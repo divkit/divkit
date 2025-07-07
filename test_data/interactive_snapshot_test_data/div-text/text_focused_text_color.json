@@ -1,6 +1,7 @@
 {
   "description": "Text with focused text color and focus background",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

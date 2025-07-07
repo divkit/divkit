@@ -1,5 +1,6 @@
 package com.yandex.div.internal.widget.slider
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,13 +8,21 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.Region
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo.RangeInfo.RANGE_TYPE_INT
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.SeekBar
 import androidx.annotation.Px
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.customview.widget.ExploreByTouchHelper
+import com.yandex.div.R
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
@@ -31,6 +40,8 @@ private const val UNSET_VALUE = -1
 private const val DEFAULT_ANIMATION_DURATION = 300L
 private const val DEFAULT_ANIMATION_ENABLED = true
 private const val DEFAULT_INTERCEPTION_ANGLE = 45f
+private const val THUMB_VIRTUAL_VIEW_ID = 0
+private const val SECONDARY_THUMB_VIRTUAL_VIEW_ID = 1
 
 open class SliderView @JvmOverloads constructor(
     context: Context,
@@ -59,25 +70,56 @@ open class SliderView @JvmOverloads constructor(
     }
 
     private var sliderAnimator: ValueAnimator? = null
-    private var prevThumbValue: Float = DEFAULT_MIN_VALUE
     private var sliderSecondaryAnimator: ValueAnimator? = null
-    private var prevThumbSecondaryValue: Float? = null
 
-    private val animatorListener = SliderThumbAnimatorListener { hasCanceled ->
-        sliderAnimator = null
-        if (!hasCanceled) {
-            notifyThumbChangedListeners(prevThumbValue, thumbValue)
+    private val animatorListener = object : Animator.AnimatorListener {
+
+        var prevThumbValue: Float = DEFAULT_MIN_VALUE
+
+        private var hasCanceled = false
+
+        override fun onAnimationEnd(animation: Animator) {
+            sliderAnimator = null
+            if (!hasCanceled) {
+                notifyThumbChangedListeners(prevThumbValue, thumbValue)
+            }
         }
+
+        override fun onAnimationCancel(animation: Animator) {
+            hasCanceled = true
+        }
+
+        override fun onAnimationStart(animation: Animator) {
+            hasCanceled = false
+        }
+
+        override fun onAnimationRepeat(animation: Animator) = Unit
     }
+    private val animatorSecondaryListener = object : Animator.AnimatorListener {
 
-    private val animatorSecondaryListener = SliderThumbAnimatorListener { hasCanceled ->
-        sliderSecondaryAnimator = null
-        if (!hasCanceled) {
-            notifyThumbSecondaryChangedListeners(
-                prevThumbSecondaryValue,
-                thumbSecondaryValue
-            )
+        var prevThumbSecondaryValue: Float? = null
+
+        private var hasCanceled = false
+
+        override fun onAnimationEnd(animation: Animator) {
+            sliderSecondaryAnimator = null
+            if (!hasCanceled) {
+                notifyThumbSecondaryChangedListeners(
+                    prevThumbSecondaryValue,
+                    thumbSecondaryValue
+                )
+            }
         }
+
+        override fun onAnimationCancel(animation: Animator) {
+            hasCanceled = true
+        }
+
+        override fun onAnimationStart(animation: Animator) {
+            hasCanceled = false
+        }
+
+        override fun onAnimationRepeat(animation: Animator) = Unit
     }
 
     val ranges = mutableListOf<Range>()
@@ -96,7 +138,7 @@ open class SliderView @JvmOverloads constructor(
      * This allows the basic animation effects (alpha, scale, translate, rotate) to be accelerated,
      * decelerated, repeated, etc.
      */
-    private var animationInterpolator = AccelerateDecelerateInterpolator()
+    var animationInterpolator = AccelerateDecelerateInterpolator()
 
     /**
      * Animation enabled flag.
@@ -198,7 +240,7 @@ open class SliderView @JvmOverloads constructor(
         if (thumbValue == newValue) return
         if (animated && animationEnabled) {
             if (sliderAnimator == null) {
-                prevThumbValue = thumbValue
+                animatorListener.prevThumbValue = thumbValue
             }
             sliderAnimator?.cancel()
             sliderAnimator = ValueAnimator.ofFloat(thumbValue, newValue).apply {
@@ -215,9 +257,9 @@ open class SliderView @JvmOverloads constructor(
                 sliderAnimator?.cancel()
             }
             if (forced || sliderAnimator == null) {
-                prevThumbValue = thumbValue
+                animatorListener.prevThumbValue = thumbValue
                 thumbValue = newValue
-                notifyThumbChangedListeners(prevThumbValue, thumbValue)
+                notifyThumbChangedListeners(animatorListener.prevThumbValue, thumbValue)
             }
         }
         invalidate()
@@ -235,7 +277,7 @@ open class SliderView @JvmOverloads constructor(
 
     /**
      * The appearance of thumb text.
-     * Returns null if doesn't exist.
+     * Returns [null] if doesn't exist.
      */
     var thumbTextDrawable: TextDrawable? = null
         set(drawable) {
@@ -245,16 +287,21 @@ open class SliderView @JvmOverloads constructor(
 
     /**
      * The value of thumb secondary. Should be in range from [minValue] to [maxValue].
-     * Returns null if doesn't exist.
+     * Returns [null] if doesn't exist.
      */
     var thumbSecondaryValue: Float? = null
         private set
 
-    private val a11yHelper = SliderAccessibilityHelper(this)
+    private val a11yHelper: A11yHelper = A11yHelper(this)
+
+    init {
+        ViewCompat.setAccessibilityDelegate(this, a11yHelper)
+        accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
+    }
 
     /**
      * Set the value of thumb secondary.
-     * @param value should be in range from [minValue] to [maxValue] or be null
+     * @param value should be in range from [minValue] to [maxValue] or be [null]
      * @param animated change value with animation
      */
     fun setThumbSecondaryValue(value: Float?, animated: Boolean = animationEnabled) {
@@ -263,7 +310,7 @@ open class SliderView @JvmOverloads constructor(
 
     /**
      * Tries to set the value of thumb secondary.
-     * @param value should be in range from [minValue] to [maxValue] or be null
+     * @param value should be in range from [minValue] to [maxValue] or be [null]
      * @param animated change value with animation
      * @param forced if [animated] is false and [forced] is true,
      * then value will be set regardless of the running animation
@@ -277,7 +324,7 @@ open class SliderView @JvmOverloads constructor(
         if (thumbSecondaryValue == newValue) return
         if (animated && animationEnabled && thumbSecondaryValue != null && newValue != null) {
             if (sliderSecondaryAnimator == null) {
-                prevThumbSecondaryValue = thumbSecondaryValue
+                animatorSecondaryListener.prevThumbSecondaryValue = thumbSecondaryValue
             }
             sliderSecondaryAnimator?.cancel()
             sliderSecondaryAnimator = ValueAnimator.ofFloat(thumbSecondaryValue!!, newValue).apply {
@@ -294,10 +341,10 @@ open class SliderView @JvmOverloads constructor(
                 sliderSecondaryAnimator?.cancel()
             }
             if (forced || sliderSecondaryAnimator == null) {
-                prevThumbSecondaryValue = thumbSecondaryValue
+                animatorSecondaryListener.prevThumbSecondaryValue = thumbSecondaryValue
                 thumbSecondaryValue = newValue
                 notifyThumbSecondaryChangedListeners(
-                    prevThumbSecondaryValue,
+                    animatorSecondaryListener.prevThumbSecondaryValue,
                     thumbSecondaryValue
                 )
             }
@@ -307,7 +354,7 @@ open class SliderView @JvmOverloads constructor(
 
     /**
      * The appearance of thumb secondary.
-     * Returns null if doesn't exist.
+     * Returns [null] if doesn't exist.
      */
     var thumbSecondaryDrawable: Drawable? = null
         set(value) {
@@ -318,7 +365,7 @@ open class SliderView @JvmOverloads constructor(
 
     /**
      * The appearance of thumb secondary text.
-     * Returns null if doesn't exist.
+     * Returns [null] if doesn't exist.
      */
     var thumbSecondTextDrawable: TextDrawable? = null
         set(drawable) {
@@ -344,6 +391,10 @@ open class SliderView @JvmOverloads constructor(
 
     fun addOnThumbChangedListener(listener: ChangedListener) {
         listeners.addObserver(listener)
+    }
+
+    fun removeOnChangedListener(listener: ChangedListener) {
+        listeners.removeObserver(listener)
     }
 
     fun clearOnThumbChangedListener() = listeners.clear()
@@ -389,6 +440,10 @@ open class SliderView @JvmOverloads constructor(
         val thumbHeight = max(thumbDrawable.boundsHeight, thumbSecondaryDrawable.boundsHeight)
         return maxOf(thumbHeight, trackHeight, rangesHeight)
     }
+
+    private val Drawable?.boundsWidth get() = this?.bounds?.width() ?: 0
+
+    private val Drawable?.boundsHeight get() = this?.bounds?.height() ?: 0
 
     override fun getSuggestedMinimumWidth(): Int {
         val tickCount = (maxValue - minValue + 1).toInt()
@@ -537,7 +592,7 @@ open class SliderView @JvmOverloads constructor(
         return false
     }
 
-    internal fun getClosestThumb(position: Int): Thumb {
+    private fun getClosestThumb(position: Int): Thumb {
         if (!isThumbSecondaryEnabled()) {
             return Thumb.THUMB
         }
@@ -562,9 +617,6 @@ open class SliderView @JvmOverloads constructor(
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         return a11yHelper.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
     }
-
-    internal fun setValueToAccessibilityThumb(thumb: Thumb, value: Float) =
-        setValueToThumb(thumb, value.inBoarders(), animated = false, forced = true)
 
     private fun setValueToThumb(thumb: Thumb, value: Float, animated: Boolean, forced: Boolean = false) =
         when (thumb) {
@@ -631,8 +683,6 @@ open class SliderView @JvmOverloads constructor(
         interpolator = animationInterpolator
     }
 
-    internal fun getPositionInView(thumbValue: Float) = thumbValue.toPosition() + paddingLeft
-
     /**
      * Calculates slider active range presented by two values, where start <= end.
      * If there is only one thumb then its value will be considered as the end of the range.
@@ -664,7 +714,7 @@ open class SliderView @JvmOverloads constructor(
         }
     }
 
-    internal enum class Thumb {
+    private enum class Thumb {
         THUMB, THUMB_SECONDARY
     }
 
@@ -682,9 +732,114 @@ open class SliderView @JvmOverloads constructor(
         @Px var endPosition = 0
     }
 
-    internal companion object {
-        val Drawable?.boundsWidth get() = this?.bounds?.width() ?: 0
+    /**
+     * Provides info about virtual view hierarchy for accessibility services.
+     */
+    private inner class A11yHelper(private val slider: SliderView) : ExploreByTouchHelper(slider) {
+        private val bounds = Rect()
+        private val step get() = max(((maxValue - minValue) * 0.05).roundToInt(), 1)
 
-        val Drawable?.boundsHeight get() = this?.bounds?.height() ?: 0
+        override fun getVirtualViewAt(x: Float, y: Float): Int {
+            if (x < leftPaddingOffset) {
+                return THUMB_VIRTUAL_VIEW_ID
+            }
+            val position = when (getClosestThumb(x.toInt())) {
+                Thumb.THUMB -> THUMB_VIRTUAL_VIEW_ID
+                Thumb.THUMB_SECONDARY -> SECONDARY_THUMB_VIRTUAL_VIEW_ID
+            }
+            return position
+        }
+
+        override fun getVisibleVirtualViews(virtualViewIds: MutableList<Int>) {
+            virtualViewIds.add(THUMB_VIRTUAL_VIEW_ID)
+            if (thumbSecondaryValue != null) virtualViewIds.add(SECONDARY_THUMB_VIRTUAL_VIEW_ID)
+        }
+
+        override fun onPopulateNodeForVirtualView(
+            virtualViewId: Int,
+            node: AccessibilityNodeInfoCompat
+        ) {
+            node.className = SeekBar::class.java.name
+            node.rangeInfo = AccessibilityNodeInfoCompat.RangeInfoCompat.obtain(
+                RANGE_TYPE_INT, minValue, maxValue, virtualViewId.toThumbValue()
+            )
+            val contentDescription = StringBuilder()
+            slider.contentDescription?.let {
+                contentDescription.append(it).append(",")
+            }
+            contentDescription.append(startOrEndDescription(virtualViewId))
+            node.contentDescription = contentDescription.toString()
+            node.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_FORWARD)
+            node.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_BACKWARD)
+
+            updateBounds(virtualViewId)
+            node.setBoundsInParent(bounds)
+        }
+
+        override fun onPerformActionForVirtualView(virtualViewId: Int, action: Int, arguments: Bundle?): Boolean {
+            when (action) {
+                android.R.id.accessibilityActionSetProgress -> {
+                    if (arguments == null || !arguments.containsKey(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_PROGRESS_VALUE)) {
+                        return false
+                    }
+                    val value = arguments.getFloat(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_PROGRESS_VALUE)
+                    setThumbValue(virtualViewId, value)
+                }
+
+                AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD ->
+                    setThumbValue(virtualViewId, virtualViewId.toThumbValue() + step)
+                AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD ->
+                    setThumbValue(virtualViewId, virtualViewId.toThumbValue() - step)
+                else -> return false
+            }
+            return true
+        }
+
+        private fun startOrEndDescription(virtualViewId: Int): String {
+            return when {
+                thumbSecondaryValue == null -> ""
+                virtualViewId == THUMB_VIRTUAL_VIEW_ID -> context.getString(R.string.div_slider_range_start)
+                virtualViewId == SECONDARY_THUMB_VIRTUAL_VIEW_ID -> context.getString(R.string.div_slider_range_end)
+                else -> ""
+            }
+        }
+
+        private fun updateBounds(index: Int) {
+            val width: Int
+            val height: Int
+            when (index) {
+                SECONDARY_THUMB_VIRTUAL_VIEW_ID -> {
+                    width = thumbSecondaryDrawable.boundsWidth
+                    height = thumbSecondaryDrawable.boundsHeight
+                }
+                else -> {
+                    width = thumbDrawable.boundsWidth
+                    height = thumbDrawable.boundsHeight
+                }
+            }
+
+            val position = index.toThumbValue().toPosition() + slider.paddingLeft
+            bounds.left = position
+            bounds.right = position + width
+            bounds.top = slider.height / 2 - height / 2
+            bounds.bottom = slider.height / 2 + height / 2
+        }
+
+        private fun setThumbValue(virtualViewId: Int, value: Float) {
+            setValueToThumb(virtualViewId.toThumb(), value.inBoarders(), animated = false, forced = true)
+            sendEventForVirtualView(virtualViewId, AccessibilityEvent.TYPE_VIEW_SELECTED)
+            invalidateVirtualView(virtualViewId)
+        }
+
+        private fun Int.toThumb(): Thumb = when {
+            this == THUMB_VIRTUAL_VIEW_ID -> Thumb.THUMB
+            thumbSecondaryValue != null -> Thumb.THUMB_SECONDARY
+            else -> Thumb.THUMB
+        }
+
+        private fun Int.toThumbValue(): Float = when {
+            this == THUMB_VIRTUAL_VIEW_ID -> thumbValue
+            else -> thumbSecondaryValue ?: thumbValue
+        }
     }
 }

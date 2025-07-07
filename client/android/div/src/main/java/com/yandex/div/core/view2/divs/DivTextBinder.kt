@@ -77,6 +77,7 @@ internal class DivTextBinder @Inject constructor(
             div.pressStartActions,
             div.pressEndActions,
             div.actionAnimation,
+            div.accessibility,
             div.captureFocusOnAction,
         )
 

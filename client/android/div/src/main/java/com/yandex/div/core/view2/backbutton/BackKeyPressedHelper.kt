@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.backbutton
 import android.view.KeyEvent
 import android.view.View
 import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper.OnBackClickListener
-import com.yandex.div.core.view2.divs.gainAccessibilityFocus
 
 /**
  * This class helps to handle BACK key inside some View.
@@ -31,7 +30,7 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
      */
     fun setOnBackClickListener(onBackClickListener: OnBackClickListener?) {
         mOnBackClickListener = onBackClickListener
-        setupAccessibilityFocus()
+        setupFocus()
     }
 
     /**
@@ -62,7 +61,7 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
      */
     fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         if (hasWindowFocus) {
-            setupAccessibilityFocus()
+            setupFocus()
         }
     }
 
@@ -70,16 +69,18 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
      * Call this from [View.onVisibilityChanged].
      */
     fun onVisibilityChanged() {
-        setupAccessibilityFocus()
+        setupFocus()
     }
 
-    private fun setupAccessibilityFocus() {
+    private fun setupFocus() {
         if (mOnBackClickListener == null || !mOwnerView.hasWindowFocus()) return
 
         mOwnerView.apply {
+            isFocusable = true
+            isFocusableInTouchMode = true
             when {
-                isShown -> gainAccessibilityFocus()
-                isAccessibilityFocused -> rootView?.gainAccessibilityFocus()
+                isShown -> requestFocus()
+                hasFocus() -> rootView?.requestFocus(View.FOCUS_UP)
             }
         }
     }

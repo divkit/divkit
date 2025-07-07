@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
-import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
@@ -83,28 +82,24 @@ internal class DivPagerView @JvmOverloads constructor(
 
     private val accessibilityDelegate by lazy(LazyThreadSafetyMode.NONE) {
         val recycler = getRecyclerView() ?: return@lazy null
+        recycler.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
 
         object : RecyclerViewAccessibilityDelegate(recycler) {
             override fun onRequestSendAccessibilityEvent(
-                host: ViewGroup,
-                child: View,
-                event: AccessibilityEvent
+                host: ViewGroup, child: View, event: AccessibilityEvent
             ): Boolean {
-                performActionIfNeeded(child, event)
-                return super.onRequestSendAccessibilityEvent(host, child, event)
-            }
-
-            private fun performActionIfNeeded(child: View, event: AccessibilityEvent) {
-                if (event.eventType != AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) return
-                val pos = getWrapperFor(child)?.let { recycler.getChildAdapterPosition(it) } ?: return
-                if (currentItem == pos || pos == RecyclerView.NO_POSITION) return
-
-                val action = if (pos > currentItem) {
-                    AccessibilityNodeInfo.ACTION_SCROLL_FORWARD
-                } else {
-                    AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+                if (event.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
+                    getFocusedChildPos(child)?.let { pos ->
+                        if (currentItem != pos) {
+                            recycler.performAccessibilityAction(
+                                if (pos > currentItem) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD
+                                else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD,
+                                null
+                            )
+                        }
+                    }
                 }
-                recycler.performAccessibilityAction(action, null)
+                return super.onRequestSendAccessibilityEvent(host, child, event)
             }
         }
     }
@@ -161,11 +156,11 @@ internal class DivPagerView @JvmOverloads constructor(
         return wrappedChild.getChildAt(0)
     }
 
-    private fun getWrapperFor(child: View): View? {
-        var parent = child
-        while (parent != getRecyclerView()) {
-            if (parent is DivViewWrapper) return parent
-            parent = parent.parent as? View ?: return null
+    private fun getFocusedChildPos(child: View): Int? {
+        var child = child
+        while (child != this) {
+            (child.getTag(R.id.div_pager_item_clip_id) as? Int)?.let { return it }
+            child = child.parent as? View ?: return null
         }
         return null
     }

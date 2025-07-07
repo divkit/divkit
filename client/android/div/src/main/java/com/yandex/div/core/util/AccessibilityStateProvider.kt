@@ -14,22 +14,22 @@ internal class AccessibilityStateProvider @Inject constructor(
     fun isAccessibilityEnabled(context: Context): Boolean {
         return when {
             !a11yConfigurationEnabled -> false
-            touchExplorationEnabled != null -> touchExplorationEnabled!!
+            touchModeEnabled != null -> touchModeEnabled!!
             else -> {
                 evaluateTouchModeEnabled(context)
-                touchExplorationEnabled!!
+                touchModeEnabled!!
             }
         }
     }
 
     companion object {
-        var touchExplorationEnabled: Boolean? = null
+        var touchModeEnabled: Boolean? = null
 
         fun evaluateTouchModeEnabled(context: Context) {
-            if (touchExplorationEnabled != null) return
+            if (touchModeEnabled != null) return
             val accessibilityManager = context.getSystemService(
                 Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager
-            touchExplorationEnabled = accessibilityManager?.isTouchExplorationEnabled ?: false
+            touchModeEnabled = accessibilityManager?.isTouchExplorationEnabled ?: false
         }
     }
 }

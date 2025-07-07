@@ -66,6 +66,7 @@ internal class DivPagerAdapter(
             divBinder,
             viewCreator,
             path,
+            accessibilityEnabled,
             { isHorizontal },
             { crossAxisAlignment },
         )
@@ -77,7 +78,7 @@ internal class DivPagerAdapter(
 
     override fun onBindViewHolder(holder: DivPagerViewHolder, position: Int) {
         val item = itemsToShow[position]
-        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, items.indexOf(item))
+        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position, items.indexOf(item))
         pageTranslations[position]?.let {
             if (isHorizontal) {
                 holder.itemView.translationX = it

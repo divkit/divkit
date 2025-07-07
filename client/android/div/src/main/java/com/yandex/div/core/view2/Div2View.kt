@@ -89,6 +89,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.INVALID_STATE_ID
 import com.yandex.div.util.getInitialStateId
 import com.yandex.div2.Div
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -130,6 +131,7 @@ class Div2View private constructor(
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
+    private val propagatedAccessibilityModes = WeakHashMap<View, DivAccessibility.Mode>()
     private val bulkActionsHandler = BulkActionHandler()
     private val divVideoActionHandler: DivVideoActionHandler
         get() = div2Component.divVideoActionHandler
@@ -707,6 +709,7 @@ class Div2View private constructor(
 
     private fun stopLoadAndSubscriptions() {
         viewToDivBindings.clear()
+        propagatedAccessibilityModes.clear()
         cancelTooltips() // Depends on children, should be called before removing them
         clearSubscriptions()
         divDataChangedObservers.clear()
@@ -1156,6 +1159,20 @@ class Div2View private constructor(
     }
 
     internal fun takeBindingDiv(view: View) = viewToDivBindings[view]
+
+    internal fun setPropagatedAccessibilityMode(view: View, mode: DivAccessibility.Mode) {
+        propagatedAccessibilityModes[view] = mode
+    }
+
+    internal fun getPropagatedAccessibilityMode(view: View): DivAccessibility.Mode? {
+        return propagatedAccessibilityModes[view]
+    }
+
+    internal fun isDescendantAccessibilityMode(view: View): Boolean {
+        return (view.parent as? View)?.let { parent ->
+            propagatedAccessibilityModes[parent] == propagatedAccessibilityModes[view]
+        } ?: false
+    }
 
     /**
      * @return exception if setting variable failed, null otherwise.

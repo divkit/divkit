@@ -55,6 +55,7 @@ internal class DivGridBinder @Inject constructor(
             div.pressStartActions,
             div.pressEndActions,
             div.actionAnimation,
+            div.accessibility,
             div.captureFocusOnAction,
         )
 
