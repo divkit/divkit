@@ -53,13 +53,18 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       superview: self
     )
 
-    secondThumb = sliderModel.secondThumb?.block.reuse(
-      secondThumb,
-      observer: observer,
-      overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      superview: self
-    )
+    if let model = sliderModel.secondThumb {
+      secondThumb = model.block.reuse(
+        secondThumb,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate,
+        superview: self
+      )
+    } else {
+      secondThumb?.removeFromSuperview()
+      secondThumb = nil
+    }
 
     marksView.configuration = sliderModel.marksConfiguration
 
