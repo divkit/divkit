@@ -1,6 +1,6 @@
 import DivKit
 import LayoutKitInterface
-import UIKit
+import Foundation
 import VGSL
 
 struct LottieExtensionParams {
