@@ -22,41 +22,63 @@ private func makeTestCases() -> [(String, IntegrationTestData)] {
   getFiles(
     "integration_test_data",
     forBundle: Bundle(for: IntegrationTests.self)
-  ).map { url in
+  ).flatMap { url in
     let fileName = url.lastPathComponent
-    let testData = try! JSONDecoder()
-      .decode(IntegrationTestData.self, from: Data(contentsOf: url))
-    return ("\(fileName): \(testData.description)", testData)
+    let test = try! IntegrationTest(Data(contentsOf: url))
+
+    return test.cases
+      .enumerated()
+      .filter { $1.platforms.contains(.ios) }
+      .map { index, testCase in
+        (
+          "\(fileName): test case index - [\(index)]",
+          IntegrationTestData(divData: test.divData, testCase: testCase)
+        )
+      }
   }
 }
 
 @MainActor
 private func runTest(_ testData: IntegrationTestData) async {
-  for testCase in testData.cases.filter({ $0.platforms.contains(.ios) }) {
-    let reporter = MockReporter()
-    let divkitComponents = createDivKitComponents(testCase: testCase, reporter: reporter)
-    DivKitLogger.isEnabled = true
-    DivKitLogger.setLogger { reporter.insertErrorMessage($0) }
-    await setSource(testData.divData, components: divkitComponents)
+  let testCase = testData.testCase
+  let reporter = MockReporter()
+  DivKitLogger.isEnabled = true
+  DivKitLogger.setLogger { reporter.insertErrorMessage($0) }
+  let globalStorage = DivVariableStorage()
+  globalStorage.put(
+    testCase.expected.makeDefaultVariables(),
+    notifyObservers: false
+  )
+  let divkitComponents = DivKitComponents(
+    flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
+    reporter: reporter,
+    variablesStorage: DivVariablesStorage(outerStorage: globalStorage)
+  )
 
-    testCase.divActions?.forEach {
-      divkitComponents.actionHandler.handle(
-        $0,
-        path: cardId.path,
-        source: .tap,
-        sender: nil
-      )
-    }
+  let divView = DivView(divKitComponents: divkitComponents)
+  await divView.setSource(DivViewSource(kind: .divData(testData.divData), cardId: cardId))
 
+  testCase.divActions?.forEach {
+    divkitComponents.actionHandler.handle(
+      $0,
+      path: cardId.path,
+      source: .tap,
+      sender: nil
+    )
+  }
+
+  Task { @MainActor in
     testCase.expected.forEach {
       switch $0 {
       case let .variable(name, value):
+        let variableValue = divkitComponents.variablesStorage.getVariableValue(
+          cardId: cardId,
+          name: DivVariableName(rawValue: name)
+        )
         XCTAssertEqual(
           value.divVariableValue,
-          divkitComponents.variablesStorage.getVariableValue(
-            cardId: cardId,
-            name: DivVariableName(rawValue: name)
-          )
+          variableValue,
+          "Variable name - '\(name)'"
         )
       case let .error(message):
         XCTAssert(
@@ -66,27 +88,6 @@ private func runTest(_ testData: IntegrationTestData) async {
       }
     }
   }
-}
-
-private func createDivKitComponents(
-  testCase: IntegrationTestCase,
-  reporter: DivReporter
-) -> DivKitComponents {
-  let globalStorage = DivVariableStorage()
-  globalStorage.put(
-    testCase.expected.makeDefaultVariables(),
-    notifyObservers: false
-  )
-  return DivKitComponents(
-    reporter: reporter,
-    variablesStorage: DivVariablesStorage(outerStorage: globalStorage)
-  )
-}
-
-@MainActor
-private func setSource(_ divData: DivData, components: DivKitComponents) async {
-  let divView = DivView(divKitComponents: components)
-  await divView.setSource(DivViewSource(kind: .divData(divData), cardId: cardId))
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
@@ -101,32 +102,30 @@ private final class MockReporter: @unchecked Sendable, DivReporter {
   }
 }
 
-private struct IntegrationTestData: Decodable, @unchecked Sendable {
-  init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    let cardContainer = try container.nestedContainer(
-      keyedBy: DivDataCodingKeys.self,
-      forKey: .divData
-    )
+private struct IntegrationTestData {
+  let divData: DivData
+  let testCase: IntegrationTestCase
+}
 
-    self.description = try container.decode(String.self, forKey: .description)
-    self.divData = try cardContainer.decode(DivData.self, forKey: .card)
-    self.cases = try container.decode([IntegrationTestCase].self, forKey: .cases)
+private struct IntegrationTest: Decodable, @unchecked Sendable {
+  init(_ data: Data) throws {
+    let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+    let casesJson = json["cases"]!
+    let divDataJson = json["div_data"] as! [String: Any]
+    let card = divDataJson["card"] as! [String: Any]
+    let templates = divDataJson["templates"] as? [String: Any] ?? [:]
+
+    self.description = json["description"] as! String
+    self.divData = try DivData.resolve(card: card, templates: templates).unwrap()
+    self.cases = try! JSONDecoder().decode(
+      [IntegrationTestCase].self,
+      from: try JSONSerialization.data(withJSONObject: casesJson)
+    )
   }
 
   let description: String
   let divData: DivData
   let cases: [IntegrationTestCase]
-
-  private enum CodingKeys: String, CodingKey {
-    case description
-    case divData = "div_data"
-    case cases
-  }
-
-  private enum DivDataCodingKeys: String, CodingKey {
-    case card
-  }
 }
 
 private struct IntegrationTestCase: Decodable {
