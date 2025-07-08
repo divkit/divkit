@@ -215,7 +215,7 @@ data class Image internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -421,7 +421,7 @@ data class Image internal constructor(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -596,7 +596,7 @@ fun DivScope.image(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -769,7 +769,7 @@ fun DivScope.imageProps(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -942,7 +942,7 @@ fun TemplateScope.imageRefs(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1117,7 +1117,7 @@ fun Image.override(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1292,7 +1292,7 @@ fun Image.defer(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1568,7 +1568,7 @@ fun Image.evaluate(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1744,7 +1744,7 @@ fun Component<Image>.override(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2022,7 +2022,7 @@ fun Component<Image>.evaluate(
  * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
