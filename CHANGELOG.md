@@ -1,9 +1,14 @@
+## 32.7.1
+
+# Android Client:
+* Reverted fixes for accessibility mode `merge`.
+
+
 ## 32.7.0
 
 # Android Client:
 * Dump error monitor report to logcat.
 * Remove view from TriggerExecutor's attachedViews when view is detached from window to prevent memory leaks.
-* Reverted fixes for accessibility mode `merge`.
 * Supported `update_structure` actions.
 * Updated Coil to 3.0.4.
 
