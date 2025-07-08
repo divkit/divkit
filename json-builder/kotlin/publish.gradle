@@ -44,10 +44,10 @@ if (publishToMavenCentral) {
         repositories {
             sonatype {
                 stagingProfileId = "14c2d9e18a30b"
-                nexusUrl = uri("https://oss.sonatype.org/service/local/")
-                snapshotRepositoryUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                username = ossUsername
-                password = ossPassword
+                nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
+                snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+                username = sonatypeUsername
+                password = sonatypePassword
             }
         }
     }
