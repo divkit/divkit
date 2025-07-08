@@ -87,14 +87,26 @@ extension DivText: DivBlockModeling {
       typo = typo.with(lineBreakMode: lineBreakMode)
     }
 
-    let attributedString = makeAttributedString(
-      text: text.value as CFString,
-      typo: typo,
-      ranges: ranges,
-      actions: nil,
-      context: context,
-      fontParams: fontParams
-    )
+    let makeAttributedStringWithTypo: (Typo) -> NSAttributedString = {
+      self.makeAttributedString(
+        text: text.value as CFString,
+        typo: $0,
+        ranges: self.ranges,
+        actions: nil,
+        context: context,
+        fontParams: fontParams
+      )
+    }
+
+    let attributedString = makeAttributedStringWithTypo(typo)
+    let gradientModel: TextBlock.GradientModel? = if let gradient = resolveGradient(context) {
+      TextBlock.GradientModel(
+        gradient: gradient,
+        rangedTextWithColor: makeAttributedStringWithTypo(typo.with(color: .clear))
+      )
+    } else {
+      nil
+    }
 
     let images = makeInlineImages(
       context: context,
@@ -132,7 +144,7 @@ extension DivText: DivBlockModeling {
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
       text: attributedString,
-      textGradient: resolveGradient(context),
+      gradientModel: gradientModel,
       verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
       maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
       minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,

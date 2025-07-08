@@ -12,7 +12,7 @@ extension TextBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let textBlockContainer = view as! TextBlockContainer
-    textBlockContainer.textGradient = textGradient
+    textBlockContainer.textGradientModel = gradientModel
 
     let intrinsicHeight: GetIntrinsicTextHeight? = if autoEllipsize {
       nil
@@ -45,20 +45,16 @@ extension TextBlock {
 private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
   var layoutReporter: LayoutReporter?
   private let textBlockView = TextBlockView()
-  private var gradientView: UIView?
+  private var gradientContainerView: GradientContainerView?
 
-  var textGradient: Gradient? {
+  var textGradientModel: TextBlock.GradientModel? {
     didSet {
-      guard textGradient == nil || textGradient != oldValue else {
+      guard textGradientModel == nil || textGradientModel != oldValue else {
         return
       }
-      if let textGradient {
-        gradientView = textGradient.uiView
-        currentView = gradientView
-      } else {
-        gradientView = nil
-        currentView = textBlockView
-      }
+
+      gradientContainerView = GradientContainerView(model: textGradientModel, mask: textBlockView)
+      currentView = gradientContainerView ?? textBlockView
     }
   }
 
@@ -81,6 +77,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
         return
       }
       textBlockView.model = model
+      gradientContainerView?.configureRangedTextColor(textBlockViewModel: model)
       isUserInteractionEnabled = model.isUserInteractionEnabled
       applyAccessibilityFromScratch(model.accessibility)
     }
@@ -117,10 +114,44 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
       bounds
     }
     textBlockView.frame = textFrame
-    gradientView?.frame = textFrame
-
-    gradientView?.mask = textBlockView
+    gradientContainerView?.frame = textFrame
     layoutReporter?.didLayoutSubviews()
+  }
+}
+
+private class GradientContainerView: UIView {
+  private let model: TextBlock.GradientModel
+  private let rangedTextWithColorTextBlockView: TextBlockView
+  let gradientView: UIView
+  
+  init?(model: TextBlock.GradientModel?, mask: UIView) {
+    guard let model else {
+      return nil
+    }
+    self.model = model
+    gradientView = model.gradient.uiView
+    gradientView.mask = mask
+    
+    rangedTextWithColorTextBlockView = TextBlockView()
+    
+    super.init(frame: .zero)
+    
+    gradientView.addSubview(rangedTextWithColorTextBlockView)
+    addSubview(gradientView)
+  }
+  
+  required init(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    gradientView.frame = bounds
+    rangedTextWithColorTextBlockView.frame = bounds
+  }
+  
+  func configureRangedTextColor(textBlockViewModel: TextBlockView.Model) {
+    rangedTextWithColorTextBlockView.model = textBlockViewModel.updated(with: model.rangedTextWithColor)
   }
 }
 
@@ -651,5 +682,21 @@ extension Gradient {
 extension TextBlockView.Model {
   fileprivate var isUserInteractionEnabled: Bool {
     canSelect || text.hasActions || truncationToken?.hasActions == true
+  }
+
+  fileprivate func updated(with newText: NSAttributedString) -> Self {
+    .init(
+      images: images,
+      attachments: attachments,
+      text: newText,
+      verticalPosition: verticalPosition,
+      source: source,
+      accessibility: accessibility,
+      truncationToken: truncationToken,
+      canSelect: canSelect,
+      additionalTextInsets: additionalTextInsets,
+      intrinsicHeight: intrinsicHeight,
+      isFocused: isFocused
+    )
   }
 }

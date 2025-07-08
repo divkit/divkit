@@ -2,6 +2,7 @@
   "description": "text_gradient must be more important than the text_color, but the text_color in ranges should be more important, than text_gradient",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {

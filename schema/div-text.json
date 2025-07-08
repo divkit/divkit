@@ -92,7 +92,7 @@
         },
         "text_color": {
           "$ref": "common.json#/color",
-          "$description": "translations.json#/div_text_color"
+          "$description": "translations.json#/div_text_range_text_color"
         },
         "underline": {
           "$ref": "div-line-style.json",

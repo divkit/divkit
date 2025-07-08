@@ -26,10 +26,20 @@ public final class TextBlock: BlockWithTraits {
     }
   }
 
+  public struct GradientModel: Equatable {
+    let gradient: Gradient
+    let rangedTextWithColor: NSAttributedString
+
+    public init(gradient: Gradient, rangedTextWithColor: NSAttributedString) {
+      self.gradient = gradient
+      self.rangedTextWithColor = rangedTextWithColor
+    }
+  }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let text: NSAttributedString
-  public let textGradient: Gradient?
+  public let gradientModel: GradientModel?
   public let verticalAlignment: Alignment
   public let maxIntrinsicNumberOfLines: Int
   public let minNumberOfHiddenLines: Int
@@ -54,7 +64,7 @@ public final class TextBlock: BlockWithTraits {
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait = .intrinsic,
     text: NSAttributedString,
-    textGradient: Gradient? = nil,
+    gradientModel: GradientModel? = nil,
     verticalAlignment: Alignment = .center,
     maxIntrinsicNumberOfLines: Int = .max,
     minNumberOfHiddenLines: Int = 0,
@@ -72,7 +82,7 @@ public final class TextBlock: BlockWithTraits {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     (self.text, attachments) = setImagePlaceholders(for: images, to: text)
-    self.textGradient = textGradient
+    self.gradientModel = gradientModel
     self.verticalAlignment = verticalAlignment
     self.maxIntrinsicNumberOfLines = maxIntrinsicNumberOfLines
     self.minNumberOfHiddenLines = minNumberOfHiddenLines
@@ -99,7 +109,7 @@ public final class TextBlock: BlockWithTraits {
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait = .intrinsic,
     text: NSAttributedString,
-    textGradient: Gradient? = nil,
+    gradientModel: GradientModel? = nil,
     verticalAlignment: Alignment = .center,
     maxIntrinsicNumberOfLines: Int = .max,
     minNumberOfHiddenLines: Int = 0,
@@ -117,7 +127,7 @@ public final class TextBlock: BlockWithTraits {
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       text: text,
-      textGradient: textGradient,
+      gradientModel: gradientModel,
       verticalAlignment: verticalAlignment,
       maxIntrinsicNumberOfLines: maxIntrinsicNumberOfLines,
       minNumberOfHiddenLines: minNumberOfHiddenLines,
@@ -190,7 +200,7 @@ public final class TextBlock: BlockWithTraits {
     lhs.widthTrait == rhs.widthTrait
       && lhs.heightTrait == rhs.heightTrait
       && lhs.text == rhs.text
-      && lhs.textGradient == rhs.textGradient
+      && lhs.gradientModel?.gradient == rhs.gradientModel?.gradient
       && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
       && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
       && lhs.images == rhs.images
@@ -240,7 +250,7 @@ extension TextBlock: ElementStateUpdatingDefaultImpl {
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       text: text,
-      textGradient: textGradient,
+      gradientModel: gradientModel,
       verticalAlignment: verticalAlignment,
       maxIntrinsicNumberOfLines: maxIntrinsicNumberOfLines,
       minNumberOfHiddenLines: minNumberOfHiddenLines,
