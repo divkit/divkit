@@ -381,10 +381,6 @@ extension DecoratingBlock: CustomDebugStringConvertible {
       decorations.append(actions.debugDescription)
     }
 
-    if let url = analyticsURL {
-      decorations.append("Analytics: \(url.absoluteString)")
-    }
-
     if boundary != DecoratingBlock.defaultBoundary {
       decorations.append("Boundary: \(boundary)")
     }

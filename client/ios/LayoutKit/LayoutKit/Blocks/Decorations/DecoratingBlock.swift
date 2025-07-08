@@ -20,7 +20,6 @@ final class DecoratingBlock: WrapperBlock {
   let pressEndActions: NonEmptyArray<UserInterfaceAction>?
   let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
   let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
-  let analyticsURL: URL?
   let boundary: BoundaryTrait
   let border: BlockBorder?
   let childAlpha: CGFloat
@@ -47,7 +46,6 @@ final class DecoratingBlock: WrapperBlock {
     pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
-    analyticsURL: URL? = nil,
     boundary: BoundaryTrait = DecoratingBlock.defaultBoundary,
     border: BlockBorder? = nil,
     childAlpha: CGFloat = defaultChildAlpha,
@@ -73,7 +71,6 @@ final class DecoratingBlock: WrapperBlock {
     self.pressEndActions = pressEndActions
     self.hoverStartActions = hoverStartActions
     self.hoverEndActions = hoverEndActions
-    self.analyticsURL = analyticsURL
     self.boundary = boundary
     self.border = border
     self.childAlpha = childAlpha
@@ -135,7 +132,6 @@ final class DecoratingBlock: WrapperBlock {
       && hoverStartActions == other.hoverStartActions
       && hoverEndActions == other.hoverEndActions
       && actionAnimation == other.actionAnimation
-      && analyticsURL == other.analyticsURL
       && boundary == other.boundary
       && border == other.border
       && childAlpha == other.childAlpha
@@ -174,7 +170,6 @@ extension DecoratingBlock {
     pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
-    analyticsURL: URL?? = nil,
     boundary: BoundaryTrait? = nil,
     border: BlockBorder?? = nil,
     childAlpha: CGFloat? = nil,
@@ -201,7 +196,6 @@ extension DecoratingBlock {
       pressEndActions: pressEndActions ?? self.pressEndActions,
       hoverStartActions: hoverStartActions ?? self.hoverStartActions,
       hoverEndActions: hoverEndActions ?? self.hoverEndActions,
-      analyticsURL: analyticsURL ?? self.analyticsURL,
       boundary: boundary ?? self.boundary,
       border: border ?? self.border,
       childAlpha: childAlpha ?? self.childAlpha,

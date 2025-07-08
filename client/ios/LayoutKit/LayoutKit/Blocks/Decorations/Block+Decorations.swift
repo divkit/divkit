@@ -26,7 +26,6 @@ extension Block {
     pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
-    analyticsURL: URL? = nil,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
@@ -46,7 +45,6 @@ extension Block {
         || actions != nil
         || doubleTapActions != nil
         || longTapActions != nil
-        || analyticsURL != nil
         || visibilityParams != nil
         || tooltips?.isEmpty == false
         || forceWrapping
@@ -78,7 +76,6 @@ extension Block {
         pressEndActions: pressEndActions ?? block.pressEndActions,
         hoverStartActions: hoverStartActions ?? block.hoverStartActions,
         hoverEndActions: hoverEndActions ?? block.hoverEndActions,
-        analyticsURL: (analyticsURL ?? block.analyticsURL) as URL?,
         boundary: boundary ?? block.boundary,
         border: (border ?? block.border) as BlockBorder?,
         childAlpha: alpha.map { $0 * block.childAlpha },
@@ -111,7 +108,6 @@ extension Block {
       pressEndActions: pressEndActions,
       hoverStartActions: hoverStartActions,
       hoverEndActions: hoverEndActions,
-      analyticsURL: analyticsURL,
       boundary: boundary ?? DecoratingBlock.defaultBoundary,
       border: border,
       childAlpha: alpha ?? DecoratingBlock.defaultChildAlpha,
@@ -150,7 +146,6 @@ extension Block {
     pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
     hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
-    analyticsURL: URL? = nil,
     shadow: BlockShadow? = nil,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
@@ -177,7 +172,6 @@ extension Block {
       pressEndActions: pressEndActions,
       hoverStartActions: hoverStartActions,
       hoverEndActions: hoverEndActions,
-      analyticsURL: analyticsURL,
       visibilityParams: visibilityParams,
       tooltips: tooltips,
       forceWrapping: forceWrapping,
@@ -284,7 +278,6 @@ extension DecoratingBlock {
       && actions == nil
       && doubleTapActions == nil
       && longTapActions == nil
-      && analyticsURL == nil
       && boundary.allCornersAreApproximatelyEqualToZero()
       && border == nil
   }

@@ -41,7 +41,6 @@ extension DecoratingBlock {
       pressEndActions: pressEndActions,
       hoverStartActions: hoverStartActions,
       hoverEndActions: hoverEndActions,
-      analyticsURL: analyticsURL,
       boundary: boundary,
       border: border,
       childAlpha: childAlpha,
@@ -121,7 +120,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let pressEndActions: NonEmptyArray<UserInterfaceAction>?
     let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
     let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
-    let analyticsURL: URL?
     let boundary: BoundaryTrait
     let border: BlockBorder?
     let childAlpha: CGFloat
@@ -141,7 +139,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
 
     var shouldHandleTap: Bool {
-      actions != nil || longTapActions != nil || doubleTapActions != nil || analyticsURL != nil
+      actions != nil || longTapActions != nil || doubleTapActions != nil
     }
 
     var shouldHandleLongTap: Bool {
@@ -332,7 +330,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     // This breaks UX due to UIView reusing, so just skip them here.
     guard bounds.contains(recognizer.location(in: self)) else { return }
     captureFocusIfNeeded()
-    model.analyticsURL.flatMap(AnalyticsUrlEvent.init(analyticsUrl:))?.sendFrom(self)
     let actions: [UserInterfaceAction]? = if recognizer === doubleTapRecognizer {
       model.doubleTapActions?.asArray()
     } else if recognizer === tapRecognizer {
