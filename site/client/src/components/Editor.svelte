@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     import { urlPath } from '../utils/const';
     import type * as monaco from 'monaco-editor';
     import tsBuilderTypes from '../../artifacts/jsonbuilder.d.ts?inline';
@@ -56,18 +57,40 @@
                         tokenizer: {
                             root: [
                                 [/\{/, 'delimiter.bracket', '@obj'],
-                                [/\[/, 'delimiter.bracket', '@obj'],
+                                [/\[/, 'delimiter.bracket', '@arr'],
                                 { include: 'common' }
                             ],
 
                             obj: [
                                 [/\}/, 'delimiter.bracket', '@pop'],
-                                [/\]/, 'delimiter.bracket', '@pop'],
                                 [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
                                 [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
                                 [/"/, 'string.key', '@string_double_key'],
                                 [/:/, 'delimiter', '@obj_value'],
                                 { include: 'common' }
+                            ],
+
+                            arr: [
+                                [/\{/, 'delimiter.bracket', '@obj'],
+                                [/\[/, 'delimiter.bracket', '@arr'],
+                                [/\]/, 'delimiter.bracket', '@pop'],
+                                [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/"/, 'string.value', '@string_double_value'],
+                                [/[,]/, 'delimiter'],
+                                { include: '@whitespace' },
+                                // numbers
+                                [/(@digits)[eE]([-+]?(@digits))?/, 'number.float'],
+                                [/(@digits)\.(@digits)([eE][-+]?(@digits))?/, 'number.float'],
+                                [/(@digits)/, 'number'],
+                                // identifiers and keywords
+                                [/[a-z_$][\w$]*/, {
+                                    cases: {
+                                        '@keywords': 'keyword',
+                                        '@default': 'invalid'
+                                    }
+                                }],
+                                // { include: 'common' }
                             ],
 
                             string_double_key: [
@@ -78,8 +101,9 @@
                             ],
 
                             obj_value: [
-                                [/[{]/, 'delimiter.bracket', '@obj'],
-                                [/[,]/, 'delimiter', '@obj'],
+                                [/\{/, 'delimiter.bracket', '@obj'],
+                                [/\[/, 'delimiter.bracket', '@arr'],
+                                [/,/, 'delimiter', '@obj'],
                                 { include: 'common' }
                             ],
 
@@ -151,7 +175,7 @@
 
                                 [/"/, 'string.invalid'],  // non-teminated string
                                 [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-                                [/'/, 'string.value', '@divkit_string'],
+                                [/'/, 'string.divkit', '@divkit_string'],
 
                                 { include: '@whitespace' }
                             ],
@@ -188,14 +212,39 @@
             const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
             const tsModelUri = monaco.Uri.parse('file:///main.tsx');
 
+            const patchTriggerCondition = (module: any) => {
+                const condition = module?.properties?.condition;
+                if (condition) {
+                    delete condition.$ref;
+                    condition.type = 'string';
+                }
+            };
+
+            const patchDictType = (obj: any) => {
+                if (obj && typeof obj === 'object') {
+                    if (obj.type === 'dict') {
+                        obj.type = 'object';
+                    }
+                    for (const key in obj) {
+                        patchDictType(obj[key]);
+                    }
+                }
+            };
+
             const schemas = require.context('../../../../schema/', false, /\.json$/);
             let schema = schemas.keys().map((key: string) => {
                 const filename = key.replace(/^\.\//, '');
+                const module = schemas(key) as any;
+
+                if (filename.includes('div-trigger.json')) {
+                    patchTriggerCondition(module);
+                }
+                patchDictType(module);
 
                 return {
                     uri: 'schema://div2/' + filename,
                     fileMatch: [] as string [],
-                    schema: schemas(key)
+                    schema: module
                 };
             });
 
