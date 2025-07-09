@@ -266,7 +266,7 @@
 
         items.forEach(item => {
             const itemSize = orientation === 'horizontal' ? 'width' : 'height';
-            children.push(componentContext.getDerivedFromVars({
+            children.push(item.getDerivedFromVars({
                 size: item.json[itemSize],
                 visibility: item.json.visibility
             }));
