@@ -412,6 +412,11 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
+  override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesCancelled(touches, with: event)
+    model.pressEndActions?.asArray().perform(sendingFrom: self)
+  }
+
   func configure(
     model: Model,
     observer: ElementStateObserver?,
