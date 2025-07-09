@@ -2351,17 +2351,13 @@
     "en": "Text.",
     "ru": "Текст."
   },
-  "div_text_color": {
-    "en": "Text color.",
-    "ru": "Цвет текста."
-  },
   "div_text_auto_ellipsize": {
     "en": "Automatic text cropping to fit the container size.",
     "ru": "Автоматическая обрезка текста под размер контейнера."
   },
-  "div_text_range_text_color": {
-    "en": "Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.",
-    "ru": "Цвет текста для определенного диапазона. Приоритет: имеет высший приоритет над `text_gradient` и `text_color`."
+  "div_text_color": {
+    "en": "Text color.",
+    "ru": "Цвет текста."
   },
   "div_text_ellipsis": {
     "en": "Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.",
@@ -2523,6 +2519,10 @@
     "en": "Strikethrough.",
     "ru": "Зачеркивание."
   },
+  "div_text_range_text_color": {
+    "en": "Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.",
+    "ru": "Цвет текста для определенного диапазона. Приоритет: имеет высший приоритет над `text_gradient` и `text_color`."
+  },
   "div_text_range_top_offset": {
     "en": "Top margin of the character range. Units specified in `font_size_unit`.",
     "ru": "Верхний отступ диапазона символов. Измеряется в единицах, заданных в `font_size_unit`."
@@ -2564,12 +2564,12 @@
     "ru": "Вертикальное выравнивание текста."
   },
   "div_text_text_color": {
-    "en": "Text color. Priority: applied only if neither `range.text_color` nor `text_gradient` are set.",
-    "ru": "Цвет текста. Приоритет: применяется только если ни `range.text_color`, ни `text_gradient` не заданы."
+    "en": "Text color. Not used if the `text_gradient` parameter is set.",
+    "ru": "Цвет текста. Не используется, если задан параметр `text_gradient`."
   },
   "div_text_text_gradient": {
-    "en": "Gradient text color. Priority: applied if `range.text_color` is not set.",
-    "ru": "Градиентный цвет текста. Приоритет: применяется, если `range.text_color` не задан."
+    "en": "Gradient text color.",
+    "ru": "Градиентный цвет текста."
   },
   "div_text_tighten_width": {
     "en": "Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.",
