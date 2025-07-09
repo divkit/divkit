@@ -1,3 +1,8 @@
+## 32.8.0 (July 14, 2025)
+
+* Fixed an error with the calculation of the expression for the `visibility` property of the child element of the gallery.
+
+
 ## 32.7.0 (July 7, 2025)
 
 * Added the `update_structure` action support.

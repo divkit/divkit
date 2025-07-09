@@ -1,3 +1,18 @@
+## 32.8.0
+
+# iOS Client:
+* Added DivKit Sample app on SwiftUI.
+* Added len() function for dictionaries.
+* Fixed animation usage when scrolling in tabs, triggered by an action.
+* Fixed priority of `div-text` `text_gradient` and `range.text_color`.
+* Fixed the bug with duplicating thumbs in the slider.
+* Lottie-extension expressions support.
+* Supported `update_structure` action.
+
+# Web Client:
+* Fixed an error with the calculation of the expression for the `visibility` property of the child element of the gallery.
+
+
 ## 32.7.1
 
 # Android Client:
