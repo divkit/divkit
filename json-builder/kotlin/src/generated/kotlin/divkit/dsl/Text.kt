@@ -249,7 +249,7 @@ data class Text internal constructor(
          */
         val images: Property<List<Image>>?,
         /**
-         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -331,7 +331,7 @@ data class Text internal constructor(
          */
         val textColor: Property<Color>?,
         /**
-         * Gradient text color.
+         * Gradient text color. Priority: applied if `range.text_color` is not set.
          */
         val textGradient: Property<TextGradient>?,
         /**
@@ -814,7 +814,7 @@ data class Text internal constructor(
              */
             val strike: Property<LineStyle>?,
             /**
-             * Text color.
+             * Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
              */
             val textColor: Property<Color>?,
             /**
@@ -896,7 +896,7 @@ data class Text internal constructor(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -915,7 +915,7 @@ data class Text internal constructor(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1113,7 +1113,7 @@ fun DivScope.text(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1132,7 +1132,7 @@ fun DivScope.text(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1328,7 +1328,7 @@ fun DivScope.textProps(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1347,7 +1347,7 @@ fun DivScope.textProps(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1543,7 +1543,7 @@ fun TemplateScope.textRefs(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1562,7 +1562,7 @@ fun TemplateScope.textRefs(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1760,7 +1760,7 @@ fun Text.override(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1779,7 +1779,7 @@ fun Text.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1977,7 +1977,7 @@ fun Text.defer(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1996,7 +1996,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2331,7 +2331,7 @@ fun Text.evaluate(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -2350,7 +2350,7 @@ fun Text.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2549,7 +2549,7 @@ fun Component<Text>.override(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -2568,7 +2568,7 @@ fun Component<Text>.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2905,7 +2905,7 @@ fun Component<Text>.evaluate(
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -2924,7 +2924,7 @@ fun Component<Text>.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -3545,7 +3545,7 @@ fun Text.Image.asList() = listOf(this)
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3621,7 +3621,7 @@ fun DivScope.textRange(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3695,7 +3695,7 @@ fun DivScope.textRangeProps(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3769,7 +3769,7 @@ fun TemplateScope.textRangeRefs(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3845,7 +3845,7 @@ fun Text.Range.override(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3921,7 +3921,7 @@ fun Text.Range.defer(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -3992,7 +3992,7 @@ fun Text.Range.modify(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color.
+ * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */

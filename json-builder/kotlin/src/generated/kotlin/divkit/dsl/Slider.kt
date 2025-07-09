@@ -151,7 +151,7 @@ data class Slider internal constructor(
          */
         val isEnabled: Property<Boolean>?,
         /**
-         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -499,7 +499,7 @@ data class Slider internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -650,7 +650,7 @@ fun DivScope.slider(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -799,7 +799,7 @@ fun DivScope.sliderProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -948,7 +948,7 @@ fun TemplateScope.sliderRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1099,7 +1099,7 @@ fun Slider.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1250,7 +1250,7 @@ fun Slider.defer(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1478,7 +1478,7 @@ fun Slider.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1630,7 +1630,7 @@ fun Component<Slider>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1860,7 +1860,7 @@ fun Component<Slider>.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables toggling values by clicking or swiping.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.

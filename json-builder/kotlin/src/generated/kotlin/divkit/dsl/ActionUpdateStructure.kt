@@ -44,7 +44,7 @@ data class ActionUpdateStructure internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+         * Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
          */
         val path: Property<String>?,
         /**
@@ -68,7 +68,7 @@ data class ActionUpdateStructure internal constructor(
 }
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -87,7 +87,7 @@ fun DivScope.actionUpdateStructure(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -104,7 +104,7 @@ fun DivScope.actionUpdateStructureProps(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -121,7 +121,7 @@ fun TemplateScope.actionUpdateStructureRefs(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -140,7 +140,7 @@ fun ActionUpdateStructure.override(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -159,7 +159,7 @@ fun ActionUpdateStructure.defer(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param value Value set into dictionary/array.
  * @param variableName Variable name of array or dictionary type.
  */
@@ -178,7 +178,7 @@ fun ActionUpdateStructure.modify(
 )
 
 /**
- * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.
+ * @param path Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.
  * @param variableName Variable name of array or dictionary type.
  */
 @Generated

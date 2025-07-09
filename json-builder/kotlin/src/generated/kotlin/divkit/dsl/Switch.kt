@@ -143,7 +143,7 @@ data class Switch internal constructor(
          */
         val isOnVariable: Property<String>?,
         /**
-         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -283,7 +283,7 @@ data class Switch internal constructor(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -400,7 +400,7 @@ fun DivScope.switch(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -515,7 +515,7 @@ fun DivScope.switchProps(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -630,7 +630,7 @@ fun TemplateScope.switchRefs(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -747,7 +747,7 @@ fun Switch.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -864,7 +864,7 @@ fun Switch.defer(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -1046,7 +1046,7 @@ fun Switch.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -1164,7 +1164,7 @@ fun Component<Switch>.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
@@ -1348,7 +1348,7 @@ fun Component<Switch>.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param isOnVariable Name of the Boolean variable assigned to the toggle.
- * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
