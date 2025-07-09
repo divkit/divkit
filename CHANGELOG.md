@@ -1,3 +1,9 @@
+## 32.7.1
+
+# Android Client:
+* Reverted fixes for accessibility mode `merge`.
+
+
 ## 32.7.0
 
 # Android Client:
