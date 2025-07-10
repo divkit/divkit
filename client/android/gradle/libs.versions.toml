@@ -159,7 +159,7 @@ markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 
-nexusPublishPlugin = { module = "io.github.gradle-nexus:publish-plugin", version = "1.1.0" }
+nexusPublishPlugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 nvWebsocket = { module = "com.neovisionaries:nv-websocket-client", version = "2.14" }
 
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
