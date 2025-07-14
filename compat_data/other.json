@@ -98,9 +98,13 @@
         "id": "get_value_subscriptions",
         "name": "Subscribing to variables inside getStringValue and other functions for get<Type>Value",
         "compat": {
-            "ios": {
-                "version_added": "1.0.0"
-            },
+            "ios": [{
+                "version_added": "1.0.0",
+                "partial_implementation": true,
+                "notes": "Partial implementation refers to problems in several complex cases."
+            }, {
+                "version_added": "32.7.0"
+            }],
             "android": {
                 "version_added": "32.5.0"
             },

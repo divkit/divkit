@@ -238,6 +238,17 @@
             }
         }
     }, {
+        "id": "action_update_structure",
+        "name": "Typed action <code>update_structure</code>",
+        "compat": {
+            "android": {
+                "version_added": "32.7.0"
+            },
+            "web": {
+                "version_added": "32.7.0"
+            }
+        }
+    }, {
         "id": "action_typed_submit",
         "name": "Typed action <code>submit</code>",
         "compat": {
