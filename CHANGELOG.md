@@ -1,6 +1,7 @@
 ## 32.8.0
 
 # Android Client:
+* Added ability to discard sequential drawing pass cancellation. Corresponding events will be logged to `Div2Logger`.
 * Fixed ranges with actions in selectable text.
 * Fixed unnecessary selection of ranges with actions.
 
