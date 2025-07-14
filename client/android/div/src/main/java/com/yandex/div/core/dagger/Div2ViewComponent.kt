@@ -1,7 +1,8 @@
 package com.yandex.div.core.dagger
 
-import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
+import com.yandex.div.core.tooltip.DivTooltipController
+import com.yandex.div.core.util.SafeDrawingPassOverrideStrategy
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
@@ -39,6 +40,7 @@ internal interface Div2ViewComponent {
     val animatorController: DivAnimatorController
     val divTooltipController: DivTooltipController
     val runtimeVisitor: DivRuntimeVisitor
+    val drawingPassOverrideStrategy: SafeDrawingPassOverrideStrategy
 
     @Component.Builder
     interface Builder {

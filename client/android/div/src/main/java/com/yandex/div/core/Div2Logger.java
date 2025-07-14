@@ -326,4 +326,18 @@ public interface Div2Logger {
     ) {
         //do nothing
     }
+
+    default void logFrameCancelled(
+        @NonNull Div2View divView,
+        @NonNull String message
+    ) {
+        //do nothing
+    }
+
+    default void logFrameCancelLimitExceeded(
+        @NonNull Div2View divView,
+        @NonNull String message
+    ) {
+        //do nothing
+    }
 }
