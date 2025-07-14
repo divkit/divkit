@@ -1,5 +1,9 @@
 ## 32.8.0
 
+# Android Client:
+* Fixed ranges with actions in selectable text.
+* Fixed unnecessary selection of ranges with actions.
+
 # iOS Client:
 * Added DivKit Sample app on SwiftUI.
 * Added len() function for dictionaries.
