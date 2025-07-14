@@ -24,6 +24,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.spannable.ShadowData
 import com.yandex.div.core.view2.spannable.SpannedTextBuilder
+import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.drawable.LinearGradientDrawable
@@ -379,7 +380,11 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun TextView.applySelectable(selectable: Boolean) {
+        val movementMethod = this.movementMethod
         setTextIsSelectable(selectable)
+        if (movementMethod is SelectableLinkMovementMethod) {
+            this.movementMethod = movementMethod
+        }
     }
 
     //endregion
