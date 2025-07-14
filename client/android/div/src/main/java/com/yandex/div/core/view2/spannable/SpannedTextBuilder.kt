@@ -6,7 +6,6 @@ import android.graphics.PorterDuffColorFilter
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.method.LinkMovementMethod
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
 import android.widget.Button
@@ -36,6 +35,7 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
 import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.core.view2.getTypefaceValue
+import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
@@ -169,8 +169,7 @@ internal class SpannedTextBuilder @Inject constructor(
             spannedText,
             0,
             spannedText.length,
-            actions,
-            enableClickableSpanSupport = false
+            actions
         )
 
         for (index in sortedImages.indices.reversed()) {
@@ -435,21 +434,18 @@ internal class SpannedTextBuilder @Inject constructor(
         spannedText: Spannable,
         start: Int,
         end: Int,
-        actions: List<DivAction>?,
-        enableClickableSpanSupport: Boolean = true,
+        actions: List<DivAction>?
     ) {
         if (actions.isNullOrEmpty()) return
 
-        textView.movementMethod = LinkMovementMethod.getInstance()
+        textView.movementMethod = SelectableLinkMovementMethod
         spannedText.setSpan(
             PerformActionSpan(bindingContext, actions),
             start,
             end,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        if (enableClickableSpanSupport) {
-            ViewCompat.enableAccessibleClickableSpanSupport(textView)
-        }
+        ViewCompat.enableAccessibleClickableSpanSupport(textView)
     }
 
     private fun addDecorationSpan(
