@@ -20,7 +20,6 @@ internal class DivPagerAdapter(
     private val pageTranslations: SparseArray<Float>,
     private val viewCreator: DivViewCreator,
     path: DivStatePath,
-    private val accessibilityEnabled: Boolean,
     private val pagerView: DivPagerView,
 ) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, path, items) {
 
@@ -65,7 +64,6 @@ internal class DivPagerAdapter(
             view,
             divBinder,
             viewCreator,
-            accessibilityEnabled,
             { isHorizontal },
             { crossAxisAlignment },
         )

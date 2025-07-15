@@ -91,7 +91,6 @@ internal class DivPagerBinder @Inject constructor(
             pageTranslations,
             viewCreator,
             path,
-            a11yEnabled,
             this
         )
         viewPager.adapter = adapter

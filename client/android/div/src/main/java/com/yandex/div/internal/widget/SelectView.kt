@@ -3,7 +3,6 @@ package com.yandex.div.internal.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
@@ -14,14 +13,15 @@ import android.widget.AbsListView.CHOICE_MODE_SINGLE
 import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.ListPopupWindow
+import androidx.core.graphics.drawable.toDrawable
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.clearFocusOnClick
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 
 private const val POPUP_ITEM_HEIGHT = 48
 
-internal open class SelectView constructor(context: Context) : EllipsizedTextView(context) {
+internal open class SelectView(context: Context) : EllipsizedTextView(context) {
     init {
         this.setOnClickListener {
             focusTracker?.let { tracker -> clearFocusOnClick(tracker) }
@@ -45,7 +45,7 @@ internal open class SelectView constructor(context: Context) : EllipsizedTextVie
         }
 
         setOverlapAnchor(true)
-        setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        setBackgroundDrawable(Color.WHITE.toDrawable())
         setAdapter(adapter)
     }
 
@@ -86,6 +86,8 @@ internal open class SelectView constructor(context: Context) : EllipsizedTextVie
         // We need to ignore hint here so it won't be announced twice
         info.text = text
     }
+
+    override fun getAccessibilityClassName() = "android.widget.Spinner"
 
     @Mockable
     private class PopupWindow @JvmOverloads constructor(

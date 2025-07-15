@@ -50,14 +50,13 @@ internal class DivInputView @JvmOverloads constructor(
 
     private var _hint: String? = null
 
-    private var _isFocusable = true
-
     private var editorActionListener: OnEditorActionListener? = null
 
     var enabled = true
         internal set(value) {
             field = value
-            isFocusable = _isFocusable
+            isFocusable = value
+            isFocusableInTouchMode = value
         }
 
     internal var accessibilityEnabled: Boolean = false
@@ -94,13 +93,6 @@ internal class DivInputView @JvmOverloads constructor(
 
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas, scrollX, scrollY) { super.draw(it) }
-    }
-
-    override fun setFocusable(focusable: Boolean) {
-        _isFocusable = focusable
-        val isFocusable = _isFocusable && enabled
-        super.setFocusable(isFocusable)
-        isFocusableInTouchMode = isFocusable
     }
 
     override fun setOnEditorActionListener(l: OnEditorActionListener?) {

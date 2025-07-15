@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs.pager
 
 import android.view.Gravity
-import com.yandex.div.R
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnEveryDetach
 import com.yandex.div.core.view2.BindingContext
@@ -22,7 +21,6 @@ internal class DivPagerViewHolder(
     private val pageLayout: DivPagerPageLayout,
     divBinder: DivBinder,
     viewCreator: DivViewCreator,
-    private val accessibilityEnabled: Boolean,
     private val isHorizontal: () -> Boolean,
     private val crossAxisAlignment: () -> ItemAlignment,
 ) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator) {
@@ -40,10 +38,6 @@ internal class DivPagerViewHolder(
 
         (pageLayout.child?.layoutParams as? DivLayoutParams)
             ?.setCrossAxisAlignment(div.value(), bindingContext.expressionResolver)
-
-        if (accessibilityEnabled) {
-            pageLayout.setTag(R.id.div_pager_item_clip_id, position)
-        }
     }
 
     private fun DivLayoutParams.setCrossAxisAlignment(div: DivBase, resolver: ExpressionResolver) {

@@ -110,7 +110,6 @@ internal class DivContainerBinder @Inject constructor(
             div.pressStartActions,
             div.pressEndActions,
             div.actionAnimation,
-            div.accessibility,
             div.captureFocusOnAction,
         )
 

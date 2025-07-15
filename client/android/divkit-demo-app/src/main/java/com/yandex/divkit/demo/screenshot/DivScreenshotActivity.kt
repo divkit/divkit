@@ -4,17 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.FOCUS_BEFORE_DESCENDANTS
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.core.view.descendants
-import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
@@ -76,14 +74,20 @@ class DivScreenshotActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
             id = R.id.morda_screenshot_div
+            removeAutofocusForOldApis()
             hideCursor()
-            focusRecyclersBeforeDescendants()
         }
         applyConfiguration(divView)
         setContentView(divView)
     }
 
     fun getTestCaseJson() = assetReader.read(cardAssetName)
+
+    private fun View.removeAutofocusForOldApis() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            isFocusableInTouchMode = true
+        }
+    }
 
     private fun ViewGroup.hideCursor() {
         for (child in children) {
@@ -92,14 +96,6 @@ class DivScreenshotActivity : AppCompatActivity() {
                 child.inputType = child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             } else {
                 (child as? ViewGroup)?.hideCursor()
-            }
-        }
-    }
-
-    private fun ViewGroup.focusRecyclersBeforeDescendants() {
-        descendants.forEach {
-            if (it is RecyclerView) {
-                it.descendantFocusability = FOCUS_BEFORE_DESCENDANTS
             }
         }
     }

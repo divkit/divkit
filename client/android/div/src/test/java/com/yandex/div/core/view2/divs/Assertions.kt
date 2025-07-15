@@ -25,7 +25,6 @@ internal fun assertActionApplied(context: BindingContext, target: View, actionUr
         pressStartActions = anyOrNull(),
         pressEndActions = anyOrNull(),
         actionAnimation = any(),
-        accessibility = anyOrNull(),
         captureFocusOnAction = any(),
     )
 
