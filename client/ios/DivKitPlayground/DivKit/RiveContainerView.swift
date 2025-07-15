@@ -70,6 +70,10 @@ extension RiveContainerView: AsyncSourceAnimatableView {
   func play() {
     riveViewModel?.play(loop: loop)
   }
+  
+  func pause() {
+    riveViewModel?.pause()
+  }
 
   func setSourceAsync(_ source: AnimationSourceType) async {
     if let source = source as? RiveAnimationSourceType {

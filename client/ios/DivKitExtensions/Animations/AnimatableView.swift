@@ -24,7 +24,14 @@ extension AnimatableViewFactory {
 
 public protocol AsyncSourceAnimatableView: ViewType {
   func play()
+  func pause()
   @MainActor func setSourceAsync(_ source: AnimationSourceType) async
+}
+
+extension AsyncSourceAnimatableView {
+  func pause() {
+    assertionFailure("AsyncSourceAnimatableView needs to implement pause()")
+  }
 }
 
 /// This protocol is deprecated. Use AsyncSourceAnimatableView instead.

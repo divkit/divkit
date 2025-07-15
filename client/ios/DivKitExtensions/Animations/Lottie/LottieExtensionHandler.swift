@@ -58,7 +58,8 @@ public final class LottieExtensionHandler: DivExtensionHandler {
       ),
       animationHolder: animationHolder,
       sizeProvider: block,
-      scale: scale
+      scale: scale,
+      isPlaying: params.isPlaying
     )
   }
 

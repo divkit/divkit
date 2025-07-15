@@ -9,6 +9,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
   let animationHolder: AnimationHolder
   let sizeProvider: Block
   let scale: DivImageScale
+  var isPlaying: Bool
 
   var debugDescription: String {
     "Animation Block playing animation with view: \(animatableView)"
@@ -18,12 +19,14 @@ final class LottieAnimationBlock: SizeForwardingBlock {
     animatableView: Lazy<AsyncSourceAnimatableView>,
     animationHolder: AnimationHolder,
     sizeProvider: Block,
-    scale: DivImageScale
+    scale: DivImageScale,
+    isPlaying: Bool
   ) {
     self.animatableView = animatableView
     self.animationHolder = animationHolder
     self.sizeProvider = sizeProvider
     self.scale = scale
+    self.isPlaying = isPlaying
   }
 
   let intrinsicContentWidth: CGFloat = 0
@@ -39,6 +42,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
     return self.sizeProvider == other.sizeProvider
       && self.animationHolder == other.animationHolder
       && self.scale == other.scale
+      && self.isPlaying == other.isPlaying
   }
 }
 

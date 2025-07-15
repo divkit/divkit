@@ -99,6 +99,8 @@ private final class MockAnimatableView: UIView, AsyncSourceAnimatableView {
     playCallsCount += 1
   }
   
+  func pause() {}
+  
   func setSourceAsync(_ source: any DivKitExtensions.AnimationSourceType) async {
     receivedSources.append(source)
   }
@@ -136,7 +138,8 @@ private func makeExpectedBlockBlock(
         ),
         accessibilityElement: accessibility(identifier: "container_with_extension")
       ),
-      scale: .fit
+      scale: .fit,
+      isPlaying: true
     ),
     ids: []
   )

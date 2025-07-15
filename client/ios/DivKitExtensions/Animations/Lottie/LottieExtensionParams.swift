@@ -12,11 +12,13 @@ struct LottieExtensionParams {
   enum Defaults {
     public static let defaultRepeatCount: Float = 0
     public static let defaultRepeatMode: AnimationRepeatMode = .restart
+    public static let defaultIsPlaying: Bool = true
   }
 
   var source: Source
   var repeatCount: Float
   var repeatMode: AnimationRepeatMode
+  var isPlaying: Bool
 
   init?(
     paramsDictionary: [String: Any],
@@ -39,12 +41,15 @@ struct LottieExtensionParams {
         .flatMap(expressionResolver.resolveString)
         .flatMap(AnimationRepeatMode.init)
         ?? Defaults.defaultRepeatMode
+
+    self.isPlaying = (try? paramsDictionary.getOptionalBool("is_playing", expressionResolver: expressionResolver)) ?? Defaults.defaultIsPlaying
   }
 
-  init(source: Source, repeatCount: Float, repeatMode: AnimationRepeatMode) {
+  init(source: Source, repeatCount: Float, repeatMode: AnimationRepeatMode, isPlaying: Bool) {
     self.source = source
     self.repeatCount = repeatCount
     self.repeatMode = repeatMode
+    self.isPlaying = isPlaying
   }
 }
 

@@ -19,6 +19,18 @@ final class AnimationBlockView: BlockView {
   }
 
   private var animationRequest: Cancellable?
+
+  var isPlaying: Bool = true {
+    didSet {
+      guard oldValue != isPlaying else { return }
+      if isPlaying {
+        animatableView?.play()
+      } else {
+        animatableView?.pause()
+      }
+    }
+  }
+
   var animationHolder: AnimationHolder? {
     didSet {
       animationRequest?.cancel()
@@ -36,7 +48,9 @@ final class AnimationBlockView: BlockView {
           view.contentMode = animationContentMode
           Task { @MainActor in
             await view.setSourceAsync(animationSource)
-            view.play()
+            if self.isPlaying {
+              view.play()
+            }
           }
         }
     }

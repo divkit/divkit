@@ -25,6 +25,7 @@ extension LottieAnimationBlock {
       lottieView.animationContentMode = scale.contentMode
       lottieView.animationHolder = animationHolder
     }
+    lottieView.isPlaying = isPlaying
   }
 }
 
