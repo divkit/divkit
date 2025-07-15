@@ -47,6 +47,8 @@ private func runTest(_ testCase: ExpressionTestCase) {
     XCTAssertEqual(testCase.resolveArray(), expectedValue)
   case let .dict(expectedValue):
     XCTAssertEqual(testCase.resolveDict(), expectedValue)
+  case let .unorderedArray(expectedValue):
+    XCTAssertTrue(expectedValue.isEqualUnordered(testCase.resolveArray()))
   case let .error(expectedMessage):
     var errorMessage = ""
     _ = testCase.resolveValue(errorTracker: { errorMessage = $0.message })
@@ -189,6 +191,7 @@ enum ExpectedValue: Decodable {
   case url(URL)
   case array(DivArray)
   case dict(DivDictionary)
+  case unorderedArray(DivArray)
   case error(String)
 
   init(from decoder: Decoder) throws {
@@ -223,6 +226,13 @@ enum ExpectedValue: Decodable {
         fallthrough
       }
       self = .array(array)
+    case "unordered_array":
+      let value = try JSONObject(from: decoder).makeDictionary()
+      guard let rawValue = value?["value"] as? [Any],
+            let array = DivArray.fromAny(rawValue) else {
+        fallthrough
+      }
+      self = .unorderedArray(array)
     case "dict":
       let value = try JSONObject(from: decoder).makeDictionary()
       guard let rawValue = value?["value"] as? [String: Any],
@@ -263,6 +273,8 @@ enum ExpectedValue: Decodable {
     case let .array(value):
       formatArgForError(value)
     case let .dict(value):
+      formatArgForError(value)
+    case let .unorderedArray(value):
       formatArgForError(value)
     case .error:
       "error"

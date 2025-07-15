@@ -27,7 +27,10 @@ extension [String: Function] {
     addFunctions("Url", _getUrl)
     addFunctions("OptUrl", _getOptUrl)
     
-    addFunction("len", FunctionUnary<DivDictionary, Int> { $0.count })
+    addFunction("len", _len)
+    
+    addFunction("getDictKeys", _getDictKeys)
+    addFunction("getDictValues", _getDictValues)
   }
 
   mutating func addDictMethods() {
@@ -42,6 +45,9 @@ extension [String: Function] {
     addFunction("isEmpty", _isEmpty)
 
     addFunction("containsKey", _containsKey)
+    
+    addFunction("getKeys", _getDictKeys)
+    addFunction("getValues", _getDictValues)
   }
 
   private mutating func addFunctions(
@@ -139,6 +145,18 @@ private let _getOptUrl = OverloadedFunction(functions: [
 
 private let _containsKey = FunctionBinary<DivDictionary, String, Bool> { dict, key in
   dict.contains { $0.key == key }
+}
+
+private let _len = FunctionUnary<DivDictionary, Int> {
+  $0.count
+}
+
+private let _getDictKeys = FunctionUnary<DivDictionary, DivArray> {
+  Array($0.keys)
+}
+
+private let _getDictValues = FunctionUnary<DivDictionary, DivArray> {
+  Array($0.values)
 }
 
 extension DivDictionary {

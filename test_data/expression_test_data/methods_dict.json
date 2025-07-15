@@ -535,6 +535,108 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "expression": "@{dict_var.getKeys()}",
+      "expected": {
+        "type": "unordered_array",
+        "value": []
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{dict_var.getKeys()}",
+      "expected": {
+        "type": "unordered_array",
+        "value": [
+          "key3",
+          "key1",
+          "key2"
+        ]
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict_var",
+          "value": {
+            "key1": {
+              "name": "text1"
+            },
+            "key2": {
+              "name": "text2"
+            },
+            "key3": {
+              "name": "text3"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{dict_var.getValues()}",
+      "expected": {
+        "type": "unordered_array",
+        "value": []
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{dict_var.getValues()}",
+      "expected": {
+        "type": "unordered_array",
+        "value": [
+          {
+            "name": "text2"
+          },
+          {
+            "name": "text1"
+          },
+          {
+            "name": "text2"
+          }
+        ]
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict_var",
+          "value": {
+            "key1": {
+              "name": "text1"
+            },
+            "key2": {
+              "name": "text2"
+            },
+            "key3": {
+              "name": "text2"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

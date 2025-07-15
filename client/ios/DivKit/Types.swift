@@ -8,6 +8,17 @@ extension DivArray {
   }
 }
 
+extension DivArray {
+  func isEqualUnordered(_ other: DivArray?) -> Bool {
+    guard let other,
+      self.count == other.count else {
+      return false
+    }
+    
+    return self.countElements() == other.countElements()
+  }
+}
+
 public typealias DivDictionary = [String: AnyHashable]
 
 extension DivDictionary {
@@ -15,3 +26,4 @@ extension DivDictionary {
     NSDictionary(dictionary: value) as? DivDictionary
   }
 }
+

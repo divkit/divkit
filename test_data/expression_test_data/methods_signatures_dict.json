@@ -223,6 +223,36 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "function_name": "getKeys",
+      "is_method": true,
+      "doc": "Return a collection containing just the keys of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "function_name": "getValues",
+      "is_method": true,
+      "doc": "Return a collection containing just the values of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

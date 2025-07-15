@@ -781,6 +781,34 @@
       "platforms": [
         "ios"
       ]
+    },
+    {
+      "function_name": "getDictKeys",
+      "doc": "Return a collection containing just the keys of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "function_name": "getDictValues",
+      "doc": "Return a collection containing just the values of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
