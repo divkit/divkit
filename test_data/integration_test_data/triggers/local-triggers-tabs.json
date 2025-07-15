@@ -1,0 +1,266 @@
+{
+  "description": "Local triggers in tabs",
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "trigger_state_tabs",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "trigger_state_item",
+          "type": "string",
+          "value": "unset"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "tabs",
+            "id": "sample",
+            "variable_triggers": [
+              {
+                "condition": "@{counter > 100}",
+                "actions": [
+                  {
+                    "log_id": "trigger_invoke",
+                    "url": "div-action://set_variable?name=trigger_state_tabs&value=activated"
+                  }
+                ]
+              }
+            ],
+            "items": [
+              {
+                "title": "Tab 1",
+                "div": {
+                  "type": "text",
+                  "text": "Tab 1. Total count: @{counter}",
+                  "variable_triggers": [
+                    {
+                      "condition": "@{counter > 200}",
+                      "actions": [
+                        {
+                          "log_id": "trigger_invoke",
+                          "url": "div-action://set_variable?name=trigger_state_item&value=activated"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "title": "Tab 2",
+                "div": {
+                  "type": "text",
+                  "text": "Tab 2. Total count: @{counter}"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=sample&item=1",
+          "log_id": "set_second_tab"
+        },
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=sample&item=1",
+          "log_id": "set_second_tab"
+        },
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        },
+        {
+          "url": "div-action://set_current_item?id=sample&item=0",
+          "log_id": "set_first_tab"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_tabs",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_item",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

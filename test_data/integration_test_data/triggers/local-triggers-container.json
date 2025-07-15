@@ -1,0 +1,116 @@
+{
+  "description": "Local triggers",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "trigger_state",
+          "type": "string",
+          "value": "unset"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Total count: @{counter}",
+                "variable_triggers": [
+                  {
+                    "condition": "@{counter > 100}",
+                    "actions": [
+                      {
+                        "log_id": "trigger_invoke",
+                        "url": "div-action://set_variable?name=trigger_state&value=activated"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

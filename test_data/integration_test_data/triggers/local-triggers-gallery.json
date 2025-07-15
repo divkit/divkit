@@ -1,0 +1,216 @@
+{
+  "description": "Local triggers in gallery",
+  "div_data": {
+    "templates": {
+      "item": {
+        "type": "text",
+        "height": {
+          "type": "fixed",
+          "value": 120
+        }
+      }
+    },
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "gallery_trigger_state",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "item_trigger_state",
+          "type": "string",
+          "value": "unset"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "gallery",
+                "id": "gallery1",
+                "height": {
+                  "type": "match_parent"
+                },
+                "orientation": "vertical",
+                "variable_triggers": [
+                  {
+                    "condition": "@{counter > 100}",
+                    "actions": [
+                      {
+                        "log_id": "gallery_trigger_invoke",
+                        "url": "div-action://set_variable?name=gallery_trigger_state&value=activated"
+                      }
+                    ]
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "item",
+                    "text": "item/1"
+                  },
+                  {
+                    "type": "item",
+                    "text": "item/2"
+                  },
+                  {
+                    "type": "item",
+                    "text": "item/3"
+                  },
+                  {
+                    "type": "item",
+                    "text": "item/4",
+                    "variable_triggers": [
+                      {
+                        "condition": "@{counter > 200}",
+                        "actions": [
+                          {
+                            "log_id": "item_trigger_invoke",
+                            "url": "div-action://set_variable?name=item_trigger_state&value=activated"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

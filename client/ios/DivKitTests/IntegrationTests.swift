@@ -67,7 +67,7 @@ private func runTest(_ testData: IntegrationTestData) async {
     )
   }
 
-  Task { @MainActor in
+  let task = Task { @MainActor in
     testCase.expected.forEach {
       switch $0 {
       case let .variable(name, value):
@@ -88,6 +88,8 @@ private func runTest(_ testData: IntegrationTestData) async {
       }
     }
   }
+
+  await task.value
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
