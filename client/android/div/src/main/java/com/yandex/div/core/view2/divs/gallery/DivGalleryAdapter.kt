@@ -14,10 +14,10 @@ internal class DivGalleryAdapter(
     private val bindingContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
-    private val path: DivStatePath,
-) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
+    path: DivStatePath,
+) : DivCollectionAdapter<DivGalleryViewHolder>(bindingContext, path, items) {
 
-    private val ids = WeakHashMap<DivItemBuilderResult, Long>()
+    private val internalIds = WeakHashMap<DivItemBuilderResult, Long>()
     private var lastItemId = 0L
 
     init {
@@ -26,16 +26,11 @@ internal class DivGalleryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
         val view = DivGalleryItemLayout(bindingContext.divView.context)
-        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator, path)
+        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator)
     }
 
     override fun getItemId(position: Int): Long {
         val item = visibleItems[position]
-        return ids[item] ?: (lastItemId++).also { ids[item] = it }
-    }
-
-    override fun onBindViewHolder(holder: DivGalleryViewHolder, position: Int) {
-        val item = visibleItems[position]
-        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position, items.indexOf(item))
+        return internalIds[item] ?: (lastItemId++).also { internalIds[item] = it }
     }
 }

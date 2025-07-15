@@ -267,7 +267,7 @@ class DivStateBinderTest: DivBinderTest() {
     }
 
     private fun pathToState(stateId: String): DivStatePath {
-        return rootPath.append(divId = "state_container", stateId = stateId)
+        return rootPath.append(divId = "state_container", state = null, stateIdFallback = stateId)
     }
 
     private fun assertStateNotBound(path: DivStatePath) {

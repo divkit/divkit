@@ -35,6 +35,7 @@ internal class ExpressionResolverImpl(
     val variableController: VariableController,
     val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
+    val itemBuilderData: String? = null
 ) : ExpressionResolver {
 
     private val evaluationsCache = mutableMapOf<String, Any>()
@@ -242,6 +243,7 @@ internal class ExpressionResolverImpl(
                 )
             ),
             errorCollector = errorCollector,
+            itemBuilderData = pathSegment,
         )
     }
 

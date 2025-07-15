@@ -147,7 +147,7 @@ class Div2View private constructor(
     internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
     internal var inMiddleOfBind = false
 
-    internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
+    internal var bindingContext: BindingContext = BindingContext(this, ExpressionResolver.EMPTY)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -228,7 +228,7 @@ class Div2View private constructor(
         if (oldRuntimeStore != runtimeStore) {
             oldRuntimeStore?.clearBindings(this)
         }
-        bindingContext = bindingContext.getFor(expressionResolver)
+        bindingContext = BindingContext(this, expressionResolver)
     }
 
     private fun tryAttachVariableTriggers(data: DivData?) {

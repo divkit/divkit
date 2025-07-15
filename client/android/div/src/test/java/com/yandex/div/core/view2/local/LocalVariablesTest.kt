@@ -7,6 +7,7 @@ import android.widget.TextView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -49,6 +50,7 @@ class LocalVariablesTest {
     private val container get() = state.getChildAt(0) as DivLinearLayout
     private val inputWithLocalVariable get() = container.getChildAt(0) as EditText
     private val inputWithCardVariable get() = container.getChildAt(1) as EditText
+    private val path = DivStatePath.parse("0/label/state_1")
 
     private fun setDivView(json: String) {
         val parsingEnvironment = DivParsingEnvironment({ e -> throw AssertionError(e) })
@@ -66,7 +68,7 @@ class LocalVariablesTest {
     @Test
     fun `local variable value can be updated by path`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, path)
 
         assertTextShown(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable)
     }
@@ -74,7 +76,7 @@ class LocalVariablesTest {
     @Test
     fun `changing local variable will not effect other states`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, path)
 
         setState(2)
         assertTextShown(LOCAL_INPUT_INITIAL_VALUE_SECOND_STATE, inputWithLocalVariable)
@@ -83,7 +85,7 @@ class LocalVariablesTest {
     @Test
     fun `local variable restore it's value on changing state to another and returning to original state`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, path)
 
         setState(2)
         setState(1)
@@ -108,7 +110,7 @@ class LocalVariablesTest {
         assertTextShown("text", textWithLocalVariable)
         assertTextShown("text", textWithParentVariable)
 
-        setVariable("text", "changed text", "0/label/state_4")
+        setVariable("text", "changed text", DivStatePath.parse("0/label/state_4"))
         assertTextShown("text", textWithLocalVariable)
         assertTextShown("changed text", textWithParentVariable)
     }
@@ -124,7 +126,7 @@ class LocalVariablesTest {
         )
     }
 
-    private fun setVariable(name: String, value: String, path: String) {
+    private fun setVariable(name: String, value: String, path: DivStatePath) {
         val variable = div2View.runtimeStore.getOrCreateRuntime(path, div, div2View.expressionResolver)
             .expressionResolver.variableController.getMutableVariable(name) ?: return
         variable.set(value)

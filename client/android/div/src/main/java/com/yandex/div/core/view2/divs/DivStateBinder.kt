@@ -150,9 +150,9 @@ internal class DivStateBinder @Inject constructor(
     ) {
         val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
-        val currentPath = path.append(id, newState.stateId)
         val newStateDiv = newState.div
         val newStateDivValue = newStateDiv?.value()
+        val currentPath = path.append(id, newState, newState.stateId)
 
         val outgoing = if (isNotEmpty()) getChildAt(0) else null
         val incoming: View?
@@ -290,7 +290,8 @@ internal class DivStateBinder @Inject constructor(
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
                     if (value == null || stateId == null || value == stateId) return
-                    val newDivStatePath = divStatePath.append(div.getId(), value)
+                    val state = div.states.find { it.stateId == value }
+                    val newDivStatePath = divStatePath.append(div.getId(), state, value)
                     bindingContext.divView.switchToState(newDivStatePath, true)
                 }
 

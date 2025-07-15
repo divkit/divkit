@@ -19,10 +19,10 @@ internal class DivPagerAdapter(
     private val divBinder: DivBinder,
     private val pageTranslations: SparseArray<Float>,
     private val viewCreator: DivViewCreator,
-    private val path: DivStatePath,
+    path: DivStatePath,
     private val accessibilityEnabled: Boolean,
     private val pagerView: DivPagerView,
-) : DivCollectionAdapter<DivPagerViewHolder>(items) {
+) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, path, items) {
 
     val itemsToShow = object : AbstractList<DivItemBuilderResult>() {
         override val size get() = visibleItems.size + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM * 2 else 0
@@ -65,7 +65,6 @@ internal class DivPagerAdapter(
             view,
             divBinder,
             viewCreator,
-            path,
             accessibilityEnabled,
             { isHorizontal },
             { crossAxisAlignment },
@@ -77,8 +76,7 @@ internal class DivPagerAdapter(
     override fun getItemCount() = itemsToShow.size
 
     override fun onBindViewHolder(holder: DivPagerViewHolder, position: Int) {
-        val item = itemsToShow[position]
-        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position, items.indexOf(item))
+        super.onBindViewHolder(holder, (getRealPosition(position) + visibleItems.size) % visibleItems.size)
         pageTranslations[position]?.let {
             if (isHorizontal) {
                 holder.itemView.translationX = it

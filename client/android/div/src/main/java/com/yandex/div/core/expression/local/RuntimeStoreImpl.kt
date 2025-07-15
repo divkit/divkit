@@ -4,6 +4,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -44,26 +45,27 @@ internal class RuntimeStoreImpl(
      * @param parentResolver
      */
     override fun getOrCreateRuntime(
-        path: String,
+        path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime {
-        pathToRuntime[path]?.let { return it }
+        val pathString = path.fullPath
+        pathToRuntime[pathString]?.let { return it }
 
         if (parentResolver !is ExpressionResolverImpl) return rootRuntime
 
         val parentRuntime = getRuntimeWithOrNull(parentResolver) ?: run {
-            reportParentRuntimeError(path)
+            reportParentRuntimeError(pathString)
             return rootRuntime
         }
 
         if (!div.needLocalRuntime) {
-            pathToRuntime[path] = parentRuntime
+            pathToRuntime[pathString] = parentRuntime
             return parentRuntime
         }
 
         return runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector).also {
-            putRuntime(it, path, parentRuntime)
+            putRuntime(it, pathString, parentRuntime)
         }
     }
 
@@ -83,39 +85,40 @@ internal class RuntimeStoreImpl(
 
     override fun resolveRuntimeWith(
         divView: DivViewFacade?,
-        path: String,
+        path: DivStatePath,
         div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
-        val runtimeForPath = pathToRuntime[path]
+        val pathString = path.fullPath
+        val runtimeForPath = pathToRuntime[pathString]
         if (runtimeForPath?.let { resolver == it.expressionResolver || div.needLocalRuntime } == true) {
             return runtimeForPath
         }
 
-        runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, path) }
+        runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, pathString) }
 
         if (resolver !is ExpressionResolverImpl) return null
 
         val parentRuntime = getRuntimeWithOrNull(parentResolver) ?: run {
-            reportParentRuntimeError(path)
+            reportParentRuntimeError(pathString)
             return null
         }
 
         return when {
             div.needLocalRuntime -> {
                 runtimeProvider.createChildRuntime(path, div.value(), resolver, errorCollector).also {
-                    putRuntime(it, path, parentRuntime)
+                    putRuntime(it, pathString, parentRuntime)
                 }
             }
             resolver != parentResolver -> {
                 ExpressionsRuntime(resolver, null).also {
-                    putRuntime(it, path, parentRuntime)
+                    putRuntime(it, pathString, parentRuntime)
                 }
             }
             else -> {
                 parentRuntime.also {
-                    pathToRuntime[path] = parentRuntime
+                    pathToRuntime[pathString] = parentRuntime
                 }
             }
         }
@@ -134,8 +137,8 @@ internal class RuntimeStoreImpl(
         it.onDetachedFromWindow(divView)
     }
 
-    override fun traverseFrom(runtime: ExpressionsRuntime, path: String, callback: (ExpressionsRuntime) -> Unit) {
-        tree.invokeRecursively(runtime, path) { node ->
+    override fun traverseFrom(runtime: ExpressionsRuntime, path: DivStatePath, callback: (ExpressionsRuntime) -> Unit) {
+        tree.invokeRecursively(runtime, path.fullPath) { node ->
             callback(node.runtime)
         }
     }

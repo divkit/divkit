@@ -1,12 +1,12 @@
 package com.yandex.div.internal.core
 
-import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.state.DivPathUtils.getId
+import com.yandex.div.core.state.DivPathUtils.getIds
+import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div2.Div
-import com.yandex.div2.DivTabs
+import com.yandex.div2.DivCollectionItemBuilder
 
 internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> Boolean)? = null) {
 
@@ -39,69 +39,79 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         data: Div,
         context: BindingContext,
         path: DivStatePath,
-        items: () -> List<Triple<Div, BindingContext, DivStatePath>>
+        items: List<Div>?,
+        itemBuilder: DivCollectionItemBuilder? = null,
+        pathOverride: List<DivStatePath>? = null
     ): T {
         val result = defaultVisit(data, context, path)
         if (returnCondition?.invoke(result) == true) return result
 
-        items().forEach { (div, context, path) ->
-            visit(div, context, path)?.let {
-                if (returnCondition?.invoke(it) == true) return it
-            }
+        itemBuilder?.let {
+            return it.visit(context, path, result)
+        }
+
+        val ids = items?.getIds() ?: return result
+        items.forEachIndexed { index, div ->
+            val childPath = pathOverride?.get(index) ?: path.appendDiv(ids[index])
+            val child = visitCollectionChild(div, context, childPath, result)
+            if (returnCondition?.invoke(child) == true) return child
         }
         return result
     }
 
-    protected open fun visit(data: Div.Container, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
+    private fun DivCollectionItemBuilder.visit(
+        context: BindingContext,
+        path: DivStatePath,
+        parent: T,
+    ): T {
+        val builtItems = build(context.expressionResolver)
+        val ids = builtItems.getItemIds()
+        builtItems.forEachIndexed { index, item ->
+            val childPath = path.appendDiv(ids[index])
+            val resolver = context.divView.runtimeStore.resolveRuntimeWith(
+                context.divView,
+                childPath,
+                item.div,
+                item.expressionResolver,
+                context.expressionResolver
+            )?.expressionResolver ?: item.expressionResolver
+            val childContext = BindingContext(context.divView, resolver)
+
+            val result = visitCollectionChild(item.div, childContext, childPath, parent)
+            if (returnCondition?.invoke(result) == true) return result
         }
+        return parent
     }
 
-    protected open fun visit(data: Div.Grid, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.nonNullItems.mapDivWithContext(context, path)
-        }
-    }
+    protected open fun visitCollectionChild(div: Div, context: BindingContext, path: DivStatePath, parent: T) =
+        visit(div, context, path)
 
-    protected open fun visit(data: Div.Gallery, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
-        }
-    }
+    protected open fun visit(data: Div.Container, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
 
-    protected open fun visit(data: Div.Pager, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
-        }
-    }
+    protected open fun visit(data: Div.Grid, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items)
 
-    protected open fun visit(data: Div.Tabs, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.items.mapIndexed { index: Int, item: DivTabs.Item ->
-                Triple(
-                    item.div,
-                    context,
-                    item.div.value().resolvePath(index, path)
-                )
-            }
-        }
-    }
+    protected open fun visit(data: Div.Gallery, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
+
+    protected open fun visit(data: Div.Pager, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
+
+    protected open fun visit(data: Div.Tabs, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items.map { it.div })
 
     protected open fun visit(data: Div.State, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.states.mapNotNull {
-                val div = it.div ?: return@mapNotNull null
-                Triple(div, context, path.append(data.value.getId(), it.stateId))
-            }
+        val id = data.value.getId()
+        val paths = data.value.states.mapNotNull {
+            it.div ?: return@mapNotNull null
+            path.append(id, it, it.stateId)
         }
+        return defaultVisitCollection(data, context, path, data.value.states.mapNotNull { it.div }, null, paths)
     }
 
-    protected open fun visit(data: Div.Custom, context: BindingContext, path: DivStatePath): T {
-        return defaultVisitCollection(data, context, path) {
-            data.value.nonNullItems.mapDivWithContext(context, path)
-        }
-    }
+    protected open fun visit(data: Div.Custom, context: BindingContext, path: DivStatePath) =
+        defaultVisitCollection(data, context, path, data.value.items)
 
     protected open fun visit(data: Div.Text, context: BindingContext, path: DivStatePath) =
         defaultVisit(data, context, path)
@@ -132,38 +142,9 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 
     protected open fun visit(data: Div.Switch, context: BindingContext, path: DivStatePath) =
         defaultVisit(data, context, path)
-
-    private fun List<DivItemBuilderResult>.mapItemWithContext(
-        context: BindingContext,
-        parentPath: DivStatePath
-    ): List<Triple<Div, BindingContext, DivStatePath>> {
-        return mapIndexed { index: Int, item: DivItemBuilderResult ->
-            val div = item.div
-            val path = div.value().resolvePath(index, parentPath)
-            val itemResolver = item.expressionResolver
-            val runtime = itemResolver.asImpl?.runtimeStore?.resolveRuntimeWith(
-                context.divView,
-                path.fullPath,
-                div,
-                itemResolver,
-                context.expressionResolver
-            )
-            Triple(div, context.getFor(runtime?.expressionResolver ?: itemResolver), path)
-        }
-    }
-
-    private fun List<Div>.mapDivWithContext(
-        context: BindingContext,
-        parentPath: DivStatePath
-    ): List<Triple<Div, BindingContext, DivStatePath>> {
-        return mapIndexed { index: Int, div: Div ->
-            Triple(div, context, div.value().resolvePath(index, parentPath))
-        }
-    }
 }
 
 internal fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    val parentResolver = expressionResolver.asImpl ?: return this
-    val runtime = parentResolver.runtimeStore.getOrCreateRuntime(path.fullPath, div, parentResolver)
+    val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, expressionResolver)
     return getFor(runtime.expressionResolver)
 }

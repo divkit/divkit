@@ -15,11 +15,10 @@ internal class DivGalleryViewHolder(
     private val rootView: DivViewWrapper,
     private val divBinder: DivBinder,
     viewCreator: DivViewCreator,
-    path: DivStatePath,
-) : DivCollectionViewHolder(rootView, parentContext, divBinder, viewCreator, path) {
+) : DivCollectionViewHolder(rootView, parentContext, divBinder, viewCreator) {
 
-    fun bind(bindingContext: BindingContext, div: Div, position: Int, index: Int) {
-        bind(bindingContext, div, index)
+    override fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
+        super.bind(bindingContext, div, position, path)
         rootView.setTag(R.id.div_gallery_item_index, position)
         divBinder.attachIndicators()
     }

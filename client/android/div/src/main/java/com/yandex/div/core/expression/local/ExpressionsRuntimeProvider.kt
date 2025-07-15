@@ -11,6 +11,7 @@ import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toLocalFunctions
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -73,7 +74,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     fun createChildRuntime(
-        path: String,
+        path: DivStatePath,
         div: DivBase,
         parentResolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
@@ -95,7 +96,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val evaluator = Evaluator(evaluationContext)
 
         val childResolver = ExpressionResolverImpl(
-            path = path + "/" + parentResolver.path,
+            path = parentResolver.path + "/" + path.lastDivId,
             parentResolver.runtimeStore,
             localVariableController,
             evaluator,

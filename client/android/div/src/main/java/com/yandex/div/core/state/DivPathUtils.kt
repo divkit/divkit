@@ -3,6 +3,9 @@ package com.yandex.div.core.state
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.local.ChildPathUnitCache
+import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
@@ -152,6 +155,25 @@ internal object DivPathUtils {
         errorCallback?.invoke()
         ""
     }
+
+    fun List<Div>.getIds() = getIds({ this })
+
+    fun List<DivItemBuilderResult>.getItemIds() = getIds({ div }, { expressionResolver.asImpl })
+
+    fun <T> List<T>.getIds(div: T.() -> Div, resolver: T.() -> ExpressionResolverImpl? = { null }): List<String> {
+        val idsCount = mutableMapOf<String, Int>()
+        forEach {
+            val id = it.div().getId() ?: return@forEach
+            idsCount[id] = (idsCount[id] ?: 0) + 1
+        }
+        return mapIndexed { index, item ->
+            item.div().getId()?.let { if ((idsCount[it] ?: 0) > 1) "$it#$index" else it }
+                ?: item.resolver()?.itemBuilderData
+                ?: ChildPathUnitCache.getValue(index)
+        }
+    }
+
+    fun Div.getId() = value().run { if (this is DivState) getId() else id }
 }
 
 internal class StateConflictException(message: String, cause: Throwable? = null) : Exception(message, cause)

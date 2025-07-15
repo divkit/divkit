@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -17,7 +18,7 @@ internal interface RuntimeStore {
      * @param parentResolver
      */
     fun getOrCreateRuntime(
-        path: String,
+        path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime
@@ -26,7 +27,7 @@ internal interface RuntimeStore {
 
     fun resolveRuntimeWith(
         divView: DivViewFacade?,
-        path: String,
+        path: DivStatePath,
         div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver,
@@ -40,7 +41,7 @@ internal interface RuntimeStore {
 
     fun onDetachedFromWindow(divView: DivViewFacade)
 
-    fun traverseFrom(runtime: ExpressionsRuntime, path: String, callback: (ExpressionsRuntime) -> Unit)
+    fun traverseFrom(runtime: ExpressionsRuntime, path: DivStatePath, callback: (ExpressionsRuntime) -> Unit)
 
     fun getUniquePathsAndRuntimes(): Map<String, ExpressionsRuntime>
 
@@ -56,7 +57,7 @@ internal interface RuntimeStore {
             override val rootRuntime: ExpressionsRuntime get() = throwException()
 
             override fun getOrCreateRuntime(
-                path: String,
+                path: DivStatePath,
                 div: Div,
                 parentResolver: ExpressionResolver
             ) = throw IllegalStateException()
@@ -65,7 +66,7 @@ internal interface RuntimeStore {
 
             override fun resolveRuntimeWith(
                 divView: DivViewFacade?,
-                path: String,
+                path: DivStatePath,
                 div: Div,
                 resolver: ExpressionResolver,
                 parentResolver: ExpressionResolver
@@ -81,7 +82,7 @@ internal interface RuntimeStore {
 
             override fun traverseFrom(
                 runtime: ExpressionsRuntime,
-                path: String,
+                path: DivStatePath,
                 callback: (ExpressionsRuntime) -> Unit
             ) = Unit
 

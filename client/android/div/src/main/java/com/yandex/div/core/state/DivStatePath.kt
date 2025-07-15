@@ -1,10 +1,12 @@
 package com.yandex.div.core.state
 
 import androidx.annotation.VisibleForTesting
+import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath.Companion.parse
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
+import com.yandex.div2.DivState
 import kotlin.math.min
 
 /**
@@ -34,8 +36,11 @@ data class DivStatePath @VisibleForTesting internal constructor(
         get() = if (states.isEmpty()) {
             null
         } else {
-            DivStatePath(topLevelStateId, states.subList(0, states.size - 1)).statesString + "/" + states.last().divId
+            DivStatePath(topLevelStateId, states.subList(0, states.size - 1), path)
+                .statesString + "/" + states.last().divId
         }
+
+    internal val lastDivId: String get() = path.last()
 
     internal val fullPath by lazy { path.joinToString("/") }
     internal val statesString by lazy {
@@ -48,15 +53,16 @@ data class DivStatePath @VisibleForTesting internal constructor(
 
     override fun toString(): String = fullPath
 
-    fun append(divId: String, stateId: String): DivStatePath {
+    internal fun append(divId: String, state: DivState.State?, stateIdFallback: String): DivStatePath {
         val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {
             addAll(states)
-            add(divId to stateId)
+            add(divId to (state?.stateId ?: stateIdFallback))
         }
-        return DivStatePath(topLevelStateId, newStates, createFullPath(stateId))
+        val stateDivId = state?.div?.value()?.id ?: state?.stateId ?: stateIdFallback
+        return DivStatePath(topLevelStateId, newStates, createFullPath(stateDivId))
     }
 
-    fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
+    internal fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
 
     private fun createFullPath(divId: String): List<String> {
         return ArrayList<String>(path.size + 1).apply {
@@ -77,8 +83,9 @@ data class DivStatePath @VisibleForTesting internal constructor(
             return this
         }
         val list = states.toMutableList()
-        list.removeAt(list.lastIndex)
-        return DivStatePath(topLevelStateId, list, path.extractStates(states, false))
+        val lastState = list.removeAt(list.lastIndex)
+        val lastStateIndex = path.lastIndexOf(lastState.divId)
+        return DivStatePath(topLevelStateId, list, path.subList(0, lastStateIndex + 1))
     }
 
     fun isRootPath(): Boolean = states.isEmpty()
@@ -126,10 +133,10 @@ data class DivStatePath @VisibleForTesting internal constructor(
         internal fun fromState(state: DivData.State) = fromRootDiv(state.stateId, state.div)
 
         internal fun fromRootDiv(stateId: Long, div: Div): DivStatePath {
-            val path = mutableListOf(stateId.toString())
-            if (div is Div.State) {
-                path.add(div.value.getId())
-            }
+            val path = listOf(
+                stateId.toString(),
+                div.getId() ?: ChildPathUnitCache.getValue(0)
+            )
             return DivStatePath(stateId, emptyList(), path)
         }
 

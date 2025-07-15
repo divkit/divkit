@@ -60,7 +60,7 @@ class TwoWayVariableBinderTest {
     }
 
     init {
-        val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver)
+        val bindingContext = BindingContext(divView, expressionResolver)
         TwoWayStringVariableBinder(mock()).bindVariable(bindingContext, VARIABLE_NAME, callbacks, mock())
     }
 

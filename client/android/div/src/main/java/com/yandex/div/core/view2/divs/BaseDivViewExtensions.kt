@@ -23,10 +23,7 @@ import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.suppressExpressionErrors
-import com.yandex.div.core.state.DivPathUtils.getId
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
@@ -91,7 +88,6 @@ import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
-import com.yandex.div2.DivState
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
@@ -628,11 +624,6 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
 }
-
-internal fun DivBase.getChildPathUnit(index: Int) =
-    if (this is DivState) getId() else id ?: ChildPathUnitCache.getValue(index)
-
-internal fun DivBase.resolvePath(index: Int, parentPath: DivStatePath) = parentPath.appendDiv(getChildPathUnit(index))
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]

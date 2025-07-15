@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -41,6 +42,7 @@ class RuntimeStoreImplTest {
     private val div = mock<Div> {
         on { value() } doReturn divBase
     }
+    private val path = DivStatePath(0, path = listOf("0", "div1"))
 
     @Test
     fun `root resolver registered in store`() {
@@ -49,7 +51,7 @@ class RuntimeStoreImplTest {
 
     @Test
     fun `resolveRuntimeWith links path to created runtime`() {
-        underTest.resolveRuntimeWith(divView, PATH, div, resolver, rootResolver)
+        underTest.resolveRuntimeWith(divView, path, div, resolver, rootResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
     }
@@ -58,20 +60,20 @@ class RuntimeStoreImplTest {
     fun `getOrCreateRuntime returns runtime for path if exist`() {
         underTest.putRuntime(childRuntime, PATH, rootRuntime)
 
-        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(PATH, div, resolver))
+        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(path, div, resolver))
         Assert.assertEquals(childRuntime, underTest.getRuntimeWithOrNull(resolver))
     }
 
     @Test
     fun `getOrCreateRuntime returns parent runtime for path if no variables provided`() {
-        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(PATH, div, rootResolver))
+        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(path, div, rootResolver))
     }
 
     @Test
     fun `getOrCreateRuntime returns new runtime if new variables provided`() {
         setVariable()
 
-        val runtime = underTest.getOrCreateRuntime(PATH, div, rootResolver)
+        val runtime = underTest.getOrCreateRuntime(path, div, rootResolver)
 
         Assert.assertNotNull(runtime)
         Assert.assertNotSame(rootRuntime, runtime)
@@ -79,7 +81,7 @@ class RuntimeStoreImplTest {
 
     @Test
     fun `getOrCreateRuntime returns root runtime if parent runtime is not found`() {
-        val runtime = underTest.getOrCreateRuntime(PATH, div, mock<ExpressionResolverImpl>())
+        val runtime = underTest.getOrCreateRuntime(path, div, mock<ExpressionResolverImpl>())
 
         Assert.assertEquals(rootRuntime, runtime)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
@@ -89,7 +91,7 @@ class RuntimeStoreImplTest {
     fun `resolveRuntimeWith creates new runtime if new variables provided`() {
         setVariable()
 
-        val runtime = underTest.resolveRuntimeWith(divView, PATH, div, resolver, rootResolver)
+        val runtime = underTest.resolveRuntimeWith(divView, path, div, resolver, rootResolver)
 
         Assert.assertNotNull(runtime)
         Assert.assertNotSame(rootRuntime, runtime)

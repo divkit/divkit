@@ -22,11 +22,10 @@ internal class DivPagerViewHolder(
     private val pageLayout: DivPagerPageLayout,
     divBinder: DivBinder,
     viewCreator: DivViewCreator,
-    path: DivStatePath,
     private val accessibilityEnabled: Boolean,
     private val isHorizontal: () -> Boolean,
     private val crossAxisAlignment: () -> ItemAlignment,
-) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator, path) {
+) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator) {
 
     init {
         itemView.doOnEveryDetach { view ->
@@ -36,8 +35,8 @@ internal class DivPagerViewHolder(
         }
     }
 
-    fun bind(bindingContext: BindingContext, div: Div, position: Int, index: Int) {
-        bind(bindingContext, div, index)
+    override fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
+        super.bind(bindingContext, div, position, path)
 
         (pageLayout.child?.layoutParams as? DivLayoutParams)
             ?.setCrossAxisAlignment(div.value(), bindingContext.expressionResolver)

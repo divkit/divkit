@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
+import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.internal.viewpool.ViewPool
@@ -50,7 +50,8 @@ internal class DivTabsAdapter(
 ) {
 
     private val tabModels = mutableMapOf<ViewGroup, TabModel>()
-    private val childStates = mutableMapOf<Int, DivStatePath>()
+    private val childStates = mutableMapOf<String, DivStatePath>()
+    private var childIds: List<String> = emptyList()
 
     var statePath
         get() = path
@@ -61,6 +62,7 @@ internal class DivTabsAdapter(
 
     fun setData(data: Input<DivSimpleTab>, selectedTab: Int) {
         super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
+        childIds = data.tabs.getIds({ item.div })
         tabModels.clear()
         mPager.setCurrentItem(selectedTab, true)
     }
@@ -99,21 +101,17 @@ internal class DivTabsAdapter(
             )
         }
 
-        val childPath = getChildPath(tabNumber, div)
+        val childPath = getChildPath(tabNumber)
         divBinder.bind(bindingContext, itemView, div, childPath)
 
         return itemView
     }
 
-    private fun getChildPath(index: Int, div: Div): DivStatePath {
-        return childStates.getOrPut(index) {
-            div.value().resolvePath(index, path)
-        }
-    }
+    private fun getChildPath(index: Int) = childStates.getOrPut(childIds[index]) { path.appendDiv(childIds[index]) }
 
     fun notifyStateChanged() {
         tabModels.forEach { (tabView, tabModel) ->
-            val childPath = getChildPath(tabModel.index, tabModel.div)
+            val childPath = getChildPath(tabModel.index)
             divBinder.bind(bindingContext, tabModel.view, tabModel.div, childPath)
             // ... and a little bit of a magic
             tabView.requestLayout()

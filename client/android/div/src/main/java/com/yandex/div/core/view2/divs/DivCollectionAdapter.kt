@@ -6,18 +6,37 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.expression.local.asImpl
+import com.yandex.div.core.state.DivPathUtils.getItemIds
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
 import com.yandex.div2.DivVisibility
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
+    private val bindingContext: BindingContext,
+    private val path: DivStatePath,
     items: List<DivItemBuilderResult>,
 ) : VisibilityAwareAdapter<VH>(items) {
+
+    private var ids = items.getItemIds()
 
     override fun getItemViewType(position: Int): Int {
         val item = visibleItems.getOrNull(position) ?: return 0
         return item.div.value().reuseId?.evaluate(item.expressionResolver).hashCode()
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val item = visibleItems[position]
+        val childPath = path.appendDiv(ids[items.indexOf(item)])
+        val resolver = bindingContext.divView.runtimeStore.resolveRuntimeWith(
+            bindingContext.divView,
+            childPath,
+            item.div,
+            item.expressionResolver,
+            bindingContext.expressionResolver
+        )?.expressionResolver ?: item.expressionResolver
+        holder.bind(bindingContext.getFor(resolver), item.div, position, childPath)
     }
 
     override fun onViewAttachedToWindow(holder: VH) {
@@ -80,6 +99,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
 
         if (appliedToListPatchIds.isEmpty()) return false
 
+        updateIds()
         subscribeOnElements()
         return true
     }
@@ -88,7 +108,12 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         val diffUtilCallback = DiffUtilCallback(items, newItems)
         val updateCallback = UpdateCallBack(newItems)
         DiffUtil.calculateDiff(diffUtilCallback).dispatchUpdatesTo(updateCallback)
+        updateIds()
         subscribeOnElements()
+    }
+
+    private fun updateIds() {
+        ids = items.getItemIds()
     }
 
     private class DiffUtilCallback(

@@ -18,13 +18,11 @@ internal abstract class DivCollectionViewHolder(
     private val parentContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
-    private val path: DivStatePath,
 ) : RecyclerView.ViewHolder(viewWrapper) {
 
     protected var oldDiv: Div? = null
-    private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
-    open fun bind(bindingContext: BindingContext, div: Div, index: Int) {
+    open fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
         val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
 
@@ -43,18 +41,15 @@ internal abstract class DivCollectionViewHolder(
 
         oldDiv = div
 
-        val id = div.value().getChildPathUnit(index)
-        val childPath = childrenPaths.getOrPut(id) { path.appendDiv(id) }
-
         divView.runtimeStore.resolveRuntimeWith(
             divView,
-            childPath.fullPath,
+            path,
             div,
             resolver,
             parentContext.expressionResolver,
         )
 
-        divBinder.bind(bindingContext, childView, div, childPath)
+        divBinder.bind(bindingContext, childView, div, path)
         divView.runtimeStore.showWarningIfNeeded(div.value())
     }
 

@@ -99,9 +99,10 @@ class DivStatePathUtilsTest {
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, thrdLvlPath), thrdLvlPath)
 
         val notSharedState = DivStatePath(0, listOf("one" to "another"), listOf("0", "one", "another"))
-
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, notSharedState), rootPath)
-        Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, scndLvlPath.append("some", "state")), scndLvlPath)
+
+        val nestedState = scndLvlPath.append("some", DivState.State(stateId = "state"), "state")
+        Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, nestedState), scndLvlPath)
 
         val pseudoThrdLvl = DivStatePath(
             0,

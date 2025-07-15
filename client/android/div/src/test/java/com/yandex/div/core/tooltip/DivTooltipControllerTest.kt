@@ -93,7 +93,7 @@ class DivTooltipControllerTest {
         on { childCount } doReturn 1
         on { getContext() } doReturn activity
     }
-    private val bindingContext = BindingContext.createEmpty(div2View).getFor(expressionResolver)
+    private val bindingContext = BindingContext(div2View, expressionResolver)
 
     private val tooltipView = mock<View> {
         on { width } doReturn 100

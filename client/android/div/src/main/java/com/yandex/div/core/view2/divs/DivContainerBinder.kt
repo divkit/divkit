@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchManager
+import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.equalsToConstant
@@ -230,8 +231,16 @@ internal class DivContainerBinder @Inject constructor(
                 .also { shift += it.size - 1 }
         }
 
+        val ids = patchedItems.getItemIds()
         patchedItems.forEachIndexed { index, item ->
-            getChildAt(index).bindChild(bindingContext, item.div, item.expressionResolver, newDiv, oldDiv, path, index)
+            getChildAt(index).bindChild(
+                bindingContext,
+                item.div,
+                item.expressionResolver,
+                newDiv,
+                oldDiv,
+                path.appendDiv(ids[index])
+            )
         }
         return patchedItems
     }
@@ -255,15 +264,13 @@ internal class DivContainerBinder @Inject constructor(
         resolver: ExpressionResolver,
         parentDiv: DivContainer,
         oldParentDiv: DivContainer?,
-        parentPath: DivStatePath,
-        index: Int
+        path: DivStatePath,
     ) {
         val oldDiv = (this as? DivHolderView<*>)?.div
-        val path = div.value().resolvePath(index, parentPath)
 
         val divView = parentContext.divView
         val childRuntime = divView.runtimeStore
-            .resolveRuntimeWith(divView, path.fullPath, div, resolver, parentContext.expressionResolver)
+            .resolveRuntimeWith(divView, path, div, resolver, parentContext.expressionResolver)
 
         divBinder.get().bind(parentContext.getFor(resolver), this, div, path)
 

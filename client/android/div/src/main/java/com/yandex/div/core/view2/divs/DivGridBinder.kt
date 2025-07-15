@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchManager
+import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
@@ -119,10 +120,11 @@ internal class DivGridBinder @Inject constructor(
             ).also { shift += it.size - 1 }
         }
 
+        val ids = patchedItems.getIds()
         patchedItems.forEachIndexed { index, item ->
             val childView = getChildAt(index)
             val childDiv = item.value()
-            val childPath = childDiv.resolvePath(index, path)
+            val childPath = path.appendDiv(ids[index])
 
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             divBinder.get().bind(bindingContext, childView, item, childPath)

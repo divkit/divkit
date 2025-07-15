@@ -6,6 +6,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivText
@@ -40,7 +41,7 @@ class DivBaseBinderTest {
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { viewComponent } doReturn viewComponent
     }
-    private val context = BindingContext.createEmpty(divView)
+    private val context = BindingContext(divView, ExpressionResolver.EMPTY)
 
     @Test
     fun `do not apply paddings when same`() {
