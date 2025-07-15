@@ -5,12 +5,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import com.yandex.div.internal.widget.indicator.IndicatorParams
-import kotlin.math.ceil
 
 internal class RoundedRect(private val params: IndicatorParams.Style) : SingleIndicatorDrawer {
 
-    private val paint = Paint()
-    private val strokePaint = Paint().apply {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
     }
     private val rect = RectF()
@@ -27,11 +26,10 @@ internal class RoundedRect(private val params: IndicatorParams.Style) : SingleIn
         val rectSize = itemSize as IndicatorParams.ItemSize.RoundedRect
         paint.color = color
         rect.apply {
-            // without float rounding rect may not render all rounded corners properly.
-            left = ceil(x - rectSize.itemWidth / 2f)
-            top = ceil(y - rectSize.itemHeight / 2f)
-            right = ceil(x + rectSize.itemWidth / 2f)
-            bottom = ceil(y + rectSize.itemHeight / 2f)
+            left = x - rectSize.itemWidth / 2f
+            top = y - rectSize.itemHeight / 2f
+            right = x + rectSize.itemWidth / 2f
+            bottom = y + rectSize.itemHeight / 2f
 
             if (strokeWidth > 0f) {
                 // to fit supplied sizes we need to shrink rect by half of stroke so final

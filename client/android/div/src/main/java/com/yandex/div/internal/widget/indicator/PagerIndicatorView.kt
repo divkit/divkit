@@ -66,8 +66,12 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val selectedHeight = style?.activeShape?.itemSize?.height ?: 0f
-        val desiredHeight = (selectedHeight + paddingTop + paddingBottom).toInt()
+        val highestState = maxOf(
+            style?.activeShape?.itemSize?.height ?: 0f,
+            style?.inactiveShape?.itemSize?.height ?: 0f,
+            style?.minimumShape?.itemSize?.height ?: 0f,
+        )
+        val desiredHeight = (highestState + paddingTop + paddingBottom).toInt()
         val measuredHeight = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
             MeasureSpec.AT_MOST -> min(desiredHeight, heightSize)

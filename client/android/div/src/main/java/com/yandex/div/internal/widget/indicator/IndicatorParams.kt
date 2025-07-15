@@ -1,6 +1,7 @@
 package com.yandex.div.internal.widget.indicator
 
 import android.graphics.Color
+import kotlin.math.ceil
 
 
 internal class IndicatorParams {
@@ -53,13 +54,13 @@ internal class IndicatorParams {
         ): ItemSize()
 
         val width get() = when (this) {
-            is RoundedRect -> itemWidth
-            is Circle -> radius * 2
+            is RoundedRect -> ceil(itemWidth)
+            is Circle -> ceil(radius * 2)
         }
 
         val height get() = when (this) {
-            is RoundedRect -> itemHeight
-            is Circle -> radius * 2
+            is RoundedRect -> ceil(itemHeight)
+            is Circle -> ceil(radius * 2)
         }
     }
 
