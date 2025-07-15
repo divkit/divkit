@@ -67,6 +67,8 @@ internal class DivTextBinder @Inject constructor(
 ) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
     
     override fun DivLineHeightTextView.bind(bindingContext: BindingContext, div: DivText, oldDiv: DivText?) {
+        configureView(bindingContext, this)
+
         applyDivActions(
             bindingContext,
             div.action,
@@ -91,7 +93,7 @@ internal class DivTextBinder @Inject constructor(
         bindTextColor(div, oldDiv, expressionResolver)
         bindUnderline(div, oldDiv, expressionResolver)
         bindStrikethrough(div, oldDiv, expressionResolver)
-        bindMaxLines(div, oldDiv, expressionResolver)
+        bindMaxLines(bindingContext, div, oldDiv, expressionResolver)
         bindText(bindingContext, div, oldDiv)
         bindEllipsis(bindingContext, div, oldDiv)
         bindEllipsize(div, oldDiv, expressionResolver)
@@ -100,6 +102,10 @@ internal class DivTextBinder @Inject constructor(
         bindSelectable(div, oldDiv, expressionResolver)
         bindTightenWidth(div, oldDiv, expressionResolver)
         updateFocusableState(div)
+    }
+
+    private fun configureView(bindingContext: BindingContext, view: DivLineHeightTextView) {
+        view.drawingPassOverrideStrategy = bindingContext.divView.viewComponent.drawingPassOverrideStrategy
     }
 
     //region Text Alignment
@@ -153,6 +159,7 @@ internal class DivTextBinder @Inject constructor(
     //region Max Lines
 
     private fun DivLineHeightTextView.bindMaxLines(
+        bindingContext: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
         resolver: ExpressionResolver
@@ -162,27 +169,32 @@ internal class DivTextBinder @Inject constructor(
             return
         }
 
-        applyMaxLines(newDiv.maxLines?.evaluate(resolver), newDiv.minHiddenLines?.evaluate(resolver))
+        applyMaxLines(bindingContext.divView, newDiv.maxLines?.evaluate(resolver), newDiv.minHiddenLines?.evaluate(resolver))
 
         if (newDiv.maxLines.isConstantOrNull() && newDiv.minHiddenLines.isConstantOrNull()) {
             return
         }
 
         val callback = { _: Any ->
-            applyMaxLines(newDiv.maxLines?.evaluate(resolver), newDiv.minHiddenLines?.evaluate(resolver))
+            applyMaxLines(
+                bindingContext.divView,
+                newDiv.maxLines?.evaluate(resolver),
+                newDiv.minHiddenLines?.evaluate(resolver)
+            )
         }
         addSubscription(newDiv.maxLines?.observe(resolver, callback))
         addSubscription(newDiv.minHiddenLines?.observe(resolver, callback))
     }
 
     private fun DivLineHeightTextView.applyMaxLines(
+        divView: Div2View,
         maxLines: Long?,
         minHiddenLines: Long?
     ) {
         adaptiveMaxLines?.reset()
 
         if (maxLines != null && minHiddenLines != null) {
-            adaptiveMaxLines = AdaptiveMaxLines(this).also {
+            adaptiveMaxLines = AdaptiveMaxLines(this, divView.viewComponent.drawingPassOverrideStrategy).also {
                 it.apply(AdaptiveMaxLines.Params(
                         maxLines = maxLines.toIntSafely(),
                         minHiddenLines = minHiddenLines.toIntSafely()

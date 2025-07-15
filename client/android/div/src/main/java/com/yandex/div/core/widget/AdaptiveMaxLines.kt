@@ -10,7 +10,10 @@ import com.yandex.div.core.widget.AdaptiveMaxLines.Params
 /**
  * Adjust [TextView] max lines based on [Params].
  */
-internal class AdaptiveMaxLines(private val textView: TextView) {
+internal class AdaptiveMaxLines(
+    private val textView: TextView,
+    private val drawingPassOverrideStrategy: DrawingPassOverrideStrategy,
+) {
 
     private var viewAttachListener: View.OnAttachStateChangeListener? = null
     private var preDrawListener: ViewTreeObserver.OnPreDrawListener? = null
@@ -60,30 +63,28 @@ internal class AdaptiveMaxLines(private val textView: TextView) {
         if (preDrawListener != null) {
             return
         }
-        preDrawListener = object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                val params = params ?: return true
+        preDrawListener = onPreDrawListener(drawingPassOverrideStrategy) {
+            val params = params ?: return@onPreDrawListener true
 
-                if (TextUtils.isEmpty(textView.text)) {
-                    return true
-                }
+            if (TextUtils.isEmpty(textView.text)) {
+                return@onPreDrawListener true
+            }
 
-                if (isAdaptLinesRequested) {
-                    removePreDrawListener()
-                    isAdaptLinesRequested = false
-                    return true
-                }
+            if (isAdaptLinesRequested) {
+                removePreDrawListener()
+                isAdaptLinesRequested = false
+                return@onPreDrawListener true
+            }
 
-                val maxLines =
-                    Int.MAX_VALUE.takeIf { textView.lineCount <= params.totalVisibleLines } ?: params.maxLines
-                return if (maxLines != textView.maxLines) {
-                    textView.maxLines = maxLines
-                    isAdaptLinesRequested = true
-                    false
-                } else {
-                    removePreDrawListener()
-                    true
-                }
+            val maxLines =
+                Int.MAX_VALUE.takeIf { textView.lineCount <= params.totalVisibleLines } ?: params.maxLines
+            return@onPreDrawListener if (maxLines != textView.maxLines) {
+                textView.maxLines = maxLines
+                isAdaptLinesRequested = true
+                false
+            } else {
+                removePreDrawListener()
+                true
             }
         }.apply(textView.viewTreeObserver::addOnPreDrawListener)
     }

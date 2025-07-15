@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.R
+import com.yandex.div.core.widget.DrawingPassOverrideStrategy
 
 open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,
@@ -39,6 +40,12 @@ open class EllipsizedTextView @JvmOverloads constructor(
                 autoEllipsize = false
             }
             onEllipsisChanged(ellipsis)
+        }
+
+    internal var drawingPassOverrideStrategy: DrawingPassOverrideStrategy
+        get() = autoEllipsizeHelper.drawingPassOverrideStrategy
+        set(value) {
+            autoEllipsizeHelper.drawingPassOverrideStrategy = value
         }
 
     private var isRemeasureNeeded = false

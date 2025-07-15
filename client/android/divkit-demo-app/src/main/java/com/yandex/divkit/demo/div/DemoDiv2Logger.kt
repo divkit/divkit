@@ -217,6 +217,14 @@ class DemoDiv2Logger(
         }
     }
 
+    override fun logFrameCancelled(divView: Div2View, message: String) {
+        log { message }
+    }
+
+    override fun logFrameCancelLimitExceeded(divView: Div2View, message: String) {
+        log { message }
+    }
+
     private inline fun log(message : () -> String) {
         KLog.d(TAG, message)
         capturedLogActions.add(message.invoke())

@@ -23,7 +23,7 @@ class AdaptiveMaxLinesTest {
         on { viewTreeObserver } doReturn viewTreeObserver
     }
 
-    private val underTest = AdaptiveMaxLines(textView)
+    private val underTest = AdaptiveMaxLines(textView, DrawingPassOverrideStrategy.Default)
 
     @Test
     fun `add pre draw listener when view already attached to window`() {

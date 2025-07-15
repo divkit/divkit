@@ -1,6 +1,8 @@
 package com.yandex.div.internal.widget
 
 import android.view.ViewTreeObserver
+import com.yandex.div.core.widget.DrawingPassOverrideStrategy
+import com.yandex.div.core.widget.onPreDrawListener
 import com.yandex.div.internal.KLog
 
 /**
@@ -12,6 +14,8 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
      * If auto ellipsize is enabled.
      */
     var isEnabled = false
+
+    var drawingPassOverrideStrategy: DrawingPassOverrideStrategy = DrawingPassOverrideStrategy.Default
 
     private var preDrawListener: ViewTreeObserver.OnPreDrawListener? = null
 
@@ -35,9 +39,9 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
         if (preDrawListener != null) {
             return
         }
-        preDrawListener = ViewTreeObserver.OnPreDrawListener {
+        preDrawListener = onPreDrawListener(drawingPassOverrideStrategy) {
             if (!isEnabled) {
-                return@OnPreDrawListener true
+                return@onPreDrawListener true
             }
             val visibleLineCount = textView.run {
                 val textHeight = height - compoundPaddingTop - compoundPaddingBottom
