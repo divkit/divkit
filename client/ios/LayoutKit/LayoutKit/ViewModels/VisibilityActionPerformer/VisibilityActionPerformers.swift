@@ -17,8 +17,9 @@ final class VisibilityActionPerformers {
         requiredDuration: action.requiredDuration,
         targetVisibilityPercentage: action.targetPercentage,
         limiter: action.limiter,
-        action: { [unowned actionSender] in
+        action: { [weak actionSender] in
           #if os(iOS)
+          guard let actionSender else { return }
           UIActionEvent(
             uiAction: action.uiAction,
             originalSender: actionSender
