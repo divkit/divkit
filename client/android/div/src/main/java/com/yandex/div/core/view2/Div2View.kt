@@ -698,7 +698,6 @@ class Div2View private constructor(
         cancelImageLoads()
         releaseMedia(this)
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them
-        div2Component.bitmapEffectHelper.release()
         if (removeChildren) {
             releaseAndRemoveChildren(this) // Removes children
         }

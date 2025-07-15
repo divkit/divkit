@@ -373,7 +373,7 @@ internal class DivBorderDrawer(
             paint.color = color
             paint.alpha = (alpha * view.alpha * 255).toInt()
 
-            cachedShadow = ShadowCache.getShadow(radii, radius, divView.div2Component.bitmapEffectHelper)
+            cachedShadow = ShadowCache.getShadow(view.context, radii, radius)
         }
     }
 

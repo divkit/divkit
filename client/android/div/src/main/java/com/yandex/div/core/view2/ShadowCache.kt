@@ -1,18 +1,31 @@
 package com.yandex.div.core.view2
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.NinePatch
 import android.graphics.Paint
 import android.graphics.drawable.shapes.RoundRectShape
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import androidx.core.graphics.scale
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
-import com.yandex.div.core.util.bitmap.BitmapEffectHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 internal object ShadowCache {
+    /**
+    * The minimum value, that ScriptIntrinsicBlur can use
+    **/
+    private const val MIN_BLUR = 1f
+    /**
+     * The maximum value, that ScriptIntrinsicBlur can use
+     **/
+    private const val MAX_BLUR = 25f
+
     private const val EDGE_OFFSET = 1
     /**
      * Region transparency:
@@ -26,12 +39,12 @@ internal object ShadowCache {
 
     private val shadowMap = mutableMapOf<ShadowCacheKey, NinePatch>()
 
-    fun getShadow(radii: FloatArray, blur: Float, effectHelper: BitmapEffectHelper): NinePatch? {
+    fun getShadow(context: Context, radii: FloatArray, blur: Float): NinePatch? {
         val shadowCacheKey = ShadowCacheKey(radii, blur)
 
         var shadow = shadowMap[shadowCacheKey]
         if (shadow == null) {
-            shadow = createNewShadow(radii, blur, effectHelper)?.also {
+            shadow = createNewShadow(context, radii, blur)?.also {
                 shadowMap[shadowCacheKey] = it
             }
         }
@@ -52,14 +65,19 @@ internal object ShadowCache {
      *
      * Shadow uses only alpha channel, so you must set shadow color with paint on draw
      */
-    private fun createNewShadow(radii: FloatArray, blur: Float, effectHelper: BitmapEffectHelper): NinePatch? {
+    private fun createNewShadow(context: Context, radii: FloatArray, blur: Float): NinePatch? {
         val rectWidth = blur + maxOf(radii[1] + radii[2], radii[5] + radii[6])
         val rectHeight = blur + maxOf(radii[0] + radii[7], radii[3] + radii[4])
 
         if (rectWidth <= 0 || rectHeight <= 0) return null
 
-        val coercedBlur = effectHelper.getCoercedBlurRadius(blur)
-        val scale = effectHelper.getBitmapScale(blur)
+        val coercedBlur = blur.coerceIn(MIN_BLUR, MAX_BLUR)
+
+        /**
+         * Because ScriptIntrinsicBlur can't apply blur more then 25, we just downscale bitmap,
+         * blur it and upscale to previous size
+         */
+        val scale = (if (blur <= MAX_BLUR) 1f else MAX_BLUR / blur)
 
         val bitmapWidth = ((rectWidth + (blur * 2)) * scale).toInt()
         val bitmapHeight = ((rectHeight + (blur * 2)) * scale).toInt()
@@ -70,9 +88,15 @@ internal object ShadowCache {
             Bitmap.Config.ALPHA_8
         )
 
+        val outBitmap = Bitmap.createBitmap(
+            bitmapWidth,
+            bitmapHeight,
+            Bitmap.Config.ALPHA_8
+        )
+
         inBitmap.drawNewShadow(rectWidth, rectHeight, radii, coercedBlur, scale)
 
-        val outBitmap = effectHelper.blurShadow(inBitmap, coercedBlur)
+        inBitmap.blur(context, outBitmap, coercedBlur)
 
         inBitmap.recycle()
 
@@ -109,6 +133,27 @@ internal object ShadowCache {
                 }
             }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun Bitmap.blur(context: Context, out: Bitmap, blur: Float) {
+        val renderScript = RenderScript.create(context)
+        val scriptIntrinsicBlur = ScriptIntrinsicBlur
+            .create(renderScript, Element.A_8(renderScript))
+
+        val inAllocation = Allocation.createFromBitmap(renderScript, this)
+        val outAllocation = Allocation.createFromBitmap(renderScript, out)
+
+        scriptIntrinsicBlur.apply {
+            setRadius(blur)
+            setInput(inAllocation)
+            forEach(outAllocation)
+        }
+
+        outAllocation.copyTo(out)
+        outAllocation.destroy()
+        inAllocation.destroy()
+        scriptIntrinsicBlur.destroy()
     }
 
     private fun Bitmap.toNinePatch() =

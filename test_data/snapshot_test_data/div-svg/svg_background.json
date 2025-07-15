@@ -1,7 +1,6 @@
 {
   "description": "Svg as background",
   "platforms": [
-    "android",
     "web"
   ],
   "templates": {

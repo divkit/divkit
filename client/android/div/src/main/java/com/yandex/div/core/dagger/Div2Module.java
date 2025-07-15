@@ -1,13 +1,13 @@
 package com.yandex.div.core.dagger;
 
-import javax.inject.Named;
-
 import android.content.Context;
 import android.os.Build;
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
+
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
@@ -18,9 +18,6 @@ import com.yandex.div.core.image.DivImageLoaderWrapper;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
-import com.yandex.div.core.util.bitmap.BitmapEffectHelper;
-import com.yandex.div.core.util.bitmap.blur.HighApiBitmapEffectHelper;
-import com.yandex.div.core.util.bitmap.blur.LowApiBitmapEffectHelper;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.internal.viewpool.AdvanceViewPool;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
@@ -32,6 +29,8 @@ import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.yatagan.Binds;
 import com.yandex.yatagan.Module;
 import com.yandex.yatagan.Provides;
+
+import javax.inject.Named;
 
 @Module
 abstract public class Div2Module {
@@ -137,17 +136,5 @@ abstract public class Div2Module {
                 videoPreloader,
                 DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
         );
-    }
-
-    @Provides
-    @DivScope
-    @NonNull
-    public static BitmapEffectHelper provideBitmapEffectHelper(
-            @Named(Names.CONTEXT)
-            Context context
-    ) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-                ? new HighApiBitmapEffectHelper()
-                : new LowApiBitmapEffectHelper(context);
     }
 }
