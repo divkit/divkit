@@ -53,6 +53,11 @@ data class DivStatePath @VisibleForTesting internal constructor(
 
     override fun toString(): String = fullPath
 
+    @Deprecated("Will be removed from public API in the near future", ReplaceWith("append(divId, null, stateId)"))
+    fun append(divId: String, stateId: String): DivStatePath {
+        return append(divId, null, stateId)
+    }
+
     internal fun append(divId: String, state: DivState.State?, stateIdFallback: String): DivStatePath {
         val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {
             addAll(states)
@@ -62,7 +67,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
         return DivStatePath(topLevelStateId, newStates, createFullPath(stateDivId))
     }
 
-    internal fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
+    fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
 
     private fun createFullPath(divId: String): List<String> {
         return ArrayList<String>(path.size + 1).apply {
