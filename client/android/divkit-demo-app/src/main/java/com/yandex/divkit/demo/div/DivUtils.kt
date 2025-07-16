@@ -75,6 +75,9 @@ fun divConfiguration(
         .enablePermanentDebugPanel(
             flagPreferenceProvider.getExperimentFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
         )
+        .setRenderEffectEnabled(
+            flagPreferenceProvider.getExperimentFlag(Experiment.RENDER_EFFECT_ENABLED)
+        )
         .tooltipRestrictor { _, _, _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))

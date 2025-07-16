@@ -96,6 +96,7 @@ public class DivConfiguration {
     private boolean mComplexRebindEnabled;
     private boolean mPagerPageClipEnabled;
     private boolean mPermanentDebugPanelEnabled;
+    private boolean mRenderEffectEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -136,7 +137,8 @@ public class DivConfiguration {
             boolean complexRebindEnabled,
             boolean pagerChildrenClipEnabled,
             boolean permanentDebugPanelEnabled,
-            float recyclerScrollInterceptionAngle
+            float recyclerScrollInterceptionAngle,
+            boolean renderEffectEnabled
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -175,6 +177,7 @@ public class DivConfiguration {
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
         mPagerPageClipEnabled = pagerChildrenClipEnabled;
+        mRenderEffectEnabled = renderEffectEnabled;
     }
 
     @Provides
@@ -332,6 +335,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.RENDER_EFFECT_ENABLED)
+    public boolean isRenderEffectEnabled() {
+        return mRenderEffectEnabled;
+    }
+
+    @Provides
     @NonNull
     public DivDownloader getDivDownloader() {
         return mDivDownloader;
@@ -466,6 +475,7 @@ public class DivConfiguration {
         private boolean mPagerPageClipEnabled = Experiment.PAGER_PAGE_CLIP_ENABLED.getDefaultValue();
         private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
+        private boolean mRenderEffectEnabled = Experiment.RENDER_EFFECT_ENABLED.getDefaultValue();
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -707,6 +717,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder setRenderEffectEnabled(boolean enable) {
+            mRenderEffectEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
@@ -752,7 +768,8 @@ public class DivConfiguration {
                     mComplexRebindEnabled,
                     mPagerPageClipEnabled,
                     mPermanentDebugPanelEnabled,
-                    mRecyclerScrollInterceptionAngle);
+                    mRecyclerScrollInterceptionAngle,
+                    mRenderEffectEnabled);
         }
     }
 }

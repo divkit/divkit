@@ -452,6 +452,25 @@
                             ]
                         },
                         {
+                          "type": "settings_item",
+                          "items": [
+                            {
+                              "type": "settings_item_title",
+                              "text": "RenderEffect enabled"
+                            },
+                            {
+                              "type": "setting_switch_state",
+                              "id": "render_effect_enabled",
+                              "active_click_log_id": "set_render_effect_enabled_disabled",
+                              "active_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/inactive",
+                              "active_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=0",
+                              "inactive_click_log_id": "set_render_effect_enabled",
+                              "inactive_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=1",
+                              "inactive_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/active"
+                            }
+                          ]
+                        },
+                        {
                             "type": "settings_item",
                             "orientation": "vertical",
                             "items": [

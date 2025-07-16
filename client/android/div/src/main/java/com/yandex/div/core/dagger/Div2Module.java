@@ -143,10 +143,12 @@ abstract public class Div2Module {
     @DivScope
     @NonNull
     public static BitmapEffectHelper provideBitmapEffectHelper(
+            @NonNull
             @Named(Names.CONTEXT)
-            Context context
+            Context context,
+            @ExperimentFlag(experiment = Experiment.RENDER_EFFECT_ENABLED) boolean renderEffectEnabled
     ) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+        return renderEffectEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
                 ? new HighApiBitmapEffectHelper()
                 : new LowApiBitmapEffectHelper(context);
     }

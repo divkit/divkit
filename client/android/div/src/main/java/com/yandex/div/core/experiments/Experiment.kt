@@ -61,5 +61,9 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     PERMANENT_DEBUG_PANEL_ENABLED(
         "permanent_debug_panel_enabled",
         defaultValue = false
-    )
+    ),
+    RENDER_EFFECT_ENABLED(
+        "render_effect_enabled",
+        defaultValue = false,
+    ),
 }

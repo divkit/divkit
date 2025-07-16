@@ -21,14 +21,15 @@ internal class LowApiBitmapEffectHelper(
     private fun getOrCreateRenderScript(): RenderScript {
         return cachedRenderScript ?: run {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                return RenderScript.create(context)
+                RenderScript.create(context)
+            } else {
+                RenderScript.createMultiContext(
+                    context,
+                    RenderScript.ContextType.NORMAL,
+                    RenderScript.CREATE_FLAG_NONE,
+                    context.applicationInfo.targetSdkVersion,
+                )
             }
-            return RenderScript.createMultiContext(
-                context,
-                RenderScript.ContextType.NORMAL,
-                RenderScript.CREATE_FLAG_NONE,
-                context.applicationInfo.targetSdkVersion,
-            )
         }.also {
             cachedRenderScript = it
         }
