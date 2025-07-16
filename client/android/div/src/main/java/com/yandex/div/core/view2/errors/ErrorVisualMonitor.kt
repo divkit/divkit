@@ -99,11 +99,15 @@ internal class ErrorModel(
         if (visualErrorsEnabled) {
             this.currentErrors.apply {
                 clear()
-                addAll(errors.reversed())
+                val reversedErrors = errors.toMutableList()
+                reversedErrors.reverse()
+                addAll(reversedErrors)
             }
             this.currentWarnings.apply {
                 clear()
-                addAll(warnings.reversed())
+                val reversedWarnings = warnings.toMutableList()
+                reversedWarnings.reverse()
+                addAll(reversedWarnings)
             }
             state = state.copy(errorCount = currentErrors.size, errorDetails = errorsToDetails(currentErrors),
                 warningCount = currentWarnings.size, warningDetails = warningsToDetails(currentWarnings))

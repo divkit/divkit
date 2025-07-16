@@ -153,7 +153,9 @@ open class DivActivity : AppCompatActivity() {
 
     private fun addAll() {
         adapter.removeAll()
-        listAssetsRecursively(DivFolder.DIV2_SAMPLES.path).reversed().forEach { addItemFromAsset(it, DivFolder.DIV2_SAMPLES.path) }
+        val assets = listAssetsRecursively(DivFolder.DIV2_SAMPLES.path).toMutableList()
+        assets.reverse()
+        assets.forEach { addItemFromAsset(it, DivFolder.DIV2_SAMPLES.path) }
     }
 
     private fun loadDivJsonPath(path: String) =

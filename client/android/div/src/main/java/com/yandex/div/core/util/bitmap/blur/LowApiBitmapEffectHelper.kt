@@ -51,7 +51,7 @@ internal class LowApiBitmapEffectHelper(
         }
 
         val result = if (sampling == 1f) {
-            bitmap.copy(bitmap.config, /* isMutable = */ false)
+            bitmap.copy(bitmap.config ?: Bitmap.Config.ARGB_8888, /* isMutable = */ false)
         } else {
             bitmap.scale(
                 width = (bitmap.width / sampling).toInt(),

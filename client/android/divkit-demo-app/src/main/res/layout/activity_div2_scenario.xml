@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/colorPrimary"
     android:theme="@style/AppTheme.NoActionBar.Demo"
+    android:fitsSystemWindows="true"
     tools:context=".div.Div2ScenarioActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -21,7 +22,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
         <com.yandex.divkit.demo.div.DemoNestedScrollView
             android:id="@+id/scrollView2"

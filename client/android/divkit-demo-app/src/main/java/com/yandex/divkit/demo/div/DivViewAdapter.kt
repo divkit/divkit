@@ -56,12 +56,12 @@ class DivViewAdapter(
     override fun getItemCount() = items.size
 
     fun addFromJson(json: JSONObject) {
-        items.addFirst(divItemFromJson(json))
+        items.addFirstItem(divItemFromJson(json))
         notifyItemInserted(0)
     }
 
     fun add(divData: DivData) {
-        items.addFirst(DivItem(divData))
+        items.addFirstItem(DivItem(divData))
         notifyItemInserted(0)
     }
 
@@ -119,5 +119,5 @@ class DivViewAdapter(
             .forEach { items.add(it) }
     }
 
-    private fun <T> MutableList<T>.addFirst(t: T) = add(0, t)
+    private fun <T> MutableList<T>.addFirstItem(t: T) = add(0, t)
 }

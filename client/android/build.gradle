@@ -7,8 +7,8 @@ apply from: "$projectDir/version.gradle"
 
 ext {
     minSdkVersion = 21
-    compileSdkVersion = 34
-    targetSdkVersion = 34
+    compileSdkVersion = 35
+    targetSdkVersion = 35
     buildToolsVersion = "35.0.0"
 }
 

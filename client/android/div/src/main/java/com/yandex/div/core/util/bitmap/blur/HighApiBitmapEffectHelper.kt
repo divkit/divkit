@@ -35,7 +35,7 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
     ): Bitmap {
         if (!isBlurParamsValid(bitmap, radius)) return bitmap
 
-        return blur(bitmap, radius.toFloat(), isShadow = false)
+        return blur(bitmap, radius, isShadow = false)
     }
 
     override fun blurShadow(
@@ -104,10 +104,10 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
                     wrapped.copy(Bitmap.Config.ALPHA_8, false)
                 }
                 wrapped.config != bitmap.config -> {
-                    wrapped.copy(bitmap.config, false)
+                    wrapped.copy(bitmap.config ?: Bitmap.Config.ARGB_8888, false)
                 }
                 else -> {
-                    wrapped.copy(wrapped.config, false)
+                    wrapped.copy(wrapped.config ?: Bitmap.Config.ARGB_8888, false)
                 }
             }.also {
                 wrapped.recycle()

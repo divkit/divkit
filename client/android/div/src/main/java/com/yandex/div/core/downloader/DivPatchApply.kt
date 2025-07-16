@@ -217,7 +217,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it.div, idToFind, resolver, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeAt(currentPath.lastIndex)
                     }
                     emptyList()
                 }
@@ -229,7 +229,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.states.mapNotNull { it.div }.forEach {
                         val newPath = pathToChildWithId(it, idToFind, resolver, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeAt(currentPath.lastIndex)
                     }
                     emptyList()
                 }
@@ -248,7 +248,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
 
         forEach {
             val newPath = pathToChildWithId(it, idToFind, resolver, currentPath)
-            if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
+            if (newPath.isNotEmpty()) return newPath else currentPath.removeAt(currentPath.lastIndex)
         }
         return emptyList()
     }

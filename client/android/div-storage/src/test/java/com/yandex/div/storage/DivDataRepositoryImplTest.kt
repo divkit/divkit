@@ -158,13 +158,13 @@ class DivDataRepositoryImplTest {
         underTest.getAll()
         assertEquals(2, errors.allValues[1].size) // request cards with errors
 
-        listOfErrors.removeLast()
+        listOfErrors.removeAt(listOfErrors.lastIndex)
         underTest.getAll()
         assertEquals(2, errors.allValues[2].size)
         underTest.getAll()
         assertEquals(1, errors.allValues[3].size) // request last error card
 
-        listOfErrors.removeLast()
+        listOfErrors.removeAt(listOfErrors.lastIndex)
         underTest.getAll()
         assertEquals(1, errors.allValues[4].size)
 
