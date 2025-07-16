@@ -116,9 +116,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 cases.addAll(newCases)
             }.map { TestCaseOrError<ExpressionTestCase>(it) }
 
-            val allCases = errors + cases.filter {
-                it.error != null || MultiplatformTestUtils.isForAndroidPlatform(it.testCase?.platform)
-            }
+            val allCases = errors + cases
 
             ExpressionTestCaseUtils.checkDuplicates(allCases.asSequence())
 

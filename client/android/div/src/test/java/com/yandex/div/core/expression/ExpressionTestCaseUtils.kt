@@ -11,6 +11,7 @@ import com.yandex.div.interactive.IntegrationTestLogger
 import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
 import com.yandex.div.internal.util.map
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
@@ -51,6 +52,7 @@ object ExpressionTestCaseUtils {
     fun parseTestCases(json: JSONObject, fileName: String): List<TestCaseOrError<ExpressionTestCase>> {
         return json.optJSONArray(CASES_FIELD)
             .toListOfJSONObject()
+            .filter { isForAndroidPlatform(parsePlatform(it)) }
             .map { parseTestCase(it, fileName) }
     }
 
