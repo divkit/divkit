@@ -216,7 +216,6 @@ data class Text internal constructor(
         val fontVariationSettings: Property<Map<String, Any>>?,
         /**
          * Style.
-         * Default value: `regular`.
          */
         val fontWeight: Property<FontWeight>?,
         /**
@@ -331,7 +330,7 @@ data class Text internal constructor(
          */
         val textColor: Property<Color>?,
         /**
-         * Gradient text color. Priority: applied if `range.text_color` is not set.
+         * Gradient text color.
          */
         val textGradient: Property<TextGradient>?,
         /**
@@ -915,7 +914,7 @@ data class Text internal constructor(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1132,7 +1131,7 @@ fun DivScope.text(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1347,7 +1346,7 @@ fun DivScope.textProps(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1562,7 +1561,7 @@ fun TemplateScope.textRefs(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1779,7 +1778,7 @@ fun Text.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1996,7 +1995,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2350,7 +2349,7 @@ fun Text.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2568,7 +2567,7 @@ fun Component<Text>.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2924,7 +2923,7 @@ fun Component<Text>.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color. Priority: applied if `range.text_color` is not set.
+ * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.

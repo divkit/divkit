@@ -150,7 +150,6 @@ data class Select internal constructor(
         val fontVariationSettings: Property<Map<String, Any>>?,
         /**
          * Style.
-         * Default value: `regular`.
          */
         val fontWeight: Property<FontWeight>?,
         /**
