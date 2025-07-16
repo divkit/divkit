@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.O)
 internal class FontVariationSpan(
-    private val settings: String
+    private val settings: String?
 ) : MetricAffectingSpan() {
 
     override fun updateDrawState(textPaint: TextPaint) {

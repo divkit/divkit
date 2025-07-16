@@ -28,7 +28,7 @@ internal fun <T> T.observeBaseTextProperties(
     newTextColor: Expression<Int>,
     newLineHeight: Expression<Long>?,
     newFontFamily: Expression<String>?,
-    newFontWeight: Expression<DivFontWeight>,
+    newFontWeight: Expression<DivFontWeight>?,
     newFontWeightValue: Expression<Long>?,
     newFontVariationSettings: Expression<JSONObject>?,
     oldFontSize: Expression<Long>?,
@@ -160,7 +160,7 @@ private fun <T> T.applyLineHeight(
 
 internal fun <T> T.observeTypeface(
     newFontFamily: Expression<String>?,
-    newFontWeight: Expression<DivFontWeight>,
+    newFontWeight: Expression<DivFontWeight>?,
     newFontWeightValue: Expression<Long>?,
     newFontVariationSettings: Expression<JSONObject>?,
     oldFontFamily: Expression<String>?,
@@ -199,7 +199,7 @@ internal fun <T> T.observeTypeface(
 
 private fun TextView.applyTypeface(
     fontFamily: Expression<String>?,
-    fontWeight: Expression<DivFontWeight>,
+    fontWeight: Expression<DivFontWeight>?,
     fontWeightValue: Expression<Long>?,
     fontVariations: Expression<JSONObject>?,
     typefaceResolver: DivTypefaceResolver,
@@ -207,7 +207,7 @@ private fun TextView.applyTypeface(
 ) {
     val typefaceProvider = typefaceResolver.getTypefaceProvider(fontFamily?.evaluate(resolver))
     typeface = getTypeface(
-        fontWeight.evaluate(resolver),
+        fontWeight?.evaluate(resolver),
         fontWeightValue?.evaluate(resolver)?.toIntSafely(),
         typefaceProvider,
     )
@@ -220,13 +220,13 @@ private fun TextView.applyTypeface(
 
 private fun <T> T.observeTypeface(
     fontFamily: Expression<String>?,
-    fontWeight: Expression<DivFontWeight>,
+    fontWeight: Expression<DivFontWeight>?,
     fontWeightValue: Expression<Long>?,
     fontVariations: Expression<JSONObject>?,
     typefaceResolver: DivTypefaceResolver,
     resolver: ExpressionResolver
 ) where T : TextView, T : ExpressionSubscriber {
-    if (fontFamily.isConstantOrNull() && fontWeight.isConstant() && fontWeightValue.isConstantOrNull()) return
+    if (fontFamily.isConstantOrNull() && fontWeight.isConstantOrNull() && fontWeightValue.isConstantOrNull()) return
 
     val callback = { _: Any ->
         applyTypeface(
@@ -239,12 +239,12 @@ private fun <T> T.observeTypeface(
         )
     }
     fontFamily?.let { addSubscription(it.observe(resolver, callback)) }
-    addSubscription(fontWeight.observe(resolver, callback))
+    fontWeight?.let { addSubscription(it.observe(resolver, callback)) }
     fontWeightValue?.let { addSubscription(it.observe(resolver, callback)) }
 }
 
 internal fun <T> T.observeFontVariationSettings(
-    newFontWeight: Expression<DivFontWeight>,
+    newFontWeight: Expression<DivFontWeight>?,
     newFontWeightValue: Expression<Long>?,
     newFontVariationSettings: Expression<JSONObject>?,
     resolver: ExpressionResolver,
@@ -262,7 +262,7 @@ internal val supportFontVariations get() = Build.VERSION.SDK_INT >= Build.VERSIO
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun TextView.applyFontVariationSettings(
-    fontWeight: Expression<DivFontWeight>,
+    fontWeight: Expression<DivFontWeight>?,
     fontWeightValue: Expression<Long>?,
     fontVariations: Expression<JSONObject>?,
     resolver: ExpressionResolver,
@@ -271,12 +271,12 @@ private fun TextView.applyFontVariationSettings(
 }
 
 internal fun getFontVariations(
-    fontWeight: Expression<DivFontWeight>,
+    fontWeight: Expression<DivFontWeight>?,
     fontWeightValue: Expression<Long>?,
     fontVariations: Expression<JSONObject>?,
     resolver: ExpressionResolver,
 ) = getFontVariations(
-    fontWeight.evaluate(resolver),
+    fontWeight?.evaluate(resolver),
     fontWeightValue?.evaluate(resolver)?.toIntSafely(),
     fontVariations?.evaluate(resolver)
 )
@@ -287,13 +287,15 @@ internal fun getFontVariations(
     fontWeight: DivFontWeight?,
     fontWeightValue: Int?,
     fontVariations: JSONObject?,
-): String {
+): String? {
+    val hasWeight = fontWeight != null || fontWeightValue != null
     val weight = getTypefaceValue(fontWeight, fontWeightValue)
+
     if (fontVariations?.isEmpty() != false) {
-        return getVariation(WEIGHT_AXIS, weight)
+        return if (hasWeight) getVariation(WEIGHT_AXIS, weight) else null
     }
 
-    if (!fontVariations.has(WEIGHT_AXIS)) {
+    if (hasWeight && !fontVariations.has(WEIGHT_AXIS)) {
         fontVariations.put(WEIGHT_AXIS, weight)
     }
     return buildList {

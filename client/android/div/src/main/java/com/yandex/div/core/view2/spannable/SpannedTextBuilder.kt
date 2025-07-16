@@ -543,7 +543,7 @@ internal class SpannedTextBuilder @Inject constructor(
             fontSize = fontSizeValue.unitToPx(displayMetrics, fontSizeUnit),
             fontSizeValue = fontSizeValue,
             fontSizeUnit = fontSizeUnit,
-            fontWeight = divText.fontWeight.evaluate(resolver),
+            fontWeight = divText.fontWeight?.evaluate(resolver),
             fontWeightValue = divText.fontWeightValue?.evaluate(resolver)?.toIntSafely(),
             fontFamily = divText.fontFamily?.evaluate(resolver),
             lineHeight = divText.lineHeight?.evaluate(resolver)?.toIntSafely()?.unitToPx(displayMetrics, fontSizeUnit),

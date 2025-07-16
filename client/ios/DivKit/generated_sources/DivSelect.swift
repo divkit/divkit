@@ -42,7 +42,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontVariationSettings: Expression<[String: Any]>?
-  public let fontWeight: Expression<DivFontWeight> // default value: regular
+  public let fontWeight: Expression<DivFontWeight>?
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
@@ -105,8 +105,8 @@ public final class DivSelect: DivBase, @unchecked Sendable {
     resolver.resolveDict(fontVariationSettings)
   }
 
-  public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-    resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
+  public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
+    resolver.resolveEnum(fontWeight)
   }
 
   public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
@@ -231,7 +231,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontVariationSettings = fontVariationSettings
-    self.fontWeight = fontWeight ?? .value(.regular)
+    self.fontWeight = fontWeight
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
@@ -396,7 +396,7 @@ extension DivSelect: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_variation_settings"] = fontVariationSettings?.toValidSerializationValue()
-    result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight"] = fontWeight?.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()

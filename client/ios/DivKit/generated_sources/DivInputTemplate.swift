@@ -114,7 +114,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontVariationSettings: Field<Expression<[String: Any]>>?
-  public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
+  public let fontWeight: Field<Expression<DivFontWeight>>?
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())

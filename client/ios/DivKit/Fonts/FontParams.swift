@@ -3,7 +3,7 @@ import VGSL
 
 public struct FontParams: Hashable {
   let family: String
-  let weight: Int
+  let weight: Int?
   let size: Int
   let unit: DivSizeUnit
   let featureSettings: String?
@@ -12,7 +12,7 @@ public struct FontParams: Hashable {
 
 public protocol FontParamsProvider {
   func resolveFontFamily(_ expressionResolver: ExpressionResolver) -> String?
-  func resolveFontWeight(_ expressionResolver: ExpressionResolver) -> DivFontWeight
+  func resolveFontWeight(_ expressionResolver: ExpressionResolver) -> DivFontWeight?
   func resolveFontWeightValue(_ expressionResolver: ExpressionResolver) -> Int?
   func resolveFontSize(_ resolver: ExpressionResolver) -> Int
   func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit
@@ -25,7 +25,7 @@ extension FontParamsProvider {
     FontParams(
       family: resolveFontFamily(expressionResolver) ?? "",
       weight: resolveFontWeightValue(expressionResolver)
-        ?? resolveFontWeight(expressionResolver).toInt(),
+        ?? resolveFontWeight(expressionResolver)?.toInt(),
       size: resolveFontSize(expressionResolver),
       unit: resolveFontSizeUnit(expressionResolver),
       featureSettings: resolveFontFeatureSettings(expressionResolver),
@@ -63,12 +63,12 @@ extension DivBlockModelingContext {
 private func makeFont(provider: DivFontProvider, params: FontParams) -> Font {
   var font = provider.font(
     family: params.family,
-    weight: params.weight,
+    weight: params.weight ?? DivFontWeight.regular.toInt(),
     size: params.unit.makeScaledValue(params.size)
   )
   var variationSettings = params.variationSettings ?? [:]
-  if variationSettings["wght"] == nil {
-    variationSettings["wght"] = params.weight as NSNumber
+  if let weight = params.weight, variationSettings["wght"] == nil {
+    variationSettings["wght"] = weight as NSNumber
   }
   font = font.withVariationSettings(axisTagToValue: variationSettings)
 

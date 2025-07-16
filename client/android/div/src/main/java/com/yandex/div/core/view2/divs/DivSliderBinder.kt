@@ -383,13 +383,13 @@ internal class DivSliderBinder @Inject constructor(
             val fontVariations = if (typefaceProvider.isVariable) {
                 getFontVariations(fontWeight, fontWeightValue, fontVariationSettings, resolver)
             } else {
-                ""
+                null
             }
             return SliderTextStyle(
                 fontSize = size.fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
                 spacing = letterSpacing.evaluate(resolver).toFloat() / size,
                 fontWeight = getTypeface(
-                    fontWeight.evaluate(resolver),
+                    fontWeight?.evaluate(resolver),
                     fontWeightValue?.evaluate(resolver)?.toIntSafely(),
                     typefaceProvider
                 ),

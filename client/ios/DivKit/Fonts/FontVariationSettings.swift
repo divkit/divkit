@@ -4,7 +4,7 @@ import VGSLUI
 
 extension Font {
   func withVariationSettings(axisTagToValue: [String: NSNumber]?) -> Font {
-    guard let axisTagToValue else { return self }
+    guard let axisTagToValue, !axisTagToValue.isEmpty else { return self }
     let ctfont = CTFontCreateWithName(fontName as CFString, pointSize, nil)
     guard let fontAxesRaw = CTFontCopyVariationAxes(ctfont) as? [Any] else { return self }
 

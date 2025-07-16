@@ -40,7 +40,7 @@ public final class DivSlider: DivBase, Sendable {
     public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontVariationSettings: Expression<[String: Any]>?
-    public let fontWeight: Expression<DivFontWeight> // default value: regular
+    public let fontWeight: Expression<DivFontWeight>?
     public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let letterSpacing: Expression<Double> // default value: 0
     public let offset: DivPoint?
@@ -62,8 +62,8 @@ public final class DivSlider: DivBase, Sendable {
       resolver.resolveDict(fontVariationSettings)
     }
 
-    public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-      resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
+    public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
+      resolver.resolveEnum(fontWeight)
     }
 
     public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
@@ -99,7 +99,7 @@ public final class DivSlider: DivBase, Sendable {
       self.fontSize = fontSize ?? .value(12)
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontVariationSettings = fontVariationSettings
-      self.fontWeight = fontWeight ?? .value(.regular)
+      self.fontWeight = fontWeight
       self.fontWeightValue = fontWeightValue
       self.letterSpacing = letterSpacing ?? .value(0)
       self.offset = offset
@@ -550,7 +550,7 @@ extension DivSlider.TextStyle: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_variation_settings"] = fontVariationSettings?.toValidSerializationValue()
-    result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight"] = fontWeight?.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["offset"] = offset?.toDictionary()

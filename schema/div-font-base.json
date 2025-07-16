@@ -31,7 +31,6 @@
     },
     "font_weight": {
       "$ref": "div-font-weight.json",
-      "default_value": "regular",
       "$description": "translations.json#/div_font_weight"
     },
     "font_weight_value": {

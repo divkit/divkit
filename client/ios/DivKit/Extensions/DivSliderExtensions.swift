@@ -254,7 +254,7 @@ extension DivSlider.TextStyle {
     let fontParams = FontParams(
       family: "",
       weight: resolveFontWeightValue(expressionResolver)
-        ?? resolveFontWeight(expressionResolver).toInt(),
+        ?? resolveFontWeight(expressionResolver)?.toInt(),
       size: resolveFontSize(expressionResolver),
       unit: resolveFontSizeUnit(expressionResolver),
       featureSettings: nil,
