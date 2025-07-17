@@ -75,6 +75,9 @@
       "compat": {
         "android": {
           "version_added": "31.11.0"
+        },
+        "ios": {
+          "version_added": "32.8.0"
         }
       }
     },

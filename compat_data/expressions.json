@@ -56,6 +56,14 @@
             }
         }
     }, {
+        "id": "fn_len_dict",
+        "name": "Function <code>len</code> for dicts",
+        "compat": {
+            "ios": {
+                "version_added": "32.8.0"
+            }
+        }
+    }, {
         "id": "fn_parse_unix_time_as_local",
         "name": "Function <code>parseUnixTimeAsLocal</code>",
         "compat": {

@@ -246,6 +246,9 @@
             },
             "web": {
                 "version_added": "32.7.0"
+            },
+            "ios": {
+                "version_added": "32.8.0"
             }
         }
     }, {
