@@ -1,7 +1,7 @@
 @testable import DivKit
 @testable import DivKitExtensions
-@testable import LayoutKit
 import DivKitTestsSupport
+@testable import LayoutKit
 import VGSL
 import XCTest
 
@@ -13,7 +13,7 @@ final class LottieExtensionHandlerTests: XCTestCase {
     factory: factory,
     requester: requester
   )
-  
+
   func test_getPreloadURLs() {
     let lottieURLString = "https://example.com/DivGif9.json"
     let divWithExtension = divContainer(
@@ -24,9 +24,9 @@ final class LottieExtensionHandlerTests: XCTestCase {
           params: [
             "lottie_url": lottieURLString,
             "repeat_count": 2,
-            "repeat_mode": "reverse"
+            "repeat_mode": "reverse",
           ]
-        )
+        ),
       ],
       items: []
     )
@@ -61,9 +61,9 @@ final class LottieExtensionHandlerTests: XCTestCase {
             params: [
               "lottie_url": "@{lottie_url}",
               "repeat_count": "@{repeat_count}",
-              "repeat_mode": "@{repeat_mode}"
+              "repeat_mode": "@{repeat_mode}",
             ]
-          )
+          ),
         ],
         items: []
       ),
@@ -85,8 +85,8 @@ final class LottieExtensionHandlerTests: XCTestCase {
 
 private final class MockLottieAnimationFactory: AsyncSourceAnimatableViewFactory {
   var returnView = MockAnimatableView(frame: .zero)
-  func createAsyncSourceAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float)
-  -> AsyncSourceAnimatableView {
+  func createAsyncSourceAnimatableView(withMode _: AnimationRepeatMode, repeatCount _: Float)
+    -> AsyncSourceAnimatableView {
     returnView
   }
 }
@@ -94,13 +94,13 @@ private final class MockLottieAnimationFactory: AsyncSourceAnimatableViewFactory
 private final class MockAnimatableView: UIView, AsyncSourceAnimatableView {
   var playCallsCount = 0
   var receivedSources: [any DivKitExtensions.AnimationSourceType] = []
-  
+
   func play() {
     playCallsCount += 1
   }
-  
+
   func pause() {}
-  
+
   func setSourceAsync(_ source: any DivKitExtensions.AnimationSourceType) async {
     receivedSources.append(source)
   }

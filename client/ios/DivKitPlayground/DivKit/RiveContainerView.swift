@@ -70,7 +70,7 @@ extension RiveContainerView: AsyncSourceAnimatableView {
   func play() {
     riveViewModel?.play(loop: loop)
   }
-  
+
   func pause() {
     riveViewModel?.pause()
   }

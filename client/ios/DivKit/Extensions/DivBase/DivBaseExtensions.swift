@@ -130,8 +130,8 @@ extension DivBase {
 
     return blockActions
   }
-  
-  func setupContextWithVariablesAndFunctions( 
+
+  func setupContextWithVariablesAndFunctions(
     context: DivBlockModelingContext
   ) {
     context.functionsStorage?.setIfNeeded(
@@ -245,9 +245,17 @@ extension Block {
     for extensionHandler in extensionHandlers {
       switch order {
       case .beforeBaseProperties:
-        newBlock = extensionHandler.applyBeforeBaseProperties(to: newBlock, div: div, context: context)
+        newBlock = extensionHandler.applyBeforeBaseProperties(
+          to: newBlock,
+          div: div,
+          context: context
+        )
       case .afterBaseProperties:
-        newBlock = extensionHandler.applyAfterBaseProperties(to: newBlock, div: div, context: context)
+        newBlock = extensionHandler.applyAfterBaseProperties(
+          to: newBlock,
+          div: div,
+          context: context
+        )
       }
     }
     return newBlock

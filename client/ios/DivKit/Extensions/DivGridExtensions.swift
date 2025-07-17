@@ -66,7 +66,8 @@ extension DivGrid: DivBlockModeling {
     isRTLLayout: Bool
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment(isRTLLayout: isRTLLayout),
+      horizontal: resolveContentAlignmentHorizontal(expressionResolver)
+        .alignment(isRTLLayout: isRTLLayout),
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
   }

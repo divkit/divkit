@@ -1,24 +1,24 @@
 @testable import DivKit
-@testable import LayoutKit
 @testable import DivKitExtensions
 import DivKitTestsSupport
+@testable import LayoutKit
 import VGSL
 import XCTest
 
 final class InputExtensionHandlersTests: XCTestCase {
   private let variableStorage = DivVariableStorage()
   private var context: DivBlockModelingContext!
-  
+
   override func setUp() {
     variableStorage.put(name: "input_variable", value: .string("Hello!"))
     context = DivBlockModelingContext(variableStorage: variableStorage)
   }
-  
+
   func test_ApplyAllExtensionsToTextInput() throws {
     let contextWithExtensions = DivBlockModelingContext(
       extensionHandlers: [
         InputPropertiesExtensionHandler(),
-        InputAutocorrectionExtensionHandler()
+        InputAutocorrectionExtensionHandler(),
       ],
       variableStorage: variableStorage
     )
@@ -30,15 +30,15 @@ final class InputExtensionHandlersTests: XCTestCase {
             id: "input_properties",
             params: [
               "enables_return_key_automatically": true,
-              "spell_checking": true
+              "spell_checking": true,
             ]
           ),
           DivExtension(
             id: "input_autocorrection",
             params: [
-              "enabled": true
+              "enabled": true,
             ]
-          )
+          ),
         ],
         textVariable: "input_variable"
       ),

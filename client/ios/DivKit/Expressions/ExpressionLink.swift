@@ -84,7 +84,7 @@ public struct ExpressionLink<T: Sendable>: Sendable {
     self.rawValue = rawValue
     self.validator = validator
   }
-  
+
   func extractDynamicVariableNames(_ context: ExpressionContext) -> [String] {
     items.flatMap { item in
       switch item {

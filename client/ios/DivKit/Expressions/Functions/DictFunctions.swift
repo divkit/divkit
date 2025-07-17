@@ -26,9 +26,9 @@ extension [String: Function] {
 
     addFunctions("Url", _getUrl)
     addFunctions("OptUrl", _getOptUrl)
-    
+
     addFunction("len", _len)
-    
+
     addFunction("getDictKeys", _getDictKeys)
     addFunction("getDictValues", _getDictValues)
   }
@@ -45,7 +45,7 @@ extension [String: Function] {
     addFunction("isEmpty", _isEmpty)
 
     addFunction("containsKey", _containsKey)
-    
+
     addFunction("getKeys", _getDictKeys)
     addFunction("getValues", _getDictValues)
   }

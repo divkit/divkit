@@ -84,10 +84,10 @@ private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> Playe
 private func makeResourcesPreloader(
   requestPerformer: URLRequestPerforming?
 ) -> DivDataResourcesPreloader? {
-  guard let requestPerformer = requestPerformer else {
+  guard let requestPerformer else {
     return nil
   }
-  
+
   let cacheQueue = OperationQueue.serialQueue(
     name: "divkit.resources-preloader.cache-queue",
     qos: .utility
@@ -100,7 +100,10 @@ private func makeResourcesPreloader(
     reportError: { _ in }
   )
   let networkRequester = NetworkURLResourceRequester(performer: requestPerformer)
-  let cachedRequester = CachedURLResourceRequester(cache: diskCache, cachemissRequester: networkRequester)
+  let cachedRequester = CachedURLResourceRequester(
+    cache: diskCache,
+    cachemissRequester: networkRequester
+  )
   return DivDataResourcesPreloader(resourceRequester: cachedRequester)
 }
 

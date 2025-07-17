@@ -68,14 +68,14 @@ extension Div {
       []
     }
   }
-  
+
   func makeExtensionPreloadURLs(
-    extensionHandlers: [String : DivExtensionHandler],
+    extensionHandlers: [String: DivExtensionHandler],
     expressionResolver: ExpressionResolver
   ) -> [URL] {
-    guard !extensionHandlers.isEmpty else { return [] } 
-    return value.extensions?.compactMap { 
-      extensionHandlers[$0.id]?.getPreloadURLs(div: value, expressionResolver: expressionResolver) 
+    guard !extensionHandlers.isEmpty else { return [] }
+    return value.extensions?.compactMap {
+      extensionHandlers[$0.id]?.getPreloadURLs(div: value, expressionResolver: expressionResolver)
     }.flatMap { $0 } ?? []
   }
 }

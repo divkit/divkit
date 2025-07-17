@@ -7,7 +7,7 @@ public struct MarksConfigurationModel: Equatable {
   let activeMark: RoundedRectangle
   let inactiveMark: RoundedRectangle
   let layoutDirection: UserInterfaceLayoutDirection
-  
+
   public init(
     minValue: CGFloat,
     maxValue: CGFloat,
@@ -21,7 +21,7 @@ public struct MarksConfigurationModel: Equatable {
     self.inactiveMark = inactiveMark
     self.layoutDirection = layoutDirection
   }
-  
+
   public static let empty = Self(
     minValue: 0,
     maxValue: 0,

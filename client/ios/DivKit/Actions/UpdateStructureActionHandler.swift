@@ -16,9 +16,15 @@ final class UpdateStructureActionHandler {
     }
 
     let updatedValue: DivVariableValue?
-    if let dict: DivDictionary = context.variablesStorage.getVariableValue(path: context.path, name: divVariableName) {
+    if let dict: DivDictionary = context.variablesStorage.getVariableValue(
+      path: context.path,
+      name: divVariableName
+    ) {
       updatedValue = updateDictionary(dict, newValue: newValue, path: pathComponents)
-    } else if let array: DivArray = context.variablesStorage.getVariableValue(path: context.path, name: divVariableName) {
+    } else if let array: DivArray = context.variablesStorage.getVariableValue(
+      path: context.path,
+      name: divVariableName
+    ) {
       updatedValue = updateArray(array, newValue: newValue, path: pathComponents)
     } else {
       DivKitLogger.error("Action requires array or dictionary variable")
@@ -106,9 +112,11 @@ private func updateElement(
   newValue: AnyHashable
 ) -> AnyHashable? {
   if let nestedArray = currentElement as? DivArray {
-    return updateArray(nestedArray, newValue: newValue, path: path, pathIndex: pathIndex)?.arrayValue
+    return updateArray(nestedArray, newValue: newValue, path: path, pathIndex: pathIndex)?
+      .arrayValue
   } else if let nestedDict = currentElement as? DivDictionary {
-    return updateDictionary(nestedDict, newValue: newValue, path: path, pathIndex: pathIndex)?.dictValue
+    return updateDictionary(nestedDict, newValue: newValue, path: path, pathIndex: pathIndex)?
+      .dictValue
   } else {
     DivKitLogger.error(
       "Element with path '\(path[0..<pathIndex].joined(separator: "/"))' is not a structure"
@@ -117,8 +125,8 @@ private func updateElement(
   }
 }
 
-private extension Array {
-  subscript(insert index: Int) -> Element? {
+extension Array {
+  fileprivate subscript(insert index: Int) -> Element? {
     get {
       (0..<count).contains(index) ? self[index] : nil
     }
@@ -138,16 +146,16 @@ private extension Array {
   }
 }
 
-private extension DivVariableValue {
-  var arrayValue: DivArray? {
-    if case .array(let array) = self {
+extension DivVariableValue {
+  fileprivate var arrayValue: DivArray? {
+    if case let .array(array) = self {
       return array
     }
     return nil
   }
 
-  var dictValue: DivDictionary? {
-    if case .dict(let dict) = self {
+  fileprivate var dictValue: DivDictionary? {
+    if case let .dict(dict) = self {
       return dict
     }
     return nil
@@ -155,5 +163,6 @@ private extension DivVariableValue {
 }
 
 private func logElementNotFound(path: [String], pathIndex: Int) {
-  DivKitLogger.error("Element with path '\(path[0...pathIndex].joined(separator: "/"))' is not found")
+  DivKitLogger
+    .error("Element with path '\(path[0...pathIndex].joined(separator: "/"))' is not found")
 }

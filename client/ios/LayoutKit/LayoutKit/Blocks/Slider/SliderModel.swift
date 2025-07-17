@@ -99,7 +99,7 @@ public struct SliderModel: Equatable {
   public let layoutDirection: UserInterfaceLayoutDirection
   public let path: UIElementPath?
   public let isEnabled: Bool
-    
+
   public var marksConfiguration: MarksConfiguration {
     MarksConfiguration(
       modelConfiguration: marksModelConfiguration,
@@ -110,7 +110,7 @@ public struct SliderModel: Equatable {
   public var valueRange: Int {
     maxValue - minValue
   }
-  
+
   private let marksModelConfiguration: MarksConfigurationModel
 
   public var sliderHeight: CGFloat {

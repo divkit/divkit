@@ -8,7 +8,7 @@ open class DivViewController: UIViewController {
   private let divKitComponents: DivKitComponents
   private let debugParams: DebugParams
   private var divView: DivView?
-  
+
   private let scrollView = VisibilityTrackingScrollView()
   private var cancellables = Set<AnyCancellable>()
 
@@ -65,7 +65,7 @@ open class DivViewController: UIViewController {
 
     divView.setParentScrollView(scrollView)
     divView.accessibilityIdentifier = identifier
-        
+
     return divView
   }
 

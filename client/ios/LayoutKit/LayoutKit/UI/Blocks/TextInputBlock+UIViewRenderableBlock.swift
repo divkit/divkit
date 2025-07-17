@@ -358,7 +358,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       setSmartInsertDeleteType(.default)
     }
   }
-  
+
   func setSmartInsertDeleteType(_ type: UITextSmartInsertDeleteType) {
     singleLineInput.smartInsertDeleteType = type
     multiLineInput.smartInsertDeleteType = type
@@ -909,7 +909,7 @@ extension UITextField {
     guard let selectedRange = self.selectedTextRange else {
       return nil
     }
-    
+
     let beginning = self.beginningOfDocument
     let startPosition = self.offset(from: beginning, to: selectedRange.start)
     let endPosition = self.offset(from: beginning, to: selectedRange.end)
@@ -939,12 +939,16 @@ private class PatchedUITextField: UITextField {
     guard let string = UIPasteboard.general.string else {
       return
     }
-    
+
     guard let range = self.selectedNSRange else {
       return
     }
-    
-    if (self.delegate as? TextInputBlockView)?.textField(self, shouldChangeCharactersIn: range, replacementString: string) == true {
+
+    if (self.delegate as? TextInputBlockView)?.textField(
+      self,
+      shouldChangeCharactersIn: range,
+      replacementString: string
+    ) == true {
       super.paste(sender)
     }
   }
@@ -962,8 +966,12 @@ private class PatchedUITextView: UITextView {
     guard let string = UIPasteboard.general.string else {
       return
     }
-    
-    if (self.delegate as? TextInputBlockView)?.textView(self, shouldChangeTextIn: self.selectedRange, replacementText: string) == true {
+
+    if (self.delegate as? TextInputBlockView)?.textView(
+      self,
+      shouldChangeTextIn: self.selectedRange,
+      replacementText: string
+    ) == true {
       isPasting = true
       super.paste(sender)
     }

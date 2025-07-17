@@ -16,7 +16,7 @@ extension Dictionary where Key == String {
     }
     return result
   }
-  
+
   func getOptionalFloat(
     _ key: Key,
     expressionResolver: ExpressionResolver

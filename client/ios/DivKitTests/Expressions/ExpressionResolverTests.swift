@@ -535,7 +535,8 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_extractDynamicVariables_WithNestedGetValueFunctionsAndUnknownVars() {
-    let expression = "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, ''), '')}"
+    let expression =
+      "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, ''), '')}"
 
     XCTAssertEqual(
       expressionResolver.extractDynamicVariables(
@@ -546,7 +547,8 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_extractDynamicVariables_WithGetValueFunctionsWithFallbackValue() {
-    let expression = "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, 'value'), '')}"
+    let expression =
+      "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, 'value'), '')}"
 
     XCTAssertEqual(
       expressionResolver.extractDynamicVariables(

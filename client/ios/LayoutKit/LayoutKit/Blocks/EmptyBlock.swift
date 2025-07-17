@@ -27,7 +27,7 @@ public final class EmptyBlock: BlockWithTraits {
   public var isEmpty: Bool {
     self == EmptyBlock.zeroSized
   }
-  
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? EmptyBlock else {
       return false

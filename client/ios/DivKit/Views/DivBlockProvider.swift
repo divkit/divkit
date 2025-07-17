@@ -173,7 +173,7 @@ final class DivBlockProvider {
       self.divData = nil
       return
     }
-    
+
     if let resourcesPreloader = divKitComponents.resourcesPreloader {
       resourcesPreloader.downloadResources(
         for: divData,

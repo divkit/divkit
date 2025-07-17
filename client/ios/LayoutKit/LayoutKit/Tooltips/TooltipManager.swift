@@ -196,8 +196,9 @@ public class DefaultTooltipManager: TooltipManager {
     guard tooltipWindowManager == nil else { return }
 
     let scenes = UIApplication.shared.connectedScenes
-    guard let windowScene = scenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-          let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+    guard let windowScene = scenes
+      .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+      let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) else {
       return
     }
 

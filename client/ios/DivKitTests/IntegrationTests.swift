@@ -75,8 +75,12 @@ private func runTest(_ testData: IntegrationTestData) async {
           cardId: cardId,
           name: DivVariableName(rawValue: name)
         )
-        if case .unorderedArray(let expectedArray) = value {
-          let variableArray: DivArray? = if case .array(let arr) = variableValue { arr } else { nil }
+        if case let .unorderedArray(expectedArray) = value {
+          let variableArray: DivArray? = if case let .array(arr) = variableValue {
+            arr
+          } else {
+            nil
+          }
           XCTAssertTrue(
             expectedArray.isEqualUnordered(variableArray),
             "Variable name - '\(name)'"
@@ -266,23 +270,23 @@ extension [Expected] {
 private func makeDefault(_ value: ExpectedValue) -> DivVariableValue? {
   switch value {
   case .string, .datetime:
-      .string("")
+    .string("")
   case .integer:
-      .integer(0)
+    .integer(0)
   case .double:
-      .number(0.0)
+    .number(0.0)
   case .bool:
-      .bool(false)
+    .bool(false)
   case .color:
-      .color(.black)
+    .color(.black)
   case .url:
-      .url(URL(string: "empty://")!)
+    .url(URL(string: "empty://")!)
   case .array:
-      .array([])
+    .array([])
   case .dict:
-      .dict([:])
+    .dict([:])
   case .unorderedArray:
-      .array([])
+    .array([])
   case .error:
     nil
   }

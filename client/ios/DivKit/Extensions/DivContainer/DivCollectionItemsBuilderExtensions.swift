@@ -6,7 +6,7 @@ extension DivCollectionItemBuilder {
     context: DivBlockModelingContext,
     mappedBy modificator: (Div, Block, DivBlockModelingContext) -> T
   ) -> [T] {
-    makeItemDivAndContexts(context: context).compactMap { (div, itemContext) in
+    makeItemDivAndContexts(context: context).compactMap { div, itemContext in
       do {
         return try modifyError({
           DivBlockModelingError($0.message, path: itemContext.path)
@@ -20,7 +20,7 @@ extension DivCollectionItemBuilder {
       }
     }
   }
-  
+
   func makeItemDivAndContexts(
     context: DivBlockModelingContext
   ) -> [(Div, DivBlockModelingContext)] {

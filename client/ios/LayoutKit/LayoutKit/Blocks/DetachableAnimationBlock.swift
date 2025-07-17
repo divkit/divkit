@@ -79,7 +79,7 @@ extension DetachableAnimationBlock: ElementStateUpdating {
     if updatedChild === child, animationIn == nil {
       return self
     }
-    
+
     return Self(
       child: updatedChild,
       id: id,

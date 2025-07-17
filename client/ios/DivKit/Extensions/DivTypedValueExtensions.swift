@@ -70,9 +70,9 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-        if let dictValue = value.resolveValue(expressionResolver) {
-          return DivDictionary.fromAny(dictValue)
-        }
+      if let dictValue = value.resolveValue(expressionResolver) {
+        return DivDictionary.fromAny(dictValue)
+      }
       return nil
     case let .integerValue(value):
       if let integerValue = value.resolveValue(expressionResolver) {

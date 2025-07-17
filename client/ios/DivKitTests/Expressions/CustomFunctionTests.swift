@@ -1,7 +1,7 @@
 @testable @_spi(Internal) import DivKit
+import DivKitTestsSupport
 @testable import LayoutKit
 import XCTest
-import DivKitTestsSupport
 
 final class CustomFunctionTests: XCTestCase {
   private let incrementFunction = DivFunction(

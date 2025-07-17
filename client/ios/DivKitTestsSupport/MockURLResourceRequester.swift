@@ -5,7 +5,7 @@ public final class MockURLResourceRequester: URLResourceRequesting {
   public var requestedURLs: [URL] = []
   public var shouldSucceed = true
   public var customBehavior: ((URL) -> Bool)?
-  
+
   public init() {}
 
   @MainActor

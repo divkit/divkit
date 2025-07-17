@@ -134,7 +134,7 @@ public final class ExpressionResolver {
     resolveNumeric(expression)
   }
 
-  func extractDynamicVariables<T>(_ link: ExpressionLink<T>) -> [String] {
+  func extractDynamicVariables(_ link: ExpressionLink<some Any>) -> [String] {
     link.extractDynamicVariableNames(context)
   }
 

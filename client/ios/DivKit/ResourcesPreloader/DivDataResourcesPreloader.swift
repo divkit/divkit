@@ -6,7 +6,6 @@ public enum ResourcePreloadFilter {
 }
 
 public final class DivDataResourcesPreloader {
-
   private let resourceRequester: URLResourceRequesting
 
   public init(
@@ -25,13 +24,13 @@ public final class DivDataResourcesPreloader {
     let validURLs = divData.flatMap(
       {
         let extensionURLs = $0.makeExtensionPreloadURLs(
-          extensionHandlers: extensionHandlers, 
+          extensionHandlers: extensionHandlers,
           expressionResolver: $1.expressionResolver
         )
         let imageURLs = $0.makeImageURLs(with: $1.expressionResolver, filter: filter)
         let videoURLs = $0.makeVideoURLs(with: $1.expressionResolver, filter: filter)
         return extensionURLs + imageURLs + videoURLs
-      }, 
+      },
       context: context
     )
     .flatMap { $0 }
@@ -62,11 +61,11 @@ public final class DivDataResourcesPreloader {
 
 extension DivData {
   fileprivate func flatMap<T>(
-    _ transform: (Div, DivBlockModelingContext) -> T, 
+    _ transform: (Div, DivBlockModelingContext) -> T,
     context: DivBlockModelingContext
   ) -> [T] {
     var result: [T] = []
-    
+
     context.functionsStorage?.setIfNeeded(
       path: context.path,
       functions: functions ?? []
@@ -76,17 +75,17 @@ extension DivData {
       path: context.path,
       variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:]
     )
-    
+
     func traverse(div: Div, divContext: DivBlockModelingContext) {
       div.value.setupContextWithVariablesAndFunctions(context: divContext)
       result.append(transform(div, divContext))
-      
+
       if let container = div.value as? DivContainer, let itemBuilder = container.itemBuilder {
         itemBuilder.makeItemDivAndContexts(context: divContext).forEach { div, itemContext in
           traverse(div: div, divContext: itemContext)
         }
       }
-      
+
       div.children.forEach {
         let childContext = $0.value.modifiedContextParentPath(divContext)
         traverse(div: $0, divContext: childContext)

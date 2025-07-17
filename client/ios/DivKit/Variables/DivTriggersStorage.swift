@@ -260,7 +260,10 @@ extension Expression {
   fileprivate func getVariablesNames(_ resolver: ExpressionResolver) -> Set<DivVariableName> {
     switch self {
     case let .link(link):
-      let dynamicNames = Set(resolver.extractDynamicVariables(link).map(DivVariableName.init(rawValue:)))
+      let dynamicNames = Set(
+        resolver.extractDynamicVariables(link)
+          .map(DivVariableName.init(rawValue:))
+      )
       let staticNames = Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
       return staticNames.union(dynamicNames)
     case .value:

@@ -1,5 +1,5 @@
-import SwiftUI
 import DivKit
+import SwiftUI
 
 struct ContentView: View {
   @State private var isPresented: Bool = false

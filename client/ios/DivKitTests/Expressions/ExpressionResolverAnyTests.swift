@@ -5,7 +5,7 @@ import XCTest
 
 final class ExpressionResolverAnyTests: XCTestCase {
   private var isErrorExpected = false
-  private var error: String? = nil
+  private var error: String?
 
   private var variables: DivVariables = [:]
 

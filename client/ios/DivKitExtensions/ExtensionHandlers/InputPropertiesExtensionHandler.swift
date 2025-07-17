@@ -17,7 +17,7 @@ public final class InputPropertiesExtensionHandler: DivExtensionHandler {
     }
 
     let params = getExtensionParams(div)
-    
+
     var newBlock = textInputBlock
 
     if let enablesReturnKeyAutomatically = try? params.getOptionalBool(

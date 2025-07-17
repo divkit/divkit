@@ -4,19 +4,19 @@ final class MarksLayer: CALayer {
   var firstThumbProgress: CGFloat = 0
   var secondThumbProgress: CGFloat = 0
   var configuration = MarksConfiguration.empty
-  
+
   private var maxValue: CGFloat {
     configuration.modelConfiguration.maxValue
   }
-  
+
   private var minValue: CGFloat {
     configuration.modelConfiguration.minValue
   }
-  
+
   private var activeMark: MarksConfigurationModel.RoundedRectangle {
     configuration.modelConfiguration.activeMark
   }
-  
+
   private var inactiveMark: MarksConfigurationModel.RoundedRectangle {
     configuration.modelConfiguration.inactiveMark
   }

@@ -50,7 +50,7 @@ struct CalcExpression {
       return nil
     }
   }
-  
+
   func extractDynamicVariableNames(_ context: ExpressionContext) throws -> [String] {
     try root.extractDynamicVariableNames(context)
   }

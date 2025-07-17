@@ -166,7 +166,7 @@ private struct FunctionEvaluator: Function {
 }
 
 private struct DynamicVariablesEvaluator: Function {
-  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     guard let arg = args.first else {
       throw ExpressionError("There is no arguments in getValueFunction")
     }
@@ -221,5 +221,5 @@ private let getValueFunctions = [
   "getIntegerValue",
   "getNumberValue",
   "getStringValue",
-  "getUrlValue"
+  "getUrlValue",
 ]

@@ -26,7 +26,7 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
 
   public var effectiveBackgroundColor: UIColor? { tabContentsView.effectiveBackgroundColor }
   public var layoutReporter: LayoutReporter?
-  
+
   public func configure(
     model: TabViewModel,
     state: TabViewState,

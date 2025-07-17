@@ -1,6 +1,6 @@
 import DivKit
-import LayoutKitInterface
 import Foundation
+import LayoutKitInterface
 import VGSL
 
 struct LottieExtensionParams {
@@ -34,15 +34,24 @@ struct LottieExtensionParams {
       return nil
     }
 
-    self.repeatCount = (try? paramsDictionary.getOptionalFloat("repeat_count", expressionResolver: expressionResolver)).map(Float.init)
+    self
+      .repeatCount = (
+        try? paramsDictionary
+          .getOptionalFloat("repeat_count", expressionResolver: expressionResolver)
+      ).map(Float.init)
       ?? Defaults.defaultRepeatCount
 
     self.repeatMode = (paramsDictionary["repeat_mode"] as? String)
-        .flatMap(expressionResolver.resolveString)
-        .flatMap(AnimationRepeatMode.init)
-        ?? Defaults.defaultRepeatMode
+      .flatMap(expressionResolver.resolveString)
+      .flatMap(AnimationRepeatMode.init)
+      ?? Defaults.defaultRepeatMode
 
-    self.isPlaying = (try? paramsDictionary.getOptionalBool("is_playing", expressionResolver: expressionResolver)) ?? Defaults.defaultIsPlaying
+    self
+      .isPlaying = (
+        try? paramsDictionary
+          .getOptionalBool("is_playing", expressionResolver: expressionResolver)
+      ) ?? Defaults
+      .defaultIsPlaying
   }
 
   init(source: Source, repeatCount: Float, repeatMode: AnimationRepeatMode, isPlaying: Bool) {
@@ -53,8 +62,8 @@ struct LottieExtensionParams {
   }
 }
 
-private extension AnimationRepeatMode {
-  init?(repeatModeString: String) {
+extension AnimationRepeatMode {
+  fileprivate init?(repeatModeString: String) {
     switch repeatModeString {
     case "reverse":
       self = .reverse

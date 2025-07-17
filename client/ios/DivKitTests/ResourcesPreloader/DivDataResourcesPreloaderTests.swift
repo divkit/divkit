@@ -105,7 +105,7 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     let context = DivBlockModelingContext(
       extensionHandlers: [
         mockExtensionHandler,
-        invalidExtensionHandler
+        invalidExtensionHandler,
       ]
     )
 
@@ -127,90 +127,95 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     let divData = divData(divWithExtension)
 
     downloadResourcesAndWait(
-      for: divData, 
+      for: divData,
       using: preloader,
       context: context
     )
 
     XCTAssertEqual(mockRequester.requestedURLs, [mockExtensionHandler.preloadURL])
   }
-  
+
   func test_WhenContainerHasNestedItemBuilders_WithAllFilter_PreloadsAllResources() {
     let divData = createDivDataWithNestedItemBuilders()
-    
+
     downloadResourcesAndWait(for: divData, using: preloader)
-    
+
     XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map { $0.absoluteString }),
+      Set(mockRequester.requestedURLs.map(\.absoluteString)),
       Set([requiredImageURL, optionalImageURL, validImageURL])
     )
   }
-  
+
   func test_WhenItemBuilderUsesVariables_WithRequiredFilter_PreloadsOnlyRequiredResources() {
     let mockRequester = MockURLResourceRequester()
     mockRequester.shouldSucceed = true
     let preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
-    
+
     let variableStorage = DivVariableStorage()
     variableStorage.put(name: "image_url_var", value: .url(URL(string: requiredImageURL)!))
     variableStorage.put(name: "preload_required_var", value: .bool(true))
-    
+
     let context = DivBlockModelingContext(variableStorage: variableStorage)
     let divData = createDivDataWithVariables()
-    
-    downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired, context: context)
-    
+
+    downloadResourcesAndWait(
+      for: divData,
+      using: preloader,
+      filter: .onlyRequired,
+      context: context
+    )
+
     XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map { $0.absoluteString }),
+      Set(mockRequester.requestedURLs.map(\.absoluteString)),
       Set([requiredImageURL])
     )
   }
-  
+
   func test_WhenContainerHasItemBuilder_WithRequiredFilter_OnlyDownloadsRequiredResources() {
     let divData = createDivDataWithMixedItemBuilderResources()
-    
+
     downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired)
-    
+
     XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map { $0.absoluteString }),
+      Set(mockRequester.requestedURLs.map(\.absoluteString)),
       Set([requiredImageURL, requiredVideoURL])
     )
   }
-  
+
   func test_WhenContainerHasItemBuilder_WithAllFilter_DownloadsAllResources() {
     let divData = createDivDataWithMixedItemBuilderResources()
-    
+
     downloadResourcesAndWait(for: divData, using: preloader)
-    
+
     XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map { $0.absoluteString }),
+      Set(mockRequester.requestedURLs.map(\.absoluteString)),
       Set([requiredImageURL, optionalImageURL, requiredVideoURL, optionalVideoURL])
     )
   }
-  
+
   func test_WhenDivDataHasVariables_WithRequiredFilter_PreloadsCorrectly() {
     let divData = createDivDataWithDivVariables()
-    
+
     downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired)
-    
+
     XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map { $0.absoluteString }),
+      Set(mockRequester.requestedURLs.map(\.absoluteString)),
       Set([requiredImageURL])
     )
   }
-  
+
   private func createDivDataWithDivVariables() -> DivData {
     let imageWithVariable = divImage(
       id: "image_with_variable",
       imageUrlExpression: "@{image_var}",
       preloadRequired: true
     )
-    
+
     let container = divContainer(
       id: "container_with_variables",
       items: [imageWithVariable]
     )
-    
+
     return DivData(
       functions: nil,
       logId: DivBlockModelingContext.testCardId.rawValue,
@@ -219,11 +224,11 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       transitionAnimationSelector: nil,
       variableTriggers: nil,
       variables: [
-        .urlVariable(UrlVariable(name: "image_var", value: .value(URL(string: requiredImageURL)!)))
+        .urlVariable(UrlVariable(name: "image_var", value: .value(URL(string: requiredImageURL)!))),
       ]
     )
   }
-  
+
   private func downloadResourcesAndWait(
     for divData: DivData,
     using preloader: DivDataResourcesPreloader,
@@ -244,19 +249,19 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       }
       expectation.fulfill()
     }
-    
+
     wait(for: [expectation], timeout: 1.0)
   }
-  
+
   private func createDivDataWithNestedItemBuilders() -> DivData {
     let outerData: [Any] = [
       ["type": "container", "items": [
         ["url": requiredImageURL, "preload_required": true],
-        ["url": optionalImageURL, "preload_required": false]
+        ["url": optionalImageURL, "preload_required": false],
       ]],
-      ["type": "image", "url": validImageURL, "preload_required": true]
+      ["type": "image", "url": validImageURL, "preload_required": true],
     ]
-    
+
     let innerImagePrototype = DivCollectionItemBuilder.Prototype(
       div: divImage(
         id: "inner_image",
@@ -264,7 +269,7 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
         preloadRequiredExpression: "@{getBooleanFromDict(item, 'preload_required')}"
       )
     )
-    
+
     let innerItemBuilder = DivCollectionItemBuilder(
       data: .value(outerData.flatMap { item in
         guard let dict = item as? [String: Any],
@@ -274,7 +279,7 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       dataElementName: "item",
       prototypes: [innerImagePrototype]
     )
-    
+
     let containerPrototype = DivCollectionItemBuilder.Prototype(
       div: divContainer(
         id: "container_from_item_builder",
@@ -282,7 +287,7 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       ),
       selector: expression("@{getStringFromDict(item, 'type') == 'container'}")
     )
-    
+
     let imagePrototype = DivCollectionItemBuilder.Prototype(
       div: divImage(
         id: "image_from_item_builder",
@@ -291,27 +296,27 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       ),
       selector: expression("@{getStringFromDict(item, 'type') == 'image'}")
     )
-    
+
     let outerItemBuilder = DivCollectionItemBuilder(
       data: .value(outerData),
       dataElementName: "item",
       prototypes: [containerPrototype, imagePrototype]
     )
-    
+
     let container = divContainer(
       id: "container_with_nested_item_builders",
       itemBuilder: outerItemBuilder
     )
-    
+
     return divData(container)
   }
-  
+
   private func createDivDataWithVariables() -> DivData {
     let data: [Any] = [
       ["type": "image", "use_variable": true],
-      ["type": "image", "url": optionalImageURL, "preload_required": false]
+      ["type": "image", "url": optionalImageURL, "preload_required": false],
     ]
-    
+
     let variableImagePrototype = DivCollectionItemBuilder.Prototype(
       div: divImage(
         id: "image_with_variable",
@@ -320,27 +325,27 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       ),
       selector: expression("@{getStringFromDict(item, 'type') == 'image'}")
     )
-    
+
     let itemBuilder = DivCollectionItemBuilder(
       data: .value(data),
       dataElementName: "item",
       prototypes: [variableImagePrototype]
     )
-    
+
     let container = divContainer(
       id: "container_with_variables",
       itemBuilder: itemBuilder
     )
-    
+
     return divData(container)
   }
-  
+
   private func createDivDataWithMixedItemBuilderResources() -> DivData {
     let data: [[String: Any]] = [
       ["type": "image", "url": requiredImageURL, "preload_required": true],
       ["type": "image", "url": optionalImageURL, "preload_required": false],
       ["type": "video", "url": requiredVideoURL, "preload_required": true],
-      ["type": "video", "url": optionalVideoURL, "preload_required": false]
+      ["type": "video", "url": optionalVideoURL, "preload_required": false],
     ]
 
     let imagePrototype = DivCollectionItemBuilder.Prototype(
@@ -351,7 +356,7 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       ),
       selector: expression("@{getStringFromDict(it, 'type') == 'image'}")
     )
-    
+
     let videoPrototype = DivCollectionItemBuilder.Prototype(
       div: divVideo(
         id: "video_from_item_builder",
@@ -359,23 +364,23 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
           divVideoSource(
             mimeType: "video/mp4",
             urlExpression: "@{getStringFromDict(it, 'url')}"
-          )
+          ),
         ],
         preloadRequiredExpression: "@{getBooleanFromDict(it, 'preload_required')}"
       ),
       selector: expression("@{getStringFromDict(it, 'type') == 'video'}")
     )
-    
+
     let itemBuilder = DivCollectionItemBuilder(
       data: .value(data),
       prototypes: [videoPrototype, imagePrototype]
     )
-    
+
     let container = divContainer(
       id: "container_with_item_builder",
       itemBuilder: itemBuilder
     )
-    
+
     return divData(container)
   }
 }
@@ -566,7 +571,7 @@ private func createDivDataWithInvalidURLs() -> DivData {
 }
 
 private func testURL(_ path: String, domain: String = "example.com") -> String {
-  return "https://\(domain)/\(path)"
+  "https://\(domain)/\(path)"
 }
 
 private let requiredImageURL = testURL("required_image.jpg")

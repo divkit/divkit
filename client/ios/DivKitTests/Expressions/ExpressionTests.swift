@@ -168,12 +168,12 @@ private struct ExpressionTestCase: Decodable {
 }
 
 extension ExpressionTestCase: Hashable {
-  static func == (lhs: ExpressionTestCase, rhs: ExpressionTestCase) -> Bool {
-    return lhs.expression == rhs.expression &&
-    lhs.variables == rhs.variables &&
-    lhs.expected.description == rhs.expected.description
+  static func ==(lhs: ExpressionTestCase, rhs: ExpressionTestCase) -> Bool {
+    lhs.expression == rhs.expression &&
+      lhs.variables == rhs.variables &&
+      lhs.expected.description == rhs.expected.description
   }
-  
+
   func hash(into hasher: inout Hasher) {
     hasher.combine(expression)
     hasher.combine(variables)

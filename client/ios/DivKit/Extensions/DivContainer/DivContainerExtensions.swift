@@ -230,7 +230,7 @@ extension DivContainer.Orientation {
 extension DivAlignmentHorizontal {
   func alignment(isRTLLayout: Bool) -> Alignment {
     switch self {
-      case .left:
+    case .left:
       isRTLLayout ? .trailing : .leading
     case .right:
       isRTLLayout ? .leading : .trailing

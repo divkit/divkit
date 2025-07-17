@@ -117,7 +117,7 @@ public final class DivBlockStateStorage {
          !state.isDifferent(from: existingState) {
         shouldUpdatePipe = false
       }
-      
+
       _states[key] = state
     }
 
@@ -245,7 +245,6 @@ extension DivBlockStateStorage: ElementStateObserver {
 }
 
 private enum StateKey {
-  
   case path(UIElementPath)
   case id(IdAndCardId)
 
@@ -261,12 +260,12 @@ private enum StateKey {
   var cardID: DivCardID {
     id.cardId
   }
-  
+
   private var id: IdAndCardId {
     switch self {
-    case .path(let path):
+    case let .path(path):
       IdAndCardId(path: path)
-    case .id(let id):
+    case let .id(id):
       id
     }
   }

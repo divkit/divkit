@@ -101,7 +101,7 @@ public func divImage(
   } else {
     .value(url(imageUrl))
   }
-  
+
   let preloadRequiredValue: Expression<Bool>? = if let preloadRequiredExpression {
     expression(preloadRequiredExpression)
   } else {
@@ -575,7 +575,6 @@ public func variable(_ name: String, _ value: String) -> DivVariable {
   .stringVariable(StringVariable(name: name, value: .value(value)))
 }
 
-
 public func solidBackground(_ color: RGBAColor) -> DivBackground {
   .divSolidBackground(DivSolidBackground(color: .value(color)))
 }
@@ -591,7 +590,7 @@ public func divVideo(
   } else {
     preloadRequired.map { .value($0) }
   }
-  
+
   return .divVideo(DivVideo(
     id: id,
     preloadRequired: preloadRequiredValue,
