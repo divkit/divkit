@@ -96,14 +96,14 @@ internal class DivPagerAdapter(
     override fun notifyRawItemRemoved(position: Int) {
         removedItems++
         if (!infiniteScrollEnabled) {
-            notifyItemRemoved(position)
+            super.notifyRawItemRemoved(position)
             if (currentItem > position) {
                 currentItem--
             }
             return
         }
 
-        notifyItemRemoved(position + OFFSET_TO_REAL_ITEM)
+        super.notifyRawItemRemoved(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
         if (currentItem > position + OFFSET_TO_REAL_ITEM) {
             currentItem--
@@ -112,14 +112,14 @@ internal class DivPagerAdapter(
 
     override fun notifyRawItemInserted(position: Int) {
         if (!infiniteScrollEnabled) {
-            notifyItemInserted(position)
+            super.notifyRawItemInserted(position)
             if (currentItem >= position) {
                 currentItem++
             }
             return
         }
 
-        notifyItemInserted(position + OFFSET_TO_REAL_ITEM)
+        super.notifyRawItemInserted(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
         if (currentItem >= position + OFFSET_TO_REAL_ITEM) {
             currentItem++
@@ -128,11 +128,11 @@ internal class DivPagerAdapter(
 
     override fun notifyRawItemChanged(position: Int) {
         if (!infiniteScrollEnabled) {
-            notifyItemChanged(position)
+            super.notifyRawItemChanged(position)
             return
         }
 
-        notifyItemChanged(position + OFFSET_TO_REAL_ITEM)
+        super.notifyRawItemChanged(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
     }
 
