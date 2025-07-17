@@ -1,3 +1,22 @@
+## 32.9.0
+
+# Android Client:
+* Fixed `pager`'s `indication` clipping.
+* Brought back fixes for accessibility mode `merge`.
+* Make `font_weight` optional.
+* RenderEffect support moved under DivConfiguration flag.
+* Updated compile SDK and target SDK to 35.
+
+# iOS Client:
+* Added dict function `getDictKeys`, which return a collection containing just the keys of the dictionary.
+* Added dict function `getDictValues`, which return a collection containing just the values of the dictionary.
+* Added dict method `getKeys`, which return a collection containing just the keys of the dictionary.
+* Added dict method `getValues`, which return a collection containing just the values of the dictionary.
+* Added press_end_actions when touches are canceled.
+* Make `font_weight` optional.
+* Supported is_playing for lottie_extension.
+
+
 ## 32.8.0
 
 # Android Client:
