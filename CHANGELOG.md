@@ -1,8 +1,9 @@
 ## 32.9.0
 
 # Android Client:
-* Fixed `pager`'s `indication` clipping.
 * Brought back fixes for accessibility mode `merge`.
+* Fixed `pager`'s `indication` clipping.
+* Fixed gallery item reordering after item builder data update.
 * Make `font_weight` optional.
 * RenderEffect support moved under DivConfiguration flag.
 * Updated compile SDK and target SDK to 35.
