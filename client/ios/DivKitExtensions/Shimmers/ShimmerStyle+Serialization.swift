@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import Foundation
 import LayoutKit
@@ -140,3 +141,4 @@ extension Dictionary where Key == String {
 private enum ShimmerSerializationError: Error {
   case invalidColorsAndLocationsCount
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -326,3 +327,4 @@ extension TabContentsView: UICollectionViewDelegate {
 }
 
 extension TabContentsView: VisibleBoundsTrackingContainer {}
+#endif

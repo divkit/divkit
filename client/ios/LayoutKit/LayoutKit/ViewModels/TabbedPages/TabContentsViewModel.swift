@@ -3,6 +3,8 @@ import VGSL
 
 #if canImport(UIKit)
 import UIKit
+#else
+import AppKit
 #endif
 
 public struct TabContentsViewModel: Equatable {

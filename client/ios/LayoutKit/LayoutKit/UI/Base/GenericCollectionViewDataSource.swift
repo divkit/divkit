@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -86,3 +87,4 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
     )
   }
 }
+#endif

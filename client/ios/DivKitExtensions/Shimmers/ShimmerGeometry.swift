@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 
 enum ShimmerGradientGeometry {
@@ -52,3 +53,4 @@ enum ShimmerGradientGeometry {
 private func tanx(_ theta: CGFloat) -> CGFloat {
   tan(theta * CGFloat.pi / 180)
 }
+#endif

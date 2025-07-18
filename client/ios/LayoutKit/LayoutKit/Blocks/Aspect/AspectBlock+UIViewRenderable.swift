@@ -1,3 +1,4 @@
+#if os(iOS)
 import VGSL
 
 extension AspectBlock {
@@ -23,3 +24,4 @@ extension AspectBlock {
     )
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import VGSL
@@ -29,3 +30,4 @@ public final class MarkdownExtensionHandler: DivExtensionHandler {
     )
   }
 }
+#endif

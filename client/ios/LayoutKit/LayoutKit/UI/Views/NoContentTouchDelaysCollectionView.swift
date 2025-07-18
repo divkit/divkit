@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 open class NoContentTouchDelaysCollectionView: UICollectionView {
@@ -16,3 +17,4 @@ open class NoContentTouchDelaysCollectionView: UICollectionView {
     true
   }
 }
+#endif

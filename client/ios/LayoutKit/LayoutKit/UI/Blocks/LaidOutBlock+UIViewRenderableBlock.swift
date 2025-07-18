@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -25,3 +26,4 @@ extension LaidOutBlock where T: BlockWithLayout {
     block.canConfigureBlockView(view)
   }
 }
+#endif

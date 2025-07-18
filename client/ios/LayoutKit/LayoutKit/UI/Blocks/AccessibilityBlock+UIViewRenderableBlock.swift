@@ -1,7 +1,8 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
-#if INTERNAL_BUILD
+@_spi(Internal)
 extension AccessibilityBlock {
   public static func makeBlockView() -> BlockView { AccessibilityBlockView() }
 

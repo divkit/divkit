@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -110,3 +111,4 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
     layoutReporter?.didLayoutSubviews()
   }
 }
+#endif

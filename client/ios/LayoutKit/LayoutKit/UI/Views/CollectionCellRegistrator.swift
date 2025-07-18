@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 final class CollectionCellRegistrator {
@@ -13,3 +14,4 @@ final class CollectionCellRegistrator {
     }
   }
 }
+#endif

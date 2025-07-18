@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import LayoutKit
@@ -53,3 +54,4 @@ extension ShineBlock: CustomDebugStringConvertible {
       "parameters: \(params)"
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 @objc(ComposeDivKitFactory) public class ComposeDivKitFactory: NSObject {
@@ -9,3 +10,4 @@ import UIKit
     return view
   }
 }
+#endif

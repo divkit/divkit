@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -265,3 +266,4 @@ extension SwitchableContainerBlock.Selection {
     }
   }
 }
+#endif

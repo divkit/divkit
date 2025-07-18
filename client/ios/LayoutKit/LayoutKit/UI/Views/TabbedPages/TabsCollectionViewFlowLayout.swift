@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -102,3 +103,4 @@ final class TabsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     super.invalidateLayout()
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import UIKit
@@ -24,3 +25,4 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
     return PinchToZoomBlock(child: block, overlayView: overlayView)
   }
 }
+#endif

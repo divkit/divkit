@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -39,3 +40,4 @@ public final class BoxShadowView: UIView {
     innerShadowLayer.shadowPath = path.cgPath
   }
 }
+#endif

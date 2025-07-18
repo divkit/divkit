@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -39,3 +40,4 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
     view?.frame = bounds
   }
 }
+#endif

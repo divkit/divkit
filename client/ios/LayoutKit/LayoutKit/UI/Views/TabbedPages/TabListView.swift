@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -236,3 +237,4 @@ private func makeCollectionView(layout: UICollectionViewLayout) -> UICollectionV
   collectionView.contentInsetAdjustmentBehavior = .never
   return collectionView
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import VGSL
@@ -67,3 +68,4 @@ private func easeInOutCubic(_ step: CGFloat) -> CGFloat {
     return 4 * pow(t - 1, 3) + 1
   }
 }
+#endif

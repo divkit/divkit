@@ -1,3 +1,4 @@
+#if os(iOS)
 import AVFoundation
 import DivKit
 import LayoutKit
@@ -39,3 +40,4 @@ extension DivImageScale {
     }
   }
 }
+#endif

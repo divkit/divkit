@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -37,3 +38,4 @@ extension Menu {
 }
 
 private let cancelID = "cancel"
+#endif

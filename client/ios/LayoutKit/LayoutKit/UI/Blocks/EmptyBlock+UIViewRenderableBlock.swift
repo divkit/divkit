@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -22,3 +23,4 @@ extension EmptyBlock {
 private final class EmptyBlockView: UIView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 }
+#endif

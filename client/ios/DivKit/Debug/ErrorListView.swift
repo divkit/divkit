@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import LayoutKit
 import UIKit
@@ -153,3 +154,4 @@ private let headerHeight: CGFloat = 56
 private let headerTypo = Typo(size: .textL, weight: .medium).with(height: .textL)
 private let errorsTypo = Typo(size: .textM, weight: .regular)
   .with(height: FontLineHeight(rawValue: 18))
+#endif

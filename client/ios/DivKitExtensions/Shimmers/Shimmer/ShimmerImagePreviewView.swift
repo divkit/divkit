@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSLFundamentals
 
@@ -112,3 +113,4 @@ private let defaultStyle = ShimmerImagePreviewStyle(
   angle: 0,
   duration: 1.6
 )
+#endif

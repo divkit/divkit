@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 
 struct IndicatorState {
@@ -39,3 +40,4 @@ struct IndicatorState {
     kind = .normal
   }
 }
+#endif

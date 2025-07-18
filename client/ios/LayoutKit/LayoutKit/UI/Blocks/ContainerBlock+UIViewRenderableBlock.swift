@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import UIKit
@@ -186,3 +187,4 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     return result === self ? nil : result
   }
 }
+#endif

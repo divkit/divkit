@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -81,3 +82,4 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
     model.on.value = aSwitch.isOn
   }
 }
+#endif

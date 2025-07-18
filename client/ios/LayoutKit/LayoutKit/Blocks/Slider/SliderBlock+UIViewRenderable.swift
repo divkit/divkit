@@ -1,3 +1,4 @@
+#if os(iOS)
 import VGSL
 
 extension SliderBlock: UIViewRenderable {
@@ -24,3 +25,4 @@ extension SliderBlock: UIViewRenderable {
     )
   }
 }
+#endif

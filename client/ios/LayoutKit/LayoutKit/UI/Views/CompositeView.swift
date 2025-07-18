@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -31,3 +32,4 @@ public final class CompositeView: UIView {
     frontView.frame = bounds
   }
 }
+#endif

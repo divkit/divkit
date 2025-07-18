@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -61,3 +62,4 @@ final class PageIndicatorView: UIView {
     // overriden draw is required for redrawing of layer
   }
 }
+#endif

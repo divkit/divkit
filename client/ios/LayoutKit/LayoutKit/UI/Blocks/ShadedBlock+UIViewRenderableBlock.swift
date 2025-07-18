@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -79,3 +80,4 @@ private final class ShadedBlockView: ViewWithShadow, BlockViewProtocol,
     shadow = model.shadow
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 public final class BlockHostingView: UIView {
@@ -15,3 +16,4 @@ public final class BlockHostingView: UIView {
     contentView.frame = bounds
   }
 }
+#endif

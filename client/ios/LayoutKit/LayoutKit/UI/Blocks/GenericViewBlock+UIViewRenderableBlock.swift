@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -87,3 +88,4 @@ extension GenericViewBlock.Content {
     }
   }
 }
+#endif

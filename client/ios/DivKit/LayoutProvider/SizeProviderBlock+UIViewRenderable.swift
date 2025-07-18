@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -76,3 +77,4 @@ extension SizeProviderBlockView: VisibleBoundsTrackingContainer {
     [childView]
   }
 }
+#endif

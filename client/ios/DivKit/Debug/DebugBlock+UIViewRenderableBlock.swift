@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -121,3 +122,4 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
 private let showOverlayURL = URL(string: "debugInfo://show")!
 private let maxCount = 9999
 private let buttonSize = 50.0
+#endif

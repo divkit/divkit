@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import UIKit
@@ -693,3 +694,4 @@ extension BlockBorder.Style {
     }
   }
 }
+#endif

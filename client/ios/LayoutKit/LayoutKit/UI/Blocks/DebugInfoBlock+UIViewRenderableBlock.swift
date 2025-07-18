@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -86,3 +87,4 @@ extension DebugInfoBlockView: UIActionEventPerforming {
     showInfo()
   }
 }
+#endif

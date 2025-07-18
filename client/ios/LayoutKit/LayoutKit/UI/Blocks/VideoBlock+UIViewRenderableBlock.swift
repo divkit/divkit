@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreMedia
 import Foundation
 import UIKit
@@ -210,3 +211,4 @@ extension CGSize {
     width * height
   }
 }
+#endif

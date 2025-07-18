@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -42,3 +43,4 @@ final class TabTitleDelimiterImageLoader {
     }
   }
 }
+#endif

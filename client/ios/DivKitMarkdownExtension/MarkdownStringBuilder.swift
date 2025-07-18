@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import Markdown
 import UIKit
@@ -384,3 +385,4 @@ extension [NSAttributedString.Key: Any] {
     self[.font] as? UIFont ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -255,3 +256,4 @@ extension ScrollPageIndicatorLayer {
     }
   }
 }
+#endif

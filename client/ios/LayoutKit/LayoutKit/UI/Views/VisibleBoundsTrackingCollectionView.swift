@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -30,3 +31,4 @@ extension VisibleBoundsTrackingCollectionView: VisibleBoundsTracking {
     passVisibleBoundsChanged(from: from, to: to)
   }
 }
+#endif

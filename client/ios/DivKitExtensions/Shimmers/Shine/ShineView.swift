@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -198,3 +199,4 @@ extension CGFloat {
     self / 1000
   }
 }
+#endif

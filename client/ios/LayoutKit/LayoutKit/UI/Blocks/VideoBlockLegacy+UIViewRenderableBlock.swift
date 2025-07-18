@@ -1,3 +1,4 @@
+#if os(iOS)
 import AVFoundation
 import Foundation
 import UIKit
@@ -89,3 +90,4 @@ private final class VideoBlockLegacyView: BlockView {
     }
   }
 }
+#endif

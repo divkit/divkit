@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import UIKit
@@ -38,3 +39,4 @@ public final class ShineExtensionHandler: DivExtensionHandler {
 }
 
 private let extensionID = "shine"
+#endif

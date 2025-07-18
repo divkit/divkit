@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -23,3 +24,4 @@ extension SeparatorBlock {
 private final class SeparatorBlockView: UIView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 }
+#endif

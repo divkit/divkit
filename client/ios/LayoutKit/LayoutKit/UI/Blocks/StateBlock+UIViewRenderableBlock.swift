@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -240,3 +241,4 @@ extension StateBlockView: VisibleBoundsTrackingContainer {
     childView.asArray()
   }
 }
+#endif

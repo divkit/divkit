@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -88,3 +89,4 @@ private func makeAnimation() -> CABasicAnimation {
   animation.toValue = animationEndValue
   return animation
 }
+#endif

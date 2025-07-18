@@ -1,3 +1,4 @@
+#if os(iOS)
 import AVFoundation
 import Foundation
 import VGSL
@@ -127,3 +128,4 @@ extension VideoData {
     videos.first { mimeTypeChecker($0.mimeType) }
   }
 }
+#endif

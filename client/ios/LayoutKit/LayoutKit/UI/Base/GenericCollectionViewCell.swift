@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -49,3 +50,4 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
     view?.frame = contentView.bounds
   }
 }
+#endif

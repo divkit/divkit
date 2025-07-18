@@ -3,59 +3,46 @@ import Foundation
 import VGSL
 
 extension Block {
+  @_spi(Internal)
   public func addingAccessibilityID(_ id: @autoclosure () -> String?) -> Block {
-    #if INTERNAL_BUILD
     guard let accessibilityID = id() else {
       return self
     }
     return AccessibilityBlock(child: self, accessibilityID: accessibilityID, traits: .none)
-    #else
-    return self
-    #endif
   }
 
+  @_spi(Internal)
   public func addingAccessibilityID<T: RawRepresentable>(_ id: @autoclosure () -> T?) -> Block
     where T.RawValue == String {
-    #if INTERNAL_BUILD
     guard let accessibilityID = id().map(\.rawValue) else {
       return self
     }
     return AccessibilityBlock(child: self, accessibilityID: accessibilityID, traits: .none)
-    #else
-    return self
-    #endif
   }
 
+  @_spi(Internal)
   public func addingAccessibilityID(
     withTraits id: @autoclosure ()
       -> (id: String?, AccessibilityElement.Traits)?
   ) -> Block {
-    #if INTERNAL_BUILD
     guard let (accessibilityID, traits) = id(), let id = accessibilityID else {
       return self
     }
     return AccessibilityBlock(child: self, accessibilityID: id, traits: traits)
-    #else
-    return self
-    #endif
   }
 
+  @_spi(Internal)
   public func addingAccessibilityID<T: RawRepresentable>(
     withTraits id: @autoclosure ()
       -> (id: T?, AccessibilityElement.Traits)?
   ) -> Block where T.RawValue == String {
-    #if INTERNAL_BUILD
     guard let (accessibilityID, traits) = id(), let id = accessibilityID.map(\.rawValue) else {
       return self
     }
     return AccessibilityBlock(child: self, accessibilityID: id, traits: traits)
-    #else
-    return self
-    #endif
   }
 }
 
-#if INTERNAL_BUILD
 final class AccessibilityBlock: WrapperBlock {
   let accessibilityID: String
   let traits: AccessibilityElement.Traits
@@ -105,4 +92,3 @@ extension AccessibilityBlock {
     )
   }
 }
-#endif

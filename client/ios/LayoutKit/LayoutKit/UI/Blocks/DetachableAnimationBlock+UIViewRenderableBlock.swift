@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -236,3 +237,4 @@ extension TransitioningAnimation {
     )
   }
 }
+#endif

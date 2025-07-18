@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -403,3 +404,4 @@ extension DivView: UIGestureRecognizerDelegate {
     return view.isDescendant(of: otherView)
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -11,3 +12,4 @@ extension CommonHandler {
     }
   }
 }
+#endif

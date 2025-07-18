@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import UIKit
@@ -180,3 +181,4 @@ private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
 }
 
 private let closeDuration: TimeInterval = 0.2
+#endif

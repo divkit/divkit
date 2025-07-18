@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 /// ``DivHostingView`` is a `UIViewRepresentable` adapter for using `DivKit` in `SwiftUI`.
@@ -71,3 +72,4 @@ private class VisibilityTrackingView: UIView {
     divView.onVisibleBoundsChanged(to: bounds)
   }
 }
+#endif

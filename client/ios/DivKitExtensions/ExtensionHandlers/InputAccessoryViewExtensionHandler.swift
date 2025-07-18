@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import UIKit
@@ -51,3 +52,4 @@ public final class InputAccessoryViewExtensionHandler: DivExtensionHandler {
     return textInputBlock
   }
 }
+#endif

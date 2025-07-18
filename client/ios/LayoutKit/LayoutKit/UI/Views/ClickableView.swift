@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 final class ClickableView: UIView {
@@ -22,3 +23,4 @@ final class ClickableView: UIView {
     action.perform(sendingFrom: self)
   }
 }
+#endif

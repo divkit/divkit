@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -193,3 +194,4 @@ extension PinchToZoomView: UIGestureRecognizerDelegate {
 
 private let minScale: CGFloat = 1
 private let maxScale: CGFloat = 4
+#endif

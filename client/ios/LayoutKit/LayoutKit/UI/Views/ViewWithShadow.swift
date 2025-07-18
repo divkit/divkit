@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -66,3 +67,4 @@ open class ViewWithShadow: UIView {
     return result === self ? nil : result
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -69,3 +70,4 @@ extension ContextMenu {
     return UIMenu(title: title ?? "", children: childrenItems)
   }
 }
+#endif

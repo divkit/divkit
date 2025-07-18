@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -21,3 +22,4 @@ public final class PagerSelectedPageChangedEvent: AppActionEventProtocol {
     (responder as? PagerEventHandling)?.handle(event:from:)
   }
 }
+#endif

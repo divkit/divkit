@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -26,3 +27,4 @@ public final class UIActionEventPerformingAdapter<HandledType>: UIActionEventPer
     }
   }
 }
+#endif

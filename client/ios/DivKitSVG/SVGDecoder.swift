@@ -1,9 +1,12 @@
 import Darwin
 import DivKit
 import Foundation
+#if os(iOS)
 import UIKit
+#endif
 import VGSL
 
+#if os(iOS)
 @objc
 private class CGSVGDocument: NSObject {}
 
@@ -57,3 +60,9 @@ public final class SVGDecoder {
     return image
   }
 }
+#else
+public final class SVGDecoder {
+  public init() {}
+  public func decode(data: Data) -> Image? { nil }
+}
+#endif

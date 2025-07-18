@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -260,3 +261,4 @@ extension UICollectionView {
     return result
   }
 }
+#endif

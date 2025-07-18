@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import VGSL
 
@@ -134,3 +135,4 @@ public final class DivViewPreloader {
     blockProviders.removeValue(forKey: cardId)
   }
 }
+#endif

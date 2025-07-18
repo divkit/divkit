@@ -1,3 +1,4 @@
+#if os(iOS)
 import AVFoundation
 import UIKit
 
@@ -60,3 +61,4 @@ extension VideoScale {
     }
   }
 }
+#endif

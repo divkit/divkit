@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import VGSL
 
@@ -62,3 +63,4 @@ struct PageIndicatorLayerParams {
     renderRange = head...renderRangeEnd
   }
 }
+#endif

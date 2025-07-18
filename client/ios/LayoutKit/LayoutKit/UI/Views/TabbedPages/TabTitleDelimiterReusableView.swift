@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 final class TabTitleDelimiterReusableView: UICollectionReusableView {
@@ -28,3 +29,4 @@ final class TabTitleDelimiterReusableView: UICollectionReusableView {
     delimiterImageView.image = image
   }
 }
+#endif

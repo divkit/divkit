@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 final class MarksView: UIView {
@@ -60,3 +61,4 @@ final class MarksView: UIView {
     // overriden draw is required for redrawing of layer
   }
 }
+#endif

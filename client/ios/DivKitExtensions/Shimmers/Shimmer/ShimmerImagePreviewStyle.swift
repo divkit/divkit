@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import UIKit
@@ -65,3 +66,4 @@ private let defaultDuration: CGFloat = 1
 
 private let fromColor: Color = RGBAColor.colorWithHexCode(0xE9_E9_E9_FF)
 private let toColor: Color = RGBAColor.colorWithHexCode(0xFB_FB_FB_FF)
+#endif

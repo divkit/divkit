@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -981,3 +982,4 @@ private class PatchedUITextView: UITextView {
 private let additionalOffset = 40.0
 private let singleLineCusorOffset = 2.0
 private let multiLineCusorOffset = 0.0
+#endif

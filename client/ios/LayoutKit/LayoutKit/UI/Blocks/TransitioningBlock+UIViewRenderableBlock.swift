@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import UIKit
@@ -174,3 +175,4 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
     return result == self ? nil : result
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKitInterface
 import UIKit
@@ -89,3 +90,4 @@ private let defaultColorsAndLocations: [ColorAndLocation] = [
 
 private let fromColor: Color = RGBAColor.clear
 private let toColor: Color = RGBAColor.white
+#endif

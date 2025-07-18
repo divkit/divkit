@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -117,3 +118,4 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
     return result === self ? nil : result
   }
 }
+#endif

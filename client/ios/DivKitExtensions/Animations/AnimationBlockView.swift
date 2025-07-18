@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -74,3 +75,4 @@ final class AnimationBlockView: BlockView {
 }
 
 extension AnimationBlockView: VisibleBoundsTrackingLeaf {}
+#endif

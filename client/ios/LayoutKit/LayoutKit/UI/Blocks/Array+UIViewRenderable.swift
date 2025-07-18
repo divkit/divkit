@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -85,3 +86,4 @@ private func calculateReusability(
     orphanViews: orphanViews
   )
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -33,3 +34,4 @@ extension CGPoint {
     isHorizontal ? x : y
   }
 }
+#endif

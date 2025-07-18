@@ -1,3 +1,4 @@
+#if os(iOS)
 import VGSL
 
 protocol ReferenceEquatable: Equatable {
@@ -12,3 +13,4 @@ extension ReferenceEquatable {
     return lhs.source.value === rhs.source.value
   }
 }
+#endif

@@ -4,6 +4,8 @@ import VGSL
 
 #if canImport(UIKit)
 import UIKit
+#else
+import AppKit
 #endif
 
 public final class PageControlBlock: BlockWithTraits {

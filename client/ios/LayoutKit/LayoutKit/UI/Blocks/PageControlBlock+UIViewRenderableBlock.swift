@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -84,3 +85,4 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreText
 import UIKit
 
@@ -83,3 +84,4 @@ private let featureParams: [String: (Int, Int)] = [
   "sups": (kVerticalPositionType, kSuperiorsSelector),
   "tnum": (kNumberSpacingType, kMonospacedNumbersSelector),
 ]
+#endif

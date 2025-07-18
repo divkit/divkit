@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -61,3 +62,4 @@ extension TabSelectionWireframe: TabListViewDelegateTabSelection {
 }
 
 public let tabChangedUrl = URL(string: "tab-changed://")!
+#endif

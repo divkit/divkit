@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import UIKit
@@ -119,3 +120,4 @@ extension TimingFunction {
     }
   }
 }
+#endif

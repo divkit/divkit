@@ -1,3 +1,4 @@
+#if os(iOS)
 #if DEBUG
 import UIKit
 
@@ -25,4 +26,5 @@ extension UIView {
 }
 
 private var associatedKey: UInt8 = 0
+#endif
 #endif

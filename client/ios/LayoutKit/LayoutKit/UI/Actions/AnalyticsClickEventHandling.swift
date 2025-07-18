@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -23,3 +24,4 @@ public final class AnalyticsTouchEvent: AppActionEventProtocol {
     (responder as? AnalyticsTouchEventHandling)?.handle(touchEvent:from:)
   }
 }
+#endif

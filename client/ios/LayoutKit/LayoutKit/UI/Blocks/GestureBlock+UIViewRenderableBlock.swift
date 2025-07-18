@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -145,3 +146,4 @@ extension GestureView: UIGestureRecognizerDelegate {
     true
   }
 }
+#endif

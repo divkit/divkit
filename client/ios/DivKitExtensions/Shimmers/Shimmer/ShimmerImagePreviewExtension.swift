@@ -1,3 +1,4 @@
+#if os(iOS)
 import DivKit
 import LayoutKit
 import UIKit
@@ -39,3 +40,4 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
 }
 
 private let extensionID = "shimmer"
+#endif

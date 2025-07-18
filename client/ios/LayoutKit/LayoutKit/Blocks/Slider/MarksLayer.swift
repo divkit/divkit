@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 final class MarksLayer: CALayer {
@@ -133,3 +134,4 @@ private enum MarkStyle {
   case active
   case inactive
 }
+#endif

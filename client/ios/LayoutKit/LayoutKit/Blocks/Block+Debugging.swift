@@ -440,7 +440,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
   }
 }
 
-#if INTERNAL_BUILD
+@_spi(Internal)
 extension AccessibilityBlock: CustomDebugStringConvertible {
   var debugDescription: String {
     """
@@ -451,7 +451,6 @@ extension AccessibilityBlock: CustomDebugStringConvertible {
     """
   }
 }
-#endif
 
 extension TransitioningBlock: CustomDebugStringConvertible {
   public var debugDescription: String {

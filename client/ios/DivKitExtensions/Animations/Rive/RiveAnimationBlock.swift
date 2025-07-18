@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import LayoutKit
 import VGSL
@@ -60,3 +61,4 @@ public final class RiveAnimationBlock: BlockWithTraits {
 
 extension RiveAnimationBlock: LayoutCachingDefaultImpl {}
 extension RiveAnimationBlock: ElementStateUpdatingDefaultImpl {}
+#endif

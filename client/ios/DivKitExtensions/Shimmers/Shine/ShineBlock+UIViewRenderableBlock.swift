@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import UIKit
 import VGSL
@@ -25,3 +26,4 @@ extension ShineBlock {
     )
   }
 }
+#endif

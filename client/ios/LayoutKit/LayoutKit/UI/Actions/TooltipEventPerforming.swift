@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -27,3 +28,4 @@ public final class TooltipEvent: AppActionEventProtocol {
     (responder as? TooltipEventPerforming)?.perform(tooltipEvent:from:)
   }
 }
+#endif

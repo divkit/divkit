@@ -1,3 +1,4 @@
+#if os(iOS)
 @_spi(Internal) import DivKit
 import LayoutKit
 import Serialization
@@ -50,3 +51,4 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     }
   }
 }
+#endif

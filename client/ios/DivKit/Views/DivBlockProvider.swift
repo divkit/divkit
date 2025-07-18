@@ -1,3 +1,4 @@
+#if os(iOS)
 import LayoutKit
 import Serialization
 import UIKit
@@ -413,3 +414,4 @@ extension [DivError] {
     return false
   }
 }
+#endif

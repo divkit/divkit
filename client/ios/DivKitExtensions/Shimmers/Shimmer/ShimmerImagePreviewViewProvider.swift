@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import LayoutKit
 import UIKit
@@ -38,3 +39,4 @@ public final class ShimmerImagePreviewViewProvider: ViewProvider {
     return style == other.style && effectBeginTime == other.effectBeginTime && path == other.path
   }
 }
+#endif

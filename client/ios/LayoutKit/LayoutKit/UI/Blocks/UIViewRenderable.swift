@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -190,3 +191,4 @@ public enum SubviewPosition {
   case trailing
   case index(Int)
 }
+#endif

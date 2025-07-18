@@ -3,6 +3,8 @@ import VGSL
 
 #if canImport(UIKit)
 import UIKit
+#else
+import Foundation
 #endif
 
 public struct TabSeparatorStyle: Equatable {

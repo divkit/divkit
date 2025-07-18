@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -467,3 +468,4 @@ extension UIView {
     layer.mask = shapeLayer
   }
 }
+#endif

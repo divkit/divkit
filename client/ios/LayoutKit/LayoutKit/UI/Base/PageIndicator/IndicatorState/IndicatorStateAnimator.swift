@@ -1,3 +1,4 @@
+#if os(iOS)
 import CoreGraphics
 import Foundation
 import VGSL
@@ -87,3 +88,4 @@ struct IndicatorStateAnimator {
     }
   }
 }
+#endif

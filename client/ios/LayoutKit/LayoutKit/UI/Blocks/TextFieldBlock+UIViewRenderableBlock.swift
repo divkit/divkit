@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -616,3 +617,4 @@ extension UserInterfaceAction {
     )
   }
 }
+#endif

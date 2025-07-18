@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -167,3 +168,4 @@ private final class ActivatableAccessibilityElement: UIAccessibilityElement {
     return true
   }
 }
+#endif

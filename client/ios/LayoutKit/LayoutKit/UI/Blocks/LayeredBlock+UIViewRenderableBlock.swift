@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -107,3 +108,4 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
     return result == self ? nil : result
   }
 }
+#endif

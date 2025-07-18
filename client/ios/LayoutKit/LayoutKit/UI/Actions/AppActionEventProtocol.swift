@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 public protocol AppActionEventProtocol {
@@ -17,3 +18,4 @@ extension AppActionEventProtocol {
     }
   }
 }
+#endif

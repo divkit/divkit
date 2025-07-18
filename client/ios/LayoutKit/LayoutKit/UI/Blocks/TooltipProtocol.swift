@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 public protocol TooltipProtocol {
@@ -18,3 +19,4 @@ public func makeTooltip(with info: TooltipInfo, rootView: UIView) -> TooltipEven
 
   return nil
 }
+#endif

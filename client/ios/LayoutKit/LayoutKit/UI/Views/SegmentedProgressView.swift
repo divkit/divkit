@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -161,3 +162,4 @@ private class SegmentLayer: CALayer {
 }
 
 private let segmentsSpacing: CGFloat = 4
+#endif

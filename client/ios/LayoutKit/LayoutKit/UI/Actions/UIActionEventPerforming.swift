@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 public protocol UIActionEventPerforming {
@@ -88,3 +89,4 @@ extension UserInterfaceAction.Payload {
     }
   }
 }
+#endif

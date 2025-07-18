@@ -1,3 +1,4 @@
+#if os(iOS)
 import AVFoundation
 import Foundation
 import UIKit
@@ -21,3 +22,4 @@ public final class DefaultPlayerFactory: PlayerFactory {
     self.itemsProvider = itemsProvider
   }
 }
+#endif

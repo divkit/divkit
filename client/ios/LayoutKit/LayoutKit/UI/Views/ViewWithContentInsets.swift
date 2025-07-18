@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -23,3 +24,4 @@ final class ViewWithContentInsets: UIView {
     innerView.frame = bounds.inset(by: contentInsets)
   }
 }
+#endif

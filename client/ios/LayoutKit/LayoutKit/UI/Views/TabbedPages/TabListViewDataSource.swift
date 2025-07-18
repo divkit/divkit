@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -101,3 +102,4 @@ final class TabListItemCell: UICollectionViewCell {
     model.totalSize.ceiled()
   }
 }
+#endif

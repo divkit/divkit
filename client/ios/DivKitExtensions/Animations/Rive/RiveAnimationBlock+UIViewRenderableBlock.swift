@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import LayoutKit
 import VGSL
@@ -24,3 +25,4 @@ extension RiveAnimationBlock {
     }
   }
 }
+#endif

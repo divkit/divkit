@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -119,3 +120,4 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
     view.backgroundColor = separatorStyle.color.systemColor
   }
 }
+#endif

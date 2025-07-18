@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import UIKit
 import VGSL
@@ -96,3 +97,4 @@ extension UICollectionViewLayoutAttributes {
     self.frame = frame
   }
 }
+#endif

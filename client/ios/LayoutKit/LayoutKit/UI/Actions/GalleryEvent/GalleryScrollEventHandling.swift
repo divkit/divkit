@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -46,3 +47,4 @@ public final class GalleryScrollEvent: AppActionEventProtocol {
     (responder as? GalleryScrollEventHandling)?.handle(galleryScrollEvent:from:)
   }
 }
+#endif
