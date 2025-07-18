@@ -11,7 +11,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
-import com.yandex.div2.DivVisibility
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     private val bindingContext: BindingContext,
@@ -63,14 +62,10 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
             }
 
             if (patchDivs != null) {
-                updateItemVisibility(index, DivVisibility.GONE)
-                items.removeAt(index)
+                removeItem(index)
 
                 val patchItems = patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver)
-                items.addAll(index, patchItems)
-                patchItems.indices.forEach {
-                    updateItemVisibility(index + it)
-                }
+                addItems(index, patchItems)
 
                 index += patchDivs.size - 1
                 appliedToListPatchIds.add(patchId)
@@ -81,7 +76,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
 
         // Apply patch inside items if needed
         patch.patches.keys.filter { it !in appliedToListPatchIds }.forEach { idToFind ->
-            for (i in 0 until items.size) {
+            for (i in items.indices) {
                 val childDiv = items[i].div
                 divPatchApply.patchDivChild(
                     parentView = recyclerView ?: bindingContext.divView,
@@ -89,9 +84,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
                     idToFind,
                     bindingContext.expressionResolver
                 )?.let { newDiv ->
-                    updateItemVisibility(i, DivVisibility.GONE)
-                    items[i] = DivItemBuilderResult(newDiv, bindingContext.expressionResolver)
-                    updateItemVisibility(i)
+                    setItem(i, DivItemBuilderResult(newDiv, bindingContext.expressionResolver))
                     return@forEach
                 }
             }
@@ -164,16 +157,12 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
 
         override fun onInserted(position: Int, count: Int) {
             val newItemPosition = if (position + count > newItems.size) newItems.size - count else position
-            for (i in 0 until count) {
-                items.add(position + i, newItems[newItemPosition + i])
-                updateItemVisibility(position + i)
-            }
+            addItems(position, newItems.subList(newItemPosition, newItemPosition + count))
         }
 
         override fun onRemoved(position: Int, count: Int) {
             for (i in 0 until count) {
-                updateItemVisibility(position, DivVisibility.GONE)
-                items.removeAt(position)
+                removeItem(position)
             }
         }
 

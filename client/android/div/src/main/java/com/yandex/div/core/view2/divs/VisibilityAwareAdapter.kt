@@ -7,80 +7,146 @@ import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div2.DivVisibility
 
 internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
-    items: List<DivItemBuilderResult>,
-) : RecyclerView.Adapter<VH>(),
-    ExpressionSubscriber {
+    initialItems: List<DivItemBuilderResult>,
+) : RecyclerView.Adapter<VH>(), ExpressionSubscriber {
 
-    val items = items.toMutableList()
-    private val indexedItems get() = items.withIndex()
+    val items: List<DivItemBuilderResult>
+        get() = itemList
 
-    private val _visibleItems = mutableListOf<IndexedValue<DivItemBuilderResult>>()
-    val visibleItems: List<DivItemBuilderResult> = object : AbstractList<DivItemBuilderResult>() {
+    val visibleItems: List<DivItemBuilderResult>
+        get() = buildVisibleItemList()
 
-        override fun get(index: Int) = _visibleItems[index].value
-
-        override val size get() = _visibleItems.size
-    }
-
-    private val visibilityMap = mutableMapOf<DivItemBuilderResult, Boolean>()
+    private val itemList = initialItems.toMutableList()
+    private val visibleItemList = mutableListOf<DivItemBuilderResult>()
+    private val itemVisibilityList = initialItems.map { item -> item.isVisible }.toMutableList()
+    private var isVisibleItemListValid = false
 
     override val subscriptions = mutableListOf<Disposable>()
 
     init {
-        initVisibleItems()
         subscribeOnElements()
     }
 
-    private fun initVisibleItems() {
-        indexedItems.forEach {
-            val isVisible = it.value.visibility != DivVisibility.GONE
-            visibilityMap[it.value] = isVisible
+    private fun buildVisibleItemList(): List<DivItemBuilderResult> {
+        if (!isVisibleItemListValid) {
+            visibleItemList.clear()
+            itemList.mapIndexedNotNullTo(visibleItemList) { index, item ->
+                if (itemVisibilityList[index]) item else null
+            }
+            isVisibleItemListValid = true
+        }
+        return visibleItemList
+    }
+
+    fun addItem(
+        position: Int,
+        item: DivItemBuilderResult,
+        visibility: DivVisibility = item.visibility
+    ) {
+        val isVisible = visibility == DivVisibility.VISIBLE
+
+        itemList.add(position, item)
+        itemVisibilityList.add(position, isVisible)
+        isVisibleItemListValid = false
+
+        if (isVisible) {
+            notifyRawItemInserted(position)
+        }
+    }
+
+    fun addItems(
+        position: Int,
+        items: Collection<DivItemBuilderResult>
+    ) {
+        itemList.addAll(position, items)
+        itemVisibilityList.addAll(position, items.map { item -> item.isVisible })
+        isVisibleItemListValid = false
+
+        items.forEachIndexed { index, item ->
+            val isVisible = item.visibility == DivVisibility.VISIBLE
             if (isVisible) {
-                _visibleItems.add(it)
+                notifyRawItemInserted(position + index)
             }
         }
     }
 
-    private val DivItemBuilderResult.visibility get() = div.value().visibility.evaluate(expressionResolver)
+    fun setItem(
+        position: Int,
+        item: DivItemBuilderResult,
+        visibility: DivVisibility = item.visibility
+    ) {
+        val isVisible = visibility == DivVisibility.VISIBLE
+        val wasVisible = itemVisibilityList[position]
 
-    fun subscribeOnElements() {
+        itemList[position] = item
+        itemVisibilityList[position] = isVisible
+        if (isVisible != wasVisible) {
+            isVisibleItemListValid = false
+        }
+
+        when {
+            wasVisible && !isVisible -> notifyRawItemRemoved(position)
+            !wasVisible && isVisible -> notifyRawItemInserted(position)
+            wasVisible && isVisible -> notifyRawItemChanged(position)
+        }
+    }
+
+    fun removeItem(position: Int) {
+        itemList.removeAt(position)
+        val isVisible = itemVisibilityList.removeAt(position)
+        isVisibleItemListValid = false
+
+        if (isVisible) {
+            notifyRawItemRemoved(position)
+        }
+    }
+
+    private fun visiblePositionOf(position: Int): Int {
+        var visiblePosition = 0
+        for (i in 0 until position) {
+            if (itemVisibilityList[i]) visiblePosition++
+        }
+        return visiblePosition
+    }
+
+    override fun getItemCount() = visibleItems.size
+
+    protected fun subscribeOnElements() {
         closeAllSubscription()
-        indexedItems.forEach { item ->
-            val subscription = item.value.div.value().visibility.observe(item.value.expressionResolver) {
-                updateItemVisibility(item.index, it)
+        itemList.forEachIndexed { index, item ->
+            val subscription = item.div.value().visibility.observe(item.expressionResolver) { visibility ->
+                updateItemVisibility(index, visibility)
             }
             addSubscription(subscription)
         }
     }
 
-    protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
-
-    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(position)
-
-    protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
-
-    protected fun updateItemVisibility(
-        rawIndex: Int,
-        newVisibility: DivVisibility = items[rawIndex].visibility,
-    ) {
-        val item = items[rawIndex]
-        val wasVisible = visibilityMap[item] ?: false
-        val isVisible = newVisibility != DivVisibility.GONE
-
-        if (!wasVisible && isVisible) {
-            val position = _visibleItems
-                .indexOfFirst { it.index > rawIndex }
-                .takeUnless { it == -1 } ?: _visibleItems.size
-            _visibleItems.add(position, IndexedValue(rawIndex, item))
-            notifyRawItemInserted(position)
-        } else if (wasVisible && !isVisible) {
-            val position = _visibleItems.indexOfFirst { it.value == item }
-            _visibleItems.removeAt(position)
-            notifyRawItemRemoved(position)
+    private fun updateItemVisibility(position: Int, visibility: DivVisibility = itemList[position].visibility) {
+        val isVisible = visibility == DivVisibility.VISIBLE
+        val wasVisible = itemVisibilityList[position]
+        if (isVisible == wasVisible) {
+            return
         }
 
-        visibilityMap[item] = isVisible
+        itemVisibilityList[position] = isVisible
+        isVisibleItemListValid = false
+
+        if (wasVisible) {
+            notifyRawItemRemoved(position)
+        } else {
+            notifyRawItemInserted(position)
+        }
     }
 
-    override fun getItemCount() = visibleItems.size
+    protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(visiblePositionOf(position))
+
+    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(visiblePositionOf(position))
+
+    protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(visiblePositionOf(position))
 }
+
+private val DivItemBuilderResult.visibility: DivVisibility
+    get() = div.value().visibility.evaluate(expressionResolver)
+
+private val DivItemBuilderResult.isVisible: Boolean
+    get() = visibility == DivVisibility.VISIBLE
