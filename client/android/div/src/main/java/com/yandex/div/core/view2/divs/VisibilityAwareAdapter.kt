@@ -132,9 +132,9 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         isVisibleItemListValid = false
 
         if (wasVisible) {
-            notifyItemRemoved(visiblePositionOf(position))
+            notifyRawItemRemoved(position)
         } else {
-            notifyItemInserted(visiblePositionOf(position))
+            notifyRawItemInserted(position)
         }
     }
 
