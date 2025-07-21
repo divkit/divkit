@@ -633,6 +633,27 @@ internal object GetOptArrayFromDict : Function() {
     }
 }
 
+internal object GetDictLength : Function() {
+
+    override val name = "len"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT),
+    )
+
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val dict = args[0] as JSONObject
+        return dict.length().toLong()
+    }
+}
+
 internal object DictContainsKey : Function() {
 
     override val name = "containsKey"

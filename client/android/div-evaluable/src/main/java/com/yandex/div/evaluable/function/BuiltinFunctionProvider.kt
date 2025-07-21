@@ -248,6 +248,7 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.registerMethod(GetString)
         registry.registerMethod(GetUrl)
         registry.registerMethod(DictIsEmpty)
+        registry.register(GetDictLength)
 
         // Array functions legacy
         registry.register(GetArrayInteger)
