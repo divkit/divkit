@@ -1497,7 +1497,15 @@ class KotlinPropertyType(PropertyType):
             mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES,
             supports_expressions=p.supports_expressions
         )
-        definition = f'TypeHelper.from(default = {type_decl}.values().first()) {{ it is {type_decl} }}'
+        if p.default_value is None:
+            default_value = f'{type_decl}.values().first()'
+        else:
+            default_value = cast(KotlinPropertyType, p.property_type).declaration_by_default_value(
+                default_value=p.default_value,
+                string_enum_prefixed=True,
+                supports_expressions_flag=False
+            )
+        definition = f'TypeHelper.from(default = {default_value}) {{ it is {type_decl} }}'
         prefix = 'private ' if is_private else '@JvmField '
         return f'{prefix}val {self.type_helper_reference(p)} = {definition}'
 

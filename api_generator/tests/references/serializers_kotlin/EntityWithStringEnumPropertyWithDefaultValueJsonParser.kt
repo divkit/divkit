@@ -75,6 +75,6 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @JvmField val VALUE_DEFAULT_VALUE = Expression.constant(EntityWithStringEnumPropertyWithDefaultValue.Value.SECOND)
 
-        @JvmField val TYPE_HELPER_VALUE = TypeHelper.from(default = EntityWithStringEnumPropertyWithDefaultValue.Value.values().first()) { it is EntityWithStringEnumPropertyWithDefaultValue.Value }
+        @JvmField val TYPE_HELPER_VALUE = TypeHelper.from(default = EntityWithStringEnumPropertyWithDefaultValue.Value.SECOND) { it is EntityWithStringEnumPropertyWithDefaultValue.Value }
     }
 }
