@@ -1,3 +1,4 @@
+import com.asarkar.gradle.buildtimetracker.Sort
 import com.yandex.div.gradle.FileExtensions
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -26,6 +27,7 @@ buildscript {
     dependencies {
         classpath libs.agp.gradle
         classpath libs.appmetrica.plugin
+        classpath libs.buildTimeTracker
         classpath libs.nexusPublishPlugin
         classpath libs.dokka
         classpath libs.kotlin.allopen
@@ -37,6 +39,7 @@ buildscript {
 }
 
 apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
+apply plugin: "com.asarkar.gradle.build-time-tracker"
 
 allprojects {
     repositories {
@@ -103,6 +106,12 @@ subprojects {
             task.finalizedBy(reportVersion)
         }
     }
+}
+
+buildTimeTracker {
+    minTaskDuration = Duration.ofSeconds(1)
+    sortBy = Sort.DESC
+    showBars = false
 }
 
 wrapper {
