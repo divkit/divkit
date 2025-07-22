@@ -17,11 +17,11 @@ class DivStatePathTest {
     @Test
     fun parse() {
         Assert.assertEquals(
-            DivStatePath(1, listOf("foo" to "bar"), listOf("1", "foo", "bar")),
+            DivStatePath(1, listOf("foo" to "bar"), listOf("1", "foo", "bar"), true),
             DivStatePath.parse("1/foo/bar"),
         )
         Assert.assertEquals(
-            DivStatePath(1, listOf("foo" to "bar", "lol" to "kek"), listOf("1", "foo", "bar", "lol", "kek")),
+            DivStatePath(1, listOf("foo" to "bar", "lol" to "kek"), listOf("1", "foo", "bar", "lol", "kek"), true),
             DivStatePath.parse("1/foo/bar/lol/kek"),
         )
     }
@@ -29,7 +29,7 @@ class DivStatePathTest {
     @Test
     fun `top state only is parsed`() {
         Assert.assertEquals(
-            DivStatePath(1123123, mutableListOf()),
+            DivStatePath(1123123, mutableListOf(), listOf("1123123"), true),
             DivStatePath.parse("1123123"),
         )
     }

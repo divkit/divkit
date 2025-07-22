@@ -22,7 +22,8 @@ import kotlin.math.min
 data class DivStatePath @VisibleForTesting internal constructor(
     val topLevelStateId: Long,
     private val states: List<Pair<String, String>> = listOf(),
-    internal val path: List<String> = listOf(topLevelStateId.toString())
+    internal val path: List<String> = listOf(topLevelStateId.toString()),
+    internal val containsOnlyStates: Boolean = false,
 ) {
 
     val lastStateId: String?
@@ -89,7 +90,8 @@ data class DivStatePath @VisibleForTesting internal constructor(
         }
         val list = states.toMutableList()
         val lastState = list.removeAt(list.lastIndex)
-        val lastStateIndex = path.lastIndexOf(lastState.divId)
+        val lastStateIndex = path.indexOfLast { it == lastState.divId }.takeIf { it != -1 }
+            ?: path.indexOfLast { it.substringBeforeLast('#') == lastState.divId }
         return DivStatePath(topLevelStateId, list, path.subList(0, lastStateIndex + 1))
     }
 
@@ -130,7 +132,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
             for (i in (1 until split.size).step(2)) {
                 list.add(split[i] to split[i + 1])
             }
-            return DivStatePath(topLevelStateId, list, split)
+            return DivStatePath(topLevelStateId, list, split, containsOnlyStates = true)
         }
 
         fun fromState(stateId: Long) = DivStatePath(stateId, mutableListOf())
@@ -155,7 +157,12 @@ data class DivStatePath @VisibleForTesting internal constructor(
                 return null
             }
             val sharedPairs = findSharedPairs(somePath, otherPath)
-            return DivStatePath(somePath.topLevelStateId, sharedPairs, somePath.path.extractStates(sharedPairs, true))
+            return DivStatePath(
+                somePath.topLevelStateId,
+                sharedPairs,
+                somePath.path.extractStates(sharedPairs, true),
+                somePath.containsOnlyStates || otherPath.containsOnlyStates
+            )
         }
 
         private fun findSharedPairs(somePath: DivStatePath, otherPath: DivStatePath): List<Pair<String, String>> {
