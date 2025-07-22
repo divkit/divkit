@@ -1,3 +1,4 @@
+import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
 import { checkUrl, convertJsValueToDivKit, transformColorValue } from '../utils';
@@ -110,6 +111,13 @@ function isEmpty(_ext: EvalContext, dict: DictValue): BooleanValue {
     };
 }
 
+function len(_ext: EvalContext, dict: DictValue): IntegerValue {
+    return {
+        type: INTEGER,
+        value: toBigInt(Object.keys(dict.value).length)
+    };
+}
+
 export function registerDict(): void {
     const STRING_VARARG = {
         type: STRING,
@@ -176,4 +184,6 @@ export function registerDict(): void {
     registerMethod('getDict', [DICT, STRING_VARARG], getDictDict);
     registerMethod('containsKey', [DICT, STRING], containsKey);
     registerMethod('isEmpty', [DICT], isEmpty);
+
+    registerFunc('len', [DICT], len);
 }
