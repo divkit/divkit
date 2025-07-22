@@ -36,43 +36,6 @@ dependencies {
     androidTestImplementation libs.androidx.test.uiautomator
 }
 
-tasks.register('assemblePerfTests') {
-    def buildDir = layout.buildDirectory.get().asFile
-    def outputPerfDir = rootProject.layout.buildDirectory.get().dir("perf")
-    def buildType = "debug"
-
-    doLast {
-        def copied = 0
-        copy {
-            from buildDir
-            into outputPerfDir.asFile
-            include "**/apk/**/divkit-perftests-${buildType}.apk"
-            exclude "**/intermediates"
-            eachFile { file ->
-                file.path = "mock-app.apk"
-                copied += 1
-            }
-            includeEmptyDirs = false
-        }
-        assert copied == 1 && outputPerfDir.file("mock-app.apk").asFile.exists()
-
-        copy {
-            from buildDir
-            into outputPerfDir.asFile
-            include "**/apk/androidTest/**/divkit-perftests-$buildType-androidTest.apk"
-            exclude "**/intermediates"
-            eachFile { file ->
-                file.path = "tests.apk"
-                copied += 1
-            }
-            includeEmptyDirs = false
-        }
-        assert copied == 2 && outputPerfDir.file("tests.apk").asFile.exists()
-    }
-
-    dependsOn("assembleDebug", "assembleDebugAndroidTest")
-}
-
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
     apply from: it
 }
