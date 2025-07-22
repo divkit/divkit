@@ -48,7 +48,8 @@
           },
           "$description": "translations.json#/div_state_div_state_swipe_out_actions",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ],
           "deprecated": true
         }
