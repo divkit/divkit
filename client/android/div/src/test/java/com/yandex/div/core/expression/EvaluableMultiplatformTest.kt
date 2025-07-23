@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression
 
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_UNORDERED_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.toVariable
 import com.yandex.div.core.expression.variables.wrapVariableValue
 import com.yandex.div.evaluable.Evaluable
@@ -8,6 +9,7 @@ import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.test.expression.MultiplatformTestUtils
+import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
 import com.yandex.div.test.expression.withEvaluator
 import org.json.JSONArray
@@ -53,8 +55,16 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
             }
 
             is JSONArray, is JSONObject -> {
-                checkEquality(testCase) { message, expected, actual ->
-                    Assert.assertEquals(message, expected.toString(), actual.toString())
+                if (testCase.expectedType == VALUE_TYPE_UNORDERED_ARRAY){
+                    checkEquality(testCase) { message, expected, actual ->
+                        val expectedList = (expected as JSONArray).toSortedList()
+                        val actualList = (actual as JSONArray).toSortedList()
+                        Assert.assertEquals(message, expectedList.toString(), actualList.toString())
+                    }
+                } else {
+                    checkEquality(testCase) { message, expected, actual ->
+                        Assert.assertEquals(message, expected.toString(), actual.toString())
+                    }
                 }
             }
 

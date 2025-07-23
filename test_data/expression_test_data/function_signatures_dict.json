@@ -795,6 +795,7 @@
       ],
       "result_type": "array",
       "platforms": [
+        "android",
         "ios"
       ]
     },
@@ -809,6 +810,7 @@
       ],
       "result_type": "array",
       "platforms": [
+        "android",
         "ios"
       ]
     }

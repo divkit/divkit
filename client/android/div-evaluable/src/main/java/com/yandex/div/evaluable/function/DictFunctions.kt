@@ -697,6 +697,76 @@ internal object DictIsEmpty : Function() {
     }
 }
 
+internal abstract class GetKeysFromDict : Function() {
+
+    open val isMethod = false
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT)
+    )
+
+    override val resultType = EvaluableType.ARRAY
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val dict = args[0] as JSONObject
+        val keysList = JSONArray()
+        dict.keys().forEach { key ->
+            keysList.put(key)
+        }
+        return keysList
+    }
+}
+
+internal object GetDictKeys: GetKeysFromDict() {
+    override val name = "getDictKeys"
+}
+
+internal object GetKeys : GetKeysFromDict() {
+    override val name = "getKeys"
+    override val isMethod = true
+}
+
+
+internal abstract class GetValuesFromDict : Function() {
+
+    open val isMethod = false
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT)
+    )
+
+    override val resultType = EvaluableType.ARRAY
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val dict = args[0] as JSONObject
+        val names = JSONArray()
+        dict.keys().forEach { key ->
+            names.put(dict.get(key))
+        }
+        return names
+    }
+}
+
+internal object GetDictValues: GetValuesFromDict() {
+    override val name = "getDictValues"
+}
+
+internal object GetValues : GetValuesFromDict() {
+    override val name = "getValues"
+    override val isMethod = true
+}
+
+
 internal fun evaluateSafe(args: List<Any>, fallback: Any, defaultFallback: Boolean = false): Any? {
     val dictIndex = if (defaultFallback) 0 else 1
     var dict = args[dictIndex] as? JSONObject ?: return fallback

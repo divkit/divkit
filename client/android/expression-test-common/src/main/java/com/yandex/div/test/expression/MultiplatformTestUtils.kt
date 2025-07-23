@@ -58,6 +58,10 @@ object MultiplatformTestUtils {
         return result
     }
 
+    fun JSONArray.toSortedList(): List<String> {
+        return (0 until length()).map { get(it).toString() }.sorted()
+    }
+
     private fun getFiles(dir: File): List<File> {
         val (directories, files) = dir.listFiles().orEmpty()
             .partition { it.isDirectory }

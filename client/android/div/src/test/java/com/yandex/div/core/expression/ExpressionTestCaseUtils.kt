@@ -15,6 +15,7 @@ import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
+import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
 import com.yandex.div.test.expression.TestCaseParsingError
 import com.yandex.div.test.expression.parseAsUTC
@@ -36,6 +37,7 @@ object ExpressionTestCaseUtils {
     private const val VALUE_TYPE_COLOR = "color"
     const val VALUE_TYPE_DICT = "dict"
     const val VALUE_TYPE_ARRAY = "array"
+    const val VALUE_TYPE_UNORDERED_ARRAY = "unordered_array"
     private const val VALUE_TYPE_UNIT = "unit"
     private const val VALUE_TYPE_ERROR = "error"
     private const val VALUE_TYPE_VARIABLE = "variable"
@@ -97,6 +99,7 @@ object ExpressionTestCaseUtils {
             VALUE_TYPE_DECIMAL -> getDouble(VALUE_FIELD)
             VALUE_TYPE_DICT -> getJSONObject(VALUE_FIELD)
             VALUE_TYPE_ARRAY -> getJSONArray(VALUE_FIELD)
+            VALUE_TYPE_UNORDERED_ARRAY -> getJSONArray(VALUE_FIELD)
             VALUE_TYPE_BOOLEAN, VALUE_TYPE_BOOL_INT -> {
                 val value = get(VALUE_FIELD)
                 ANY_TO_BOOLEAN(value) ?: throw IllegalAccessException("Unknown variable value: $value")
