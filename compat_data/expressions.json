@@ -261,5 +261,21 @@
                 "version_added": "31.12.0"
             }
         }
+    }, {
+        "id": "fn_get_dict_keys",
+        "name": "<code>getDictKeys</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "32.9.0"
+            }
+        }
+    }, {
+        "id": "fn_get_dict_values",
+        "name": "<code>getDictValues</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "32.9.0"
+            }
+        }
     }]
 }

@@ -115,5 +115,21 @@
                 "version_added": "30.30.0"
             }
         }
+    }, {
+        "id": "methods_dict_get_keys",
+        "name": "Method-<code>getKeys</code> for the <code>dict</code>",
+        "compat": {
+            "ios": {
+                "version_added": "32.9.0"
+            }
+        }
+    }, {
+        "id": "methods_dict_get_values",
+        "name": "Method-<code>getValues</code> for the <code>dict</code>",
+        "compat": {
+            "ios": {
+                "version_added": "32.9.0"
+            }
+        }
     }]
 }

@@ -66,12 +66,15 @@
         },
         "web": {
           "version_added": "31.4.0"
+        },
+        "ios": {
+          "version_added": "32.9.0"
         }
       }
     },
     {
       "id": "ext_lottie_params_expressions",
-      "name": "Lottie extension expressions in params (<code>lottie_url`</code>, <code>repeat_count</code>)",
+      "name": "Lottie extension expressions in params (<code>lottie_url</code>, <code>repeat_count</code>)",
       "compat": {
         "android": {
           "version_added": "31.11.0"
