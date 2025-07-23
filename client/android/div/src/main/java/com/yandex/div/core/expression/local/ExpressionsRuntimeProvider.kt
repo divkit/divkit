@@ -45,7 +45,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val storedValueProvider = StoredValueProvider { storedValueName ->
             storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
         }
-        val functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
+        var functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
+        val functions = data.functions
+        if (!functions.isNullOrEmpty()) {
+            functionProvider += functions.toLocalFunctions()
+        }
+
         val warningSender = WarningSender { expressionContext, message ->
             val rawExpr = expressionContext.evaluable.rawExpr
             val warning = "Warning occurred while evaluating '$rawExpr': $message"
