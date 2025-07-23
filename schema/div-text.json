@@ -189,6 +189,7 @@
           "default_value": "false",
           "$description": "translations.json#/div_image_base_preload_required",
           "platforms": [
+            "android",
             "ios",
             "web"
           ]

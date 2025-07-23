@@ -221,6 +221,7 @@ class DivPreloader internal constructor(
             @JvmField
             val ONLY_PRELOAD_REQUIRED_FILTER = object : PreloadFilter {
                 override fun shouldPreloadContent(div: Div, resolver: ExpressionResolver) = when(div) {
+                    is Div.Text -> div.value.images?.any { it.preloadRequired.evaluate(resolver) } ?: false
                     is Div.Video -> div.value.preloadRequired.evaluate(resolver)
                     is Div.Image -> div.value.preloadRequired.evaluate(resolver)
                     is Div.GifImage -> div.value.preloadRequired.evaluate(resolver)

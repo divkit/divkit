@@ -62,7 +62,9 @@ class DivImagePreloader @Inject constructor(
 
         override fun visit(data: Div.Text, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
-            data.value.images?.forEach { preloadImage(it.url.evaluate(resolver).toString(), callback, references) }
+            if (preloadFilter.shouldPreloadContent(data, resolver)) {
+                data.value.images?.forEach { preloadImage(it.url.evaluate(resolver).toString(), callback, references) }
+            }
         }
 
         override fun visit(data: Div.Image, resolver: ExpressionResolver) {
