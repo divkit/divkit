@@ -121,7 +121,7 @@ data class Input internal constructor(
          */
         val animators: Property<List<Animator>>?,
         /**
-         * Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+         * Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
          * Default value: `auto`.
          */
         val autocapitalization: Property<Autocapitalization>?,
@@ -419,7 +419,7 @@ data class Input internal constructor(
     }
 
     /**
-     * Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+     * Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
      * 
      * Possible values: [auto], [none], [words], [sentences], [all_characters].
      */
@@ -486,7 +486,7 @@ data class Input internal constructor(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -673,7 +673,7 @@ fun DivScope.input(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -858,7 +858,7 @@ fun DivScope.inputProps(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1043,7 +1043,7 @@ fun TemplateScope.inputRefs(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1230,7 +1230,7 @@ fun Input.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1417,7 +1417,7 @@ fun Input.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1602,7 +1602,7 @@ fun Input.modify(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1727,7 +1727,7 @@ fun Input.evaluate(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1915,7 +1915,7 @@ fun Component<Input>.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -2101,7 +2101,7 @@ fun Component<Input>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -2227,7 +2227,7 @@ fun Component<Input>.evaluate(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
- * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>
+ * @param autocapitalization Text auto-capitalization type. <li>By default: `auto` — default behavior of the platform;</li><li>`none' — automatic capitalization is not applied;</li><li>`words` — capitalization of each word;</li><li>`sentences` — capitalization at the beginning of a sentence;</li><li>`all_characters' — capitalization of each character.</li>
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
