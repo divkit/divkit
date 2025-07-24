@@ -1,3 +1,20 @@
+## 32.10.0
+
+# Android Client:
+* Added `dict` to `array` conversion.
+* Added `len` function for `dict` variables.
+* Fixed default value usage when property has incorrect value.
+* Fixed switching of states with same ids.
+* Support `preload_required` for images in `div-text`.
+* Supported `functions` in `div-data`.
+
+# iOS Client:
+* Fix infinite `invalidateIntrinsicContentSize` layout cycle.
+
+# Web Client:
+* Added `len` function for `dict` variables.
+
+
 ## 32.9.0
 
 # Android Client:
