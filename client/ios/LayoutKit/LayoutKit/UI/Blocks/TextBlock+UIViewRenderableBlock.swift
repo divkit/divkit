@@ -175,20 +175,11 @@ private final class TextBlockView: UIView {
     let isFocused: Bool
   }
 
-  private var selectedRange: Range<Int>? {
-    didSet {
-      if selectedRange != oldValue {
-        setNeedsDisplay()
-      }
-    }
-  }
+  private var lastElementIndex: Int?
 
-  private var activePointer: ActivePointer?
-  private var selectionRect: CGRect? {
+  private var selection: TextSelection? {
     didSet {
-      guard let delayedSelectionTapGesture else { return }
-      handleSelectionTapEnded(delayedSelectionTapGesture)
-      self.delayedSelectionTapGesture = nil
+      setNeedsDisplay()
     }
   }
 
@@ -259,6 +250,7 @@ private final class TextBlockView: UIView {
       isUserInteractionEnabled = model.isUserInteractionEnabled
 
       configureRecognizers()
+      selection = nil
 
       setNeedsDisplay()
     }
@@ -320,7 +312,7 @@ private final class TextBlockView: UIView {
 
   override func draw(_ rect: CGRect) {
     guard let model else { return }
-    let textLayout: AttributedStringLayout<ActionsAttribute> = model.text.drawAndGetLayout(
+    self.textLayout = model.text.drawAndGetLayout(
       inContext: UIGraphicsGetCurrentContext()!,
       verticalPosition: model.verticalPosition,
       rect: rect,
@@ -329,15 +321,10 @@ private final class TextBlockView: UIView {
       actionKey: ActionsAttribute.Key,
       backgroundKey: BackgroundAttribute.Key,
       borderKey: BorderAttribute.Key,
-      selectedRange: selectedRange
+      selectedRange: selection?.range
     )
-    self.textLayout = textLayout
-    selectionRect = model.text.drawSelection(
-      context: UIGraphicsGetCurrentContext()!,
-      rect: rect,
-      linesLayout: textLayout.lines,
-      selectedRange: selectedRange
-    )
+
+    self.selection?.draw(rect)
   }
 
   override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
@@ -387,26 +374,26 @@ private final class TextBlockView: UIView {
 
   func handleSelectionTapBegan(_ gesture: UIGestureRecognizer) {
     becomeFirstResponder()
-    let elementIndex = textLayout?.getTapElementIndex(
-      from: gesture.location(in: gesture.view)
-        .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
-    )
+
+    guard let textLayout else { return }
+
     UIMenuController.shared.hideMenu(animated: true)
-    if let elementIndex {
-      let prefix = model.text.string.prefix(elementIndex)
-      let suffix = model.text.string.suffix(from: prefix.endIndex)
-      let trailing = elementIndex + suffix.distance(
-        from: suffix.startIndex,
-        to: suffix.firstIndex { $0.isWhitespace || $0.isNewline } ?? suffix.endIndex
-      )
-      let leading = prefix.lastIndex { $0.isWhitespace || $0.isNewline }
-        .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
-      selectedRange = leading..<trailing
+    let textModel = TextSelection.TextModel(layout: textLayout, text: model.text)
+    let point = TextSelection.Point(
+      point: gesture.location(in: gesture.view),
+      viewBounds: bounds
+    )
+
+    selection = TextSelection(textModel: textModel, point: point) { [weak self] in
+
+      guard let delayedSelectionTapGesture = self?.delayedSelectionTapGesture else { return }
+      self?.handleSelectionTapEnded(delayedSelectionTapGesture)
+      self?.delayedSelectionTapGesture = nil
     }
   }
 
   func handleSelectionTapEnded(_: UIGestureRecognizer) {
-    guard let selectionRect else {
+    guard let selectionRect = selection?.rect else {
       return
     }
     UIMenuController.shared.presentMenu(from: self, in: selectionRect)
@@ -420,64 +407,31 @@ private final class TextBlockView: UIView {
 
   @objc private func handleSelectionPan(_ gesture: UIPanGestureRecognizer) {
     let point = gesture.location(in: gesture.view)
-    let transformedPoint = point
-      .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
-    let elementIndex = textLayout?.getTapElementIndex(
-      from: transformedPoint
+
+    let selectionPoint = TextSelection.Point(
+      point: point,
+      viewBounds: bounds
     )
     switch gesture.state {
     case .began:
-      guard let selectedRange,
-            let elementIndex else {
+      guard let selection else {
         return
       }
-      let lineIndex = textLayout?.lines.lastIndex(where: {
-        transformedPoint.y <= $0.verticalOffset
-      }) ?? 0
-      let prevLineElementIndex = textLayout?.getTapElementIndex(
-        from: CGPoint(
-          x: point.x,
-          y: textLayout?.lines.element(at: lineIndex - 1)?.verticalOffset
-            .advanced(by: -1) ?? .infinity
-        )
-      )
-      let nextLineElementIndex = textLayout?.getTapElementIndex(
-        from: CGPoint(
-          x: point.x,
-          y: textLayout?.lines.element(at: lineIndex + 1)?.verticalOffset.advanced(by: -1) ?? 0
-        )
-      )
-      let nearestIndex = [elementIndex, prevLineElementIndex, nextLineElementIndex]
-        .compactMap(identity).first { min(
-          abs($0 - selectedRange.lowerBound),
-          abs($0 - selectedRange.upperBound)
-        ) < 5 }
-      guard let nearestIndex else {
-        return
-      }
-      activePointer =
-        (
-          abs(nearestIndex - selectedRange.lowerBound) <
-            abs(nearestIndex - selectedRange.upperBound)
-        ) ?
-        .leading : .trailing
+
+      selection.setActivePointer(to: selectionPoint)
+      lastElementIndex = nil
     case .changed:
-      guard let activePointer, let elementIndex,
-            let selectedRange else {
+      guard let selection,
+            let elementIndex = selection.elementIndex(at: selectionPoint.verticallyInverted),
+            elementIndex != lastElementIndex else {
         return
       }
-      switch activePointer {
-      case .leading:
-        self.selectedRange = min(elementIndex, selectedRange.upperBound)..<selectedRange.upperBound
-      case .trailing:
-        self.selectedRange = selectedRange.lowerBound..<max(selectedRange.lowerBound, elementIndex)
-      }
+
+      lastElementIndex = elementIndex
+      selection.moveSelection(elementIndex)
     case .ended, .cancelled, .failed:
-      activePointer = nil
-      guard let selectionRect else {
-        return
-      }
-      UIMenuController.shared.presentMenu(from: self, in: selectionRect)
+      lastElementIndex = nil
+      selection?.showMenu(from: self)
     default:
       return
     }
@@ -499,8 +453,7 @@ private final class TextBlockView: UIView {
   }
 
   @objc private func resetSelecting() {
-    selectedRange = nil
-    selectionRect = nil
+    selection = nil
   }
 
   override func canPerformAction(_ action: Selector, withSender _: Any?) -> Bool {
@@ -508,16 +461,11 @@ private final class TextBlockView: UIView {
   }
 
   override func copy(_: Any?) {
-    let maxSymbolIndex = textLayout?.lines
-      .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max()
-
-    if let selectedRange {
-      UIPasteboard.general.string = model.text.string[Range(uncheckedBounds: (
-        selectedRange.lowerBound,
-        min(selectedRange.upperBound, maxSymbolIndex ?? .max)
-      ))]
+    if let selection {
+      UIPasteboard.general.string = selection.getSelectedText()
     }
-    selectedRange = nil
+
+    selection = nil
     setNeedsDisplay()
   }
 
@@ -544,7 +492,7 @@ private final class TextBlockView: UIView {
 extension TextBlockView: UIGestureRecognizerDelegate {
   override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     if gestureRecognizer == panSelectionRecognizer,
-       selectedRange == nil {
+       selection == nil {
       false
     } else {
       super.gestureRecognizerShouldBegin(gestureRecognizer)
@@ -638,34 +586,6 @@ extension NSAttributedString {
       }
     }
     return hasActions
-  }
-}
-
-private enum ActivePointer {
-  case leading
-  case trailing
-}
-
-extension AttributedStringLayout {
-  fileprivate func getTapElementIndex(from point: CGPoint) -> Int? {
-    let lineLayout = lines.last(where: { point.y <= $0.verticalOffset })
-    guard let lineLayout,
-          point.x > lineLayout.horizontalOffset else {
-      return nil
-    }
-    if !lineLayout.isTruncated {
-      return CTLineGetStringIndexForPosition(
-        lineLayout.line,
-        point.movingX(by: -lineLayout.horizontalOffset)
-      )
-    } else {
-      let previousLineRange = lines.last { $0 != lineLayout }?.range
-      return (previousLineRange?.upperBound ?? 0) +
-        CTLineGetStringIndexForPosition(
-          lineLayout.line,
-          point.movingX(by: -lineLayout.horizontalOffset)
-        )
-    }
   }
 }
 
