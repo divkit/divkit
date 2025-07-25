@@ -66,6 +66,7 @@
     {
       "$ref": "div-actionable.json",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]

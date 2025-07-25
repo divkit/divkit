@@ -128,6 +128,20 @@ internal class DivStateBinder @Inject constructor(
         newState: DivState.State,
         path: DivStatePath,
     ) {
+        applyDivActions(
+            context,
+            div.action,
+            div.actions,
+            div.longtapActions,
+            div.doubletapActions,
+            div.hoverStartActions,
+            div.hoverEndActions,
+            div.pressStartActions,
+            div.pressEndActions,
+            div.actionAnimation,
+            div.captureFocusOnAction,
+        )
+
         val resolver = context.expressionResolver
         fixAlignment(div, oldDiv, resolver)
         observeStateIdVariable(div, context, path)
