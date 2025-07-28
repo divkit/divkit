@@ -75,6 +75,7 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(Acos)
         registry.register(Atan)
         registry.register(Atan2)
+        registry.register(Cot)
 
         // Color functions
         registry.register(ColorAlphaComponentGetter)

@@ -177,3 +177,19 @@ internal object Atan2 : Function() {
         return atan2(args[0] as Double, args[1] as Double)// (y, x)
     }
 }
+
+internal object Cot : Function() {
+    override val name = "cot"
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.NUMBER))
+    override val resultType = EvaluableType.NUMBER
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>,
+    ): Any {
+        val x = args.first() as Double
+        return cos(x) / sin(x)
+    }
+}
