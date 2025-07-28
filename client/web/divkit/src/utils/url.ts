@@ -3,6 +3,10 @@ export function getUrlSchema(url: string): string {
         return 'tel';
     }
 
+    if (url.startsWith('/')) {
+        return 'https';
+    }
+
     const match = /^([^/]+):\/\//.exec(url);
 
     return match && match[1] || '';

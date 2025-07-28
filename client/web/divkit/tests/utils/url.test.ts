@@ -17,9 +17,9 @@ describe('getUrlSchema', () => {
 
     test('incorrect', () => {
         expect(getUrlSchema('1')).toBe('');
-        expect(getUrlSchema('/http://ya.ru')).toBe('');
+        expect(getUrlSchema('/http://ya.ru')).toBe('https');
         expect(getUrlSchema('://ya.ru')).toBe('');
-        expect(getUrlSchema('//ya.ru')).toBe('');
+        expect(getUrlSchema('//ya.ru')).toBe('https');
     });
 });
 
