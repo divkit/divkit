@@ -48,6 +48,14 @@ public class DivImageDownloadCallback {
     }
 
     /**
+     * Is called when image load is canceled. By default, it means an error.
+     */
+    @UiThread
+    public void onCancel() {
+        onError();
+    }
+
+    /**
      * Is called if immediate call to {@link #onError} or {@link #onSuccess(CachedBitmap)} didn't happen.
      * That is, image is not in cache or it's only on disk cache and callback asked for memory cache only.
      * Callback will be called later when result is ready.

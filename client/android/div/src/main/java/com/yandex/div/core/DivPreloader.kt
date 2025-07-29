@@ -181,6 +181,10 @@ class DivPreloader internal constructor(
             done()
         }
 
+        override fun onCancel() {
+            done()
+        }
+
         override fun onError() = runOnUiThread {
             failures++
             done()
