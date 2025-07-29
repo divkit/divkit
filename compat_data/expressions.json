@@ -61,6 +61,12 @@
         "compat": {
             "ios": {
                 "version_added": "32.8.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
+            },
+            "web": {
+                "version_added": "32.10.0"
             }
         }
     }, {
@@ -267,6 +273,9 @@
         "compat": {
             "ios": {
                 "version_added": "32.9.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
             }
         }
     }, {
@@ -275,6 +284,9 @@
         "compat": {
             "ios": {
                 "version_added": "32.9.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
             }
         }
     }]

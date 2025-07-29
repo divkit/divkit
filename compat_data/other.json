@@ -92,6 +92,9 @@
             },
             "web": {
                 "version_added": "31.9.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
             }
         }
     }, {
