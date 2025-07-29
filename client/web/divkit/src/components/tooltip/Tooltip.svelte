@@ -7,6 +7,8 @@
             name: 'fade'
         }]
     };
+
+    let openedTooltipsStack: HTMLElement[] = [];
 </script>
 
 <script lang="ts">
@@ -169,6 +171,10 @@
     }
 
     function onOutClick(event: Event): void {
+        if (openedTooltipsStack.length && openedTooltipsStack[openedTooltipsStack.length - 1] !== tooltipNode) {
+            return;
+        }
+
         const path = event.composedPath();
 
         if (
@@ -186,6 +192,7 @@
         event.preventDefault();
 
         if (componentContext.getJsonWithVars(data.close_by_tap_outside) !== false) {
+            openedTooltipsStack = openedTooltipsStack.filter(it => it !== tooltipNode);
             rootCtx.onTooltipClose(internalId);
         }
 
@@ -201,12 +208,18 @@
     }
 
     function onKeyDown(event: KeyboardEvent): void {
+        if (openedTooltipsStack.length && openedTooltipsStack[openedTooltipsStack.length - 1] !== tooltipNode) {
+            return;
+        }
+
         if (event.key === 'Escape' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+            openedTooltipsStack = openedTooltipsStack.filter(it => it !== tooltipNode);
             rootCtx.onTooltipClose(internalId);
         }
     }
 
     function onClose(event: Event): void {
+        openedTooltipsStack = openedTooltipsStack.filter(it => it !== tooltipNode);
         rootCtx.onTooltipClose(internalId);
         event.preventDefault();
     }
@@ -227,6 +240,9 @@
         if (hasDialogSupport && tooltipNode && tooltipNode instanceof HTMLDialogElement) {
             tooltipNode[modal ? 'showModal' : 'show']();
         }
+        if (modal) {
+            openedTooltipsStack.push(tooltipNode);
+        }
     });
 
     afterUpdate(() => {
@@ -241,6 +257,8 @@
         }
 
         resizeObserver?.disconnect();
+
+        openedTooltipsStack = openedTooltipsStack.filter(it => it !== tooltipNode);
 
         if (modal && prevFocusedElement && prevFocusedElement instanceof HTMLElement) {
             if (hasDialogSupport && tooltipNode && tooltipNode instanceof HTMLDialogElement) {
