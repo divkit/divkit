@@ -80,7 +80,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
 
         itemList[position] = item
         itemVisibilityList[position] = isVisible
-        if (isVisible != wasVisible) {
+        if (isVisible || wasVisible) {
             isVisibleItemListValid = false
         }
 
