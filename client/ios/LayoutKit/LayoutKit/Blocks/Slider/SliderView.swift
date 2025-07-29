@@ -7,12 +7,14 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   private var thumbAnimator: UIViewPropertyAnimator?
   private var firstThumbProgress: CGFloat = .zero {
     didSet {
+      marksView.firstThumbProgress = firstThumbProgress
       setNeedsLayout()
     }
   }
 
   private var secondThumbProgress: CGFloat = .zero {
     didSet {
+      marksView.secondThumbProgress = secondThumbProgress
       setNeedsLayout()
     }
   }
@@ -360,18 +362,18 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     progressFirstThumb: CGFloat,
     progressSecondThumb: CGFloat
   ) {
-    let progressFirstThumbWidth =
+    let progressLeadingThumb =
       (min(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) * pointWidth
-    let progressSecondThumbWidth =
+    let progressTrailingThumb =
       (max(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) * pointWidth
-    let (originX, progressWidth) = {
+    let (activeTrackOriginX, activeTrackWidth) = {
       switch sliderModel.layoutDirection {
       case .leftToRight:
-        return (progressFirstThumbWidth, progressSecondThumbWidth)
+        return (progressLeadingThumb, progressTrailingThumb)
       case .rightToLeft:
         return (
-          inactiveTrackView.frame.width - progressSecondThumbWidth,
-          inactiveTrackView.frame.width - progressFirstThumbWidth
+          inactiveTrackView.frame.width - progressTrailingThumb,
+          inactiveTrackView.frame.width - progressLeadingThumb
         )
       @unknown default:
         assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
@@ -379,17 +381,10 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       }
     }()
 
-    activeTrackView.cutView(originX: originX)
-
-    activeTrackView.frame = CGRect(
-      x: inactiveTrackView.frame.minX,
-      y: inactiveTrackView.frame.minY,
-      width: progressWidth,
-      height: sliderModel.sliderHeight
+    activeTrackView.maskView(
+      visibleRectOriginX: activeTrackOriginX,
+      visibleRectWidth: activeTrackWidth
     )
-
-    marksView.firstThumbProgress = firstThumbProgress
-    marksView.secondThumbProgress = secondThumbProgress
   }
 
   private func configureThumb(
@@ -452,17 +447,29 @@ private enum ThumbPosition {
 private let animationDuration = 0.3
 
 extension UIView {
-  fileprivate func cutView(originX: CGFloat) {
+  fileprivate func maskView(
+    visibleRectOriginX: CGFloat,
+    visibleRectWidth: CGFloat
+  ) {
     let shapeLayer = CAShapeLayer()
     let path = CGMutablePath()
-    let rect = CGRect(
-      x: self.bounds.origin.x,
-      y: self.bounds.origin.y,
-      width: originX,
-      height: self.bounds.height
+    let trailingMaskRect = CGRect(
+      x: visibleRectWidth,
+      y: bounds.origin.y,
+      width: bounds.width - visibleRectWidth,
+      height: bounds.height
     )
-    path.addRect(rect)
-    path.addRect(bounds)
+
+    let leadingMaskRect = CGRect(
+      x: bounds.origin.x,
+      y: bounds.origin.y,
+      width: visibleRectOriginX,
+      height: bounds.height
+    )
+
+    [leadingMaskRect, trailingMaskRect, bounds].forEach {
+      path.addRect($0)
+    }
     shapeLayer.path = path
     shapeLayer.fillRule = CAShapeLayerFillRule.evenOdd
     layer.mask = shapeLayer
