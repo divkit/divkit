@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 import VGSL
 
@@ -234,3 +235,4 @@ private enum ActivePointer {
     }
   }
 }
+#endif
