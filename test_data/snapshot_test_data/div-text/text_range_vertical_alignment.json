@@ -3,6 +3,7 @@
   "platforms": [
     "android",
     "web",
+    "ios",
     "flutter"
   ],
   "templates": {

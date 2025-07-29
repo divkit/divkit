@@ -30,6 +30,7 @@
           "$description": "translations.json#/div_text_range_alignment_vertical",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },

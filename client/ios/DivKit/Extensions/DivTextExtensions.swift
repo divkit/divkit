@@ -239,8 +239,9 @@ extension DivText: DivBlockModeling {
       .map { Typo(strikethrough: $0.underlineStyle) }
     let underlineTypo = range.resolveUnderline(expressionResolver)
       .map { Typo(underline: $0.underlineStyle) }
+    let baselineOffset = range.resolveBaselineOffset(expressionResolver)
     let baselineOffsetTypo = Typo(
-      baselineOffset: range.resolveBaselineOffset(expressionResolver)
+      baselineOffset: baselineOffset.isApproximatelyEqualTo(0) ? nil : baselineOffset
     )
     let blockShadow = range.textShadow?.resolve(expressionResolver).typoShadow
     let shadowTypo = blockShadow.map { Typo(shadow: $0) }
@@ -267,6 +268,7 @@ extension DivText: DivBlockModeling {
     [
       range.makeBackground(context: context, range: cfRange),
       range.makeBorder(range: cfRange, resolver: expressionResolver),
+      range.makeVerticalAlignment(range: cfRange, resolver: expressionResolver),
     ].forEach {
       $0?.apply(to: string, at: cfRange)
     }
@@ -392,6 +394,24 @@ extension DivText.Range {
       cornerRadius.flatMap(CGFloat.init),
       range: range
     )
+  }
+
+  fileprivate func makeVerticalAlignment(
+    range: CFRange,
+    resolver: ExpressionResolver
+  ) -> RangeVerticalAlignmentAttribute? {
+    switch resolveAlignmentVertical(resolver) {
+    case .top:
+      return .init(verticalAlignment: .top, range: range)
+    case .center:
+      return .init(verticalAlignment: .center, range: range)
+    case .bottom:
+      return .init(verticalAlignment: .bottom, range: range)
+    case .baseline:
+      return .init(verticalAlignment: .baseline, range: range)
+    case .none:
+      return nil
+    }
   }
 
   fileprivate func makeBackground(

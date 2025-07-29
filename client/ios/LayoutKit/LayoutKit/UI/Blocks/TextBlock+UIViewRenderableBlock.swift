@@ -321,6 +321,7 @@ private final class TextBlockView: UIView {
       actionKey: ActionsAttribute.Key,
       backgroundKey: BackgroundAttribute.Key,
       borderKey: BorderAttribute.Key,
+      rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
       selectedRange: selection?.range
     )
 
