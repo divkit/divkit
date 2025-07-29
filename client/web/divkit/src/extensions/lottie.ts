@@ -56,17 +56,17 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
         private wrapper: HTMLElement | undefined;
         private isPlayingUnsubscriber: Unsubscriber | undefined;
         private isPlaying = true;
+        private unsubscribe: (() => void) | undefined;
 
         constructor(params: Params) {
             this.params = params;
         }
 
-        private loadData(): Promise<object> {
+        private loadData(url: string | undefined): Promise<object> {
             if (this.params.lottie_json) {
                 return Promise.resolve(this.params.lottie_json);
             }
 
-            const url = this.params.lottie_url;
             if (url) {
                 return fetch(url)
                     .then(res => {
@@ -233,7 +233,8 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
             this.setWrapperScale(scale);
             node.appendChild(this.wrapper);
 
-            const repeatCount = Number(this.params.repeat_count || -1);
+            const repeatCount = Number(context.processExpressions(this.params.repeat_count) ?? -1);
+            const repeatMode = context.processExpressions(this.params.repeat_mode);
             const onError = () => {
                 this.animItem?.destroy();
                 // reveal back gif contents
@@ -252,36 +253,41 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                 };
                 context.logError(err);
             };
-            this.loadData().then(json => {
-                const animItem = this.animItem = loadAnimation({
-                    container: wrapper,
-                    animationData: json,
-                    renderer: 'svg',
-                    loop: true,
-                    rendererSettings: {
-                        preserveAspectRatio: scale.attribute
-                    }
-                });
-                this.setSvgScale(scale);
-                this.animItem.addEventListener('data_failed', onError);
-                if (this.params.repeat_mode === 'reverse' || repeatCount !== -1) {
-                    let direction = 1;
-                    let count = 0;
-                    animItem.addEventListener('loopComplete', () => {
-                        ++count;
-                        if (repeatCount !== -1 && count === repeatCount) {
-                            animItem.stop();
-                            animItem.goToAndStop(animItem.totalFrames, true);
-                        } else {
-                            if (this.params.repeat_mode === 'reverse') {
-                                direction *= -1;
-                                animItem.setDirection(direction);
-                            }
-                            animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
+
+            this.unsubscribe = context.derviedExpression(this.params.lottie_url).subscribe(url => {
+                this.loadData(url).then(json => {
+                    this.animItem?.destroy();
+
+                    const animItem = this.animItem = loadAnimation({
+                        container: wrapper,
+                        animationData: json,
+                        renderer: 'svg',
+                        loop: true,
+                        rendererSettings: {
+                            preserveAspectRatio: scale.attribute
                         }
                     });
-                }
-            }).catch(onError);
+                    this.setSvgScale(scale);
+                    this.animItem.addEventListener('data_failed', onError);
+                    if (repeatMode === 'reverse' || repeatCount !== -1) {
+                        let direction = 1;
+                        let count = 0;
+                        animItem.addEventListener('loopComplete', () => {
+                            ++count;
+                            if (repeatCount !== -1 && count === repeatCount) {
+                                animItem.stop();
+                                animItem.goToAndStop(animItem.totalFrames, true);
+                            } else {
+                                if (repeatMode === 'reverse') {
+                                    direction *= -1;
+                                    animItem.setDirection(direction);
+                                }
+                                animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
+                            }
+                        });
+                    }
+                }).catch(onError);
+            });
 
             this.isPlayingUnsubscriber = context.derviedExpression(this.params.is_playing).subscribe(val => {
                 this.isPlaying = val !== false;
@@ -317,6 +323,7 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
             }
             node.removeAttribute('data-lottie');
 
+            this.unsubscribe?.();
             this.isPlayingUnsubscriber?.();
         }
     };

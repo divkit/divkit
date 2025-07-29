@@ -1840,13 +1840,10 @@
         return {
             variables: mergeMaps(variables, componentContext.variables),
             derviedExpression: function<T>(t: T) {
-                return getDerivedFromVars(logError, t) as DerivedExpression<T>;
+                return componentContext.getDerivedFromVars(t) as DerivedExpression<T>;
             },
             processExpressions: function<T>(t: T) {
-                return getJsonWithVars(
-                    logError,
-                    t
-                ) as T;
+                return componentContext.getJsonWithVars<T>(t) as T;
             },
             execAction,
             logError,
