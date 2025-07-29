@@ -709,6 +709,18 @@
             return;
         }
 
+        const hasBody = Object.keys(vals).length > 0;
+        const method = (action.request.method || 'post').toLowerCase();
+
+        if ((method === 'get' || method === 'head') && hasBody) {
+            log(wrapError(new Error('Can\'t send variables using the get/head method.'), {
+                additional: {
+                    url: action.request.url
+                }
+            }));
+            return;
+        }
+
         let hasContentType = false;
         const headers: [string, string][] = [];
         action.request.headers?.forEach(header => {
@@ -731,9 +743,9 @@
         // no await!
         fetch(action.request.url, {
             ...init,
-            method: action.request.method || 'post',
+            method,
             headers,
-            body: JSON.stringify(vals)
+            body: hasBody ? JSON.stringify(vals) : undefined
         }).then(res => {
             if (!res.ok) {
                 throw new Error('Response is not ok');
