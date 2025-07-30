@@ -1,6 +1,6 @@
 import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import type { BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
+import type { ArrayValue, BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
 import { checkUrl, convertJsValueToDivKit, transformColorValue } from '../utils';
 import { registerFunc, registerMethod } from './funcs';
 
@@ -118,6 +118,20 @@ function len(_ext: EvalContext, dict: DictValue): IntegerValue {
     };
 }
 
+function getDictKeys(_ext: EvalContext, dict: DictValue): ArrayValue {
+    return {
+        type: ARRAY,
+        value: Object.keys(dict.value)
+    };
+}
+
+function getDictValues(_ext: EvalContext, dict: DictValue): ArrayValue {
+    return {
+        type: ARRAY,
+        value: Object.values(dict.value)
+    };
+}
+
 export function registerDict(): void {
     const STRING_VARARG = {
         type: STRING,
@@ -186,4 +200,6 @@ export function registerDict(): void {
     registerMethod('isEmpty', [DICT], isEmpty);
 
     registerFunc('len', [DICT], len);
+    registerFunc('getDictKeys', [DICT], getDictKeys);
+    registerFunc('getDictValues', [DICT], getDictValues);
 }

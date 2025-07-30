@@ -108,7 +108,10 @@ function runCase(item: any) {
             expect(res.result.value).toBeTypeOf('bigint');
         }
 
-        if (res.result.type === 'number' && item.expected.type === 'number') {
+        if (res.result.type === 'array' && item.expected.type === 'unordered_array') {
+            expect(new Set(res.result.value.map(value => ({ value }))))
+                .toEqual(new Set(item.expected.value.map((value: unknown) => ({ value }))));
+        } else if (res.result.type === 'number' && item.expected.type === 'number') {
             expect(res.result.value).toBeCloseTo(item.expected.value);
         } else {
             expect(convertVals(res.result)).toEqual(convertVals(item.expected));

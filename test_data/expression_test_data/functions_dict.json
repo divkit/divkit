@@ -1556,7 +1556,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1574,7 +1575,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1583,13 +1585,13 @@
         "type": "unordered_array",
         "value": [
           {
-            "name": "text2"
+            "name": "duplicate_text"
           },
           {
             "name": "text1"
           },
           {
-            "name": "text2"
+            "name": "duplicate_text"
           }
         ]
       },
@@ -1602,17 +1604,45 @@
               "name": "text1"
             },
             "key2": {
-              "name": "text2"
+              "name": "duplicate_text"
             },
             "key3": {
-              "name": "text2"
+              "name": "duplicate_text"
             }
           }
         }
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getDictValues(source)}",
+      "expected": {
+        "type": "unordered_array",
+        "value": [
+          "text1",
+          "duplicate_text",
+          "duplicate_text"
+        ]
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "source",
+          "value": {
+            "key1": "text1",
+            "key2": "duplicate_text",
+            "key3": "duplicate_text"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -1630,7 +1660,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
