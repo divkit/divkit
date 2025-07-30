@@ -4,7 +4,7 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let version = Version("7.6.0")
+  let version = Version("7.7.1")
   return (
     package: Package.Dependency.package(url: "https://github.com/yandex/vgsl.git", from: version),
     packageName: "vgsl"
@@ -28,7 +28,7 @@ let package = Package(
   name: "DivKit",
   platforms: [
     .iOS(.v13),
-    .macOS(.v10_15)
+    .macOS(.v10_15),
   ],
   products: [
     .library(name: "DivKit", targets: ["DivKit"]),
