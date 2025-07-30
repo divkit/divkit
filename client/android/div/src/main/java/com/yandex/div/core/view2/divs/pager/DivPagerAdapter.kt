@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -29,14 +28,15 @@ internal class DivPagerAdapter(
         override fun get(index: Int): DivItemBuilderResult {
             if (!infiniteScrollEnabled) return visibleItems[index]
 
-            val position = (visibleItems.size + index - OFFSET_TO_REAL_ITEM).mod(visibleItems.size)
-            return visibleItems[position]
+            return visibleItems[realItemPosition(index)]
         }
     }
 
     val currentRealItem get() = pagerView.currentItem - offsetToRealItem
 
     private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
+
+    fun realItemPosition(position: Int) = (getRealPosition(position) + visibleItems.size) % visibleItems.size
 
     var orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
@@ -51,7 +51,6 @@ internal class DivPagerAdapter(
         }
 
     private var removedItems = 0
-    private var currentItem = NO_POSITION
 
     fun getPosition(visibleItemIndex: Int) = visibleItemIndex + offsetToRealItem
 
@@ -74,7 +73,7 @@ internal class DivPagerAdapter(
     override fun getItemCount() = itemsToShow.size
 
     override fun onBindViewHolder(holder: DivPagerViewHolder, position: Int) {
-        super.onBindViewHolder(holder, (getRealPosition(position) + visibleItems.size) % visibleItems.size)
+        super.onBindViewHolder(holder, realItemPosition(position))
         pageTranslations[position]?.let {
             if (isHorizontal) {
                 holder.itemView.translationX = it
@@ -88,51 +87,40 @@ internal class DivPagerAdapter(
         val oldSize = items.size
         removedItems = 0
         val oldCurrentItem = pagerView.currentItem
-        currentItem = oldCurrentItem
         super.setItems(newItems)
-        pagerView.currentItem = if (removedItems == oldSize) oldCurrentItem else currentItem
+        if (removedItems == oldSize) {
+            pagerView.currentItem =  oldCurrentItem
+        }
     }
 
     override fun notifyRawItemRemoved(position: Int) {
         removedItems++
         if (!infiniteScrollEnabled) {
-            super.notifyRawItemRemoved(position)
-            if (currentItem > position) {
-                currentItem--
-            }
+            notifyItemRemoved(position)
             return
         }
 
-        super.notifyRawItemRemoved(position + OFFSET_TO_REAL_ITEM)
+        notifyItemRemoved(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
-        if (currentItem > position + OFFSET_TO_REAL_ITEM) {
-            currentItem--
-        }
     }
 
     override fun notifyRawItemInserted(position: Int) {
         if (!infiniteScrollEnabled) {
-            super.notifyRawItemInserted(position)
-            if (currentItem >= position) {
-                currentItem++
-            }
+            notifyItemInserted(position)
             return
         }
 
-        super.notifyRawItemInserted(position + OFFSET_TO_REAL_ITEM)
+        notifyItemInserted(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
-        if (currentItem >= position + OFFSET_TO_REAL_ITEM) {
-            currentItem++
-        }
     }
 
     override fun notifyRawItemChanged(position: Int) {
         if (!infiniteScrollEnabled) {
-            super.notifyRawItemChanged(position)
+            notifyItemChanged(position)
             return
         }
 
-        super.notifyRawItemChanged(position + OFFSET_TO_REAL_ITEM)
+        notifyItemChanged(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
     }
 

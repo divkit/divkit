@@ -50,7 +50,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         isVisibleItemListValid = false
 
         if (isVisible) {
-            notifyRawItemInserted(position)
+            notifyVisibleItemInserted(position)
         }
     }
 
@@ -65,7 +65,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         items.forEachIndexed { index, item ->
             val isVisible = item.visibility == DivVisibility.VISIBLE
             if (isVisible) {
-                notifyRawItemInserted(position + index)
+                notifyVisibleItemInserted(position + index)
             }
         }
     }
@@ -85,9 +85,9 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         }
 
         when {
-            wasVisible && !isVisible -> notifyRawItemRemoved(position)
-            !wasVisible && isVisible -> notifyRawItemInserted(position)
-            wasVisible && isVisible -> notifyRawItemChanged(position)
+            wasVisible && !isVisible -> notifyVisibleItemRemoved(position)
+            !wasVisible && isVisible -> notifyVisibleItemInserted(position)
+            wasVisible && isVisible -> notifyVisibleItemChanged(position)
         }
     }
 
@@ -97,7 +97,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         isVisibleItemListValid = false
 
         if (isVisible) {
-            notifyRawItemRemoved(position)
+            notifyVisibleItemRemoved(position)
         }
     }
 
@@ -132,17 +132,23 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         isVisibleItemListValid = false
 
         if (wasVisible) {
-            notifyRawItemRemoved(position)
+            notifyVisibleItemRemoved(position)
         } else {
-            notifyRawItemInserted(position)
+            notifyVisibleItemInserted(position)
         }
     }
 
-    protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(visiblePositionOf(position))
+    private fun notifyVisibleItemRemoved(position: Int) = notifyRawItemRemoved(visiblePositionOf(position))
 
-    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(visiblePositionOf(position))
+    private fun notifyVisibleItemInserted(position: Int) = notifyRawItemInserted(visiblePositionOf(position))
 
-    protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(visiblePositionOf(position))
+    private fun notifyVisibleItemChanged(position: Int) = notifyRawItemChanged(visiblePositionOf(position))
+
+    protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
+
+    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(position)
+
+    protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
 }
 
 private val DivItemBuilderResult.visibility: DivVisibility

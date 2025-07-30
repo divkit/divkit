@@ -78,7 +78,7 @@ internal class DivPagerBinder @Inject constructor(
 
     private fun DivPagerView.bind(bindingContext: BindingContext, div: DivPager, path: DivStatePath) {
         val recyclerView = getRecyclerView() ?: return
-        
+
         val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
         val pageTranslations = SparseArray<Float>()
@@ -179,9 +179,9 @@ internal class DivPagerBinder @Inject constructor(
             val itemCount = viewPager.adapter?.itemCount ?: 0
             val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
             val lastItemVisible = layoutManager.findLastVisibleItemPosition()
-            if (firstItemVisible == (itemCount - OFFSET_TO_REAL_ITEM) && dx > 0) {
+            if (firstItemVisible >= (itemCount - OFFSET_TO_REAL_ITEM) && dx > 0) {
                 recyclerView.scrollToPosition(OFFSET_TO_REAL_ITEM)
-            } else if (lastItemVisible == OFFSET_TO_REAL_ITEM - 1 && dx < 0) {
+            } else if (lastItemVisible <= OFFSET_TO_REAL_ITEM - 1 && dx < 0) {
                 recyclerView.scrollToPosition(itemCount - 1 - OFFSET_TO_REAL_ITEM)
             }
         }
@@ -325,10 +325,12 @@ internal class DivPagerBinder @Inject constructor(
     private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager) {
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
-            (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
-            pagerOnItemsCountChange?.onItemsUpdated()
-            getRecyclerView()?.scrollToPosition(currentItem)
-            viewPager.doOnNextLayout { viewPager.requestTransform() }
+            (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
+                adapter.setItems(builder.build(context.expressionResolver))
+                pagerOnItemsCountChange?.onItemsUpdated()
+                getRecyclerView()?.scrollToPosition(adapter.realItemPosition(currentItem))
+                viewPager.doOnNextLayout { viewPager.requestTransform() }
+            }
         }
     }
 }
