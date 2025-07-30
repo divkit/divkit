@@ -1,3 +1,28 @@
+## 32.11.0
+
+# Android Client:
+* Add a cancelled callback to `DivImageDownloadCallback`.
+* Added `cot` function.
+* Added actions to `div-state`.
+* Downgraded androidx-appcompat library to 1.6.1.
+* Downgraded androidx-recyclerview to 1.3.0 and androidx-viewpager2 to 1.0.0.
+* Fixed items removing in pager with infinite scroll.
+
+# iOS Client:
+* Applying alignment_vertical to ranges in div-text.
+* Fixed a bug that in some cases could lead to a mismatch between the size of the image container and its contents.
+* Fixed a bug with painting the active part of the slider track.
+* The text selection algorithm has been changed to bring it into line with the iOS standard. It is now impossible to select an empty text fragment.
+
+# Web Client:
+* Added `getDictKeys` and `getDictValues` functions.
+* Added support for expressions in the `lottie` extension in the `lottie_url`, `repeat_count` and `repeat_mode` fields.
+* Added support for the relative action urls (like `/smth`).
+* Fixed a bug with the `submit` action when using the `method` = `get` / `head`. The request body will not be sent if there are no variables in it.
+* Fixed several issues with multiple `tooltip`s being displayed at the same time.
+* Fixed the issue with the custom context and the extension context, now they support access to local variables.
+
+
 ## 32.10.0
 
 # Android Client:
