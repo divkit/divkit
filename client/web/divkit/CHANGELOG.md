@@ -1,3 +1,13 @@
+## 32.11.0 (August 4, 2025)
+
+* Added `getDictKeys` and `getDictValues` functions.
+* Added support for expressions in the `lottie` extension in the `lottie_url`, `repeat_count` and `repeat_mode` fields.
+* Added support for the relative action urls (like `/smth`).
+* Fixed a bug with the `submit` action when using the `method` = `get` / `head`. The request body will not be sent if there are no variables in it.
+* Fixed several issues with multiple `tooltip`s being displayed at the same time.
+* Fixed the issue with the custom context and the extension context, now they support access to local variables.
+
+
 ## 32.10.0 (July 28, 2025)
 
 * Added `len` function for a `dict` variables.
