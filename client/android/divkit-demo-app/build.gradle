@@ -36,6 +36,12 @@ android {
         if (!project.hasProperty("include-regression-tests")) {
             testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
         }
+        if (project.hasProperty("shardIndex")) {
+            testInstrumentationRunnerArguments.shardIndex = project.property("shardIndex")
+        }
+        if (project.hasProperty("numShards")) {
+            testInstrumentationRunnerArguments.numShards = project.property("numShards")
+        }
     }
 
     buildTypes {

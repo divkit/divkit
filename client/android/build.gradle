@@ -139,14 +139,16 @@ apiValidation {
 }
 
 tasks.register('reportVersion') {
+    def version = divkitVersion.releaseLibraryVersion
     doLast {
-        println "DivKit version ${divkitVersion.releaseLibraryVersion}"
+        println "DivKit version $version"
     }
 }
 
 tasks.register('reportBuildNumber') {
+    def version = divkitVersion.releaseLibraryVersion
     doLast {
-        println "buildNumber ${divkitVersion.releaseLibraryVersion}"
+        println "buildNumber $version"
     }
 }
 

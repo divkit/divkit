@@ -12,16 +12,9 @@ ext {
     signingKeyId = rootProject.findProperty("signingKeyId")
     signingPassword = rootProject.findProperty("signingPassword")
     signingSecretKeyRingFile = rootProject.findProperty("signingSecretKeyRingFile")
-
-    commitHash = { ->
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine 'arc', 'rev-parse', 'HEAD'
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    }
 }
+
+publicationType.configureForProject(project)
 
 def publishToMavenCentral = rootProject.ext.has("publishToMavenCentral")
         && rootProject.ext.publishToMavenCentral
