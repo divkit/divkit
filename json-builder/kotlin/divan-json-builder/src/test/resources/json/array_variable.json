@@ -1,0 +1,33 @@
+{
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text"
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "array_variable",
+        "type": "array",
+        "value": [
+          "outer_string",
+          123,
+          true,
+          {
+            "type": "array",
+            "value": [
+              "inner_string",
+              456,
+              false
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "templates": {}
+}

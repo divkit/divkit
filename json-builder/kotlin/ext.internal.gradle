@@ -1,8 +1,0 @@
-ext {
-    bucketUsername = project.findProperty("bucketUsername") ?: System.env["BUCKET_USERNAME"]
-    bucketPassword = project.findProperty("bucketPassword") ?: System.env["BUCKET_PASSWORD"]
-    publishToBucket = bucketUsername != null && bucketPassword != null
-    sonatypeUsername = project.findProperty("sonatypeUsername")
-    sonatypePassword = project.findProperty("sonatypePassword")
-    publishToMavenCentral = sonatypeUsername != null && sonatypePassword != null
-}
