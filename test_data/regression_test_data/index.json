@@ -2134,6 +2134,19 @@
       "file": "animations/lottie/lottie_gallery.json"
     },
     {
+      "title": "Lottie from divkit-asset",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "divkit-asset support is not expected"
+      },
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/asset_lottie.json"
+    },
+    {
       "title": "Lottie gallery with expressions",
       "platforms": [
         "android",

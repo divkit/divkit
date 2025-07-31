@@ -6,6 +6,7 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.ASSET_SCHEME
+import com.yandex.div.lottie.DivLottieRawResProvider.Companion.DIVKIT_ASSET_SCHEME
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.HTTPS_SCHEME
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.HTTP_SCHEME
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.RES_SCHEME
@@ -15,6 +16,15 @@ internal class DivLottieCompositionRepository(
     private val rawResProvider: DivLottieRawResProvider,
     private val networkCache: DivLottieNetworkCache
 ) {
+
+    private fun modifyLottieUrl(lottieUrl: String): String {
+        val path = lottieUrl.removePrefix("${DIVKIT_ASSET_SCHEME}://")
+        return if (path.startsWith(DEFAULT_ASSET_FOLDER)) {
+            path
+        } else {
+            "$DEFAULT_ASSET_FOLDER${path.removePrefix("/")}"
+        }
+    }
 
     internal fun receiveLottieComposition(
         data: LottieData,
@@ -57,8 +67,16 @@ internal class DivLottieCompositionRepository(
                     LottieCompositionFactory.fromAssetSync(context, assetFileAddress)
                 }
             }
+            DIVKIT_ASSET_SCHEME -> {
+                val assetFileAddress = modifyLottieUrl(url)
+                LottieCompositionFactory.fromAssetSync(context, assetFileAddress)
+            }
             else -> LottieResult(IllegalArgumentException("Failed to retrieve lottie json from $url"))
         }
+    }
+
+    companion object {
+        private const val DEFAULT_ASSET_FOLDER = "divkit/"
     }
 
     @Suppress("DEPRECATION")

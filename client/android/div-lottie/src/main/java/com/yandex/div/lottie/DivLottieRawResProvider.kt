@@ -34,6 +34,7 @@ interface DivLottieRawResProvider {
         const val HTTPS_SCHEME = "https"
         const val RES_SCHEME = "res"
         const val ASSET_SCHEME = "asset"
+        const val DIVKIT_ASSET_SCHEME = "divkit-asset"
 
         val STUB = object : DivLottieRawResProvider {
             override fun provideRes(url: String): Int? = null

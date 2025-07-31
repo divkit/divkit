@@ -1,0 +1,91 @@
+{
+  "templates": {
+    "lottie_gif": {
+      "type": "gif",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 250
+      },
+      "margins": {
+        "left": 4,
+        "right": 4,
+        "bottom": 4,
+        "top": 4
+      },
+      "paddings": {
+        "top": 4,
+        "right": 2,
+        "left": 2
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "lottie_gif_card": {
+      "type": "lottie_card",
+      "items": [
+        {
+          "type": "lottie_gif",
+          "scale": "fit",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ],
+          "gif_url": "https://i.gifer.com/VhdJ.gif"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "id": "container",
+          "type": "container",
+          "items": [
+            {
+              "type": "lottie_gif_card",
+              "lottie_params": {
+                "lottie_url": "divkit-asset://divkit/banana_lottie.json",
+                "repeat_count": 3,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "lottie_params": {
+                "lottie_url": "divkit-asset://banana_lottie.json",
+                "repeat_count": 3,
+                "repeat_mode": "reverse"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
