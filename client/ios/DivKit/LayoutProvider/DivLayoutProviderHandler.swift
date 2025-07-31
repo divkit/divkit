@@ -20,7 +20,7 @@ public final class DivLayoutProviderHandler {
          !event.changedVariables.isSubset(of: updatedVariables) {
         // If any variables are updated externally (not by DivLayoutProviderHandler) it must be
         // considered as new layout cycle.
-        self?.updatedVariables = []
+        self?.resetUpdatedVariables()
       }
     }.dispose(in: autodisposePool)
   }
