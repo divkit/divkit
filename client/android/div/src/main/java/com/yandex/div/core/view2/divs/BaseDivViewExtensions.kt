@@ -86,11 +86,11 @@ import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibilityAction
-import com.yandex.div2.DivWrapContentSize
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -193,7 +193,7 @@ internal fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionReso
     }
 }
 
-internal fun DivWrapContentSize.ConstraintSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+internal fun DivSizeUnitValue.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
         DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
@@ -238,7 +238,7 @@ internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
     applyTransform(div.transform, resolver)
 }
 
-internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+internal fun View.applyMinHeight(minHeight: DivSizeUnitValue?, resolver: ExpressionResolver) {
     val heightValue = minHeight?.toPx(resources.displayMetrics, resolver) ?: 0
     if (minimumHeight != heightValue) {
         minimumHeight = heightValue
@@ -254,7 +254,7 @@ internal fun View.applyVerticalWeightValue(value: Float) {
     }
 }
 
-internal fun View.applyMaxHeight(maxHeight: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+internal fun View.applyMaxHeight(maxHeight: DivSizeUnitValue?, resolver: ExpressionResolver) {
     val params = layoutParams as? DivLayoutParams ?: return
     val heightValue = maxHeight?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
     if (params.maxHeight != heightValue) {
@@ -272,7 +272,7 @@ internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     applyTransform(div.transform, resolver)
 }
 
-internal fun View.applyMinWidth(minWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+internal fun View.applyMinWidth(minWidth: DivSizeUnitValue?, resolver: ExpressionResolver) {
     val widthValue = minWidth?.toPx(resources.displayMetrics, resolver) ?: 0
     if (minimumWidth != widthValue) {
         minimumWidth = widthValue
@@ -293,7 +293,7 @@ internal fun DivSize.getWeight(resolver: ExpressionResolver) = when (this) {
     else -> DivLayoutParams.DEFAULT_WEIGHT
 }
 
-internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+internal fun View.applyMaxWidth(maxWidth: DivSizeUnitValue?, resolver: ExpressionResolver) {
     val params = layoutParams as? DivLayoutParams ?: return
     val widthValue = maxWidth?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
     if (params.maxWidth != widthValue) {

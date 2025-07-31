@@ -11,6 +11,16 @@
       "enum": [
         "match_parent"
       ]
+    },
+    "min_size": {
+      "$ref": "div-size-unit-value.json",
+      "$description": "translations.json#/div_size_min",
+      "platforms": []
+    },
+    "max_size": {
+      "$ref": "div-size-unit-value.json",
+      "$description": "translations.json#/div_size_max",
+      "platforms": []
     }
   },
   "required": [

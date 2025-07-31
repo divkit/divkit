@@ -1,24 +1,6 @@
 {
   "type": "object",
   "$description": "translations.json#/div_wrap_content_size",
-  "definitions": {
-    "constraint_size": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "$ref": "common.json#/non_negative_integer"
-        },
-        "unit": {
-          "$ref": "div-size-unit.json",
-          "$description": "translations.json#/div_size_unit",
-          "default_value": "dp"
-        }
-      },
-      "required": [
-        "value"
-      ]
-    }
-  },
   "properties": {
     "type": {
       "type": "string",
@@ -31,11 +13,11 @@
       "$description": "translations.json#/div_wrap_content_size_constrained"
     },
     "min_size": {
-      "$ref": "#/definitions/constraint_size",
+      "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_min"
     },
     "max_size": {
-      "$ref": "#/definitions/constraint_size",
+      "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_max"
     }
   },
