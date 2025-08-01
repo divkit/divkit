@@ -37,7 +37,7 @@ internal abstract class DivCollectionViewHolder(
                 (child as? DivHolderView<*>)?.bindingContext?.expressionResolver?.let {
                     DivComparator.areDivsReplaceable(oldDiv, div, it, resolver)
                 } == true
-            } ?: createChildView(bindingContext, div)
+            } ?: createChildView(bindingContext, div).also { viewWrapper.addView(it) }
 
         oldDiv = div
 
@@ -50,16 +50,17 @@ internal abstract class DivCollectionViewHolder(
         )
 
         divBinder.bind(bindingContext, childView, div, path)
+        updateWrapperLayoutParams(childView)
         divView.runtimeStore.showWarningIfNeeded(div.value())
     }
+
+    protected open fun updateWrapperLayoutParams(childView: View) = Unit
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {
         oldDiv?.let { logReuseError() }
 
         viewWrapper.releaseAndRemoveChildren(bindingContext.divView)
-        return viewCreator.create(div, bindingContext.expressionResolver).also {
-            viewWrapper.addView(it)
-        }
+        return viewCreator.create(div, bindingContext.expressionResolver)
     }
 
     fun updateState() {

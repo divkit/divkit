@@ -66,7 +66,7 @@ internal class DivGalleryItemLayout(
 }
 
 private fun LayoutParams.setBy(other: LayoutParams?): LayoutParams {
-    if (other == null) {
+    if (other == null || this == other) {
         return this
     }
 
@@ -91,4 +91,3 @@ private fun LayoutParams.setBy(other: LayoutParams?): LayoutParams {
 
     return this
 }
-
