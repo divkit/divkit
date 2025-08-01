@@ -7,6 +7,7 @@
 * Downgraded androidx-appcompat library to 1.6.1.
 * Downgraded androidx-recyclerview to 1.3.0 and androidx-viewpager2 to 1.0.0.
 * Fixed accessibility focus on empty containers.
+* Fixed default typeface provider applying when no font properties defined in json.
 * Fixed items removing in pager with infinite scroll.
 
 # iOS Client:
