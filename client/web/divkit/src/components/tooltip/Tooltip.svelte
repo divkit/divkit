@@ -184,12 +184,12 @@
             return;
         }
 
-        closeByOutside(event);
+        closeByOutside();
     }
 
-    function closeByOutside(event: Event): void {
-        event.stopPropagation();
-        event.preventDefault();
+    function closeByOutside(event?: Event): void {
+        event?.stopPropagation();
+        event?.preventDefault();
 
         if (componentContext.getJsonWithVars(data.close_by_tap_outside) !== false) {
             openedTooltipsStack = openedTooltipsStack.filter(it => it !== tooltipNode);
@@ -279,7 +279,7 @@
 />
 
 <svelte:body
-    on:click={onOutClick}
+    on:click|capture={onOutClick}
 />
 
 {#if hasDialogSupport}
