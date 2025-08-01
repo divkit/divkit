@@ -8,6 +8,7 @@
 * Downgraded androidx-recyclerview to 1.3.0 and androidx-viewpager2 to 1.0.0.
 * Fixed accessibility focus on empty containers.
 * Fixed default typeface provider applying when no font properties defined in json.
+* Fixed gallery item measurement when `maxSize` specified.
 * Fixed items removing in pager with infinite scroll.
 
 # iOS Client:
