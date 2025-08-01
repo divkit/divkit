@@ -219,15 +219,15 @@ extension DivInput.KeyboardType {
   fileprivate var system: TextInputBlock.InputType {
     switch self {
     case .singleLineText, .multiLineText, .password:
-      return .default
+      .default
     case .phone:
-      return .keyboard(.phonePad)
+      .keyboard(.phonePad)
     case .number:
-      return .keyboard(.decimalPad)
+      .keyboard(.decimalPad)
     case .email:
-      return .keyboard(.emailAddress)
+      .keyboard(.emailAddress)
     case .uri:
-      return .keyboard(.URL)
+      .keyboard(.URL)
     }
   }
 

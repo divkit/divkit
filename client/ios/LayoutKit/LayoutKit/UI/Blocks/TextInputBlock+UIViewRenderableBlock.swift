@@ -650,11 +650,11 @@ extension TextInputBlockView {
       return false
     }
 
-    let updatedRange: Range<String.Index>
-    if text == "", range.isEmpty, range.lowerBound > currentText.startIndex {
-      updatedRange = currentText.index(before: range.lowerBound)..<range.lowerBound
+    let updatedRange: Range<String.Index> = if text == "", range.isEmpty,
+                                               range.lowerBound > currentText.startIndex {
+      currentText.index(before: range.lowerBound)..<range.lowerBound
     } else {
-      updatedRange = range
+      range
     }
 
     let updatedText = currentText.replacingCharactersInRange(updatedRange, withString: text).result

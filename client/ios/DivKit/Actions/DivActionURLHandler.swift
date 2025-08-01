@@ -14,9 +14,9 @@ public enum DivActionURLHandler {
     var isVariable: Bool {
       switch self {
       case .variable:
-        return true
+        true
       default:
-        return false
+        false
       }
     }
   }

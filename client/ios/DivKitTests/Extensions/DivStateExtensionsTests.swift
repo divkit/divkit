@@ -75,8 +75,8 @@ final class DivStateExtensionsTests: XCTestCase {
 
     let expectedPath = UIElementPath.root + 0 + "test_id" + "state_item_1" + "text"
 
-    assertEqual(
-      try block.firstStateElementPath(),
+    try assertEqual(
+      block.firstStateElementPath(),
       expectedPath
     )
   }
@@ -90,8 +90,8 @@ final class DivStateExtensionsTests: XCTestCase {
       )
     )
 
-    assertEqual(
-      try block.firstStateElementPath(),
+    try assertEqual(
+      block.firstStateElementPath(),
       .root + 0 + "test_id" + "state_item_1" + "text"
     )
   }
@@ -113,8 +113,8 @@ final class DivStateExtensionsTests: XCTestCase {
       context: context
     )
 
-    assertEqual(
-      try block.firstStateElementPath(),
+    try assertEqual(
+      block.firstStateElementPath(),
       .root + 0 + "test_id" + "state_item_2" + "text"
     )
   }
@@ -150,12 +150,12 @@ final class DivStateExtensionsTests: XCTestCase {
       return textBlock.path
     }
 
-    assertEqual(
-      try getPathForText(index: 0),
+    try assertEqual(
+      getPathForText(index: 0),
       .root + 0 + "container" + 0 + "test_prototype_id" + "state_item_1" + "text"
     )
-    assertEqual(
-      try getPathForText(index: 1),
+    try assertEqual(
+      getPathForText(index: 1),
       .root + 0 + "container" + 1 + "test_prototype_id" + "state_item_1" + "text"
     )
   }

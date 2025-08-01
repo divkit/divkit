@@ -63,9 +63,9 @@ extension DivAccessibility {
     switch type {
     case .checkbox:
       // voice over sounds this as "checked" / "unchecked" for switchButton trait
-      return resolveIsChecked(resolver) == true ? "1" : "0"
+      resolveIsChecked(resolver) == true ? "1" : "0"
     default:
-      return resolveStateDescription(resolver)
+      resolveStateDescription(resolver)
     }
   }
 }

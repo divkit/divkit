@@ -467,8 +467,8 @@ extension UIView {
       height: bounds.height
     )
 
-    [leadingMaskRect, trailingMaskRect, bounds].forEach {
-      path.addRect($0)
+    for item in [leadingMaskRect, trailingMaskRect, bounds] {
+      path.addRect(item)
     }
     shapeLayer.path = path
     shapeLayer.fillRule = CAShapeLayerFillRule.evenOdd

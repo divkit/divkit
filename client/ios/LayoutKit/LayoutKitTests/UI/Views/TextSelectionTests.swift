@@ -15,10 +15,10 @@ final class TextSelectionTests: XCTestCase {
       ), // Select second word
     ]
 
-    results.forEach {
+    for item in results {
       XCTAssertEqual(
-        makeSelection(point: $0.value).range.lowerBound,
-        $0.result
+        makeSelection(point: item.value).range.lowerBound,
+        item.result
       )
     }
   }
@@ -35,10 +35,10 @@ final class TextSelectionTests: XCTestCase {
       ), // Select second word
     ]
 
-    results.forEach {
+    for item in results {
       XCTAssertEqual(
-        makeSelection(point: $0.value).range.upperBound,
-        $0.result
+        makeSelection(point: item.value).range.upperBound,
+        item.result
       )
     }
   }
@@ -64,12 +64,12 @@ final class TextSelectionTests: XCTestCase {
     let selection = makeSelection(point: point1) // Select first word of text
     selection.setActivePointer(to: point1) // Set left pointer active
 
-    resultSteps.enumerated().forEach {
-      selection.moveSelection($0.offset)
+    for resultStep in resultSteps.enumerated() {
+      selection.moveSelection(resultStep.offset)
 
       XCTAssertEqual(
         selection.getSelectedText(),
-        $0.element
+        resultStep.element
       )
     }
   }
@@ -89,12 +89,12 @@ final class TextSelectionTests: XCTestCase {
     selection.setActivePointer(to: point2) // Set right pointer active
     let startIndex = words[0].count
 
-    resultSteps.enumerated().forEach {
-      selection.moveSelection(startIndex - $0.offset)
+    for resultStep in resultSteps.enumerated() {
+      selection.moveSelection(startIndex - resultStep.offset)
 
       XCTAssertEqual(
         selection.getSelectedText(),
-        $0.element
+        resultStep.element
       )
     }
   }

@@ -42,9 +42,9 @@ public final class DivBlockStateStorage {
       let dict = Dictionary(
         _states.compactMap { key, value in
           if let path = key.path {
-            return (path, value)
+            (path, value)
           } else {
-            return nil
+            nil
           }
         },
         uniquingKeysWith: { _, new in new }

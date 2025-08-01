@@ -39,7 +39,7 @@ extension DivData {
     let isPatchApplied = !isTransactional || allChangesApplied
 
     if isPatchApplied {
-      changedElementIds.forEach { id in
+      for id in changedElementIds {
         context.triggersStorage?.reset(elementId: id)
       }
     }

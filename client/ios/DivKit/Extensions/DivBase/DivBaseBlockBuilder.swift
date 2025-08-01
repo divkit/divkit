@@ -37,30 +37,24 @@ final class DivBaseBlockBuilder {
 
   private lazy var border = isFocused ? div.focus?.border ?? div.border : div.border
 
-  private lazy var boundary: BoundaryTrait? = {
-    if !clipToBounds {
-      .noClip
-    } else if let border {
-      .clipCorner(border.resolveCornerRadii(expressionResolver))
-    } else {
-      nil
-    }
-  }()
+  private lazy var boundary: BoundaryTrait? = if !clipToBounds {
+    .noClip
+  } else if let border {
+    .clipCorner(border.resolveCornerRadii(expressionResolver))
+  } else {
+    nil
+  }
 
   private lazy var shadow: BlockShadow? = border?.resolveShadow(expressionResolver)
 
-  private lazy var finalClipToBounds: Bool = {
-    [nil, 0.0].contains(rotation) && shadow == nil
-  }()
+  private lazy var finalClipToBounds: Bool = [nil, 0.0].contains(rotation) && shadow == nil
 
-  private lazy var block: Block = {
-    switch visibility {
-    case let .visible(block, _), let .invisible(block):
-      block
-    case .gone:
-      makeGoneBlock(div: div)
-    }
-  }()
+  private lazy var block: Block = switch visibility {
+  case let .visible(block, _), let .invisible(block):
+    block
+  case .gone:
+    makeGoneBlock(div: div)
+  }
 
   init(
     context: DivBlockModelingContext,
@@ -267,13 +261,13 @@ final class DivBaseBlockBuilder {
       customParams: customAccessibilityParams
     )
 
-    block = block
+    block = try block
       .addingDecorations(
         boundary: boundary,
         border: border?.resolveBorder(expressionResolver),
         shadow: shadow,
         visibilityParams: visibilityParams,
-        tooltips: try div.tooltips.makeTooltips(context: context),
+        tooltips: div.tooltips.makeTooltips(context: context),
         accessibilityElement: accessibilityElement,
         isFocused: isFocused
       )

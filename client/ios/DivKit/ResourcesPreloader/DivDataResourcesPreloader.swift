@@ -43,7 +43,7 @@ public final class DivDataResourcesPreloader {
 
     var successes = 0
     var failures = 0
-    validURLs.forEach { url in
+    for url in validURLs {
       _ = resourceRequester.getData(from: url) { result in
         switch result {
         case .success: successes += 1
@@ -81,20 +81,20 @@ extension DivData {
       result.append(transform(div, divContext))
 
       if let container = div.value as? DivContainer, let itemBuilder = container.itemBuilder {
-        itemBuilder.makeItemDivAndContexts(context: divContext).forEach { div, itemContext in
+        for (div, itemContext) in itemBuilder.makeItemDivAndContexts(context: divContext) {
           traverse(div: div, divContext: itemContext)
         }
       }
 
-      div.children.forEach {
-        let childContext = $0.value.modifiedContextParentPath(divContext)
-        traverse(div: $0, divContext: childContext)
+      for child in div.children {
+        let childContext = child.value.modifiedContextParentPath(divContext)
+        traverse(div: child, divContext: childContext)
       }
     }
-    states.map(\.div).forEach {
-      let stateContext = $0.value.modifiedContextParentPath(context)
-      $0.value.setupContextWithVariablesAndFunctions(context: stateContext)
-      traverse(div: $0, divContext: stateContext)
+    for state in states.map(\.div) {
+      let stateContext = state.value.modifiedContextParentPath(context)
+      state.value.setupContextWithVariablesAndFunctions(context: stateContext)
+      traverse(div: state, divContext: stateContext)
     }
     return result
   }

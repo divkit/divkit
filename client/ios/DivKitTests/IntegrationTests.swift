@@ -68,8 +68,8 @@ private func runTest(_ testData: IntegrationTestData) async {
   }
 
   let task = Task { @MainActor in
-    testCase.expected.forEach {
-      switch $0 {
+    for item in testCase.expected {
+      switch item {
       case let .variable(name, value):
         let variableValue = divkitComponents.variablesStorage.getVariableValue(
           cardId: cardId,
@@ -167,7 +167,7 @@ private enum Expected: Decodable {
       let variableName = try container.decode(String.self, forKey: .variableName)
       self = .variable(variableName, variable)
     case "error":
-      self = .error(try container.decode(String.self, forKey: .value))
+      self = try .error(container.decode(String.self, forKey: .value))
     default:
       throw DecodingError.valueNotFound(
         String.self,
@@ -229,26 +229,26 @@ extension ExpectedValue {
   fileprivate var divVariableValue: DivVariableValue? {
     switch self {
     case let .string(value):
-      return .string(value)
+      .string(value)
     case let .double(value):
-      return .number(value)
+      .number(value)
     case let .integer(value):
-      return .integer(value)
+      .integer(value)
     case let .bool(value):
-      return .bool(value)
+      .bool(value)
     case let .color(value):
-      return .color(value)
+      .color(value)
     case let .url(value):
-      return .url(value)
+      .url(value)
     case let .datetime(value):
-      return .string(value.formatString)
+      .string(value.formatString)
     case let .array(value):
-      return .array(value)
+      .array(value)
     case let .dict(value):
-      return .dict(value)
+      .dict(value)
     case let .unorderedArray(value):
-      return .array(value)
-    case .error: return nil
+      .array(value)
+    case .error: nil
     }
   }
 }

@@ -29,9 +29,9 @@ extension DivBase {
       case .gone:
         return .gone
       case .invisible:
-        return .invisible(try makeBlock())
+        return try .invisible(makeBlock())
       case .visible:
-        return .visible(try makeBlock(), alpha: alpha)
+        return try .visible(makeBlock(), alpha: alpha)
       }
     }()
 

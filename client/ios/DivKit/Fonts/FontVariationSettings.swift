@@ -44,12 +44,14 @@ extension Font {
 
 #if os(iOS) || os(tvOS)
 import UIKit
+
 typealias FontDescriptor = UIFontDescriptor
 private func makeFont(descriptor: FontDescriptor, size: CGFloat) -> Font {
   Font(descriptor: descriptor, size: size)
 }
 #else
 import AppKit
+
 typealias FontDescriptor = NSFontDescriptor
 private func makeFont(descriptor: FontDescriptor, size: CGFloat) -> Font {
   Font(descriptor: descriptor, size: size)!

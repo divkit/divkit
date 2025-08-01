@@ -62,9 +62,9 @@ extension DivShapeDrawable {
   func resolveWidth(_ context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
-      return CGFloat(rectangle.itemWidth.resolveValue(context.expressionResolver) ?? 0)
+      CGFloat(rectangle.itemWidth.resolveValue(context.expressionResolver) ?? 0)
     case let .divCircleShape(circle):
-      return CGFloat(circle.radius.resolveValue(context.expressionResolver) ?? 0) * 2
+      CGFloat(circle.radius.resolveValue(context.expressionResolver) ?? 0) * 2
     }
   }
 

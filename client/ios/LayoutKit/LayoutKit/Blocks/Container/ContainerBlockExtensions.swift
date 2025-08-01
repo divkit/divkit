@@ -115,9 +115,9 @@ extension ContainerBlock.LayoutDirection {
   var cast: ScrollDirection {
     switch self {
     case .horizontal:
-      return .horizontal
+      .horizontal
     case .vertical:
-      return .vertical
+      .vertical
     }
   }
 }

@@ -116,7 +116,7 @@ enum Subexpression {
         dynamicVariables.append(variableName)
       }
       for subexpression in subexpressions {
-        dynamicVariables.append(contentsOf: try subexpression.extractDynamicVariableNames(context))
+        try dynamicVariables.append(contentsOf: subexpression.extractDynamicVariableNames(context))
       }
       return dynamicVariables
     }

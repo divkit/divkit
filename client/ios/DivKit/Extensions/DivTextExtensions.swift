@@ -402,15 +402,15 @@ extension DivText.Range {
   ) -> RangeVerticalAlignmentAttribute? {
     switch resolveAlignmentVertical(resolver) {
     case .top:
-      return .init(verticalAlignment: .top, range: range)
+      .init(verticalAlignment: .top, range: range)
     case .center:
-      return .init(verticalAlignment: .center, range: range)
+      .init(verticalAlignment: .center, range: range)
     case .bottom:
-      return .init(verticalAlignment: .bottom, range: range)
+      .init(verticalAlignment: .bottom, range: range)
     case .baseline:
-      return .init(verticalAlignment: .baseline, range: range)
+      .init(verticalAlignment: .baseline, range: range)
     case .none:
-      return nil
+      nil
     }
   }
 

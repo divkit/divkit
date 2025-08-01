@@ -1,5 +1,5 @@
-import VGSL
 import Foundation
+import VGSL
 
 public final class GradientBlock: BlockWithTraits {
   public let gradient: Gradient
