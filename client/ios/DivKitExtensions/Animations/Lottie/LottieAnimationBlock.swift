@@ -29,9 +29,6 @@ final class LottieAnimationBlock: SizeForwardingBlock {
     self.isPlaying = isPlaying
   }
 
-  let intrinsicContentWidth: CGFloat = 0
-  func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat { 0 }
-
   func getImageHolders() -> [ImageHolder] { [] }
 
   func equals(_ other: Block) -> Bool {
