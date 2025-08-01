@@ -17,6 +17,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSizeUnit
 import org.json.JSONObject
@@ -40,6 +41,7 @@ internal fun <T> T.observeBaseTextProperties(
     oldFontWeight: Expression<DivFontWeight>?,
     oldFontWeightValue: Expression<Long>?,
     oldFontVariationSettings: Expression<JSONObject>?,
+    oldDiv: DivBase?,
     typefaceResolver: DivTypefaceResolver,
     resolver: ExpressionResolver,
 ) where T : TextView, T : FixedLineHeightView, T : ExpressionSubscriber {
@@ -56,6 +58,7 @@ internal fun <T> T.observeBaseTextProperties(
         oldFontWeight,
         oldFontWeightValue,
         oldFontVariationSettings,
+        oldDiv,
         typefaceResolver,
         resolver,
     )
@@ -167,10 +170,11 @@ internal fun <T> T.observeTypeface(
     oldFontWeight: Expression<DivFontWeight>?,
     oldFontWeightValue: Expression<Long>?,
     oldFontVariationSettings: Expression<JSONObject>?,
+    oldDiv: DivBase?,
     typefaceResolver: DivTypefaceResolver,
     resolver: ExpressionResolver,
 ) where T : TextView, T : ExpressionSubscriber {
-    if (newFontFamily.equalsToConstant(oldFontFamily) &&
+    if (oldDiv != null && newFontFamily.equalsToConstant(oldFontFamily) &&
         newFontWeight.equalsToConstant(oldFontWeight) &&
         newFontWeightValue.equalsToConstant(oldFontWeightValue) &&
         (!supportFontVariations || newFontVariationSettings.equalsToConstant(oldFontVariationSettings))) {
