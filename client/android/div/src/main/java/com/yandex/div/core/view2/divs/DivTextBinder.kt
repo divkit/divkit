@@ -65,7 +65,7 @@ internal class DivTextBinder @Inject constructor(
     private val spannedTextBuilder: SpannedTextBuilder,
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
 ) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
-    
+
     override fun DivLineHeightTextView.bind(bindingContext: BindingContext, div: DivText, oldDiv: DivText?) {
         configureView(bindingContext, this)
 
@@ -261,6 +261,7 @@ internal class DivTextBinder @Inject constructor(
             oldDiv?.fontWeight,
             oldDiv?.fontWeightValue,
             oldDiv?.fontVariationSettings,
+            oldDiv,
             typefaceResolver,
             resolver,
         )

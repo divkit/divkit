@@ -140,6 +140,7 @@ internal class DivSelectBinder @Inject constructor(
             oldDiv?.fontWeight,
             oldDiv?.fontWeightValue,
             oldDiv?.fontVariationSettings,
+            oldDiv,
             typefaceResolver,
             resolver,
         )

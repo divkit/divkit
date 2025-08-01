@@ -187,6 +187,7 @@ internal class DivInputBinder @Inject constructor(
             oldDiv?.fontWeight,
             oldDiv?.fontWeightValue,
             oldDiv?.fontVariationSettings,
+            oldDiv,
             typefaceResolver,
             resolver,
         )
