@@ -2,22 +2,15 @@ package com.yandex.div.core.view2
 
 import android.os.Build
 import android.view.View
-import android.view.View.OnLayoutChangeListener
-import android.view.ViewGroup
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.view.children
-import androidx.core.view.isVisible
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivCollectionHolder
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -174,6 +167,7 @@ internal class DivAccessibilityBinder @Inject constructor(
 
         val callback = { _: Any ->
             applyDescriptionAndHint(newDescription?.evaluate(resolver), newHint?.evaluate(resolver))
+            applyMode(newDiv.accessibility?.mode?.evaluate(resolver))
         }
         subscriber.addSubscription(newDescription?.observe(resolver, callback))
         subscriber.addSubscription(newHint?.observe(resolver, callback))
@@ -183,6 +177,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         contentDescription = when {
             description == null -> hint
             hint == null -> description
+            description == hint -> description
             else -> "$description\n$hint"
         }
     }
@@ -210,57 +205,12 @@ internal class DivAccessibilityBinder @Inject constructor(
     }
 
     private fun View.applyMode(mode: DivAccessibility.Mode? = null) {
-        if (this !is ViewGroup) {
-            importantForAccessibility = when {
-                mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-                !contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                else -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
-            }
-            return
+        ViewCompat.setScreenReaderFocusable(this, mode == DivAccessibility.Mode.MERGE)
+        importantForAccessibility = when {
+            mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            !contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            else -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
         }
-
-        if (this !is DivCollectionHolder) return
-
-        if (mode == DivAccessibility.Mode.MERGE) {
-            updateContainerMode()
-            if (accessibilityObserver != null) return
-
-            val observer = createContentObserver()
-            expressionSubscriber.addSubscription(observer)
-            accessibilityObserver = observer
-            return
-        }
-
-        accessibilityObserver?.close()
-        accessibilityObserver = null
-
-        ViewCompat.setScreenReaderFocusable(this, false)
-        importantForAccessibility = if (mode == DivAccessibility.Mode.EXCLUDE) {
-            View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-        } else {
-            View.IMPORTANT_FOR_ACCESSIBILITY_NO
-        }
-    }
-
-    private fun ViewGroup.createContentObserver() = object : OnLayoutChangeListener, Disposable {
-
-        init {
-            addOnLayoutChangeListener(this)
-        }
-
-        override fun onLayoutChange(
-            v: View?, left: Int, top: Int, right: Int, bottom: Int,
-            oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
-        ) = updateContainerMode()
-
-        override fun close() = removeOnLayoutChangeListener(this)
-    }
-
-    private fun ViewGroup.updateContainerMode() {
-        val hasContent = children.any { it.isVisible }
-        ViewCompat.setScreenReaderFocusable(this, hasContent)
-        importantForAccessibility =
-            if (hasContent) View.IMPORTANT_FOR_ACCESSIBILITY_YES else View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     // endregion
