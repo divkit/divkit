@@ -53,6 +53,7 @@
       "$ref": "common.json#/boolean_int",
       "$description": "translations.json#/div_accessibility_is_checked",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -80,6 +81,7 @@
         "ios"
       ],
       "unsupported_platforms": {
+        "android": "iOS-specific functionality, no such feature",
         "web": "iOS-specific functionality, no such feature"
       }
     }

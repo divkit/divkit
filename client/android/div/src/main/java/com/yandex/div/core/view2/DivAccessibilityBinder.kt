@@ -57,7 +57,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         view.bindDescriptionAndHint(newDiv, oldDiv, resolver, subscriber)
         view.bindMode(newDiv, oldDiv, resolver, subscriber)
         view.bindStateDescription(newDiv, oldDiv, resolver, subscriber)
-        //TODO: bind 'muteAfterAction' property
+        view.bindCheckedState(newDiv, oldDiv, resolver, subscriber)
     }
 
     // region Type
@@ -85,16 +85,11 @@ internal class DivAccessibilityBinder @Inject constructor(
         val heading = type == AccessibilityType.HEADER
         val autoClassName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) view.accessibilityClassName else null
         if ((className.isEmpty() || className == autoClassName) && !heading) return null
-
-        return object : AccessibilityDelegateCompat() {
-            override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                super.onInitializeAccessibilityNodeInfo(host, info)
-                if (className.isNotEmpty()) {
-                    info.className = className
-                }
-                info.isHeading = heading
-            }
-        }
+        return ExtensiveAccessibilityDelegate(
+                className = className,
+                isHeading = heading,
+                isCheckable = (type == AccessibilityType.CHECK_BOX || type == AccessibilityType.RADIO_BUTTON),
+            )
     }
 
     private fun DivAccessibility.Type.toAccessibilityType(div: DivBase): AccessibilityType {
@@ -236,6 +231,37 @@ internal class DivAccessibilityBinder @Inject constructor(
     private fun View.applyStateDescription(stateDescription: String?) =
         ViewCompat.setStateDescription(this, stateDescription)
 
+    // endregion
+
+    // region Is checked
+
+    private fun View.bindCheckedState(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newCheckedState = newDiv.accessibility?.isChecked
+        if (newCheckedState.equalsToConstant(oldDiv?.accessibility?.isChecked)) return
+
+        applyCheckedState(divBase = newDiv, isChecked = newCheckedState?.evaluate(resolver))
+
+        if (newCheckedState.isConstantOrNull()) return
+
+        subscriber.addSubscription(newCheckedState?.observe(resolver) { applyCheckedState(newDiv, it) })
+
+    }
+
+    private fun View.applyCheckedState(divBase: DivBase, isChecked: Boolean?) {
+        val type = divBase.accessibility?.type?.toAccessibilityType(divBase)
+        if (type != AccessibilityType.CHECK_BOX && type != AccessibilityType.RADIO_BUTTON) return
+
+        val currentDelegate = ViewCompat.getAccessibilityDelegate(this) as? ExtensiveAccessibilityDelegate
+        currentDelegate?.setChecked(isChecked)
+    }
+
+    // endregion
+
     private enum class AccessibilityType {
         NONE,
         BUTTON,
@@ -251,5 +277,29 @@ internal class DivAccessibilityBinder @Inject constructor(
         RADIO_BUTTON,
         CHECK_BOX,
         CONTAINER,
+    }
+}
+
+private class ExtensiveAccessibilityDelegate(
+    private val className: String,
+    private val isHeading: Boolean,
+    private val isCheckable: Boolean
+) : AccessibilityDelegateCompat() {
+
+    private var isChecked: Boolean? = null
+
+    fun setChecked(checked: Boolean?) {
+        isChecked = checked
+    }
+
+    override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+        super.onInitializeAccessibilityNodeInfo(host, info)
+        if (className.isNotEmpty()) info.className = className
+        info.isHeading = isHeading
+
+        if (isCheckable) {
+            info.isCheckable = true
+            isChecked?.let { info.isChecked = it }
+        }
     }
 }
