@@ -74,7 +74,7 @@
               "actions": [
                 {
                   "log_id": "perform_restart_of_animation",
-                  "url": "div-demo-action://set_data?path=animations/rive_oneShot.json"
+                  "url": "div-demo-action://set_data?path=animations/rive/rive_restart_one_shot.json"
                 }
               ]
             }

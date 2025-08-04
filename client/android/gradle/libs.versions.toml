@@ -32,6 +32,7 @@ okhttp = "4.12.0"
 okio = "3.9.1"
 picasso = "2.8"
 protobuf = "4.28.2"
+rive = "10.3.1"
 robolectric = "4.11.1"
 stetho = "1.6.0"
 unmock = "0.9.0"
@@ -172,7 +173,7 @@ picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 protobuf = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 
-rive = { module = "app.rive:rive-android", version = "10.1.0" }
+rive = { module = "app.rive:rive-android", version.ref = "rive" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

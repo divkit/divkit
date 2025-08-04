@@ -2222,6 +2222,7 @@
       "title": "Rive animations",
       "case_id": 150,
       "platforms": [
+        "android",
         "ios"
       ],
       "expected_results": [
@@ -2232,6 +2233,7 @@
     {
       "title": "Rive gallery",
       "platforms": [
+        "android",
         "ios"
       ],
       "expected_results": [
@@ -2244,6 +2246,7 @@
       "title": "Rive animation (loop=pingPong)",
       "case_id": 149,
       "platforms": [
+        "android",
         "ios"
       ],
       "expected_results": [
@@ -2255,6 +2258,7 @@
       "title": "Rive animation (loop=oneShot)",
       "case_id": 148,
       "platforms": [
+        "android",
         "ios"
       ],
       "steps": [

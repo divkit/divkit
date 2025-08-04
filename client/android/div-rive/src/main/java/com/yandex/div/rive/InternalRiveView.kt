@@ -89,28 +89,20 @@ internal class InternalRiveView(context: Context) : RiveAnimationView(context) {
             fit = fit,
             alignment = alignment,
             loop = loop,
-            autoplay = true
+            autoplay = true,
         )
-        (renderer as? InternalArtboardRenderer)?.setHasAnimation(true)
         // handle 'wrap_content' size
         requestLayout()
     }
 
     internal class InternalArtboardRenderer(
-        controller: RiveFileController
+        private val controller: RiveFileController
     ) : RiveArtboardRenderer(false, Rive.defaultRendererType, controller) {
-
-        private var hasAnimation = false
-
-        @MainThread
-        fun setHasAnimation(hasAnimation: Boolean) {
-            this.hasAnimation = hasAnimation
-        }
 
         // Sometimes advance() method is called from cpp library before any animation is set.
         // If there is no animation, this method will cause the Surface to be released.
         override fun advance(elapsed: Float) {
-            if (!hasAnimation) return
+            if (!controller.isAdvancing) return
             super.advance(elapsed)
         }
     }
