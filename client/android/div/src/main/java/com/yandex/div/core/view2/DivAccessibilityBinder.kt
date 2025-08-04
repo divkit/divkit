@@ -11,6 +11,8 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivGifImageView
+import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -208,7 +210,9 @@ internal class DivAccessibilityBinder @Inject constructor(
         ViewCompat.setScreenReaderFocusable(this, mode == DivAccessibility.Mode.MERGE)
         importantForAccessibility = when {
             mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-            !contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+            mode == DivAccessibility.Mode.MERGE -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            this is DivImageView || this is DivGifImageView -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
             else -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
         }
     }
