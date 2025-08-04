@@ -899,6 +899,10 @@
     "en": "Declaration of variables that can be used in an element.",
     "ru": "Объявление переменных, которые могут быть использованы в элементе."
   },
+  "div_data_properties": {
+    "en": "Declaration of properties that use two-way binding and can be used in an element.",
+    "ru": "Объявление свойств, которые используют двусторонний биндинг и могут быть использованы в элементе."
+  },
   "div_dimension": {
     "en": "Element dimension value.",
     "ru": "Значение измерения элемента."
@@ -2758,6 +2762,30 @@
   "div_variable_value": {
     "en": "Value. Supports expressions for variable initialization.",
     "ru": "Значение. Поддерживает выражения для инициализации переменных."
+  },
+  "div_property": {
+    "en": "A property that is handeled with get and set methods.",
+    "ru": "Свойство, обращение к которому происходит через методы get и set."
+  },
+  "div_property_value": {
+    "en": "Value. Supports expressions for property initialization.",
+    "ru": "Значение. Поддерживает выражения для инициализации свойств."
+  },
+  "div_property_new_value_variable_name": {
+    "en": "Name for accessing the data passed to the setter.",
+    "ru": "Имя для обращения к данным, передающимся в сеттер."
+  },
+  "div_property_value_type": {
+    "en": "Return property value type.",
+    "ru": "Тип возвращаемого значения свойства."
+  },
+  "div_property_name": {
+    "en": "Property name.",
+    "ru": "Название свойства."
+  },
+  "div_property_action": {
+    "en": "Action when setting a property.",
+    "ru": "Действие при установке свойства."
   },
   "div_video": {
     "en": "Video.",

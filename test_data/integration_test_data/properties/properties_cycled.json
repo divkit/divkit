@@ -1,0 +1,59 @@
+{
+  "description": "Decl properties linked with cicular expression.",
+  "div_data": {
+    "card": {
+      "log_id": "properties-cycled",
+      "variables": [
+        {
+          "name": "first",
+          "type": "property",
+          "value_type": "string",
+          "get": "@{second}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "url": "div-action://set_variable?name=second&value=@{second}}"
+            }
+          ]
+        },
+        {
+          "name": "second",
+          "type": "property",
+          "value_type": "string",
+          "get": "@{first}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "url": "div-action://set_variable?name=first&value=@{first}}"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{first}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'second' is missing. Expression: @{second}"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

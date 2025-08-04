@@ -1,0 +1,51 @@
+{
+  "description": "Decl property with cicular expression.",
+  "div_data": {
+    "card": {
+      "log_id": "property-cycle",
+      "variables": [
+        {
+          "name": "title",
+          "type": "property",
+          "value_type": "string",
+          "get": "@{title}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "url": "div-action://set_variable?name=string_var&value=@{title}}"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{title}"
+              },
+              {
+                "type": "input",
+                "text_variable": "title"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'title' is missing. Expression: @{title}"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

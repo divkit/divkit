@@ -1,0 +1,105 @@
+{
+  "description": "Property setting integer value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-integer-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "counter": 5
+          }
+        },
+        {
+          "name": "counter_prop",
+          "type": "property",
+          "value_type": "integer",
+          "get": "@{getIntegerFromDict(source, 'counter')}",
+          "set": [
+            {
+              "log_id": "set_action_int",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "counter",
+                "value": {
+                  "type": "integer",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Value: @{counter_prop}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "counter": 5
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "counter_prop",
+          "value": {
+            "type": "integer",
+            "value": 5
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=counter_prop&value=10",
+          "log_id": "set_int_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "counter": 10
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "counter_prop",
+          "value": {
+            "type": "integer",
+            "value": 10
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

@@ -78,5 +78,6 @@ internal fun DivVariable.toVariable(resolver: ExpressionResolver): Variable {
                 this.value.name, this.value.value.evaluate(resolver)
             )
         }
+        is DivVariable.Property -> TODO("Support property variables")
     }
 }

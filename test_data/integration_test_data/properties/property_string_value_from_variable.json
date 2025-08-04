@@ -1,0 +1,95 @@
+{
+  "description": "Property setting string variable",
+  "div_data": {
+    "card": {
+      "log_id": "property-string-value-from-variable",
+      "variables": [
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "title",
+          "type": "property",
+          "value_type": "string",
+          "get": "@{string_var}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "url": "div-action://set_variable?name=string_var&value=set"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{title}"
+              },
+              {
+                "type": "input",
+                "text_variable": "title"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "string_var",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "title",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=title&value=set",
+          "log_id": "set_string_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "string_var",
+          "value": {
+            "type": "string",
+            "value": "set"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "title",
+          "value": {
+            "type": "string",
+            "value": "set"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

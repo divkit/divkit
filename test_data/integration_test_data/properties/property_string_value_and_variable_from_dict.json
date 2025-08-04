@@ -1,0 +1,137 @@
+{
+  "description": "Property setting string value and variable from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-string-value-and-variable-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "title": "Title",
+            "subtitle": "Subtitle"
+          }
+        },
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "title",
+          "type": "property",
+          "value_type": "string",
+          "get": "@{getStringFromDict(source, 'title')}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "title",
+                "value": {
+                  "type": "string",
+                  "value": "@{new_value}"
+                }
+              }
+            },
+            {
+              "url": "div-action://set_variable?name=string_var&value=@{new_value}",
+              "log_id": "set_string_var"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{title}"
+              },
+              {
+                "type": "input",
+                "text_variable": "title"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "string_var",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "title": "Title",
+              "subtitle": "Subtitle"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "title",
+          "value": {
+            "type": "string",
+            "value": "Title"
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=title&value=New Value",
+          "log_id": "set_string_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "string_var",
+          "value": {
+            "type": "string",
+            "value": "New Value"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "title": "New Value",
+              "subtitle": "Subtitle"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "title",
+          "value": {
+            "type": "string",
+            "value": "New Value"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

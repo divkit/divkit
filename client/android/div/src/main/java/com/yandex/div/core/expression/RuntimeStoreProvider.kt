@@ -82,6 +82,7 @@ internal class RuntimeStoreProvider @Inject constructor(
                 is DivVariable.Url -> existingVariable is Variable.UrlVariable
                 is DivVariable.Dict -> existingVariable is Variable.DictVariable
                 is DivVariable.Array -> existingVariable is Variable.ArrayVariable
+                is DivVariable.Property -> existingVariable is Variable.PropertyVariable
             }.apply { /*exhaustive*/ }
 
             // This usually happens when you're using same DivDataTag for DivData
@@ -112,5 +113,6 @@ internal val DivVariable.name: String
             is DivVariable.Url -> this.value.name
             is DivVariable.Dict -> this.value.name
             is DivVariable.Array -> this.value.name
+            is DivVariable.Property -> this.value.name
         }
     }

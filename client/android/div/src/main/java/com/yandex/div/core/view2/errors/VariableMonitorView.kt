@@ -214,7 +214,7 @@ private fun Variable.toModel(path: String) = VariableModel(
 )
 
 private fun Variable.getType() =
-    when(this) {
+    when (this) {
         is Variable.ArrayVariable -> "array"
         is Variable.BooleanVariable -> "boolean"
         is Variable.ColorVariable -> "color"
@@ -223,4 +223,5 @@ private fun Variable.getType() =
         is Variable.IntegerVariable -> "integer"
         is Variable.StringVariable -> "string"
         is Variable.UrlVariable -> "url"
+        is Variable.PropertyVariable -> TODO("Support property variables")
     }

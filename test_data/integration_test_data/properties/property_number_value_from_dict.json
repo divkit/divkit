@@ -1,0 +1,105 @@
+{
+  "description": "Property setting number value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-number-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "price": 99.99
+          }
+        },
+        {
+          "name": "price_prop",
+          "type": "property",
+          "value_type": "number",
+          "get": "@{getNumberFromDict(source, 'price')}",
+          "set": [
+            {
+              "log_id": "set_action_num",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "price",
+                "value": {
+                  "type": "number",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Price: @{price_prop}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "price": 99.99
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "price_prop",
+          "value": {
+            "type": "number",
+            "value": 99.99
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=price_prop&value=123.45",
+          "log_id": "set_num_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "price": 123.45
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "price_prop",
+          "value": {
+            "type": "number",
+            "value": 123.45
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

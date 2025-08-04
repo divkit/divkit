@@ -171,6 +171,10 @@ sealed class Variable {
         }
     }
 
+    class PropertyVariable(
+        override val name: String,
+    ): Variable()
+
     fun getValue(): Any {
         return when (this) {
             is StringVariable -> value
@@ -181,6 +185,7 @@ sealed class Variable {
             is UrlVariable -> value
             is DictVariable -> value
             is ArrayVariable -> value
+            is PropertyVariable -> TODO("Support property variables")
         }
     }
 
@@ -194,6 +199,7 @@ sealed class Variable {
             is UrlVariable -> defaultValue
             is DictVariable -> defaultValue
             is ArrayVariable -> defaultValue
+            is PropertyVariable -> TODO("Support property variables")
         }
     }
 
@@ -222,6 +228,7 @@ sealed class Variable {
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
             is ArrayVariable -> value = newValue.parseAsJsonArray()
+            is PropertyVariable -> TODO("Support property variables")
         }
     }
 
@@ -237,6 +244,7 @@ sealed class Variable {
             this is UrlVariable && from is UrlVariable -> this.value = from.value
             this is DictVariable && from is DictVariable -> this.value = from.value
             this is ArrayVariable && from is ArrayVariable -> this.value = from.value
+            this is PropertyVariable && from is PropertyVariable -> TODO("Support property variables")
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
         }
     }
@@ -255,6 +263,7 @@ sealed class Variable {
                 is UrlVariable -> value = newValue as Uri
                 is DictVariable -> value = newValue as JSONObject
                 is ArrayVariable -> value = newValue as JSONArray
+                is PropertyVariable -> TODO("Support property variables")
             }
         } catch (e: ClassCastException) {
             throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to $this")
@@ -330,6 +339,7 @@ sealed class Variable {
             is IntegerVariable -> com.yandex.div2.IntegerVariable(this.name, Expression.constant(this.value))
             is StringVariable -> com.yandex.div2.StrVariable(this.name, Expression.constant(this.value))
             is UrlVariable -> com.yandex.div2.UrlVariable(this.name, Expression.constant(this.value))
+            is PropertyVariable -> TODO("Support property variables")
         }
 
         return serializable.writeToJSON()

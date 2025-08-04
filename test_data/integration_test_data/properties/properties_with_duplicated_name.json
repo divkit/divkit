@@ -1,0 +1,47 @@
+{
+  "description": "Decl properties with duplicated name.",
+  "div_data": {
+    "card": {
+      "log_id": "properties-with-duplicated-name",
+      "variables": [
+        {
+          "name": "first",
+          "type": "property",
+          "value_type": "string",
+          "get": "hello"
+        },
+        {
+          "name": "first",
+          "type": "property",
+          "value_type": "string",
+          "get": "other"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{first}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Duplicate variable (name=first)"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

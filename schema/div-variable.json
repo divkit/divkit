@@ -202,6 +202,48 @@
         "value",
         "type"
       ]
+    },
+    "property_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_property",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_property_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "property"
+          ]
+        },
+        "value_type": {
+          "$ref": "div-evaluable-type.json",
+          "$desciption": "translations.json#/div_property_value_type"
+        },
+        "new_value_variable_name": {
+          "$ref": "div-variable-name.json",
+          "default_value": "new_value",
+          "$description": "translations.json#/div_property_new_value_variable_name"
+        },
+        "get": {
+          "type": "string",
+          "$description": "translations.json#/div_property_value"
+        },
+        "set": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_property_action"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "value_type",
+        "get"
+      ]
     }
   },
   "anyOf": [
@@ -228,6 +270,9 @@
     },
     {
       "$ref": "#/definitions/array_variable"
+    },
+    {
+      "$ref": "#/definitions/property_variable"
     }
   ]
 }

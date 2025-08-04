@@ -64,6 +64,7 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
 
                     is Variable.UrlVariable ->
                         checkValueAndCast<Uri>(newValue, view, variableName)?.let(::set)
+                    is Variable.PropertyVariable -> TODO("Support property variables")
                 }
             }
         }
