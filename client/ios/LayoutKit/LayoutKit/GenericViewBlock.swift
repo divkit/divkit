@@ -41,6 +41,18 @@ public final class GenericViewBlock: BlockWithTraits {
   public var widthTrait: LayoutTrait { width.layoutTrait }
   public var heightTrait: LayoutTrait { height.layoutTrait }
 
+  public var intrinsicContentWidth: CGFloat {
+    switch width {
+    case .resizable: 0
+    case let .fixed(width): width
+    case let .intrinsic(calculator): calculator.calculateWidth()
+    }
+  }
+
+  public var debugDescription: String {
+    "Generic: \(dbgStr(content.currentValue)), W:\(dbgStr(width)), H:\(dbgStr(height))"
+  }
+
   public init(
     lazyContent: Lazy<Content>,
     width: Trait,
@@ -81,14 +93,6 @@ public final class GenericViewBlock: BlockWithTraits {
     self.init(content: .layer(layer), width: width.trait, height: height.trait)
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    switch width {
-    case .resizable: 0
-    case let .fixed(width): width
-    case let .intrinsic(calculator): calculator.calculateWidth()
-    }
-  }
-
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch height {
     case .resizable: 0
@@ -108,9 +112,6 @@ public final class GenericViewBlock: BlockWithTraits {
 
   public func getImageHolders() -> [ImageHolder] { [] }
 
-  public var debugDescription: String {
-    "Generic: \(dbgStr(content.currentValue)), W:\(dbgStr(width)), H:\(dbgStr(height))"
-  }
 }
 
 extension GenericViewBlock: LayoutCachingDefaultImpl {}

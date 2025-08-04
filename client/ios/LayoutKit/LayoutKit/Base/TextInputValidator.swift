@@ -1,11 +1,11 @@
 import Foundation
 
 public final class TextInputValidator {
-  private let allowEmpty: Bool
-  private let validator: (String) -> Bool
-
   public let message: () -> String?
   public var isValid: Binding<Bool>
+
+  private let allowEmpty: Bool
+  private let validator: (String) -> Bool
 
   public init(
     isValid: Binding<Bool>,

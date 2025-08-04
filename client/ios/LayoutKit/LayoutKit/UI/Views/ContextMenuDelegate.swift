@@ -5,6 +5,7 @@ import VGSL
 final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
   private let contextMenu: ContextMenu
   private weak var view: UIView?
+
   public init(
     contextMenu: ContextMenu,
     view: UIView?
@@ -23,13 +24,6 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
       }
       return self.contextMenu.makeUIMenu(sender: sender)
     }
-  }
-
-  private func makeVC() -> UIViewController? {
-    let viewController = UIViewController(nibName: nil, bundle: nil)
-    viewController.view = contextMenu.preview.makeBlockView()
-    viewController.preferredContentSize = contextMenu.preview.intrinsicSize
-    return viewController
   }
 
   public func contextMenuInteraction(
@@ -51,6 +45,14 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     )
     return UITargetedPreview(view: UIView(), parameters: previewParameters, target: previewTarget)
   }
+
+  private func makeVC() -> UIViewController? {
+    let viewController = UIViewController(nibName: nil, bundle: nil)
+    viewController.view = contextMenu.preview.makeBlockView()
+    viewController.preferredContentSize = contextMenu.preview.intrinsicSize
+    return viewController
+  }
+
 }
 
 extension ContextMenu {

@@ -2,14 +2,14 @@
 import UIKit
 
 public final class BlockHostingView: UIView {
-  private var contentView: BlockView!
-
   public var block: UIViewRenderable! {
     didSet {
       contentView = block.reuse(contentView, superview: self)
       forceLayout()
     }
   }
+
+  private var contentView: BlockView!
 
   public override func layoutSubviews() {
     super.layoutSubviews()

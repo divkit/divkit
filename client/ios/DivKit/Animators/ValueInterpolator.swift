@@ -28,6 +28,7 @@ extension Double: BuildFromDivVariable {
 
 struct DoubleInterpolator: ValueInterpolator {
   typealias ValueType = Double
+
   func interpolate(from: Double, to: Double, progress: CGFloat) -> Double {
     from + (to - from) * progress
   }
@@ -49,6 +50,7 @@ extension Color: BuildFromDivVariable {
 
 struct ColorInterpolator: ValueInterpolator {
   typealias ValueType = Color
+
   func interpolate(from: Color, to: Color, progress: CGFloat) -> Color {
     guard let fromComponents = from.cgColor.components, let toComponents = to.cgColor.components,
           fromComponents.count >= 3, toComponents.count >= 3 else {

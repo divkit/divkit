@@ -4,6 +4,72 @@ import VGSL
 import XCTest
 
 final class DivViewSizeTests: XCTestCase {
+  private final class TestBlock: BlockWithTraits {
+    var widthTrait: LayoutKit.LayoutTrait
+
+    var heightTrait: LayoutKit.LayoutTrait
+
+    var intrinsicContentWidth: CGFloat
+
+    var debugDescription: String = ""
+
+    init(
+      widthTrait: LayoutTrait,
+      heightTrait: LayoutTrait,
+      intrinsicContentWidth: CGFloat
+    ) {
+      self.widthTrait = widthTrait
+      self.heightTrait = heightTrait
+      self.intrinsicContentWidth = intrinsicContentWidth
+    }
+
+    static func makeBlockView() -> LayoutKit.BlockView {
+      TestView()
+    }
+
+    func configureBlockView(
+      _: LayoutKit.BlockView,
+      observer _: LayoutKit.ElementStateObserver?,
+      overscrollDelegate _: VGSLUI.ScrollDelegate?,
+      renderingDelegate _: LayoutKit.RenderingDelegate?
+    ) {}
+
+    func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
+      0.0
+    }
+
+    func equals(_: LayoutKit.Block) -> Bool {
+      true
+    }
+
+    func canConfigureBlockView(_: LayoutKit.BlockView) -> Bool { false }
+
+    func getImageHolders() -> [VGSLUI.ImageHolder] {
+      []
+    }
+
+    func laidOut(for _: CGFloat) -> LayoutKit.Block {
+      self
+    }
+
+    func laidOut(for _: CGSize) -> LayoutKit.Block {
+      self
+    }
+
+    func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
+      self
+    }
+  }
+
+  private final class TestView: BlockView {
+    var block: TestBlock?
+
+    var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+    func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
+
+  }
+
   func test_sizeForParentViewSizeForWeightedBlock() {
     let weightedBlock = TestBlock(
       widthTrait: LayoutTrait.weighted(.default),
@@ -60,67 +126,4 @@ final class DivViewSizeTests: XCTestCase {
     XCTAssertTrue(size == CGSize(width: 500.0, height: 0.0))
   }
 
-  private final class TestBlock: BlockWithTraits {
-    init(
-      widthTrait: LayoutTrait,
-      heightTrait: LayoutTrait,
-      intrinsicContentWidth: CGFloat
-    ) {
-      self.widthTrait = widthTrait
-      self.heightTrait = heightTrait
-      self.intrinsicContentWidth = intrinsicContentWidth
-    }
-
-    func configureBlockView(
-      _: LayoutKit.BlockView,
-      observer _: LayoutKit.ElementStateObserver?,
-      overscrollDelegate _: VGSLUI.ScrollDelegate?,
-      renderingDelegate _: LayoutKit.RenderingDelegate?
-    ) {}
-
-    var widthTrait: LayoutKit.LayoutTrait
-
-    var heightTrait: LayoutKit.LayoutTrait
-
-    var intrinsicContentWidth: CGFloat
-
-    func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-      0.0
-    }
-
-    func equals(_: LayoutKit.Block) -> Bool {
-      true
-    }
-
-    var debugDescription: String = ""
-
-    static func makeBlockView() -> LayoutKit.BlockView {
-      TestView()
-    }
-
-    func canConfigureBlockView(_: LayoutKit.BlockView) -> Bool { false }
-
-    func getImageHolders() -> [VGSLUI.ImageHolder] {
-      []
-    }
-
-    func laidOut(for _: CGFloat) -> LayoutKit.Block {
-      self
-    }
-
-    func laidOut(for _: CGSize) -> LayoutKit.Block {
-      self
-    }
-
-    func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
-      self
-    }
-  }
-
-  private final class TestView: BlockView {
-    func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
-    var block: TestBlock?
-    var effectiveBackgroundColor: UIColor? { backgroundColor }
-  }
 }

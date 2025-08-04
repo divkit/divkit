@@ -31,6 +31,9 @@ public final class SegmentedProgressView: UIView {
     }
   }
 
+  private var segmentLayers: [SegmentLayer] = []
+  private var isReloadSegmentLayersNeeded = true
+
   public init(fillColor: Color, segmentBackgroundColor: Color) {
     self.fillColor = fillColor
     self.segmentBackgroundColor = segmentBackgroundColor
@@ -41,9 +44,6 @@ public final class SegmentedProgressView: UIView {
   public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-  private var segmentLayers: [SegmentLayer] = []
-  private var isReloadSegmentLayersNeeded = true
 
   public override func layoutSubviews() {
     super.layoutSubviews()

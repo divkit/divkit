@@ -12,20 +12,6 @@ public final class TabsBlock: BlockWithTraits {
     model.contentsModel.path
   }
 
-  public init(
-    model: TabViewModel,
-    state: TabViewState,
-    widthTrait: LayoutTrait = .resizable,
-    heightTrait: LayoutTrait = .intrinsic
-  ) throws {
-    self.model = model
-    self.state = state
-    self.widthTrait = widthTrait
-    self.heightTrait = heightTrait
-
-    try checkConstraints()
-  }
-
   public var intrinsicContentWidth: CGFloat {
     if case let .fixed(value) = widthTrait {
       return value
@@ -43,6 +29,20 @@ public final class TabsBlock: BlockWithTraits {
     }
 
     return layout.size.width
+  }
+
+  public init(
+    model: TabViewModel,
+    state: TabViewState,
+    widthTrait: LayoutTrait = .resizable,
+    heightTrait: LayoutTrait = .intrinsic
+  ) throws {
+    self.model = model
+    self.state = state
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
+
+    try checkConstraints()
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {

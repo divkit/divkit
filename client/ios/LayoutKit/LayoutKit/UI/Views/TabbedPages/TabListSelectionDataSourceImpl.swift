@@ -6,13 +6,13 @@ import VGSL
 final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {
   private let listModel: TabListViewModel
 
+  var numberOfTabs: Int {
+    listModel.tabTitles.count
+  }
+
   init(listModel: TabListViewModel) {
     precondition(!listModel.tabTitles.isEmpty)
     self.listModel = listModel
-  }
-
-  var numberOfTabs: Int {
-    listModel.tabTitles.count
   }
 
   func modelForItemSelection(_ selection: CGFloat) -> TabTitlesViewModel {

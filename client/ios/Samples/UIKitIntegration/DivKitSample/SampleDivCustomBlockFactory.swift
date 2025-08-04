@@ -48,6 +48,12 @@ private final class SampleView: UIView {
     setupView()
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    label.center = bounds.center
+    gradientLayer.frame = bounds
+  }
+
   private func setupView(text: String = "") {
     label.text = text
     label.sizeToFit()
@@ -55,9 +61,4 @@ private final class SampleView: UIView {
     self.addSubview(label)
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    label.center = bounds.center
-    gradientLayer.frame = bounds
-  }
 }

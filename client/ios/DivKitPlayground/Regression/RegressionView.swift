@@ -9,6 +9,15 @@ struct RegressionView: View {
 
   private let divViewProvider: DivViewProvider
 
+  private var tests: [RegressionTestModel] {
+    if query.isEmpty {
+      return TestData.regressionTests
+    }
+    return TestData.regressionTests.filter {
+      $0.title.range(of: query, options: .caseInsensitive) != nil
+    }
+  }
+
   init(
     divViewProvider: DivViewProvider
   ) {
@@ -40,14 +49,6 @@ struct RegressionView: View {
     }
   }
 
-  private var tests: [RegressionTestModel] {
-    if query.isEmpty {
-      return TestData.regressionTests
-    }
-    return TestData.regressionTests.filter {
-      $0.title.range(of: query, options: .caseInsensitive) != nil
-    }
-  }
 }
 
 private struct NavigationButton<Destination>: View where Destination: View {

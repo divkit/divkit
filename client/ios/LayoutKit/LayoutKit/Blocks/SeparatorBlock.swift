@@ -12,20 +12,8 @@ public final class SeparatorBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
-  private init(
-    color: Color = .clear,
-    direction: Direction = .horizontal,
-    trait: LayoutTrait = .resizable
-  ) {
-    self.color = color
-    switch direction {
-    case .horizontal:
-      widthTrait = trait
-      heightTrait = .fixed(1)
-    case .vertical:
-      widthTrait = .fixed(1)
-      heightTrait = trait
-    }
+  public var intrinsicContentWidth: CGFloat {
+    widthTrait.intrinsicSize
   }
 
   public convenience init(
@@ -44,8 +32,20 @@ public final class SeparatorBlock: BlockWithTraits {
     self.init(color: color, direction: direction, trait: .fixed(size))
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    widthTrait.intrinsicSize
+  private init(
+    color: Color = .clear,
+    direction: Direction = .horizontal,
+    trait: LayoutTrait = .resizable
+  ) {
+    self.color = color
+    switch direction {
+    case .horizontal:
+      widthTrait = trait
+      heightTrait = .fixed(1)
+    case .vertical:
+      widthTrait = .fixed(1)
+      heightTrait = trait
+    }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {

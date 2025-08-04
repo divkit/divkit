@@ -2,6 +2,12 @@ import CoreGraphics
 import VGSL
 
 public struct PagerViewState: ElementState, Equatable {
+  public static let `default` = Self(
+    numberOfPages: 0,
+    currentPage: 0,
+    animated: true
+  )
+
   public let numberOfPages: Int
   public let currentPage: CGFloat
   public let animated: Bool
@@ -19,11 +25,6 @@ public struct PagerViewState: ElementState, Equatable {
     self.animated = true
   }
 
-  public static let `default` = Self(
-    numberOfPages: 0,
-    currentPage: 0,
-    animated: true
-  )
 }
 
 extension PagerViewState {

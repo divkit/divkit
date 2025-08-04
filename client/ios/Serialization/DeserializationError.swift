@@ -17,21 +17,19 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   case composite(error: DerivedError, causes: NonEmptyArray<DeserializationError>)
   case unexpectedError(message: String)
 
-  public var description: String {
-    getDescription(path: [])
+  public enum DerivedError: Error, CustomStringConvertible {
+    case invalidValue(result: Any?, from: Any?)
+
+    public var description: String {
+      switch self {
+      case let .invalidValue(result, value):
+        "Invalid value: '\(dbgStrLimited(result))', from: '\(dbgStrLimited(value))'"
+      }
+    }
   }
 
-  private func getDescription(path: [String]) -> String {
-    switch self {
-    case let .composite(error, causes):
-      "[\(path.joined(separator: "/"))]: \(error)," +
-        "    caused by    " +
-        "\(causes.map { $0.getDescription(path: path) }.joined(separator: ";    "))"
-    case let .nestedObjectError(field, error):
-      error.getDescription(path: path + [field])
-    default:
-      "[\(path.joined(separator: "/"))]: \(errorMessage)"
-    }
+  public var description: String {
+    getDescription(path: [])
   }
 
   public var errorMessage: String {
@@ -69,26 +67,6 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     getUserInfo([])
   }
 
-  private func getUserInfo(_ path: [String]) -> [String: String] {
-    var userInfo: [String: String] = [:]
-
-    switch self {
-    case let .nestedObjectError(field, error):
-      return error.getUserInfo(path + [field])
-    case .composite:
-      userInfo["root_causes"] =
-        "\(rootCauses.map { $0.getDescription(path: path) }.joined(separator: ";   "))"
-    default:
-      break
-    }
-
-    return userInfo + [
-      "subkind": subkind,
-      "path": path.joined(separator: "/"),
-      "description": errorMessage,
-    ]
-  }
-
   public var rootCauses: [DeserializationError] {
     switch self {
     case let .composite(_, causes):
@@ -118,16 +96,39 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     }
   }
 
-  public enum DerivedError: Error, CustomStringConvertible {
-    case invalidValue(result: Any?, from: Any?)
-
-    public var description: String {
-      switch self {
-      case let .invalidValue(result, value):
-        "Invalid value: '\(dbgStrLimited(result))', from: '\(dbgStrLimited(value))'"
-      }
+  private func getDescription(path: [String]) -> String {
+    switch self {
+    case let .composite(error, causes):
+      "[\(path.joined(separator: "/"))]: \(error)," +
+        "    caused by    " +
+        "\(causes.map { $0.getDescription(path: path) }.joined(separator: ";    "))"
+    case let .nestedObjectError(field, error):
+      error.getDescription(path: path + [field])
+    default:
+      "[\(path.joined(separator: "/"))]: \(errorMessage)"
     }
   }
+
+  private func getUserInfo(_ path: [String]) -> [String: String] {
+    var userInfo: [String: String] = [:]
+
+    switch self {
+    case let .nestedObjectError(field, error):
+      return error.getUserInfo(path + [field])
+    case .composite:
+      userInfo["root_causes"] =
+        "\(rootCauses.map { $0.getDescription(path: path) }.joined(separator: ";   "))"
+    default:
+      break
+    }
+
+    return userInfo + [
+      "subkind": subkind,
+      "path": path.joined(separator: "/"),
+      "description": errorMessage,
+    ]
+  }
+
 }
 
 fileprivate func dbgStrLimited(_ val: (some Any)?, limit: UInt = 100) -> String {

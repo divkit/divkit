@@ -11,6 +11,8 @@ final class DivTimerController {
     case paused
   }
 
+  private(set) var state: State = .stopped
+
   private let cardId: DivCardID
   private let divTimer: DivTimer
   private let timerScheduler: Scheduling
@@ -21,8 +23,6 @@ final class DivTimerController {
   private let functionsStorage: DivFunctionsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
-
-  private(set) var state: State = .stopped
 
   private var savedDuration: TimeInterval?
   private var savedInterval: TimeInterval?

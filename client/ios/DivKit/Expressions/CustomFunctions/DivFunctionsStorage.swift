@@ -3,13 +3,13 @@ import VGSL
 
 @_spi(Internal)
 public final class DivFunctionsStorage {
+  let outerStorage: DivFunctionsStorage?
+
   private var functions: [CustomFunction.Signature: CustomFunction] = [:]
   private var storages: [UIElementPath: DivFunctionsStorage] = [:]
 
   private let reporter: DivReporter
   private let lock = AllocatedUnfairLock()
-
-  let outerStorage: DivFunctionsStorage?
 
   init(
     outerStorage: DivFunctionsStorage? = DivFunctionsStorage(outerStorage: nil),

@@ -10,12 +10,13 @@ public class MaskedInputViewModel {
     case clearRange(range: Range<String.Index>)
   }
 
-  @ObservableProperty private var rawCursorPosition: CursorData?
   @ObservableVariable var text: String
   @ObservableVariable var cursorPosition: NSRange?
   @ObservableProperty var rawText: String
   @ObservableProperty var maskValidator: MaskValidator
   @ObservableProperty var typo: Typo?
+
+  @ObservableProperty private var rawCursorPosition: CursorData?
   private let disposePool = AutodisposePool()
 
   init(

@@ -21,6 +21,18 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     self.localAnimationDataProvider = localAnimationDataProvider
   }
 
+  static func getPreloadURL(div: DivBase, expressionResolver: ExpressionResolver) -> URL? {
+    let extensionData = div.extensions?.first { $0.id == "lottie" }
+    guard let paramsDict = extensionData?.params,
+          let params = LottieExtensionParams(
+            paramsDictionary: paramsDict,
+            expressionResolver: expressionResolver
+          ) else {
+      return nil
+    }
+    return params.source.url
+  }
+
   public func applyAfterBaseProperties(
     to block: Block,
     div: DivBase,
@@ -67,21 +79,19 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     [Self.getPreloadURL(div: div, expressionResolver: expressionResolver)].compactMap { $0 }
   }
 
-  static func getPreloadURL(div: DivBase, expressionResolver: ExpressionResolver) -> URL? {
-    let extensionData = div.extensions?.first { $0.id == "lottie" }
-    guard let paramsDict = extensionData?.params,
-          let params = LottieExtensionParams(
-            paramsDictionary: paramsDict,
-            expressionResolver: expressionResolver
-          ) else {
-      return nil
-    }
-    return params.source.url
-  }
 }
 
 private class JSONAnimationHolder: AnimationHolder {
   let animation: AnimationSourceType?
+
+  var debugDescription: String {
+    guard let animation = animation as? LottieAnimationSourceType,
+          case let .json(json) = animation else {
+      assertionFailure("JSONAnimation holder can hold only json ")
+      return ""
+    }
+    return "JSON Animation holder with json \(json)"
+  }
 
   init(json: [String: Any]) {
     self.animation = LottieAnimationSourceType.json(json)
@@ -102,12 +112,4 @@ private class JSONAnimationHolder: AnimationHolder {
     return false
   }
 
-  var debugDescription: String {
-    guard let animation = animation as? LottieAnimationSourceType,
-          case let .json(json) = animation else {
-      assertionFailure("JSONAnimation holder can hold only json ")
-      return ""
-    }
-    return "JSON Animation holder with json \(json)"
-  }
 }

@@ -36,27 +36,22 @@ extension TextFieldBlock {
 }
 
 private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
-  var text: NSAttributedString? {
-    get {
-      textField.attributedText
-    }
-    set {
-      updateSecureTextStyle(from: newValue)
-      textField.setTextPreservingPosition(newValue)
-      updatePlaceholdersVisibility()
-    }
+  struct Model: Equatable {
+    let placeholders: TextFieldBlock.Placeholders?
+    let text: NSAttributedString?
+    let size: CGSize
+    let headerIsHidden: Bool
   }
 
-  var textLabel: NSAttributedString? {
-    switch placeholders {
-    case let .separate(placeholders):
-      let attributes = headerIsHidden ? placeholders.field.attributes : placeholders
-        .headerAttributes
-      let typo = Typo(size: attributes.size, weight: placeholders.fontWeight)
-        .with(height: attributes.height).with(color: attributes.color)
-      return placeholders.text.with(typo: typo)
-    case .fieldOnly, .none:
-      return nil
+  struct Layout {
+    let labelFrame: CGRect
+    let fieldFrame: CGRect
+  }
+
+  override var backgroundColor: UIColor? {
+    didSet {
+      placeholderLabel.backgroundColor = backgroundColor
+      textField.backgroundColor = backgroundColor
     }
   }
 
@@ -73,74 +68,9 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
-  var keyboardAppearance: TextFieldBlock.KeyboardAppearance {
-    get { textField.keyboardAppearance.blockValue }
-    set { textField.keyboardAppearance = newValue.uiValue }
-  }
-
   var updateAction: UserInterfaceAction?
   var returnButtonPressedAction: UserInterfaceAction?
   var didBeginEditingAction: UserInterfaceAction?
-
-  private var lastModelAndLayout = (model: Model.empty, layout: Layout.empty)
-
-  private func updateSecureTextStyle(from string: NSAttributedString?) {
-    let color: SystemColor = string.attribute(key: .foregroundColor, defaultValue: .black)
-    textField.defaultTextAttributes[.foregroundColor] = color
-  }
-
-  override var backgroundColor: UIColor? {
-    didSet {
-      placeholderLabel.backgroundColor = backgroundColor
-      textField.backgroundColor = backgroundColor
-    }
-  }
-
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
-
-  var autocapitalizationType: UITextAutocapitalizationType {
-    get { textField.autocapitalizationType }
-    set { textField.autocapitalizationType = newValue }
-  }
-
-  var autocorrectionType: UITextAutocorrectionType {
-    get { textField.autocorrectionType }
-    set { textField.autocorrectionType = newValue }
-  }
-
-  var isSecureTextEntry: Bool {
-    get { textField.isSecureTextEntry }
-    set { textField.isSecureTextEntry = newValue }
-  }
-
-  var keyboardType: UIKeyboardType {
-    get { textField.keyboardType }
-    set { textField.keyboardType = newValue }
-  }
-
-  func updateInteraction(_ interaction: TextFieldBlock.Interaction) {
-    postponedUpdateOfInteraction = nil
-    switch interaction {
-    case .unchanged:
-      break
-    case let .enabled(isFirstResponder):
-      textField.isUserInteractionEnabled = true
-      let setFirstResponder = { [weak self] in
-        if isFirstResponder {
-          _ = self?.textField.becomeFirstResponder()
-        } else {
-          _ = self?.textField.resignFirstResponder()
-        }
-      }
-      guard textField.window != nil else {
-        self.postponedUpdateOfInteraction = setFirstResponder
-        break
-      }
-      setFirstResponder()
-    case .disabled:
-      textField.isUserInteractionEnabled = false
-    }
-  }
 
   var accessibility: AccessibilityElement? {
     didSet {
@@ -212,10 +142,63 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   var maxNumberOfLines = 1
 
+  private var lastModelAndLayout = (model: Model.empty, layout: Layout.empty)
+
   private let placeholderLabel = Label()
   private let animationLabel = Label()
   private let textField = UITextField()
   private var postponedUpdateOfInteraction: Action?
+
+  var text: NSAttributedString? {
+    get {
+      textField.attributedText
+    }
+    set {
+      updateSecureTextStyle(from: newValue)
+      textField.setTextPreservingPosition(newValue)
+      updatePlaceholdersVisibility()
+    }
+  }
+
+  var textLabel: NSAttributedString? {
+    switch placeholders {
+    case let .separate(placeholders):
+      let attributes = headerIsHidden ? placeholders.field.attributes : placeholders
+        .headerAttributes
+      let typo = Typo(size: attributes.size, weight: placeholders.fontWeight)
+        .with(height: attributes.height).with(color: attributes.color)
+      return placeholders.text.with(typo: typo)
+    case .fieldOnly, .none:
+      return nil
+    }
+  }
+
+  var keyboardAppearance: TextFieldBlock.KeyboardAppearance {
+    get { textField.keyboardAppearance.blockValue }
+    set { textField.keyboardAppearance = newValue.uiValue }
+  }
+
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  var autocapitalizationType: UITextAutocapitalizationType {
+    get { textField.autocapitalizationType }
+    set { textField.autocapitalizationType = newValue }
+  }
+
+  var autocorrectionType: UITextAutocorrectionType {
+    get { textField.autocorrectionType }
+    set { textField.autocorrectionType = newValue }
+  }
+
+  var isSecureTextEntry: Bool {
+    get { textField.isSecureTextEntry }
+    set { textField.isSecureTextEntry = newValue }
+  }
+
+  var keyboardType: UIKeyboardType {
+    get { textField.keyboardType }
+    set { textField.keyboardType = newValue }
+  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -247,6 +230,35 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
       self.postponedUpdateOfInteraction = nil
       postponedUpdateOfInteraction()
     }
+  }
+
+  func updateInteraction(_ interaction: TextFieldBlock.Interaction) {
+    postponedUpdateOfInteraction = nil
+    switch interaction {
+    case .unchanged:
+      break
+    case let .enabled(isFirstResponder):
+      textField.isUserInteractionEnabled = true
+      let setFirstResponder = { [weak self] in
+        if isFirstResponder {
+          _ = self?.textField.becomeFirstResponder()
+        } else {
+          _ = self?.textField.resignFirstResponder()
+        }
+      }
+      guard textField.window != nil else {
+        self.postponedUpdateOfInteraction = setFirstResponder
+        break
+      }
+      setFirstResponder()
+    case .disabled:
+      textField.isUserInteractionEnabled = false
+    }
+  }
+
+  private func updateSecureTextStyle(from string: NSAttributedString?) {
+    let color: SystemColor = string.attribute(key: .foregroundColor, defaultValue: .black)
+    textField.defaultTextAttributes[.foregroundColor] = color
   }
 
   private func layoutTextField(animated: Bool) {
@@ -445,17 +457,6 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
-  struct Model: Equatable {
-    let placeholders: TextFieldBlock.Placeholders?
-    let text: NSAttributedString?
-    let size: CGSize
-    let headerIsHidden: Bool
-  }
-
-  struct Layout {
-    let labelFrame: CGRect
-    let fieldFrame: CGRect
-  }
 }
 
 extension TextFieldBlockView: UITextFieldDelegate {

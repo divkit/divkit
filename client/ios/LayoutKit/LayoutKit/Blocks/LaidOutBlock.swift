@@ -4,7 +4,32 @@ import VGSL
 final class LaidOutBlock<T: BlockWithLayout>: Block {
   public let block: T
   public let layout: T.Layout
+  public let isVerticallyResizable = false
+  public let isHorizontallyResizable = false
+
   private let size: CGSize
+
+  public var isVerticallyConstrained: Bool { block.isVerticallyConstrained }
+  public var isHorizontallyConstrained: Bool { block.isHorizontallyConstrained }
+
+  public var intrinsicContentWidth: CGFloat {
+    size.width
+  }
+
+  public var widthOfHorizontallyNonResizableBlock: CGFloat { size.width }
+  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
+    assertionFailure("try to get weight for non resizable block")
+    return .default
+  }
+
+  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
+    assertionFailure("try to get weight for non resizable block")
+    return .default
+  }
+
+  public var debugDescription: String {
+    "L\(size.width)x\(size.height) \(block.debugDescription)"
+  }
 
   public convenience init(block: T, width: CGFloat) {
     let height = block.heightOfVerticallyNonResizableBlock(forWidth: width)
@@ -17,33 +42,12 @@ final class LaidOutBlock<T: BlockWithLayout>: Block {
     (self.block, layout) = block.laidOutHierarchy(for: size)
   }
 
-  public let isVerticallyResizable = false
-  public let isHorizontallyResizable = false
-
-  public var isVerticallyConstrained: Bool { block.isVerticallyConstrained }
-  public var isHorizontallyConstrained: Bool { block.isHorizontallyConstrained }
-
-  public var intrinsicContentWidth: CGFloat {
-    size.width
-  }
-
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     size.height
   }
 
-  public var widthOfHorizontallyNonResizableBlock: CGFloat { size.width }
   public func heightOfVerticallyNonResizableBlock(forWidth _: CGFloat) -> CGFloat {
     size.height
-  }
-
-  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    assertionFailure("try to get weight for non resizable block")
-    return .default
-  }
-
-  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    assertionFailure("try to get weight for non resizable block")
-    return .default
   }
 
   public func equals(_ other: Block) -> Bool {
@@ -54,9 +58,6 @@ final class LaidOutBlock<T: BlockWithLayout>: Block {
     return block == other.block && size == other.size
   }
 
-  public var debugDescription: String {
-    "L\(size.width)x\(size.height) \(block.debugDescription)"
-  }
 }
 
 extension LaidOutBlock: ImageContaining {

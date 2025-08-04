@@ -68,66 +68,24 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     let accessibility: AccessibilityElement?
   }
 
-  private var blockViews: [BlockView] = []
-
   var layoutReporter: LayoutReporter?
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
-  var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
+
+  private var blockViews: [BlockView] = []
 
   // layoutSubivews is called multiple times for same view size and model, so we optimize out
   // redundant calls
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
   private var preventLayoutAndConfig = false
 
-  private var model: Model! {
-    modelAndLastLayoutSize.model
-  }
-
   private weak var observer: ElementStateObserver?
   private weak var overscrollDelegate: ScrollDelegate?
   private weak var renderingDelegate: RenderingDelegate?
 
-  func configure(
-    model: Model,
-    observer: ElementStateObserver?,
-    overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
-  ) {
-    guard model != modelAndLastLayoutSize.model ||
-      observer !== self.observer,
-      !preventLayoutAndConfig
-    else {
-      return
-    }
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
+  var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
 
-    applyAccessibilityFromScratch(model.accessibility)
-    modelAndLastLayoutSize = (model: model, lastLayoutSize: nil)
-    self.observer = observer
-    self.overscrollDelegate = overscrollDelegate
-    self.renderingDelegate = renderingDelegate
-
-    // Configuring views may lead to unpredictable side effects,
-    // including view hierarchy layout.
-    preventLayoutAndConfig = true
-    blockViews = blockViews.reused(
-      with: model.children.map(\.content),
-      attachTo: self,
-      observer: observer,
-      overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
-    )
-
-    preventLayoutAndConfig = false
-
-    setNeedsLayout()
-
-    clipsToBounds = model.clipContent
-
-    let animationKey = "contentAnimation"
-    layer.removeAnimation(forKey: animationKey)
-    if let animation = model.contentAnimation?.keyFrameAnimation {
-      layer.add(animation, forKey: animationKey)
-    }
+  private var model: Model! {
+    modelAndLastLayoutSize.model
   }
 
   override func layoutSubviews() {
@@ -186,5 +144,49 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     let result = super.hitTest(point, with: event)
     return result === self ? nil : result
   }
+
+  func configure(
+    model: Model,
+    observer: ElementStateObserver?,
+    overscrollDelegate: ScrollDelegate?,
+    renderingDelegate: RenderingDelegate?
+  ) {
+    guard model != modelAndLastLayoutSize.model ||
+      observer !== self.observer,
+      !preventLayoutAndConfig
+    else {
+      return
+    }
+
+    applyAccessibilityFromScratch(model.accessibility)
+    modelAndLastLayoutSize = (model: model, lastLayoutSize: nil)
+    self.observer = observer
+    self.overscrollDelegate = overscrollDelegate
+    self.renderingDelegate = renderingDelegate
+
+    // Configuring views may lead to unpredictable side effects,
+    // including view hierarchy layout.
+    preventLayoutAndConfig = true
+    blockViews = blockViews.reused(
+      with: model.children.map(\.content),
+      attachTo: self,
+      observer: observer,
+      overscrollDelegate: overscrollDelegate,
+      renderingDelegate: renderingDelegate
+    )
+
+    preventLayoutAndConfig = false
+
+    setNeedsLayout()
+
+    clipsToBounds = model.clipContent
+
+    let animationKey = "contentAnimation"
+    layer.removeAnimation(forKey: animationKey)
+    if let animation = model.contentAnimation?.keyFrameAnimation {
+      layer.add(animation, forKey: animationKey)
+    }
+  }
+
 }
 #endif

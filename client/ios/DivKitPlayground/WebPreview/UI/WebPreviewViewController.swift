@@ -50,11 +50,6 @@ private final class WebPreviewViewController: DivViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    takeScreenshot(afterScreenUpdates: false)
-  }
-
   public override func viewDidAppear(_: Bool) {
     isAppeared = true
   }
@@ -64,6 +59,11 @@ private final class WebPreviewViewController: DivViewController {
     screenshotCancellationToken = nil
 
     isAppeared = false
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    takeScreenshot(afterScreenUpdates: false)
   }
 
   override func onViewUpdated() {

@@ -6,6 +6,9 @@ public typealias TextInputFilter = (String) -> Bool
 
 public final class TextInputBlock: BlockWithTraits {
   public enum InputType: Equatable {
+    case keyboard(KeyboardType)
+    case selection([SelectionItem])
+
     public enum KeyboardType: Equatable {
       case `default`
       case URL
@@ -24,9 +27,6 @@ public final class TextInputBlock: BlockWithTraits {
         self.text = text
       }
     }
-
-    case keyboard(KeyboardType)
-    case selection([SelectionItem])
 
     public static let `default`: Self = .keyboard(.default)
   }
@@ -95,6 +95,31 @@ public final class TextInputBlock: BlockWithTraits {
   public let spellChecking: Bool?
 
   let shouldClearFocus: Variable<Bool>
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case let .intrinsic(_, minSize, _):
+      minSize
+    case .weighted:
+      0
+    }
+  }
+
+  private var textForMeasuring: NSAttributedString {
+    guard multiLineMode else {
+      return defaultTextForMeasuring.with(typo: textTypo)
+    }
+    let text = textValue.value
+    if text.isEmpty {
+      if hint.isEmpty {
+        return defaultTextForMeasuring.with(typo: textTypo)
+      }
+      return hint
+    }
+    return text.with(typo: textTypo)
+  }
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -168,17 +193,6 @@ public final class TextInputBlock: BlockWithTraits {
     self.spellChecking = spellChecking
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case let .intrinsic(_, minSize, _):
-      minSize
-    case .weighted:
-      0
-    }
-  }
-
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .fixed(value):
@@ -198,20 +212,6 @@ public final class TextInputBlock: BlockWithTraits {
     case .weighted:
       return 0
     }
-  }
-
-  private var textForMeasuring: NSAttributedString {
-    guard multiLineMode else {
-      return defaultTextForMeasuring.with(typo: textTypo)
-    }
-    let text = textValue.value
-    if text.isEmpty {
-      if hint.isEmpty {
-        return defaultTextForMeasuring.with(typo: textTypo)
-      }
-      return hint
-    }
-    return text.with(typo: textTypo)
   }
 
   public func equals(_ other: Block) -> Bool {

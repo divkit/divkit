@@ -34,6 +34,10 @@ public struct BlockTooltip: Equatable {
   public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
 
+  public var id: String {
+    params.id
+  }
+
   public init(
     block: Block,
     params: BlockTooltipParams,
@@ -48,10 +52,6 @@ public struct BlockTooltip: Equatable {
     self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
     self.params = params
-  }
-
-  public var id: String {
-    params.id
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {

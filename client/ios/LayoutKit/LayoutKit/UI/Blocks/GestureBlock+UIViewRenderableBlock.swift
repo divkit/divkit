@@ -57,6 +57,11 @@ private final class GestureView: BlockView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    self.childView.frame = bounds
+  }
+
   func configure(
     child: Block,
     observer: ElementStateObserver?,
@@ -80,11 +85,6 @@ private final class GestureView: BlockView {
     self.rightActions = rightActions
     setupGestureRecognizers()
     setNeedsLayout()
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    self.childView.frame = bounds
   }
 
   private func setupGestureRecognizers() {

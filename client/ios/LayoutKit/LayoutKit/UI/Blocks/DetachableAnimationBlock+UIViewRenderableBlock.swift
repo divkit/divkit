@@ -32,6 +32,14 @@ extension DetachableAnimationBlock {
 }
 
 final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView {
+  var visibilityAction: Action? {
+    didSet {
+      if childView != nil, visibilityAction != nil {
+        applyVisibilityAction()
+      }
+    }
+  }
+
   private var childView: BlockView? {
     didSet {
       guard childView !== oldValue else { return }
@@ -55,14 +63,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     }
   }
 
-  var visibilityAction: Action? {
-    didSet {
-      if childView != nil, visibilityAction != nil {
-        applyVisibilityAction()
-      }
-    }
-  }
-
   private var animatedView: BlockView?
 
   private var animationIn: [TransitioningAnimation]?
@@ -72,31 +72,11 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   private var child: Block?
   private var isFirstChildLayout: Bool = true
 
-  var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
-
-  func configure(
-    child: Block,
-    animationIn: [TransitioningAnimation]?,
-    animationOut: [TransitioningAnimation]?,
-    animationChange: ChangeBoundsTransition?,
-    observer: ElementStateObserver?,
-    overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
-  ) {
-    self.child = child
-    childView = child.reuse(
-      childView,
-      observer: observer,
-      overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      superview: self
-    )
-    self.animationIn = animationIn
-    self.animationOut = animationOut
-    self.animationChange = animationChange
-
-    setNeedsLayout()
+  public var hasAnimationIn: Bool {
+    animationIn != nil
   }
+
+  var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
   override func layoutSubviews() {
     super.layoutSubviews()
@@ -108,10 +88,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     if frame != .zero {
       isFirstChildLayout = false
     }
-  }
-
-  public var hasAnimationIn: Bool {
-    animationIn != nil
   }
 
   public func convertFrame(to container: UIView) -> CGRect {
@@ -211,6 +187,30 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     } else {
       item.perform()
     }
+  }
+
+  func configure(
+    child: Block,
+    animationIn: [TransitioningAnimation]?,
+    animationOut: [TransitioningAnimation]?,
+    animationChange: ChangeBoundsTransition?,
+    observer: ElementStateObserver?,
+    overscrollDelegate: ScrollDelegate?,
+    renderingDelegate: RenderingDelegate?
+  ) {
+    self.child = child
+    childView = child.reuse(
+      childView,
+      observer: observer,
+      overscrollDelegate: overscrollDelegate,
+      renderingDelegate: renderingDelegate,
+      superview: self
+    )
+    self.animationIn = animationIn
+    self.animationOut = animationOut
+    self.animationChange = animationChange
+
+    setNeedsLayout()
   }
 
   func cancelAnimations() {

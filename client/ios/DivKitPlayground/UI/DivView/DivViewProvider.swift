@@ -4,6 +4,7 @@ import SwiftUI
 
 final class DivViewProvider {
   let jsonProvider: PlaygroundJsonProvider
+
   private let divKitComponents: DivKitComponents
   private let layoutDirection: UIUserInterfaceLayoutDirection
 

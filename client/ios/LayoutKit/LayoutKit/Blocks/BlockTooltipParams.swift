@@ -5,10 +5,11 @@ public struct BlockTooltipParams: Equatable {
   public let mode: BlockTooltip.Mode
   public let duration: TimeInterval
   public let closeByTapOutside: Bool
-  let tapOutsideActions: [UserInterfaceAction]
   public let backgroundAccessibilityDescription: String?
   public let animationIn: [TransitioningAnimation]?
   public let animationOut: [TransitioningAnimation]?
+
+  let tapOutsideActions: [UserInterfaceAction]
 
   public init(
     id: String,

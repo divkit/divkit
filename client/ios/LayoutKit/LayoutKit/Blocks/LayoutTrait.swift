@@ -15,6 +15,8 @@ public enum LayoutTrait: Equatable {
 
   public struct Weight: RawRepresentable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral,
     Equatable, Comparable {
+    public static let `default`: Weight = 1
+
     public let rawValue: CGFloat
 
     public init?(rawValue: CGFloat) {
@@ -29,8 +31,6 @@ public enum LayoutTrait: Equatable {
     public init(integerLiteral value: IntegerLiteralType) {
       self.init(rawValue: CGFloat(value))!
     }
-
-    public static let `default`: Weight = 1
 
     public static func <(lhs: Weight, rhs: Weight) -> Bool {
       lhs.rawValue < rhs.rawValue

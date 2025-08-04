@@ -4,6 +4,7 @@ import VGSL
 
 public final class TransitioningBlock: BlockWithLayout, WrapperBlock {
   public typealias Layout = CGRect
+
   public let from: Block?
   public let to: Block
   public let animationOut: [TransitioningAnimation]?
@@ -23,6 +24,13 @@ public final class TransitioningBlock: BlockWithLayout, WrapperBlock {
     self.animationIn = animationIn
   }
 
+  public static func ==(lhs: TransitioningBlock, rhs: TransitioningBlock) -> Bool {
+    lhs.from == rhs.from &&
+      lhs.to == rhs.to &&
+      lhs.animationOut == rhs.animationOut &&
+      lhs.animationIn == rhs.animationIn
+  }
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? Self else {
       return false
@@ -38,13 +46,6 @@ public final class TransitioningBlock: BlockWithLayout, WrapperBlock {
       animationOut: animationOut,
       animationIn: animationIn
     )
-  }
-
-  public static func ==(lhs: TransitioningBlock, rhs: TransitioningBlock) -> Bool {
-    lhs.from == rhs.from &&
-      lhs.to == rhs.to &&
-      lhs.animationOut == rhs.animationOut &&
-      lhs.animationIn == rhs.animationIn
   }
 
   func laidOutHierarchy(for size: CGSize) -> (TransitioningBlock, Layout) {

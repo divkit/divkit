@@ -13,6 +13,18 @@ public final class GalleryView: BlockView {
     case firstLayoutPerformed
   }
 
+  public var layoutReporter: LayoutReporter?
+  public weak var observer: ElementStateObserver? {
+    didSet {
+      dataSource.observer = observer
+    }
+  }
+
+  public weak var updatesDelegate: GalleryViewModelDelegate?
+  public weak var visibilityDelegate: GalleryVisibilityDelegate?
+
+  private(set) var state: GalleryViewState!
+
   private let collectionView: VisibleBoundsTrackingCollectionView
   private let collectionViewLayout: GenericCollectionViewLayout
   private let dataSource = GalleryDataSource()
@@ -29,15 +41,11 @@ public final class GalleryView: BlockView {
     }
   }
 
-  public var layoutReporter: LayoutReporter?
   private var model: GalleryViewModel!
   private var layout: GalleryViewLayouting!
-  private(set) var state: GalleryViewState!
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
   private var scrollStartOffset: CGFloat = 0
-  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { [collectionView] }
-
   private weak var overscrollDelegate: ScrollDelegate? {
     didSet {
       if let previousDelegate = oldValue {
@@ -56,11 +64,7 @@ public final class GalleryView: BlockView {
     }
   }
 
-  public weak var observer: ElementStateObserver? {
-    didSet {
-      dataSource.observer = observer
-    }
-  }
+  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { [collectionView] }
 
   public var path: UIElementPath {
     model.path
@@ -82,6 +86,60 @@ public final class GalleryView: BlockView {
   }
 
   public var effectiveBackgroundColor: UIColor? { collectionView.backgroundColor }
+
+  public override init(frame: CGRect) {
+    collectionViewLayout = GenericCollectionViewLayout()
+    collectionView = VisibleBoundsTrackingCollectionView(
+      frame: frame,
+      collectionViewLayout: collectionViewLayout
+    )
+    collectionView.alwaysBounceVertical = false
+    collectionView.clipsToBounds = false
+    collectionView.backgroundColor = .clear
+    collectionView.scrollsToTop = false
+    collectionView.dataSource = dataSource
+
+    collectionView.disableContentInsetAdjustmentBehavior()
+
+    super.init(frame: frame)
+    (collectionView as UIScrollView).delegate = compoundScrollDelegate
+    compoundScrollDelegate.add(self)
+    addSubview(collectionView)
+  }
+
+  @available(*, unavailable)
+  public required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let superResult = super.hitTest(point, with: event)
+    if model.areEmptySpaceTouchesEnabled {
+      return superResult
+    } else {
+      return superResult === collectionView ? nil : superResult
+    }
+  }
+
+  public override func layoutSubviews() {
+    guard !bounds.isEmpty else {
+      return
+    }
+    layoutReporter?.willLayoutSubviews()
+    collectionView.frame = bounds
+
+    if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
+      updateLayout(to: model)
+      setState(stateWithScrollRange, notifyingObservers: true)
+    }
+    if case let .pending(state) = deferredStateSetting {
+      collectionView.performWithDetachedDelegate {
+        updateContentOffset(to: state.contentPosition, animated: false)
+      }
+    }
+    deferredStateSetting = .idle
+    layoutReporter?.didLayoutSubviews()
+  }
 
   public func configure(
     model: GalleryViewModel,
@@ -196,63 +254,6 @@ public final class GalleryView: BlockView {
         self.contentPager = contentPager
       }
     }
-  }
-
-  public weak var updatesDelegate: GalleryViewModelDelegate?
-  public weak var visibilityDelegate: GalleryVisibilityDelegate?
-
-  public override init(frame: CGRect) {
-    collectionViewLayout = GenericCollectionViewLayout()
-    collectionView = VisibleBoundsTrackingCollectionView(
-      frame: frame,
-      collectionViewLayout: collectionViewLayout
-    )
-    collectionView.alwaysBounceVertical = false
-    collectionView.clipsToBounds = false
-    collectionView.backgroundColor = .clear
-    collectionView.scrollsToTop = false
-    collectionView.dataSource = dataSource
-
-    collectionView.disableContentInsetAdjustmentBehavior()
-
-    super.init(frame: frame)
-    (collectionView as UIScrollView).delegate = compoundScrollDelegate
-    compoundScrollDelegate.add(self)
-    addSubview(collectionView)
-  }
-
-  @available(*, unavailable)
-  public required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let superResult = super.hitTest(point, with: event)
-    if model.areEmptySpaceTouchesEnabled {
-      return superResult
-    } else {
-      return superResult === collectionView ? nil : superResult
-    }
-  }
-
-  public override func layoutSubviews() {
-    guard !bounds.isEmpty else {
-      return
-    }
-    layoutReporter?.willLayoutSubviews()
-    collectionView.frame = bounds
-
-    if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
-      updateLayout(to: model)
-      setState(stateWithScrollRange, notifyingObservers: true)
-    }
-    if case let .pending(state) = deferredStateSetting {
-      collectionView.performWithDetachedDelegate {
-        updateContentOffset(to: state.contentPosition, animated: false)
-      }
-    }
-    deferredStateSetting = .idle
-    layoutReporter?.didLayoutSubviews()
   }
 
   private func updateContentOffset(

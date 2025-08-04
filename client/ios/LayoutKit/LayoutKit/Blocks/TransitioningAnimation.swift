@@ -11,13 +11,6 @@ public struct TransitioningAnimation: Equatable {
     case translationY
   }
 
-  public let kind: Kind
-  public let start: Double
-  public let end: Double
-  public let duration: TimeInterval
-  public let delay: TimeInterval
-  public let timingFunction: TimingFunction
-
   public static let empty = Self(
     kind: .fade,
     start: 1,
@@ -29,6 +22,13 @@ public struct TransitioningAnimation: Equatable {
 
   public static let defaultLeadingSlideDistance = -Double.infinity
   public static let defaultTrailingSlideDistance = Double.infinity
+
+  public let kind: Kind
+  public let start: Double
+  public let end: Double
+  public let duration: TimeInterval
+  public let delay: TimeInterval
+  public let timingFunction: TimingFunction
 
   public init(
     kind: Kind,

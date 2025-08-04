@@ -5,9 +5,11 @@ import XCTest
 
 public final class TestTimer: TimerType {
   public let timeInterval: TimeInterval
+  public var fireDate: Date
+  public private(set) var isValid = true
+
   private let block: () -> Void
   private let repeating: Bool
-  public var fireDate: Date
 
   public init(
     fireDate: Date = .distantFuture,
@@ -20,8 +22,6 @@ public final class TestTimer: TimerType {
     self.block = block
     self.repeating = repeating
   }
-
-  public private(set) var isValid = true
 
   public func fire() {
     guard isValid else {

@@ -82,43 +82,6 @@ final class GridBlockTests: XCTestCase {
     assertIntrinsicContentSize(ofBlock: grid, equals: minSize)
   }
 
-  private func makeGrid(
-    contentSize: CGSize,
-    widthTrait: LayoutTrait,
-    heightTrait: LayoutTrait
-  ) -> GridBlock {
-    let itemBlock = EmptyBlock(
-      widthTrait: .fixed(contentSize.width),
-      heightTrait: .fixed(contentSize.height)
-    )
-
-    return try! GridBlock(
-      widthTrait: widthTrait,
-      heightTrait: heightTrait,
-      contentAlignment: .default,
-      items: [
-        .init(
-          weight: GridBlock.Item.Weight(),
-          contents: itemBlock
-        ),
-      ],
-      columnCount: 1
-    )
-  }
-
-  private func assertIntrinsicContentSize(
-    ofBlock block: GridBlock,
-    equals: CGSize
-  ) {
-    let width = block.intrinsicContentWidth
-    let height = block.intrinsicContentHeight(forWidth: width)
-
-    XCTAssertEqual(
-      CGSize(width: width, height: height),
-      equals
-    )
-  }
-
   func test_KeepWeightWhenUpdateState() {
     struct TestState: ElementState {}
 
@@ -159,14 +122,74 @@ final class GridBlockTests: XCTestCase {
 
     XCTAssertTrue(newBlock == block)
   }
+
+  private func makeGrid(
+    contentSize: CGSize,
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait
+  ) -> GridBlock {
+    let itemBlock = EmptyBlock(
+      widthTrait: .fixed(contentSize.width),
+      heightTrait: .fixed(contentSize.height)
+    )
+
+    return try! GridBlock(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      contentAlignment: .default,
+      items: [
+        .init(
+          weight: GridBlock.Item.Weight(),
+          contents: itemBlock
+        ),
+      ],
+      columnCount: 1
+    )
+  }
+
+  private func assertIntrinsicContentSize(
+    ofBlock block: GridBlock,
+    equals: CGSize
+  ) {
+    let width = block.intrinsicContentWidth
+    let height = block.intrinsicContentHeight(forWidth: width)
+
+    XCTAssertEqual(
+      CGSize(width: width, height: height),
+      equals
+    )
+  }
+
 }
 
 private final class AlwaysRecreatedTestBlock: BlockWithTraits {
+  enum AlwaysRecreatedTestBlockState: ElementState, Equatable {
+    case state1
+  }
+
+  private final class AlwaysRecreatedTestBlockView: BlockView, VisibleBoundsTrackingContainer {
+    var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] = []
+
+    var effectiveBackgroundColor: UIColor?
+
+    func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
+
+  }
+
   var widthTrait: LayoutTrait
   var heightTrait: LayoutTrait
 
   let state: AlwaysRecreatedTestBlockState
   var debugDescription = ""
+
+  var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case .intrinsic, .weighted:
+      0
+    }
+  }
 
   init(
     widthTrait: LayoutTrait,
@@ -179,21 +202,16 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     self.state = state
   }
 
+  static func makeBlockView() -> BlockView {
+    AlwaysRecreatedTestBlockView()
+  }
+
   func configureBlockView(
     _: BlockView,
     observer _: ElementStateObserver? = nil,
     overscrollDelegate _: ScrollDelegate? = nil,
     renderingDelegate _: RenderingDelegate? = nil
   ) {}
-
-  var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case .intrinsic, .weighted:
-      0
-    }
-  }
 
   func intrinsicContentHeight(
     forWidth _: CGFloat
@@ -214,10 +232,6 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     return self.state == otherBlock.state
   }
 
-  static func makeBlockView() -> BlockView {
-    AlwaysRecreatedTestBlockView()
-  }
-
   func canConfigureBlockView(_ view: BlockView) -> Bool {
     view is AlwaysRecreatedTestBlockView
   }
@@ -232,17 +246,6 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     )
   }
 
-  enum AlwaysRecreatedTestBlockState: ElementState, Equatable {
-    case state1
-  }
-
-  private final class AlwaysRecreatedTestBlockView: BlockView, VisibleBoundsTrackingContainer {
-    var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] = []
-
-    func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
-    var effectiveBackgroundColor: UIColor?
-  }
 }
 
 extension AlwaysRecreatedTestBlock: LayoutCachingDefaultImpl {}

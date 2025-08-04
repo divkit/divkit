@@ -21,18 +21,6 @@ final class DivBaseBlockBuilder {
   private let identity: String
   private let isFocused: Bool
 
-  private var expressionResolver: ExpressionResolver {
-    context.expressionResolver
-  }
-
-  private var path: UIElementPath {
-    context.path
-  }
-
-  private var statePath: DivStatePath {
-    context.parentDivStatePath ?? DivData.rootPath
-  }
-
   private lazy var rotation = self.div.transform?.resolveRotation(self.expressionResolver)
 
   private lazy var border = isFocused ? div.focus?.border ?? div.border : div.border
@@ -56,6 +44,18 @@ final class DivBaseBlockBuilder {
     makeGoneBlock(div: div)
   }
 
+  private var expressionResolver: ExpressionResolver {
+    context.expressionResolver
+  }
+
+  private var path: UIElementPath {
+    context.path
+  }
+
+  private var statePath: DivStatePath {
+    context.parentDivStatePath ?? DivData.rootPath
+  }
+
   init(
     context: DivBlockModelingContext,
     visibility: Visibility,
@@ -72,77 +72,6 @@ final class DivBaseBlockBuilder {
     self.extensionHandlers = extensionHandlers
     self.identity = identity
     self.isFocused = isFocused
-  }
-
-  private func makeGoneBlock(
-    div: DivBase
-  ) -> Block {
-    context.stateManager.setBlockVisibility(
-      statePath: statePath,
-      div: div,
-      isVisible: false
-    )
-
-    if let visibilityParams = context.makeVisibilityParams(
-      actions: div.makeVisibilityActions(
-        actionsType: .disappear,
-        context: context
-      ),
-      isVisible: false
-    ) {
-      return EmptyBlock.zeroSized.addingDecorations(
-        visibilityParams: visibilityParams,
-        isEmpty: true
-      )
-    }
-
-    context.lastVisibleBoundsCache.onBecomeInvisible(path)
-    return EmptyBlock.zeroSized
-  }
-
-  private func getBackground(_ isFocused: Bool) -> [DivBackground]? {
-    guard isFocused else {
-      return div.background
-    }
-    return div.focus?.background ?? div.background
-  }
-
-  private func isAppearing() -> Bool {
-    let stateManager = context.stateManager
-    if stateManager.shouldBlockAppearWithTransition(path: statePath + identity) {
-      return true
-    }
-
-    return stateManager.isBlockAdded(identity, stateBlockPath: statePath.stateBlockPath)
-  }
-
-  private func addAnimationWarningsIfNeeded(isPresentAnimationIn: Bool) {
-    guard context.currentDivId == nil,
-          let block = block as? DetachableAnimationBlock else { return }
-
-    func warningMessage(_ animation: String) -> String {
-      "The component id with the \(animation) property for state change is missing. Either specify the id, or specify the \"transition_trigger\" property without \"state_change\" value."
-    }
-
-    if isPresentAnimationIn,
-       div.transitionTriggersOrDefault.contains(.stateChange) {
-      context.addWarning(
-        message: warningMessage("\"transition_in\"")
-      )
-    }
-
-    if block.animationOut != nil,
-       div.transitionTriggersOrDefault.contains(.stateChange) {
-      context.addWarning(
-        message: warningMessage("\"transition_out\"")
-      )
-    }
-
-    if block.animationChange != nil {
-      context.addWarning(
-        message: warningMessage("\"transition_change\"")
-      )
-    }
   }
 
   func applyExtensionHandlers(
@@ -162,7 +91,7 @@ final class DivBaseBlockBuilder {
     applyPaddings: Bool
   ) -> Self {
     block = block.addingEdgeInsets(
-      applyPaddings ? div.paddings.resolve(context) : .zero,
+      applyPaddings ? div.paddings.resolve(context): .zero,
       clipsToBounds: clipToBounds
     )
 
@@ -371,4 +300,76 @@ final class DivBaseBlockBuilder {
   func build() -> Block {
     block
   }
+
+  private func makeGoneBlock(
+    div: DivBase
+  ) -> Block {
+    context.stateManager.setBlockVisibility(
+      statePath: statePath,
+      div: div,
+      isVisible: false
+    )
+
+    if let visibilityParams = context.makeVisibilityParams(
+      actions: div.makeVisibilityActions(
+        actionsType: .disappear,
+        context: context
+      ),
+      isVisible: false
+    ) {
+      return EmptyBlock.zeroSized.addingDecorations(
+        visibilityParams: visibilityParams,
+        isEmpty: true
+      )
+    }
+
+    context.lastVisibleBoundsCache.onBecomeInvisible(path)
+    return EmptyBlock.zeroSized
+  }
+
+  private func getBackground(_ isFocused: Bool) -> [DivBackground]? {
+    guard isFocused else {
+      return div.background
+    }
+    return div.focus?.background ?? div.background
+  }
+
+  private func isAppearing() -> Bool {
+    let stateManager = context.stateManager
+    if stateManager.shouldBlockAppearWithTransition(path: statePath + identity) {
+      return true
+    }
+
+    return stateManager.isBlockAdded(identity, stateBlockPath: statePath.stateBlockPath)
+  }
+
+  private func addAnimationWarningsIfNeeded(isPresentAnimationIn: Bool) {
+    guard context.currentDivId == nil,
+          let block = block as? DetachableAnimationBlock else { return }
+
+    func warningMessage(_ animation: String) -> String {
+      "The component id with the \(animation) property for state change is missing. Either specify the id, or specify the \"transition_trigger\" property without \"state_change\" value."
+    }
+
+    if isPresentAnimationIn,
+       div.transitionTriggersOrDefault.contains(.stateChange) {
+      context.addWarning(
+        message: warningMessage("\"transition_in\"")
+      )
+    }
+
+    if block.animationOut != nil,
+       div.transitionTriggersOrDefault.contains(.stateChange) {
+      context.addWarning(
+        message: warningMessage("\"transition_out\"")
+      )
+    }
+
+    if block.animationChange != nil {
+      context.addWarning(
+        message: warningMessage("\"transition_change\"")
+      )
+    }
+  }
+
 }

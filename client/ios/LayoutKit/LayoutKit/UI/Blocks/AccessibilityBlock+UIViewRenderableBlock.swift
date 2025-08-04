@@ -43,9 +43,10 @@ private final class AccessibilityBlockView: UIView, BlockViewProtocol,
     let source: Variable<AnyObject?>
   }
 
+  private(set) var childView: BlockView?
+
   private var model: Model!
   private weak var observer: ElementStateObserver?
-  private(set) var childView: BlockView?
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
   var effectiveBackgroundColor: UIColor? { childView?.backgroundColor }
@@ -57,6 +58,16 @@ private final class AccessibilityBlockView: UIView, BlockViewProtocol,
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    childView?.frame = bounds
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
   }
 
   func configure(
@@ -87,16 +98,6 @@ private final class AccessibilityBlockView: UIView, BlockViewProtocol,
         superview: self
       )
     }
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    childView?.frame = bounds
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result === self ? nil : result
   }
 
   func onVisibleBoundsChanged(from: CGRect, to: CGRect) {

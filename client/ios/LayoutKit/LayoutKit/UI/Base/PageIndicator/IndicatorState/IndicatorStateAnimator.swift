@@ -8,6 +8,16 @@ struct IndicatorStateAnimator {
   let boundsWidth: CGFloat
   let numberOfPages: Int
 
+  private var itemWidth: CGFloat {
+    switch configuration.itemPlacement {
+    case let .fixed(spaceBetweenCenters):
+      return spaceBetweenCenters
+    case let .stretch(_, maxVisibleItems):
+      let visiblePageCount = min(maxVisibleItems, numberOfPages)
+      return boundsWidth / CGFloat(visiblePageCount)
+    }
+  }
+
   func indicatorColor(for state: IndicatorState) -> Color {
     let normalColor = configuration.normalColor
     let highlightedColor = configuration.highlightedColor
@@ -78,14 +88,5 @@ struct IndicatorStateAnimator {
     }
   }
 
-  private var itemWidth: CGFloat {
-    switch configuration.itemPlacement {
-    case let .fixed(spaceBetweenCenters):
-      return spaceBetweenCenters
-    case let .stretch(_, maxVisibleItems):
-      let visiblePageCount = min(maxVisibleItems, numberOfPages)
-      return boundsWidth / CGFloat(visiblePageCount)
-    }
-  }
 }
 #endif

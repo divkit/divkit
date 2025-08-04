@@ -9,6 +9,12 @@ import VGSL
 enum AppComponents {
   static let fontProvider = YSFontProvider()
 
+  static var debugParams: DebugParams {
+    DebugParams(
+      isDebugInfoEnabled: true
+    )
+  }
+
   static func makeDivKitComponents(
     layoutDirection: UserInterfaceLayoutDirection = .system,
     reporter: DivReporter = PlaygroundReporter(),
@@ -54,11 +60,6 @@ enum AppComponents {
     )
   }
 
-  static var debugParams: DebugParams {
-    DebugParams(
-      isDebugInfoEnabled: true
-    )
-  }
 }
 
 private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> PlayerFactory {

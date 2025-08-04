@@ -4,7 +4,12 @@ import VGSL
 
 public final class TextExtensionHandler: DivExtensionHandler {
   public let id: String
+
   private let text: String?
+
+  public var accessibilityElement: AccessibilityElement? {
+    .none(label: text)
+  }
 
   public init(
     id: String,
@@ -12,10 +17,6 @@ public final class TextExtensionHandler: DivExtensionHandler {
   ) {
     self.id = id
     self.text = text
-  }
-
-  public var accessibilityElement: AccessibilityElement? {
-    .none(label: text)
   }
 
   public func applyBeforeBaseProperties(

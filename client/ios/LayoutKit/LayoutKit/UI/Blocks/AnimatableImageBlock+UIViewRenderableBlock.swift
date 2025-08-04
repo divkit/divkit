@@ -28,16 +28,6 @@ extension AnimatableImageBlock {
 
 private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var imageRequest: Cancellable?
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
-
-  private var backgroundModel: ImageViewBackgroundModel? {
-    didSet {
-      backgroundModel.applyTo(self, oldValue: oldValue)
-    }
-  }
-
-  private var imageHolder: ImageHolder?
-
   var imageContentMode = ImageContentMode.default {
     didSet {
       if imageView.imageContentMode != imageContentMode {
@@ -47,7 +37,17 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
     }
   }
 
+  private var backgroundModel: ImageViewBackgroundModel? {
+    didSet {
+      backgroundModel.applyTo(self, oldValue: oldValue)
+    }
+  }
+
+  private var imageHolder: ImageHolder?
+
   private let imageView = AnimatableImageView(frame: .zero)
+
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   public override init(frame: CGRect) {
     super.init(frame: frame)
@@ -86,6 +86,22 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
 private class AnimatableImageView: UIImageView {
   override class var layerClass: AnyClass { AnimatableImageLayer.self }
 
+  override var image: UIImage? {
+    willSet {
+      animatableImageLayer?.updateAllowed = true
+    }
+    didSet {
+      updateGravity()
+      animatableImageLayer?.updateAllowed = false
+    }
+  }
+
+  var imageContentMode = ImageContentMode.default {
+    didSet {
+      updateGravity()
+    }
+  }
+
   var animatableImageLayer: AnimatableImageLayer? {
     layer as? AnimatableImageLayer
   }
@@ -101,22 +117,6 @@ private class AnimatableImageView: UIImageView {
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  var imageContentMode = ImageContentMode.default {
-    didSet {
-      updateGravity()
-    }
-  }
-
-  override var image: UIImage? {
-    willSet {
-      animatableImageLayer?.updateAllowed = true
-    }
-    didSet {
-      updateGravity()
-      animatableImageLayer?.updateAllowed = false
-    }
   }
 
   public override func layoutSubviews() {

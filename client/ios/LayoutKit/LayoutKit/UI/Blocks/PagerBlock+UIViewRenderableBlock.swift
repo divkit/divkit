@@ -43,6 +43,22 @@ private final class PagerView: BlockView {
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
+  override init(frame: CGRect) {
+    galleryView = GalleryView(frame: frame)
+    super.init(frame: frame)
+    addSubview(galleryView)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    galleryView.frame = bounds
+  }
+
   func configure(
     model: GalleryViewModel,
     selectedActions: [[UserInterfaceAction]],
@@ -112,21 +128,6 @@ private final class PagerView: BlockView {
     }
   }
 
-  override init(frame: CGRect) {
-    galleryView = GalleryView(frame: frame)
-    super.init(frame: frame)
-    addSubview(galleryView)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    galleryView.frame = bounds
-  }
 }
 
 extension PagerView: ElementStateObserver {

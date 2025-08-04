@@ -17,11 +17,11 @@ public struct BlockShadow: Equatable {
   public let opacity: Float
   public let color: Color
 
+  private let absoluteBlurRadius: CGFloat
+
   public var blurRadius: CGFloat {
     absoluteBlurRadius / 2
   }
-
-  private let absoluteBlurRadius: CGFloat
 
   public init(
     cornerRadii: CornerRadii,

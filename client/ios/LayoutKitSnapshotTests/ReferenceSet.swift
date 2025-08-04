@@ -12,9 +12,10 @@ enum ReferenceSet {
 }
 
 private struct PlistContents: Decodable {
-  let referenceSnapshotsPath: String
-
   enum CodingKeys: String, CodingKey {
     case referenceSnapshotsPath = "REFERENCE_SNAPSHOTS_PATH"
   }
+
+  let referenceSnapshotsPath: String
+
 }

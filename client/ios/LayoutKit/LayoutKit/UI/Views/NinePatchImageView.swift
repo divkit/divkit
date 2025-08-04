@@ -3,8 +3,6 @@ import UIKit
 import VGSL
 
 public final class NinePatchImageView: UIView, RemoteImageViewContentProtocol {
-  private var image: UIImage?
-
   public var capInsets: UIEdgeInsets = .zero {
     didSet {
       updateLayout()
@@ -14,6 +12,8 @@ public final class NinePatchImageView: UIView, RemoteImageViewContentProtocol {
   public var appearanceAnimation: ImageViewAnimation?
   public var imageRedrawingStyle: ImageRedrawingStyle?
   public var imageContentMode = ImageContentMode.default
+
+  private var image: UIImage?
 
   init() {
     super.init(frame: .zero)

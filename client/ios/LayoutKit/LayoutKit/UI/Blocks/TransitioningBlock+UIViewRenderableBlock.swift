@@ -39,14 +39,15 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
   struct Model: Equatable {
     let block: TransitioningBlock
     let layout: Layout?
+
     static func ==(lhs: Model, rhs: Model) -> Bool {
       lhs.block.equals(rhs.block) && lhs.layout == rhs.layout
     }
   }
 
-  private weak var observer: ElementStateObserver?
-
   private(set) var model: Model?
+
+  private weak var observer: ElementStateObserver?
 
   private var fromView: BlockView? {
     didSet {
@@ -68,6 +69,29 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { toView.asArray() }
   var effectiveBackgroundColor: UIColor? { toView?.effectiveBackgroundColor }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    if let view = fromView {
+      let currentTransform = view.transform
+      view.transform = .identity
+      view.frame = bounds
+      view.transform = currentTransform
+    }
+
+    if let view = toView {
+      let currentTransform = view.transform
+      view.transform = .identity
+      view.frame = bounds
+      view.transform = currentTransform
+    }
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result == self ? nil : result
+  }
 
   func configure(
     model: Model,
@@ -152,27 +176,5 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
     view.setInitialParamsAndAnimate(animations: animations, completion: completion)
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    if let view = fromView {
-      let currentTransform = view.transform
-      view.transform = .identity
-      view.frame = bounds
-      view.transform = currentTransform
-    }
-
-    if let view = toView {
-      let currentTransform = view.transform
-      view.transform = .identity
-      view.frame = bounds
-      view.transform = currentTransform
-    }
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result == self ? nil : result
-  }
 }
 #endif

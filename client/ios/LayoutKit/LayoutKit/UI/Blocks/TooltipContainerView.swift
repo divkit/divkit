@@ -24,6 +24,10 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     return backgroundElement
   }()
 
+  var isModal: Bool {
+    tooltip.params.mode == .modal
+  }
+
   public init(
     tooltip: DefaultTooltipManager.Tooltip,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
@@ -55,23 +59,6 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError()
-  }
-
-  var isModal: Bool {
-    tooltip.params.mode == .modal
-  }
-
-  func animateAppear() {
-    if let animationIn = tooltip.params.animationIn {
-      setInitialParamsAndAnimate(animations: animationIn)
-    }
-  }
-
-  @objc private func handleTap(_ sender: UITapGestureRecognizer) {
-    let point = sender.location(in: self)
-    if !isPointInsideTooltip(point) {
-      performTapOutsideActions()
-    }
   }
 
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -128,6 +115,19 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     } else {
       removeFromSuperview()
       onCloseAction()
+    }
+  }
+
+  func animateAppear() {
+    if let animationIn = tooltip.params.animationIn {
+      setInitialParamsAndAnimate(animations: animationIn)
+    }
+  }
+
+  @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+    let point = sender.location(in: self)
+    if !isPointInsideTooltip(point) {
+      performTapOutsideActions()
     }
   }
 

@@ -70,10 +70,11 @@ public class DefaultTooltipManager: TooltipManager {
 
   public var shownTooltips: Property<Set<String>>
 
+  private(set) var tooltipWindowManager: TooltipWindowManager?
+
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
-  private(set) var tooltipWindowManager: TooltipWindowManager?
   private var previousOrientation = UIDevice.current.orientation
 
   public init(
@@ -86,6 +87,14 @@ public class DefaultTooltipManager: TooltipManager {
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(orientationDidChange),
+      name: UIDevice.orientationDidChangeNotification,
+      object: nil
+    )
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(
+      self,
       name: UIDevice.orientationDidChangeNotification,
       object: nil
     )
@@ -175,14 +184,6 @@ public class DefaultTooltipManager: TooltipManager {
     handleAction = handler
   }
 
-  deinit {
-    NotificationCenter.default.removeObserver(
-      self,
-      name: UIDevice.orientationDidChangeNotification,
-      object: nil
-    )
-  }
-
   @objc func orientationDidChange(_: Notification) {
     let orientation = UIDevice.current.orientation
     guard orientation != previousOrientation, !orientation.isFlat else { return }
@@ -242,6 +243,10 @@ extension TooltipAnchorView {
 }
 
 private final class ProxyViewController: UIViewController {
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    viewController.preferredStatusBarStyle
+  }
+
   private let viewController: UIViewController
 
   init(viewController: UIViewController) {
@@ -254,9 +259,6 @@ private final class ProxyViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    viewController.preferredStatusBarStyle
-  }
 }
 
 final class TooltipWindowManager {

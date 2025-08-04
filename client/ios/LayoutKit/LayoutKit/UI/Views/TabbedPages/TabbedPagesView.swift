@@ -3,6 +3,9 @@ import UIKit
 import VGSL
 
 public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
+  public let visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView]
+  public var layoutReporter: LayoutReporter?
+
   private var selectionWireframe: TabSelectionWireframe?
 
   private let tabListView = TabListView()
@@ -23,10 +26,44 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
 
   private var tabDataSource: TabListSelectionDataSource!
   private var layout: TabViewLayout!
-  public let visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView]
 
   public var effectiveBackgroundColor: UIColor? { tabContentsView.effectiveBackgroundColor }
-  public var layoutReporter: LayoutReporter?
+
+  public weak var updatesDelegate: TabbedPagesViewModelDelegate? {
+    get { tabContentsView.updatesDelegate }
+    set { tabContentsView.updatesDelegate = newValue }
+  }
+
+  @available(*, unavailable)
+  public required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override init(frame: CGRect) {
+    visibleBoundsTrackingSubviews = [tabContentsView]
+    super.init(frame: frame)
+    attachViews()
+  }
+
+  public override func layoutSubviews() {
+    let newLayout = TabViewLayout(
+      model: model,
+      selectedPageIndex: tabContentsView.selectedPageIndex,
+      size: bounds.size
+    )
+
+    guard newLayout != layout else {
+      return
+    }
+    layoutReporter?.willLayoutSubviews()
+
+    layout = newLayout
+    tabListView.frame = layout.listFrame
+    tabContentsView.frame = layout.contentsFrame
+    separatorView?.frame = layout.separatorFrame
+
+    layoutReporter?.didLayoutSubviews()
+  }
 
   public func configure(
     model: TabViewModel,
@@ -60,44 +97,8 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
     setNeedsLayout()
   }
 
-  public weak var updatesDelegate: TabbedPagesViewModelDelegate? {
-    get { tabContentsView.updatesDelegate }
-    set { tabContentsView.updatesDelegate = newValue }
-  }
-
-  override init(frame: CGRect) {
-    visibleBoundsTrackingSubviews = [tabContentsView]
-    super.init(frame: frame)
-    attachViews()
-  }
-
   private func attachViews() {
     addSubviews([tabListView, tabContentsView])
-  }
-
-  @available(*, unavailable)
-  public required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  public override func layoutSubviews() {
-    let newLayout = TabViewLayout(
-      model: model,
-      selectedPageIndex: tabContentsView.selectedPageIndex,
-      size: bounds.size
-    )
-
-    guard newLayout != layout else {
-      return
-    }
-    layoutReporter?.willLayoutSubviews()
-
-    layout = newLayout
-    tabListView.frame = layout.listFrame
-    tabContentsView.frame = layout.contentsFrame
-    separatorView?.frame = layout.separatorFrame
-
-    layoutReporter?.didLayoutSubviews()
   }
 
   private func configureSeparatorView() {

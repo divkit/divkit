@@ -2,6 +2,7 @@ import CoreGraphics
 
 public struct AnchorPoint: Equatable {
   let x, y: AnchorValue
+
   public init(x: AnchorValue, y: AnchorValue) {
     self.x = x
     self.y = y

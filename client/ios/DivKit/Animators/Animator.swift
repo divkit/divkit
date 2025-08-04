@@ -46,6 +46,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
   }
 
   let id: String
+
   private var configuration: Configuration
   private let animationBlock: (AnimatedType) -> Void
   private let valueInterpolator: I
@@ -135,6 +136,14 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     }
   }
 
+  func stop() {
+    item?.cancel()
+    item = nil
+    displayLink?.invalidate()
+    displayLink = nil
+    cancelAction()
+  }
+
   @objc private func update() {
     guard let startTime, displayLink != nil else { return }
 
@@ -180,13 +189,6 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     }
   }
 
-  func stop() {
-    item?.cancel()
-    item = nil
-    displayLink?.invalidate()
-    displayLink = nil
-    cancelAction()
-  }
 }
 
 #if os(iOS)
@@ -201,6 +203,7 @@ extension CADisplayLink {
 private let currentMediaTime = { Double(0) }
 private class DisplayLink {
   init(target _: Any, selector _: Selector) {}
+
   func invalidate() {}
   func addToCurrentRunLoop() {}
 }

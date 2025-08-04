@@ -3,6 +3,9 @@ import Foundation
 import VGSL
 
 public enum InsetMode: Equatable {
+  case fixed(values: SideInsets)
+  case resizable(params: Resizable)
+
   public struct Resizable: Equatable {
     public let minValue: CGFloat
     public let maxViewportSize: CGFloat
@@ -16,8 +19,6 @@ public enum InsetMode: Equatable {
     }
   }
 
-  case fixed(values: SideInsets)
-  case resizable(params: Resizable)
 }
 
 extension InsetMode {

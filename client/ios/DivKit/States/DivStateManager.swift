@@ -58,26 +58,6 @@ public class DivStateManager {
     self._items = items
   }
 
-  func get(stateBlockPath: DivStatePath) -> Item? {
-    lock.withLock {
-      _items[stateBlockPath]
-    }
-  }
-
-  func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
-    lock.withLock {
-      _stateBindings[stateBlockPath] = stateBinding
-      guard stateBinding.value != _items[stateBlockPath]?.currentStateID.rawValue else { return }
-      updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
-    }
-  }
-
-  func resetBinding(for stateBlockPath: DivStatePath) {
-    lock.withLock {
-      _ = _stateBindings.removeValue(forKey: stateBlockPath)
-    }
-  }
-
   public func setState(stateBlockPath: DivStatePath, stateID: DivStateID) {
     lock.withLock {
       _stateBindings[stateBlockPath]?.value = stateID.rawValue
@@ -92,21 +72,6 @@ public class DivStateManager {
     lock.withLock {
       updateState(path: path, stateID: stateID)
     }
-  }
-
-  private func updateState(path: DivStatePath, stateID: DivStateID) {
-    // need to take a write lock before
-    let previousItem = _items[path]
-    let previousState: PreviousState = if let previousStateID = previousItem?.currentStateID {
-      .withID(previousStateID)
-    } else {
-      .initial
-    }
-    _stateBindings[path]?.value = stateID.rawValue
-    _items[path] = Item(
-      currentStateID: stateID,
-      previousState: previousState
-    )
   }
 
   public func removeState(path: DivStatePath) {
@@ -182,6 +147,35 @@ public class DivStateManager {
     }
   }
 
+  public func reset() {
+    lock.withLock {
+      _items = [:]
+      _blockIds = [:]
+      _blockVisibility = [:]
+      _stateBindings = [:]
+    }
+  }
+
+  func get(stateBlockPath: DivStatePath) -> Item? {
+    lock.withLock {
+      _items[stateBlockPath]
+    }
+  }
+
+  func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
+    lock.withLock {
+      _stateBindings[stateBlockPath] = stateBinding
+      guard stateBinding.value != _items[stateBlockPath]?.currentStateID.rawValue else { return }
+      updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
+    }
+  }
+
+  func resetBinding(for stateBlockPath: DivStatePath) {
+    lock.withLock {
+      _ = _stateBindings.removeValue(forKey: stateBlockPath)
+    }
+  }
+
   func setBlockVisibility(
     statePath: DivStatePath,
     resolvedId: String,
@@ -200,14 +194,21 @@ public class DivStateManager {
     }
   }
 
-  public func reset() {
-    lock.withLock {
-      _items = [:]
-      _blockIds = [:]
-      _blockVisibility = [:]
-      _stateBindings = [:]
+  private func updateState(path: DivStatePath, stateID: DivStateID) {
+    // need to take a write lock before
+    let previousItem = _items[path]
+    let previousState: PreviousState = if let previousStateID = previousItem?.currentStateID {
+      .withID(previousStateID)
+    } else {
+      .initial
     }
+    _stateBindings[path]?.value = stateID.rawValue
+    _items[path] = Item(
+      currentStateID: stateID,
+      previousState: previousState
+    )
   }
+
 }
 
 extension DivStateManager: Equatable {

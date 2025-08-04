@@ -76,6 +76,10 @@ private class LabelImagePreviewProvider: ViewProvider {
     return label!
   }
 
+  func equals(other: ViewProvider) -> Bool {
+    loadView() == other.loadView()
+  }
+
   private func makeLabel() -> UILabel {
     let label = UILabel()
     label.text = "Preview"
@@ -83,9 +87,6 @@ private class LabelImagePreviewProvider: ViewProvider {
     return label
   }
 
-  func equals(other: ViewProvider) -> Bool {
-    loadView() == other.loadView()
-  }
 }
 
 private let defaultPagerViewState = [

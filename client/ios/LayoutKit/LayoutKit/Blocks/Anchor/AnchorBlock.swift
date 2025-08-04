@@ -16,33 +16,32 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
   public let center: Block
   public let trailing: Block?
 
-  private var contents: [Block] {
-    [leading, center, trailing].compactMap { $0 }
+  public var intrinsicContentWidth: CGFloat {
+    if case let .fixed(value) = widthTrait {
+      return value
+    }
+
+    let widths = contents.map(\.intrinsicContentWidth)
+    var result: CGFloat = switch direction {
+    case .horizontal:
+      widths.reduce(0, +)
+    case .vertical:
+      widths.max()!
+    }
+
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    return result
   }
 
-  private init(
-    direction: ContainerBlock.LayoutDirection,
-    widthTrait: LayoutTrait,
-    heightTrait: LayoutTrait,
-    crossAlignment: Alignment,
-    leading: Block?,
-    center: Block,
-    trailing: Block?
-  ) {
-    self.direction = direction
-    self.widthTrait = widthTrait
-    self.heightTrait = heightTrait
-    self.crossAlignment = crossAlignment
-    self.leading = leading
-    self.center = center
-    self.trailing = trailing
+  public var debugDescription: String {
+    "Anchored"
+  }
 
-    for content in contents {
-      switch direction {
-      case .vertical: precondition(!content.isVerticallyResizable)
-      case .horizontal: precondition(!content.isHorizontallyResizable)
-      }
-    }
+  private var contents: [Block] {
+    [leading, center, trailing].compactMap { $0 }
   }
 
   public convenience init(
@@ -76,24 +75,29 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
     )
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    if case let .fixed(value) = widthTrait {
-      return value
-    }
+  private init(
+    direction: ContainerBlock.LayoutDirection,
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait,
+    crossAlignment: Alignment,
+    leading: Block?,
+    center: Block,
+    trailing: Block?
+  ) {
+    self.direction = direction
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
+    self.crossAlignment = crossAlignment
+    self.leading = leading
+    self.center = center
+    self.trailing = trailing
 
-    let widths = contents.map(\.intrinsicContentWidth)
-    var result: CGFloat = switch direction {
-    case .horizontal:
-      widths.reduce(0, +)
-    case .vertical:
-      widths.max()!
+    for content in contents {
+      switch direction {
+      case .vertical: precondition(!content.isVerticallyResizable)
+      case .horizontal: precondition(!content.isHorizontallyResizable)
+      }
     }
-
-    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
-      result = clamp(result, min: minSize, max: maxSize)
-    }
-
-    return result
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -116,17 +120,6 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
     }
 
     return result
-  }
-
-  func makeLayout(for size: CGSize) -> Layout {
-    Layout(
-      size: size,
-      direction: direction,
-      crossAlignment: crossAlignment,
-      leading: leading,
-      center: center,
-      trailing: trailing
-    )
   }
 
   public func laidOutHierarchy(for size: CGSize) -> (AnchorBlock, Layout) {
@@ -153,10 +146,6 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       && leading == other.leading
       && center == other.center
       && trailing == other.trailing
-  }
-
-  public var debugDescription: String {
-    "Anchored"
   }
 
   public func getImageHolders() -> [ImageHolder] {
@@ -186,4 +175,16 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       trailing: trailing?.updated(path: path, isFocused: isFocused)
     )
   }
+
+  func makeLayout(for size: CGSize) -> Layout {
+    Layout(
+      size: size,
+      direction: direction,
+      crossAlignment: crossAlignment,
+      leading: leading,
+      center: center,
+      trailing: trailing
+    )
+  }
+
 }

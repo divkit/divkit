@@ -36,6 +36,14 @@ extension BackgroundBlock {
 }
 
 private final class BackgroundBlockView: BlockView, VisibleBoundsTrackingContainer {
+  struct Model: ReferenceEquatable {
+    let background: Background
+    let child: Block
+    let source: Variable<AnyObject?>
+    let cornerRadius: CGFloat
+    let layout: BackgroundBlock.Layout?
+  }
+
   private var backgroundView: BlockView? {
     didSet {
       guard oldValue !== backgroundView else { return }
@@ -56,22 +64,28 @@ private final class BackgroundBlockView: BlockView, VisibleBoundsTrackingContain
     }
   }
 
+  private var model: Model!
+  private weak var observer: ElementStateObserver?
+
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [childView, backgroundView].compactMap { $0 }
   }
 
   var effectiveBackgroundColor: UIColor? { backgroundView?.effectiveBackgroundColor }
 
-  struct Model: ReferenceEquatable {
-    let background: Background
-    let child: Block
-    let source: Variable<AnyObject?>
-    let cornerRadius: CGFloat
-    let layout: BackgroundBlock.Layout?
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    layer.cornerRadius = clamp(model.cornerRadius, min: 0, max: bounds.size.minDimension.half)
+
+    backgroundView?.frame = model?.layout ?? bounds
+    childView?.frame = model?.layout ?? bounds
   }
 
-  private var model: Model!
-  private weak var observer: ElementStateObserver?
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
+  }
 
   func configure(
     model: Model,
@@ -108,19 +122,6 @@ private final class BackgroundBlockView: BlockView, VisibleBoundsTrackingContain
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    layer.cornerRadius = clamp(model.cornerRadius, min: 0, max: bounds.size.minDimension.half)
-
-    backgroundView?.frame = model?.layout ?? bounds
-    childView?.frame = model?.layout ?? bounds
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result === self ? nil : result
-  }
 }
 
 extension UIViewRenderable {

@@ -12,6 +12,23 @@ public func ==(lhs: CATransform3D, rhs: CATransform3D) -> Bool {
 }
 
 public struct BlockAnimation: Equatable {
+  public struct KeyTime: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, Equatable {
+    public let value: Double
+
+    public init(_ value: Double) {
+      precondition(value >= 0 && value <= 1.0, "KeyTime value must be in [0; 1]")
+      self.value = value
+    }
+
+    public init(floatLiteral value: Double) {
+      self.init(value)
+    }
+
+    public init(integerLiteral value: IntegerLiteralType) {
+      self.init(Double(value))
+    }
+  }
+
   public let changes: AnimationChanges
   public let keyTimes: [KeyTime]
   public let duration: TimeInterval
@@ -38,22 +55,6 @@ public struct BlockAnimation: Equatable {
     self.timingFunction = timingFunction
   }
 
-  public struct KeyTime: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, Equatable {
-    public let value: Double
-
-    public init(_ value: Double) {
-      precondition(value >= 0 && value <= 1.0, "KeyTime value must be in [0; 1]")
-      self.value = value
-    }
-
-    public init(floatLiteral value: Double) {
-      self.init(value)
-    }
-
-    public init(integerLiteral value: IntegerLiteralType) {
-      self.init(Double(value))
-    }
-  }
 }
 
 extension BlockAnimation {

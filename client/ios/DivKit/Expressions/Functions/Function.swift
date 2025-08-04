@@ -34,16 +34,16 @@ extension SimpleFunction {
 struct NoMatchingSignatureError: Error {}
 
 struct ConstantFunction<R>: SimpleFunction {
+  let signature = FunctionSignature(
+    arguments: [],
+    resultType: R.self
+  )
+
   private let value: R
 
   init(_ value: R) {
     self.value = value
   }
-
-  let signature = FunctionSignature(
-    arguments: [],
-    resultType: R.self
-  )
 
   func invoke(_: [Any], context _: ExpressionContext) throws -> Any {
     value
@@ -67,12 +67,12 @@ struct LazyFunction: Function {
 }
 
 struct FunctionNullary<R>: SimpleFunction {
-  private let impl: (ExpressionContext) throws -> R
-
   let signature = FunctionSignature(
     arguments: [],
     resultType: R.self
   )
+
+  private let impl: (ExpressionContext) throws -> R
 
   init(impl: @escaping () throws -> R) {
     self.impl = { _ in try impl() }
@@ -88,14 +88,14 @@ struct FunctionNullary<R>: SimpleFunction {
 }
 
 struct FunctionUnary<T1, R>: SimpleFunction {
-  private let impl: (T1) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
     ],
     resultType: R.self
   )
+
+  private let impl: (T1) throws -> R
 
   init(impl: @escaping (T1) throws -> R) {
     self.impl = impl
@@ -108,8 +108,6 @@ struct FunctionUnary<T1, R>: SimpleFunction {
 }
 
 struct FunctionBinary<T1, T2, R>: SimpleFunction {
-  private let impl: (T1, T2, ExpressionContext) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
@@ -117,6 +115,8 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
     ],
     resultType: R.self
   )
+
+  private let impl: (T1, T2, ExpressionContext) throws -> R
 
   init(impl: @escaping (T1, T2) throws -> R) {
     self.impl = { arg1, arg2, _ in try impl(arg1, arg2) }
@@ -137,8 +137,6 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
 }
 
 struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
-  private let impl: (T1, T2, T3) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
@@ -147,6 +145,8 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
     ],
     resultType: R.self
   )
+
+  private let impl: (T1, T2, T3) throws -> R
 
   init(impl: @escaping (T1, T2, T3) throws -> R) {
     self.impl = impl
@@ -163,8 +163,6 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
 }
 
 struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
-  private let impl: (T1, T2, T3, T4) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
@@ -174,6 +172,8 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
     ],
     resultType: R.self
   )
+
+  private let impl: (T1, T2, T3, T4) throws -> R
 
   init(impl: @escaping (T1, T2, T3, T4) throws -> R) {
     self.impl = impl
@@ -191,14 +191,14 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
 }
 
 struct FunctionVarUnary<T1, R>: SimpleFunction {
-  private let impl: ([T1]) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self, vararg: true),
     ],
     resultType: R.self
   )
+
+  private let impl: ([T1]) throws -> R
 
   init(impl: @escaping ([T1]) throws -> R) {
     self.impl = impl
@@ -211,8 +211,6 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
 }
 
 struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
-  private let impl: (T1, [T2]) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
@@ -220,6 +218,8 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
     ],
     resultType: R.self
   )
+
+  private let impl: (T1, [T2]) throws -> R
 
   init(impl: @escaping (T1, [T2]) throws -> R) {
     self.impl = impl
@@ -235,8 +235,6 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
 }
 
 struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
-  private let impl: (T1, T2, [T3]) throws -> R
-
   let signature = FunctionSignature(
     arguments: [
       .init(type: T1.self),
@@ -245,6 +243,8 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
     ],
     resultType: R.self
   )
+
+  private let impl: (T1, T2, [T3]) throws -> R
 
   init(impl: @escaping (T1, T2, [T3]) throws -> R) {
     self.impl = impl
@@ -262,6 +262,7 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 
 struct OverloadedFunction: Function {
   let functions: [SimpleFunction]
+
   private let makeError: ([Any]) -> Error
 
   init(functions: [SimpleFunction], makeError: (([Any]) -> Error)? = nil) {

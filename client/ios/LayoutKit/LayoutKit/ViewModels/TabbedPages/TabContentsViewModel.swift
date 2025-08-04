@@ -39,6 +39,16 @@ public struct TabContentsViewModel: Equatable {
     try checkConstraints()
   }
 
+  public static func ==(lhs: TabContentsViewModel, rhs: TabContentsViewModel) -> Bool {
+    lhs.path == rhs.path
+      && lhs.pages == rhs.pages
+      && lhs.pagesHeight == rhs.pagesHeight
+      && lhs.contentInsets == rhs.contentInsets
+      && lhs.background == rhs.background
+      && lhs.footer == rhs.footer
+      && lhs.scrollingEnabled == rhs.scrollingEnabled
+  }
+
   private func checkConstraints() throws {
     if pages.isEmpty {
       throw BlockError("Tab error: no children provided")
@@ -49,15 +59,6 @@ public struct TabContentsViewModel: Equatable {
     }
   }
 
-  public static func ==(lhs: TabContentsViewModel, rhs: TabContentsViewModel) -> Bool {
-    lhs.path == rhs.path
-      && lhs.pages == rhs.pages
-      && lhs.pagesHeight == rhs.pagesHeight
-      && lhs.contentInsets == rhs.contentInsets
-      && lhs.background == rhs.background
-      && lhs.footer == rhs.footer
-      && lhs.scrollingEnabled == rhs.scrollingEnabled
-  }
 }
 
 extension TabContentsViewModel: CustomDebugStringConvertible {

@@ -18,13 +18,13 @@ final class ErrorListView: UIView {
     addSubview(errorView)
   }
 
-  public override func layoutSubviews() {
-    self.errorView.frame = self.bounds.inset(by: safeAreaInsets)
-  }
-
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  public override func layoutSubviews() {
+    self.errorView.frame = self.bounds.inset(by: safeAreaInsets)
   }
 
   private func copyToPasteboard() {

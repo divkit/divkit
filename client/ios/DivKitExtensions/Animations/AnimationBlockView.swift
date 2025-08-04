@@ -19,8 +19,6 @@ final class AnimationBlockView: BlockView {
     }
   }
 
-  private var animationRequest: Cancellable?
-
   var isPlaying: Bool = true {
     didSet {
       guard oldValue != isPlaying else { return }
@@ -57,13 +55,12 @@ final class AnimationBlockView: BlockView {
     }
   }
 
+  let effectiveBackgroundColor: UIColor? = nil
+
+  private var animationRequest: Cancellable?
+
   init() {
     super.init(frame: .zero)
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    animatableView?.frame = bounds
   }
 
   @available(*, unavailable)
@@ -71,7 +68,11 @@ final class AnimationBlockView: BlockView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  let effectiveBackgroundColor: UIColor? = nil
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    animatableView?.frame = bounds
+  }
+
 }
 
 extension AnimationBlockView: VisibleBoundsTrackingLeaf {}

@@ -62,6 +62,13 @@ public final class PhoneMaskFormatter: MaskFormatter {
     return InputData(text: textString, cursorPosition: newCursorPosition, rawData: rawData)
   }
 
+  public func equals(_ other: MaskFormatter) -> Bool {
+    guard let other = other as? PhoneMaskFormatter else {
+      return false
+    }
+    return self.masksByCountryCode == other.masksByCountryCode
+  }
+
   private func findMask(for rawText: String) -> String {
     guard !rawText.isEmpty else {
       return ""
@@ -95,12 +102,6 @@ public final class PhoneMaskFormatter: MaskFormatter {
     return resultMask + extraSymbols
   }
 
-  public func equals(_ other: MaskFormatter) -> Bool {
-    guard let other = other as? PhoneMaskFormatter else {
-      return false
-    }
-    return self.masksByCountryCode == other.masksByCountryCode
-  }
 }
 
 extension Character {

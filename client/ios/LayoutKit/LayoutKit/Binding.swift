@@ -2,8 +2,9 @@ import Foundation
 import VGSL
 
 public struct Binding<T: Equatable>: Equatable {
-  private let name: String
   @Property public var value: T
+
+  private let name: String
 
   public init(
     name: String,

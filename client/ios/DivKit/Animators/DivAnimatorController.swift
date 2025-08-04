@@ -6,6 +6,12 @@ final class DivAnimatorController {
   private var animators = [UIElementPath: Animator]()
   private let lock = AllocatedUnfairLock()
 
+  deinit {
+    lock.withLock {
+      animators.values.forEach { $0.stop() }
+    }
+  }
+
   func startAnimator(
     path: UIElementPath,
     id: String,
@@ -61,9 +67,4 @@ final class DivAnimatorController {
     }
   }
 
-  deinit {
-    lock.withLock {
-      animators.values.forEach { $0.stop() }
-    }
-  }
 }

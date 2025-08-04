@@ -32,10 +32,6 @@ public final class DivKitComponents {
   public let visibilityCounter = DivVisibilityCounter()
   public let resourcesPreloader: DivDataResourcesPreloader?
 
-  public var updateCardSignal: Signal<[DivCardUpdateReason]> {
-    updateCardPipe.signal
-  }
-
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
   private let idToPath = IdToPath()
@@ -49,6 +45,10 @@ public final class DivKitComponents {
   private let updateCardPipe: SignalPipe<[DivCardUpdateReason]>
   private let variableTracker = DivVariableTracker()
   private var debugErrorCollectors = [DivCardID: DebugErrorCollector]()
+
+  public var updateCardSignal: Signal<[DivCardUpdateReason]> {
+    updateCardPipe.signal
+  }
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.

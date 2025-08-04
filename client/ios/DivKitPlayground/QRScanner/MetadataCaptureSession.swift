@@ -5,15 +5,16 @@ import VGSL
 typealias LogError = (String) -> Void
 
 final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDelegate {
+  let result: ObservableProperty<String>
+
   private let captureSession = AVCaptureSession()
   private let previewLayer: AVCaptureVideoPreviewLayer
 
-  let result: ObservableProperty<String>
   private let logError: LogError
 
-  var layer: CALayer { previewLayer }
-
   private var isInitialized = false
+
+  var layer: CALayer { previewLayer }
 
   init(
     result: ObservableProperty<String>,

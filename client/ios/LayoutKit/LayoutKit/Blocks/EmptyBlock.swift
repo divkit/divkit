@@ -6,6 +6,14 @@ public final class EmptyBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  public var intrinsicContentWidth: CGFloat {
+    widthTrait.intrinsicSize
+  }
+
+  public var isEmpty: Bool {
+    self == EmptyBlock.zeroSized
+  }
+
   public init(
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .resizable
@@ -14,19 +22,11 @@ public final class EmptyBlock: BlockWithTraits {
     self.heightTrait = heightTrait
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    widthTrait.intrinsicSize
-  }
-
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     heightTrait.intrinsicSize
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }
-
-  public var isEmpty: Bool {
-    self == EmptyBlock.zeroSized
-  }
 
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? EmptyBlock else {

@@ -2,9 +2,13 @@ import CoreGraphics
 import VGSL
 
 public final class ScrollableContentPager: NSObject {
+  public private(set) var currentPageIndex: Int?
+  public private(set) var lastTargetPageIndex: Int?
+
+  private(set) var isHorizontal = true
+
   private var indexedPageOrigins: [(origin: CGFloat, index: Int)] = []
   private var isPagingEnabled = true
-  private(set) var isHorizontal = true
 
   public func setPageOrigins(
     _ pageOrigins: [CGFloat],
@@ -25,9 +29,6 @@ public final class ScrollableContentPager: NSObject {
 
     currentPageIndex = pageIndex(forOffset: offset)
   }
-
-  public private(set) var currentPageIndex: Int?
-  public private(set) var lastTargetPageIndex: Int?
 
   public func targetPageOffset(forProposedOffset offset: CGFloat, velocity: CGFloat) -> CGFloat? {
     guard let startPageIndex = currentPageIndex else { return nil }

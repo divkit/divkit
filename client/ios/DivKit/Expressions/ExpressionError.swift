@@ -1,6 +1,27 @@
 import Foundation
 
 public struct ExpressionError: LocalizedError, CustomStringConvertible {
+  public let description: String
+
+  let message: String
+
+  public var errorDescription: String? {
+    description
+  }
+
+  init(
+    _ message: String,
+    expression: String? = nil
+  ) {
+    self.message = message
+
+    description = if let expression {
+      "\(message) Expression: \(expression)"
+    } else {
+      message
+    }
+  }
+
   static func integerOverflow() -> Error {
     ExpressionError("Integer overflow.")
   }
@@ -31,23 +52,4 @@ public struct ExpressionError: LocalizedError, CustomStringConvertible {
     )
   }
 
-  public let description: String
-  let message: String
-
-  init(
-    _ message: String,
-    expression: String? = nil
-  ) {
-    self.message = message
-
-    description = if let expression {
-      "\(message) Expression: \(expression)"
-    } else {
-      message
-    }
-  }
-
-  public var errorDescription: String? {
-    description
-  }
 }

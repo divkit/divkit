@@ -18,16 +18,16 @@ enum UserPreferences {
 
   static let isRTLEnabledDefault: Bool = UIUserInterfaceLayoutDirection
     .system == .rightToLeft ? true : false
+  static let showRenderingTimeDefault = false
+  static let playgroundThemeDefault = Theme.system
+
   static var isRTLEnabled: Bool {
     defaults.value(forKey: isRTLEnabledKey) as? Bool ?? isRTLEnabledDefault
   }
 
-  static let showRenderingTimeDefault = false
   static var showRenderingTime: Bool {
     defaults.value(forKey: showRenderingTimeKey) as? Bool ?? showRenderingTimeDefault
   }
-
-  static let playgroundThemeDefault = Theme.system
 
   static var playgroundTheme: Theme {
     let value = Theme(rawValue: defaults.value(forKey: playgroundThemeKey) as? String ?? "") ??

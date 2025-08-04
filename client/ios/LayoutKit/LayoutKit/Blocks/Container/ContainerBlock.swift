@@ -9,12 +9,6 @@ import AppKit
 #endif
 
 public final class ContainerBlock: BlockWithLayout {
-  typealias Layout = ContainerBlockLayout
-  public static let defaultAnchorPoint = AnchorPoint(
-    x: .relative(value: 50),
-    y: .relative(value: 50)
-  )
-
   /// Determines direction in which child blocks are laid out in a container
   @frozen
   public enum LayoutDirection: CaseIterable {
@@ -82,11 +76,18 @@ public final class ContainerBlock: BlockWithLayout {
     }
   }
 
+  typealias Layout = ContainerBlockLayout
+
   private struct CachedSizes {
     var intrinsicWidth: CGFloat?
     var intrinsicHeight: (width: CGFloat, height: CGFloat)?
     var nonResizableSize: (width: CGFloat, height: CGFloat?)?
   }
+
+  public static let defaultAnchorPoint = AnchorPoint(
+    x: .relative(value: 50),
+    y: .relative(value: 50)
+  )
 
   public let blockLayoutDirection: UserInterfaceLayoutDirection
   public let layoutDirection: LayoutDirection
@@ -107,6 +108,98 @@ public final class ContainerBlock: BlockWithLayout {
   public let path: UIElementPath?
 
   private var cached = CachedSizes()
+
+  public var isVerticallyResizable: Bool { heightTrait.isResizable }
+  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
+
+  public var calculateWidthFirst: Bool {
+    switch widthTrait {
+    case .fixed, .weighted:
+      true
+    case .intrinsic:
+      !(layoutDirection == .vertical && layoutMode == .wrap)
+    }
+  }
+
+  public var isVerticallyConstrained: Bool { heightTrait.isConstrained }
+  public var isHorizontallyConstrained: Bool { widthTrait.isConstrained }
+
+  public var intrinsicContentWidth: CGFloat {
+    if case let .fixed(width) = widthTrait {
+      return width
+    }
+
+    if let cached = cached.intrinsicWidth {
+      return cached
+    }
+
+    var result: CGFloat = switch layoutDirection {
+    case .horizontal:
+      (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
+    case .vertical:
+      children.map(\.content.intrinsicContentWidth).max() ?? 0
+    }
+
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    cached.intrinsicWidth = result
+    return result
+  }
+
+  public var widthOfHorizontallyNonResizableBlock: CGFloat {
+    if case let .fixed(value) = widthTrait {
+      return value
+    }
+
+    guard case .intrinsic = widthTrait else {
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for resizable block")
+      return 0
+    }
+
+    if let cached = cached.nonResizableSize, cached.height == nil {
+      return cached.width
+    }
+
+    let result: CGFloat = switch layoutDirection {
+    case .horizontal:
+      (children.map(\.content.widthOfHorizontallyNonResizableBlock) + gaps)
+        .reduce(0, +)
+    case .vertical:
+      // MOBYANDEXIOS-1092: Only non-resizable children can influence the width of a container
+      // because the widths of resizable children depend on the width of container itself
+      children.filter { !$0.content.isHorizontallyResizable }
+        .map(\.content.widthOfHorizontallyNonResizableBlock).max() ?? 0
+    }
+
+    cached.nonResizableSize = (width: result, height: nil)
+    return result
+  }
+
+  public var heightOfVerticallyNonResizableBlock: CGFloat {
+    assert(
+      layoutMode == .wrap && layoutDirection == .vertical,
+      "First height calculation should only be used for vertical container with wrap layout mode"
+    )
+    return heightOfVerticallyNonResizableBlock(forWidth: .zero)
+  }
+
+  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
+    guard case let .weighted(value) = heightTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return LayoutTrait.Weight.default
+    }
+    return value
+  }
+
+  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
+    guard case let .weighted(value) = widthTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return LayoutTrait.Weight.default
+    }
+    return value
+  }
 
   public init(
     blockLayoutDirection: UserInterfaceLayoutDirection = .leftToRight,
@@ -186,94 +279,6 @@ public final class ContainerBlock: BlockWithLayout {
     return layout.ascent
   }
 
-  private func validateLayoutTraits() throws {
-    if layoutMode == .wrap {
-      switch layoutDirection {
-      case .horizontal:
-        guard children.map(\.content).allVerticallyNonResizable else {
-          throw BlockError(
-            "Container block error: horizontal wrap container has children with resizable height"
-          )
-        }
-      case .vertical:
-        guard children.map(\.content).allHorizontallyNonResizable else {
-          throw BlockError(
-            "Container block error: vertical wrap container has children with resizable width"
-          )
-        }
-      }
-    }
-
-    if case .intrinsic = widthTrait {
-      switch layoutDirection {
-      case .horizontal:
-        guard children.map(\.content).allHorizontallyNonResizable else {
-          throw BlockError(
-            "Container block error: horizontal intrinsic-width container has children with resizable width"
-          )
-        }
-      case .vertical:
-        guard children.map(\.content).hasHorizontallyNonResizable else {
-          throw BlockError(
-            "Container block error: in vertical intrinsic-width container all children have resizable width"
-          )
-        }
-      }
-    }
-
-    if case .intrinsic = heightTrait {
-      switch layoutDirection {
-      case .horizontal:
-        break // this is currently a valid case, see `.max() ?? 0` on line 163
-      case .vertical:
-        guard children.map(\.content).allVerticallyNonResizable else {
-          throw BlockError(
-            "Container block error: vertical intrinsic-height container has children with resizable height"
-          )
-        }
-      }
-    }
-  }
-
-  public var isVerticallyResizable: Bool { heightTrait.isResizable }
-  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
-
-  public var calculateWidthFirst: Bool {
-    switch widthTrait {
-    case .fixed, .weighted:
-      true
-    case .intrinsic:
-      !(layoutDirection == .vertical && layoutMode == .wrap)
-    }
-  }
-
-  public var isVerticallyConstrained: Bool { heightTrait.isConstrained }
-  public var isHorizontallyConstrained: Bool { widthTrait.isConstrained }
-
-  public var intrinsicContentWidth: CGFloat {
-    if case let .fixed(width) = widthTrait {
-      return width
-    }
-
-    if let cached = cached.intrinsicWidth {
-      return cached
-    }
-
-    var result: CGFloat = switch layoutDirection {
-    case .horizontal:
-      (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
-    case .vertical:
-      children.map(\.content.intrinsicContentWidth).max() ?? 0
-    }
-
-    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
-      result = clamp(result, min: minSize, max: maxSize)
-    }
-
-    cached.intrinsicWidth = result
-    return result
-  }
-
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     if case let .fixed(height) = heightTrait {
       return height
@@ -318,43 +323,6 @@ public final class ContainerBlock: BlockWithLayout {
 
     cached.intrinsicHeight = (width: width, height: result)
     return result
-  }
-
-  public var widthOfHorizontallyNonResizableBlock: CGFloat {
-    if case let .fixed(value) = widthTrait {
-      return value
-    }
-
-    guard case .intrinsic = widthTrait else {
-      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for resizable block")
-      return 0
-    }
-
-    if let cached = cached.nonResizableSize, cached.height == nil {
-      return cached.width
-    }
-
-    let result: CGFloat = switch layoutDirection {
-    case .horizontal:
-      (children.map(\.content.widthOfHorizontallyNonResizableBlock) + gaps)
-        .reduce(0, +)
-    case .vertical:
-      // MOBYANDEXIOS-1092: Only non-resizable children can influence the width of a container
-      // because the widths of resizable children depend on the width of container itself
-      children.filter { !$0.content.isHorizontallyResizable }
-        .map(\.content.widthOfHorizontallyNonResizableBlock).max() ?? 0
-    }
-
-    cached.nonResizableSize = (width: result, height: nil)
-    return result
-  }
-
-  public var heightOfVerticallyNonResizableBlock: CGFloat {
-    assert(
-      layoutMode == .wrap && layoutDirection == .vertical,
-      "First height calculation should only be used for vertical container with wrap layout mode"
-    )
-    return heightOfVerticallyNonResizableBlock(forWidth: .zero)
   }
 
   public func widthOfHorizontallyNonResizableBlock(forHeight height: CGFloat) -> CGFloat {
@@ -406,22 +374,6 @@ public final class ContainerBlock: BlockWithLayout {
     }
   }
 
-  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else {
-      assertionFailure("try to get weight for non resizable block")
-      return LayoutTrait.Weight.default
-    }
-    return value
-  }
-
-  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else {
-      assertionFailure("try to get weight for non resizable block")
-      return LayoutTrait.Weight.default
-    }
-    return value
-  }
-
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? ContainerBlock else {
       return false
@@ -450,6 +402,56 @@ public final class ContainerBlock: BlockWithLayout {
 
     return (block, layout)
   }
+
+  private func validateLayoutTraits() throws {
+    if layoutMode == .wrap {
+      switch layoutDirection {
+      case .horizontal:
+        guard children.map(\.content).allVerticallyNonResizable else {
+          throw BlockError(
+            "Container block error: horizontal wrap container has children with resizable height"
+          )
+        }
+      case .vertical:
+        guard children.map(\.content).allHorizontallyNonResizable else {
+          throw BlockError(
+            "Container block error: vertical wrap container has children with resizable width"
+          )
+        }
+      }
+    }
+
+    if case .intrinsic = widthTrait {
+      switch layoutDirection {
+      case .horizontal:
+        guard children.map(\.content).allHorizontallyNonResizable else {
+          throw BlockError(
+            "Container block error: horizontal intrinsic-width container has children with resizable width"
+          )
+        }
+      case .vertical:
+        guard children.map(\.content).hasHorizontallyNonResizable else {
+          throw BlockError(
+            "Container block error: in vertical intrinsic-width container all children have resizable width"
+          )
+        }
+      }
+    }
+
+    if case .intrinsic = heightTrait {
+      switch layoutDirection {
+      case .horizontal:
+        break // this is currently a valid case, see `.max() ?? 0` on line 163
+      case .vertical:
+        guard children.map(\.content).allVerticallyNonResizable else {
+          throw BlockError(
+            "Container block error: vertical intrinsic-height container has children with resizable height"
+          )
+        }
+      }
+    }
+  }
+
 }
 
 private func makeGapsWithSeparators(

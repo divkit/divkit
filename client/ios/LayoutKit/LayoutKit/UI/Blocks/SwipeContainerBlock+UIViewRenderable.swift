@@ -48,11 +48,11 @@ private final class SwipeContainerBlockView: BlockView, VisibleBoundsTrackingCon
     }
   }
 
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { view.asArray() }
-  var effectiveBackgroundColor: UIColor? { view?.effectiveBackgroundColor }
-
   private weak var observer: ElementStateObserver?
   private weak var renderingDelegate: RenderingDelegate?
+
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { view.asArray() }
+  var effectiveBackgroundColor: UIColor? { view?.effectiveBackgroundColor }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -62,6 +62,11 @@ private final class SwipeContainerBlockView: BlockView, VisibleBoundsTrackingCon
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    swipeContainerView.frame = CGRect(origin: .zero, size: frame.size)
   }
 
   func configure(
@@ -95,10 +100,6 @@ private final class SwipeContainerBlockView: BlockView, VisibleBoundsTrackingCon
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    swipeContainerView.frame = CGRect(origin: .zero, size: frame.size)
-  }
 }
 
 private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
@@ -138,6 +139,23 @@ private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    contentSize = CGSize(width: bounds.width * 3, height: bounds.height)
+    layoutChild()
+  }
+
+  func scrollViewDidEndDecelerating(_: UIScrollView) {
+    switch bounds.minX {
+    case let x where x < bounds.width * 0.5:
+      state = .left
+    case let x where x > bounds.width * 1.5:
+      state = .right
+    default:
+      state = .normal
+    }
+  }
+
   private func updateContentOffset() {
     let x: CGFloat = switch state {
     case .left:
@@ -162,22 +180,6 @@ private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
     }
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    contentSize = CGSize(width: bounds.width * 3, height: bounds.height)
-    layoutChild()
-  }
-
-  func scrollViewDidEndDecelerating(_: UIScrollView) {
-    switch bounds.minX {
-    case let x where x < bounds.width * 0.5:
-      state = .left
-    case let x where x > bounds.width * 1.5:
-      state = .right
-    default:
-      state = .normal
-    }
-  }
 }
 
 private let closeDuration: TimeInterval = 0.2

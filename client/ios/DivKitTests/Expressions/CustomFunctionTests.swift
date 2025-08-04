@@ -87,16 +87,6 @@ final class CustomFunctionTests: XCTestCase {
   private lazy var functionsStorage = DivFunctionsStorage(reporter: mockReporter)
   private lazy var resolver = makeExpressionResolver(path: path)
 
-  private func makeExpressionResolver(path: UIElementPath) -> ExpressionResolver {
-    ExpressionResolver(
-      path: path,
-      variablesStorage: variablesStorage,
-      functionsStorage: functionsStorage,
-      persistentValuesStorage: DivPersistentValuesStorage(),
-      reporter: mockReporter
-    )
-  }
-
   override func setUp() {
     variablesStorage.set(cardId: "card_id", variables: variables)
   }
@@ -315,6 +305,17 @@ final class CustomFunctionTests: XCTestCase {
 
     XCTAssertNil(resolver.resolve("@{array_var.increment(2)}"))
   }
+
+  private func makeExpressionResolver(path: UIElementPath) -> ExpressionResolver {
+    ExpressionResolver(
+      path: path,
+      variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      reporter: mockReporter
+    )
+  }
+
 }
 
 private let variables: DivVariables = [

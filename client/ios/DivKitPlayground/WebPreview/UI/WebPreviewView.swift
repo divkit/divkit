@@ -34,8 +34,9 @@ struct WebPreviewView: View {
 
 private final class WebPreviewModel {
   let divKitComponents: DivKitComponents
-  private let socket = WebPreviewSocket()
   private(set) var debugParams: DebugParams!
+
+  private let socket = WebPreviewSocket()
   private let payloadFactory: UIStatePayloadFactory
   private var renderingTime: UIStatePayload.RenderingTime?
   private var cancellables = Set<AnyCancellable>()

@@ -44,6 +44,11 @@ private final class DebugInfoBlockView: BlockView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    self.childView.frame = bounds
+  }
+
   func configure(
     child: Block,
     showDebugInfo: @escaping Action,
@@ -60,11 +65,6 @@ private final class DebugInfoBlockView: BlockView {
     )
     self.showDebugInfo = showDebugInfo
     setNeedsLayout()
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    self.childView.frame = bounds
   }
 
   private func showInfo() {

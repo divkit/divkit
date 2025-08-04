@@ -3,6 +3,53 @@ import VGSL
 import XCTest
 
 final class TextSelectionTests: XCTestCase {
+  private let rect = CGRect(x: 0, y: 0, width: 100, height: 100)
+
+  private lazy var context: CGContext = {
+    let width = Int(rect.width)
+    let height = Int(rect.height)
+    let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)
+    let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+
+    return CGContext(
+      data: nil,
+      width: width,
+      height: height,
+      bitsPerComponent: 8,
+      bytesPerRow: width * 4,
+      space: colorSpace!,
+      bitmapInfo: bitmapInfo
+    )!
+  }()
+
+  private let text = NSAttributedString(string: "Hello world!")
+
+  private lazy var point1: TextSelection.Point = .init(
+    point: CGPoint(x: 5, y: 10),
+    viewBounds: rect
+  )
+
+  private lazy var point2: TextSelection.Point = .init(
+    point: CGPoint(x: 45, y: 10),
+    viewBounds: rect
+  )
+
+  private lazy var words: [String] = text.string.components(separatedBy: " ")
+
+  private lazy var model: TextSelection.TextModel = {
+    let textLayout: AttributedStringLayout<ActionsAttribute> = text.drawAndGetLayout(
+      inContext: context,
+      verticalPosition: .top,
+      rect: rect,
+      textInsets: .zero
+    )
+
+    return TextSelection.TextModel(
+      layout: textLayout,
+      text: text
+    )
+  }()
+
   func testInitCreatesValidRangeLowerBound() {
     let results: [(value: TextSelection.Point, result: Int)] = [
       (
@@ -99,8 +146,6 @@ final class TextSelectionTests: XCTestCase {
     }
   }
 
-  private let rect = CGRect(x: 0, y: 0, width: 100, height: 100)
-
   private func makeSelection(point: TextSelection.Point) -> TextSelection {
     TextSelection(
       textModel: model,
@@ -109,53 +154,9 @@ final class TextSelectionTests: XCTestCase {
     )!
   }
 
-  private lazy var context: CGContext = {
-    let width = Int(rect.width)
-    let height = Int(rect.height)
-    let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)
-    let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
-
-    return CGContext(
-      data: nil,
-      width: width,
-      height: height,
-      bitsPerComponent: 8,
-      bytesPerRow: width * 4,
-      space: colorSpace!,
-      bitmapInfo: bitmapInfo
-    )!
-  }()
-
-  private let text = NSAttributedString(string: "Hello world!")
-
-  private lazy var point1: TextSelection.Point = .init(
-    point: CGPoint(x: 5, y: 10),
-    viewBounds: rect
-  )
-
-  private lazy var point2: TextSelection.Point = .init(
-    point: CGPoint(x: 45, y: 10),
-    viewBounds: rect
-  )
-
-  private lazy var words: [String] = text.string.components(separatedBy: " ")
-
   private func range(of word: String) -> NSRange {
     let text = text.string as NSString
     return text.range(of: word)
   }
 
-  private lazy var model: TextSelection.TextModel = {
-    let textLayout: AttributedStringLayout<ActionsAttribute> = text.drawAndGetLayout(
-      inContext: context,
-      verticalPosition: .top,
-      rect: rect,
-      textInsets: .zero
-    )
-
-    return TextSelection.TextModel(
-      layout: textLayout,
-      text: text
-    )
-  }()
 }

@@ -29,8 +29,9 @@ extension StateBlock {
 }
 
 private final class SubviewStorage: RenderingDelegate {
-  private typealias ViewWithID = (id: BlockViewID, view: DetachableAnimationBlockView)
   typealias FrameWithID = (id: BlockViewID, frame: CGRect)
+
+  private typealias ViewWithID = (id: BlockViewID, view: DetachableAnimationBlockView)
 
   private let wrappedRenderingDelegate: RenderingDelegate?
   private let ids: Set<BlockViewID>
@@ -145,6 +146,17 @@ private final class StateBlockView: BlockView {
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    childView?.setNonTransformedFrame(bounds)
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
+  }
+
   func configure(
     child: Block,
     ids: Set<BlockViewID>,
@@ -224,16 +236,6 @@ private final class StateBlockView: BlockView {
     }
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    childView?.setNonTransformedFrame(bounds)
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result === self ? nil : result
-  }
 }
 
 extension StateBlockView: VisibleBoundsTrackingContainer {

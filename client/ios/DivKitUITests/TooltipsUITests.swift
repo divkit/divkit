@@ -1,11 +1,15 @@
 import XCTest
 
 final class TooltipsUITests: XCTestCase {
-  private let app = XCUIApplication()
-  private var elementsQuery: XCUIElementTypeQueryProvider {
-    app.scrollViews.otherElements
+  private enum TooltipTest {
+    case tooltipPosition, closeOnSwitchOrientation
   }
 
+  private enum Position: CaseIterable {
+    case bottom, top, right
+  }
+
+  private let app = XCUIApplication()
   private lazy var baseDivView: XCUIElement = {
     let mainWindow = app.windows.element(boundBy: 0)
     return mainWindow.descendants(matching: .any).matching(identifier: "baseDivView").element
@@ -17,6 +21,10 @@ final class TooltipsUITests: XCTestCase {
     .staticTexts["tooltip with close button"]
 
   private lazy var closeTooltipButton: XCUIElement = app.buttons["close tooltip"]
+
+  private var elementsQuery: XCUIElementTypeQueryProvider {
+    app.scrollViews.otherElements
+  }
 
   override func setUpWithError() throws {
     try super.setUpWithError()
@@ -85,11 +93,4 @@ final class TooltipsUITests: XCTestCase {
     }
   }
 
-  private enum TooltipTest {
-    case tooltipPosition, closeOnSwitchOrientation
-  }
-
-  private enum Position: CaseIterable {
-    case bottom, top, right
-  }
 }

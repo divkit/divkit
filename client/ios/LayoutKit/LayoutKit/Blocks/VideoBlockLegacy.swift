@@ -17,15 +17,17 @@ public final class VideoBlockLegacy: BlockWithTraits {
     }
   }
 
-  public var debugDescription: String {
-    "Video Block playing video with url \(videoAssetHolder.url)"
-  }
-
   public let videoAssetHolder: VideoAssetHolder
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  public let intrinsicContentWidth: CGFloat = 0
+
   let autoplayAllowed: ObservableVariable<Bool>
+
+  public var debugDescription: String {
+    "Video Block playing video with url \(videoAssetHolder.url)"
+  }
 
   public init(
     videoAssetHolder: VideoAssetHolder,
@@ -39,7 +41,6 @@ public final class VideoBlockLegacy: BlockWithTraits {
     self.autoplayAllowed = autoplayAllowed
   }
 
-  public let intrinsicContentWidth: CGFloat = 0
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat { 0 }
 
   public func getImageHolders() -> [ImageHolder] { [] }

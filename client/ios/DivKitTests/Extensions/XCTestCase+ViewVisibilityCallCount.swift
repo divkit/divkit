@@ -37,6 +37,10 @@ final class VisibilityTester {
   let timer: TestTimerScheduler
   let performer = UIActionEventPerformerMock()
 
+  var callsCount: Int {
+    performer.callCount
+  }
+
   init(
     block: Block,
     timer: TestTimerScheduler
@@ -44,10 +48,6 @@ final class VisibilityTester {
     self.view = block.makeBlockView()
     self.timer = timer
     performer.addSubview(view)
-  }
-
-  var callsCount: Int {
-    performer.callCount
   }
 
   func setViewAppear() {

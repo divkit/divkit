@@ -53,6 +53,10 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
     self.boundsSize = boundsSize ?? contentSize
   }
 
+  public static func ==(_ lhs: GalleryViewLayout, _ rhs: GalleryViewLayout) -> Bool {
+    lhs.isEqual(to: rhs.model, boundsSize: rhs.boundsSize)
+  }
+
   public func contentOffset(pageIndex: CGFloat) -> CGFloat {
     let integralIndex = Int(pageIndex)
     guard blockPages.indices.contains(integralIndex) else {
@@ -82,9 +86,6 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
     self.model == model && self.boundsSize == boundsSize
   }
 
-  public static func ==(_ lhs: GalleryViewLayout, _ rhs: GalleryViewLayout) -> Bool {
-    lhs.isEqual(to: rhs.model, boundsSize: rhs.boundsSize)
-  }
 }
 
 extension GalleryViewModel {

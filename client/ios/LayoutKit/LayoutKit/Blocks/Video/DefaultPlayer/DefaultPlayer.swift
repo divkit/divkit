@@ -5,15 +5,15 @@ import VGSL
 
 final class DefaultPlayer: Player {
   private let eventPipe = SignalPipe<PlayerEvent>()
-  var signal: Signal<PlayerEvent> {
-    eventPipe.signal
-  }
-
   private let player: CorePlayer
   private var context: SourceContext?
 
   private let playerObservers = AutodisposePool()
   private let playbackConfigObservers = AutodisposePool()
+
+  var signal: Signal<PlayerEvent> {
+    eventPipe.signal
+  }
 
   init(itemsProvider: PlayerItemsProvider) {
     self.player = CorePlayerImpl(itemsProvider: itemsProvider)

@@ -3,10 +3,10 @@ import Serialization
 import VGSL
 
 public struct DivTemplates: Deserializable, @unchecked Sendable {
+  public static let empty = DivTemplates(dictionary: [:])
+
   public let templates: [TemplateName: Any]
   public let templateToType: [TemplateName: String]
-
-  public static let empty = DivTemplates(dictionary: [:])
 
   public init(
     templates: [TemplateName: Any],

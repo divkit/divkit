@@ -10,6 +10,10 @@ public class DivPatchDownloader: DivPatchProvider {
     self.requestPerformer = requestPerformer
   }
 
+  deinit {
+    cancelRequests()
+  }
+
   public func getPatch(
     url: URL,
     completion: @escaping DivPatchProviderCompletion
@@ -33,9 +37,6 @@ public class DivPatchDownloader: DivPatchProvider {
     requests.removeAll()
   }
 
-  deinit {
-    cancelRequests()
-  }
 }
 
 private func parseResult(

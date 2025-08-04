@@ -29,8 +29,12 @@ extension SizeProviderBlock {
 }
 
 private final class SizeProviderBlockView: BlockView {
+  var childMarginsSize = CGSize.zero
+
   private var block: SizeProviderBlock!
   private var childView: BlockView!
+
+  var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
 
   init() {
     super.init(frame: .zero)
@@ -41,9 +45,12 @@ private final class SizeProviderBlockView: BlockView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
-
-  var childMarginsSize = CGSize.zero
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    childView.frame = bounds
+    block.widthUpdater?(Int(bounds.width - childMarginsSize.width))
+    block.heightUpdater?(Int(bounds.height - childMarginsSize.height))
+  }
 
   func configure(
     block: SizeProviderBlock,
@@ -64,12 +71,6 @@ private final class SizeProviderBlockView: BlockView {
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    childView.frame = bounds
-    block.widthUpdater?(Int(bounds.width - childMarginsSize.width))
-    block.heightUpdater?(Int(bounds.height - childMarginsSize.height))
-  }
 }
 
 extension SizeProviderBlockView: VisibleBoundsTrackingContainer {

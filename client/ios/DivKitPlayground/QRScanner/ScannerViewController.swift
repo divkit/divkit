@@ -2,9 +2,9 @@ import UIKit
 import VGSL
 
 final class ScannerViewController: UIViewController {
-  private let captureSession: Lazy<MetadataCaptureSession>
-
   let result = ObservableProperty(initialValue: "")
+
+  private let captureSession: Lazy<MetadataCaptureSession>
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) {

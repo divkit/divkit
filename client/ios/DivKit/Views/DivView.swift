@@ -14,6 +14,34 @@ import VGSL
 /// the demo app.
 
 public final class DivView: VisibleBoundsTrackingView {
+  /// Returns the intrinsic content size of the ``DivView``.
+  ///
+  /// - Returns: The calculated intrinsic content size.
+  public override var intrinsicContentSize: CGSize {
+    guard let cardSize else {
+      return CGSize(width: DivView.noIntrinsicMetric, height: DivView.noIntrinsicMetric)
+    }
+    let width: CGFloat
+    switch cardSize.width {
+    case .matchParent:
+      width = bounds.width == 0 ? DivView.noIntrinsicMetric : bounds.width
+    case let .desired(value):
+      width = value
+    case .dependsOnOtherDimensionSize:
+      assertionFailure("Width depends on other dimension size")
+      width = DivView.noIntrinsicMetric
+    }
+    let height: CGFloat = switch cardSize.height {
+    case .matchParent:
+      bounds.height == 0 ? DivView.noIntrinsicMetric : bounds.height
+    case let .desired(value):
+      value
+    case let .dependsOnOtherDimensionSize(heightForWidth):
+      heightForWidth(width)
+    }
+    return CGSize(width: width, height: height)
+  }
+
   private let divKitComponents: DivKitComponents
   private let preloader: DivViewPreloader
   private var blockSubscription: Disposable?
@@ -42,6 +70,13 @@ public final class DivView: VisibleBoundsTrackingView {
 
   private let boundsTracker = BoundsTracker()
 
+  /// Returns ``DivCardSize`` of the ``DivView``.
+  ///
+  /// - Returns: The calculated ``DivCardSize``.
+  public var cardSize: DivViewSize? {
+    blockProvider?.cardSize
+  }
+
   /// Initializes a new `DivView` instance.
   ///
   /// - Parameters:
@@ -58,6 +93,43 @@ public final class DivView: VisibleBoundsTrackingView {
     tapGestureRecognizer.delegate = self
     tapGestureRecognizer.cancelsTouchesInView = false
     addGestureRecognizer(tapGestureRecognizer)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    guard let blockView else { return }
+
+    blockView.frame = bounds
+    blockView.layoutIfNeeded()
+
+    if shouldRecalculateVisibility {
+      blockView.onVisibleBoundsChanged(
+        from: boundsTracker.previousBounds,
+        to: boundsTracker.lastVisibleBounds
+      )
+
+      shouldRecalculateVisibility = false
+      boundsTracker.updatePreviousBounds()
+    }
+  }
+
+  public override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+
+    invalidateIntrinsicContentSizeIfBoundsChanged()
+  }
+
+  public override func removeFromSuperview() {
+    super.removeFromSuperview()
+    blockView?.onVisibleBoundsChanged(
+      from: boundsTracker.lastVisibleBounds,
+      to: .zero
+    )
   }
 
   /// Sets the source of the ``DivView`` and updates the layout.
@@ -149,50 +221,6 @@ public final class DivView: VisibleBoundsTrackingView {
     blockProvider?.update(reasons: [.patch(cardId, patch)])
   }
 
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-    guard let blockView else { return }
-
-    blockView.frame = bounds
-    blockView.layoutIfNeeded()
-
-    if shouldRecalculateVisibility {
-      blockView.onVisibleBoundsChanged(
-        from: boundsTracker.previousBounds,
-        to: boundsTracker.lastVisibleBounds
-      )
-
-      shouldRecalculateVisibility = false
-      boundsTracker.updatePreviousBounds()
-    }
-  }
-
-  public override func layoutSublayers(of layer: CALayer) {
-    super.layoutSublayers(of: layer)
-
-    invalidateIntrinsicContentSizeIfBoundsChanged()
-  }
-
-  public override func removeFromSuperview() {
-    super.removeFromSuperview()
-    blockView?.onVisibleBoundsChanged(
-      from: boundsTracker.lastVisibleBounds,
-      to: .zero
-    )
-  }
-
-  /// Returns ``DivCardSize`` of the ``DivView``.
-  ///
-  /// - Returns: The calculated ``DivCardSize``.
-  public var cardSize: DivViewSize? {
-    blockProvider?.cardSize
-  }
-
   /// Adds an observer to listen for ``DivView`` estimated size changes.
   ///
   /// - Parameters:
@@ -208,32 +236,23 @@ public final class DivView: VisibleBoundsTrackingView {
     }
   }
 
-  /// Returns the intrinsic content size of the ``DivView``.
-  ///
-  /// - Returns: The calculated intrinsic content size.
-  public override var intrinsicContentSize: CGSize {
-    guard let cardSize else {
-      return CGSize(width: DivView.noIntrinsicMetric, height: DivView.noIntrinsicMetric)
+  /// Notifies the DivView about changes in its visible bounds.
+  /// - Parameters:
+  ///  - to: The new bounds rectangle.
+  public func onVisibleBoundsChanged(to: CGRect) {
+    guard boundsTracker.append(to) else { return }
+
+    shouldRecalculateVisibility = true
+    if window == nil {
+      forceLayout()
+    } else {
+      setNeedsLayout()
     }
-    let width: CGFloat
-    switch cardSize.width {
-    case .matchParent:
-      width = bounds.width == 0 ? DivView.noIntrinsicMetric : bounds.width
-    case let .desired(value):
-      width = value
-    case .dependsOnOtherDimensionSize:
-      assertionFailure("Width depends on other dimension size")
-      width = DivView.noIntrinsicMetric
-    }
-    let height: CGFloat = switch cardSize.height {
-    case .matchParent:
-      bounds.height == 0 ? DivView.noIntrinsicMetric : bounds.height
-    case let .desired(value):
-      value
-    case let .dependsOnOtherDimensionSize(heightForWidth):
-      heightForWidth(width)
-    }
-    return CGSize(width: width, height: height)
+  }
+
+  /// Use ``onVisibleBoundsChanged(to:)`` instead.
+  public func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+    onVisibleBoundsChanged(to: to)
   }
 
   private func update(block: Block) {
@@ -272,24 +291,6 @@ public final class DivView: VisibleBoundsTrackingView {
     clearFocus()
   }
 
-  /// Notifies the DivView about changes in its visible bounds.
-  /// - Parameters:
-  ///  - to: The new bounds rectangle.
-  public func onVisibleBoundsChanged(to: CGRect) {
-    guard boundsTracker.append(to) else { return }
-
-    shouldRecalculateVisibility = true
-    if window == nil {
-      forceLayout()
-    } else {
-      setNeedsLayout()
-    }
-  }
-
-  /// Use ``onVisibleBoundsChanged(to:)`` instead.
-  public func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
-    onVisibleBoundsChanged(to: to)
-  }
 }
 
 extension DivView: ElementStateObserver {

@@ -10,8 +10,10 @@ public final class RemoteAnimationHolder: AnimationHolder {
   private typealias AsyncAnimationRequester = (@escaping (AnimationSourceType?) -> Void)
     -> Cancellable?
 
-  let url: URL
   public private(set) var animation: AnimationSourceType?
+
+  let url: URL
+
   private let animationType: AnimationType
   private let resourceRequester: AsyncAnimationRequester
 

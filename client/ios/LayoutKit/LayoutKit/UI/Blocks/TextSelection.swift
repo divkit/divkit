@@ -3,13 +3,61 @@ import UIKit
 import VGSL
 
 final class TextSelection {
-  private var activePointer: ActivePointer?
+  struct Point {
+    let point: CGPoint
+    let viewBounds: CGRect
+
+    var x: CGFloat {
+      point.x
+    }
+
+    var y: CGFloat {
+      point.y
+    }
+
+    var verticallyInverted: CGPoint {
+      point
+        .applying(CGAffineTransform(translationX: 0, y: viewBounds.height).scaledBy(x: 1, y: -1))
+    }
+  }
+
+  struct TextModel {
+    let layout: AttributedStringLayout<ActionsAttribute>
+    let text: NSAttributedString
+
+    var maxSymbolIndex: Int {
+      layout.lines
+        .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max() ?? Int.max
+    }
+
+    func maxLineSymbolIndex(_ pointerIndex: Int) -> Int {
+      getLineRange(pointerIndex).upperBound
+    }
+
+    func minLineSymbolIndex(_ pointerIndex: Int) -> Int {
+      getLineRange(pointerIndex).lowerBound
+    }
+
+    private func getLineRange(_ index: Int) -> Range<Int> {
+      for line in layout.lines {
+        if line.range.contains(index), let range = Range(line.range) {
+          return range
+        }
+      }
+
+      return 0..<maxSymbolIndex
+    }
+
+  }
+
   private(set) var range: Range<Int>
   private(set) var rect: CGRect? {
     didSet {
       rectSetAction()
     }
   }
+
+  private var activePointer: ActivePointer?
 
   private let textModel: TextModel
   private let rectSetAction: () -> Void
@@ -26,47 +74,6 @@ final class TextSelection {
     guard let elementIndex = elementIndex(at: point.verticallyInverted) else { return nil }
 
     makeRange(elementIndex)
-  }
-
-  private func makeRange(_ elementIndex: Int) {
-    let prefix = textModel.text.string.prefix(elementIndex)
-    let suffix = textModel.text.string.suffix(from: prefix.endIndex)
-    let trailing = elementIndex + suffix.distance(
-      from: suffix.startIndex,
-      to: suffix.firstIndex { $0.isWhitespace || $0.isNewline } ?? suffix.endIndex
-    )
-    let leading = prefix.lastIndex { $0.isWhitespace || $0.isNewline }
-      .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
-
-    range = leading..<trailing
-  }
-
-  private func moveLeading(_ elementIndex: Int) {
-    let elementIndex = min(elementIndex, range.upperBound)
-
-    switch true {
-    case elementIndex < range.upperBound:
-      range = elementIndex..<range.upperBound
-    case range.upperBound + 1 < textModel.maxLineSymbolIndex(elementIndex):
-      range = elementIndex..<range.upperBound + 1
-      activePointer?.toggle()
-    default:
-      break
-    }
-  }
-
-  private func moveTrailing(_ elementIndex: Int) {
-    let elementIndex = max(elementIndex, range.lowerBound)
-
-    switch true {
-    case elementIndex > range.lowerBound:
-      range = range.lowerBound..<elementIndex
-    case range.lowerBound - 1 > textModel.minLineSymbolIndex(elementIndex):
-      range = range.lowerBound - 1..<elementIndex
-      activePointer?.toggle()
-    default:
-      break
-    }
   }
 
   func draw(_ rect: CGRect) {
@@ -148,51 +155,47 @@ final class TextSelection {
     ))]
   }
 
-  struct Point {
-    let point: CGPoint
-    let viewBounds: CGRect
+  private func makeRange(_ elementIndex: Int) {
+    let prefix = textModel.text.string.prefix(elementIndex)
+    let suffix = textModel.text.string.suffix(from: prefix.endIndex)
+    let trailing = elementIndex + suffix.distance(
+      from: suffix.startIndex,
+      to: suffix.firstIndex { $0.isWhitespace || $0.isNewline } ?? suffix.endIndex
+    )
+    let leading = prefix.lastIndex { $0.isWhitespace || $0.isNewline }
+      .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
 
-    var x: CGFloat {
-      point.x
-    }
+    range = leading..<trailing
+  }
 
-    var y: CGFloat {
-      point.y
-    }
+  private func moveLeading(_ elementIndex: Int) {
+    let elementIndex = min(elementIndex, range.upperBound)
 
-    var verticallyInverted: CGPoint {
-      point
-        .applying(CGAffineTransform(translationX: 0, y: viewBounds.height).scaledBy(x: 1, y: -1))
+    switch true {
+    case elementIndex < range.upperBound:
+      range = elementIndex..<range.upperBound
+    case range.upperBound + 1 < textModel.maxLineSymbolIndex(elementIndex):
+      range = elementIndex..<range.upperBound + 1
+      activePointer?.toggle()
+    default:
+      break
     }
   }
 
-  struct TextModel {
-    let layout: AttributedStringLayout<ActionsAttribute>
-    let text: NSAttributedString
+  private func moveTrailing(_ elementIndex: Int) {
+    let elementIndex = max(elementIndex, range.lowerBound)
 
-    var maxSymbolIndex: Int {
-      layout.lines
-        .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max() ?? Int.max
-    }
-
-    private func getLineRange(_ index: Int) -> Range<Int> {
-      for line in layout.lines {
-        if line.range.contains(index), let range = Range(line.range) {
-          return range
-        }
-      }
-
-      return 0..<maxSymbolIndex
-    }
-
-    func maxLineSymbolIndex(_ pointerIndex: Int) -> Int {
-      getLineRange(pointerIndex).upperBound
-    }
-
-    func minLineSymbolIndex(_ pointerIndex: Int) -> Int {
-      getLineRange(pointerIndex).lowerBound
+    switch true {
+    case elementIndex > range.lowerBound:
+      range = range.lowerBound..<elementIndex
+    case range.lowerBound - 1 > textModel.minLineSymbolIndex(elementIndex):
+      range = range.lowerBound - 1..<elementIndex
+      activePointer?.toggle()
+    default:
+      break
     }
   }
+
 }
 
 extension AttributedStringLayout {

@@ -10,6 +10,7 @@ public protocol InputAccessoryViewProvider {
 
 public final class InputAccessoryViewExtensionHandler: DivExtensionHandler {
   public let id = "input_accessory_view"
+
   private let viewProvider: InputAccessoryViewProvider
 
   public init(viewProvider: InputAccessoryViewProvider) {

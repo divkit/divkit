@@ -37,11 +37,11 @@ private final class PinchToZoomView: BlockView {
   private var translationToIgnore = CGPoint.zero
   private var originTranslation = CGPoint.zero
 
+  var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
+
   private var isZooming: Bool {
     childView.superview == shadeView
   }
-
-  var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
 
   init() {
     super.init(frame: .zero)
@@ -68,6 +68,21 @@ private final class PinchToZoomView: BlockView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    let currentTransform = childView.transform
+    childView.transform = .identity
+    if isZooming {
+      childView.frame = convert(bounds, to: overlayView)
+      shadeView.frame = overlayView.frame
+    } else {
+      childView.frame = bounds
+      shadeView.frame = .zero
+    }
+    childView.transform = currentTransform
+  }
+
   func configure(
     child: Block,
     observer: ElementStateObserver?,
@@ -84,21 +99,6 @@ private final class PinchToZoomView: BlockView {
     )
     self.overlayView = overlayView
     setNeedsLayout()
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    let currentTransform = childView.transform
-    childView.transform = .identity
-    if isZooming {
-      childView.frame = convert(bounds, to: overlayView)
-      shadeView.frame = overlayView.frame
-    } else {
-      childView.frame = bounds
-      shadeView.frame = .zero
-    }
-    childView.transform = currentTransform
   }
 
   private func updateTransform() {

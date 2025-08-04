@@ -6,17 +6,6 @@ import VGSL
 
 @MainActor
 final class DivBlockProvider {
-  private let divKitComponents: DivKitComponents
-  private let onCardSizeChanged: (DivCardID, DivViewSize) -> Void
-  private let disposePool = AutodisposePool()
-
-  private var divData: DivData? {
-    didSet {
-      guard oldValue !== divData else { return }
-      update(reasons: [])
-    }
-  }
-
   private(set) var id: DivViewId!
 
   private(set) var cardSize: DivViewSize? {
@@ -26,16 +15,6 @@ final class DivBlockProvider {
       }
     }
   }
-
-  private var debugParams = DebugParams()
-  private var dataErrors = [DeserializationError]()
-  private var updateInProgress = false
-
-  private let measurements = DebugParams.Measurements(
-    divDataParsingTime: TimeMeasure(),
-    renderTime: TimeMeasure(),
-    templateParsingTime: TimeMeasure()
-  )
 
   @ObservableProperty
   private(set) var block: Block = noDataBlock {
@@ -51,14 +30,35 @@ final class DivBlockProvider {
     }
   }
 
-  var cardId: DivCardID {
-    id.cardId
-  }
-
   @ObservableProperty
   private(set) var shouldRecalculateVisibility: Bool = true
 
   var accessibilityElementsStorage: DivAccessibilityElementsStorage?
+
+  private let divKitComponents: DivKitComponents
+  private let onCardSizeChanged: (DivCardID, DivViewSize) -> Void
+  private let disposePool = AutodisposePool()
+
+  private var divData: DivData? {
+    didSet {
+      guard oldValue !== divData else { return }
+      update(reasons: [])
+    }
+  }
+
+  private var debugParams = DebugParams()
+  private var dataErrors = [DeserializationError]()
+  private var updateInProgress = false
+
+  private let measurements = DebugParams.Measurements(
+    divDataParsingTime: TimeMeasure(),
+    renderTime: TimeMeasure(),
+    templateParsingTime: TimeMeasure()
+  )
+
+  var cardId: DivCardID {
+    id.cardId
+  }
 
   init(
     divKitComponents: DivKitComponents,
@@ -105,6 +105,80 @@ final class DivBlockProvider {
       update(divData: divData)
     case let .json(json):
       await update(json: json)
+    }
+  }
+
+  func update(reasons: [DivCardUpdateReason]) {
+    guard var divData else {
+      block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
+      return
+    }
+
+    guard needUpdateBlock(reasons: reasons) else {
+      return
+    }
+
+    guard !updateInProgress else {
+      return
+    }
+
+    updateInProgress = true
+    defer {
+      updateInProgress = false
+    }
+
+    let context = makeCurrentContext()
+
+    reasons.compactMap { $0.patch(for: self.cardId) }.forEach { patch in
+      divData = divData.applyPatchWithActions(
+        patch,
+        context: context
+      )
+    }
+
+    self.divData = divData
+
+    if reasons.filter(\.isVariable).isEmpty {
+      context.layoutProviderHandler?.resetUpdatedVariables()
+      shouldRecalculateVisibility = true
+    }
+    dataErrors.forEach { context.errorsStorage.add($0) }
+    do {
+      block = try measurements.renderTime.updateMeasure {
+        try divData.makeBlock(
+          context: context
+        )
+      }
+      accessibilityElementsStorage = context.accessibilityElementsStorage
+      debugParams.processMeasurements((cardId: cardId, measurements: measurements))
+      for error in context.errorsStorage.errors {
+        divKitComponents.reporter.reportError(cardId: cardId, error: error)
+      }
+      if !divKitComponents.flagsInfo.initializeTriggerOnSet {
+        divKitComponents.triggersStorage.initialize(cardId: cardId)
+      }
+    } catch {
+      divKitComponents.reporter.reportError(
+        cardId: cardId,
+        error: DivUnknownError(error, path: UIElementPath(cardId.rawValue))
+      )
+      block = handleError(error: error, context: context)
+    }
+  }
+
+  func update(withStates blockStates: BlocksState) {
+    do {
+      block = try block.updated(withStates: blockStates)
+    } catch {
+      block = handleError(error: error)
+    }
+  }
+
+  func update(path: UIElementPath, isFocused: Bool) {
+    do {
+      block = try block.updated(path: path, isFocused: isFocused)
+    } catch {
+      block = handleError(error: error)
     }
   }
 
@@ -189,64 +263,6 @@ final class DivBlockProvider {
     self.divData = divData
   }
 
-  func update(reasons: [DivCardUpdateReason]) {
-    guard var divData else {
-      block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
-      return
-    }
-
-    guard needUpdateBlock(reasons: reasons) else {
-      return
-    }
-
-    guard !updateInProgress else {
-      return
-    }
-
-    updateInProgress = true
-    defer {
-      updateInProgress = false
-    }
-
-    let context = makeCurrentContext()
-
-    reasons.compactMap { $0.patch(for: self.cardId) }.forEach { patch in
-      divData = divData.applyPatchWithActions(
-        patch,
-        context: context
-      )
-    }
-
-    self.divData = divData
-
-    if reasons.filter(\.isVariable).isEmpty {
-      context.layoutProviderHandler?.resetUpdatedVariables()
-      shouldRecalculateVisibility = true
-    }
-    dataErrors.forEach { context.errorsStorage.add($0) }
-    do {
-      block = try measurements.renderTime.updateMeasure {
-        try divData.makeBlock(
-          context: context
-        )
-      }
-      accessibilityElementsStorage = context.accessibilityElementsStorage
-      debugParams.processMeasurements((cardId: cardId, measurements: measurements))
-      for error in context.errorsStorage.errors {
-        divKitComponents.reporter.reportError(cardId: cardId, error: error)
-      }
-      if !divKitComponents.flagsInfo.initializeTriggerOnSet {
-        divKitComponents.triggersStorage.initialize(cardId: cardId)
-      }
-    } catch {
-      divKitComponents.reporter.reportError(
-        cardId: cardId,
-        error: DivUnknownError(error, path: UIElementPath(cardId.rawValue))
-      )
-      block = handleError(error: error, context: context)
-    }
-  }
-
   private func needUpdateBlock(reasons: [DivCardUpdateReason]) -> Bool {
     guard !reasons.isEmpty else { return true }
     for reason in reasons {
@@ -281,22 +297,6 @@ final class DivBlockProvider {
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )
-  }
-
-  func update(withStates blockStates: BlocksState) {
-    do {
-      block = try block.updated(withStates: blockStates)
-    } catch {
-      block = handleError(error: error)
-    }
-  }
-
-  func update(path: UIElementPath, isFocused: Bool) {
-    do {
-      block = try block.updated(path: path, isFocused: isFocused)
-    } catch {
-      block = handleError(error: error)
-    }
   }
 
   private func parseDivDataWithTemplates(

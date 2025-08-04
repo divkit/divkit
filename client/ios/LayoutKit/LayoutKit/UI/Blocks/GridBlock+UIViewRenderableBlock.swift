@@ -44,42 +44,15 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
     let source: Variable<AnyObject?>
   }
 
-  private var blockViews: [BlockView] = []
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
   var layoutReporter: LayoutReporter?
 
+  private var blockViews: [BlockView] = []
   private weak var observer: ElementStateObserver?
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
   private var preventLayout = false
 
-  func setModel(
-    _ model: Model,
-    withObserver observer: ElementStateObserver?,
-    overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
-  ) {
-    guard model != modelAndLastLayoutSize.model || observer !== self.observer else {
-      return
-    }
-
-    modelAndLastLayoutSize = (model, nil)
-    self.observer = observer
-
-    // Configuring views may lead to unpredictable side effects,
-    // including view hierarchy layout.
-    preventLayout = true
-    blockViews = blockViews.reused(
-      with: model.items.map(\.contents),
-      attachTo: self,
-      observer: observer,
-      overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
-    )
-    preventLayout = false
-
-    setNeedsLayout()
-  }
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
     let result = super.hitTest(point, with: event)
@@ -110,5 +83,34 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
     }
     layoutReporter?.didLayoutSubviews()
   }
+
+  func setModel(
+    _ model: Model,
+    withObserver observer: ElementStateObserver?,
+    overscrollDelegate: ScrollDelegate?,
+    renderingDelegate: RenderingDelegate?
+  ) {
+    guard model != modelAndLastLayoutSize.model || observer !== self.observer else {
+      return
+    }
+
+    modelAndLastLayoutSize = (model, nil)
+    self.observer = observer
+
+    // Configuring views may lead to unpredictable side effects,
+    // including view hierarchy layout.
+    preventLayout = true
+    blockViews = blockViews.reused(
+      with: model.items.map(\.contents),
+      attachTo: self,
+      observer: observer,
+      overscrollDelegate: overscrollDelegate,
+      renderingDelegate: renderingDelegate
+    )
+    preventLayout = false
+
+    setNeedsLayout()
+  }
+
 }
 #endif

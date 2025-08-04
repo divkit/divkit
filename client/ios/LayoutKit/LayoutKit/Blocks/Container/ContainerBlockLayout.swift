@@ -7,6 +7,15 @@ struct ContainerBlockLayout {
     case fits
     case doesNotFit(notFittingPartSize: CGFloat)
 
+    var insetValue: CGFloat {
+      switch self {
+      case .fits:
+        0
+      case let .doesNotFit(notFittingPartSize: inset):
+        inset
+      }
+    }
+
     init(offsets: [CGFloat], margin: CGFloat) {
       let minOffset = (offsets.min() ?? 0) - margin
       if minOffset.isApproximatelyLessThan(0) {
@@ -16,19 +25,12 @@ struct ContainerBlockLayout {
       }
     }
 
-    var insetValue: CGFloat {
-      switch self {
-      case .fits:
-        0
-      case let .doesNotFit(notFittingPartSize: inset):
-        inset
-      }
-    }
   }
 
   public private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
   public private(set) var blockFrames: [CGRect] = []
   public private(set) var ascent: CGFloat?
+
   let gaps: [CGFloat]
   let blockLayoutDirection: UserInterfaceLayoutDirection
   let layoutDirection: ContainerBlock.LayoutDirection
@@ -37,6 +39,32 @@ struct ContainerBlockLayout {
   let size: CGSize
   let needCompressConstrainedBlocks: Bool
   let axialAlignmentManager: AxialAlignmentManager
+
+  public var leftInset: CGFloat {
+    let leftMargin = layoutDirection == .horizontal ? gaps.first! : 0
+    return ContentFitting(
+      offsets: blockFrames.map(\.minX),
+      margin: leftMargin
+    ).insetValue
+  }
+
+  public var topInset: CGFloat {
+    let topMargin = layoutDirection == .vertical ? gaps.first! : 0
+    return ContentFitting(
+      offsets: blockFrames.map(\.minY),
+      margin: topMargin
+    ).insetValue
+  }
+
+  public var bottomInset: CGFloat { layoutDirection == .vertical ? gaps.last! : 0 }
+  public var rightInset: CGFloat { layoutDirection == .horizontal ? gaps.last! : 0 }
+
+  public var contentSize: CGSize {
+    CGSize(
+      width: blockFrames.map(\.maxX).max() ?? 0,
+      height: blockFrames.map(\.maxY).max() ?? 0
+    )
+  }
 
   private var sizeInDirection: CGFloat {
     switch layoutDirection {
@@ -378,32 +406,6 @@ struct ContainerBlockLayout {
     case .vertical:
       group.map { item in item.childSize.width }.max() ?? 0
     }
-  }
-
-  public var leftInset: CGFloat {
-    let leftMargin = layoutDirection == .horizontal ? gaps.first! : 0
-    return ContentFitting(
-      offsets: blockFrames.map(\.minX),
-      margin: leftMargin
-    ).insetValue
-  }
-
-  public var topInset: CGFloat {
-    let topMargin = layoutDirection == .vertical ? gaps.first! : 0
-    return ContentFitting(
-      offsets: blockFrames.map(\.minY),
-      margin: topMargin
-    ).insetValue
-  }
-
-  public var bottomInset: CGFloat { layoutDirection == .vertical ? gaps.last! : 0 }
-  public var rightInset: CGFloat { layoutDirection == .horizontal ? gaps.last! : 0 }
-
-  public var contentSize: CGSize {
-    CGSize(
-      width: blockFrames.map(\.maxX).max() ?? 0,
-      height: blockFrames.map(\.maxY).max() ?? 0
-    )
   }
 
   private func getMaxAscent(

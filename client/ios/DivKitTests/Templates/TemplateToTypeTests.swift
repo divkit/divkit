@@ -2,16 +2,6 @@
 import XCTest
 
 final class TemplateToTypeTests: XCTestCase {
-  private func performTestCase(
-    json: String,
-    templateToType: [TemplateName: String]
-  ) throws {
-    let dict = try JSONSerialization.jsonObject(
-      with: json.data(using: .utf8)!
-    ) as! [String: Any]
-    XCTAssertEqual(calculateTemplateToType(in: dict), templateToType)
-  }
-
   func test_IndependentTypes() throws {
     let json = """
     {
@@ -101,4 +91,15 @@ final class TemplateToTypeTests: XCTestCase {
     ]
     try performTestCase(json: json, templateToType: templateToType)
   }
+
+  private func performTestCase(
+    json: String,
+    templateToType: [TemplateName: String]
+  ) throws {
+    let dict = try JSONSerialization.jsonObject(
+      with: json.data(using: .utf8)!
+    ) as! [String: Any]
+    XCTAssertEqual(calculateTemplateToType(in: dict), templateToType)
+  }
+
 }

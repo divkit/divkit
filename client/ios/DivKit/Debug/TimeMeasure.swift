@@ -16,10 +16,10 @@ public final class TimeMeasure: @unchecked Sendable {
     case warm
   }
 
+  public private(set) var time: Time?
+
   private var startTime: Date?
   private var status: Status = .cold
-
-  public private(set) var time: Time?
 
   init() {}
 

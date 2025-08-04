@@ -5,13 +5,6 @@ enum TestData {
   static let samplesPath = "samples"
   static let patchesPath = "regression_test_data/patches"
 
-  private static var cachedRegressionTests: [RegressionTestModel]?
-
-  static var samples: [URL] {
-    getAllFiles(path: samplesPath)
-      .map { url, _ in url }
-  }
-
   static var regressionTests: [RegressionTestModel] = {
     let indexFileUrl = Bundle.main
       .url(forResource: "index", withExtension: "json", subdirectory: regressionPath)!
@@ -22,6 +15,13 @@ enum TestData {
       .filter { $0.platforms.contains(.ios) }
       .sorted { $0.title < $1.title }
   }()
+
+  private static var cachedRegressionTests: [RegressionTestModel]?
+
+  static var samples: [URL] {
+    getAllFiles(path: samplesPath)
+      .map { url, _ in url }
+  }
 
   private static func getAllFiles(path: String) -> [(URL, String)] {
     getItems(path: path, extension: "")

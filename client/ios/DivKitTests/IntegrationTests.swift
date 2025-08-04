@@ -123,6 +123,10 @@ private struct IntegrationTestData {
 }
 
 private struct IntegrationTest: Decodable, @unchecked Sendable {
+  let description: String
+  let divData: DivData
+  let cases: [IntegrationTestCase]
+
   init(_ data: Data) throws {
     let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
     let casesJson = json["cases"]!
@@ -138,24 +142,26 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     )
   }
 
-  let description: String
-  let divData: DivData
-  let cases: [IntegrationTestCase]
 }
 
 private struct IntegrationTestCase: Decodable {
+  private enum CodingKeys: String, CodingKey {
+    case divActions = "div_actions", expected, platforms
+  }
+
   let divActions: [DivAction]?
   let expected: [Expected]
   let platforms: [Platform]
 
-  private enum CodingKeys: String, CodingKey {
-    case divActions = "div_actions", expected, platforms
-  }
 }
 
 private enum Expected: Decodable {
   case variable(String, ExpectedValue)
   case error(String)
+
+  private enum CodingKeys: String, CodingKey {
+    case variableName = "variable_name", type, value
+  }
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -179,9 +185,6 @@ private enum Expected: Decodable {
     }
   }
 
-  private enum CodingKeys: String, CodingKey {
-    case variableName = "variable_name", type, value
-  }
 }
 
 extension DivAction: Swift.Decodable {

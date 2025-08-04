@@ -5,6 +5,7 @@ import VGSL
 
 public final class CustomImagePreviewExtensionHandler: DivExtensionHandler {
   public let id: String
+
   private let viewProvider: ViewProvider
 
   public init(id: String, viewProvider: ViewProvider) {

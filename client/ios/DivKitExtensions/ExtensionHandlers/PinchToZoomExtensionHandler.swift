@@ -4,9 +4,9 @@ import LayoutKit
 import UIKit
 
 public final class PinchToZoomExtensionHandler: DivExtensionHandler {
-  private weak var overlayView: UIView?
-
   public let id = "pinch-to-zoom"
+
+  private weak var overlayView: UIView?
 
   public init(overlayView: UIView) {
     self.overlayView = overlayView

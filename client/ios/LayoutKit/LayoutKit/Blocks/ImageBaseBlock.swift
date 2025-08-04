@@ -19,6 +19,7 @@ public enum ImageBlockHeight: Equatable {
 
 public struct ImageBaseBlockState: ElementState, Equatable {
   public let intrinsicContentSize: CGSize?
+
   public init(widthTrait: LayoutTrait, height: ImageBlockHeight, imageHolder: ImageHolder) {
     let hasIntrinsicSize = widthTrait == .intrinsic || height == .trait(.intrinsic)
     self.intrinsicContentSize = hasIntrinsicSize ? imageHolder.currentImageSize : nil

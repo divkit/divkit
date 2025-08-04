@@ -3,6 +3,22 @@ import AVFoundation
 import UIKit
 
 public final class DefaultPlayerView: UIView, PlayerView {
+  public override static var layerClass: AnyClass { AVPlayerLayer.self }
+
+  public var videoRatio: CGFloat? {
+    guard let asset = playerLayer.player?.currentItem?.asset,
+          let videoSize = asset.tracks(
+            withMediaType: .video
+          ).first?.naturalSize
+    else {
+      return nil
+    }
+
+    return videoSize.width / videoSize.height
+  }
+
+  private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+
   public func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 
   public func attach(player: Player) {
@@ -23,21 +39,6 @@ public final class DefaultPlayerView: UIView, PlayerView {
     }
   }
 
-  public var videoRatio: CGFloat? {
-    guard let asset = playerLayer.player?.currentItem?.asset,
-          let videoSize = asset.tracks(
-            withMediaType: .video
-          ).first?.naturalSize
-    else {
-      return nil
-    }
-
-    return videoSize.width / videoSize.height
-  }
-
-  private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
-
-  public override static var layerClass: AnyClass { AVPlayerLayer.self }
 }
 
 extension AVPlayer {

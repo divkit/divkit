@@ -45,9 +45,6 @@ extension TextBlock {
 
 private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
   var layoutReporter: LayoutReporter?
-  private let textBlockView = TextBlockView()
-  private var gradientContainerView: GradientContainerView?
-
   var textGradientModel: TextBlock.GradientModel? {
     didSet {
       guard textGradientModel == nil || textGradientModel != oldValue else {
@@ -56,19 +53,6 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
 
       gradientContainerView = GradientContainerView(model: textGradientModel, mask: textBlockView)
       currentView = gradientContainerView ?? textBlockView
-    }
-  }
-
-  private var currentView: UIView? {
-    didSet {
-      guard currentView !== oldValue else {
-        return
-      }
-      oldValue?.removeFromSuperview()
-      if let currentView {
-        addSubview(currentView)
-      }
-      setNeedsLayout()
     }
   }
 
@@ -81,6 +65,22 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
       gradientContainerView?.configureRangedTextColor(textBlockViewModel: model)
       isUserInteractionEnabled = model.isUserInteractionEnabled
       applyAccessibilityFromScratch(model.accessibility)
+    }
+  }
+
+  private let textBlockView = TextBlockView()
+  private var gradientContainerView: GradientContainerView?
+
+  private var currentView: UIView? {
+    didSet {
+      guard currentView !== oldValue else {
+        return
+      }
+      oldValue?.removeFromSuperview()
+      if let currentView {
+        addSubview(currentView)
+      }
+      setNeedsLayout()
     }
   }
 
@@ -121,9 +121,10 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
 }
 
 private class GradientContainerView: UIView {
+  let gradientView: UIView
+
   private let model: TextBlock.GradientModel
   private let rangedTextWithColorTextBlockView: TextBlockView
-  let gradientView: UIView
 
   init?(model: TextBlock.GradientModel?, mask: UIView) {
     guard let model else {
@@ -173,6 +174,36 @@ private final class TextBlockView: UIView {
     let additionalTextInsets: EdgeInsets
     let intrinsicHeight: GetIntrinsicTextHeight?
     let isFocused: Bool
+  }
+
+  override var canBecomeFirstResponder: Bool {
+    model.canSelect
+  }
+
+  var model: Model! {
+    didSet {
+      guard model == nil || model != oldValue else {
+        return
+      }
+
+      precondition(model.images.count == model.attachments.count)
+
+      if model.images == oldValue?.images {
+        imageRequests = model.images.indices
+          .filter { model.attachments[$0].image == nil }
+          .compactMap(requestImage)
+      } else {
+        imagesReferences = Array(repeating: nil, times: UInt(model.images.count))
+        imageRequests = model.images.indices.compactMap(requestImage)
+      }
+
+      isUserInteractionEnabled = model.isUserInteractionEnabled
+
+      configureRecognizers()
+      selection = nil
+
+      setNeedsDisplay()
+    }
   }
 
   private var lastElementIndex: Int?
@@ -230,32 +261,6 @@ private final class TextBlockView: UIView {
 
   private var imagesReferences: [UIImage?] = []
 
-  var model: Model! {
-    didSet {
-      guard model == nil || model != oldValue else {
-        return
-      }
-
-      precondition(model.images.count == model.attachments.count)
-
-      if model.images == oldValue?.images {
-        imageRequests = model.images.indices
-          .filter { model.attachments[$0].image == nil }
-          .compactMap(requestImage)
-      } else {
-        imagesReferences = Array(repeating: nil, times: UInt(model.images.count))
-        imageRequests = model.images.indices.compactMap(requestImage)
-      }
-
-      isUserInteractionEnabled = model.isUserInteractionEnabled
-
-      configureRecognizers()
-      selection = nil
-
-      setNeedsDisplay()
-    }
-  }
-
   override init(frame: CGRect) {
     super.init(frame: frame)
 
@@ -267,6 +272,88 @@ private final class TextBlockView: UIView {
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+  override func draw(_ rect: CGRect) {
+    guard let model else { return }
+    self.textLayout = model.text.drawAndGetLayout(
+      inContext: UIGraphicsGetCurrentContext()!,
+      verticalPosition: model.verticalPosition,
+      rect: rect,
+      textInsets: model.additionalTextInsets,
+      truncationToken: model.truncationToken,
+      actionKey: ActionsAttribute.Key,
+      backgroundKey: BackgroundAttribute.Key,
+      borderKey: BorderAttribute.Key,
+      rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
+      selectedRange: selection?.range
+    )
+
+    self.selection?.draw(rect)
+  }
+
+  override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
+    guard let textLayout else {
+      return false
+    }
+    return model.canSelect && bounds.contains(point)
+      || textLayout.runsWithAction.contains { $0.rect.contains(point) }
+  }
+
+  override func resignFirstResponder() -> Bool {
+    let result = super.resignFirstResponder()
+    NotificationCenter.default.removeObserver(
+      self,
+      name: UIMenuController.willHideMenuNotification,
+      object: nil
+    )
+    return result
+  }
+
+  override func canPerformAction(_ action: Selector, withSender _: Any?) -> Bool {
+    action == #selector(copy(_:))
+  }
+
+  override func copy(_: Any?) {
+    if let selection {
+      UIPasteboard.general.string = selection.getSelectedText()
+    }
+
+    selection = nil
+    setNeedsDisplay()
+  }
+
+  func handleSelectionTapBegan(_ gesture: UIGestureRecognizer) {
+    becomeFirstResponder()
+
+    guard let textLayout else { return }
+
+    UIMenuController.shared.hideMenu(animated: true)
+    let textModel = TextSelection.TextModel(layout: textLayout, text: model.text)
+    let point = TextSelection.Point(
+      point: gesture.location(in: gesture.view),
+      viewBounds: bounds
+    )
+
+    selection = TextSelection(textModel: textModel, point: point) { [weak self] in
+
+      guard let delayedSelectionTapGesture = self?.delayedSelectionTapGesture else { return }
+      self?.handleSelectionTapEnded(delayedSelectionTapGesture)
+      self?.delayedSelectionTapGesture = nil
+    }
+  }
+
+  func handleSelectionTapEnded(_: UIGestureRecognizer) {
+    guard let selectionRect = selection?.rect else {
+      return
+    }
+    UIMenuController.shared.presentMenu(from: self, in: selectionRect)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(resetSelecting),
+      name: UIMenuController.willHideMenuNotification,
+      object: nil
+    )
+  }
 
   private func configureRecognizers() {
     if model.canSelect {
@@ -310,32 +397,6 @@ private final class TextBlockView: UIView {
     }
   }
 
-  override func draw(_ rect: CGRect) {
-    guard let model else { return }
-    self.textLayout = model.text.drawAndGetLayout(
-      inContext: UIGraphicsGetCurrentContext()!,
-      verticalPosition: model.verticalPosition,
-      rect: rect,
-      textInsets: model.additionalTextInsets,
-      truncationToken: model.truncationToken,
-      actionKey: ActionsAttribute.Key,
-      backgroundKey: BackgroundAttribute.Key,
-      borderKey: BorderAttribute.Key,
-      rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
-      selectedRange: selection?.range
-    )
-
-    self.selection?.draw(rect)
-  }
-
-  override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
-    guard let textLayout else {
-      return false
-    }
-    return model.canSelect && bounds.contains(point)
-      || textLayout.runsWithAction.contains { $0.rect.contains(point) }
-  }
-
   @objc private func handleHideSelectionMenuTap(_: UITapGestureRecognizer) {
     UIMenuController.shared.hideMenu(animated: true)
   }
@@ -373,39 +434,6 @@ private final class TextBlockView: UIView {
     }
   }
 
-  func handleSelectionTapBegan(_ gesture: UIGestureRecognizer) {
-    becomeFirstResponder()
-
-    guard let textLayout else { return }
-
-    UIMenuController.shared.hideMenu(animated: true)
-    let textModel = TextSelection.TextModel(layout: textLayout, text: model.text)
-    let point = TextSelection.Point(
-      point: gesture.location(in: gesture.view),
-      viewBounds: bounds
-    )
-
-    selection = TextSelection(textModel: textModel, point: point) { [weak self] in
-
-      guard let delayedSelectionTapGesture = self?.delayedSelectionTapGesture else { return }
-      self?.handleSelectionTapEnded(delayedSelectionTapGesture)
-      self?.delayedSelectionTapGesture = nil
-    }
-  }
-
-  func handleSelectionTapEnded(_: UIGestureRecognizer) {
-    guard let selectionRect = selection?.rect else {
-      return
-    }
-    UIMenuController.shared.presentMenu(from: self, in: selectionRect)
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(resetSelecting),
-      name: UIMenuController.willHideMenuNotification,
-      object: nil
-    )
-  }
-
   @objc private func handleSelectionPan(_ gesture: UIPanGestureRecognizer) {
     let point = gesture.location(in: gesture.view)
 
@@ -439,35 +467,8 @@ private final class TextBlockView: UIView {
     setNeedsDisplay()
   }
 
-  override var canBecomeFirstResponder: Bool {
-    model.canSelect
-  }
-
-  override func resignFirstResponder() -> Bool {
-    let result = super.resignFirstResponder()
-    NotificationCenter.default.removeObserver(
-      self,
-      name: UIMenuController.willHideMenuNotification,
-      object: nil
-    )
-    return result
-  }
-
   @objc private func resetSelecting() {
     selection = nil
-  }
-
-  override func canPerformAction(_ action: Selector, withSender _: Any?) -> Bool {
-    action == #selector(copy(_:))
-  }
-
-  override func copy(_: Any?) {
-    if let selection {
-      UIPasteboard.general.string = selection.getSelectedText()
-    }
-
-    selection = nil
-    setNeedsDisplay()
   }
 
   private func requestImage(at index: Int) -> Cancellable? {

@@ -6,16 +6,6 @@ public final class GradientBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
-  public init(
-    gradient: Gradient,
-    widthTrait: LayoutTrait = .resizable,
-    heightTrait: LayoutTrait = .resizable
-  ) {
-    self.gradient = gradient
-    self.widthTrait = widthTrait
-    self.heightTrait = heightTrait
-  }
-
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
@@ -25,6 +15,20 @@ public final class GradientBlock: BlockWithTraits {
     case .weighted:
       0
     }
+  }
+
+  public var debugDescription: String {
+    "\(widthTrait) x \(heightTrait) Gradient \(gradient)"
+  }
+
+  public init(
+    gradient: Gradient,
+    widthTrait: LayoutTrait = .resizable,
+    heightTrait: LayoutTrait = .resizable
+  ) {
+    self.gradient = gradient
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
@@ -43,10 +47,6 @@ public final class GradientBlock: BlockWithTraits {
     return gradient == other.gradient
       && widthTrait == other.widthTrait
       && heightTrait == other.heightTrait
-  }
-
-  public var debugDescription: String {
-    "\(widthTrait) x \(heightTrait) Gradient \(gradient)"
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }

@@ -20,6 +20,23 @@ struct WrapLayoutGroups {
   private var offset: CGFloat = 0
   private var separatorAdded = false
 
+  private var separatorOffset: CGFloat {
+    guard let separator else {
+      return 0
+    }
+    let separatorSize = separatorSize[keyPath: keyPath]
+    var offset: CGFloat = 0
+    if line.count > 0, separator.showBetween {
+      offset = separatorSize
+    } else if separator.showAtStart {
+      offset = separatorSize
+    }
+    if separator.showAtEnd {
+      offset = offset + separatorSize
+    }
+    return offset
+  }
+
   init(
     blockLayoutDirection: UserInterfaceLayoutDirection,
     children: [ContainerBlock.Child],
@@ -91,23 +108,6 @@ struct WrapLayoutGroups {
     }
 
     childrenWithSeparators = groups.flatMap { $0 }.map(\.child)
-  }
-
-  private var separatorOffset: CGFloat {
-    guard let separator else {
-      return 0
-    }
-    let separatorSize = separatorSize[keyPath: keyPath]
-    var offset: CGFloat = 0
-    if line.count > 0, separator.showBetween {
-      offset = separatorSize
-    } else if separator.showAtStart {
-      offset = separatorSize
-    }
-    if separator.showAtEnd {
-      offset = offset + separatorSize
-    }
-    return offset
   }
 
   private mutating func addChild(child: ContainerBlock.Child, size: CGSize) {

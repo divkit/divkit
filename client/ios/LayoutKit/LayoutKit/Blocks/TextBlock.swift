@@ -60,6 +60,27 @@ public final class TextBlock: BlockWithTraits {
   private var cachedIntrinsicWidth: CGFloat?
   private var cachedIntrinsicHeight: (width: CGFloat, height: CGFloat)?
 
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .intrinsic(_, minSize, maxSize):
+      if let cached = cachedIntrinsicWidth {
+        return cached
+      }
+
+      let width = ceil(
+        text.sizeForWidth(tightenWidth ? maxSize : .infinity)
+          .width + additionalTextInsets.horizontal.sum
+      )
+      let result = clamp(width, min: minSize, max: maxSize)
+      cachedIntrinsicWidth = result
+      return result
+    case let .fixed(value):
+      return value
+    case .weighted:
+      return 0
+    }
+  }
+
   public init(
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait = .intrinsic,
@@ -144,25 +165,18 @@ public final class TextBlock: BlockWithTraits {
     )
   }
 
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .intrinsic(_, minSize, maxSize):
-      if let cached = cachedIntrinsicWidth {
-        return cached
-      }
-
-      let width = ceil(
-        text.sizeForWidth(tightenWidth ? maxSize : .infinity)
-          .width + additionalTextInsets.horizontal.sum
-      )
-      let result = clamp(width, min: minSize, max: maxSize)
-      cachedIntrinsicWidth = result
-      return result
-    case let .fixed(value):
-      return value
-    case .weighted:
-      return 0
-    }
+  public static func ==(lhs: TextBlock, rhs: TextBlock) -> Bool {
+    lhs.widthTrait == rhs.widthTrait
+      && lhs.heightTrait == rhs.heightTrait
+      && lhs.text == rhs.text
+      && lhs.gradientModel?.gradient == rhs.gradientModel?.gradient
+      && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
+      && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
+      && lhs.images == rhs.images
+      && lhs.accessibilityElement == rhs.accessibilityElement
+      && lhs.tightenWidth == rhs.tightenWidth
+      && lhs.autoEllipsize == rhs.autoEllipsize
+      && lhs.path == rhs.path
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -194,20 +208,6 @@ public final class TextBlock: BlockWithTraits {
 
   public func getImageHolders() -> [ImageHolder] {
     images.map(\.holder)
-  }
-
-  public static func ==(lhs: TextBlock, rhs: TextBlock) -> Bool {
-    lhs.widthTrait == rhs.widthTrait
-      && lhs.heightTrait == rhs.heightTrait
-      && lhs.text == rhs.text
-      && lhs.gradientModel?.gradient == rhs.gradientModel?.gradient
-      && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
-      && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
-      && lhs.images == rhs.images
-      && lhs.accessibilityElement == rhs.accessibilityElement
-      && lhs.tightenWidth == rhs.tightenWidth
-      && lhs.autoEllipsize == rhs.autoEllipsize
-      && lhs.path == rhs.path
   }
 
   public func calculateTextIntrinsicContentHeight(

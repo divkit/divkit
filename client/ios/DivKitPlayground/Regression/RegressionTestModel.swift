@@ -1,15 +1,6 @@
 import SwiftUI
 
 struct RegressionTestsModel: Decodable {
-  let tests: [RegressionTestModel]
-
-  init(from decoder: Decoder) throws {
-    tests = try decoder
-      .container(keyedBy: CodingKeys.self)
-      .decode([SafeDecodable<RegressionTestModel>].self, forKey: .tests)
-      .compactMap(\.value)
-  }
-
   private enum CodingKeys: String, CodingKey {
     case tests
   }
@@ -26,15 +17,78 @@ struct RegressionTestsModel: Decodable {
       }
     }
   }
+
+  let tests: [RegressionTestModel]
+
+  init(from decoder: Decoder) throws {
+    tests = try decoder
+      .container(keyedBy: CodingKeys.self)
+      .decode([SafeDecodable<RegressionTestModel>].self, forKey: .tests)
+      .compactMap(\.value)
+  }
+
 }
 
 struct RegressionTestModel: Decodable, Hashable {
+  private enum CodingKeys: String, CodingKey {
+    case expectedResults = "expected_results"
+    case file
+    case platforms
+    case steps
+    case tags
+    case title
+  }
+
+  private struct DecodingError: LocalizedError {
+    let description: String
+
+    var errorDescription: String? {
+      NSLocalizedString(description, comment: "DecodingError")
+    }
+
+    init(_ description: String) {
+      self.description = description
+    }
+
+    init(key: CodingKeys, error: Error) {
+      description = "Failed to read \(key.rawValue): \(error.localizedDescription)"
+    }
+
+    init(key: CodingKeys, title: String, error: Error) {
+      description =
+        "Failed to read \(key.rawValue) in test '\(title)': \(error.localizedDescription)"
+    }
+
+  }
+
   let expectedResults: [String]
   let platforms: [Platform]
   let steps: [String]
   let tags: [String]
   let title: String
   let url: URL
+
+  var description: String {
+    var description = ""
+    if !steps.isEmpty {
+      description += "Steps:"
+      for step in steps {
+        description += "\n • \(step)"
+      }
+    }
+
+    if !expectedResults.isEmpty {
+      if !steps.isEmpty {
+        description += "\n\n"
+      }
+      description += "Expected results:"
+      for result in expectedResults {
+        description += "\n • \(result)"
+      }
+    }
+
+    return description
+  }
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -73,57 +127,6 @@ struct RegressionTestModel: Decodable, Hashable {
     tags = (try? container.decodeIfPresent([String].self, forKey: .tags)) ?? []
   }
 
-  var description: String {
-    var description = ""
-    if !steps.isEmpty {
-      description += "Steps:"
-      for step in steps {
-        description += "\n • \(step)"
-      }
-    }
-
-    if !expectedResults.isEmpty {
-      if !steps.isEmpty {
-        description += "\n\n"
-      }
-      description += "Expected results:"
-      for result in expectedResults {
-        description += "\n • \(result)"
-      }
-    }
-
-    return description
-  }
-
-  private enum CodingKeys: String, CodingKey {
-    case expectedResults = "expected_results"
-    case file
-    case platforms
-    case steps
-    case tags
-    case title
-  }
-
-  private struct DecodingError: LocalizedError {
-    let description: String
-
-    init(_ description: String) {
-      self.description = description
-    }
-
-    init(key: CodingKeys, error: Error) {
-      description = "Failed to read \(key.rawValue): \(error.localizedDescription)"
-    }
-
-    init(key: CodingKeys, title: String, error: Error) {
-      description =
-        "Failed to read \(key.rawValue) in test '\(title)': \(error.localizedDescription)"
-    }
-
-    var errorDescription: String? {
-      NSLocalizedString(description, comment: "DecodingError")
-    }
-  }
 }
 
 enum Platform: String, Decodable {

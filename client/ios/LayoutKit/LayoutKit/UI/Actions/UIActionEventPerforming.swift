@@ -15,13 +15,13 @@ public final class UIActionEvent: AppActionEventProtocol {
   public let originalSender: UIResponder
   public let uiAction: UserInterfaceAction
 
+  public var payload: UserInterfaceAction.Payload {
+    uiAction.payload
+  }
+
   public init(uiAction: UserInterfaceAction, originalSender: UIResponder) {
     self.originalSender = originalSender
     self.uiAction = uiAction
-  }
-
-  public var payload: UserInterfaceAction.Payload {
-    uiAction.payload
   }
 
   public func makeHandler(responder: UIResponder) -> Handler? {

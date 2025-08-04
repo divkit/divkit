@@ -58,7 +58,7 @@ custom_rules:
     message: "Such a cast to CF* type is unsafe. Use Serialization.safeCFCast (or add one if missing)"
   no_direct_use_of_repeating_count_initializer:
     name: "Dangerous repeating initializer"
-    regex: '\(\s*repeating\s*:\s*\S.*,\s*count\s*:\s*\S.*\)'
+    regex: '\(\s*repeating\s*:\s*[^,]*,\s*count\s*:\s*'
     message: "Use init(repeating:times:) instead"
     severity: warning
   no_direct_use_of_unique_keys_with_values_initializer:

@@ -5,6 +5,10 @@ import VGSL
 final class TabsCollectionViewFlowLayout: UICollectionViewFlowLayout {
   static let delimiterKind = "TabDelimiter"
 
+  override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+    true
+  }
+
   var tabTitleDelimiter: TabTitleDelimiterStyle? {
     didSet {
       if tabTitleDelimiter != oldValue {
@@ -24,10 +28,6 @@ final class TabsCollectionViewFlowLayout: UICollectionViewFlowLayout {
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-    true
   }
 
   override func prepare() {

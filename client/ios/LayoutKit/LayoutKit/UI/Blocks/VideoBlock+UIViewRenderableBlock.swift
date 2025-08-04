@@ -28,24 +28,24 @@ extension VideoBlock {
 }
 
 private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
-    [videoView].compactMap { $0 }
-  }
-
   var layoutReporter: LayoutReporter?
 
-  init() {
-    super.init(frame: .zero)
-
-    preview.whenLoaded { [weak self] value in
-      self?.videoView.map { $0.addSubview(value) }
+  var state: VideoBlockViewState = .init(state: .playing) {
+    didSet {
+      guard oldValue != state else { return }
+      switch state.state {
+      case .playing:
+        player?.play()
+        preview.currentValue?.isHidden = true
+      case .paused:
+        player?.pause()
+      }
     }
   }
 
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+  weak var observer: ElementStateObserver?
+  var playerFactory: PlayerFactory?
+  var effectiveBackgroundColor: UIColor?
 
   private var model: VideoBlockViewModel = .zero
   private var playerSignal: Disposable?
@@ -109,22 +109,36 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     return view
   }()
 
-  var state: VideoBlockViewState = .init(state: .playing) {
-    didSet {
-      guard oldValue != state else { return }
-      switch state.state {
-      case .playing:
-        player?.play()
-        preview.currentValue?.isHidden = true
-      case .paused:
-        player?.pause()
-      }
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
+    [videoView].compactMap { $0 }
+  }
+
+  init() {
+    super.init(frame: .zero)
+
+    preview.whenLoaded { [weak self] value in
+      self?.videoView.map { $0.addSubview(value) }
     }
   }
 
-  weak var observer: ElementStateObserver?
-  var playerFactory: PlayerFactory?
-  var effectiveBackgroundColor: UIColor?
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  deinit {
+    player?.pause()
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    layoutReporter?.willLayoutSubviews()
+    videoView?.frame = bounds
+    if preview.currentValue != nil {
+      preview.value.frame = adjustPreviewFrame()
+    }
+    layoutReporter?.didLayoutSubviews()
+  }
 
   func configure(with model: VideoBlockViewModel) {
     let oldValue = self.model
@@ -151,16 +165,6 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.seek(to: CMTime(value: elapsedTime))
       previousTime = elapsedTime
     }
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    layoutReporter?.willLayoutSubviews()
-    videoView?.frame = bounds
-    if preview.currentValue != nil {
-      preview.value.frame = adjustPreviewFrame()
-    }
-    layoutReporter?.didLayoutSubviews()
   }
 
   private func adjustPreviewFrame() -> CGRect {
@@ -193,9 +197,6 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     }
   }
 
-  deinit {
-    player?.pause()
-  }
 }
 
 extension VideoBlockViewModel {

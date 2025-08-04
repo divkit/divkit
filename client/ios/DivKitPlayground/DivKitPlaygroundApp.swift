@@ -3,13 +3,14 @@ import SwiftUI
 
 @main
 struct DivKitPlaygroundApp: App {
-  init() {
-    DivKitLogger.isEnabled = true
-  }
-
   var body: some Scene {
     WindowGroup {
       MainView()
     }
   }
+
+  init() {
+    DivKitLogger.isEnabled = true
+  }
+
 }

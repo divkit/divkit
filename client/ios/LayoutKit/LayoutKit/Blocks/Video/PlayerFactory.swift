@@ -34,6 +34,14 @@ public protocol PlayerFactory {
 }
 
 public struct PlaybackConfig: Equatable {
+  public static let `default` = PlaybackConfig(
+    autoPlay: true,
+    repeatable: false,
+    isMuted: false,
+    startPosition: .zero,
+    settingsPayload: [:]
+  )
+
   public let autoPlay: Bool
   public let repeatable: Bool
   public let isMuted: Bool
@@ -53,14 +61,6 @@ public struct PlaybackConfig: Equatable {
     self.startPosition = startPosition
     self.settingsPayload = settingsPayload
   }
-
-  public static let `default` = PlaybackConfig(
-    autoPlay: true,
-    repeatable: false,
-    isMuted: false,
-    startPosition: .zero,
-    settingsPayload: [:]
-  )
 
   public static func ==(lhs: PlaybackConfig, rhs: PlaybackConfig) -> Bool {
     lhs.autoPlay == rhs.autoPlay &&

@@ -28,6 +28,8 @@ extension VideoBlockLegacy {
 }
 
 private final class VideoBlockLegacyView: BlockView {
+  override static var layerClass: AnyClass { AVPlayerLayer.self }
+
   var videoAssetHolder: VideoBlockLegacy.VideoAssetHolder! {
     didSet {
       let actualURL = videoAssetHolder.url
@@ -40,6 +42,14 @@ private final class VideoBlockLegacyView: BlockView {
   }
 
   let autoplayAllowed: ObservableVariableConnection<Bool>
+
+  let effectiveBackgroundColor: UIColor? = nil
+
+  private let disposePool = AutodisposePool()
+  private let avPlayer = AVQueuePlayer()
+  private var playerLooper: AVPlayerLooper?
+
+  private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
 
   init() {
     autoplayAllowed = .init(initialValue: false)
@@ -66,17 +76,7 @@ private final class VideoBlockLegacyView: BlockView {
     NotificationCenter.default.removeObserver(self)
   }
 
-  private let disposePool = AutodisposePool()
-  private let avPlayer = AVQueuePlayer()
-  private var playerLooper: AVPlayerLooper?
-
-  private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
-
-  override static var layerClass: AnyClass { AVPlayerLayer.self }
-
   func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
-  let effectiveBackgroundColor: UIColor? = nil
 
   private func configurePlayer(with playerItem: AVPlayerItem) {
     avPlayer.removeAllItems()

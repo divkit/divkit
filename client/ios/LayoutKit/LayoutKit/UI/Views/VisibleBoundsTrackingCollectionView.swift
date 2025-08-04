@@ -4,12 +4,6 @@ import VGSL
 
 public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysCollectionView,
   VisibleBoundsTrackingContainer {
-  private var previousVisibleBounds = CGRect.zero
-  private var currentVisibleBounds = CGRect.zero
-  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
-    subviews.compactMap { $0 as? VisibleBoundsTrackingView }
-  }
-
   public override var bounds: CGRect {
     didSet {
       if bounds.size == oldValue.size {
@@ -23,6 +17,14 @@ public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysColl
       previousVisibleBounds = currentVisibleBounds
     }
   }
+
+  private var previousVisibleBounds = CGRect.zero
+  private var currentVisibleBounds = CGRect.zero
+
+  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
+    subviews.compactMap { $0 as? VisibleBoundsTrackingView }
+  }
+
 }
 
 extension VisibleBoundsTrackingCollectionView: VisibleBoundsTracking {

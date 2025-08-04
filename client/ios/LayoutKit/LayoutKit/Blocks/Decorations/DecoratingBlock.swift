@@ -34,6 +34,14 @@ final class DecoratingBlock: WrapperBlock {
   let isFocused: Bool
   let captureFocusOnAction: Bool
 
+  var intrinsicContentWidth: CGFloat {
+    child.intrinsicContentWidth.roundedToScreenScale + paddings.horizontal.sum
+  }
+
+  var widthOfHorizontallyNonResizableBlock: CGFloat {
+    intrinsicContentWidth
+  }
+
   init(
     child: Block,
     backgroundColor: Color = DecoratingBlock.defaultBackgroundColor,
@@ -86,8 +94,11 @@ final class DecoratingBlock: WrapperBlock {
     self.captureFocusOnAction = captureFocusOnAction
   }
 
-  var intrinsicContentWidth: CGFloat {
-    child.intrinsicContentWidth.roundedToScreenScale + paddings.horizontal.sum
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    guard let childAscent = child.ascent(forWidth: width) else {
+      return nil
+    }
+    return childAscent + paddings.vertical.leading
   }
 
   func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -96,19 +107,8 @@ final class DecoratingBlock: WrapperBlock {
       + paddings.vertical.sum
   }
 
-  var widthOfHorizontallyNonResizableBlock: CGFloat {
-    intrinsicContentWidth
-  }
-
   func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
     intrinsicContentHeight(forWidth: width)
-  }
-
-  public func ascent(forWidth width: CGFloat) -> CGFloat? {
-    guard let childAscent = child.ascent(forWidth: width) else {
-      return nil
-    }
-    return childAscent + paddings.vertical.leading
   }
 
   func laidOut(for width: CGFloat) -> Block {

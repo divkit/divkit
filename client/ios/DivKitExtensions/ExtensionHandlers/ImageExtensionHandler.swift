@@ -4,6 +4,7 @@ import VGSL
 
 public final class ImageExtensionHandler: DivExtensionHandler {
   public let id: String
+
   private let image: ImageHolder?
 
   public init(

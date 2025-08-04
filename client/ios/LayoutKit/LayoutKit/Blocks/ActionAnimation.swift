@@ -1,8 +1,8 @@
 public struct ActionAnimation: Equatable {
+  public static let empty = Self(touchDown: [.empty], touchUp: [.empty])
+
   public let touchDown: [TransitioningAnimation]
   public let touchUp: [TransitioningAnimation]
-
-  public static let empty = Self(touchDown: [.empty], touchUp: [.empty])
 
   public init(
     touchDown: [TransitioningAnimation],

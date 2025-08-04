@@ -85,6 +85,7 @@ final class LottieExtensionHandlerTests: XCTestCase {
 
 private final class MockLottieAnimationFactory: AsyncSourceAnimatableViewFactory {
   var returnView = MockAnimatableView(frame: .zero)
+
   func createAsyncSourceAnimatableView(withMode _: AnimationRepeatMode, repeatCount _: Float)
     -> AsyncSourceAnimatableView {
     returnView

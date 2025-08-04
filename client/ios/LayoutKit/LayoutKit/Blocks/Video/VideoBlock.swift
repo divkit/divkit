@@ -8,8 +8,19 @@ public final class VideoBlock: BlockWithTraits {
   public let model: VideoBlockViewModel
   public let state: VideoBlockViewState
   public let playerFactory: PlayerFactory
+  public var debugDescription: String = ""
+
   public var path: UIElementPath? {
     model.path
+  }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case .intrinsic, .weighted:
+      0
+    }
   }
 
   public init(
@@ -24,15 +35,6 @@ public final class VideoBlock: BlockWithTraits {
     self.model = model
     self.state = state
     self.playerFactory = playerFactory
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case .intrinsic, .weighted:
-      0
-    }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
@@ -54,7 +56,6 @@ public final class VideoBlock: BlockWithTraits {
     return self.model == other.model && self.state == other.state
   }
 
-  public var debugDescription: String = ""
 }
 
 extension VideoBlock: LayoutCachingDefaultImpl {}

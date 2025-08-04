@@ -35,9 +35,9 @@ struct SampleView: View {
 }
 
 final class SamplesModel {
-  private let divKitComponents = AppComponents.makeDivKitComponents()
-
   private(set) var items: [SampleModel]!
+
+  private let divKitComponents = AppComponents.makeDivKitComponents()
 
   init() {
     items = TestData.samples

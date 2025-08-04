@@ -66,10 +66,25 @@ private struct TestCases: Decodable {
 }
 
 private struct ExpressionTestCase: Decodable {
+  private enum CodingKeys: String, CodingKey {
+    case expression, variables, expected, platforms
+  }
+
   let expression: String
   let variables: DivVariables
   let expected: ExpectedValue
   let platforms: [Platform]
+
+  var description: String {
+    let formattedExpression = if expression.starts(with: "@{"),
+                                 expression.last == "}",
+                                 !expression.dropFirst(2).contains("@{") {
+      String(expression.dropFirst(2).dropLast())
+    } else {
+      expression
+    }
+    return "\(formattedExpression) -> \(expected.description): \(hashValue)"
+  }
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -96,21 +111,6 @@ private struct ExpressionTestCase: Decodable {
         errorTracker: { XCTFail($0.description) }
       )
     )
-  }
-
-  var description: String {
-    let formattedExpression = if expression.starts(with: "@{"),
-                                 expression.last == "}",
-                                 !expression.dropFirst(2).contains("@{") {
-      String(expression.dropFirst(2).dropLast())
-    } else {
-      expression
-    }
-    return "\(formattedExpression) -> \(expected.description): \(hashValue)"
-  }
-
-  private enum CodingKeys: String, CodingKey {
-    case expression, variables, expected, platforms
   }
 
   func resolveValue(
@@ -194,6 +194,37 @@ enum ExpectedValue: Decodable {
   case unorderedArray(DivArray)
   case error(String)
 
+  private enum CodingKeys: String, CodingKey {
+    case type, value
+  }
+
+  var description: String {
+    switch self {
+    case let .string(value):
+      formatArgForError(value)
+    case let .double(value):
+      formatArgForError(value)
+    case let .integer(value):
+      formatArgForError(value)
+    case let .bool(value):
+      formatArgForError(value)
+    case let .color(value):
+      formatArgForError(value)
+    case let .datetime(value):
+      formatArgForError(value)
+    case let .url(value):
+      formatArgForError(value)
+    case let .array(value):
+      formatArgForError(value)
+    case let .dict(value):
+      formatArgForError(value)
+    case let .unorderedArray(value):
+      formatArgForError(value)
+    case .error:
+      "error"
+    }
+  }
+
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     let type = try container.decode(String.self, forKey: .type)
@@ -254,36 +285,6 @@ enum ExpectedValue: Decodable {
     }
   }
 
-  var description: String {
-    switch self {
-    case let .string(value):
-      formatArgForError(value)
-    case let .double(value):
-      formatArgForError(value)
-    case let .integer(value):
-      formatArgForError(value)
-    case let .bool(value):
-      formatArgForError(value)
-    case let .color(value):
-      formatArgForError(value)
-    case let .datetime(value):
-      formatArgForError(value)
-    case let .url(value):
-      formatArgForError(value)
-    case let .array(value):
-      formatArgForError(value)
-    case let .dict(value):
-      formatArgForError(value)
-    case let .unorderedArray(value):
-      formatArgForError(value)
-    case .error:
-      "error"
-    }
-  }
-
-  private enum CodingKeys: String, CodingKey {
-    case type, value
-  }
 }
 
 extension DivVariable: Swift.Decodable {

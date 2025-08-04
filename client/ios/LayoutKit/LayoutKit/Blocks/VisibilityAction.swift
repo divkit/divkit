@@ -3,6 +3,7 @@ import Foundation
 
 public struct VisibilityAction {
   public let logId: String?
+
   let uiAction: UserInterfaceAction
   let requiredDuration: TimeInterval
   let targetPercentage: Int

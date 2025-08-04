@@ -37,6 +37,7 @@ struct RiveDivCustomData {
   }
 
   static let divCustomType = "rive_animation"
+
   let url: URL
   let fit: Fit
   let alignment: Alignment

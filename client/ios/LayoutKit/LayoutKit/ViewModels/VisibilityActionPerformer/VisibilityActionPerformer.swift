@@ -31,6 +31,10 @@ final class VisibilityActionPerformer {
     self.timerScheduler = timerScheduler
   }
 
+  deinit {
+    visibilityTimer?.invalidate()
+  }
+
   func onVisibleBoundsChanged(
     visibleAreaPercentageBefore: Int,
     visibleAreaPercentageAfter: Int
@@ -78,7 +82,4 @@ final class VisibilityActionPerformer {
     visibilityTimer = nil
   }
 
-  deinit {
-    visibilityTimer?.invalidate()
-  }
 }

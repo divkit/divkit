@@ -11,6 +11,34 @@ public final class SwitchBlock: Block {
   public let onTintColor: Color?
   public let accessibilityElement: AccessibilityElement?
 
+  public let isVerticallyConstrained = false
+  public let isHorizontallyConstrained = false
+
+  public var isVerticallyResizable: Bool { heightTrait.isResizable }
+  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case .intrinsic:
+      uiSwitchSize.width
+    case .weighted:
+      0
+    }
+  }
+
+  public var widthOfHorizontallyNonResizableBlock: CGFloat { uiSwitchSize.width }
+  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
+    assertionFailure("try to get weight for non resizable block")
+    return .default
+  }
+
+  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
+    assertionFailure("try to get weight for non resizable block")
+    return .default
+  }
+
   public init(
     widthTrait: LayoutTrait = .intrinsic,
     heightTrait: LayoutTrait = .intrinsic,
@@ -47,23 +75,6 @@ public final class SwitchBlock: Block {
     self.accessibilityElement = accessibilityElement
   }
 
-  public var isVerticallyResizable: Bool { heightTrait.isResizable }
-  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
-
-  public let isVerticallyConstrained = false
-  public let isHorizontallyConstrained = false
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case .intrinsic:
-      uiSwitchSize.width
-    case .weighted:
-      0
-    }
-  }
-
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .fixed(value):
@@ -75,19 +86,8 @@ public final class SwitchBlock: Block {
     }
   }
 
-  public var widthOfHorizontallyNonResizableBlock: CGFloat { uiSwitchSize.width }
   public func heightOfVerticallyNonResizableBlock(forWidth _: CGFloat) -> CGFloat {
     uiSwitchSize.height
-  }
-
-  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    assertionFailure("try to get weight for non resizable block")
-    return .default
-  }
-
-  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    assertionFailure("try to get weight for non resizable block")
-    return .default
   }
 
   public func equals(_ other: Block) -> Bool {

@@ -2,6 +2,14 @@ import Foundation
 import VGSL
 
 public struct MarksConfigurationModel: Equatable {
+  public static let empty = Self(
+    minValue: 0,
+    maxValue: 0,
+    activeMark: .empty,
+    inactiveMark: .empty,
+    layoutDirection: .leftToRight
+  )
+
   let minValue: CGFloat
   let maxValue: CGFloat
   let activeMark: RoundedRectangle
@@ -22,17 +30,18 @@ public struct MarksConfigurationModel: Equatable {
     self.layoutDirection = layoutDirection
   }
 
-  public static let empty = Self(
-    minValue: 0,
-    maxValue: 0,
-    activeMark: .empty,
-    inactiveMark: .empty,
-    layoutDirection: .leftToRight
-  )
 }
 
 extension MarksConfigurationModel {
   public struct RoundedRectangle: Equatable {
+    public static let empty = RoundedRectangle(
+      size: CGSize.zero,
+      cornerRadius: 0,
+      color: .clear,
+      borderWidth: 0,
+      borderColor: .clear
+    )
+
     var size: CGSize
     let cornerRadius: CGFloat
     let color: Color
@@ -53,12 +62,5 @@ extension MarksConfigurationModel {
       self.borderColor = borderColor
     }
 
-    public static let empty = RoundedRectangle(
-      size: CGSize.zero,
-      cornerRadius: 0,
-      color: .clear,
-      borderWidth: 0,
-      borderColor: .clear
-    )
   }
 }

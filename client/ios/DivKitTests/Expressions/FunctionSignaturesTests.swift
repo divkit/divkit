@@ -48,20 +48,19 @@ private struct TestCases: Decodable {
 }
 
 private struct SignatureTestCase: Decodable {
+  private enum CodingKeys: String, CodingKey {
+    case functionName = "function_name"
+    case isMethod = "is_method"
+    case arguments
+    case resultType = "result_type"
+    case platforms
+  }
+
   let functionName: String
   let isMethod: Bool
   let arguments: [ArgumentSignature]
   let resultType: Any.Type
   let platforms: [Platform]
-
-  init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    functionName = try container.decode(String.self, forKey: .functionName)
-    isMethod = (try? container.decode(Bool.self, forKey: .isMethod)) ?? false
-    arguments = (try? container.decode([ArgumentSignature].self, forKey: .arguments)) ?? []
-    resultType = try parseType(container.decode(String.self, forKey: .resultType))
-    platforms = try container.decode([Platform].self, forKey: .platforms)
-  }
 
   var toSignature: FunctionSignature {
     FunctionSignature(arguments: arguments, resultType: resultType)
@@ -82,13 +81,15 @@ private struct SignatureTestCase: Decodable {
     return name
   }
 
-  private enum CodingKeys: String, CodingKey {
-    case functionName = "function_name"
-    case isMethod = "is_method"
-    case arguments
-    case resultType = "result_type"
-    case platforms
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    functionName = try container.decode(String.self, forKey: .functionName)
+    isMethod = (try? container.decode(Bool.self, forKey: .isMethod)) ?? false
+    arguments = (try? container.decode([ArgumentSignature].self, forKey: .arguments)) ?? []
+    resultType = try parseType(container.decode(String.self, forKey: .resultType))
+    platforms = try container.decode([Platform].self, forKey: .platforms)
   }
+
 }
 
 extension Function {

@@ -3,6 +3,7 @@ import UIKit
 
 final class TabTitleDelimiterReusableView: UICollectionReusableView {
   static let reuseID = "TabTitleDelimiterReusableView"
+
   private let delimiterImageView = UIImageView()
 
   override init(frame: CGRect) {
@@ -15,11 +16,6 @@ final class TabTitleDelimiterReusableView: UICollectionReusableView {
     setupView()
   }
 
-  private func setupView() {
-    addSubview(delimiterImageView)
-    delimiterImageView.contentMode = .scaleAspectFit
-  }
-
   override func layoutSubviews() {
     super.layoutSubviews()
     delimiterImageView.frame = bounds
@@ -28,5 +24,11 @@ final class TabTitleDelimiterReusableView: UICollectionReusableView {
   func configure(with image: UIImage?) {
     delimiterImageView.image = image
   }
+
+  private func setupView() {
+    addSubview(delimiterImageView)
+    delimiterImageView.contentMode = .scaleAspectFit
+  }
+
 }
 #endif

@@ -10,6 +10,7 @@ public final class SliderBlock: BlockWithTraits {
   // MARK: - SliderBlock
 
   let sliderModel: SliderModel
+
   public var path: UIElementPath? {
     sliderModel.path
   }
@@ -26,16 +27,12 @@ public final class SliderBlock: BlockWithTraits {
     }
   }
 
-  public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-    switch heightTrait {
-    case let .fixed(value):
-      return value
-    case let .intrinsic(_, minSize, maxSize):
-      let height = sliderModel.sliderHeight
-      return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
-    }
+  public var debugDescription: String {
+    """
+    Slider min value: \(sliderModel.minValue)
+    Slider max value: \(sliderModel.maxValue)
+    First thumb value: \(sliderModel.firstThumb.value)
+    """ + (sliderModel.secondThumb.flatMap { "Second thumb value: \($0.value)" } ?? "")
   }
 
   public init(
@@ -46,6 +43,18 @@ public final class SliderBlock: BlockWithTraits {
     self.sliderModel = sliderModel
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
+  }
+
+  public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
+    switch heightTrait {
+    case let .fixed(value):
+      return value
+    case let .intrinsic(_, minSize, maxSize):
+      let height = sliderModel.sliderHeight
+      return clamp(height, min: minSize, max: maxSize)
+    case .weighted:
+      return 0
+    }
   }
 
   public func equals(_ other: Block) -> Bool {
@@ -60,13 +69,6 @@ public final class SliderBlock: BlockWithTraits {
     []
   }
 
-  public var debugDescription: String {
-    """
-    Slider min value: \(sliderModel.minValue)
-    Slider max value: \(sliderModel.maxValue)
-    First thumb value: \(sliderModel.firstThumb.value)
-    """ + (sliderModel.secondThumb.flatMap { "Second thumb value: \($0.value)" } ?? "")
-  }
 }
 
 extension SliderBlock: LayoutCachingDefaultImpl {}

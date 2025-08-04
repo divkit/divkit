@@ -8,6 +8,10 @@ final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
   let errorCollector: DebugErrorCollector
   let showDebugInfo: (ViewType) -> Void
 
+  var debugDescription: String {
+    "DebugBlock errors: \(errorCollector.debugDescription). Child: \(child)"
+  }
+
   init(
     child: Block,
     errorCollector: DebugErrorCollector,
@@ -30,10 +34,6 @@ final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
     if self === other { return true }
     guard let other = other as? DebugBlock else { return false }
     return errorCollector === other.errorCollector && child.equals(other.child)
-  }
-
-  var debugDescription: String {
-    "DebugBlock errors: \(errorCollector.debugDescription). Child: \(child)"
   }
 
   func getImageHolders() -> [any VGSLUI.ImageHolder] {

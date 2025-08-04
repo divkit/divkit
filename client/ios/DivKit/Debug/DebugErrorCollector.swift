@@ -2,12 +2,24 @@ import LayoutKit
 import VGSLFundamentals
 
 final class DebugErrorCollector: DivReporter {
-  private let wrappedDivReporter: DivReporter
-
   var errorStorage: DivErrorsStorage
 
   private(set) var layoutErrors = [DivError]()
   let observableErrorCount = ObservableProperty<Int>(initialValue: 0)
+
+  private let wrappedDivReporter: DivReporter
+
+  var totalErrorCount: Int {
+    errorStorage.errors.count + layoutErrors.count
+  }
+
+  var errorList: [String] {
+    errorStorage.errors.map(\.prettyMessage) + layoutErrors.map(\.prettyMessage)
+  }
+
+  var debugDescription: String {
+    "Errors: \(errorList)"
+  }
 
   init(
     wrappedDivReporter: DivReporter,
@@ -26,18 +38,6 @@ final class DebugErrorCollector: DivReporter {
 
   func reportAction(cardId: DivCardID, info: DivActionInfo) {
     wrappedDivReporter.reportAction(cardId: cardId, info: info)
-  }
-
-  var totalErrorCount: Int {
-    errorStorage.errors.count + layoutErrors.count
-  }
-
-  var errorList: [String] {
-    errorStorage.errors.map(\.prettyMessage) + layoutErrors.map(\.prettyMessage)
-  }
-
-  var debugDescription: String {
-    "Errors: \(errorList)"
   }
 
   private func hasError(_ error: DivError) -> Bool {

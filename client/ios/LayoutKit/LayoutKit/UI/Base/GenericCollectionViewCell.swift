@@ -6,8 +6,6 @@ import VGSL
 open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackingContainer {
   public private(set) var model: UIViewRenderable!
 
-  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { view.asArray() }
-
   public private(set) var view: BlockView? {
     didSet {
       oldValue?.removeFromSuperview()
@@ -16,6 +14,13 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
         setNeedsLayout()
       }
     }
+  }
+
+  public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { view.asArray() }
+
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    view?.frame = contentView.bounds
   }
 
   public func configure(
@@ -45,9 +50,5 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
     applyAccessibilityFromScratch(accessibilityElement)
   }
 
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-    view?.frame = contentView.bounds
-  }
 }
 #endif

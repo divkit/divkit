@@ -2,6 +2,8 @@
 import UIKit
 
 final class MarksView: UIView {
+  override class var layerClass: AnyClass { MarksLayer.self }
+
   var configuration: MarksConfiguration {
     get {
       contentLayer.configuration
@@ -36,8 +38,6 @@ final class MarksView: UIView {
     layer as! MarksLayer
   }
 
-  override class var layerClass: AnyClass { MarksLayer.self }
-
   init() {
     super.init(frame: .zero)
     commonInit()
@@ -53,12 +53,13 @@ final class MarksView: UIView {
     commonInit()
   }
 
+  override func draw(_: CGRect) {
+    // overriden draw is required for redrawing of layer
+  }
+
   private func commonInit() {
     backgroundColor = .clear
   }
 
-  override func draw(_: CGRect) {
-    // overriden draw is required for redrawing of layer
-  }
 }
 #endif

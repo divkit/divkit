@@ -33,8 +33,6 @@ private struct Model: ReferenceEquatable {
 }
 
 private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
-  private let indicatorView = PageIndicatorView()
-
   var model: Model! {
     didSet {
       guard model != oldValue else { return }
@@ -48,6 +46,8 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
       configureIndicatorView(animated: model.state.animated)
     }
   }
+
+  private let indicatorView = PageIndicatorView()
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 

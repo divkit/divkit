@@ -2,8 +2,6 @@ import CoreGraphics
 import VGSL
 
 public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
-  typealias Layout = [CGRect]
-
   public struct Child: Equatable {
     public var content: Block
     public let alignment: BlockAlignment2D
@@ -14,9 +12,23 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     }
   }
 
+  typealias Layout = [CGRect]
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let children: [Child]
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(width):
+      return width
+    case let .intrinsic(_, minSize, maxSize):
+      let width = children.map(\.content.intrinsicContentWidth).max() ?? 0
+      return clamp(width, min: minSize, max: maxSize)
+    case .weighted:
+      return children.map(\.content.intrinsicContentWidth).max() ?? 0
+    }
+  }
 
   public convenience init(
     widthTrait: LayoutTrait = .resizable,
@@ -47,18 +59,6 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.children = children
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(width):
-      return width
-    case let .intrinsic(_, minSize, maxSize):
-      let width = children.map(\.content.intrinsicContentWidth).max() ?? 0
-      return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return children.map(\.content.intrinsicContentWidth).max() ?? 0
-    }
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {

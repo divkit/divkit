@@ -19,6 +19,12 @@ public final class BackgroundBlock: BlockWithLayout, WrapperBlock {
     self.cornerRadius = cornerRadius
   }
 
+  public static func ==(lhs: BackgroundBlock, rhs: BackgroundBlock) -> Bool {
+    lhs.background == rhs.background &&
+      lhs.child == rhs.child &&
+      lhs.cornerRadius == rhs.cornerRadius
+  }
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? BackgroundBlock else {
       return false
@@ -33,12 +39,6 @@ public final class BackgroundBlock: BlockWithLayout, WrapperBlock {
       child: block,
       cornerRadius: cornerRadius
     )
-  }
-
-  public static func ==(lhs: BackgroundBlock, rhs: BackgroundBlock) -> Bool {
-    lhs.background == rhs.background &&
-      lhs.child == rhs.child &&
-      lhs.cornerRadius == rhs.cornerRadius
   }
 
   func laidOutHierarchy(for size: CGSize) -> (BackgroundBlock, Layout) {

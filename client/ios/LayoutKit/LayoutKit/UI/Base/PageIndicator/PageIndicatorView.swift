@@ -3,6 +3,8 @@ import UIKit
 import VGSL
 
 final class PageIndicatorView: UIView {
+  override class var layerClass: AnyClass { ScrollPageIndicatorLayer.self }
+
   var currentIndexPosition: CGFloat {
     get {
       contentLayer.currentIndexPosition
@@ -37,8 +39,6 @@ final class PageIndicatorView: UIView {
     layer as! ScrollPageIndicatorLayer
   }
 
-  override class var layerClass: AnyClass { ScrollPageIndicatorLayer.self }
-
   init() {
     super.init(frame: .zero)
     commonInit()
@@ -54,12 +54,13 @@ final class PageIndicatorView: UIView {
     commonInit()
   }
 
+  override func draw(_: CGRect) {
+    // overriden draw is required for redrawing of layer
+  }
+
   private func commonInit() {
     backgroundColor = .clear
   }
 
-  override func draw(_: CGRect) {
-    // overriden draw is required for redrawing of layer
-  }
 }
 #endif

@@ -3,15 +3,27 @@ import Foundation
 import VGSL
 
 public final class GalleryBlock: BlockWithTraits {
-  private lazy var contentSize: CGSize = model.intrinsicSize
-
   public let model: GalleryViewModel
   public let state: GalleryViewState
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  private lazy var contentSize: CGSize = model.intrinsicSize
+
   public var path: UIElementPath? {
     model.path
+  }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      return value
+    case let .intrinsic(_, minSize, maxSize):
+      let width = contentSize.width
+      return clamp(width, min: minSize, max: maxSize)
+    case .weighted:
+      return 0
+    }
   }
 
   public init(
@@ -31,18 +43,6 @@ public final class GalleryBlock: BlockWithTraits {
           "Gallery block error: in intrinsic-width vertical gallery all children have resizable width"
         )
       }
-    }
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      return value
-    case let .intrinsic(_, minSize, maxSize):
-      let width = contentSize.width
-      return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
     }
   }
 

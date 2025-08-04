@@ -14,6 +14,11 @@ open class DivViewController: UIViewController {
 
   private let identifier: String = "baseDivView"
 
+  @available(*, unavailable)
+  public required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   init(
     jsonPublisher: JsonPublisher,
     divKitComponents: DivKitComponents,
@@ -31,11 +36,6 @@ open class DivViewController: UIViewController {
         self?.setData(value)
       }
       .store(in: &cancellables)
-  }
-
-  @available(*, unavailable)
-  public required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   public override func loadView() {

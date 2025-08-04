@@ -32,14 +32,6 @@ extension DebugBlock: UIViewRenderable {
 private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
   private var childView: BlockView?
 
-  var effectiveBackgroundColor: UIColor? {
-    childView?.backgroundColor
-  }
-
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
-    childView.map { [$0] } ?? []
-  }
-
   private var showDebugInfo: ((ViewType) -> Void)?
   private var errorCollector: DebugErrorCollector?
   private let disposePool = AutodisposePool()
@@ -54,6 +46,14 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
     return button
   }()
 
+  var effectiveBackgroundColor: UIColor? {
+    childView?.backgroundColor
+  }
+
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
+    childView.map { [$0] } ?? []
+  }
+
   init() {
     super.init(frame: .zero)
     addSubview(errorsButton)
@@ -63,6 +63,21 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    childView?.frame = bounds
+    errorsButton.frame = CGRect(
+      center: CGPoint(x: buttonSize / 2.0, y: bounds.midY),
+      size: CGSize(squareDimension: buttonSize)
+    )
+    errorsButton.layer.cornerRadius = buttonSize / 2.0
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
   }
 
   func configure(
@@ -91,14 +106,9 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    childView?.frame = bounds
-    errorsButton.frame = CGRect(
-      center: CGPoint(x: buttonSize / 2.0, y: bounds.midY),
-      size: CGSize(squareDimension: buttonSize)
-    )
-    errorsButton.layer.cornerRadius = buttonSize / 2.0
+  @objc func errorsButtonTapped() {
+    guard let showDebugInfo, let errorCollector, errorCollector.totalErrorCount > 0 else { return }
+    showDebugInfo(ErrorListView(errors: errorCollector.errorList))
   }
 
   private func updateCountLabel() {
@@ -108,15 +118,6 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
     errorsButton.setTitle("\(min(maxCount, errorsCount))", for: .normal)
   }
 
-  @objc func errorsButtonTapped() {
-    guard let showDebugInfo, let errorCollector, errorCollector.totalErrorCount > 0 else { return }
-    showDebugInfo(ErrorListView(errors: errorCollector.errorList))
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result === self ? nil : result
-  }
 }
 
 private let showOverlayURL = URL(string: "debugInfo://show")!

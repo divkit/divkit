@@ -54,6 +54,15 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   var effectiveBackgroundColor: UIColor? { maskedBlockView?.effectiveBackgroundColor }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    maskedBlockView?.frame = bounds
+    maskBlockView?.frame = bounds
+
+    maskedBlockView?.mask = maskBlockView
+  }
+
   func configure(
     model: Model,
     observer: ElementStateObserver?,
@@ -76,13 +85,5 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    maskedBlockView?.frame = bounds
-    maskBlockView?.frame = bounds
-
-    maskedBlockView?.mask = maskBlockView
-  }
 }
 #endif

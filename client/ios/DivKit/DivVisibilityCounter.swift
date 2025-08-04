@@ -6,6 +6,14 @@ public final class DivVisibilityCounter {
 
   init() {}
 
+  public func reset() {
+    storage.removeAll()
+  }
+
+  public func reset(cardId: DivCardID) {
+    storage = storage.filter { $0.key.root != cardId.rawValue }
+  }
+
   func visibilityCount(for path: UIElementPath) -> UInt {
     storage[path] ?? 0
   }
@@ -14,11 +22,4 @@ public final class DivVisibilityCounter {
     storage[path] = visibilityCount(for: path) + 1
   }
 
-  public func reset() {
-    storage.removeAll()
-  }
-
-  public func reset(cardId: DivCardID) {
-    storage = storage.filter { $0.key.root != cardId.rawValue }
-  }
 }

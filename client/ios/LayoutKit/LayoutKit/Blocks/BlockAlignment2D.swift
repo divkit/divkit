@@ -2,8 +2,6 @@ import CoreGraphics
 import VGSL
 
 public struct BlockAlignment2D: Equatable {
-  public let horizontal: Alignment
-  public let vertical: Alignment
   public static let `default` = BlockAlignment2D.topLeft
   public static let topLeft = BlockAlignment2D(horizontal: .leading, vertical: .leading)
   public static let topCenter = BlockAlignment2D(horizontal: .center, vertical: .leading)
@@ -14,6 +12,9 @@ public struct BlockAlignment2D: Equatable {
   public static let bottomLeft = BlockAlignment2D(horizontal: .leading, vertical: .trailing)
   public static let bottomCenter = BlockAlignment2D(horizontal: .center, vertical: .trailing)
   public static let bottomRight = BlockAlignment2D(horizontal: .trailing, vertical: .trailing)
+
+  public let horizontal: Alignment
+  public let vertical: Alignment
 
   public init(
     horizontal: Alignment = .leading,

@@ -7,6 +7,16 @@ final class TabContentsView: BlockView {
     static let animationDuration: TimeInterval = 0.2
   }
 
+  var delegate: TabContentsViewDelegate?
+  weak var updatesDelegate: TabbedPagesViewModelDelegate?
+  private(set) var selectedPageIndex: CGFloat = 0 {
+    didSet {
+      updateContentOffset()
+    }
+  }
+
+  private(set) var model: TabContentsViewModel!
+
   private var collectionView: VisibleBoundsTrackingCollectionView!
   private var listViews: [UIView] = []
   private var footerView: UIView? {
@@ -27,11 +37,6 @@ final class TabContentsView: BlockView {
     }
   }
 
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { collectionView.asArray() }
-  var effectiveBackgroundColor: UIColor? { backgroundView?.effectiveBackgroundColor }
-
-  var delegate: TabContentsViewDelegate?
-  weak var updatesDelegate: TabbedPagesViewModelDelegate?
   private weak var overscrollDelegate: ScrollDelegate? {
     didSet {
       dataSource.overscrollDelegate = overscrollDelegate
@@ -42,21 +47,6 @@ final class TabContentsView: BlockView {
     didSet {
       dataSource.renderingDelegate = renderingDelegate
     }
-  }
-
-  private(set) var selectedPageIndex: CGFloat = 0 {
-    didSet {
-      updateContentOffset()
-    }
-  }
-
-  private var selectedPagePath: UIElementPath {
-    let index = clamp(
-      Int(selectedPageIndex.rounded()),
-      min: 0,
-      max: max(0, model.pages.count - 1)
-    )
-    return model.pages.element(at: index)!.path
   }
 
   private var layout: TabContentsViewLayout! {
@@ -75,7 +65,6 @@ final class TabContentsView: BlockView {
     }
   }
 
-  private(set) var model: TabContentsViewModel!
   private weak var observer: ElementStateObserver? {
     didSet {
       dataSource.observer = observer
@@ -83,6 +72,76 @@ final class TabContentsView: BlockView {
   }
 
   private let cellRegistrator = CollectionCellRegistrator()
+
+  private let dataSource = GenericCollectionViewDataSource()
+  private let collectionViewLayout = GenericCollectionViewLayout()
+
+  private var scrolledPageIndex: CGFloat = 0
+
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { collectionView.asArray() }
+  var effectiveBackgroundColor: UIColor? { backgroundView?.effectiveBackgroundColor }
+
+  private var selectedPagePath: UIElementPath {
+    let index = clamp(
+      Int(selectedPageIndex.rounded()),
+      min: 0,
+      max: max(0, model.pages.count - 1)
+    )
+    return model.pages.element(at: index)!.path
+  }
+
+  private var selectedPageContentOffset: CGPoint {
+    CGPoint(x: collectionView.bounds.width * selectedPageIndex, y: 0)
+  }
+
+  init() {
+    collectionView = VisibleBoundsTrackingCollectionView(
+      frame: .zero,
+      collectionViewLayout: collectionViewLayout
+    )
+    collectionView.dataSource = dataSource
+    collectionView.backgroundColor = .clear
+    collectionView.scrollsToTop = false
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.isPagingEnabled = true
+
+    collectionView.disableContentInsetAdjustmentBehavior()
+
+    super.init(frame: .zero)
+    addSubview(collectionView)
+    collectionView.delegate = self
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    if collectionView.frame != bounds {
+      collectionView.frame = bounds
+      updateContentOffset(animated: false)
+    }
+
+    let newLayout = TabContentsViewLayout(
+      pages: model.pages.map(\.block),
+      footer: model.footer,
+      size: collectionView.bounds.size,
+      pagesInsets: model.contentInsets.horizontal
+    )
+    guard newLayout != layout else {
+      return
+    }
+
+    layout = newLayout
+    collectionView.setNeedsLayout()
+
+    footerView?.frame = layout.footerFrame
+    backgroundView?.frame = bounds
+  }
 
   func configure(
     model: TabContentsViewModel,
@@ -146,35 +205,6 @@ final class TabContentsView: BlockView {
     }
   }
 
-  private let dataSource = GenericCollectionViewDataSource()
-  private let collectionViewLayout = GenericCollectionViewLayout()
-
-  private var scrolledPageIndex: CGFloat = 0
-
-  init() {
-    collectionView = VisibleBoundsTrackingCollectionView(
-      frame: .zero,
-      collectionViewLayout: collectionViewLayout
-    )
-    collectionView.dataSource = dataSource
-    collectionView.backgroundColor = .clear
-    collectionView.scrollsToTop = false
-    collectionView.showsHorizontalScrollIndicator = false
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.isPagingEnabled = true
-
-    collectionView.disableContentInsetAdjustmentBehavior()
-
-    super.init(frame: .zero)
-    addSubview(collectionView)
-    collectionView.delegate = self
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   func updateRelativeOffset(_ offset: CGFloat) {
     relativeContentOffset = offset
     updateSelectedPageIndexIfNeeded(relativeContentOffset)
@@ -191,35 +221,6 @@ final class TabContentsView: BlockView {
 
   private func updateContentOffset(animated: Bool = true) {
     collectionView.setContentOffset(selectedPageContentOffset, animated: animated)
-  }
-
-  private var selectedPageContentOffset: CGPoint {
-    CGPoint(x: collectionView.bounds.width * selectedPageIndex, y: 0)
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    if collectionView.frame != bounds {
-      collectionView.frame = bounds
-      updateContentOffset(animated: false)
-    }
-
-    let newLayout = TabContentsViewLayout(
-      pages: model.pages.map(\.block),
-      footer: model.footer,
-      size: collectionView.bounds.size,
-      pagesInsets: model.contentInsets.horizontal
-    )
-    guard newLayout != layout else {
-      return
-    }
-
-    layout = newLayout
-    collectionView.setNeedsLayout()
-
-    footerView?.frame = layout.footerFrame
-    backgroundView?.frame = bounds
   }
 
   private func updateSelectedPageIndexFromRelativeContentOffset(

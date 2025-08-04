@@ -22,6 +22,24 @@ final class MarksLayer: CALayer {
     configuration.modelConfiguration.inactiveMark
   }
 
+  override init() {
+    super.init()
+  }
+
+  override init(layer: Any) {
+    super.init(layer: layer)
+    guard let markLayer = layer as? MarksLayer else {
+      assertionFailure("unknown layer inside init(layer: Any)")
+      return
+    }
+    configuration = markLayer.configuration
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   override func draw(in ctx: CGContext) {
     configureMarks(in: ctx)
 
@@ -92,23 +110,6 @@ final class MarksLayer: CALayer {
     }
   }
 
-  override init() {
-    super.init()
-  }
-
-  override init(layer: Any) {
-    super.init(layer: layer)
-    guard let markLayer = layer as? MarksLayer else {
-      assertionFailure("unknown layer inside init(layer: Any)")
-      return
-    }
-    configuration = markLayer.configuration
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 }
 
 extension MarksConfigurationModel.RoundedRectangle {

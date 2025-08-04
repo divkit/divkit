@@ -28,6 +28,7 @@ final class ScrollPageIndicatorLayer: CALayer {
   }
 
   private var _cachedParams: PageIndicatorLayerParams?
+
   private var params: PageIndicatorLayerParams {
     if let value = _cachedParams { return value }
     let result = PageIndicatorLayerParams(

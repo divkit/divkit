@@ -2,15 +2,6 @@ import Foundation
 import VGSL
 
 final class FunctionsProvider {
-  private let persistentValuesStorage: DivPersistentValuesStorage
-  private let lock = AllocatedUnfairLock()
-
-  init(
-    persistentValuesStorage: DivPersistentValuesStorage
-  ) {
-    self.persistentValuesStorage = persistentValuesStorage
-  }
-
   static let methods: [String: Function] = {
     var methods: [String: Function] = [:]
     methods.addArrayMethods()
@@ -64,6 +55,16 @@ final class FunctionsProvider {
     guard getValueFunctions.contains(symbol.name) else { return nil }
     return DynamicVariablesEvaluator()
   }
+
+  private let persistentValuesStorage: DivPersistentValuesStorage
+  private let lock = AllocatedUnfairLock()
+
+  init(
+    persistentValuesStorage: DivPersistentValuesStorage
+  ) {
+    self.persistentValuesStorage = persistentValuesStorage
+  }
+
 }
 
 private struct CustomFunctionEvaluator: Function {

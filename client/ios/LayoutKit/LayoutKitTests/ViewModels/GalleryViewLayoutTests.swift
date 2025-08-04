@@ -332,6 +332,46 @@ final class GalleryViewLayoutTests: XCTestCase {
 }
 
 private enum Blocks {
+  static let smallCount = 2
+  static let bigCount = 2
+  static let resizableCount = 2
+  static let totalCount = bigCount + smallCount + resizableCount
+  static let blocksCount = smallCount + bigCount + resizableCount
+  static let smallSize = CGFloat(64)
+  static let bigSize = CGFloat(128)
+  static let resizableSize = CGFloat(1)
+  static let gapSize = CGFloat(1)
+  static let bigAxialSize = bigSize * CGFloat(bigCount)
+  static let smallAxialSize = smallSize * CGFloat(smallCount)
+  static let resizableAxialSize = resizableSize * CGFloat(resizableCount)
+  static let gapAxialSize = gapSize * CGFloat(blocksCount + 1)
+  static let framesAxialSize = bigAxialSize + smallAxialSize + resizableAxialSize + gapSize *
+    CGFloat(max(blocksCount - 1, 0))
+  static let contentAxialSize = bigAxialSize + smallAxialSize + resizableAxialSize + gapAxialSize
+  static let contentAxialSizeWithoutSideGaps = contentAxialSize - 2 * gapSize
+  static let contentCrossMaxSize = max(bigSize, smallSize)
+  static let horizontalCenterModel = makeModel()
+  static let horizontalLeadingModel = makeModel(crossAlignment: .leading)
+  static let horizontalTrailingModel = makeModel(crossAlignment: .trailing)
+  static let verticalCenterModel = makeModel(direction: .vertical)
+  static let verticalLeadingModel = makeModel(
+    direction: .vertical,
+    crossAlignment: .leading
+  )
+  static let verticalTrailingModel = makeModel(
+    direction: .vertical,
+    crossAlignment: .trailing
+  )
+  static let fixedPagingModel = makeModel(scrollMode: .fixedPaging(pageSize: boundsSize.width))
+  static let autoPagingModel = makeModel(scrollMode: .autoPaging(inertionEnabled: true))
+  static let fixedInsets = SideInsets(leading: 4, trailing: 10)
+  static let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
+  static let horizontalResizableModel = makeModel(metrics: .resizableAxial)
+  static let verticalResizableModel = makeModel(
+    direction: .vertical,
+    metrics: .resizableAxial
+  )
+
   private static let horizontallyResizable: Block = SeparatorBlock(direction: .horizontal)
 
   private static let verticallyResizable: Block = SeparatorBlock(direction: .vertical)
@@ -372,45 +412,6 @@ private enum Blocks {
     )
   }
 
-  static let smallCount = 2
-  static let bigCount = 2
-  static let resizableCount = 2
-  static let totalCount = bigCount + smallCount + resizableCount
-  static let blocksCount = smallCount + bigCount + resizableCount
-  static let smallSize = CGFloat(64)
-  static let bigSize = CGFloat(128)
-  static let resizableSize = CGFloat(1)
-  static let gapSize = CGFloat(1)
-  static let bigAxialSize = bigSize * CGFloat(bigCount)
-  static let smallAxialSize = smallSize * CGFloat(smallCount)
-  static let resizableAxialSize = resizableSize * CGFloat(resizableCount)
-  static let gapAxialSize = gapSize * CGFloat(blocksCount + 1)
-  static let framesAxialSize = bigAxialSize + smallAxialSize + resizableAxialSize + gapSize *
-    CGFloat(max(blocksCount - 1, 0))
-  static let contentAxialSize = bigAxialSize + smallAxialSize + resizableAxialSize + gapAxialSize
-  static let contentAxialSizeWithoutSideGaps = contentAxialSize - 2 * gapSize
-  static let contentCrossMaxSize = max(bigSize, smallSize)
-  static let horizontalCenterModel = makeModel()
-  static let horizontalLeadingModel = makeModel(crossAlignment: .leading)
-  static let horizontalTrailingModel = makeModel(crossAlignment: .trailing)
-  static let verticalCenterModel = makeModel(direction: .vertical)
-  static let verticalLeadingModel = makeModel(
-    direction: .vertical,
-    crossAlignment: .leading
-  )
-  static let verticalTrailingModel = makeModel(
-    direction: .vertical,
-    crossAlignment: .trailing
-  )
-  static let fixedPagingModel = makeModel(scrollMode: .fixedPaging(pageSize: boundsSize.width))
-  static let autoPagingModel = makeModel(scrollMode: .autoPaging(inertionEnabled: true))
-  static let fixedInsets = SideInsets(leading: 4, trailing: 10)
-  static let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
-  static let horizontalResizableModel = makeModel(metrics: .resizableAxial)
-  static let verticalResizableModel = makeModel(
-    direction: .vertical,
-    metrics: .resizableAxial
-  )
 }
 
 private let boundsSize = CGSize(width: 64, height: 64)

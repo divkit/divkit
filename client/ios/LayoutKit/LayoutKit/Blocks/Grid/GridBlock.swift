@@ -3,18 +3,19 @@ import VGSL
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {
   public struct Span: Equatable {
-    public let rows: Int
-    public let columns: Int
     public static let `default` = Span()
 
-    private init() {
-      rows = 1
-      columns = 1
-    }
+    public let rows: Int
+    public let columns: Int
 
     public init(rows: Int = 1, columns: Int = 1) {
       self.rows = rows
       self.columns = columns
+    }
+
+    private init() {
+      rows = 1
+      columns = 1
     }
 
     func validate() throws {
@@ -72,27 +73,29 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
   public let items: [Item]
   public let columnCount: Int
   public let path: UIElementPath?
+
   let grid: Grid
 
   private var cachedIntrinsicWidth: CGFloat?
   private var cachedIntrinsicHeight: (width: CGFloat, height: CGFloat)?
 
-  private init(
-    widthTrait: LayoutTrait,
-    heightTrait: LayoutTrait,
-    contentAlignment: BlockAlignment2D,
-    items: [Item],
-    columnCount: Int,
-    grid: Grid,
-    path: UIElementPath?
-  ) {
-    self.widthTrait = widthTrait
-    self.heightTrait = heightTrait
-    self.contentAlignment = contentAlignment
-    self.items = items
-    self.columnCount = columnCount
-    self.grid = grid
-    self.path = path
+  public var intrinsicContentWidth: CGFloat {
+    if case let .fixed(value) = widthTrait {
+      return value
+    }
+
+    if let cached = cachedIntrinsicWidth {
+      return cached
+    }
+
+    var result = Layout.calculateIntrinsicColumnWidths(items: items, grid: grid).reduce(0, +)
+
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    cachedIntrinsicWidth = result
+    return result
   }
 
   public convenience init(
@@ -115,58 +118,26 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     try validateLayoutTraits()
   }
 
+  private init(
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait,
+    contentAlignment: BlockAlignment2D,
+    items: [Item],
+    columnCount: Int,
+    grid: Grid,
+    path: UIElementPath?
+  ) {
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
+    self.contentAlignment = contentAlignment
+    self.items = items
+    self.columnCount = columnCount
+    self.grid = grid
+    self.path = path
+  }
+
   public func getImageHolders() -> [ImageHolder] {
     items.flatMap { $0.contents.getImageHolders() }
-  }
-
-  private func validateLayoutTraits() throws {
-    if case .intrinsic = widthTrait, Layout.isGrid(
-      grid,
-      with: items,
-      resizableAtDirection: .horizontal
-    ) {
-      throw BlockError(
-        "Grid block error: cannot create horizontally resizable grid with intrinsic width trait"
-      )
-    }
-
-    if case .intrinsic = heightTrait, Layout.isGrid(
-      grid,
-      with: items,
-      resizableAtDirection: .vertical
-    ) {
-      throw BlockError(
-        "Grid block error: cannot create vertically resizable grid with intrinsic height trait"
-      )
-    }
-  }
-
-  private func makeLayout(constrainedTo size: CGSize = .infinite) -> Layout {
-    Layout(
-      size: size,
-      items: items,
-      grid: grid,
-      contentAlignment: contentAlignment
-    )
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    if case let .fixed(value) = widthTrait {
-      return value
-    }
-
-    if let cached = cachedIntrinsicWidth {
-      return cached
-    }
-
-    var result = Layout.calculateIntrinsicColumnWidths(items: items, grid: grid).reduce(0, +)
-
-    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
-      result = clamp(result, min: minSize, max: maxSize)
-    }
-
-    cachedIntrinsicWidth = result
-    return result
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -220,6 +191,38 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
     return (block, layout)
   }
+
+  private func validateLayoutTraits() throws {
+    if case .intrinsic = widthTrait, Layout.isGrid(
+      grid,
+      with: items,
+      resizableAtDirection: .horizontal
+    ) {
+      throw BlockError(
+        "Grid block error: cannot create horizontally resizable grid with intrinsic width trait"
+      )
+    }
+
+    if case .intrinsic = heightTrait, Layout.isGrid(
+      grid,
+      with: items,
+      resizableAtDirection: .vertical
+    ) {
+      throw BlockError(
+        "Grid block error: cannot create vertically resizable grid with intrinsic height trait"
+      )
+    }
+  }
+
+  private func makeLayout(constrainedTo size: CGSize = .infinite) -> Layout {
+    Layout(
+      size: size,
+      items: items,
+      grid: grid,
+      contentAlignment: contentAlignment
+    )
+  }
+
 }
 
 extension GridBlock {

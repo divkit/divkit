@@ -3,16 +3,12 @@ import UIKit
 import VGSL
 
 final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
-  private let collectionView: UICollectionView
-  public var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
-
-  private var itemSizes: [CGSize] = [] {
-    didSet {
-      if itemSizes != oldValue {
-        collectionView.collectionViewLayout.invalidateLayout()
-      }
-    }
+  struct Layout {
+    let contentOffset: CGPoint
+    let pillOriginX: CGFloat
   }
+
+  public var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
 
   var tabs: [TabTitleViewModel] = [] {
     didSet {
@@ -31,6 +27,16 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   weak var selectionDelegate: TabListViewDelegateTabSelection?
   weak var overscrollDelegate: ScrollDelegate?
 
+  private let collectionView: UICollectionView
+
+  private var itemSizes: [CGSize] = [] {
+    didSet {
+      if itemSizes != oldValue {
+        collectionView.collectionViewLayout.invalidateLayout()
+      }
+    }
+  }
+
   private var scrollInfo: (startOffset: CGFloat, itemPath: UIElementPath)?
 
   init(collectionView: UICollectionView) {
@@ -43,11 +49,6 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
     itemSizes[indexPath.item]
-  }
-
-  struct Layout {
-    let contentOffset: CGPoint
-    let pillOriginX: CGFloat
   }
 
   func collectionView(

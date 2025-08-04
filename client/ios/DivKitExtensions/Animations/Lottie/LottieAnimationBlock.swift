@@ -11,6 +11,8 @@ final class LottieAnimationBlock: SizeForwardingBlock {
   let scale: DivImageScale
   var isPlaying: Bool
 
+  let intrinsicContentWidth: CGFloat = 0
+
   var debugDescription: String {
     "Animation Block playing animation with view: \(animatableView)"
   }

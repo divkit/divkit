@@ -36,6 +36,9 @@ public final class TextFieldBlock: Block {
   }
 
   public enum Placeholders: Equatable {
+    case separate(Separate)
+    case fieldOnly(NSAttributedString)
+
     public struct Separate: Equatable {
       public struct AnimatableAttributes: Equatable {
         public let size: FontSize
@@ -85,8 +88,6 @@ public final class TextFieldBlock: Block {
       }
     }
 
-    case separate(Separate)
-    case fieldOnly(NSAttributedString)
   }
 
   public enum TextAutocapitalizationType {
@@ -123,6 +124,12 @@ public final class TextFieldBlock: Block {
     case disabled
   }
 
+  public enum KeyboardAppearance {
+    case `default`
+    case light
+    case dark
+  }
+
   public static let defaultKeyboardAppearance = KeyboardAppearance.light
 
   public let widthTrait: LayoutTrait
@@ -143,6 +150,59 @@ public final class TextFieldBlock: Block {
   public let keyboardType: KeyboardType
   public let interaction: Interaction
   public let accessibilityElement: AccessibilityElement?
+
+  public var isVerticallyResizable: Bool { heightTrait.isResizable }
+  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
+
+  public var isVerticallyConstrained: Bool { heightTrait.isConstrained }
+  public var isHorizontallyConstrained: Bool { widthTrait.isConstrained }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case let .intrinsic(_, minSize, _):
+      minSize
+    case .weighted:
+      0
+    }
+  }
+
+  public var widthOfHorizontallyNonResizableBlock: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      return value
+    case .intrinsic,
+         .weighted:
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for text block")
+      return 0
+    }
+  }
+
+  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
+    guard case let .weighted(value) = heightTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return .default
+    }
+    return value
+  }
+
+  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
+    guard case let .weighted(value) = widthTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return .default
+    }
+    return value
+  }
+
+  private var gap: CGFloat {
+    switch placeholders {
+    case let .separate(placeholders):
+      placeholders.gap
+    case .fieldOnly, .none:
+      0
+    }
+  }
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -182,41 +242,6 @@ public final class TextFieldBlock: Block {
     self.accessibilityElement = accessibilityElement
   }
 
-  public var isVerticallyResizable: Bool { heightTrait.isResizable }
-  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
-
-  public var isVerticallyConstrained: Bool { heightTrait.isConstrained }
-  public var isHorizontallyConstrained: Bool { widthTrait.isConstrained }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case let .intrinsic(_, minSize, _):
-      minSize
-    case .weighted:
-      0
-    }
-  }
-
-  private var gap: CGFloat {
-    switch placeholders {
-    case let .separate(placeholders):
-      placeholders.gap
-    case .fieldOnly, .none:
-      0
-    }
-  }
-
-  private func getHeaderHeight(forWidth _: CGFloat) -> CGFloat {
-    switch placeholders {
-    case let .separate(placeholders):
-      placeholders.headerAttributes.height.rawValue
-    case .fieldOnly, .none:
-      0
-    }
-  }
-
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .fixed(value):
@@ -227,17 +252,6 @@ public final class TextFieldBlock: Block {
       let height = ceil(textHeight + headerHeight + gap)
       return clamp(height, min: minSize, max: maxSize)
     case .weighted:
-      return 0
-    }
-  }
-
-  public var widthOfHorizontallyNonResizableBlock: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      return value
-    case .intrinsic,
-         .weighted:
-      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for text block")
       return 0
     }
   }
@@ -256,22 +270,6 @@ public final class TextFieldBlock: Block {
     }
   }
 
-  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else {
-      assertionFailure("try to get weight for non resizable block")
-      return .default
-    }
-    return value
-  }
-
-  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else {
-      assertionFailure("try to get weight for non resizable block")
-      return .default
-    }
-    return value
-  }
-
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? TextFieldBlock else {
       return false
@@ -279,13 +277,17 @@ public final class TextFieldBlock: Block {
     return self == other
   }
 
-  public enum KeyboardAppearance {
-    case `default`
-    case light
-    case dark
+  public func getImageHolders() -> [ImageHolder] { [] }
+
+  private func getHeaderHeight(forWidth _: CGFloat) -> CGFloat {
+    switch placeholders {
+    case let .separate(placeholders):
+      placeholders.headerAttributes.height.rawValue
+    case .fieldOnly, .none:
+      0
+    }
   }
 
-  public func getImageHolders() -> [ImageHolder] { [] }
 }
 
 extension TextFieldBlock {

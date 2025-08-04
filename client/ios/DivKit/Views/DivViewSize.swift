@@ -30,6 +30,12 @@ public struct DivViewSize: Equatable {
     }
   }
 
+  public let width: DivDimension
+  public let height: DivDimension
+
+  private let constrainedWidth: Bool
+  private let constrainedHeight: Bool
+
   public init(block: Block) {
     let width: DivDimension = block
       .isHorizontallyResizable ? .matchParent : .desired(block.widthOfHorizontallyNonResizableBlock)
@@ -39,12 +45,6 @@ public struct DivViewSize: Equatable {
     self.constrainedWidth = block.isHorizontallyConstrained
     self.constrainedHeight = block.isVerticallyConstrained
   }
-
-  public let width: DivDimension
-  public let height: DivDimension
-
-  private let constrainedWidth: Bool
-  private let constrainedHeight: Bool
 
   /// Computes the actual size for a ``DivView`` given its parent's size.
   ///

@@ -14,6 +14,10 @@ public final class MaskValidator: Equatable {
     self.formatter = formatter
   }
 
+  public static func ==(lhs: MaskValidator, rhs: MaskValidator) -> Bool {
+    lhs.formatter.equals(rhs.formatter)
+  }
+
   public func formatted(rawText: String, rawCursorPosition: CursorData? = nil) -> InputData {
     formatter.formatted(rawText: rawText, rawCursorPosition: rawCursorPosition)
   }
@@ -80,9 +84,6 @@ public final class MaskValidator: Equatable {
     )
   }
 
-  public static func ==(lhs: MaskValidator, rhs: MaskValidator) -> Bool {
-    lhs.formatter.equals(rhs.formatter)
-  }
 }
 
 public enum CursorPositionTag {}
@@ -102,6 +103,7 @@ public struct InputData {
   public let text: String
   public let cursorPosition: CursorPosition?
   public var rawData: [RawCharacter]
+
   public var rawText: String {
     String(rawData.map(\.char))
   }

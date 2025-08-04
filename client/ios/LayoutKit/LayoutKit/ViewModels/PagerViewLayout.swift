@@ -59,6 +59,10 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
     self.boundsSize = boundsSize
   }
 
+  public static func ==(_ lhs: PagerViewLayout, _ rhs: PagerViewLayout) -> Bool {
+    lhs.isEqual(to: rhs.model, boundsSize: rhs.boundsSize)
+  }
+
   public func contentOffset(pageIndex: CGFloat) -> CGFloat {
     let integralIndex = Int(pageIndex)
 
@@ -84,9 +88,6 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
     self.model == model && self.boundsSize == boundsSize
   }
 
-  public static func ==(_ lhs: PagerViewLayout, _ rhs: PagerViewLayout) -> Bool {
-    lhs.isEqual(to: rhs.model, boundsSize: rhs.boundsSize)
-  }
 }
 
 extension GalleryViewModel {

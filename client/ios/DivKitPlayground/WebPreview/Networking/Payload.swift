@@ -54,10 +54,6 @@ struct UIStatePayload: Encodable {
   }
 
   struct RenderingTime: Encodable {
-    let div_render_total: Time
-    let div_parsing_data: Time
-    let div_parsing_templates: Time
-
     enum HistogramType: String, Encodable {
       case cold
       case warm
@@ -67,6 +63,11 @@ struct UIStatePayload: Encodable {
       let value: Int
       let histogram_type: HistogramType
     }
+
+    let div_render_total: Time
+    let div_parsing_data: Time
+    let div_parsing_templates: Time
+
   }
 
   let type: String = "ui_state"

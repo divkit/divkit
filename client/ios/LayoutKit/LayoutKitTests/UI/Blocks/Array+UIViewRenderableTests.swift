@@ -202,6 +202,14 @@ private class TestBlock: BlockWithTraits {
 
   let path: UIElementPath?
 
+  var debugDescription = ""
+
+  init(_ path: UIElementPath? = nil) {
+    self.path = path
+  }
+
+  static func makeBlockView() -> BlockView { TestView() }
+
   func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     0.0
   }
@@ -213,8 +221,6 @@ private class TestBlock: BlockWithTraits {
 
     return other.valuableContent == valuableContent
   }
-
-  var debugDescription = ""
 
   func getImageHolders() -> [VGSLUI.ImageHolder] {
     []
@@ -231,8 +237,6 @@ private class TestBlock: BlockWithTraits {
   func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
     self
   }
-
-  static func makeBlockView() -> BlockView { TestView() }
 
   func isBestViewForReuse(_ view: BlockView) -> Bool {
     if let path, path == ((view as? TestView)?.block as? TestBlock)?.path {
@@ -255,17 +259,17 @@ private class TestBlock: BlockWithTraits {
     (view as! TestView).block = self
   }
 
-  init(_ path: UIElementPath? = nil) {
-    self.path = path
-  }
 }
 
 private final class TestView: BlockView, VisibleBoundsTrackingLeaf {
   var block: TestBlock?
+
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 }
 
 private final class OtherTestBlock: UIViewRenderable {
+  init() {}
+
   static func makeBlockView() -> BlockView { OtherTestView() }
 
   func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -279,7 +283,6 @@ private final class OtherTestBlock: UIViewRenderable {
     renderingDelegate _: RenderingDelegate?
   ) {}
 
-  init() {}
 }
 
 private final class OtherTestView: BlockView, VisibleBoundsTrackingLeaf {

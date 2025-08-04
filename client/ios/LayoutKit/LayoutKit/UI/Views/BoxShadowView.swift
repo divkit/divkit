@@ -21,6 +21,15 @@ public final class BoxShadowView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    innerShadowLayer.frame = bounds
+    let path = UIBezierPath(rect: innerShadowLayer.bounds.insetBy(dx: -30, dy: -30))
+    let cutout = UIBezierPath(rect: innerShadowLayer.bounds).reversing()
+    path.append(cutout)
+    innerShadowLayer.shadowPath = path.cgPath
+  }
+
   private func makeInnerShadowLayer() -> CALayer {
     let layer = CALayer()
     layer.masksToBounds = true
@@ -31,13 +40,5 @@ public final class BoxShadowView: UIView {
     return layer
   }
 
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-    innerShadowLayer.frame = bounds
-    let path = UIBezierPath(rect: innerShadowLayer.bounds.insetBy(dx: -30, dy: -30))
-    let cutout = UIBezierPath(rect: innerShadowLayer.bounds).reversing()
-    path.append(cutout)
-    innerShadowLayer.shadowPath = path.cgPath
-  }
 }
 #endif

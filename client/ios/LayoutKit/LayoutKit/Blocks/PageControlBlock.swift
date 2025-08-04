@@ -23,24 +23,6 @@ public final class PageControlBlock: BlockWithTraits {
     pageControlPath
   }
 
-  public init(
-    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    pageControlPath: UIElementPath? = nil,
-    pagerPath: PagerPath?,
-    widthTrait: LayoutTrait,
-    heightTrait: LayoutTrait,
-    configuration: PageIndicatorConfiguration,
-    state: State
-  ) {
-    self.layoutDirection = layoutDirection
-    self.pageControlPath = pageControlPath
-    self.pagerPath = pagerPath
-    self.widthTrait = widthTrait
-    self.heightTrait = heightTrait
-    self.configuration = configuration
-    self.state = state
-  }
-
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
@@ -57,6 +39,24 @@ public final class PageControlBlock: BlockWithTraits {
     case .weighted:
       return 0
     }
+  }
+
+  public init(
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
+    pageControlPath: UIElementPath? = nil,
+    pagerPath: PagerPath?,
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait,
+    configuration: PageIndicatorConfiguration,
+    state: State
+  ) {
+    self.layoutDirection = layoutDirection
+    self.pageControlPath = pageControlPath
+    self.pagerPath = pagerPath
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
+    self.configuration = configuration
+    self.state = state
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {

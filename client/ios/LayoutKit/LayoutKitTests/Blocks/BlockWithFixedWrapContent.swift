@@ -6,6 +6,14 @@ final class BlockWithFixedWrapContent: BlockWithTraits {
   var width: CGFloat
   var height: CGFloat
 
+  var widthTrait: LayoutTrait
+
+  var heightTrait: LayoutTrait
+
+  var intrinsicContentWidth: CGFloat {
+    width
+  }
+
   init(
     width: CGFloat = 0,
     height: CGFloat = 0,
@@ -24,14 +32,6 @@ final class BlockWithFixedWrapContent: BlockWithTraits {
       minSize: 0,
       maxSize: .infinity
     )
-  }
-
-  var widthTrait: LayoutTrait
-
-  var heightTrait: LayoutTrait
-
-  var intrinsicContentWidth: CGFloat {
-    width
   }
 
   func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {

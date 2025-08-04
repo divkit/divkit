@@ -55,6 +55,14 @@ public struct GalleryViewModel: Equatable {
   public let scrollbar: Scrollbar
   public let transformation: ElementsTransformation?
 
+  var itemsCountWithoutInfinite: Int {
+    items.count - infiniteCorrection * 2
+  }
+
+  var infiniteCorrection: Int {
+    infiniteScroll && items.count > 0 ? bufferSize : 0
+  }
+
   public init(
     blocks: [Block],
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
@@ -150,13 +158,6 @@ public struct GalleryViewModel: Equatable {
     )
   }
 
-  var itemsCountWithoutInfinite: Int {
-    items.count - infiniteCorrection * 2
-  }
-
-  var infiniteCorrection: Int {
-    infiniteScroll && items.count > 0 ? bufferSize : 0
-  }
 }
 
 extension GalleryViewModel.Item {

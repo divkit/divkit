@@ -36,6 +36,7 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
   struct Model: ReferenceEquatable {
     let block: LayeredBlock
     let layout: LayeredBlock.Layout?
+
     var source: Variable<AnyObject?> {
       Variable { [weak block] in block }
     }
@@ -52,6 +53,33 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
   var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
+
+  override func layoutSubviews() {
+    guard !preventLayout else { return }
+
+    super.layoutSubviews()
+
+    guard let model = modelAndLastLayoutSize.model,
+          modelAndLastLayoutSize.lastLayoutSize != bounds.size else {
+      return
+    }
+
+    let childrenFrames = model.layout ?? model.block.makeChildrenFrames(size: bounds.size)
+
+    for (view, frame) in zip(blockViews, childrenFrames) {
+      let currentTransform = view.transform
+      view.transform = .identity
+      view.frame = frame
+      view.transform = currentTransform
+    }
+
+    modelAndLastLayoutSize = (model: model, lastLayoutSize: bounds.size)
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result == self ? nil : result
+  }
 
   func configure(
     model: Model,
@@ -81,31 +109,5 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    guard !preventLayout else { return }
-
-    super.layoutSubviews()
-
-    guard let model = modelAndLastLayoutSize.model,
-          modelAndLastLayoutSize.lastLayoutSize != bounds.size else {
-      return
-    }
-
-    let childrenFrames = model.layout ?? model.block.makeChildrenFrames(size: bounds.size)
-
-    for (view, frame) in zip(blockViews, childrenFrames) {
-      let currentTransform = view.transform
-      view.transform = .identity
-      view.frame = frame
-      view.transform = currentTransform
-    }
-
-    modelAndLastLayoutSize = (model: model, lastLayoutSize: bounds.size)
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result == self ? nil : result
-  }
 }
 #endif

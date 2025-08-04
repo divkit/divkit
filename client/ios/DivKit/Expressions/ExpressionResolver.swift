@@ -18,6 +18,21 @@ public final class ExpressionResolver {
     errorTracker: errorTracker
   )
 
+  @_spi(Legacy)
+  public convenience init(
+    variableValueProvider: @escaping (String) -> Any?,
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    errorTracker: ExpressionErrorTracker? = nil
+  ) {
+    self.init(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: persistentValuesStorage
+      ),
+      variableValueProvider: variableValueProvider,
+      errorTracker: { errorTracker?($0) }
+    )
+  }
+
   init(
     functionsProvider: FunctionsProvider,
     customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
@@ -48,21 +63,6 @@ public final class ExpressionResolver {
       return variablesStorage.getVariableValue(path: path, name: variableName)
     }
     self.errorTracker = reporter.asExpressionErrorTracker(cardId: path.cardId)
-  }
-
-  @_spi(Legacy)
-  public convenience init(
-    variableValueProvider: @escaping (String) -> Any?,
-    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
-    errorTracker: ExpressionErrorTracker? = nil
-  ) {
-    self.init(
-      functionsProvider: FunctionsProvider(
-        persistentValuesStorage: persistentValuesStorage
-      ),
-      variableValueProvider: variableValueProvider,
-      errorTracker: { errorTracker?($0) }
-    )
   }
 
   public func resolve(_ expression: String) -> Any? {

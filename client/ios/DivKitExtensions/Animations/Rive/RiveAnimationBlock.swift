@@ -4,13 +4,25 @@ import LayoutKit
 import VGSL
 
 public final class RiveAnimationBlock: BlockWithTraits {
-  let animationHolder: AnimationHolder
-  let animatableView: Lazy<AsyncSourceAnimatableView>
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  let animationHolder: AnimationHolder
+  let animatableView: Lazy<AsyncSourceAnimatableView>
+
   public var debugDescription: String {
     "Sized Animation Block is playing animation with \(animationHolder)"
+  }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case let .intrinsic(_, minSize, _):
+      minSize
+    case .weighted:
+      0
+    }
   }
 
   public init(
@@ -23,17 +35,6 @@ public final class RiveAnimationBlock: BlockWithTraits {
     self.animatableView = animatableView
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      value
-    case let .intrinsic(_, minSize, _):
-      minSize
-    case .weighted:
-      0
-    }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {

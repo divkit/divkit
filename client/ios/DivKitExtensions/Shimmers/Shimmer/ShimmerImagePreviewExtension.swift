@@ -6,6 +6,7 @@ import VGSL
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID
+
   private let effectBeginTime = CACurrentMediaTime()
 
   public init() {}

@@ -3,20 +3,7 @@ import UIKit
 import VGSL
 
 final class TabListView: UIView {
-  private let collectionView: UICollectionView
-  private let delegate: TabListViewDelegate
-  private let collectionViewLayout = TabsCollectionViewFlowLayout()
-
-  private var selectedItemBackground: UIView!
-  private var setInitialModel = false
   var isMovingToSelectedItem = false
-
-  private var dataSource: TabListViewDataSource! {
-    didSet {
-      collectionView.dataSource = dataSource
-    }
-  }
-
   var model: TabTitlesViewModel! {
     didSet {
       if oldValue?.items != model.items || oldValue?.tabTitleDelimiter != model.tabTitleDelimiter {
@@ -37,6 +24,19 @@ final class TabListView: UIView {
       collectionViewLayout.minimumLineSpacing = model.totalSpacing
       selectedItemBackground.backgroundColor = model.selectedBackgroundColor.systemColor
       setNeedsLayout()
+    }
+  }
+
+  private let collectionView: UICollectionView
+  private let delegate: TabListViewDelegate
+  private let collectionViewLayout = TabsCollectionViewFlowLayout()
+
+  private var selectedItemBackground: UIView!
+  private var setInitialModel = false
+
+  private var dataSource: TabListViewDataSource! {
+    didSet {
+      collectionView.dataSource = dataSource
     }
   }
 

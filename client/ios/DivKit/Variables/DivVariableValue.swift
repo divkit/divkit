@@ -12,28 +12,6 @@ public enum DivVariableValue: Hashable {
   case dict(DivDictionary)
   case array(DivArray)
 
-  @inlinable
-  public func typedValue<T>() -> T? {
-    switch self {
-    case let .string(value):
-      return value as? T
-    case let .number(value):
-      return value as? T
-    case let .integer(value):
-      return value as? T
-    case let .bool(value):
-      return value as? T
-    case let .color(value):
-      return value as? T
-    case let .url(value):
-      return value as? T
-    case let .dict(value):
-      return value as? T
-    case let .array(value):
-      return value as? T
-    }
-  }
-
   init?(_ value: some Any) {
     switch value {
     case let value as String:
@@ -57,4 +35,27 @@ public enum DivVariableValue: Hashable {
       return nil
     }
   }
+
+  @inlinable
+  public func typedValue<T>() -> T? {
+    switch self {
+    case let .string(value):
+      return value as? T
+    case let .number(value):
+      return value as? T
+    case let .integer(value):
+      return value as? T
+    case let .bool(value):
+      return value as? T
+    case let .color(value):
+      return value as? T
+    case let .url(value):
+      return value as? T
+    case let .dict(value):
+      return value as? T
+    case let .array(value):
+      return value as? T
+    }
+  }
+
 }

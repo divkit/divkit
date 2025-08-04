@@ -6,13 +6,20 @@ public final class AspectBlock<Content: Block>: WrapperBlock {
 
   public var child: Block { content }
 
+  public var isVerticallyResizable: Bool { false }
+
+  public var debugDescription: String {
+    """
+    Aspect \(aspectRatio):
+      \(child)
+    """
+  }
+
   public init(content: Content, aspectRatio: CGFloat) {
     assert(content.isVerticallyResizable)
     self.content = content
     self.aspectRatio = aspectRatio
   }
-
-  public var isVerticallyResizable: Bool { false }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     width * aspectRatio
@@ -29,13 +36,6 @@ public final class AspectBlock<Content: Block>: WrapperBlock {
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? Self else { return false }
     return child == other.child && aspectRatio == other.aspectRatio
-  }
-
-  public var debugDescription: String {
-    """
-    Aspect \(aspectRatio):
-      \(child)
-    """
   }
 
   public func laidOut(for width: CGFloat) -> Block {

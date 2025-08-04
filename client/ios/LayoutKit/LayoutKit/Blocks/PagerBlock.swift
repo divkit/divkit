@@ -16,11 +16,27 @@ public final class PagerBlock: BlockWithTraits {
   public let state: PagerViewState
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
+
+  let selectedActions: [[UserInterfaceAction]]
+
   public var path: UIElementPath? {
     gallery.path
   }
 
-  let selectedActions: [[UserInterfaceAction]]
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      return value
+    case let .intrinsic(_, minSize, maxSize):
+      let width = gallery.intrinsicPagerSize(
+        forWidth: CGFloat.greatestFiniteMagnitude,
+        layoutMode: layoutMode
+      ).width
+      return clamp(width, min: minSize, max: maxSize)
+    case .weighted:
+      return 0
+    }
+  }
 
   public init(
     pagerPath: PagerPath?,
@@ -47,21 +63,6 @@ public final class PagerBlock: BlockWithTraits {
           "Pager block error: in intrinsic-width vertical pager all children have resizable width"
         )
       }
-    }
-  }
-
-  public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
-      return value
-    case let .intrinsic(_, minSize, maxSize):
-      let width = gallery.intrinsicPagerSize(
-        forWidth: CGFloat.greatestFiniteMagnitude,
-        layoutMode: layoutMode
-      ).width
-      return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
     }
   }
 

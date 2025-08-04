@@ -168,10 +168,32 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
+  override var isHighlighted: Bool {
+    didSet {
+      guard oldValue != isHighlighted else {
+        return
+      }
+
+      updateHighlightState(animated: true)
+    }
+  }
+
+  override var isEnabled: Bool {
+    didSet {
+      guard oldValue != isEnabled else {
+        return
+      }
+
+      updateHighlightState(animated: false)
+    }
+  }
+
+  private(set) var childView: BlockView?
+
   fileprivate var model: Model!
+
   private weak var observer: ElementStateObserver?
   private weak var renderingDelegate: RenderingDelegate?
-  private(set) var childView: BlockView?
 
   private var contextMenuDelegate: NSObjectProtocol?
 
@@ -179,12 +201,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private let animationMinimalDuration: TimeInterval = 0.125
 
   private var visibilityActionPerformers: VisibilityActionPerformers?
-  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
-
   private var hasFocused = false
-  private var isViewOnWindow: Bool { window != nil }
-
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
       oldValue.flatMap(removeGestureRecognizer(_:))
@@ -213,32 +230,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  override var isHighlighted: Bool {
-    didSet {
-      guard oldValue != isHighlighted else {
-        return
-      }
-
-      updateHighlightState(animated: true)
-    }
-  }
-
-  override var isEnabled: Bool {
-    didSet {
-      guard oldValue != isEnabled else {
-        return
-      }
-
-      updateHighlightState(animated: false)
-    }
-  }
-
-  private var highlightState: HighlightState {
-    (isHighlighted || !isEnabled) && model.hasResponsiveUI
-      ? .highlighted
-      : .normal
-  }
-
   private var borderLayer: CALayer? {
     didSet {
       oldValue?.removeFromSuperlayer()
@@ -263,82 +254,29 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  private var isViewOnWindow: Bool { window != nil }
+
+  private var highlightState: HighlightState {
+    (isHighlighted || !isEnabled) && model.hasResponsiveUI
+      ? .highlighted
+      : .normal
+  }
+
   init() {
     super.init(frame: .zero)
     isExclusiveTouch = true
   }
 
-  private func configureRecognizers() {
-    guard model.shouldHandleAnyAction else {
-      tapRecognizer?.isEnabled = false
-      doubleTapRecognizer?.isEnabled = false
-      longPressRecognizer?.isEnabled = false
-      hoverRecognizer?.isEnabled = false
-      return
-    }
-
-    if tapRecognizer == nil {
-      tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-    }
-    tapRecognizer?.cancelsTouchesInView = false
-
-    if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
-      let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-      doubleTapRecognizer.numberOfTapsRequired = 2
-      self.doubleTapRecognizer = doubleTapRecognizer
-      tapRecognizer?.require(toFail: doubleTapRecognizer)
-    }
-
-    if model.shouldHandleLongTap, longPressRecognizer == nil {
-      longPressRecognizer = UILongPressGestureRecognizer(
-        target: self,
-        action: #selector(handleLongPress)
-      )
-    }
-
-    if model.shouldHandleHover, hoverRecognizer == nil {
-      hoverRecognizer = UIHoverGestureRecognizer(
-        target: self,
-        action: #selector(handleHover)
-      )
-    }
-
-    tapRecognizer?.isEnabled = model.shouldHandleTap
-    doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
-    longPressRecognizer?.isEnabled = model.shouldHandleLongTap
-    hoverRecognizer?.isEnabled = model.shouldHandleHover
-  }
-
-  private func checkTouchableArea() {
-    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else {
-      return
-    }
-    guard bounds.width > 0 && bounds.height > 0 else { return }
-    if bounds.width < 44 || bounds.height < 44 {
-      renderingDelegate?.reportRenderingError(
-        message: "Touchable view is too small: \(bounds.size), \(model.child)",
-        isWarning: true,
-        path: model.path ?? UIElementPath("")
-      )
-    }
-  }
-
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-  @objc private func handleTap(recognizer: UITapGestureRecognizer) {
-    // Sometimes there are late touches that were performed before layout.
-    // This breaks UX due to UIView reusing, so just skip them here.
-    guard bounds.contains(recognizer.location(in: self)) else { return }
-    captureFocusIfNeeded()
-    let actions: [UserInterfaceAction]? = if recognizer === doubleTapRecognizer {
-      model.doubleTapActions?.asArray()
-    } else if recognizer === tapRecognizer {
-      model.actions?.asArray()
-    } else {
-      []
+  deinit {
+    if model?.tooltips.isEmpty == false {
+      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
     }
-    actions?.perform(sendingFrom: self)
   }
 
   override func accessibilityActivate() -> Bool {
@@ -490,6 +428,105 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     setNeedsLayout()
   }
 
+  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+    if let child = childView as? DelayedVisibilityActionView {
+      child.visibilityAction = { [weak self] in
+
+        guard let self else { return }
+        onVisibleBoundsChangedInternal(from: from, to: to)
+      }
+    } else {
+      onVisibleBoundsChangedInternal(from: from, to: to)
+    }
+  }
+
+  func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {
+    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }), let window else {
+      return nil
+    }
+    let tooltipView = tooltipModel.block.makeBlockView()
+    tooltipView.frame = tooltipModel.calculateFrame(
+      targeting: convert(bounds, to: nil),
+      constrainedBy: window.bounds
+    )
+    return TooltipEvent(
+      info: info,
+      params: tooltipModel.params,
+      tooltipView: tooltipView,
+      tooltipAnchorView: self
+    )
+  }
+
+  private func configureRecognizers() {
+    guard model.shouldHandleAnyAction else {
+      tapRecognizer?.isEnabled = false
+      doubleTapRecognizer?.isEnabled = false
+      longPressRecognizer?.isEnabled = false
+      hoverRecognizer?.isEnabled = false
+      return
+    }
+
+    if tapRecognizer == nil {
+      tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    }
+    tapRecognizer?.cancelsTouchesInView = false
+
+    if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
+      let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+      doubleTapRecognizer.numberOfTapsRequired = 2
+      self.doubleTapRecognizer = doubleTapRecognizer
+      tapRecognizer?.require(toFail: doubleTapRecognizer)
+    }
+
+    if model.shouldHandleLongTap, longPressRecognizer == nil {
+      longPressRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(handleLongPress)
+      )
+    }
+
+    if model.shouldHandleHover, hoverRecognizer == nil {
+      hoverRecognizer = UIHoverGestureRecognizer(
+        target: self,
+        action: #selector(handleHover)
+      )
+    }
+
+    tapRecognizer?.isEnabled = model.shouldHandleTap
+    doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
+    longPressRecognizer?.isEnabled = model.shouldHandleLongTap
+    hoverRecognizer?.isEnabled = model.shouldHandleHover
+  }
+
+  private func checkTouchableArea() {
+    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else {
+      return
+    }
+    guard bounds.width > 0 && bounds.height > 0 else { return }
+    if bounds.width < 44 || bounds.height < 44 {
+      renderingDelegate?.reportRenderingError(
+        message: "Touchable view is too small: \(bounds.size), \(model.child)",
+        isWarning: true,
+        path: model.path ?? UIElementPath("")
+      )
+    }
+  }
+
+  @objc private func handleTap(recognizer: UITapGestureRecognizer) {
+    // Sometimes there are late touches that were performed before layout.
+    // This breaks UX due to UIView reusing, so just skip them here.
+    guard bounds.contains(recognizer.location(in: self)) else { return }
+    captureFocusIfNeeded()
+    let actions: [UserInterfaceAction]? = if recognizer === doubleTapRecognizer {
+      model.doubleTapActions?.asArray()
+    } else if recognizer === tapRecognizer {
+      model.actions?.asArray()
+    } else {
+      []
+    }
+    actions?.perform(sendingFrom: self)
+  }
+
   private func updateHighlightState(animated: Bool) {
     updateContentBackgroundColor(animated: animated)
 
@@ -561,35 +598,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
-    if let child = childView as? DelayedVisibilityActionView {
-      child.visibilityAction = { [weak self] in
-
-        guard let self else { return }
-        onVisibleBoundsChangedInternal(from: from, to: to)
-      }
-    } else {
-      onVisibleBoundsChangedInternal(from: from, to: to)
-    }
-  }
-
-  func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {
-    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }), let window else {
-      return nil
-    }
-    let tooltipView = tooltipModel.block.makeBlockView()
-    tooltipView.frame = tooltipModel.calculateFrame(
-      targeting: convert(bounds, to: nil),
-      constrainedBy: window.bounds
-    )
-    return TooltipEvent(
-      info: info,
-      params: tooltipModel.params,
-      tooltipView: tooltipView,
-      tooltipAnchorView: self
-    )
-  }
-
   private func updateVoiceOverFocus() {
     guard hasFocused, isViewOnWindow else { return }
 
@@ -613,11 +621,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  deinit {
-    if model?.tooltips.isEmpty == false {
-      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
-    }
-  }
 }
 
 extension DecoratingView {

@@ -1,8 +1,6 @@
 import Foundation
 
 final class CustomFunction: SimpleFunction {
-  var signature: FunctionSignature
-
   struct Signature: Hashable {
     var name: String
     var arguments: [DivEvaluableType]
@@ -13,7 +11,10 @@ final class CustomFunction: SimpleFunction {
     let type: DivEvaluableType
   }
 
+  var signature: FunctionSignature
+
   let name: String
+
   private let arguments: [Argument]
   private let body: String
 

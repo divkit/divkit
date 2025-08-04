@@ -11,8 +11,6 @@ public final class FakeImageHolderFactory: DivImageHolderFactory {
 }
 
 public final class FakeImageHolder: ImageHolder {
-  public init() {}
-
   public var image: Image? {
     nil
   }
@@ -20,6 +18,12 @@ public final class FakeImageHolder: ImageHolder {
   public var placeholder: ImagePlaceholder? {
     nil
   }
+
+  public var debugDescription: String {
+    "FakeImageHolder"
+  }
+
+  public init() {}
 
   public func requestImageWithCompletion(_: @escaping @MainActor (Image?) -> Void) -> Cancellable? {
     nil
@@ -33,7 +37,4 @@ public final class FakeImageHolder: ImageHolder {
     true
   }
 
-  public var debugDescription: String {
-    "FakeImageHolder"
-  }
 }

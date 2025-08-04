@@ -3,7 +3,16 @@ import VGSL
 
 public final class DivPersistentValuesStorage {
   static let storageFileName = "divkit.values_storage"
+
   private let timestampProvider: Variable<Milliseconds>
+
+  private let storage = Property<StoredValues>(
+    fileName: storageFileName,
+    initialValue: StoredValues(items: [:]),
+    onError: { error in
+      DivKitLogger.error("Failed to create storage: \(error)")
+    }
+  )
 
   public init(
     timestampProvider: Variable<Milliseconds> = Variable {
@@ -13,14 +22,6 @@ public final class DivPersistentValuesStorage {
     self.timestampProvider = timestampProvider
     removeOutdatedStoredValues()
   }
-
-  private let storage = Property<StoredValues>(
-    fileName: storageFileName,
-    initialValue: StoredValues(items: [:]),
-    onError: { error in
-      DivKitLogger.error("Failed to create storage: \(error)")
-    }
-  )
 
   func set(value: DivStoredValue) {
     var items = storage.value.items

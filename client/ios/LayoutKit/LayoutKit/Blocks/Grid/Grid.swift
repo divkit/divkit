@@ -2,18 +2,11 @@ import VGSL
 
 struct Grid {
   typealias GridItem = GridBlock.Item
+
   let itemsIndices: [[Int?]]
 
   var rowCount: Int { itemsIndices.count }
   var columnCount: Int { itemsIndices[0].count }
-
-  func forEachCell(_ block: ((row: Int, column: Int)) -> Void) {
-    for row in itemsIndices.indices {
-      for column in itemsIndices[0].indices {
-        block((row, column))
-      }
-    }
-  }
 
   init(spans: [GridBlock.Span], columnCount: Int) throws {
     guard !spans.isEmpty else {
@@ -62,13 +55,23 @@ struct Grid {
 
     itemsIndices = result
   }
+
+  func forEachCell(_ block: ((row: Int, column: Int)) -> Void) {
+    for row in itemsIndices.indices {
+      for column in itemsIndices[0].indices {
+        block((row, column))
+      }
+    }
+  }
+
 }
 
 private struct GridIterator {
   typealias Element = (row: Int, column: Int)
 
-  private let columnCount: Int
   private(set) var current: Element = (0, 0)
+
+  private let columnCount: Int
 
   init(columnCount: Int) {
     self.columnCount = columnCount

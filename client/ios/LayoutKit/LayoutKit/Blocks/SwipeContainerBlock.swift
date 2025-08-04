@@ -27,6 +27,13 @@ public final class SwipeContainerBlock: WrapperBlock {
     self.swipeOutActions = swipeOutActions
   }
 
+  public static func ==(lhs: SwipeContainerBlock, rhs: SwipeContainerBlock) -> Bool {
+    lhs.child == rhs.child
+      && lhs.swipeOutActions == rhs.swipeOutActions
+      && lhs.path == rhs.path
+      && lhs.state == rhs.state
+  }
+
   public func intrinsicContentHeight(forWidth: CGFloat) -> CGFloat {
     switch state {
     case .normal:
@@ -53,12 +60,6 @@ public final class SwipeContainerBlock: WrapperBlock {
     return self == other
   }
 
-  public static func ==(lhs: SwipeContainerBlock, rhs: SwipeContainerBlock) -> Bool {
-    lhs.child == rhs.child
-      && lhs.swipeOutActions == rhs.swipeOutActions
-      && lhs.path == rhs.path
-      && lhs.state == rhs.state
-  }
 }
 
 extension SwipeContainerBlock: LayoutCaching {

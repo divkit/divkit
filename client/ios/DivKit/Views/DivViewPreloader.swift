@@ -14,10 +14,12 @@ public final class DivViewPreloader {
     public let estimatedSize: DivViewSize
   }
 
+  private(set) var setSourceTask: Task<Void, Error>?
+
   private var blockProviders = [DivCardID: DivBlockProvider]()
   private let divKitComponents: DivKitComponents
   private let changeEventsPipe = SignalPipe<DivViewSizeChange>()
-  private(set) var setSourceTask: Task<Void, Error>?
+
   var changeEvents: Signal<DivViewSizeChange> {
     changeEventsPipe.signal
   }
@@ -28,18 +30,6 @@ public final class DivViewPreloader {
   ///  - divKitComponents: The ``DivKitComponents`` instance used for creating `DivBlockProvider`.
   public init(divKitComponents: DivKitComponents) {
     self.divKitComponents = divKitComponents
-  }
-
-  func blockProvider(for cardId: DivCardID) -> DivBlockProvider {
-    if let blockProvider = blockProviders[cardId] {
-      return blockProvider
-    } else {
-      let blockProvider = DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
-        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
-      }
-      blockProviders[cardId] = blockProvider
-      return blockProvider
-    }
   }
 
   /// Sets the source for  ``DivViewPreloader`` and updates the layout.
@@ -129,6 +119,18 @@ public final class DivViewPreloader {
   public func addObserver(_ onCardSizeChanged: @escaping (DivViewSizeChange) -> Void)
     -> Disposable {
     changeEvents.addObserver(onCardSizeChanged)
+  }
+
+  func blockProvider(for cardId: DivCardID) -> DivBlockProvider {
+    if let blockProvider = blockProviders[cardId] {
+      return blockProvider
+    } else {
+      let blockProvider = DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
+        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
+      }
+      blockProviders[cardId] = blockProvider
+      return blockProvider
+    }
   }
 
   func reset(cardId: DivCardID) {

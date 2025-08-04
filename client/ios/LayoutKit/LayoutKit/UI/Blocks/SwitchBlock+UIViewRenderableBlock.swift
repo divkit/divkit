@@ -44,9 +44,9 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
-
   private var aSwitch: UISwitch
+
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   init() {
     aSwitch = UISwitch()

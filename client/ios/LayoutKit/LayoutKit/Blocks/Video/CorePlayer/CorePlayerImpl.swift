@@ -3,9 +3,19 @@ import Foundation
 import VGSL
 
 final class CorePlayerImpl: CorePlayer {
-  static func isMIMETypeSupported(_ mimeType: String) -> Bool {
-    AVURLAsset.isPlayableExtendedMIMEType(mimeType)
-  }
+  private let player: AVPlayer
+  private let itemsProvider: PlayerItemsProvider
+
+  private let playerObservers = AutodisposePool()
+  private let itemObservers = AutodisposePool()
+
+  private let playerStatusPipe = SignalPipe<PlayerStatus>()
+  private let playerDurationPipe = SignalPipe<TimeInterval>()
+  private let playbackStatusPipe = SignalPipe<PlaybackStatus>()
+  private let playerErrorPipe = SignalPipe<PlayerError>()
+  private let playbackFinishPipe = SignalPipe<Void>()
+
+  private var currentTimePipes = [TimeInterval: SignalPipe<TimeInterval>]()
 
   var videoEngine: VideoEngine {
     VideoEngine(type: .avPlayer(player))
@@ -31,32 +41,14 @@ final class CorePlayerImpl: CorePlayer {
     playbackFinishPipe.signal
   }
 
-  private let player: AVPlayer
-  private let itemsProvider: PlayerItemsProvider
-
-  private let playerObservers = AutodisposePool()
-  private let itemObservers = AutodisposePool()
-
-  private let playerStatusPipe = SignalPipe<PlayerStatus>()
-  private let playerDurationPipe = SignalPipe<TimeInterval>()
-  private let playbackStatusPipe = SignalPipe<PlaybackStatus>()
-  private let playerErrorPipe = SignalPipe<PlayerError>()
-  private let playbackFinishPipe = SignalPipe<Void>()
-
-  private var currentTimePipes = [TimeInterval: SignalPipe<TimeInterval>]()
-
   init(itemsProvider: PlayerItemsProvider) {
     self.player = AVPlayer()
     self.itemsProvider = itemsProvider
     setup(player)
   }
 
-  private func resetPlayerObservers() {
-    playerObservers.drain()
-  }
-
-  private func resetItemObservers() {
-    itemObservers.drain()
+  static func isMIMETypeSupported(_ mimeType: String) -> Bool {
+    AVURLAsset.isPlayableExtendedMIMEType(mimeType)
   }
 
   func set(source: Video) {
@@ -109,6 +101,14 @@ final class CorePlayerImpl: CorePlayer {
       .dispose(in: playerObservers)
 
     return pipe.signal
+  }
+
+  private func resetPlayerObservers() {
+    playerObservers.drain()
+  }
+
+  private func resetItemObservers() {
+    itemObservers.drain()
   }
 
   private func setup(_ player: AVPlayer) {

@@ -75,17 +75,18 @@ private final class SwitchableContainerView: BlockView, VisibleBoundsTrackingCon
     }
   }
 
-  var effectiveBackgroundColor: UIColor? { selectorView.backgroundColor }
-
-  private var lastLayoutSize = CGRect.zero
-
   var observer: ElementStateObserver?
   weak var overscrollDelegate: ScrollDelegate?
   weak var renderingDelegate: RenderingDelegate?
 
+  private var lastLayoutSize = CGRect.zero
+
   private let selectorView = SegmentedSelectorView()
   private var blockViews: [BlockView] = []
+
   public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
+
+  var effectiveBackgroundColor: UIColor? { selectorView.backgroundColor }
 
   init() {
     super.init(frame: .zero)

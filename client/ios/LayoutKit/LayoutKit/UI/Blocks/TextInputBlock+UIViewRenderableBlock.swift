@@ -56,6 +56,10 @@ extension TextInputBlock {
 }
 
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
+  var paddings: EdgeInsets = .zero
+
+  var layoutReporter: LayoutReporter?
+
   private let multiLineInput = PatchedUITextView()
   private let singleLineInput = PatchedUITextField()
   private let selectionView = UIPickerView()
@@ -85,10 +89,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var keyboardHeight: CGFloat?
   private var maxLength: Int?
 
-  var paddings: EdgeInsets = .zero
-
   var effectiveBackgroundColor: UIColor? { backgroundColor }
-  var layoutReporter: LayoutReporter?
+
+  private var currentText: String {
+    guard singleLineInput.isHidden else {
+      return singleLineInput.attributedText?.string ?? ""
+    }
+    return multiLineInput.attributedText.string
+  }
 
   override init(frame: CGRect) {
     textValue = .zero
@@ -148,35 +156,26 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     layoutReporter?.didLayoutSubviews()
   }
 
+  override func didMoveToWindow() {
+    if window != nil {
+      startKeyboardTracking()
+      if isInputFocused {
+        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear
+        // method in UIViewController.
+        // This causes the focusTextInput method to be called too early, before the view is actually
+        // in the view hierarchy.
+        // As a result, the keyboard does not appear as expected.
+        DispatchQueue.main.async {
+          self.focusTextInput()
+        }
+      }
+    } else {
+      stopAllTracking()
+    }
+  }
+
   @objc func onTapGesture(sender _: UITapGestureRecognizer) {
     focusTextInput()
-  }
-
-  private func focusTextInput() {
-    if singleLineInput.isHidden {
-      multiLineInput.becomeFirstResponder()
-    } else {
-      singleLineInput.becomeFirstResponder()
-    }
-  }
-
-  private func clearFocus() {
-    if singleLineInput.isHidden {
-      if multiLineInput.isFirstResponder {
-        multiLineInput.resignFirstResponder()
-      }
-    } else {
-      if singleLineInput.isFirstResponder {
-        singleLineInput.resignFirstResponder()
-      }
-    }
-  }
-
-  private var currentText: String {
-    guard singleLineInput.isHidden else {
-      return singleLineInput.attributedText?.string ?? ""
-    }
-    return multiLineInput.attributedText.string
   }
 
   func setLayoutDirection(_ layoutDirection: UserInterfaceLayoutDirection) {
@@ -199,11 +198,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.inputView = selectionView
       setKeyboardType(.default)
     }
-  }
-
-  private func setKeyboardType(_ type: TextInputBlock.InputType.KeyboardType) {
-    multiLineInput.keyboardType = type.uiType
-    singleLineInput.keyboardType = type.uiType
   }
 
   func setInputAccessoryView(_ accessoryView: ViewType?) {
@@ -374,6 +368,31 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     maxLength = value
   }
 
+  private func focusTextInput() {
+    if singleLineInput.isHidden {
+      multiLineInput.becomeFirstResponder()
+    } else {
+      singleLineInput.becomeFirstResponder()
+    }
+  }
+
+  private func clearFocus() {
+    if singleLineInput.isHidden {
+      if multiLineInput.isFirstResponder {
+        multiLineInput.resignFirstResponder()
+      }
+    } else {
+      if singleLineInput.isFirstResponder {
+        singleLineInput.resignFirstResponder()
+      }
+    }
+  }
+
+  private func setKeyboardType(_ type: TextInputBlock.InputType.KeyboardType) {
+    multiLineInput.keyboardType = type.uiType
+    singleLineInput.keyboardType = type.uiType
+  }
+
   private func updateHintVisibility() {
     hintView.isHidden = !currentText.isEmpty
   }
@@ -464,24 +483,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
           self.updateHintVisibility()
         }
       }.dispose(in: disposePool)
-  }
-
-  override func didMoveToWindow() {
-    if window != nil {
-      startKeyboardTracking()
-      if isInputFocused {
-        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear
-        // method in UIViewController.
-        // This causes the focusTextInput method to be called too early, before the view is actually
-        // in the view hierarchy.
-        // As a result, the keyboard does not appear as expected.
-        DispatchQueue.main.async {
-          self.focusTextInput()
-        }
-      }
-    } else {
-      stopAllTracking()
-    }
   }
 
   private func startKeyboardTracking() {

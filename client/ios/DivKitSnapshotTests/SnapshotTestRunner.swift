@@ -16,11 +16,11 @@ final class SnapshotTestRunner {
   let mode = TestMode.verify
   #endif
 
+  private let file: JsonFile
+
   init(file: JsonFile) {
     self.file = file
   }
-
-  private let file: JsonFile
 
   func run(
     caseName: String,

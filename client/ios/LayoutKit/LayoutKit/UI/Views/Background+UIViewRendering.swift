@@ -39,6 +39,9 @@ private final class BackgroundView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
+  private var model: Background!
+  private weak var observer: ElementStateObserver?
+
   var effectiveBackgroundColor: UIColor? { innerView?.backgroundColor }
 
   override func layoutSubviews() {
@@ -46,9 +49,6 @@ private final class BackgroundView: BlockView, VisibleBoundsTrackingLeaf {
 
     innerView?.frame = bounds
   }
-
-  private var model: Background!
-  private weak var observer: ElementStateObserver?
 
   func configure(
     model: Background,

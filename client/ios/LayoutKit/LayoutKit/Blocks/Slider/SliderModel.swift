@@ -10,6 +10,16 @@ import AppKit
 
 public struct SliderModel: Equatable {
   public struct ThumbModel: Equatable {
+    static var empty: Self {
+      ThumbModel(
+        block: EmptyBlock.zeroSized,
+        value: .zero,
+        size: .zero,
+        offsetX: 0,
+        offsetY: 0
+      )
+    }
+
     public let block: Block
     public var value: Binding<Int>
     public let size: CGSize
@@ -28,16 +38,6 @@ public struct SliderModel: Equatable {
       self.size = size
       self.offsetX = offsetX
       self.offsetY = offsetY
-    }
-
-    static var empty: Self {
-      ThumbModel(
-        block: EmptyBlock.zeroSized,
-        value: .zero,
-        size: .zero,
-        offsetX: 0,
-        offsetY: 0
-      )
     }
 
     public static func ==(lhs: SliderModel.ThumbModel, rhs: SliderModel.ThumbModel) -> Bool {
@@ -92,6 +92,19 @@ public struct SliderModel: Equatable {
     }
   }
 
+  static var empty: Self {
+    SliderModel(
+      firstThumb: .empty,
+      secondThumb: nil,
+      minValue: 0,
+      maxValue: 0,
+      marksConfiguration: .empty,
+      ranges: [],
+      layoutDirection: .leftToRight,
+      isEnabled: true
+    )
+  }
+
   public var firstThumb: ThumbModel
   public var secondThumb: ThumbModel?
 
@@ -101,6 +114,8 @@ public struct SliderModel: Equatable {
   public let layoutDirection: UserInterfaceLayoutDirection
   public let path: UIElementPath?
   public let isEnabled: Bool
+
+  private let marksModelConfiguration: MarksConfigurationModel
 
   public var marksConfiguration: MarksConfiguration {
     MarksConfiguration(
@@ -112,8 +127,6 @@ public struct SliderModel: Equatable {
   public var valueRange: Int {
     maxValue - minValue
   }
-
-  private let marksModelConfiguration: MarksConfigurationModel
 
   public var sliderHeight: CGFloat {
     max(
@@ -174,19 +187,6 @@ public struct SliderModel: Equatable {
     self.layoutDirection = layoutDirection
     self.path = path
     self.isEnabled = isEnabled
-  }
-
-  static var empty: Self {
-    SliderModel(
-      firstThumb: .empty,
-      secondThumb: nil,
-      minValue: 0,
-      maxValue: 0,
-      marksConfiguration: .empty,
-      ranges: [],
-      layoutDirection: .leftToRight,
-      isEnabled: true
-    )
   }
 
   public static func ==(lhs: SliderModel, rhs: SliderModel) -> Bool {

@@ -4,22 +4,6 @@ import VGSL
 public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral, Codable {
   private let address: ListNode
 
-  private init(address: ListNode) {
-    self.address = address
-  }
-
-  public init(_ root: String) {
-    address = ListNode(value: root)
-  }
-
-  public init(parent: UIElementPath, child: String) {
-    address = ListNode(value: child, next: parent.address)
-  }
-
-  public init(stringLiteral value: StringLiteralType) {
-    self.init(value)
-  }
-
   public var description: String {
     address.joined(separator: "/")
   }
@@ -39,11 +23,20 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
     address.value
   }
 
-  public func starts(with path: UIElementPath) -> Bool {
-    if path == self {
-      return true
-    }
-    return parent?.starts(with: path) == true
+  public init(_ root: String) {
+    address = ListNode(value: root)
+  }
+
+  public init(parent: UIElementPath, child: String) {
+    address = ListNode(value: child, next: parent.address)
+  }
+
+  public init(stringLiteral value: StringLiteralType) {
+    self.init(value)
+  }
+
+  private init(address: ListNode) {
+    self.address = address
   }
 
   public static func parse(_ path: String) -> UIElementPath {
@@ -53,6 +46,14 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
     }
     return UIElementPath(path)
   }
+
+  public func starts(with path: UIElementPath) -> Bool {
+    if path == self {
+      return true
+    }
+    return parent?.starts(with: path) == true
+  }
+
 }
 
 extension UIElementPath: Hashable {
@@ -102,8 +103,13 @@ extension UIElementPath {
 }
 
 private final class ListNode: Codable {
+  enum CodingKeys: CodingKey {
+    case value, next
+  }
+
   let value: String
   let next: ListNode?
+
   private var _root: String?
 
   private lazy var cachedHash: Int = {
@@ -113,11 +119,6 @@ private final class ListNode: Codable {
 
     return hasher.finalize()
   }()
-
-  init(value: String, next: ListNode? = nil) {
-    self.value = value
-    self.next = next
-  }
 
   var root: String {
     if let _root {
@@ -131,9 +132,11 @@ private final class ListNode: Codable {
     return result
   }
 
-  enum CodingKeys: CodingKey {
-    case value, next
+  init(value: String, next: ListNode? = nil) {
+    self.value = value
+    self.next = next
   }
+
 }
 
 extension ListNode: Hashable {

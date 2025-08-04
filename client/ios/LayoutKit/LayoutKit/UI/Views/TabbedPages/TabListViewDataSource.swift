@@ -58,8 +58,6 @@ final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
 final class TabListItemCell: UICollectionViewCell {
   static let reuseID = "TabListItemCell"
 
-  private var textLabel: Label!
-
   var model: TabTitleViewModel! {
     didSet {
       if textLabel.attributedText !== model.text {
@@ -72,6 +70,8 @@ final class TabListItemCell: UICollectionViewCell {
     }
   }
 
+  private var textLabel: Label!
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     textLabel = makeTextLabel()
@@ -81,12 +81,6 @@ final class TabListItemCell: UICollectionViewCell {
   @available(*, unavailable)
   required init(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  private func makeTextLabel() -> Label {
-    let label = Label(frame: .zero)
-    label.textAlignment = .center
-    return label
   }
 
   override func layoutSubviews() {
@@ -101,5 +95,12 @@ final class TabListItemCell: UICollectionViewCell {
   class func sizeForModel(_ model: TabTitleViewModel) -> CGSize {
     model.totalSize.ceiled()
   }
+
+  private func makeTextLabel() -> Label {
+    let label = Label(frame: .zero)
+    label.textAlignment = .center
+    return label
+  }
+
 }
 #endif

@@ -5,6 +5,12 @@ public struct VisibilityState: Equatable {
   public var maximumVisibleSize: CGSize
   public var visibleFrame: CGRect
 
+  public var visibility: CGFloat {
+    let visibleArea = visibleFrame.size.area
+    let maximumVisibleArea = maximumVisibleSize.area
+    return (maximumVisibleArea > 0) ? (visibleArea / maximumVisibleArea) : 0
+  }
+
   public init(visibleFrame: CGRect) {
     self.visibleFrame = visibleFrame
     maximumVisibleSize = visibleFrame.size
@@ -27,11 +33,6 @@ public struct VisibilityState: Equatable {
     return visibilityState
   }
 
-  public var visibility: CGFloat {
-    let visibleArea = visibleFrame.size.area
-    let maximumVisibleArea = maximumVisibleSize.area
-    return (maximumVisibleArea > 0) ? (visibleArea / maximumVisibleArea) : 0
-  }
 }
 
 extension CGSize {

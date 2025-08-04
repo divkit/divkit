@@ -7,18 +7,6 @@ struct SwitchableContainerBlockLayout {
   private let titleGaps: CGFloat
   private let selectorSideGaps: CGFloat
 
-  init(
-    width: CGFloat,
-    titles: SwitchableContainerBlock.Titles,
-    titleGaps: CGFloat,
-    selectorSideGaps: CGFloat
-  ) {
-    self.width = width
-    self.titles = titles
-    self.titleGaps = titleGaps
-    self.selectorSideGaps = selectorSideGaps
-  }
-
   var selectorIntrinsicWidth: CGFloat {
     let leftTitleWidth = max(
       titles.0.selected.sizeForWidth(.infinity).width,
@@ -41,4 +29,17 @@ struct SwitchableContainerBlockLayout {
   var selectorIntrinsicHeight: CGFloat {
     titlesHeight + 2.0 * titleGaps
   }
+
+  init(
+    width: CGFloat,
+    titles: SwitchableContainerBlock.Titles,
+    titleGaps: CGFloat,
+    selectorSideGaps: CGFloat
+  ) {
+    self.width = width
+    self.titles = titles
+    self.titleGaps = titleGaps
+    self.selectorSideGaps = selectorSideGaps
+  }
+
 }

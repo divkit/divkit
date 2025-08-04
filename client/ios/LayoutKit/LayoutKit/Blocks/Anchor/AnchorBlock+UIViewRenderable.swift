@@ -44,15 +44,40 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
   private var preventLayout = false
   private weak var observer: ElementStateObserver?
 
-  private var block: AnchorBlock! {
-    modelAndLastLayoutSize.model?.block
-  }
-
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [leadingView, centerView, trailingView].compactMap { $0 }
   }
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  private var block: AnchorBlock! {
+    modelAndLastLayoutSize.model?.block
+  }
+
+  override func layoutSubviews() {
+    guard !preventLayout else { return }
+
+    super.layoutSubviews()
+
+    if let lastLayoutSize = modelAndLastLayoutSize.lastLayoutSize, bounds.size == lastLayoutSize {
+      return
+    }
+
+    guard let model = modelAndLastLayoutSize.model else {
+      return
+    }
+
+    let layout = model.layout ?? model.block.makeLayout(for: bounds.size)
+
+    leadingView?.frame = layout.leadingFrame
+    centerView?.frame = layout.centerFrame
+    trailingView?.frame = layout.trailingFrame
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
+  }
 
   func configure(
     model: Model,
@@ -93,29 +118,5 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
     setNeedsLayout()
   }
 
-  override func layoutSubviews() {
-    guard !preventLayout else { return }
-
-    super.layoutSubviews()
-
-    if let lastLayoutSize = modelAndLastLayoutSize.lastLayoutSize, bounds.size == lastLayoutSize {
-      return
-    }
-
-    guard let model = modelAndLastLayoutSize.model else {
-      return
-    }
-
-    let layout = model.layout ?? model.block.makeLayout(for: bounds.size)
-
-    leadingView?.frame = layout.leadingFrame
-    centerView?.frame = layout.centerFrame
-    trailingView?.frame = layout.trailingFrame
-  }
-
-  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    let result = super.hitTest(point, with: event)
-    return result === self ? nil : result
-  }
 }
 #endif

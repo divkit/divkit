@@ -5,6 +5,7 @@ import VGSL
 
 public final class ImageThemeExtensionHandler: DivExtensionHandler {
   public let id = extensionID
+
   private let theme: Variable<Theme>
 
   public init(theme: Variable<Theme>) {

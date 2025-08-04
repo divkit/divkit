@@ -11,10 +11,14 @@ public final class DivVariableStorage {
   }
 
   let initialPath: UIElementPath?
+  let changeEvents: Signal<ChangeEvent>
+
   private let outerStorage: DivVariableStorage?
 
   private var _values = DivVariables()
   private let lock = AllocatedUnfairLock()
+
+  private let changeEventsPipe = SignalPipe<ChangeEvent>()
 
   /// Gets all available variables including variables from outer storage.
   public var allValues: DivVariables {
@@ -32,9 +36,6 @@ public final class DivVariableStorage {
   private var _allValues: DivVariables {
     (outerStorage?.allValues ?? [:]) + _values
   }
-
-  private let changeEventsPipe = SignalPipe<ChangeEvent>()
-  let changeEvents: Signal<ChangeEvent>
 
   /// Initializes a new instance of ``DivVariableStorage``.
   ///
@@ -186,6 +187,10 @@ public final class DivVariableStorage {
     }
   }
 
+  public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
+    changeEvents.addObserver(action)
+  }
+
   func update(
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
@@ -216,10 +221,6 @@ public final class DivVariableStorage {
     }
 
     return isUpdated
-  }
-
-  public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
-    changeEvents.addObserver(action)
   }
 
   private func notify(_ event: ChangeEvent) {

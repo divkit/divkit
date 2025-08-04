@@ -9,17 +9,24 @@ import AppKit
 #endif
 
 public struct DivBlockModelingContext {
+  public let actionHandler: DivActionHandler?
+  public let blockStateStorage: DivBlockStateStorage
+  public let imageHolderFactory: DivImageHolderFactory
+  public let fontProvider: DivFontProvider
+  public private(set) var errorsStorage: DivErrorsStorage
+  public let variablesStorage: DivVariablesStorage
+  public private(set) var expressionResolver: ExpressionResolver
+  public let variableTracker: DivVariableTracker?
+  public private(set) var path: UIElementPath
+  public private(set) var currentDivId: String?
+
   private(set) var viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
-  public let actionHandler: DivActionHandler?
-  public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
-  public let imageHolderFactory: DivImageHolderFactory
   let divCustomBlockFactory: DivCustomBlockFactory
-  public let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
   let extensionHandlers: [String: DivExtensionHandler]
   let layoutDirection: UserInterfaceLayoutDirection
@@ -27,18 +34,10 @@ public struct DivBlockModelingContext {
   let scheduler: Scheduling
   let playerFactory: PlayerFactory?
   private(set) weak var parentScrollView: ScrollView?
-  public private(set) var errorsStorage: DivErrorsStorage
   let debugErrorCollector: DebugErrorCollector?
-  private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
   let functionsStorage: DivFunctionsStorage?
-  public let variablesStorage: DivVariablesStorage
   let triggersStorage: DivTriggersStorage?
-  public private(set) var expressionResolver: ExpressionResolver
-  private let functionsProvider: FunctionsProvider
-  public let variableTracker: DivVariableTracker?
-  public private(set) var path: UIElementPath
-  public private(set) var currentDivId: String?
   // Overriden id for modified contexts of child divs, used in prototypes
   private(set) var overridenId: String?
   private(set) var sizeModifier: DivSizeModifier?
@@ -48,9 +47,16 @@ public struct DivBlockModelingContext {
   let animatorController: DivAnimatorController?
   private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
+  private let persistentValuesStorage: DivPersistentValuesStorage
+  private let functionsProvider: FunctionsProvider
+
   // Deprecated, `parentPath` was changed to `path`
   public var parentPath: UIElementPath {
     path
+  }
+
+  public var cardId: DivCardID {
+    viewId.cardId
   }
 
   @_spi(Internal)
@@ -169,10 +175,6 @@ public struct DivBlockModelingContext {
       variableTracker: variableTracker,
       errorsStorage: errorsStorage
     )
-  }
-
-  public var cardId: DivCardID {
-    viewId.cardId
   }
 
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {

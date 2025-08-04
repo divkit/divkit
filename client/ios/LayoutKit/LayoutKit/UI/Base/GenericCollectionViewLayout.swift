@@ -4,14 +4,18 @@ import UIKit
 import VGSL
 
 public final class GenericCollectionViewLayout: UICollectionViewLayout {
+  public override var collectionViewContentSize: CGSize {
+    layout?.contentSize ?? .zero
+  }
+
+  public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+    true
+  }
+
   public var layout: GenericCollectionLayout? {
     didSet {
       invalidateLayout()
     }
-  }
-
-  public override var collectionViewContentSize: CGSize {
-    layout?.contentSize ?? .zero
   }
 
   public override func layoutAttributesForItem(at indexPath: IndexPath)
@@ -86,9 +90,6 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     return attributes
   }
 
-  public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-    true
-  }
 }
 
 extension UICollectionViewLayoutAttributes {

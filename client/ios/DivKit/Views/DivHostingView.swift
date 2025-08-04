@@ -48,11 +48,11 @@ public struct DivHostingView: UIViewRepresentable {
 }
 
 private class VisibilityTrackingView: UIView {
-  let divView: DivView
-
   override var intrinsicContentSize: CGSize {
     divView.intrinsicContentSize
   }
+
+  let divView: DivView
 
   init(divView: DivView) {
     self.divView = divView

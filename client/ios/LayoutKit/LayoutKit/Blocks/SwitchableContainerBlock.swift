@@ -47,6 +47,63 @@ public final class SwitchableContainerBlock: Block {
   public let switchAction: UserInterfaceAction?
   public let path: UIElementPath
 
+  public let isVerticallyConstrained = false
+  public let isHorizontallyConstrained = false
+
+  public var isVerticallyResizable: Bool {
+    items.0.content.isVerticallyResizable && items.1.content.isVerticallyResizable
+  }
+
+  public var isHorizontallyResizable: Bool {
+    items.0.content.isHorizontallyResizable && items.1.content.isHorizontallyResizable
+  }
+
+  public var intrinsicContentWidth: CGFloat {
+    let layout = SwitchableContainerBlockLayout(
+      width: .infinity,
+      titles: (items.0.title, items.1.title),
+      titleGaps: titleGaps,
+      selectorSideGaps: selectorSideGaps
+    )
+    let contentMaxWidth = max(
+      items.0.content.intrinsicContentWidth,
+      items.1.content.intrinsicContentWidth
+    )
+    return max(layout.selectorIntrinsicWidth, contentMaxWidth)
+  }
+
+  public var widthOfHorizontallyNonResizableBlock: CGFloat {
+    guard !isHorizontallyResizable else {
+      assertionFailure("Should be at least one non resizable block")
+      return 0
+    }
+
+    var width: CGFloat = 0
+    if !items.0.content.isHorizontallyResizable {
+      width = max(items.0.content.widthOfHorizontallyNonResizableBlock, width)
+    }
+    if !items.1.content.isHorizontallyResizable {
+      width = max(items.1.content.widthOfHorizontallyNonResizableBlock, width)
+    }
+    return width
+  }
+
+  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
+    precondition(isVerticallyResizable)
+    return max(
+      items.0.content.weightOfVerticallyResizableBlock,
+      items.1.content.weightOfVerticallyResizableBlock
+    )
+  }
+
+  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
+    precondition(isHorizontallyResizable)
+    return max(
+      items.0.content.weightOfHorizontallyResizableBlock,
+      items.1.content.weightOfHorizontallyResizableBlock
+    )
+  }
+
   public init(
     selectedItem: Selection,
     items: Items,
@@ -69,31 +126,6 @@ public final class SwitchableContainerBlock: Block {
     self.path = path
   }
 
-  public var isVerticallyResizable: Bool {
-    items.0.content.isVerticallyResizable && items.1.content.isVerticallyResizable
-  }
-
-  public var isHorizontallyResizable: Bool {
-    items.0.content.isHorizontallyResizable && items.1.content.isHorizontallyResizable
-  }
-
-  public let isVerticallyConstrained = false
-  public let isHorizontallyConstrained = false
-
-  public var intrinsicContentWidth: CGFloat {
-    let layout = SwitchableContainerBlockLayout(
-      width: .infinity,
-      titles: (items.0.title, items.1.title),
-      titleGaps: titleGaps,
-      selectorSideGaps: selectorSideGaps
-    )
-    let contentMaxWidth = max(
-      items.0.content.intrinsicContentWidth,
-      items.1.content.intrinsicContentWidth
-    )
-    return max(layout.selectorIntrinsicWidth, contentMaxWidth)
-  }
-
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     var total: CGFloat = 0
 
@@ -112,22 +144,6 @@ public final class SwitchableContainerBlock: Block {
       .max() ?? 0
 
     return total
-  }
-
-  public var widthOfHorizontallyNonResizableBlock: CGFloat {
-    guard !isHorizontallyResizable else {
-      assertionFailure("Should be at least one non resizable block")
-      return 0
-    }
-
-    var width: CGFloat = 0
-    if !items.0.content.isHorizontallyResizable {
-      width = max(items.0.content.widthOfHorizontallyNonResizableBlock, width)
-    }
-    if !items.1.content.isHorizontallyResizable {
-      width = max(items.1.content.widthOfHorizontallyNonResizableBlock, width)
-    }
-    return width
   }
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
@@ -161,22 +177,6 @@ public final class SwitchableContainerBlock: Block {
       )
     }
     return height + contentHeight
-  }
-
-  public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    precondition(isVerticallyResizable)
-    return max(
-      items.0.content.weightOfVerticallyResizableBlock,
-      items.1.content.weightOfVerticallyResizableBlock
-    )
-  }
-
-  public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    precondition(isHorizontallyResizable)
-    return max(
-      items.0.content.weightOfHorizontallyResizableBlock,
-      items.1.content.weightOfHorizontallyResizableBlock
-    )
   }
 
   public func equals(_ other: Block) -> Bool {

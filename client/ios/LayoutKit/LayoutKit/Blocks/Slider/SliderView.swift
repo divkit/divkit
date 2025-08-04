@@ -3,6 +3,8 @@ import UIKit
 import VGSL
 
 final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
+  var layoutReporter: LayoutReporter?
+
   private var sliderModel: SliderModel = .empty
   private var thumbAnimator: UIViewPropertyAnimator?
   private var firstThumbProgress: CGFloat = .zero {
@@ -19,7 +21,93 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
-  var layoutReporter: LayoutReporter?
+  private var firstThumb: BlockView?
+  private var secondThumb: BlockView?
+  private var activeRangeTracks: [BlockView] = []
+  private var inactiveRangeTracks: [BlockView] = []
+  private lazy var inactiveTrackView = makeAndInsertView(UIView(), at: 0)
+  private lazy var activeTrackView = makeAndInsertView(UIView(), at: 1)
+  private lazy var marksView = makeAndInsertView(MarksView(), at: 2)
+
+  private let recognizer = UILongPressGestureRecognizer()
+  private var activeThumb: SliderThumbNumber = .first
+
+  var effectiveBackgroundColor: UIColor? {
+    backgroundColor
+  }
+
+  private var pointWidth: CGFloat {
+    let width = bounds.width - sliderModel.horizontalInset - max(
+      abs(sliderModel.firstThumb.offsetX),
+      abs(sliderModel.secondThumb?.offsetX ?? 0)
+    )
+    if sliderModel.valueRange == 0 {
+      return width
+    } else {
+      return CGFloat(width) / CGFloat(sliderModel.valueRange)
+    }
+  }
+
+  init() {
+    super.init(frame: .zero)
+    recognizer.addTarget(self, action: #selector(handleTap))
+    isExclusiveTouch = true
+    recognizer.minimumPressDuration = 0
+    addGestureRecognizer(recognizer)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    let firstThumbProgress = clampSliderValue(firstThumbProgress, sliderModel: sliderModel)
+    let secondThumbProgress = clampSliderValue(secondThumbProgress, sliderModel: sliderModel)
+
+    guard thumbAnimator?.state != .active else {
+      return
+    }
+
+    super.layoutSubviews()
+    layoutReporter?.willLayoutSubviews()
+
+    configureThumb(
+      thumbView: firstThumb,
+      progress: firstThumbProgress,
+      thumbModel: sliderModel.firstThumb
+    )
+    configureThumb(
+      thumbView: secondThumb,
+      progress: secondThumbProgress,
+      thumbModel: sliderModel.secondThumb
+    )
+
+    configureSliderView(marksView)
+
+    configureSliderView(inactiveTrackView, with: sliderModel.horizontalInset)
+    configureSliderView(activeTrackView, with: sliderModel.horizontalInset)
+
+    configureRangeViews(
+      inactiveRangeTracks,
+      with: sliderModel.ranges,
+      in: inactiveTrackView,
+      isActive: false
+    )
+    configureRangeViews(
+      activeRangeTracks,
+      with: sliderModel.ranges,
+      in: activeTrackView,
+      isActive: true
+    )
+
+    configureTracks(
+      progressFirstThumb: firstThumbProgress,
+      progressSecondThumb: sliderModel
+        .secondThumb != nil ? secondThumbProgress : CGFloat(sliderModel.minValue)
+    )
+    layoutReporter?.didLayoutSubviews()
+  }
 
   func setSliderModel(
     _ sliderModel: SliderModel,
@@ -117,46 +205,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       setNeedsLayout()
     }
     secondThumbProgress = value
-  }
-
-  var effectiveBackgroundColor: UIColor? {
-    backgroundColor
-  }
-
-  private var pointWidth: CGFloat {
-    let width = bounds.width - sliderModel.horizontalInset - max(
-      abs(sliderModel.firstThumb.offsetX),
-      abs(sliderModel.secondThumb?.offsetX ?? 0)
-    )
-    if sliderModel.valueRange == 0 {
-      return width
-    } else {
-      return CGFloat(width) / CGFloat(sliderModel.valueRange)
-    }
-  }
-
-  private var firstThumb: BlockView?
-  private var secondThumb: BlockView?
-  private var activeRangeTracks: [BlockView] = []
-  private var inactiveRangeTracks: [BlockView] = []
-  private lazy var inactiveTrackView = makeAndInsertView(UIView(), at: 0)
-  private lazy var activeTrackView = makeAndInsertView(UIView(), at: 1)
-  private lazy var marksView = makeAndInsertView(MarksView(), at: 2)
-
-  private let recognizer = UILongPressGestureRecognizer()
-  private var activeThumb: SliderThumbNumber = .first
-
-  init() {
-    super.init(frame: .zero)
-    recognizer.addTarget(self, action: #selector(handleTap))
-    isExclusiveTouch = true
-    recognizer.minimumPressDuration = 0
-    addGestureRecognizer(recognizer)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   private func makeAndInsertView<T: UIView>(_ view: T, at position: Int) -> T {
@@ -259,54 +307,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       },
       completion: nil
     )
-  }
-
-  override func layoutSubviews() {
-    let firstThumbProgress = clampSliderValue(firstThumbProgress, sliderModel: sliderModel)
-    let secondThumbProgress = clampSliderValue(secondThumbProgress, sliderModel: sliderModel)
-
-    guard thumbAnimator?.state != .active else {
-      return
-    }
-
-    super.layoutSubviews()
-    layoutReporter?.willLayoutSubviews()
-
-    configureThumb(
-      thumbView: firstThumb,
-      progress: firstThumbProgress,
-      thumbModel: sliderModel.firstThumb
-    )
-    configureThumb(
-      thumbView: secondThumb,
-      progress: secondThumbProgress,
-      thumbModel: sliderModel.secondThumb
-    )
-
-    configureSliderView(marksView)
-
-    configureSliderView(inactiveTrackView, with: sliderModel.horizontalInset)
-    configureSliderView(activeTrackView, with: sliderModel.horizontalInset)
-
-    configureRangeViews(
-      inactiveRangeTracks,
-      with: sliderModel.ranges,
-      in: inactiveTrackView,
-      isActive: false
-    )
-    configureRangeViews(
-      activeRangeTracks,
-      with: sliderModel.ranges,
-      in: activeTrackView,
-      isActive: true
-    )
-
-    configureTracks(
-      progressFirstThumb: firstThumbProgress,
-      progressSecondThumb: sliderModel
-        .secondThumb != nil ? secondThumbProgress : CGFloat(sliderModel.minValue)
-    )
-    layoutReporter?.didLayoutSubviews()
   }
 
   private func configureRangeViews(

@@ -35,11 +35,6 @@ import Foundation
 import VGSL
 
 struct CalcExpression {
-  static func parse(_ expression: String) throws -> CalcExpression {
-    var unicodeScalarView = UnicodeScalarView(expression.unicodeScalars)
-    return try CalcExpression(root: unicodeScalarView.parseSubexpression(upTo: []))
-  }
-
   private let root: Subexpression
 
   var variableNames: [String] {
@@ -49,6 +44,11 @@ struct CalcExpression {
       }
       return nil
     }
+  }
+
+  static func parse(_ expression: String) throws -> CalcExpression {
+    var unicodeScalarView = UnicodeScalarView(expression.unicodeScalars)
+    return try CalcExpression(root: unicodeScalarView.parseSubexpression(upTo: []))
   }
 
   func extractDynamicVariableNames(_ context: ExpressionContext) throws -> [String] {
@@ -78,18 +78,6 @@ enum Subexpression {
     }
   }
 
-  func evaluate(_ context: ExpressionContext) throws -> Any {
-    switch self {
-    case let .literal(value):
-      return value
-    case let .symbol(symbol, args):
-      if let evaluator = context.evaluators(symbol) {
-        return try evaluator.invoke(args: args, context: context)
-      }
-      throw ExpressionError("Undefined symbol: \(symbol.name).")
-    }
-  }
-
   var symbols: Set<CalcExpression.Symbol> {
     switch self {
     case .literal:
@@ -100,6 +88,18 @@ enum Subexpression {
         symbols.formUnion(subexpression.symbols)
       }
       return symbols
+    }
+  }
+
+  func evaluate(_ context: ExpressionContext) throws -> Any {
+    switch self {
+    case let .literal(value):
+      return value
+    case let .symbol(symbol, args):
+      if let evaluator = context.evaluators(symbol) {
+        return try evaluator.invoke(args: args, context: context)
+      }
+      throw ExpressionError("Undefined symbol: \(symbol.name).")
     }
   }
 
@@ -129,14 +129,14 @@ enum Subexpression {
 fileprivate struct UnicodeScalarView {
   typealias Index = String.UnicodeScalarView.Index
 
-  private let characters: String.UnicodeScalarView
   private(set) var startIndex: Index
   private(set) var endIndex: Index
 
-  init(_ unicodeScalars: String.UnicodeScalarView) {
-    characters = unicodeScalars
-    startIndex = characters.startIndex
-    endIndex = characters.endIndex
+  private let characters: String.UnicodeScalarView
+
+  /// Returns the remaining characters
+  var unicodeScalars: Substring.UnicodeScalarView {
+    characters[startIndex..<endIndex]
   }
 
   private var first: UnicodeScalar? {
@@ -147,12 +147,10 @@ fileprivate struct UnicodeScalarView {
     startIndex >= endIndex
   }
 
-  private subscript(_ index: Index) -> UnicodeScalar {
-    characters[index]
-  }
-
-  private func index(after index: Index) -> Index {
-    characters.index(after: index)
+  init(_ unicodeScalars: String.UnicodeScalarView) {
+    characters = unicodeScalars
+    startIndex = characters.startIndex
+    endIndex = characters.endIndex
   }
 
   func prefix(upTo index: Index) -> UnicodeScalarView {
@@ -169,6 +167,14 @@ fileprivate struct UnicodeScalarView {
     return view
   }
 
+  private subscript(_ index: Index) -> UnicodeScalar {
+    characters[index]
+  }
+
+  private func index(after index: Index) -> Index {
+    characters.index(after: index)
+  }
+
   private mutating func popFirst() -> UnicodeScalar? {
     if isEmpty {
       return nil
@@ -178,10 +184,6 @@ fileprivate struct UnicodeScalarView {
     return char
   }
 
-  /// Returns the remaining characters
-  var unicodeScalars: Substring.UnicodeScalarView {
-    characters[startIndex..<endIndex]
-  }
 }
 
 extension String {

@@ -17,10 +17,6 @@ public final class DivVariablesStorage {
 
     public let kind: Kind
 
-    init(_ kind: Kind) {
-      self.kind = kind
-    }
-
     public var changedVariables: Set<DivVariableName> {
       switch kind {
       case let .global(names):
@@ -29,14 +25,20 @@ public final class DivVariablesStorage {
         names
       }
     }
+
+    init(_ kind: Kind) {
+      self.kind = kind
+    }
+
   }
+
+  public let changeEvents: Signal<ChangeEvent>
 
   private let globalStorage: DivVariableStorage
   private var localStorages: [UIElementPath: DivVariableStorage] = [:]
   private let lock = AllocatedUnfairLock()
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
-  public let changeEvents: Signal<ChangeEvent>
 
   public convenience init() {
     self.init(outerStorage: nil)
@@ -49,38 +51,6 @@ public final class DivVariablesStorage {
       ChangeEvent(.global($0.changedVariables))
     }
     changeEvents = Signal.merge(globalStorageEvents, changeEventsPipe.signal)
-  }
-
-  func getOnlyElementVariables(cardId: DivCardID, elementId: String) -> DivVariables? {
-    lock.withLock {
-      let storages = localStorages.filter {
-        $0.key.leaf == elementId && $0.key.cardId == cardId
-      }.map(\.value)
-
-      guard let storage = storages.first else {
-        DivKitLogger.error("Element with id \(elementId) not found")
-        return nil
-      }
-      guard storages.count == 1 else {
-        DivKitLogger.error("Found multiple elements that respond to id: \(elementId)")
-        return nil
-      }
-
-      guard storage.initialPath?.leaf == elementId else {
-        return [:]
-      }
-
-      return storage.values
-    }
-  }
-
-  func getVariableValue<T>(
-    path: UIElementPath,
-    name: DivVariableName
-  ) -> T? {
-    lock.withLock {
-      getNearestStorage(path).getValue(name)
-    }
   }
 
   public func getVariableValue<T>(
@@ -104,24 +74,6 @@ public final class DivVariablesStorage {
       localStorages[cardId.path]
     }
     return localStorage?.hasValue(name) ?? globalStorage.hasValue(name)
-  }
-
-  func initializeIfNeeded(path: UIElementPath, variables: DivVariables) {
-    lock.withLock {
-      if localStorages[path] != nil {
-        // storage is already initialized
-        return
-      }
-      let nearestStorage = getNearestStorage(path.parent)
-      if variables.isEmpty {
-        // optimization that allows to access the local storage for one operation
-        localStorages[path] = nearestStorage
-      } else {
-        let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
-        localStorage.replaceAll(variables, notifyObservers: false)
-        localStorages[path] = localStorage
-      }
-    }
   }
 
   /// Replaces all card variables with new ones.
@@ -208,6 +160,56 @@ public final class DivVariablesStorage {
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
     changeEvents.addObserver(action)
+  }
+
+  func getOnlyElementVariables(cardId: DivCardID, elementId: String) -> DivVariables? {
+    lock.withLock {
+      let storages = localStorages.filter {
+        $0.key.leaf == elementId && $0.key.cardId == cardId
+      }.map(\.value)
+
+      guard let storage = storages.first else {
+        DivKitLogger.error("Element with id \(elementId) not found")
+        return nil
+      }
+      guard storages.count == 1 else {
+        DivKitLogger.error("Found multiple elements that respond to id: \(elementId)")
+        return nil
+      }
+
+      guard storage.initialPath?.leaf == elementId else {
+        return [:]
+      }
+
+      return storage.values
+    }
+  }
+
+  func getVariableValue<T>(
+    path: UIElementPath,
+    name: DivVariableName
+  ) -> T? {
+    lock.withLock {
+      getNearestStorage(path).getValue(name)
+    }
+  }
+
+  func initializeIfNeeded(path: UIElementPath, variables: DivVariables) {
+    lock.withLock {
+      if localStorages[path] != nil {
+        // storage is already initialized
+        return
+      }
+      let nearestStorage = getNearestStorage(path.parent)
+      if variables.isEmpty {
+        // optimization that allows to access the local storage for one operation
+        localStorages[path] = nearestStorage
+      } else {
+        let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
+        localStorage.replaceAll(variables, notifyObservers: false)
+        localStorages[path] = localStorage
+      }
+    }
   }
 
   func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {

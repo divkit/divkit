@@ -16,6 +16,11 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
     }
   }
 
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    view?.frame = bounds
+  }
+
   public func configure(model: UIViewRenderable, observer: ElementStateObserver? = nil) {
     self.model = model
 
@@ -35,9 +40,5 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
     }
   }
 
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-    view?.frame = bounds
-  }
 }
 #endif
