@@ -5,6 +5,8 @@ import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
+import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.atan
@@ -112,7 +114,9 @@ internal object Asin : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>,
     ): Any {
-        return asin(args.first() as Double)
+        val x = args.first() as Double
+        val result = asin(x)
+        return evaluateMathResult(result, name, x)
     }
 }
 
@@ -127,7 +131,9 @@ internal object Acos : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>,
     ): Any {
-        return acos(args.first() as Double)
+        val x = args.first() as Double
+        val result = acos(x)
+        return evaluateMathResult(result, name, x)
     }
 }
 
@@ -190,6 +196,40 @@ internal object Cot : Function() {
         args: List<Any>,
     ): Any {
         val x = args.first() as Double
-        return cos(x) / sin(x)
+        val result = cos(x) / sin(x)
+        return evaluateMathResult(result, name, x)
     }
 }
+
+private fun evaluateMathResult(result: Double, name: String, args: Double): Any {
+    if (!isValidTrigonometricResult(result)) throwIncorrectMathValueException(name, args)
+    return result
+}
+
+
+private fun isValidTrigonometricResult(value: Double, threshold: Double = 1e10): Boolean {
+    return when {
+        value.isNaN() -> false
+        abs(value) > threshold -> false
+        else -> true
+    }
+}
+
+private fun String.toMathFunctionDisplayName() = when (this) {
+    "cot" -> "Cotangent"
+    "acos" -> "Arccosine"
+    "asin" -> "Arcsine"
+    else -> this
+}
+
+private fun throwIncorrectMathValueException(
+    name: String,
+    args: Double,
+) {
+    val displayName = name.toMathFunctionDisplayName()
+    val exceptionMessage = "$displayName is undefined for the given value."
+    val expression = "$name($args)"
+    throwExceptionOnEvaluationFailed(expression, exceptionMessage)
+}
+
+

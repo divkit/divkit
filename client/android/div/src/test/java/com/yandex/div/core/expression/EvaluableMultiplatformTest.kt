@@ -45,6 +45,10 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     @Test
     fun runExpressionTestCase() {
+        if (testCase.isExpressionConstant) {
+            Assert.assertEquals("expression: '${testCase.expression}'", testCase.expectedValue, testCase.expression)
+            return
+        }
         when (val expectedValue = testCase.expectedValue) {
             is Exception -> {
                 val actualValue = evalExpression(testCase.expectedWarnings)

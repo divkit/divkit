@@ -270,6 +270,7 @@
         "value": "Failed to evaluate [asin(2.0)]. Arcsine is undefined for the given value."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -336,6 +337,7 @@
         "value": "Failed to evaluate [acos(2.0)]. Arccosine is undefined for the given value."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -468,6 +470,7 @@
         "value": "Failed to evaluate [cot(0.0)]. Cotangent is undefined for the given value."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -479,6 +482,7 @@
         "value": "Failed to evaluate [cot(3.141592653589793)]. Cotangent is undefined for the given value."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

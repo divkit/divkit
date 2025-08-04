@@ -61,7 +61,10 @@
       "platforms": [
         "web",
         "flutter"
-      ]
+      ],
+      "unsupported_platforms": {
+        "android": "Double precision loss during conversion (1e23 → 9.999999999999999E22)"
+      }
     },
     {
       "expression": "@{toString(number_var)}",

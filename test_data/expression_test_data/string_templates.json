@@ -340,25 +340,13 @@
       ]
     },
     {
-      "name": "empty value",
-      "expression": "",
-      "expected": {
-        "type": "error",
-        "value": "Expression expected"
-      },
-      "deprecated": "Should not return error",
-      "platforms": [
-        "android",
-        "flutter"
-      ]
-    },
-    {
       "expression": "",
       "expected": {
         "type": "string",
         "value": ""
       },
       "platforms": [
+        "android",
         "ios",
         "web",
         "flutter"
