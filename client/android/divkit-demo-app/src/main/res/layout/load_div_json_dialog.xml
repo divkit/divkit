@@ -5,4 +5,5 @@
     android:padding="12dp"
     android:text=""
     android:hint="Enter link or JSON"
+    android:fontFamily="@font/ys_display_medium"
     style="@style/AppTheme.NoActionBar.Demo"/>

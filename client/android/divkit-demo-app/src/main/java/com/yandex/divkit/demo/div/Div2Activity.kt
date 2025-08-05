@@ -30,7 +30,6 @@ import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
-import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Log
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.lottie.DivLottieExtensionHandler
@@ -107,8 +106,7 @@ class Div2Activity : AppCompatActivity() {
             .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)
             .actionHandler(Div2ActionHandler(Container.uriHandler))
-            .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
+            .typefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()
         val context = divContext(
             baseContext = this,

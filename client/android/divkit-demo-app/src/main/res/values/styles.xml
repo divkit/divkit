@@ -13,7 +13,6 @@
         <item name="android:buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
-        <item name="android:fontFamily">@font/ya_regular</item>
         <item name="buttonStyle">@style/Widget.AppTheme.Button</item>
         <item name="buttonBarButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
@@ -52,8 +51,6 @@
         <item name="background">?colorPrimary</item>
     </style>
 
-    <style name="ScenarioTheme" parent="AppTheme.NoActionBar" />
-
     <style name="AppTheme.NoActionBar.Settings">
         <item name="colorPrimary">@color/setting_background</item>
         <item name="colorPrimaryDark">@color/setting_background</item>
@@ -67,7 +64,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:fontFamily">@font/ya_regular</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -79,7 +75,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:statusBarColor">?colorPrimary</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Demo">
@@ -93,7 +88,6 @@
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:statusBarColor">?colorPrimary</item>
         <item name="android:actionMenuTextColor">#000000</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
     <style name="ActivitySubtitleStyle">
@@ -104,12 +98,6 @@
 
     <style name="ActivityExpandedTitleStyle.Light">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:fontFamily">@font/ys_display_bold</item>
-        <item name="android:textSize">28sp</item>
-    </style>
-
-    <style name="SettingItem" parent="Preference.SwitchPreferenceCompat">
-        <item name="android:textColor">#ffffffff</item>
         <item name="android:fontFamily">@font/ys_display_bold</item>
         <item name="android:textSize">28sp</item>
     </style>

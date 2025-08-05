@@ -38,6 +38,7 @@
           "alignment_horizontal": "center",
           "alignment_vertical": "center",
           "font_size": 22,
+          "font_weight": "medium",
           "$text": "text_button",
           "line_height": 30,
           "width": {

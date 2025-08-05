@@ -12,12 +12,14 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
     private val root: ViewGroup,
     private val errorModel: ErrorModel,
+    private val typefaceProvider: DivTypefaceProvider,
     private val showPermanently: Boolean,
 ) : Disposable {
     private var counterView: ViewGroup? = null
@@ -98,6 +100,7 @@ internal class ErrorView(
             setTextColor(Color.BLACK)
             gravity = Gravity.CENTER
             elevation = resources.getDimension(R.dimen.div_shadow_elevation)
+            typeface = typefaceProvider.regular
             setOnClickListener { errorModel.onCounterClick(root.width, root.height) }
         }
 
@@ -147,7 +150,7 @@ private class DetailsViewGroup(
             errorsOutput.text = value
         }
         get() = errorsOutput.text.toString()
-    
+
     fun updateVariables(controllers: Map<String, VariableController>) {
         variableMonitor.controllerMap = controllers
     }

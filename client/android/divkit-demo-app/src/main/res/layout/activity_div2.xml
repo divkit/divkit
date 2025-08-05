@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme.NoActionBar.Demo"
-    tools:context=".div.DivActivity">
+    tools:context=".div.Div2Activity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

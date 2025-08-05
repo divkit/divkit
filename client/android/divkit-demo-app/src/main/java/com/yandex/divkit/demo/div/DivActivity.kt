@@ -19,7 +19,6 @@ import com.yandex.div.core.state.DefaultDivStateChangeListener
 import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
-import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.util.IOUtils
 import com.yandex.div.lottie.DivLottieExtensionHandler
@@ -104,8 +103,7 @@ open class DivActivity : AppCompatActivity() {
             .divStateChangeListener(stateChangeListener)
             .extension(DivPinchToZoomExtensionHandler(DivPinchToZoomConfiguration.Builder(this).build()))
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
-            .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
+            .typefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()
         val context = divContext(
             baseContext = this,

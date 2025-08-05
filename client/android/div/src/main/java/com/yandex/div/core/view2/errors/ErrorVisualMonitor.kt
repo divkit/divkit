@@ -25,6 +25,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.font.DivTypefaceProvider
 
 private const val SHOW_LIMIT = 25
 private const val MIN_SIZE_FOR_DETAILS_DP = 150
@@ -36,6 +37,7 @@ internal class ErrorVisualMonitor @Inject constructor(
     @ExperimentFlag(VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
     @ExperimentFlag(PERMANENT_DEBUG_PANEL_ENABLED) private val showPermanently: Boolean,
     private val bindingProvider: ViewBindingProvider,
+    private val typefaceProvider: DivTypefaceProvider,
 ) {
     internal var enabled = visualErrorsEnabled || showPermanently
         set(value) {
@@ -69,7 +71,7 @@ internal class ErrorVisualMonitor @Inject constructor(
             return
         }
         errorView?.close()
-        errorView = ErrorView(root, errorModel, showPermanently)
+        errorView = ErrorView(root, errorModel, typefaceProvider, showPermanently)
     }
 }
 
@@ -213,7 +215,7 @@ internal class ErrorModel(
             showDetails()
         }
     }
-    
+
     fun copyReportToClipboard() {
         val fullReport = generateReport()
         pasteToClipBoard(fullReport).onFailure {
