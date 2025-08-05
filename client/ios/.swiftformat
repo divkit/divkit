@@ -22,8 +22,6 @@
 --wrapcollections before-first
 --wrapparameters before-first
 
-
---rules organizeDeclarations
-# options for organizeDeclarations
+--enable organizeDeclarations
 --organization-mode type
 --mark-categories false
