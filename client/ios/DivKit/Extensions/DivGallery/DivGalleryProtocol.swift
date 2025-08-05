@@ -22,7 +22,7 @@ extension DivGalleryProtocol {
     scrollMode: GalleryViewModel.ScrollMode,
     columnCount: Int? = nil,
     infiniteScroll: Bool = false,
-    bufferSize: Int = 1,
+    layoutMode: PagerBlock.LayoutMode? = nil,
     scrollbar: GalleryViewModel.Scrollbar = .none,
     transformation: ElementsTransformation? = nil
   ) throws -> GalleryViewModel {
@@ -41,10 +41,10 @@ extension DivGalleryProtocol {
         )
       }
 
-    if let itemBuilder {
-      children = itemBuilder.makeBlocks(context: context, mappedBy: blockMapper)
+    children = if let itemBuilder {
+      itemBuilder.makeBlocks(context: context, mappedBy: blockMapper)
     } else {
-      children = nonNilItems.makeBlocks(
+      nonNilItems.makeBlocks(
         context: context,
         sizeModifier: DivGallerySizeModifier(
           context: context,
@@ -54,7 +54,10 @@ extension DivGalleryProtocol {
         mappedBy: blockMapper
       )
     }
-
+    
+    let itemsCount = children.count
+    let bufferSize = layoutMode.map { min($0.bufferSize(itemsCount: itemsCount), itemsCount) } ?? 1
+    
     if infiniteScroll {
       let leadingBuffer = children[..<bufferSize]
       let trailingBuffer = children[(children.count - bufferSize)...]
@@ -123,5 +126,18 @@ extension DivGalleryProtocol {
       return "DivGallery"
     }
     return String(typeName)
+  }
+}
+
+extension PagerBlock.LayoutMode {
+  fileprivate func bufferSize(itemsCount: Int) -> Int {
+    switch self {
+    case let .pageSize(relativeValue):
+      Int(1 / relativeValue.rawValue) + 1
+    case .neighbourPageSize:
+      2
+    case .pageContentSize:
+      itemsCount
+    }
   }
 }

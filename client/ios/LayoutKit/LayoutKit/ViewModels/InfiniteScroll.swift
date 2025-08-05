@@ -15,6 +15,11 @@ enum InfiniteScroll {
     alignment: Alignment = .center,
     insetMode: InsetMode = .fixed(values: .zero)
   ) -> Position? {
+    guard bufferSize > 0 else {
+      assertionFailure("Buffer size couldn't be less than one element for infinite scroll")
+      return nil
+    }
+
     let itemsCount = origins.count
     let cycleStartIndex = bufferSize
     let cycleEndIndex = itemsCount - bufferSize - 1

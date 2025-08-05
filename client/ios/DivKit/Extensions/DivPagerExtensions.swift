@@ -37,7 +37,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       defaultCrossAlignment: crossAlignment,
       scrollMode: .autoPaging(inertionEnabled: false),
       infiniteScroll: resolveInfiniteScroll(expressionResolver),
-      bufferSize: min(layoutMode.bufferSize(itemsCount: items.count), items.count),
+      layoutMode: layoutMode,
       transformation: pageTransformation?.resolve(
         expressionResolver,
         scrollDirection: scrollDirection
@@ -70,19 +70,6 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       currentPage: defaultItem,
       animated: true
     )
-  }
-}
-
-extension PagerBlock.LayoutMode {
-  fileprivate func bufferSize(itemsCount: Int) -> Int {
-    switch self {
-    case let .pageSize(relativeValue):
-      Int(1 / relativeValue.rawValue) + 1
-    case .neighbourPageSize:
-      2
-    case .pageContentSize:
-      itemsCount
-    }
   }
 }
 
