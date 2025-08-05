@@ -10,4 +10,12 @@ internal class MediaReleaseViewVisitor @Inject constructor() : DivViewVisitor() 
     override fun visit(view: DivVideoView) {
         view.release()
     }
+
+    override fun visit(view: DivImageView) {
+        view.release()
+    }
+
+    override fun visit(view: DivGifImageView) {
+        view.release()
+    }
 }
