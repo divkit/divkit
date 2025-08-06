@@ -3,6 +3,7 @@ package com.yandex.div.core.widget
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
+import com.yandex.div.core.view.DrawingPassOverrideStrategy
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +24,7 @@ class AdaptiveMaxLinesTest {
         on { viewTreeObserver } doReturn viewTreeObserver
     }
 
-    private val underTest = AdaptiveMaxLines(textView, DrawingPassOverrideStrategy.Default)
+    private val underTest = AdaptiveMaxLines(textView, DrawingPassOverrideStrategy.NoOp)
 
     @Test
     fun `add pre draw listener when view already attached to window`() {

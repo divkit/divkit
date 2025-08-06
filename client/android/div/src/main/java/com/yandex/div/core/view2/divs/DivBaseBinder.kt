@@ -6,7 +6,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.ViewTreeObserver
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
@@ -20,6 +19,7 @@ import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.util.observeTransform
+import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
@@ -301,7 +301,7 @@ internal class DivBaseBinder @Inject constructor(
         setTag(R.id.div_layout_provider_listener_id, listener)
         if (divView.clearVariablesListener != null) return
 
-        val clearVariablesListener = ViewTreeObserver.OnPreDrawListener {
+        val clearVariablesListener = onPreDrawListener {
             variablesHolder.clear()
             divView.layoutSizes.forEach { (resolver, variableMap) ->
                 variableMap.forEach {

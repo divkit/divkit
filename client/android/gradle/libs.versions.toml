@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.2"
+android-lint = "31.8.2"  # agp + "23.0.0"
 androidsvg = "1.4"
 buildTimeTracker = "5.0.1"
 coil = "3.0.4"
@@ -65,6 +66,10 @@ androidx-work = "2.9.1"
 [libraries]
 agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 agp-gradleApi = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
+
+android-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "android-lint" }
+android-lint = { module = "com.android.tools.lint:lint", version.ref = "android-lint" }
+android-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "android-lint" }
 
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 

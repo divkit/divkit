@@ -1,6 +1,9 @@
-apply plugin: 'java-library'
-apply plugin: 'org.jetbrains.kotlin.jvm'
-apply plugin: "kotlin-allopen"
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.allopen'
+}
+
 apply from: "${project.projectDir}/../publish-java.gradle"
 apply from: "${project.projectDir}/../div-tests-coverage.gradle"
 

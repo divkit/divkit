@@ -1,8 +1,8 @@
 package com.yandex.div.internal.widget
 
 import android.view.ViewTreeObserver
-import com.yandex.div.core.widget.DrawingPassOverrideStrategy
-import com.yandex.div.core.widget.onPreDrawListener
+import com.yandex.div.core.view.DrawingPassOverrideStrategy
+import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.internal.KLog
 
 /**
@@ -15,7 +15,7 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
      */
     var isEnabled = false
 
-    var drawingPassOverrideStrategy: DrawingPassOverrideStrategy = DrawingPassOverrideStrategy.Default
+    var drawingPassOverrideStrategy: DrawingPassOverrideStrategy = DrawingPassOverrideStrategy.Safe
 
     private var preDrawListener: ViewTreeObserver.OnPreDrawListener? = null
 

@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.R
-import com.yandex.div.core.widget.DrawingPassOverrideStrategy
+import com.yandex.div.core.view.DrawingPassOverrideStrategy
 
 open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,

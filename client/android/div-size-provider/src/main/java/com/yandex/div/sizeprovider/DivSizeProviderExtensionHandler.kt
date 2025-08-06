@@ -2,8 +2,8 @@ package com.yandex.div.sizeprovider
 
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewTreeObserver
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.pxToDp
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -59,7 +59,7 @@ class DivSizeProviderExtensionHandler(
 
         if (divView.getTag(R.id.div_size_provider_clear_variables_listener) != null) return
 
-        val clearVariablesListener = ViewTreeObserver.OnPreDrawListener {
+        val clearVariablesListener = onPreDrawListener {
             variablesHolder.clear()
             sizes.forEach { divView.setVariable(it.key, it.value.toString()) }
             sizes.clear()
