@@ -1,3 +1,17 @@
+## 32.12.0
+
+# Android Client:
+* Added releasing DivImageView and DivGifImageView inside MediaReleaseViewVisitor.
+* Bump Rive to 10.3.1 to fix static rive animations.
+* Fixed IndexOutOfBoundsException in PagerIndicator.
+* Support divkit-asset for lottie.
+* Support is_checked accessibility property.
+
+# iOS Client:
+* Fixed calculation of lottie block sizes with fixed values.
+* Fixed crash of infinite scroll pager built with item_builder.
+
+
 ## 32.11.0
 
 # Android Client:
