@@ -17,6 +17,9 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    private val currentAdapter: DivPagerAdapter?
+        get() = divPager?.viewPager?.adapter as? DivPagerAdapter
+
     private var stripDrawer: IndicatorsStripDrawer? = null
     private var divPager: DivPagerView? = null
     private var style: IndicatorParams.Style? = null
@@ -43,9 +46,8 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         }
 
         private fun Int.toRealPosition(): Int {
-            val adapter = divPager?.viewPager?.adapter as? DivPagerAdapter ?: return this
-            val count = adapter.visibleItems.size
-            return (adapter.getRealPosition(this) + count) % count
+            val adapter = currentAdapter ?: return this
+            return adapter.realItemPosition(this)
         }
     }
 
@@ -127,9 +129,10 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     }
 
     private fun IndicatorsStripDrawer.update() {
-        (divPager?.viewPager?.adapter as? DivPagerAdapter)?.let {
+        currentAdapter?.let {
             setItemsCount(it.visibleItems.size)
-            onPageSelected(it.currentRealItem)
+            val realPosition = it.realItemPosition(it.currentItem)
+            onPageSelected(realPosition)
             invalidate()
         }
     }

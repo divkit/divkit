@@ -32,7 +32,7 @@ internal class DivPagerAdapter(
         }
     }
 
-    val currentRealItem get() = pagerView.currentItem - offsetToRealItem
+    val currentItem get() = pagerView.currentItem
 
     private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
 
@@ -86,7 +86,7 @@ internal class DivPagerAdapter(
     override fun setItems(newItems: List<DivItemBuilderResult>) {
         val oldSize = items.size
         removedItems = 0
-        val oldCurrentItem = pagerView.currentItem
+        val oldCurrentItem = currentItem
         super.setItems(newItems)
         if (removedItems == oldSize) {
             pagerView.currentItem =  oldCurrentItem
