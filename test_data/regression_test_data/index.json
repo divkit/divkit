@@ -2145,7 +2145,8 @@
       "tags": [
         "lottie"
       ],
-      "file": "animations/lottie/asset_lottie.json"
+      "file": "animations/lottie/asset_lottie.json",
+      "case_id": 475
     },
     {
       "title": "Lottie gallery with expressions",
