@@ -198,6 +198,143 @@ function getUrlValue(
     return getValueForced(ctx, varName, fallback, 'url');
 }
 
+function firstDiffChar(str0: string, str1: string): string {
+    for (let i = 0; i < str1.length; ++i) {
+        const char0 = str0.charAt(i);
+        const char1 = str1.charAt(i);
+
+        if (char0 !== char1 && char1) {
+            return char1;
+        }
+    }
+
+    return '';
+}
+
+const TEST_NUMBER = 1234567890;
+
+function numberFractionDivider(locale?: string): string {
+    const formatter0 = new Intl.NumberFormat(locale, {
+        maximumFractionDigits: 0
+    });
+    const formatter1 = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 1
+    });
+
+    const str0 = formatter0.format(TEST_NUMBER);
+    const str1 = formatter1.format(TEST_NUMBER);
+
+    return firstDiffChar(str0, str1);
+}
+
+function numberGroupingDivider(locale?: string): string {
+    const formatter0 = new Intl.NumberFormat(locale, {
+        useGrouping: false
+    });
+    const formatter1 = new Intl.NumberFormat(locale, {
+        useGrouping: true
+    });
+
+    const str0 = formatter0.format(TEST_NUMBER);
+    const str1 = formatter1.format(TEST_NUMBER);
+
+    return firstDiffChar(str0, str1);
+}
+
+function decimalFormat(
+    _ctx: EvalContext,
+    arg: IntegerValue | NumberValue,
+    format: StringValue,
+    locale?: StringValue
+): EvalValue {
+    const pattern = format.value;
+    const patternWithoutGroupping = pattern.replace(/,/g, '');
+    if (
+        !/^((#+)|(#*0+))(\.0*#*)?$/.test(patternWithoutGroupping) &&
+        !/^#*0*\.((0*#*)|(#+))$/.test(patternWithoutGroupping) ||
+        /,.*,/.test(pattern) ||
+        pattern.indexOf(',') > pattern.indexOf('.') && pattern.indexOf('.') > -1
+    ) {
+        throw new Error('Incorrect format pattern.');
+    }
+
+    const rawParts = pattern.split('.');
+    const rawInteger = rawParts[0];
+    const rawFraction = rawParts[1] || '';
+
+    const parts = pattern.replace(/[^#0.]/g, '').split('.');
+    const integer = parts[0];
+    const fraction = parts[1] || '';
+
+    const groupIndex = rawInteger.indexOf(',');
+    const digitsInGroup = groupIndex > -1 ? rawInteger.length - groupIndex - 1 : -1;
+
+    if (groupIndex > -1 && digitsInGroup < 1 || rawFraction.indexOf(',') > -1) {
+        throw new Error('Incorrect format pattern.');
+    }
+
+    try {
+        let minimumIntegerDigits = 0;
+        while (integer[integer.length - 1 - minimumIntegerDigits] === '0') {
+            ++minimumIntegerDigits;
+        }
+        let minimumFractionDigits = 0;
+        while (fraction[minimumFractionDigits] === '0') {
+            ++minimumFractionDigits;
+        }
+        let maximumFractionDigits = minimumFractionDigits;
+        while (fraction[maximumFractionDigits] === '#') {
+            ++maximumFractionDigits;
+        }
+
+        const formatter = new Intl.NumberFormat(locale?.value || undefined, {
+            useGrouping: false,
+            minimumIntegerDigits: Math.min(Math.max(minimumIntegerDigits, 1), 21),
+            minimumFractionDigits: Math.min(Math.max(minimumFractionDigits, 0), 100),
+            maximumFractionDigits: Math.min(Math.max(maximumFractionDigits, minimumFractionDigits, 0), 100),
+            roundingMode: 'halfEven'
+        });
+
+        let result = formatter.format(arg.value);
+
+        if (groupIndex > -1 && digitsInGroup > 0) {
+            const groupChar = numberGroupingDivider(locale?.value);
+            const fractionChar = numberFractionDivider(locale?.value);
+
+            if (groupChar && fractionChar) {
+                const resultParts = result.split(fractionChar);
+                const resultInteger = resultParts[0];
+                let res = '';
+                for (let i = resultInteger.length - 1; i >= 0; --i) {
+                    res = resultInteger[i] + res;
+
+                    // eslint-disable-next-line max-depth
+                    if (i > 0 && (resultInteger.length - i) % digitsInGroup === 0) {
+                        res = groupChar + res;
+                    }
+                }
+
+                result = res + (resultParts.length > 1 ? fractionChar + resultParts[1] : '');
+            }
+        }
+
+        if (minimumFractionDigits === 0 && maximumFractionDigits === 0 && pattern.endsWith('.')) {
+            // force fraction delimeter on end
+            const divider = numberFractionDivider(locale?.value);
+            if (divider) {
+                result += divider;
+            }
+        }
+
+        return {
+            type: STRING,
+            value: result
+        };
+    } catch (_err) {
+        throw new Error('Incorrect or unsupported number format.' + _err + ' ' + locale?.value || undefined);
+    }
+}
+
 export function registerStd(): void {
     registerFunc('toString', [INTEGER], toString);
     registerFunc('toString', [NUMBER], toString);
@@ -242,4 +379,14 @@ export function registerStd(): void {
     registerMethod('toString', [STRING], toString);
     registerMethod('toString', [ARRAY], toString);
     registerMethod('toString', [DICT], toString);
+
+    registerFunc('decimalFormat', [INTEGER, STRING], decimalFormat);
+    registerFunc('decimalFormat', [NUMBER, STRING], decimalFormat);
+    registerFunc('decimalFormat', [INTEGER, STRING, STRING], decimalFormat);
+    registerFunc('decimalFormat', [NUMBER, STRING, STRING], decimalFormat);
+
+    registerMethod('decimalFormat', [INTEGER, STRING], decimalFormat);
+    registerMethod('decimalFormat', [NUMBER, STRING], decimalFormat);
+    registerMethod('decimalFormat', [INTEGER, STRING, STRING], decimalFormat);
+    registerMethod('decimalFormat', [NUMBER, STRING, STRING], decimalFormat);
 }

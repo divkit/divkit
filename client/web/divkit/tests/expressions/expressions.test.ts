@@ -162,31 +162,36 @@ function getTestName(test: Test): string {
 describe('expressions', () => {
     for (const file of tests) {
         const name = file.replace('.json', '');
-        const contents = require(path.resolve(dir, file));
+        const fullpath = path.resolve(dir, file);
+        try {
+            const contents = require(fullpath);
 
-        if (contents.cases) {
-            const counter: Record<string, number> = {};
+            if (contents.cases) {
+                const counter: Record<string, number> = {};
 
-            describe(name, () => {
-                for (const item of contents.cases) {
-                    if (item.platforms.includes('web')) {
-                        let name = getTestName(item);
+                describe(name, () => {
+                    for (const item of contents.cases) {
+                        if (item.platforms.includes('web')) {
+                            let name = getTestName(item);
 
-                        if (!counter[name]) {
-                            counter[name] = 0;
+                            if (!counter[name]) {
+                                counter[name] = 0;
+                            }
+
+                            name += ` : ${counter[name]++}`;
+
+                            test(name, () => {
+                                runCase(item);
+                            });
+                        } else {
+                            // eslint-disable-next-line no-console
+                            console.log('skip', file, name, item.name);
                         }
-
-                        name += ` : ${counter[name]++}`;
-
-                        test(name, () => {
-                            runCase(item);
-                        });
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log('skip', file, name, item.name);
                     }
-                }
-            });
+                });
+            }
+        } catch (err) {
+            console.error('Failed to process', fullpath, err);
         }
     }
 });

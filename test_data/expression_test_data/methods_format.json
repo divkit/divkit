@@ -1,0 +1,465 @@
+{
+  "cases": [
+    {
+      "expression": "@{0.decimalFormat('')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('..')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('..')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('.,')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('.,')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('#%')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('#%')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('abc')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('abc')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('#,.')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [decimalFormat('#,.')]. Incorrect format pattern."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "0"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "1234568"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('.#')}",
+      "expected": {
+        "type": "string",
+        "value": "1234567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#,###.#', 'ru-RU')}",
+      "expected": {
+        "type": "string",
+        "value": "1 234 567,9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#,###.#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1,234,567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{(-1234567.89).decimalFormat('#,###.#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "-1,234,567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#,###.#', 'ar-EG')}",
+      "expected": {
+        "type": "string",
+        "value": "١٬٢٣٤٬٥٦٧٫٩"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#,###.#', 'en-IN')}",
+      "description": "No support for different groupping parameters, should be 12,34,567.9",
+      "expected": {
+        "type": "string",
+        "value": "1,234,567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234567.89.decimalFormat('#,###.#', 'zh-Hans-CN-u-nu-hanidec')}",
+      "expected": {
+        "type": "string",
+        "value": "一,二三四,五六七.九"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.decimalFormat('.')}",
+      "expected": {
+        "type": "string",
+        "value": "123."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.')}",
+      "expected": {
+        "type": "string",
+        "value": "123."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.9.decimalFormat('.')}",
+      "expected": {
+        "type": "string",
+        "value": "124."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.##')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.45.decimalFormat('.#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.decimalFormat('.0')}",
+      "expected": {
+        "type": "string",
+        "value": "123.0"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.0')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.45.decimalFormat('.0')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.decimalFormat('.0#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.0"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.0#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.45.decimalFormat('.0#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.45"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.456.decimalFormat('.0#')}",
+      "expected": {
+        "type": "string",
+        "value": "123.46"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.decimalFormat('.00')}",
+      "expected": {
+        "type": "string",
+        "value": "123.00"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.4.decimalFormat('.00')}",
+      "expected": {
+        "type": "string",
+        "value": "123.40"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.45.decimalFormat('.00')}",
+      "expected": {
+        "type": "string",
+        "value": "123.45"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{123.456.decimalFormat('.00')}",
+      "expected": {
+        "type": "string",
+        "value": "123.46"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0.5.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "0"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1.5.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "2"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{2.5.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "2"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{3.5.decimalFormat('#')}",
+      "expected": {
+        "type": "string",
+        "value": "4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1.decimalFormat(',#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1234"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('#,#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1,2,3,4"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('#,##', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "12,34"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('#,###', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1,234"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('####,###', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1,234"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1.decimalFormat('000')}",
+      "expected": {
+        "type": "string",
+        "value": "001"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1234.decimalFormat('000')}",
+      "expected": {
+        "type": "string",
+        "value": "1234"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{1.decimalFormat('##000')}",
+      "expected": {
+        "type": "string",
+        "value": "001"
+      },
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

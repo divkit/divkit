@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "expression": "@{decimalFormat(1234567.89, '.#')}",
+      "expected": {
+        "type": "string",
+        "value": "1234567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{decimalFormat(1234567.89, '#,###.#', 'ru-RU')}",
+      "expected": {
+        "type": "string",
+        "value": "1 234 567,9"
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{decimalFormat(1234567.89, '#,###.#', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1,234,567.9"
+      },
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

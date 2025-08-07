@@ -1,0 +1,88 @@
+{
+  "signatures": [
+    {
+      "function_name": "decimalFormat",
+      "is_method": true,
+      "doc": "Returns a string value from an integer using format.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to format."
+        },
+        {
+          "type": "string",
+          "doc": "Number format, similar to ICU-like."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "function_name": "decimalFormat",
+      "is_method": true,
+      "doc": "Returns a string value from an number using format.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to format."
+        },
+        {
+          "type": "string",
+          "doc": "Number format, similar to ICU-like."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "function_name": "decimalFormat",
+      "is_method": true,
+      "doc": "Returns a string value from an integer using format and locale.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to format."
+        },
+        {
+          "type": "string",
+          "doc": "Number format, similar to ICU-like."
+        },
+        {
+          "type": "string",
+          "doc": "Locale."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "function_name": "decimalFormat",
+      "is_method": true,
+      "doc": "Returns a string value from an number using format and locale.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to format."
+        },
+        {
+          "type": "string",
+          "doc": "Number format, similar to ICU-like."
+        },
+        {
+          "type": "string",
+          "doc": "Locale."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}
