@@ -376,6 +376,30 @@ final class ScrollActionHandlerTests: XCTestCase {
     XCTAssertTrue(isUpdateCardCalled)
   }
 
+  func test_ScrollBy_ItemCount_Pager_Last_Page() {
+    setState(pagerState(index: 4, itemCount: 5))
+
+    handleScrollBy(itemCount: 1)
+
+    XCTAssertEqual(
+      pagerState(index: 4, itemCount: 5),
+      getState()
+    )
+    XCTAssertTrue(isUpdateCardCalled)
+  }
+
+  func test_ScrollBy_ItemCount_Infinate_Pager_Last_Page() {
+    setState(pagerWithInfiniteScrollState(index: 4, itemCount: 5))
+
+    handleScrollBy(itemCount: 1)
+
+    XCTAssertEqual(
+      pagerWithInfiniteScrollState(index: 5, itemCount: 5),
+      getState()
+    )
+    XCTAssertTrue(isUpdateCardCalled)
+  }
+
   func test_ScrollBy_NegativeItemCount_Pager() {
     setState(pagerState(index: 3, itemCount: 5))
 
@@ -520,6 +544,19 @@ private func pagerState(index: Int, itemCount: Int, animated: Bool = true) -> Pa
     numberOfPages: itemCount,
     currentPage: index,
     animated: animated
+  )
+}
+
+private func pagerWithInfiniteScrollState(
+  index: Int,
+  itemCount: Int,
+  animated: Bool = true
+) -> PagerViewState {
+  PagerViewState(
+    numberOfPages: itemCount,
+    currentPage: index,
+    animated: animated,
+    isInfiniteScrollable: true
   )
 }
 

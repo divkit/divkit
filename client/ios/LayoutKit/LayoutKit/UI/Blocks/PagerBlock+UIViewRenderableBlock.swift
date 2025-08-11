@@ -127,7 +127,6 @@ private final class PagerView: BlockView {
       }
     }
   }
-
 }
 
 extension PagerView: ElementStateObserver {
@@ -145,7 +144,8 @@ extension PagerView: ElementStateObserver {
       state: PagerViewState(
         numberOfPages: model.itemsCountWithoutInfinite,
         currentPage: currentPage,
-        animated: galleryState.animated
+        animated: galleryState.animated,
+        isInfiniteScrollable: model.infiniteScroll
       ),
       selectedActions: selectedActions
     )

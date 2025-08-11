@@ -81,18 +81,17 @@ final class ScrollActionHandler {
       return
     }
 
-    let clampedIndex = clamp(index, min: 0, max: max(0, state.itemsCount - 1))
-    guard clampedIndex == index else {
-      return
-    }
+    let clampedIndex = state.normalizeIndex(value: index)
 
-    blockStateStorage.setState(
-      id: id,
+    guard index == clampedIndex else { return }
+
+    scrollToItemInternal(
+      state: state,
       cardId: cardId,
-      state: state.makeState(clampedIndex, animated)
+      id: id,
+      clampedIndex: clampedIndex,
+      animated: animated
     )
-
-    updateCard(.state(cardId))
   }
 
   func scrollToNextItem(
@@ -107,12 +106,15 @@ final class ScrollActionHandler {
       return
     }
 
-    let index = normalizeIndex(
-      value: state.currentItemIndex + step,
-      size: state.itemsCount,
-      overflow: overflow
+    let index = state.normalizeCurrentIndex(overflow: overflow, withIncrement: step)
+
+    scrollToItemInternal(
+      state: state,
+      cardId: cardId,
+      id: id,
+      clampedIndex: index,
+      animated: animated
     )
-    scrollToItem(cardId: cardId, id: id, index: index, animated: animated)
   }
 
   func scrollToOffset(
@@ -160,11 +162,18 @@ final class ScrollActionHandler {
       return
     }
 
-    guard getState(cardId: cardId, id: id) != nil else {
+    guard let state = getState(cardId: cardId, id: id) else {
       DivKitLogger.error("Unexpected state type for \(id)")
       return
     }
-    scrollToItem(cardId: cardId, id: id, index: 0, animated: animated)
+
+    scrollToItemInternal(
+      state: state,
+      cardId: cardId,
+      id: id,
+      clampedIndex: 0,
+      animated: animated
+    )
   }
 
   func scrollToEnd(cardId: DivCardID, id: String, animated: Bool) {
@@ -181,7 +190,13 @@ final class ScrollActionHandler {
       DivKitLogger.error("Unexpected state type for \(id)")
       return
     }
-    scrollToItem(cardId: cardId, id: id, index: state.itemsCount - 1, animated: animated)
+    scrollToItemInternal(
+      state: state,
+      cardId: cardId,
+      id: id,
+      clampedIndex: state.itemsCount - 1,
+      animated: animated
+    )
   }
 
   private func getState(cardId: DivCardID, id: String) -> CollectionTypeViewState? {
@@ -211,21 +226,46 @@ final class ScrollActionHandler {
   private func normalizeIndex(
     value: Int,
     size: Int,
-    overflow: OverflowMode
+    overflow: OverflowMode,
+    isInfiniteScrollable: Bool
   ) -> Int {
     guard size > 0 else {
       return 0
     }
+
     switch overflow {
     case .ring:
-      if value > 0 {
-        return value % size
+      let remainder = value % size
+      return if value > 0 {
+        remainder
+      } else if remainder == 0 {
+        0
+      } else {
+        size + remainder
       }
-      let remainder = -value % size
-      return remainder == 0 ? 0 : size - remainder
     case .clamp:
-      return max(0, min(value, size - 1))
+      return if isInfiniteScrollable {
+        value
+      } else {
+        max(0, min(value, size - 1))
+      }
     }
+  }
+
+  private func scrollToItemInternal(
+    state: CollectionTypeViewState,
+    cardId: DivCardID,
+    id: String,
+    clampedIndex: Int,
+    animated: Bool
+  ) {
+    blockStateStorage.setState(
+      id: id,
+      cardId: cardId,
+      state: state.makeState(clampedIndex, animated)
+    )
+
+    updateCard(.state(cardId))
   }
 }
 
@@ -235,6 +275,36 @@ protocol CollectionTypeViewState: ElementState {
   var animated: Bool { get }
 
   var makeState: (_ clampedIndex: Int, _ animated: Bool) -> Self { get }
+  func normalizeCurrentIndex(overflow: OverflowMode, withIncrement increment: Int) -> Int
+}
+
+extension CollectionTypeViewState {
+  func normalizeIndex(value: Int, overflow: OverflowMode = .clamp) -> Int {
+    switch overflow {
+    case .ring:
+      let remainder = value % itemsCount
+      return if value > 0 {
+        remainder
+      } else if remainder == 0 {
+        0
+      } else {
+        itemsCount + remainder
+      }
+    case .clamp:
+      return clamp(
+        value,
+        min: 0,
+        max: max(0, itemsCount - 1)
+      )
+    }
+  }
+
+  func normalizeCurrentIndex(overflow: OverflowMode, withIncrement increment: Int = 0) -> Int {
+    normalizeIndex(
+      value: currentItemIndex + increment,
+      overflow: overflow
+    )
+  }
 }
 
 extension GalleryViewState: CollectionTypeViewState {
@@ -286,9 +356,16 @@ extension PagerViewState: CollectionTypeViewState {
       PagerViewState(
         numberOfPages: itemsCount,
         currentPage: clampedIndex,
-        animated: animated
+        animated: animated,
+        isInfiniteScrollable: self.isInfiniteScrollable
       )
     }
+  }
+
+  func normalizeCurrentIndex(overflow: OverflowMode, withIncrement increment: Int = 0) -> Int {
+    let value = currentItemIndex + increment
+
+    return isInfiniteScrollable ? value : normalizeIndex(value: value, overflow: overflow)
   }
 }
 

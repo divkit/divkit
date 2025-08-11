@@ -64,11 +64,13 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       return state
     }
 
-    let defaultItem = resolveDefaultItem(context.expressionResolver)
+    let expressionResolver = context.expressionResolver
+    let defaultItem = resolveDefaultItem(expressionResolver)
     return defaultItem == 0 ? .default : PagerViewState(
       numberOfPages: numberOfPages,
       currentPage: defaultItem,
-      animated: true
+      animated: true,
+      isInfiniteScrollable: resolveInfiniteScroll(expressionResolver)
     )
   }
 }
