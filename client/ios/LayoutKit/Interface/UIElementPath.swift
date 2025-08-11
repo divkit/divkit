@@ -48,10 +48,14 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
   }
 
   public func starts(with path: UIElementPath) -> Bool {
-    if path == self {
-      return true
+    var currentPath: UIElementPath? = self
+    while let current = currentPath {
+      if current == path {
+        return true
+      }
+      currentPath = current.parent
     }
-    return parent?.starts(with: path) == true
+    return false
   }
 
 }

@@ -5,10 +5,13 @@ import VGSL
 public final class DivFunctionsStorage {
   let outerStorage: DivFunctionsStorage?
 
-  private var functions: [CustomFunction.Signature: CustomFunction] = [:]
   private var storages: [UIElementPath: DivFunctionsStorage] = [:]
+  private var functionNamesByCard: [DivCardID: Set<String>] = [:]
 
+  private var functionSignatures: Set<CustomFunction.Signature> = []
+  private var functionsByName: [String: [CustomFunction]] = [:]
   private let reporter: DivReporter
+
   private let lock = AllocatedUnfairLock()
 
   init(
@@ -30,35 +33,19 @@ public final class DivFunctionsStorage {
         return
       }
 
-      let nearestStorage = getNearestStorage(path)
+      let nearestStorage = getNearestStorage(path.parent)
       if functions.isEmpty {
         storages[path] = nearestStorage
       } else {
         let storage = DivFunctionsStorage(outerStorage: nearestStorage)
-        for function in functions {
-          let signature = CustomFunction.Signature(
-            name: function.name,
-            arguments: function.arguments.map(\.type)
+        let cardId = path.cardId
+        let expressionErrorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
+        functions.forEach { function in
+          functionNamesByCard[cardId, default: []].insert(function.name)
+          storage.addFunction(
+            function,
+            reporter: expressionErrorTracker
           )
-          if storage.functions[signature] != nil {
-            reporter.asExpressionErrorTracker(cardId: path.cardId)(
-              ExpressionError(
-                makeErrorMessage(
-                  name: function.name,
-                  arguments: function.arguments.map(\.type.rawValue)
-                )
-              )
-            )
-          } else {
-            storage.functions[signature] = CustomFunction(
-              name: function.name,
-              arguments: function.arguments.compactMap { arg in
-                CustomFunction.Argument(name: arg.name, type: arg.type)
-              },
-              body: function.body,
-              returnType: function.returnType.systemType
-            )
-          }
         }
         storages[path] = storage
       }
@@ -70,9 +57,11 @@ public final class DivFunctionsStorage {
     contains name: String
   ) -> DivFunctionsStorage? {
     lock.withLock {
+      guard functionNamesByCard[path.cardId]?.contains(name) == true else { return nil }
+
       var storage: DivFunctionsStorage? = getNearestStorage(path)
       while storage != nil {
-        if storage?.functions.contains(where: { $0.key.name == name }) == true {
+        if let functions = storage?.getFunctions(with: name), !functions.isEmpty {
           return storage
         }
         storage = storage?.outerStorage
@@ -82,26 +71,28 @@ public final class DivFunctionsStorage {
   }
 
   func getFunctions(with name: String) -> [CustomFunction] {
-    functions.values.filter { $0.name == name }
+    lock.withLock {
+      functionsByName[name] ?? []
+    }
   }
 
   func reset() {
     lock.withLock {
       storages.removeAll()
+      functionNamesByCard.removeAll()
     }
   }
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      for path in storages.keys {
-        if path.cardId == cardId {
-          storages.removeValue(forKey: path)
-        }
-      }
+      storages.keys
+        .filter { $0.root == cardId.rawValue }
+        .forEach { storages[$0] = nil }
+      functionNamesByCard[cardId] = nil
     }
   }
 
-  func getNearestStorage(_ path: UIElementPath) -> DivFunctionsStorage? {
+  private func getNearestStorage(_ path: UIElementPath?) -> DivFunctionsStorage? {
     var currentPath: UIElementPath? = path
     while let path = currentPath {
       if let storage = storages[path] {
@@ -110,6 +101,34 @@ public final class DivFunctionsStorage {
       currentPath = path.parent
     }
     return outerStorage
+  }
+
+  private func addFunction(_ function: DivFunction, reporter: ExpressionErrorTracker) {
+    let signature = CustomFunction.Signature(
+      name: function.name,
+      arguments: function.arguments.map(\.type)
+    )
+    if functionSignatures.contains(signature) {
+      reporter(
+        ExpressionError(
+          makeErrorMessage(
+            name: function.name,
+            arguments: function.arguments.map(\.type.rawValue)
+          )
+        )
+      )
+    } else {
+      let customFunction = CustomFunction(
+        name: function.name,
+        arguments: function.arguments.compactMap { arg in
+          CustomFunction.Argument(name: arg.name, type: arg.type)
+        },
+        body: function.body,
+        returnType: function.returnType.systemType
+      )
+      functionsByName[function.name, default: []].append(customFunction)
+      functionSignatures.insert(signature)
+    }
   }
 }
 
