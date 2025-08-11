@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [StringVariable], [NumberVariable], [IntegerVariable], [BooleanVariable], [ColorVariable], [UrlVariable], [DictVariable], [ArrayVariable].
+ * Possible values: [StringVariable], [NumberVariable], [IntegerVariable], [BooleanVariable], [ColorVariable], [UrlVariable], [DictVariable], [ArrayVariable], [PropertyVariable].
  */
 @Generated
 sealed interface Variable
