@@ -12,10 +12,17 @@ import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.isBranch
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.isHorizontal
+import com.yandex.div.core.util.isWrapContainer
 import com.yandex.div.core.util.observeDrawable
+import com.yandex.div.core.util.toAlignmentHorizontal
+import com.yandex.div.core.util.toAlignmentVertical
+import com.yandex.div.core.util.toDrawable
 import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View

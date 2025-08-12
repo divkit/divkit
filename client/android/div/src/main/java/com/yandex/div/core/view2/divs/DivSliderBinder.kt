@@ -8,6 +8,7 @@ import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.observeDrawable
+import com.yandex.div.core.util.toDrawable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver

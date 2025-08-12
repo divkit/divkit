@@ -12,6 +12,8 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
+import com.yandex.div.core.util.evaluateGravity
+import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader

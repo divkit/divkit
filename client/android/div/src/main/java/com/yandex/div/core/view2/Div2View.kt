@@ -55,7 +55,6 @@ import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
-import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.drawShadow
@@ -95,9 +94,6 @@ import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.util.UUID
 import java.util.WeakHashMap
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 /**
  * Main entry point for building Div2s
@@ -1192,12 +1188,9 @@ class Div2View private constructor(
 
             histogramReporter.onRebindingStarted()
             viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
-            val rootDivView = getChildAt(0).apply {
-                bindLayoutParams(state.div.value(), expressionResolver)
-            }
             divData = newData
             div2Component.stateManager.updateState(dataTag, state.stateId, true)
-            div2Component.divBinder.bind(bindingContext, rootDivView, state.div, DivStatePath.fromState(state))
+            div2Component.divBinder.bind(bindingContext, getChildAt(0), state.div, DivStatePath.fromState(state))
             requestLayout()
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
@@ -1231,15 +1224,11 @@ class Div2View private constructor(
             this.rebindTask = it
         }
 
-        val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
-            bindLayoutParams(stateToBind.div.value(), expressionResolver)
-        }
-
         div2Component.stateManager.updateState(dataTag, stateToBind.stateId, false)
         val result = task.prepareAndRebind(
             oldData,
             newData,
-            viewToRebind,
+            view.getChildAt(0) as ViewGroup,
             DivStatePath.fromState(stateToBind)
         )
         if (!result) {

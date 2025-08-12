@@ -19,17 +19,20 @@ import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.util.observeTransform
+import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
+import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -40,6 +43,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
@@ -106,6 +110,11 @@ internal class DivBaseBinder @Inject constructor(
         applyId(newDiv.id, viewId)
     }
 
+    private fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
+        tag = divId
+        id = viewId
+    }
+
     //endregion
 
     //region Layout Params
@@ -164,6 +173,45 @@ internal class DivBaseBinder @Inject constructor(
         }
     }
 
+    private fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
+        val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
+        if (layoutParams.width != width) {
+            layoutParams.width = width
+            requestLayout()
+        }
+        applyTransform(div.transform, resolver)
+    }
+
+    private fun View.applyMinWidth(minWidth: DivSizeUnitValue?, resolver: ExpressionResolver) {
+        val widthValue = minWidth?.toPx(resources.displayMetrics, resolver) ?: 0
+        if (minimumWidth != widthValue) {
+            minimumWidth = widthValue
+            requestLayout()
+        }
+    }
+
+    private fun View.applyHorizontalWeightValue(value: Float) {
+        val params = layoutParams as? DivLayoutParams ?: return
+        if (params.horizontalWeight != value) {
+            params.horizontalWeight = value
+            requestLayout()
+        }
+    }
+
+    private fun View.applyMaxWidth(maxWidth: DivSizeUnitValue?, resolver: ExpressionResolver) {
+        val params = layoutParams as? DivLayoutParams ?: return
+        val widthValue = maxWidth?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
+        if (params.maxWidth != widthValue) {
+            params.maxWidth = widthValue
+            requestLayout()
+        }
+    }
+
+    private fun DivSize.getWeight(resolver: ExpressionResolver) = when (this) {
+        is DivSize.MatchParent -> value.weight?.evaluate(resolver)?.toFloat() ?: DivLayoutParams.DEFAULT_WEIGHT
+        else -> DivLayoutParams.DEFAULT_WEIGHT
+    }
+
     private fun View.bindHeight(
         newDiv: DivBase,
         oldDiv: DivBase?,
@@ -188,6 +236,40 @@ internal class DivBaseBinder @Inject constructor(
             applyVerticalWeightValue(newDiv.height.getWeight(resolver))
             applyMinHeight(newDiv.height.minSize, resolver)
             applyMaxHeight(newDiv.height.maxSize, resolver)
+        }
+    }
+
+    private fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
+        val height = div.height.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
+        if (layoutParams.height != height) {
+            layoutParams.height = height
+            requestLayout()
+        }
+        applyTransform(div.transform, resolver)
+    }
+
+    private fun View.applyMinHeight(minHeight: DivSizeUnitValue?, resolver: ExpressionResolver) {
+        val heightValue = minHeight?.toPx(resources.displayMetrics, resolver) ?: 0
+        if (minimumHeight != heightValue) {
+            minimumHeight = heightValue
+            requestLayout()
+        }
+    }
+
+    private fun View.applyVerticalWeightValue(value: Float) {
+        val params = layoutParams as? DivLayoutParams ?: return
+        if (params.verticalWeight != value) {
+            params.verticalWeight = value
+            requestLayout()
+        }
+    }
+
+    private fun View.applyMaxHeight(maxHeight: DivSizeUnitValue?, resolver: ExpressionResolver) {
+        val params = layoutParams as? DivLayoutParams ?: return
+        val heightValue = maxHeight?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
+        if (params.maxHeight != heightValue) {
+            params.maxHeight = heightValue
+            requestLayout()
         }
     }
 
@@ -405,6 +487,11 @@ internal class DivBaseBinder @Inject constructor(
         subscriber.addSubscription(
             newDiv.alpha.observe(resolver) { alpha -> applyAlpha(alpha) }
         )
+    }
+
+    private fun View.applyAlpha(alpha: Double) {
+        this.alpha = alpha.toFloat()
+        (this as? DivBorderSupports)?.invalidateBorder()
     }
 
     //endregion

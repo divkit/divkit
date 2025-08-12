@@ -8,10 +8,10 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi

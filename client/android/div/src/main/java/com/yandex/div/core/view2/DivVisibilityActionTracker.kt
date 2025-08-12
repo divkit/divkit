@@ -10,11 +10,10 @@ import androidx.core.view.children
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.SynchronizedWeakHashMap
+import com.yandex.div.core.util.allAppearActions
+import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
-import com.yandex.div.core.view2.divs.allAppearActions
-import com.yandex.div.core.view2.divs.allDisappearActions
 import com.yandex.div.core.view2.divs.duration
-import com.yandex.div.core.view2.divs.filterEnabled
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
@@ -345,6 +344,9 @@ internal class DivVisibilityActionTracker @Inject constructor(
             handler.post(updateVisibilityTask)
         }
     }
+
+    private fun <T : DivSightAction> List<T>.filterEnabled(resolver: ExpressionResolver) =
+        filter { action -> action.isEnabled.evaluate(resolver) }
 
     private companion object {
         const val TAG = "DivVisibilityActionTracker"

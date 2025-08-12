@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.divs.hasSightActions
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivPager

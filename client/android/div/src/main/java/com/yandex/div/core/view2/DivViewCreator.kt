@@ -7,7 +7,7 @@ import android.widget.Space
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.view2.divs.isWrapContainer
+import com.yandex.div.core.util.isWrapContainer
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView

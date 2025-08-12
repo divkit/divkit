@@ -10,8 +10,11 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.toCachedBitmap
+import com.yandex.div.core.util.toImageScale
+import com.yandex.div.core.util.toPorterDuffMode
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder

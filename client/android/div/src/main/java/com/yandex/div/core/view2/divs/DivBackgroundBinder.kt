@@ -342,7 +342,7 @@ internal class DivBackgroundBinder @Inject constructor(
         resolver: ExpressionResolver
     ) = when (this) {
         is DivRadialGradientCenter.Fixed -> DivBackgroundState.RadialGradient.Center.Fixed(
-            value.toPxF(metrics, resolver)
+            value.value.evaluate(resolver).toPxF(value.unit.evaluate(resolver), metrics)
         )
         is DivRadialGradientCenter.Relative -> DivBackgroundState.RadialGradient.Center.Relative(
             value.value.evaluate(resolver).toFloat()
@@ -489,6 +489,35 @@ internal class DivBackgroundBinder @Inject constructor(
                 context.divView.addLoadReference(loadReference, target)
 
                 return scaleDrawable
+            }
+
+            private fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
+                return when(this) {
+                    DivImageScale.FILL -> ScalingDrawable.ScaleType.FILL
+                    DivImageScale.FIT -> ScalingDrawable.ScaleType.FIT
+                    DivImageScale.STRETCH -> ScalingDrawable.ScaleType.STRETCH
+                    else -> ScalingDrawable.ScaleType.NO_SCALE
+                }
+            }
+
+            private fun DivAlignmentHorizontal.toHorizontalAlignment(isRtl: Boolean): ScalingDrawable.AlignmentHorizontal {
+                return when(this) {
+                    DivAlignmentHorizontal.LEFT -> ScalingDrawable.AlignmentHorizontal.LEFT
+                    DivAlignmentHorizontal.CENTER -> ScalingDrawable.AlignmentHorizontal.CENTER
+                    DivAlignmentHorizontal.RIGHT -> ScalingDrawable.AlignmentHorizontal.RIGHT
+                    DivAlignmentHorizontal.START ->
+                        if (isRtl) ScalingDrawable.AlignmentHorizontal.RIGHT else ScalingDrawable.AlignmentHorizontal.LEFT
+                    DivAlignmentHorizontal.END ->
+                        if (isRtl) ScalingDrawable.AlignmentHorizontal.LEFT else ScalingDrawable.AlignmentHorizontal.RIGHT
+                }
+            }
+
+            private fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertical {
+                return when(this) {
+                    DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
+                    DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
+                    else -> ScalingDrawable.AlignmentVertical.TOP
+                }
             }
         }
 

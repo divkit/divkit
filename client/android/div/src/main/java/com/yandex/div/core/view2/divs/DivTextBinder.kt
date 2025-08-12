@@ -13,6 +13,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeColorPoint
 import com.yandex.div.core.util.toColormap

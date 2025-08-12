@@ -22,14 +22,13 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toPorterDuffMode
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.getFontVariations
 import com.yandex.div.core.view2.divs.supportFontVariations
-import com.yandex.div.core.view2.divs.toPorterDuffMode
 import com.yandex.div.core.view2.divs.toPx
-import com.yandex.div.core.view2.divs.toTextVerticalAlignment
 import com.yandex.div.core.view2.divs.unitToPx
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
@@ -609,6 +608,16 @@ internal class SpannedTextBuilder @Inject constructor(
         }.color
 
         return ShadowData(offsetX, offsetY, radius, color)
+    }
+
+    private fun DivTextAlignmentVertical.toTextVerticalAlignment(): TextVerticalAlignment {
+        return when (this) {
+            DivTextAlignmentVertical.TOP -> TextVerticalAlignment.TOP
+            DivTextAlignmentVertical.CENTER -> TextVerticalAlignment.CENTER
+            DivTextAlignmentVertical.BASELINE -> TextVerticalAlignment.BASELINE
+            DivTextAlignmentVertical.BOTTOM -> TextVerticalAlignment.BOTTOM
+            else -> TextVerticalAlignment.BASELINE
+        }
     }
 
     private class ImageDownloadCallbackImpl(

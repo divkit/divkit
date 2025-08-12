@@ -28,10 +28,10 @@ import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
+import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
-import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert

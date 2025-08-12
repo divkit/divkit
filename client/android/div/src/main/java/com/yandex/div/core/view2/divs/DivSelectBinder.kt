@@ -45,7 +45,7 @@ internal class DivSelectBinder @Inject constructor(
     }
 
     private fun DivSelectView.applyOptions(div: DivSelect, bindingContext: BindingContext) {
-        setAnimatedTouchListener(bindingContext, DEFAULT_CLICK_ANIMATION, null)
+        setOnTouchListener(createAnimatedTouchListener(bindingContext, DEFAULT_CLICK_ANIMATION, null))
 
         val itemList = createObservedItemList(div, bindingContext.expressionResolver)
 

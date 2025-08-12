@@ -2,7 +2,7 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.view2.divs.allSightActions
+import com.yandex.div.core.util.allSightActions
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div

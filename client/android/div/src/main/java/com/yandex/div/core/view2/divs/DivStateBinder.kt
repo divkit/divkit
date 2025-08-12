@@ -24,6 +24,9 @@ import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
+import com.yandex.div.core.util.hasSightActions
+import com.yandex.div.core.util.toAlignmentHorizontal
+import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
@@ -38,6 +41,7 @@ import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.VerticalTranslation
 import com.yandex.div.core.view2.animations.allowsTransitionsOnStateChange
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -50,6 +54,8 @@ import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
+import com.yandex.div2.DivContentAlignmentHorizontal
+import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivState
 import javax.inject.Inject
 import javax.inject.Provider
@@ -284,6 +290,20 @@ internal class DivStateBinder @Inject constructor(
                 ?: extractParentContentAlignmentVertical(resolver)?.toAlignmentVertical()
             applyAlignment(resolvedHorizontalAlignment, resolvedVerticalAlignment)
         }
+    }
+
+    private fun View.extractParentContentAlignmentVertical(
+        resolver: ExpressionResolver
+    ): DivContentAlignmentVertical? {
+        val div = (parent as? DivHolderView<*>)?.div as? Div.Container ?: return null
+        return div.value.contentAlignmentVertical.evaluate(resolver)
+    }
+
+    private fun View.extractParentContentAlignmentHorizontal(
+        resolver: ExpressionResolver
+    ): DivContentAlignmentHorizontal? {
+        val div = (parent as? DivHolderView<*>)?.div as? Div.Container ?: return null
+        return div.value.contentAlignmentHorizontal.evaluate(resolver)
     }
 
     private fun getValueFromVariable(context: BindingContext, variableName: String): String? {

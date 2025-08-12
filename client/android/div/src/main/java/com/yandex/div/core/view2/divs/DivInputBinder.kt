@@ -16,6 +16,7 @@ import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.inputfilter.ExpressionInputFilter
 import com.yandex.div.core.util.inputfilter.InputFiltersHolder

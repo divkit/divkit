@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Color
 import android.util.DisplayMetrics
 import com.yandex.div.core.util.findNearest
 import com.yandex.div.core.util.observeFixedSize
@@ -15,6 +16,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
@@ -125,6 +127,9 @@ internal class DivIndicatorBinder @Inject constructor(
         setStyle(style)
     }
 
+    private val DivIndicator.itemsPlacementCompat get() =
+        itemsPlacement ?: DivIndicatorItemPlacement.Default(DivDefaultIndicatorItemPlacement(spaceBetweenCenters))
+
     fun DivIndicator.Animation.convert(): IndicatorParams.Animation {
         if (this == DivIndicator.Animation.WORM) return IndicatorParams.Animation.WORM
         if (this == DivIndicator.Animation.SLIDER) return IndicatorParams.Animation.SLIDER
@@ -188,5 +193,40 @@ internal class DivIndicatorBinder @Inject constructor(
                 )
             }
         }
+    }
+
+    companion object {
+
+        internal fun createRoundedRectangle(
+            color: Int,
+            width: Float,
+            height: Float,
+            cornerRadius: Float,
+            multiplier: Float = 1f,
+            strokeWidth: Float? = null,
+            strokeColor: Int? = null
+        ): IndicatorParams.Shape =
+            IndicatorParams.Shape.RoundedRect(
+                color = color,
+                itemSize = IndicatorParams.ItemSize.RoundedRect(
+                    itemWidth = width * multiplier,
+                    itemHeight = height * multiplier,
+                    cornerRadius = cornerRadius * multiplier
+                ),
+                strokeWidth = strokeWidth ?: 0f,
+                strokeColor = strokeColor ?: Color.TRANSPARENT
+            )
+
+        internal fun createCircle(
+            color: Int,
+            radius: Float,
+            multiplier: Float = 1f
+        ): IndicatorParams.Shape =
+            IndicatorParams.Shape.Circle(
+                color = color,
+                itemSize = IndicatorParams.ItemSize.Circle(
+                    radius = radius * multiplier
+                )
+            )
     }
 }

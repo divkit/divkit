@@ -7,9 +7,9 @@ import android.widget.RelativeLayout.LayoutParams
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
-import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div2.Div
 import javax.inject.Inject
 import javax.inject.Provider

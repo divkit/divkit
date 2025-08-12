@@ -7,7 +7,9 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder

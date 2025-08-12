@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2.animations
 
-import com.yandex.div.core.view2.divs.isWrapContainer
+import com.yandex.div.core.util.isWrapContainer
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivItemBuilderResult
