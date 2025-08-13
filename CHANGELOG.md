@@ -1,3 +1,12 @@
+## 32.13.0
+
+# iOS Client:
+* Fixed the problem with the action `set_next_item` in the pager with infinite scrolling and clamp overflow.
+
+# Web Client:
+* Added `decimalFormat` function and method for `integer` and `number`.
+
+
 ## 32.12.0
 
 # Android Client:

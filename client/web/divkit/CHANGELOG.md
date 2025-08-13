@@ -1,3 +1,8 @@
+## 32.13.0 (August 18, 2025)
+
+* Added `decimalFormat` function and method for `integer` and `number`.
+
+
 ## 32.11.0 (August 4, 2025)
 
 * Added `getDictKeys` and `getDictValues` functions.
