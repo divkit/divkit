@@ -80,12 +80,7 @@
     import { evalExpression } from '../expressions/eval';
     import { Truthy } from '../utils/truthy';
     import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, type VariableType } from '../expressions/variable';
-    import {
-        cleanControllerStore,
-        getControllerStore,
-        getControllerVars,
-        GlobalVariablesController
-    } from '../expressions/globalVariablesController';
+    import { GlobalVariablesController } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
     import { arrayInsert, arrayRemove, arraySet } from '../actions/array';
@@ -225,9 +220,9 @@
     const variablesController = globalVariablesController || new GlobalVariablesController();
 
     // Will notify about new global variables
-    const globalVariablesStore = getControllerStore(variablesController);
+    const globalVariablesStore = variablesController.getLastAddedVariableStore();
     // Global variables only
-    const globalVariables = getControllerVars(variablesController);
+    const globalVariables = variablesController.getVariables();
     // Local variables only
     const localVariables = new Map<string, Variable>();
     // Local and global variables combined, with local in precedence
@@ -2547,10 +2542,6 @@
         timeouts.forEach(timeout => {
             clearTimeout(timeout);
         });
-
-        if (!globalVariablesController) {
-            cleanControllerStore(variablesController);
-        }
     });
 </script>
 
