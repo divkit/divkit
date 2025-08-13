@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
 
     import type { AnimationItem } from 'lottie-web';
     import type { VideoSource } from '../../utils/video';
@@ -71,6 +71,25 @@
                     renderer: 'svg',
                     loop: true
                 });
+
+                playbackToggle = true;
+
+                lottieItem.addEventListener('data_ready', () => {
+                    if (!lottieItem) {
+                        return;
+                    }
+
+                    playbackInfo = {
+                        current: 0,
+                        duration: lottieItem.totalFrames / lottieItem.frameRate
+                    };
+
+                    lottieItem.addEventListener('enterFrame', () => {
+                        if (lottieItem) {
+                            playbackInfo.current = lottieItem.currentFrame / lottieItem.frameRate;
+                        }
+                    });
+                });
             });
         }
     }
@@ -85,6 +104,10 @@
         } else {
             imagePreviewError = false;
         }
+
+        /* if (subtype === 'video') {
+            updateVideo();
+        } */
     }
 
     export function show(props: File2DialogShowProps): void {
@@ -104,6 +127,11 @@
         generateFromLottie = props.generateFromLottie;
         showError = false;
         isShown = true;
+        playbackToggle = true;
+        playbackInfo = {
+            current: 0,
+            duration: 0
+        };
         loadFileSize();
     }
 
@@ -139,6 +167,13 @@
     let generateFromVideo: VideoSource[] | undefined;
     let generateFromLottie: string | undefined;
     let dialog: ContextDialog | undefined;
+    let playbackInfo = {
+        duration: 0,
+        current: 0
+    };
+    let playbackToggle = true;
+    let playbackInput: HTMLInputElement;
+    let videoElem: HTMLVideoElement;
 
     $: showFileSelect = !value.url;
 
@@ -147,6 +182,15 @@
     $: fileFilter = subtype ? FILE_FILTER[commonSubtype as keyof typeof FILE_FILTER] : '';
 
     function onClose(): void {
+        if (lottieItem) {
+            lottieItem.destroy();
+            lottieItem = null;
+        }
+        playbackInfo = {
+            duration: 0,
+            current: 0
+        };
+
         isShown = false;
         onHide?.();
     }
@@ -379,6 +423,54 @@
             // todo on error
         }
     }
+
+    function onPlaybackInput(): void {
+        const value = Number(playbackInput.value);
+
+        playbackInfo.current = value;
+
+        if (lottieItem) {
+            lottieItem[playbackToggle ? 'goToAndPlay' : 'goToAndStop'](value * lottieItem.frameRate, true);
+        } else if (videoElem) {
+            videoElem.currentTime = value;
+        }
+    }
+
+    function togglePlayback(): void {
+        playbackToggle = !playbackToggle;
+
+        if (lottieItem) {
+            if (playbackToggle) {
+                lottieItem.play();
+            } else {
+                lottieItem.pause();
+            }
+        } else if (videoElem) {
+            if (playbackToggle) {
+                videoElem.play();
+            } else {
+                videoElem.pause();
+            }
+        }
+    }
+
+    function onVideoMetadata(): void {
+        playbackInfo = {
+            current: videoElem.currentTime,
+            duration: videoElem.duration
+        };
+    }
+
+    function onVideoUpdate(): void {
+        playbackInfo.current = videoElem.currentTime;
+    }
+
+    onDestroy(() => {
+        if (lottieItem) {
+            lottieItem.destroy();
+            lottieItem = null;
+        }
+    });
 </script>
 
 <svelte:window
@@ -419,8 +511,17 @@
                                     on:error={onImageError}
                                 />
                             {:else if commonSubtype === 'video'}
-                                <!-- svelte-ignore a11y-media-has-caption -->
-                                <video class="file2-dialog__video-preview" src={value.url}></video>
+                                <video
+                                    bind:this={videoElem}
+                                    class="file2-dialog__video-preview"
+                                    src={value.url}
+                                    loop
+                                    muted
+                                    playsinline
+                                    autoplay
+                                    on:loadedmetadata={onVideoMetadata}
+                                    on:timeupdate={onVideoUpdate}
+                                ></video>
                             {/if}
                         {/if}
                     </div>
@@ -446,6 +547,32 @@
                         class:file2-dialog__error_warn={showError === 'big-warn'}
                     >
                         {$l10nString((showError === 'big' || showError === 'big-warn') ? 'file.too_big' : `file.${commonSubtype}_error`)}
+                    </div>
+                {/if}
+
+                {#if playbackInfo.duration}
+                    <div class="file2-dialog__playback">
+                        <input
+                            bind:this={playbackInput}
+                            type="range"
+                            class="file2-dialog__progress"
+                            value={playbackInfo.current}
+                            max={playbackInfo.duration}
+                            step="0.01"
+                            on:input={onPlaybackInput}
+                        />
+
+                        <Button2
+                            cls="file2-dialog__playback-toggle"
+                            slim
+                            title={$l10nString('file.toggle_playback')}
+                            on:click={togglePlayback}
+                        >
+                            <div
+                                class="file2-dialog__playback-toggle-icon"
+                                class:file2-dialog__playback-toggle-icon_toggle={playbackToggle}
+                            />
+                        </Button2>
                     </div>
                 {/if}
 
@@ -745,6 +872,37 @@
 
     .file2-dialog__text-inline-button:hover {
         color: var(--accent-red);
+    }
+
+    .file2-dialog__playback {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .file2-dialog__progress {
+        flex: 1 0 0;
+        margin: 0;
+        accent-color: var(--accent-purple);
+        border-radius: 4px;
+    }
+
+    .file2-dialog__progress:focus-visible {
+        outline: 2px solid var(--accent-purple);
+    }
+
+    .file2-dialog__playback-toggle-icon {
+        display: block;
+        flex: 0 0 auto;
+        width: 20px;
+        height: 20px;
+        background: no-repeat 50% 50% url(../../../assets/play.svg);
+        background-size: 20px;
+        filter: var(--icon-filter);
+    }
+
+    .file2-dialog__playback-toggle-icon_toggle {
+        background-image: url(../../../assets/pause.svg);
     }
 
     @keyframes file2-dialog__rotate {
