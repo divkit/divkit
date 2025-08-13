@@ -1,59 +1,36 @@
-import type { Writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 import { writable } from 'svelte/store';
 import type { Variable } from './variable';
 
-const controllerToStore = new Map<GlobalVariablesController, Writable<string>>();
-const controllerToVars = new Map<GlobalVariablesController, Map<string, Variable>>();
-
-export function getControllerStore(controller: GlobalVariablesController): Writable<string> {
-    const store = controllerToStore.get(controller) || writable('');
-
-    if (!controllerToStore.has(controller)) {
-        controllerToStore.set(controller, store);
-    }
-
-    return store;
-}
-
-export function cleanControllerStore(controller: GlobalVariablesController): void {
-    controllerToStore.delete(controller);
-    controllerToVars.delete(controller);
-}
-
-export function getControllerVars(controller: GlobalVariablesController): Map<string, Variable> {
-    const map = controllerToVars.get(controller) || new Map();
-
-    if (!controllerToVars.has(controller)) {
-        controllerToVars.set(controller, map);
-    }
-
-    return map;
-}
-
 export class GlobalVariablesController {
+    private _vars: Map<string, Variable> = new Map();
+    private _lastAddedVariable = writable('');
+
     setVariable(variable: Variable): void {
         const name = variable.getName();
-        const vars = getControllerVars(this);
 
-        if (vars.has(name)) {
+        if (this._vars.has(name)) {
             throw new Error('Variable with the same name already exist');
         } else {
-            vars.set(name, variable);
-            const store = getControllerStore(this);
-            store.set(name);
+            this._vars.set(name, variable);
+            this._lastAddedVariable.set(name);
         }
     }
 
     getVariable(variableName: string): Variable | undefined {
-        const vars = getControllerVars(this);
-
-        return vars.get(variableName);
+        return this._vars.get(variableName);
     }
 
     list(): IterableIterator<Variable> {
-        const vars = getControllerVars(this);
+        return this._vars.values();
+    }
 
-        return vars.values();
+    getVariables(): Map<string, Variable> {
+        return this._vars;
+    }
+
+    getLastAddedVariableStore(): Readable<string> {
+        return this._lastAddedVariable;
     }
 }
 
