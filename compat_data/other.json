@@ -14,6 +14,17 @@
             }
         }
     }, {
+        "id": "asset_support_lottie",
+        "name": "<code>divkit-asset://</code> support in <code>lottie</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "32.12.0"
+            },
+            "web": {
+                "notes": "Web support is not planned"
+            }
+        }
+    }, {
         "id": "persistent_variable_storage",
         "name": "Persistent variable storage (including <code>set_stored_value</code> action and getter functions, such as <code>getStoredStringValue</code>)",
         "compat": {
