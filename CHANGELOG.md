@@ -1,5 +1,8 @@
 ## 32.13.0
 
+# Android Client:
+* Fix input keyboardType not being applied.
+
 # iOS Client:
 * Fixed the problem with the action `set_next_item` in the pager with infinite scrolling and clamp overflow.
 
