@@ -1,6 +1,7 @@
 ## 32.13.0
 
 # Android Client:
+* Fix crash when applying second div patch.
 * Fix input keyboardType not being applied.
 
 # iOS Client:
