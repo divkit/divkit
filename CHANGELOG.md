@@ -5,6 +5,7 @@
 
 # Web Client:
 * Added `decimalFormat` function and method for `integer` and `number`.
+* Fixed memory leak on every render call.
 
 
 ## 32.12.0
