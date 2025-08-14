@@ -86,8 +86,7 @@ internal class DivContainerBinder @Inject constructor(
         val oldResolver = divHolderView.bindingContext?.expressionResolver ?: context.divView.oldExpressionResolver
 
         if (div === oldDiv) {
-            val oldItems = (view as DivCollectionHolder).items ?: return
-            view.dispatchItems(context, div.value, oldDiv.value, oldItems, oldItems, path)
+            view.bindItems(context, div.value, oldDiv.value, oldResolver, path, false)
             return
         }
 
@@ -136,6 +135,7 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         oldResolver: ExpressionResolver,
         path: DivStatePath,
+        shouldBindItemBuilder: Boolean = true,
     ) {
         val divView = context.divView
         val resolver = context.expressionResolver
@@ -161,7 +161,7 @@ internal class DivContainerBinder @Inject constructor(
             }
         }
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        bindItemBuilder(context, div, path, errorCollector)
+        if (shouldBindItemBuilder) bindItemBuilder(context, div, path, errorCollector)
         applyItems(context, div, oldDiv, items, oldItems, path, errorCollector)
     }
 
