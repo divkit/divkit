@@ -1,0 +1,35 @@
+{
+  "description": "Separator with custom paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "delimiter_style": {
+            "color": "#FF0000"
+          },
+          "paddings": {
+            "left": 4,
+            "top": 6,
+            "right": 8,
+            "bottom": 12
+          },
+          "background": [
+            {
+              "color": "#FFFFFF",
+              "type": "solid"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

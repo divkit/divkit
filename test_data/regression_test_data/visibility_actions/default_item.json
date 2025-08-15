@@ -1,0 +1,397 @@
+{
+  "templates": {
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "text_color": "#333333"
+    },
+    "text_14_18_standard": {
+      "type": "text_14_18_regular",
+      "paddings": {
+        "top": 2,
+        "bottom": 2,
+        "left": 16,
+        "right": 16
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "image_block": {
+      "type": "image",
+      "border": {
+        "corner_radius": 16
+      },
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "placeholder_color": "#C0C0B0",
+      "preload_required": 1,
+      "visibility_actions": [
+        {
+          "log_id": "content_item_show:2",
+          "visibility_percentage": 80,
+          "visibility_duration": 0
+        }
+      ],
+      "alpha": 0.8,
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240
+      }
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "border": {
+            "corner_radius": 20
+          },
+          "items": [
+            {
+              "type": "state",
+              "id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "state",
+                        "id": "slider",
+                        "states": [
+                          {
+                            "state_id": "without_ad",
+                            "div": {
+                              "type": "container",
+                              "items": [
+                                {
+                                  "type": "indicator",
+                                  "active_item_color": "#000000",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 2
+                                  },
+                                  "inactive_item_color": "#D0D1D9",
+                                  "margins": {
+                                    "bottom": 0,
+                                    "top": 15
+                                  },
+                                  "paddings": {
+                                    "bottom": 0
+                                  },
+                                  "pager_id": "gallery",
+                                  "shape": {
+                                    "type": "rounded_rectangle",
+                                    "corner_radius": {
+                                      "type": "fixed",
+                                      "value": 2
+                                    },
+                                    "item_height": {
+                                      "type": "fixed",
+                                      "value": 2
+                                    },
+                                    "item_width": {
+                                      "type": "fixed",
+                                      "value": 10
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "pager",
+                                  "id": "gallery",
+                                  "item_spacing": {
+                                    "type": "fixed",
+                                    "value": 4
+                                  },
+                                  "default_item": 4,
+                                  "items": [
+                                    {
+                                      "type": "text_block",
+                                      "text": "Item 0",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "6",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/0"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:0",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "0"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "image_block",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "106",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/1"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:1",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "1"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text_block",
+                                      "text": "Item 2",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "206",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/2"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:2",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "2"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "image_block",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "306",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/3"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:3",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "3"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text_block",
+                                      "text": "Item 4",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "406",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/4"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:4",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "4"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "image_block",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "506",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/5"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:5",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "5"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "layout_mode": {
+                                    "type": "fixed",
+                                    "neighbour_page_width": {
+                                      "type": "fixed",
+                                      "value": 10
+                                    }
+                                  },
+                                  "margins": {
+                                    "top": 8
+                                  },
+                                  "paddings": {
+                                    "right": 4,
+                                    "left": 4
+                                  },
+                                  "restrict_parent_scroll": 1
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "id": "description",
+                        "states": [
+                          {
+                            "state_id": "0",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 0",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "1",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 1",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "2",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 2",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "3",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 3",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "4",
+                            "div": {
+                              "id": "text",
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 4",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "5",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Item 5",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "container",
+              "visibility_duration": 4000,
+              "visibility_percentage": 80
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

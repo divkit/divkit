@@ -1,0 +1,24 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.zoom'
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':div-data')
+    implementation project(path: ':div-json')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+
+    implementation(libs.androidx.appcompat) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    implementation libs.androidx.core
+    implementation libs.androidx.coreKtx
+
+    testImplementation libs.androidx.test.core
+}

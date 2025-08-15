@@ -1,0 +1,549 @@
+{
+  "templates": {
+    "divgram_card": {
+      "type": "container",
+      "margins": {
+        "left": 12,
+        "right": 12,
+        "top": 12,
+        "bottom": 12
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "@{color.background}"
+        }
+      ],
+      "border": {
+        "corner_radius": 14,
+        "stroke": {
+          "color": "#666"
+        },
+        "shadow": {
+          "offset": {
+            "x": {
+              "value": 1
+            },
+            "y": {
+              "value": 4
+            }
+          },
+          "color": "#000"
+        },
+        "has_shadow": true
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "post_image",
+          "aspect": {
+            "ratio": 1
+          },
+          "content_alignment_vertical": "top",
+          "extensions": [
+            {
+              "id": "pinch-to-zoom"
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "orientation": "horizontal",
+          "margins": {
+            "left": 12,
+            "right": 12,
+            "top": 12,
+            "bottom": 12
+          },
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "text",
+              "$text": "author",
+              "font_size": 18,
+              "ranges": [
+                {
+                  "start": 0,
+                  "$end": "author_prefix_end",
+                  "font_size": 14
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "wrap_content"
+              },
+              "content_alignment_vertical": "center",
+              "items": [
+                {
+                  "type": "text",
+                  "$text": "likes_counter",
+                  "font_size": 20,
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "right": 7
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "state",
+                  "$id": "state_likes_id",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "states": [
+                    {
+                      "state_id": "disliked",
+                      "div": {
+                        "type": "image",
+                        "image_url": "https://yastatic.net/s3/home/divkit/heart_empty.svg",
+                        "tint_color": "@{color.background}",
+                        "tint_mode": "multiply",
+                        "width": {
+                          "type": "fixed",
+                          "value": 25,
+                          "unit": "dp"
+                        },
+                        "actions": [
+                          {
+                            "$log_id": "add_like_log_id",
+                            "$url": "add_like_url"
+                          },
+                          {
+                            "$log_id": "set_liked_log_id",
+                            "$url": "set_liked_url"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "liked",
+                      "div": {
+                        "type": "image",
+                        "image_url": "https://yastatic.net/s3/home/divkit/heart_empty.svg",
+                        "width": {
+                          "type": "fixed",
+                          "value": 25,
+                          "unit": "dp"
+                        },
+                        "tint_color": "#f83939",
+                        "tint_mode": "multiply",
+                        "actions": [
+                          {
+                            "$log_id": "remove_like_log_id",
+                            "$url": "remove_like_url"
+                          },
+                          {
+                            "$log_id": "set_disliked_log_id",
+                            "$url": "set_disliked_url"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "timers": [
+      {
+        "id": "like_timer",
+        "tick_interval": 2000,
+        "tick_actions": [
+          {
+            "log_id": "card0.add_timer_like",
+            "url": "@{card0.likes > 7 ? '' : 'div-action://set_variable?name=card0.likes&value=@{card0.likes + 1}'}"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "color.background",
+        "type": "color",
+        "value": "#5e6e7d"
+      },
+      {
+        "name": "card0.likes",
+        "type": "integer",
+        "value": 5
+      },
+      {
+        "name": "card1.likes",
+        "type": "integer",
+        "value": 73
+      },
+      {
+        "name": "card2.likes",
+        "type": "integer",
+        "value": 1001001
+      },
+      {
+        "name": "cup.likes",
+        "type": "integer",
+        "value": 2
+      },
+      {
+        "name": "toast_text",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "log_id": "divgram",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "height": {
+            "type": "match_parent"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "margins": {
+                "top": 12,
+                "left": 12,
+                "right": 12
+              },
+              "items": [
+                {
+                  "type": "input",
+                  "hint_text": "Toast your mind",
+                  "font_family": "super_trivia",
+                  "hint_color": "#666",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_variable": "toast_text",
+                  "font_size": 20,
+                  "text_color": "#FFF",
+                  "paddings": {
+                    "top": 10,
+                    "left": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "margins": {
+                    "top": 10,
+                    "left": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "@{color.background}"
+                    },
+                    "corner_radius": 12
+                  }
+                },
+                {
+                  "type": "container",
+                  "border": {
+                    "corner_radius": 12
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#4267B2"
+                    }
+                  ],
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "content_alignment_vertical": "center",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Toast!",
+                      "font_family": "super_trivia",
+                      "paddings": {
+                        "top": 10,
+                        "left": 10,
+                        "right": 10,
+                        "bottom": 10
+                      },
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "height": {
+                        "type": "wrap_content"
+                      },
+                      "font_size": 20,
+                      "text_color": "#FFF",
+                      "actions": [
+                        {
+                          "log_id": "show_toast",
+                          "url": "sample-action://toast?Toasted: @{toast_text}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text_alignment_horizontal": "center",
+              "text": "**Info**: no error in code `println(\"Hello World!\")`",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#fff"
+                }
+              ],
+              "paddings": {
+                "top": 5,
+                "bottom": 5,
+                "left": 5,
+                "right": 5
+              },
+              "extensions": [
+                {
+                  "id": "markdown"
+                }
+              ]
+            },
+            {
+              "type": "divgram_card",
+              "likes_counter": "@{card0.likes}",
+              "post_image": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+              "author": "by @yandex_art",
+              "author_prefix_end": 3,
+              "state_likes_id": "card0.likes",
+              "visibility_actions": [
+                {
+                  "log_id": "card_visible",
+                  "url": "div-action://timer?id=like_timer&action=start"
+                }
+              ],
+              "add_like_log_id": "card0.add_like",
+              "add_like_url": "div-action://set_variable?name=card0.likes&value=@{card0.likes + 1}",
+              "set_liked_log_id": "card0.set_liked",
+              "set_liked_url": "div-action://set_state?state_id=0/card0.likes/liked",
+              "remove_like_log_id": "card0.remove_like",
+              "remove_like_url": "div-action://set_variable?name=card0.likes&value=@{card0.likes - 1}",
+              "set_disliked_log_id": "card0.set_disliked",
+              "set_disliked_url": "div-action://set_state?state_id=0/card0.likes/disliked"
+            },
+            {
+              "type": "divgram_card",
+              "likes_counter": "@{card1.likes}",
+              "post_image": "https://yastatic.net/s3/home/divkit/ducks.jpg",
+              "author": "from @shedevrum",
+              "author_prefix_end": 5,
+              "state_likes_id": "card1.likes",
+              "add_like_log_id": "card1.add_like",
+              "add_like_url": "div-action://set_variable?name=card1.likes&value=@{card1.likes + 1}",
+              "set_liked_log_id": "card1.set_liked",
+              "set_liked_url": "div-action://set_state?state_id=0/card1.likes/liked",
+              "remove_like_log_id": "card1.remove_like",
+              "remove_like_url": "div-action://set_variable?name=card1.likes&value=@{card1.likes - 1}",
+              "set_disliked_log_id": "card1.set_disliked",
+              "set_disliked_url": "div-action://set_state?state_id=0/card1.likes/disliked"
+            },
+            {
+              "type": "divgram_card",
+              "likes_counter": "@{card2.likes}",
+              "post_image": "https://yastatic.net/s3/home/divkit/pupduck.jpg",
+              "author": "created by\n@me_and_you",
+              "author_prefix_end": 11,
+              "state_likes_id": "card2.likes",
+              "add_like_log_id": "card2.add_like",
+              "add_like_url": "div-action://set_variable?name=card2.likes&value=@{card2.likes + 1}",
+              "set_liked_log_id": "card2.set_liked",
+              "set_liked_url": "div-action://set_state?state_id=0/card2.likes/liked",
+              "remove_like_log_id": "card2.remove_like",
+              "remove_like_url": "div-action://set_variable?name=card2.likes&value=@{card2.likes - 1}",
+              "set_disliked_log_id": "card2.set_disliked",
+              "set_disliked_url": "div-action://set_state?state_id=0/card2.likes/disliked"
+            },
+            {
+              "type": "container",
+              "margins": {
+                "left": 12,
+                "right": 12,
+                "top": 12,
+                "bottom": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "@{color.background}"
+                }
+              ],
+              "border": {
+                "corner_radius": 14,
+                "stroke": {
+                  "color": "#666"
+                },
+                "shadow": {
+                  "offset": {
+                    "x": {
+                      "value": 1
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "color": "#000"
+                },
+                "has_shadow": true
+              },
+              "items": [
+                {
+                  "type": "custom",
+                  "custom_type": "rive_animation",
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "placeholder_color": "#2C3E50",
+                  "custom_props": {
+                    "url": "https://public.rive.app/community/runtime-files/3370-7083-cup-walk.riv",
+                    "fit": "FitWidth",
+                    "alignment": "Center",
+                    "loop": "Loop"
+                  }
+                },
+                {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "margins": {
+                    "left": 12,
+                    "right": 12,
+                    "top": 12,
+                    "bottom": 12
+                  },
+                  "content_alignment_vertical": "center",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "by @rive_app",
+                      "font_size": 18,
+                      "ranges": [
+                        {
+                          "start": 0,
+                          "end": 2,
+                          "font_size": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "orientation": "horizontal",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "content_alignment_vertical": "center",
+                      "items": [
+                        {
+                          "type": "text",
+                          "text": "@{cup.likes}",
+                          "font_size": 20,
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "paddings": {
+                            "right": 7
+                          },
+                          "height": {
+                            "type": "wrap_content"
+                          }
+                        },
+                        {
+                          "type": "state",
+                          "id": "cup.likes",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "height": {
+                            "type": "wrap_content"
+                          },
+                          "states": [
+                            {
+                              "state_id": "disliked",
+                              "div": {
+                                "type": "image",
+                                "image_url": "https://yastatic.net/s3/home/divkit/heart_empty.svg",
+                                "tint_color": "@{color.background}",
+                                "tint_mode": "multiply",
+                                "width": {
+                                  "type": "fixed",
+                                  "value": 25,
+                                  "unit": "dp"
+                                },
+                                "actions": [
+                                  {
+                                    "log_id": "cup.add_like",
+                                    "url": "div-action://set_variable?name=cup.likes&value=@{cup.likes + 1}"
+                                  },
+                                  {
+                                    "log_id": "cup.set_liked",
+                                    "url": "div-action://set_state?state_id=0/cup.likes/liked"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "state_id": "liked",
+                              "div": {
+                                "type": "image",
+                                "image_url": "https://yastatic.net/s3/home/divkit/heart_empty.svg",
+                                "width": {
+                                  "type": "fixed",
+                                  "value": 25,
+                                  "unit": "dp"
+                                },
+                                "tint_color": "#f83939",
+                                "tint_mode": "multiply",
+                                "actions": [
+                                  {
+                                    "log_id": "cup.remove_like",
+                                    "url": "div-action://set_variable?name=cup.likes&value=@{cup.likes - 1}"
+                                  },
+                                  {
+                                    "log_id": "cup.set_liked",
+                                    "url": "div-action://set_state?state_id=0/cup.likes/disliked"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

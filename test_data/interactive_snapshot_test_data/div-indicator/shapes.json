@@ -1,0 +1,325 @@
+{
+  "description": "DivIndicator with 4 items. On the zero step it has rectangle shape. At the first step, height of items is increased. At the second step, of items is increased. At the third step, indicator items change shape to circle. At the fourth step, the radius increases.",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "pager_base": {
+        "type": "pager",
+        "paddings": {
+          "left": 15,
+          "top": 15,
+          "right": 15,
+          "bottom": 15
+        },
+        "width": {
+          "type": "fixed",
+          "value": 360
+        },
+        "height": {
+          "type": "fixed",
+          "value": 250
+        }
+      },
+      "text_block": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "fixed",
+          "value": 80
+        },
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      },
+      "indicator_base": {
+        "type": "indicator",
+        "active_item_color": "#000000",
+        "active_item_size": 1.5,
+        "height": {
+          "type": "fixed",
+          "value": 35
+        },
+        "margins": {
+          "top": 10,
+          "bottom": 10
+        },
+        "space_between_centers": 25,
+        "inactive_item_color": "#D0D1D9"
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "rect_corner_radius",
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "name": "rect_width",
+          "type": "integer",
+          "value": 8
+        },
+        {
+          "name": "rect_height",
+          "type": "number",
+          "value": 2
+        },
+        {
+          "name": "circle_radius",
+          "type": "integer",
+          "value": 3
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "id": "state_container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "border": {
+              "stroke": {
+                "color": "#000000"
+              }
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#0000FF"
+              }
+            ],
+            "states": [
+              {
+                "state_id": "rect",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "indicator_base",
+                      "pager_id": "pager_id",
+                      "shape": {
+                        "type": "rounded_rectangle",
+                        "item_width": {
+                          "type": "fixed",
+                          "value": "@{rect_width}"
+                        },
+                        "item_height": {
+                          "type": "fixed",
+                          "value": "@{rect_height}"
+                        },
+                        "corner_radius": {
+                          "type": "fixed",
+                          "value": "@{rect_corner_radius}"
+                        }
+                      }
+                    },
+                    {
+                      "type": "pager_base",
+                      "id": "pager_id",
+                      "layout_mode": {
+                        "type": "percentage",
+                        "page_width": {
+                          "type": "percentage",
+                          "value": 80
+                        }
+                      },
+                      "items": [
+                        {
+                          "type": "text_block",
+                          "text": "Item0",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item1",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item2",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item3",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "circle",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "indicator_base",
+                      "pager_id": "pager_id",
+                      "shape": {
+                        "type": "circle",
+                        "radius": {
+                          "type": "fixed",
+                          "value": "@{circle_radius}"
+                        }
+                      }
+                    },
+                    {
+                      "type": "pager_base",
+                      "id": "pager_id",
+                      "layout_mode": {
+                        "type": "percentage",
+                        "page_width": {
+                          "type": "percentage",
+                          "value": 80
+                        }
+                      },
+                      "items": [
+                        {
+                          "type": "text_block",
+                          "text": "Item0",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item1",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item2",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        },
+                        {
+                          "type": "text_block",
+                          "text": "Item3",
+                          "width": {
+                            "type": "match_parent"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=rect_height&value=4",
+          "log_id": "bigger indicator height"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=rect_width&value=12",
+          "log_id": "bigger indicator width"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=rect_corner_radius&value=5",
+          "log_id": "bigger indicator corner radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/state_container/circle",
+          "log_id": "state with circle shape"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=circle_radius&value=6",
+          "log_id": "bigger indicator radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=rect_height&value=2",
+          "log_id": "restore: rect_height"
+        },
+        {
+          "url": "div-action://set_variable?name=rect_width&value=8",
+          "log_id": "restore: rect_width"
+        },
+        {
+          "url": "div-action://set_variable?name=rect_corner_radius&value=1",
+          "log_id": "restore: rect_corner_radius"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/state_container/rect",
+          "log_id": "restore: state"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

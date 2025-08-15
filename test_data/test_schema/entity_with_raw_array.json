@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_raw_array"
+      ]
+    },
+    "array": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "type",
+    "array"
+  ]
+}

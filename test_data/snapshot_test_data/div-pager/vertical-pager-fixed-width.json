@@ -1,0 +1,80 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_match_parent_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page_match_parent_height",
+              "text": "Pager width = 200"
+            },
+            {
+              "type": "text_page_match_parent_height",
+              "text": "Then something happened which unleashed the power of our imagination"
+            },
+            {
+              "type": "text_page_match_parent_height",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

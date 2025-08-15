@@ -1,0 +1,78 @@
+{
+  "description": "Default state",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "id": "state_container",
+          "default_state_id": "default",
+          "states": [
+            {
+              "state_id": "nondefaut",
+              "div": {
+                "type": "text",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "text_alignment_vertical": "center",
+                "text_alignment_horizontal": "center",
+                "text": "Nondefault state",
+                "actions": [
+                  {
+                    "log_id": "default state",
+                    "url": "div-action://set_state?state_id=0/state_container/default"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "default",
+              "div": {
+                "type": "text",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "text_alignment_vertical": "center",
+                "text_alignment_horizontal": "center",
+                "text": "Default state",
+                "actions": [
+                  {
+                    "log_id": "nondefault state",
+                    "url": "div-action://set_state?state_id=0/state_container/nondefaut"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "empty"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

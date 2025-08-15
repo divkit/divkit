@@ -1,0 +1,38 @@
+{
+  "description": "Element with rotation transform around bottom right point",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/lenna.png",
+          "width": {
+            "type": "fixed",
+            "value": 256
+          },
+          "aspect": {
+            "ratio": 1
+          },
+          "transform": {
+            "rotation": 45,
+            "pivot_x": {
+              "type": "pivot-percentage",
+              "value": 100
+            },
+            "pivot_y": {
+              "type": "pivot-percentage",
+              "value": 100
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,121 @@
+.container {
+    display: flex;
+}
+
+.container_wrap {
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.container_overflow_visible {
+    overflow: visible;
+}
+
+.container_orientation_vertical {
+    flex-direction: column;
+}
+
+.container_orientation_vertical.container_valign_start {
+    justify-content: flex-start;
+}
+
+.container_orientation_vertical.container_valign_center {
+    justify-content: center;
+}
+
+.container_orientation_vertical.container_valign_end {
+    justify-content: flex-end;
+}
+
+.container_orientation_vertical.container_valign_space-between {
+    justify-content: space-between;
+}
+
+.container_orientation_vertical.container_valign_space-around {
+    justify-content: space-around;
+}
+
+.container_orientation_vertical.container_valign_space-evenly {
+    justify-content: space-evenly;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_start {
+    align-content: flex-start;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_center {
+    align-content: center;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_end {
+    align-content: flex-end;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_space-between {
+    align-content: space-between;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_space-around {
+    align-content: space-around;
+}
+
+.container_wrap.container_orientation_vertical.container_halign_space-evenly {
+    align-content: space-evenly;
+}
+
+/*.container_orientation_horizontal {
+}*/
+
+.container_orientation_horizontal.container_halign_start {
+    justify-content: flex-start;
+}
+
+.container_orientation_horizontal.container_halign_center {
+    justify-content: center;
+}
+
+.container_orientation_horizontal.container_halign_end {
+    justify-content: flex-end;
+}
+
+.container_orientation_horizontal.container_halign_space-between {
+    justify-content: space-between;
+}
+
+.container_orientation_horizontal.container_halign_space-around {
+    justify-content: space-around;
+}
+
+.container_orientation_horizontal.container_halign_space-evenly {
+    justify-content: space-evenly;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_start {
+    align-content: flex-start;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_center {
+    align-content: center;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_end {
+    align-content: flex-end;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_space-between {
+    align-content: space-between;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_space-around {
+    align-content: space-around;
+}
+
+.container_wrap.container_orientation_horizontal.container_valign_space-evenly {
+    align-content: space-evenly;
+}
+
+.container_orientation_overlap {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+}

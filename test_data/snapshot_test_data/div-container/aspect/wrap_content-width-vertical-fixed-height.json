@@ -1,0 +1,75 @@
+{
+  "description": "Container with wrap_content width, vertical orientation and aspect height. Base height was fixed and must be ignored, height must be equal width / 2.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 0
+          },
+          "aspect": {
+            "ratio": 2
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0FFA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "width = wrap_content",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10,
+                "top": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "orientation = vertical",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "aspect = 2",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

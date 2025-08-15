@@ -1,0 +1,154 @@
+@value text-range from "../Cls.module.css";
+
+.text {
+    display: flex;
+    /* Already hidden in outer */
+    /*overflow: hidden;*/
+}
+
+/*@supports (overflow: clip) {
+    .text {
+        overflow: clip;
+    }
+}*/
+
+.text_halign_start {
+    justify-content: flex-start;
+    text-align: start;
+}
+
+.text_halign_center {
+    justify-content: center;
+    text-align: center;
+}
+
+.text_halign_end {
+    justify-content: flex-end;
+    text-align: end;
+}
+
+.text_valign_start {
+    align-items: flex-start;
+}
+
+.text_valign_center {
+    align-items: center;
+}
+
+.text_valign_end {
+    align-items: flex-end;
+}
+
+.text_valign_baseline {
+    align-items: baseline;
+}
+
+.text__inner {
+    min-width: 0;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.text_singleline .text__inner,
+.text_multiline .text__inner {
+    overflow: hidden;
+}
+
+@supports (overflow: clip) {
+    .text_singleline .text__inner,
+    .text_multiline .text__inner {
+        overflow: clip;
+    }
+}
+
+.text_singleline .text__inner {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text_truncate_none .text_singleline .text__inner {
+    text-overflow: clip;
+}
+
+.text_multiline .text__inner {
+    /* For -webkit-line-clamp */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.text__inner_has-cloud-bg {
+    position: relative;
+}
+
+.text__inner_cloud-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.text__inner_gradient {
+    color: transparent;
+    background-clip: text;
+}
+
+.text__image-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.text__image-wrapper_crop {
+    height: 0;
+}
+
+.text__image-wrapper_align_top {
+    vertical-align: top;
+}
+
+.text__image-wrapper_align_center {
+    vertical-align: middle;
+}
+
+.text__image-wrapper_align_bottom {
+    vertical-align: bottom;
+}
+
+.text__image-wrapper_align_baseline {
+    vertical-align: baseline;
+}
+
+.text__image {
+    display: block;
+    width: 100%;
+}
+
+.text__image-wrapper_crop .text__image {
+    position: absolute;
+}
+
+.text__image-wrapper_align_top .text__image {
+    top: 0;
+    left: 0;
+}
+
+.text__image-wrapper_align_bottom .text__image {
+    bottom: 0;
+    left: 0;
+}
+
+.text__image-wrapper_align_baseline .text__image {
+    bottom: 0;
+    left: 0;
+}
+
+.text__image_hidden {
+    display: none;
+}
+
+*:focus-visible .text_has-focus-color .text__inner .text-range,
+.text_has-focus-color:focus-visible .text__inner .text-range {
+    color: var(--divkit-text-focus-color) !important;
+}

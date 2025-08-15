@@ -1,0 +1,63 @@
+// Generated code. Do not modify.
+
+import Foundation
+import Serialization
+import VGSL
+
+public final class DivTrigger: Sendable {
+  @frozen
+  public enum Mode: String, CaseIterable, Sendable {
+    case onCondition = "on_condition"
+    case onVariable = "on_variable"
+  }
+
+  public let actions: [DivAction] // at least 1 elements
+  public let condition: Expression<Bool>
+  public let mode: Expression<Mode> // default value: on_condition
+
+  public func resolveCondition(_ resolver: ExpressionResolver) -> Bool? {
+    resolver.resolveNumeric(condition)
+  }
+
+  public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
+    resolver.resolveEnum(mode) ?? Mode.onCondition
+  }
+
+  static let actionsValidator: AnyArrayValueValidator<DivAction> =
+    makeArrayValidator(minItems: 1)
+
+  init(
+    actions: [DivAction],
+    condition: Expression<Bool>,
+    mode: Expression<Mode>? = nil
+  ) {
+    self.actions = actions
+    self.condition = condition
+    self.mode = mode ?? .value(.onCondition)
+  }
+}
+
+#if DEBUG
+extension DivTrigger: Equatable {
+  public static func ==(lhs: DivTrigger, rhs: DivTrigger) -> Bool {
+    guard
+      lhs.actions == rhs.actions,
+      lhs.condition == rhs.condition,
+      lhs.mode == rhs.mode
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+extension DivTrigger: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["actions"] = actions.map { $0.toDictionary() }
+    result["condition"] = condition.toValidSerializationValue()
+    result["mode"] = mode.toValidSerializationValue()
+    return result
+  }
+}

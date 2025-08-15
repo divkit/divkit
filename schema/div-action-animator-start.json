@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_animator_start",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "animator_start"
+      ]
+    },
+    "animator_id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_action_animator_start_animator_id"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "long_type": true,
+      "$description": "translations.json#/div_animator_base_duration"
+    },
+    "start_delay": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_animator_base_start_delay"
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "$description": "translations.json#/div_animator_base_interpolator"
+    },
+    "direction": {
+      "$ref": "div-animation-direction.json",
+      "$description": "translations.json#/div_animator_base_direction"
+    },
+    "repeat_count": {
+      "$ref": "div-count.json",
+      "$description": "translations.json#/div_animator_base_repeat_count"
+    },
+    "start_value": {
+      "$ref": "div-typed-value.json",
+      "$description": "translations.json#/div_action_animator_start_start_value"
+    },
+    "end_value": {
+      "$ref": "div-typed-value.json",
+      "$description": "translations.json#/div_action_animator_start_end_value"
+    }
+  },
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "required": [
+    "type",
+    "animator_id"
+  ]
+}

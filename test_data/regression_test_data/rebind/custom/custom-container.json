@@ -1,0 +1,83 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#550055"
+        }
+      ],
+      "paddings": {
+        "left": 50,
+        "right": 50,
+        "top": 20,
+        "bottom": 20
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "text_color": "#FFF"
+    },
+    "news_item_template": {
+      "type": "text",
+      "font_size": 16,
+      "line_height": 20,
+      "text_color": "#333",
+      "$text": "news_item_text",
+      "paddings": {
+        "left": 12,
+        "right": 12,
+        "top": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "custom_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "custom",
+              "id": "new_custom_container_1",
+              "items": [
+                {
+                  "type": "news_item_template",
+                  "news_item_text": "This is div-text item 1"
+                },
+                {
+                  "type": "news_item_template",
+                  "news_item_text": "This is div-text item 2"
+                },
+                {
+                  "type": "news_item_template",
+                  "news_item_text": "This is div-text item 3"
+                }
+              ],
+              "custom_type": "new_custom_container_1"
+            },
+            {
+              "type": "button",
+              "text": "Next",
+              "actions": [
+                {
+                  "log_id": "rebinding",
+                  "url": "div-demo-action://set_data?path=rebind/custom/custom-container-rebound.json"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

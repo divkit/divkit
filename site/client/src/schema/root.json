@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "templates": {
+            "type": "object"
+        },
+        "card": {
+            "$ref": "div-data.json"
+        }
+    },
+    "required": [
+        "card"
+    ]
+}

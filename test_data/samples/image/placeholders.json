@@ -1,0 +1,89 @@
+{
+  "templates": {
+    "image_block": {
+      "type": "image",
+      "height": {
+        "type": "fixed",
+        "value": 184
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Placeholder images, stubs"
+            },
+            {
+              "type": "subtitle",
+              "text": "By default, a gray stub is used before an image loads (first picture).\n\nYou can also set a solid colored stub (second picture) or insert a base64-encoded image (third picture).\n",
+              "margins": {
+                "bottom": 32
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "image_block",
+                  "image_url": "empty://"
+                },
+                {
+                  "type": "image_block",
+                  "placeholder_color": "#8533FF",
+                  "image_url": "empty://"
+                },
+                {
+                  "type": "image_block",
+                  "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
+                  "image_url": "empty://"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

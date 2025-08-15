@@ -1,0 +1,158 @@
+{
+    "features": [{
+        "id": "input_password",
+        "name": "Input property <code>keyboard_type</code> = <code>password</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.9.0"
+            },
+            "web": {
+                "version_added": "29.9.0"
+            },
+            "ios": {
+                "version_added": "31.7.0"
+            }
+        }
+    }, {
+        "id": "input_is_enabled",
+        "name": "Input property <code>is_enabled</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.13.0"
+            },
+            "android": {
+                "version_added": "29.14.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "input_max_length",
+        "name": "Input property <code>max_length</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            },
+            "ios": {
+                "version_added": "30.18.0"
+            }
+        }
+    }, {
+        "id": "input_font_weight_value",
+        "name": "Input <code>font_weight_value</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.6.0"
+            },
+            "ios": {
+                "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
+            }
+        }
+    }, {
+        "id": "input_autocapitalization",
+        "name": "Input <code>autocapitalization</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "input_filters",
+        "name": "Input <code>filters</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
+            },
+            "android": {
+                "version_added": "31.6.0"
+            }
+        }
+    }, {
+        "id": "input_validators",
+        "name": "Input <code>validators</code> property",
+        "compat": {
+            "android": {
+                "version_added": "25.4.0"
+            },
+            "ios": {
+                "version_added": "27.3.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_enter_key_type",
+        "name": "Input <code>enter_key_type</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            },
+            "android": {
+                "version_added": "30.28.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_enter_key_actions",
+        "name": "Input <code>enter_key_actions</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            },
+            "android": [{
+                "version_added": "30.28.0",
+                "partial_implementation": true,
+                "notes": "It only works with in single-line inputs"
+            }, {
+                "version_added": "32.0.0"
+            }],
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_mask_phone",
+        "name": "<code>phone</code> input mask",
+        "compat": {
+            "ios": {
+                "version_added": "28.0.0"
+            },
+            "android": {
+                "version_added": "28.0.0"
+            },
+            "web": {
+                "version_added": "31.7.0"
+            }
+        }
+    }, {
+        "id": "input_font_variation_settings",
+        "name": "Input <code>font_variation_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
+            }
+        }
+    }]
+}

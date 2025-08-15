@@ -1,0 +1,164 @@
+{
+  "cases": [
+    {
+      "name": "string escape with alone backslash",
+      "expression": "\\",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '\\'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape simple character escape",
+      "expression": "\\a",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape backslash escape",
+      "expression": "\\\\",
+      "expected": {
+        "type": "string",
+        "value": "\\"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape quote escape",
+      "expression": "\\'",
+      "expected": {
+        "type": "string",
+        "value": "'"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape quote escape with backslash escape",
+      "expression": "\\\\\\'",
+      "expected": {
+        "type": "string",
+        "value": "\\'"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape expression escape",
+      "expression": "\\@{123}",
+      "expected": {
+        "type": "string",
+        "value": "@{123}"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape backslash with at",
+      "expression": "\\@",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape @ without interpolation",
+      "expression": "a@bc.de",
+      "expected": {
+        "type": "string",
+        "value": "a@bc.de"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape interpolation start",
+      "expression": "@{ Hello there",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '@{ Hello there'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string escape escaped interpolation start",
+      "expression": "\\@{ Hello there",
+      "expected": {
+        "type": "string",
+        "value": "@{ Hello there"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "\\@{var} = @{var}",
+      "expected": {
+        "type": "string",
+        "value": "@{var} = value"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "value"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

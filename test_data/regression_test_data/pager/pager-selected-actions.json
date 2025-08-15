@@ -1,0 +1,204 @@
+{
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "div": {
+          "items": [
+            {
+              "default_item": 0,
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "items": [
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "0",
+                      "url": "div-action://set_state?state_id=0/description/0"
+                    }
+                  ],
+                  "item_text": "Item 0",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "1",
+                      "url": "div-action://set_state?state_id=0/description/1"
+                    }
+                  ],
+                  "item_text": "Item 1",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "2",
+                      "url": "div-action://set_state?state_id=0/description/2"
+                    }
+                  ],
+                  "item_text": "Item 2",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "3",
+                      "url": "div-action://set_state?state_id=0/description/3"
+                    }
+                  ],
+                  "item_text": "Item 3",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "4",
+                      "url": "div-action://set_state?state_id=0/description/4"
+                    }
+                  ],
+                  "item_text": "Item 4",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "5",
+                      "url": "div-action://set_state?state_id=0/description/5"
+                    }
+                  ],
+                  "item_text": "Item 5",
+                  "type": "item_text"
+                },
+                {
+                  "item_selected_actions": [
+                    {
+                      "log_id": "6",
+                      "url": "div-action://set_state?state_id=0/description/6"
+                    }
+                  ],
+                  "item_text": "Item 6",
+                  "type": "item_text"
+                }
+              ],
+              "layout_mode": {
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "type": "fixed"
+              },
+              "restrict_parent_scroll": 1,
+              "type": "pager"
+            },
+            {
+              "id": "description",
+              "states": [
+                {
+                  "div": {
+                    "description_text": "Selected position 0",
+                    "type": "description"
+                  },
+                  "state_id": "0"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 1",
+                    "type": "description"
+                  },
+                  "state_id": "1"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 2",
+                    "type": "description"
+                  },
+                  "state_id": "2"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 3",
+                    "type": "description"
+                  },
+                  "state_id": "3"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 4",
+                    "type": "description"
+                  },
+                  "state_id": "4"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 5",
+                    "type": "description"
+                  },
+                  "state_id": "5"
+                },
+                {
+                  "div": {
+                    "description_text": "Selected position 6",
+                    "type": "description"
+                  },
+                  "state_id": "6"
+                }
+              ],
+              "type": "state"
+            }
+          ],
+          "orientation": "vertical",
+          "type": "container"
+        },
+        "state_id": 0
+      }
+    ]
+  },
+  "templates": {
+    "description": {
+      "$text": "description_text",
+      "font_size": 14,
+      "line_height": 18,
+      "text_color": "#808080",
+      "margins": {
+        "top": 10,
+        "bottom": 10,
+        "left": 20,
+        "start": 20
+      },
+      "type": "text"
+    },
+    "item_text": {
+      "$selected_actions": "item_selected_actions",
+      "$text": "item_text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "type": "text"
+    }
+  }
+}

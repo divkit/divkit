@@ -1,0 +1,183 @@
+{
+  "$description": "translations.json#/div_container",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "orientation"
+      ],
+      "factories": {
+        "row": {
+          "vararg_property": "items",
+          "inlines": {
+            "orientation": "horizontal"
+          }
+        },
+        "column": {
+          "vararg_property": "items",
+          "inlines": {
+            "orientation": "vertical"
+          }
+        },
+        "stack": {
+          "vararg_property": "items",
+          "inlines": {
+            "orientation": "overlap"
+          }
+        }
+      }
+    },
+    "swift": {
+      "generate_optional_arguments": false
+    },
+    "typescript": {
+      "union_interfaces": [
+        {
+          "required_params": [
+            "items"
+          ]
+        },
+        {
+          "required_params": [
+            "item_builder"
+          ]
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "separator": {
+      "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "properties": {
+        "show_at_start": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_at_start",
+          "default_value": "false"
+        },
+        "show_between": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_between",
+          "default_value": "true"
+        },
+        "show_at_end": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_at_end",
+          "default_value": "false"
+        },
+        "style": {
+          "$ref": "div-drawable.json",
+          "$description": "translations.json#/div_container_separator_style"
+        },
+        "margins": {
+          "$ref": "div-edge-insets.json",
+          "$description": "translations.json#/div_base_margins"
+        }
+      },
+      "required": [
+        "style"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "container"
+          ]
+        },
+        "content_alignment_vertical": {
+          "$ref": "div-content-alignment-vertical.json",
+          "default_value": "top",
+          "$description": "translations.json#/div_container_content_alignment_vertical"
+        },
+        "content_alignment_horizontal": {
+          "$ref": "div-content-alignment-horizontal.json",
+          "default_value": "start",
+          "$description": "translations.json#/div_container_content_alignment_horizontal"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "vertical",
+            "horizontal",
+            "overlap"
+          ],
+          "default_value": "vertical",
+          "$description": "translations.json#/div_container_orientation"
+        },
+        "layout_mode": {
+          "type": "string",
+          "enum": [
+            "no_wrap",
+            "wrap"
+          ],
+          "default_value": "no_wrap",
+          "$description": "translations.json#/div_container_layout_mode"
+        },
+        "separator": {
+          "$ref": "#/definitions/separator",
+          "$description": "translations.json#/div_container_separator",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "line_separator": {
+          "$ref": "#/definitions/separator",
+          "$description": "translations.json#/div_container_line_separator",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "$description": "translations.json#/div_container_items"
+        },
+        "item_builder": {
+          "$ref": "div-collection-item-builder.json",
+          "$description": "translations.json#/div_collection_item_builder",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "aspect": {
+          "$ref": "div-aspect.json",
+          "$description": "translations.json#/div_container_aspect"
+        },
+        "clip_to_bounds": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_clip_to_bounds",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

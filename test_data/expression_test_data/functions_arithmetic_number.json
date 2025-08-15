@@ -1,0 +1,1148 @@
+{
+  "cases": [
+    {
+      "expression": "@{div(4.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(0.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(0.0, 0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [div(0.0, 0.0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(1.0, 0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [div(1.0, 0.0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(1.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(-1.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(-2.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(2.0, -2.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(4.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(3.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(0.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(0.0, 0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mod(0.0, 0.0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(1.0, 0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mod(1.0, 0.0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-3.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(3.0, -2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-3.0, -2.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(3.0, 2.0)}",
+      "expected": {
+        "type": "number",
+        "value": 6.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(1.0, -1.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(-1.0, -1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(1.0, 0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(3.0, 1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(1.0, +1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(1.0, -1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1.0, 1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1.0, +1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1.0, -1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1.0, -1e1)}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{maxNumber()}",
+      "expected": {
+        "type": "number",
+        "value": 1.7976931348623157E+308
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{minNumber()}",
+      "expected": {
+        "type": "number",
+        "value": 4.9E-324
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(-0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(5.3)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(-5.3)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(1.5, 2.5)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(1.5, -2.5)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-1.5, 2.5)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-1.5, -2.5)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(1.5, 0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-1.5, 0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(1.5, -0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-1.5, -0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0.0, 0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0.0, -0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-0.0, -0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-0.0, 0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-0.0, 1.5)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-0.0, -1.5)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0.0, 1.5)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0.0, -1.5)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(1.5)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(0.746578)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(0.3)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-0.3)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-0.746578)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-1.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{round(-1.5)}",
+      "expected": {
+        "type": "number",
+        "value": -2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(1.5)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(0.746578)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(0.3)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-0.3)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-0.7)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-1.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{floor(-1.5)}",
+      "expected": {
+        "type": "number",
+        "value": -2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(1.5)}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(0.746578)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(0.3)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-0.3)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-0.7)}",
+      "expected": {
+        "type": "number",
+        "value": -0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-1.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{ceil(-1.5)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

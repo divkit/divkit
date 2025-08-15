@@ -1,0 +1,133 @@
+{
+  "description": "Different stroke styles with combined with different stroke width",
+  "platforms": [
+    "ios",
+    "web",
+    "android"
+  ],
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "$style": "border_stroke_style",
+          "$width": "border_stroke_width",
+          "color": "#073642"
+        }
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#002B36"
+    }
+  },
+  "card": {
+    "log_id": "tooltip_modes",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 24,
+            "top": 24,
+            "right": 24,
+            "bottom": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#EEE8D5"
+            }
+          ],
+          "items": [
+            {
+              "type": "button",
+              "background_color": "#802AA198",
+              "border_stroke_style": {
+                "type": "solid"
+              },
+              "border_stroke_width": 2,
+              "text": "stroke style: solid\nstroke width: 2 dp"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#80268BD2",
+              "border_stroke_style": {
+                "type": "dashed"
+              },
+              "border_stroke_width": 2,
+              "text": "stroke style: dashed\nstroke width: 2 dp"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#80CB4B16",
+              "border_stroke_style": {
+                "type": "solid"
+              },
+              "border_stroke_width": 4,
+              "text": "stroke style: solid\nstroke width: 4 dp"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#80DC322F",
+              "border_stroke_style": {
+                "type": "dashed"
+              },
+              "border_stroke_width": 4,
+              "text": "stroke style: dashed\nstroke width: 4 dp"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#806C71C4",
+              "border_stroke_style": {
+                "type": "solid"
+              },
+              "border_stroke_width": 6,
+              "text": "stroke style: solid\nstroke width: 6 dp"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#80D33682",
+              "border_stroke_style": {
+                "type": "dashed"
+              },
+              "border_stroke_width": 6,
+              "text": "stroke style: dashed\nstroke width: 6 dp"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

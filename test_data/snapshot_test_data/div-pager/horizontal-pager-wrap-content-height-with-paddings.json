@@ -1,0 +1,81 @@
+{
+  "description": "Horizontal pager with paddings and items which are higher than pager",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "height": {
+        "type": "wrap_content",
+        "constrained": false
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "paddings": {
+            "top": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page",
+              "text": "Pager height = 100\nPage height = wrap_content,\nconstrained = false\nand is bigger than pager height.\nBottom padding is ignored and bottom border is not drawn.\nSome\nlong\ntext"
+            },
+            {
+              "type": "text_page",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.video.custom'
+}
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':assertion')
+    implementation project(path: ':logging')
+    implementation project(path: ':div-core')
+    implementation project(path: ':div-json')
+
+    implementation libs.exoplayer
+
+    implementation libs.kotlin.corountines.core
+    implementation libs.androidx.coreKtx
+    implementation libs.javax
+}

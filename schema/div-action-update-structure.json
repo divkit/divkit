@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_update_structure",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "update_structure"
+      ]
+    },
+    "variable_name": {
+      "type": "string",
+      "$description": "translations.json#/div_action_update_structure_variable_name"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^(?!\/)(.+)(?<!\/)$",
+      "$description": "translations.json#/div_action_update_structure_path"
+    },
+    "value": {
+      "$ref": "div-typed-value.json",
+      "$description": "translations.json#/div_action_update_structure_value"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "variable_name",
+    "path",
+    "value"
+  ]
+}

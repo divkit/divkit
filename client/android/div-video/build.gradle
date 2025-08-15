@@ -1,0 +1,24 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.video'
+}
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':assertion')
+
+    implementation libs.exoplayer
+
+    implementation libs.kotlin.corountines.core
+    implementation project(path: ':logging')
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xexplicit-api=strict')
+    }
+}

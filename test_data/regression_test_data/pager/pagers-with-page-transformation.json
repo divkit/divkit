@@ -1,0 +1,130 @@
+{
+  "templates": {
+    "title_text": {
+      "type": "text",
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "top": 16
+      },
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "text_block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#eadbfa"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 24,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "tested_pager": {
+      "type": "pager",
+      "items": [
+        {
+          "type": "text_block",
+          "text": "Item 0"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 1"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 2"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 3"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 4"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 5"
+        }
+      ],
+      "layout_mode": {
+        "type": "percentage",
+        "page_width": {
+          "type": "percentage",
+          "value": "@{percentage}"
+        }
+      },
+      "margins": {
+        "top": 8
+      },
+      "paddings": {
+        "right": 10,
+        "left": 10
+      },
+      "restrict_parent_scroll": 1
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "variables": [
+      {
+        "name": "percentage",
+        "type": "integer",
+        "value": 70
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "title_text",
+              "text": "Slide animation"
+            },
+            {
+              "type": "tested_pager",
+              "page_transformation": {
+                "type": "slide",
+                "next_page_scale": 0.8,
+                "next_page_alpha": 0.5,
+                "previous_page_scale": 0.8,
+                "previous_page_alpha": 0.5
+              }
+            },
+            {
+              "type": "title_text",
+              "text": "Overlap animation"
+            },
+            {
+              "type": "tested_pager",
+              "page_transformation": {
+                "type": "overlap",
+                "next_page_scale": 0.8,
+                "next_page_alpha": 0.5,
+                "previous_page_scale": 0.8,
+                "previous_page_alpha": 0.5
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

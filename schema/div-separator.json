@@ -1,0 +1,54 @@
+{
+  "$description": "translations.json#/div_separator",
+  "definitions": {
+    "style": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "default_value": "#14000000",
+          "$description": "translations.json#/div_separator_style_color"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "vertical",
+            "horizontal"
+          ],
+          "default_value": "horizontal",
+          "$description": "translations.json#/div_separator_style_orientation"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "delimiter_style": {
+          "$ref": "#/definitions/style",
+          "$description": "translations.json#/div_separator_delimiter_style"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "separator"
+          ]
+        }
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "required": [
+        "type"
+      ]
+    }
+  ]
+}

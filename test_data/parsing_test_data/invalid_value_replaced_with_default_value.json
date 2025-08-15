@@ -1,0 +1,34 @@
+{
+  "description": "Invalid value replaced with default value",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "delimiter_style": {
+            "color": "invalid"
+          }
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator",
+            "delimiter_style": {
+              "color": "#14000000"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_string_enum_property_with_default_value"
+      ]
+    },
+    "value": {
+      "type": "string",
+      "enum": [
+        "first",
+        "second",
+        "third"
+      ],
+      "default_value": "second"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "description": "Vertical container with elements with wrap_content constrained size with margins or paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "orientation": "vertical",
+      "height": {
+        "type": "fixed",
+        "value": 300
+      },
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      },
+      "margins": {
+        "right": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "test_container",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 80
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "max_size": {
+                      "value": 130
+                    }
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "text": "min width\n=80\nmax height\n=130\nmargins\n=10\nwith\nlong\ntext"
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "max_size": {
+                      "value": 80
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 130
+                    }
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "text": "max width = 80, min height = 130, margins = 10"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 100
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "max_size": {
+                      "value": 150
+                    }
+                  },
+                  "paddings": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "text": "min width\n=100\nmax height\n=150\npaddings\n=10\nwith\nlong\ntext"
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "max_size": {
+                      "value": 100
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 150
+                    }
+                  },
+                  "paddings": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "text": "max width = 100, min height = 150, paddings = 10"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "paddings": {
+                "left": 15,
+                "top": 15,
+                "right": 15,
+                "bottom": 15
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "max_size": {
+                      "value": 50
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 250
+                    }
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10
+                  },
+                  "paddings": {
+                    "left": 8,
+                    "top": 8,
+                    "right": 8,
+                    "bottom": 8
+                  },
+                  "text": "50x250+10+15+8"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "description": "Container with items with rotation transform",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content",
+            "constrained": true
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "button",
+              "text": "360",
+              "transform": {
+                "rotation": 360
+              }
+            },
+            {
+              "type": "button",
+              "text": "30",
+              "transform": {
+                "rotation": 30
+              }
+            },
+            {
+              "type": "button",
+              "text": "60",
+              "transform": {
+                "rotation": 60
+              }
+            },
+            {
+              "type": "button",
+              "text": "90",
+              "transform": {
+                "rotation": 90
+              }
+            },
+            {
+              "type": "button",
+              "text": "270",
+              "transform": {
+                "rotation": 270
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "button": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ]
+    }
+  }
+}

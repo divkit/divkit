@@ -1,0 +1,69 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "top": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "data_change/src",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "button",
+              "text": "Change data to DST with root flag",
+              "actions": [
+                {
+                  "log_id": "change_data",
+                  "url": "div-demo-action://set_data?path=animations/transition/transition_triggers_data_change_dst_first.json"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Change data to DST without root flag",
+              "actions": [
+                {
+                  "log_id": "change_data",
+                  "url": "div-demo-action://set_data?path=animations/transition/transition_triggers_data_change_dst_second.json"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

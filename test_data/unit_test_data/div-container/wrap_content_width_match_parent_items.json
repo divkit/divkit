@@ -1,0 +1,14 @@
+{
+  "type": "container",
+  "direction": "horizontal",
+  "width": {
+    "type": "wrap_content"
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "It is a dark time for the Rebellion",
+      "font_size": 12
+    }
+  ]
+}

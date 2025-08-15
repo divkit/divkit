@@ -1,0 +1,113 @@
+{
+  "$description": "translations.json#/div_data",
+  "typescript_templatable": false,
+  "codegen": {
+    "divan": {
+      "plus_operator": false,
+      "required_properties_at_factory": true,
+      "forced_properties_order": [
+        "log_id",
+        "states"
+      ]
+    },
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "typescript_templatable": false,
+      "codegen": {
+        "divan": {
+          "alias_factory": "root",
+          "required_properties_at_factory": true,
+          "forced_properties_order": [
+            "state_id",
+            "div"
+          ]
+        },
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
+      "properties": {
+        "state_id": {
+          "type": "integer",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_data_div_state_state_id"
+        },
+        "div": {
+          "$ref": "div.json",
+          "$description": "translations.json#/div_data_div_state_div"
+        }
+      },
+      "required": [
+        "state_id",
+        "div"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/div_state"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_data_states"
+    },
+    "log_id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_data_log_id"
+    },
+    "transition_animation_selector": {
+      "$ref": "div-transition-selector.json",
+      "default_value": "none",
+      "$description": "translations.json#/div_data_transition_animation_selector",
+      "deprecated": true,
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-function.json"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "$description": "translations.json#/div_data_functions"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "div-variable.json"
+      },
+      "$description": "translations.json#/div_data_variables"
+    },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "$description": "translations.json#/div_data_variable_triggers"
+    },
+    "timers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-timer.json"
+      },
+      "$description": "translations.json#/div_data_timers"
+    }
+  },
+  "required": [
+    "states",
+    "log_id"
+  ]
+}

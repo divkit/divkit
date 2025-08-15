@@ -1,0 +1,268 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "$text_variable": "variable",
+      "$hint_text": "hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "pretty_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 32,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffdc60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4,
+        "has_shadow": 1
+      },
+      "font_size": 10,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "input_value_1",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "input_value_2",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "input_value_3",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "inner_input_value",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "div_id": "container",
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "id": "input_1",
+              "type": "pretty_input",
+              "variable": "input_value_1",
+              "hint": "Input 1"
+            },
+            {
+              "id": "input_2",
+              "type": "pretty_input",
+              "variable": "input_value_2",
+              "hint": "Input 2"
+            },
+            {
+              "id": "input_3",
+              "type": "pretty_input",
+              "variable": "input_value_3",
+              "hint": "Input 3"
+            },
+            {
+              "div_id": "state_focus",
+              "type": "state",
+              "states": [
+                {
+                  "state_id": "0",
+                  "div": {
+                    "type": "button",
+                    "text": "Change state and focus",
+                    "actions": [
+                      {
+                        "log_id": "change_focus",
+                        "url": "div-action://set_state?state_id=0/state_focus/1"
+                      },
+                      {
+                        "log_id": "inner_focus",
+                        "typed": {
+                          "type": "focus_element",
+                          "element_id": "inner_input"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "1",
+                  "div": {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "items": [
+                      {
+                        "id": "inner_input",
+                        "type": "pretty_input",
+                        "variable": "inner_input_value",
+                        "hint": "Inner input"
+                      },
+                      {
+                        "type": "button",
+                        "text": "Hide inner input",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "action": {
+                          "log_id": "hide_inner_input",
+                          "url": "div-action://set_state?state_id=0/state_focus/0"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Focus input 1",
+                  "action": {
+                    "log_id": "focus_1",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_1"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus input 2",
+                  "action": {
+                    "log_id": "focus_2",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_2"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus input 3",
+                  "action": {
+                    "log_id": "focus_3",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_3"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,81 @@
+{
+    "features": [{
+        "id": "accessibility_type",
+        "name": "accessibility <code>type</code> property",
+        "status": {
+            "notes": "Partial implementation refers to a limited values support"
+        },
+        "compat": {
+            "android": {
+                "version_added": "1.0.0",
+                "partial_implementation": true
+            },
+            "ios": {
+                "version_added": "1.0.0",
+                "partial_implementation": true
+            },
+            "web": {
+                "version_added": "30.30.0",
+                "partial_implementation": true
+            }
+        }
+    }, {
+        "id": "accessibility_is_checked",
+        "name": "accessibility <code>is_checked</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.30.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
+            },
+            "android": {
+                "version_added": "32.12.0"
+            }
+        }
+    }, {
+        "id": "accessibility_mode",
+        "name": "accessibility <code>mode</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.11.0",
+                "partial_implementation": true,
+                "notes": "Partial implementation on the Web due to support for only the \"exclude\" value"
+            }
+        }
+    }, {
+        "id": "accessibility_state_description",
+        "name": "accessibility <code>state_description</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.12.0"
+            }
+        }
+    }, {
+        "id": "accessibility_hint",
+        "name": "accessibility <code>hint</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.12.0"
+            }
+        }
+    }]
+}

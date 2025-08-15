@@ -1,0 +1,116 @@
+{
+  "description": "Containers with element with center alignment. Element must be shifted to top/left by 10dp.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "paddings": {
+        "top": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#DDD",
+          "type": "solid"
+        }
+      ]
+    },
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "stroke": {
+          "color": "#00f",
+          "width": 2
+        }
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "text",
+          "width": {
+            "type": "fixed",
+            "value": 50
+          },
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 30,
+            "bottom": 30
+          },
+          "border": {
+            "corner_radius": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#f1dff2"
+            }
+          ],
+          "text": "Center",
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Overlap container"
+            },
+            {
+              "type": "test_container",
+              "orientation": "overlap"
+            },
+            {
+              "type": "title",
+              "text": "Horizontal container"
+            },
+            {
+              "type": "test_container",
+              "orientation": "horizontal"
+            },
+            {
+              "type": "title",
+              "text": "Vertical container"
+            },
+            {
+              "type": "test_container",
+              "orientation": "vertical"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

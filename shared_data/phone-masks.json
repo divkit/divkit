@@ -1,0 +1,158 @@
+{
+    "codegen": {
+      "kotlin": {
+        "public_default_values": true
+      },
+      "swift": {
+        "public_default_values": true
+      }
+    },
+    "constants": {
+        "rus_local": {
+            "value": "0 (000) 000-00-00"
+        },
+        "rus": {
+            "value": "+0 (000) 000-00-00"
+        },
+        "am": {
+            "value": "+000 (000) 000-00-00"
+        },
+        "az": {
+            "value": "+000 (000) 000-00-00"
+        },
+        "br": {
+            "value": "+00 (00) 0000-0000"
+        },
+        "by": {
+            "value": "+000 (00) 000-00-00"
+        },
+        "kg": {
+            "value": "+000 (000) 000-00-00"
+        },
+        "md": {
+            "value": "+000 (000) 0-00-00"
+        },
+        "kz": {
+            "value": "+0 (000) 000-00-00"
+        },
+        "ua": {
+            "value": "+000 (00) 000-00-00"
+        },
+        "uz": {
+            "value": "+000 (00) 000-00-00"
+        },
+        "uk": {
+            "value": "+00 0000 000000"
+        },
+        "swiss": {
+            "value": "+00 00 000-00-00"
+        },
+        "angola": {
+            "value": "+000 000 000 000"
+        },
+        "netherlands": {
+            "value": "+00 00 000 0000"
+        },
+        "ge": {
+            "value": "+000 (000) 00-00-00"
+        },
+        "short": {
+            "value": "+0 (000) 000-00-00"
+        },
+        "middle": {
+            "value": "+00 (000) 000-00-00"
+        },
+        "long": {
+            "value": "+000 (00) 000-00-00"
+        },
+        "universal": {
+            "value": "+0000000000000"
+        }
+    },
+    "type": "object",
+    "properties": {
+        "extra_numbers": {
+            "type": "string",
+            "enum": [ "00" ]
+        },
+        "value": {
+            "type": "object",
+            "additionalProperties": true,
+            "default_value": {
+                "1": { "$ref": "#/constants/short" },
+                "2": {
+                    "0": { "$ref": "#/constants/middle" },
+                    "7": { "$ref": "#/constants/middle" },
+                    "4": {
+                        "4": { "$ref": "#/constants/angola" },
+                        "*": { "$ref": "#/constants/long" }
+                    },
+                    "*": { "$ref": "#/constants/long" }
+                },
+                "3": {
+                    "1": { "$ref": "#/constants/netherlands" },
+                    "5": {
+                        "0": { "$ref": "#/constants/ua" },
+                        "*": { "$ref": "#/constants/long" }
+                    },
+                    "8": {
+                        "0": { "$ref": "#/constants/ua" },
+                        "*": { "$ref": "#/constants/long" }
+                    },
+                    "7": {
+                        "3": { "$ref": "#/constants/md" },
+                        "4": { "$ref": "#/constants/am" },
+                        "5": { "$ref": "#/constants/by" },
+                        "*": { "$ref": "#/constants/long" }
+                    },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "4": {
+                    "1": { "$ref": "#/constants/swiss" },
+                    "2": { "$ref": "#/constants/long" },
+                    "4": { "$ref": "#/constants/uk" },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "5": {
+                    "0": { "$ref": "#/constants/long" },
+                    "5": { "$ref": "#/constants/br" },
+                    "9": { "$ref": "#/constants/long" },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "6": {
+                    "7": { "$ref": "#/constants/long" },
+                    "8": { "$ref": "#/constants/long" },
+                    "9": { "$ref": "#/constants/long" },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "7": {
+                    "7": { "$ref": "#/constants/kz" },
+                    "3": {
+                        "3": { "$ref": "#/constants/kz" },
+                        "*": { "$ref": "#/constants/rus" }
+                    },
+                    "*": { "$ref": "#/constants/rus" }
+                },
+                "8": {
+                    "9": { "$ref": "#/constants/rus_local" },
+                    "5": { "$ref": "#/constants/long" },
+                    "8": { "$ref": "#/constants/long" },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "9": {
+                    "6": { "$ref": "#/constants/long" },
+                    "7": { "$ref": "#/constants/long" },
+                    "9": {
+                        "4": { "$ref": "#/constants/az" },
+                        "5": { "$ref": "#/constants/ge" },
+                        "6": { "$ref": "#/constants/kg" },
+                        "8": { "$ref": "#/constants/uz" },
+                        "*": { "$ref": "#/constants/long" }
+                    },
+                    "*": { "$ref": "#/constants/middle" }
+                },
+                "*": { "$ref": "#/constants/universal" }
+            }
+        }
+    }
+}

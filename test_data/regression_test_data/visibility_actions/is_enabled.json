@@ -1,0 +1,188 @@
+{
+  "templates": {
+    "block": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "text_block",
+          "font_size": 12,
+          "line_height": 15,
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "alignment_horizontal": "center",
+          "text_color": "#000000",
+          "paddings": {
+            "top": 4,
+            "bottom": 4,
+            "left": 8,
+            "right": 8
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 104
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0E000000"
+            }
+          ],
+          "border": {
+            "corner_radius": 16
+          },
+          "disappear_actions": [
+            {
+              "$log_id": "visibility_id",
+              "log_limit": 0,
+              "is_enabled": "@{is_enabled}",
+              "disappear_duration": 0,
+              "visibility_percentage": 50
+            }
+          ],
+          "visibility_actions": [
+            {
+              "$log_id": "visibility_id",
+              "$url": "visibility_url",
+              "log_limit": 0,
+              "is_enabled": "@{is_enabled}",
+              "visibility_duration": 0,
+              "visibility_percentage": 50
+            }
+          ]
+        }
+      ]
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "catched_visibility_action",
+        "type": "string",
+        "value": "none"
+      },
+      {
+        "name": "is_enabled",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "gallery",
+              "height": {
+                "type": "fixed",
+                "value": 104
+              },
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "item_spacing": 16,
+              "items": [
+                {
+                  "type": "block",
+                  "text_block": "Item 0",
+                  "visibility_id": "item_0",
+                  "visibility_url": "div-action://set_variable?name=catched_visibility_action&value=item_0"
+                },
+                {
+                  "type": "block",
+                  "text_block": "Item 1",
+                  "visibility_id": "item_1",
+                  "visibility_url": "div-action://set_variable?name=catched_visibility_action&value=item_1"
+                },
+                {
+                  "type": "block",
+                  "text_block": "Item 2",
+                  "visibility_id": "item_2",
+                  "visibility_url": "div-action://set_variable?name=catched_visibility_action&value=item_2"
+                },
+                {
+                  "type": "block",
+                  "text_block": "Item 3",
+                  "visibility_id": "item_3",
+                  "visibility_url": "div-action://set_variable?name=catched_visibility_action&value=item_3"
+                },
+                {
+                  "type": "block",
+                  "text_block": "Item 4",
+                  "visibility_id": "item_4",
+                  "visibility_url": "div-action://set_variable?name=catched_visibility_action&value=item_4"
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "Last catched visibility action: @{catched_visibility_action}",
+              "margins": {
+                "top": 16,
+                "bottom": 0
+              },
+              "ranges": [
+                {
+                  "start": 32,
+                  "end": 38,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "@{is_enabled ? 'Disable actions' : 'Enable actions'}",
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "font_size": 15,
+              "line_height": 20,
+              "action": {
+                "log_id": "switch_is_enabled",
+                "url": "div-action://set_variable?name=is_enabled&value=@{!is_enabled}"
+              },
+              "border": {
+                "corner_radius": 16,
+                "stroke": {
+                  "color": "#000000",
+                  "width": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

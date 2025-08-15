@@ -1,0 +1,38 @@
+name: divkit
+description: Open source SDUI framework for server-driven app updates, rapid UI prototyping, and cross-platform layouts.
+homepage: https://github.com/divkit/divkit
+repository: https://github.com/divkit/divkit
+version: 0.6.1-rc.1
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: ">=3.0.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  meta: ^1.8.0
+  rxdart: ">=0.27.7 <0.29.0"
+  equatable: ^2.0.5
+  logging: ^1.1.1
+  clock: ^1.1.1
+  collection: ^1.17.0
+  petitparser: ">=5.1.0 <7.0.0"
+  visibility_detector: ">=0.2.0 <0.5.0"
+
+  cached_network_image: ^3.2.3
+  flutter_svg: ">=1.0.0 <3.0.0"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+  path: ^1.8.2
+  golden_toolkit: ^0.15.0
+  fake_async: ^1.3.1
+  http: ^0.13.5
+  mocktail_image_network: ^1.2.0
+  sqflite: ^2.2.5
+  sqflite_common_ffi: ^2.2.5

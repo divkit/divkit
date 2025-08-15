@@ -1,0 +1,137 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`background > escape 1`] = `
+{
+  "image": "url("&quot;&lt;script&amp;")",
+  "position": "50% 50%",
+  "size": "cover",
+}
+`;
+
+exports[`background > getBackground 1`] = `
+{
+  "color": "#ffcc00",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > getBackground 2`] = `
+{
+  "image": "linear-gradient(90deg,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > getBackground 3`] = `
+{
+  "image": "linear-gradient(-33deg,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > getBackground 4`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "50% 50%",
+  "size": "cover",
+}
+`;
+
+exports[`background > getBackground 5`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "100% 100%",
+  "size": "contain",
+}
+`;
+
+exports[`background > radial 1`] = `
+{
+  "image": "radial-gradient(circle farthest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 2`] = `
+{
+  "image": "radial-gradient(circle 10em at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 3`] = `
+{
+  "image": "radial-gradient(circle closest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 4`] = `
+{
+  "image": "radial-gradient(circle closest-side at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 5`] = `
+{
+  "image": "radial-gradient(circle farthest-side at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 6`] = `
+{
+  "image": "radial-gradient(circle farthest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 7`] = `
+{
+  "image": "radial-gradient(circle farthest-corner at 10em 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 8`] = `
+{
+  "image": "radial-gradient(circle farthest-corner at 70% 15em,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > radial 9`] = `
+{
+  "image": "radial-gradient(circle closest-side at 100% 100%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background > rtl 1`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "100% 100%",
+  "size": "contain",
+}
+`;
+
+exports[`background > rtl 2`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "0% 100%",
+  "size": "contain",
+}
+`;

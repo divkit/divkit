@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_timer",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "timer"
+      ]
+    },
+    "id": {
+      "$description": "translations.json#/div_action_timer_id",
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "$description": "translations.json#/div_action_timer_action",
+      "enum": [
+        "start",
+        "stop",
+        "pause",
+        "resume",
+        "cancel",
+        "reset"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "id",
+    "action"
+  ]
+}

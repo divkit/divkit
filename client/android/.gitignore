@@ -1,0 +1,15 @@
+.gclient
+.gclient_entries
+*.iml
+/.mainframer
+*~
+/captures
+/deps/android-sdk
+/deps/jdk
+*.pyc
+*.swp
+venv
+/.cipd
+/yahooks/linters/detekt/temp
+.hpe
+.sdk

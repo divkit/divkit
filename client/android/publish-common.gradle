@@ -1,0 +1,78 @@
+import com.yandex.div.gradle.FileExtensions
+import com.yandex.div.gradle.PublicationType
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+group = 'com.yandex.div'
+
+ext {
+    publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
+
+    signingKeyId = rootProject.findProperty("signingKeyId")
+    signingPassword = rootProject.findProperty("signingPassword")
+    signingSecretKeyRingFile = rootProject.findProperty("signingSecretKeyRingFile")
+}
+
+publicationType.configureForProject(project)
+
+def publishToMavenCentral = rootProject.ext.has("publishToMavenCentral")
+        && rootProject.ext.publishToMavenCentral
+        && !projectDir.path.contains("internal/android/libs")
+
+if (publishToMavenCentral) {
+    rootProject.ext {
+        signing {
+            keyId = signingKeyId
+            password = signingPassword
+            secretKeyRingFile = signingSecretKeyRingFile
+        }
+    }
+}
+
+afterEvaluate {
+    if (publishToMavenCentral) {
+        signing {
+            sign publishing.publications
+            sign configurations.archives
+        }
+    }
+
+    publishing {
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = "DivKit"
+                    description = "DivKit is an open source Server-Driven UI (SDUI) framework. SDUI is a an emerging technique that leverage the server to build the user interfaces of their mobile app."
+                    url = "http://divkit.tech/"
+
+                    licenses {
+                        license {
+                            name = "Apache License, version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0"
+                            distribution = "repo"
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git://github.com/divkit/divkit.git"
+                        developerConnection = "scm:git://github.com/divkit/divkit.git"
+                        url = "https://github.com/divkit/divkit.git"
+                    }
+
+                    developers {
+                        developer {
+                            name = "Yandex"
+                            url = "http://divkit.tech/"
+                        }
+                    }
+                }
+                ext.repo = 'release'
+            }
+        }
+    }
+}
+
+FileExtensions.ifExists("${buildscript.sourceFile.parent}/publish-common.internal.gradle") {
+    apply from: it
+}

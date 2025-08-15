@@ -1,0 +1,11 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.json'
+}
+
+dependencies {
+    api project(path: ':div-data')
+}

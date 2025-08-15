@@ -1,0 +1,82 @@
+{
+  "description": "Horizontal pager with match_parent height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "border": {
+            "stroke": {
+              "color": "#00FF00"
+            }
+          },
+          "items": [
+            {
+              "type": "pager",
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "value": 90
+                }
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFF0000",
+                  "width": 2
+                }
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "Container height = 120\nPager height = match_parent"
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "For millions of years mankind lived just like animals"
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "We learned to talk"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

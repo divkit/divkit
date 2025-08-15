@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "label_id": {
+      "type": "string",
+      "$description": "translations.json#/div_input_validators_label_id"
+    },
+    "allow_empty": {
+      "$ref": "common.json#/boolean_int",
+      "default_value": "false",
+      "$description": "translations.json#/div_input_validators_allow_empty"
+    },
+    "variable": {
+      "$ref": "div-variable-name.json",
+      "$description": "translations.json#/div_input_validators_variable"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
+}

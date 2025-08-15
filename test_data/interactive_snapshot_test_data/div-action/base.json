@@ -1,0 +1,77 @@
+{
+  "description": "Typed actions",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "card": {
+        "type": "container",
+        "items": [
+          {
+            "type": "text",
+            "font_size": 21,
+            "font_weight": "bold",
+            "$text": "content"
+          }
+        ],
+        "orientation": "vertical",
+        "paddings": {
+          "top": 16,
+          "bottom": 16,
+          "left": 16,
+          "right": 16
+        }
+      }
+    },
+    "card": {
+      "log_id": "ignore_url_action_when_has_typed",
+      "variables": [
+        {
+          "type": "string",
+          "name": "string_variable",
+          "value": "default string"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "card",
+                "content": "@{string_variable}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "string_variable",
+            "index": 0,
+            "value": {
+              "type": "string",
+              "value": "typed string"
+            }
+          },
+          "url": "div-action://set_variable?name=string_variable&value=url_string",
+          "log_id": "ignore url when typed exist"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

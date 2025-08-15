@@ -1,0 +1,61 @@
+{
+  "description": "Container with radial gradient centered at the top, with a radius to the nearest side of the container, that makes it invisible",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "border": {
+            "stroke": {
+              "width": 1,
+              "color": "#000"
+            }
+          },
+          "background": [
+            {
+              "type": "radial_gradient",
+              "radius": {
+                "type": "relative",
+                "value": "nearest_side"
+              },
+              "center_x": {
+                "type": "relative",
+                "value": 0.4
+              },
+              "center_y": {
+                "type": "relative",
+                "value": 0.0
+              },
+              "colors": [
+                "#FF5C00",
+                "#EA507C",
+                "#B941EF",
+                "#5B61FF",
+                "#21BEE7"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "type": "separator",
+              "delimiter_style": {
+                "color": "#00000000"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

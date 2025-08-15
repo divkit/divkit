@@ -1,0 +1,97 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    },
+    "horizontal_match_parent_cell_with_one_pixel_margin": {
+      "type": "cell_with_one_pixel_margin",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      }
+    },
+    "vertical_match_parent_cell_with_one_pixel_margin": {
+      "type": "horizontal_match_parent_cell_with_one_pixel_margin",
+      "height": {
+        "type": "match_parent",
+        "weight": 1
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 2,
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "paddings": {
+            "left": 20,
+            "top": 5,
+            "right": 15,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BB00FF"
+            }
+          },
+          "items": [
+            {
+              "type": "vertical_match_parent_cell_with_one_pixel_margin",
+              "text": "1"
+            },
+            {
+              "type": "vertical_match_parent_cell_with_one_pixel_margin",
+              "text": "2"
+            },
+            {
+              "type": "vertical_match_parent_cell_with_one_pixel_margin",
+              "text": "3"
+            },
+            {
+              "type": "vertical_match_parent_cell_with_one_pixel_margin",
+              "text": "4"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

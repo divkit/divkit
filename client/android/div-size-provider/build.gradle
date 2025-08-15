@@ -1,0 +1,15 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.sizeprovider'
+}
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':div-json')
+    implementation project(path: ':utils')
+
+    testImplementation libs.androidx.test.coreKtx
+}

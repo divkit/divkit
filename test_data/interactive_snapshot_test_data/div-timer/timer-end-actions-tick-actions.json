@@ -1,0 +1,80 @@
+{
+  "description": "Run timer with end_actions and tick_actions",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "timer_label",
+          "type": "string",
+          "value": "NOT STARTED"
+        },
+        {
+          "name": "tick_count",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "timers": [
+        {
+          "id": "timer1",
+          "duration": 1000,
+          "tick_interval": 100,
+          "end_actions": [
+            {
+              "url": "div-action://set_variable?name=timer_label&value=FINISHED",
+              "log_id": "timer finished"
+            }
+          ],
+          "tick_actions": [
+            {
+              "url": "div-action://set_variable?name=tick_count&value=@{tick_count + 1}",
+              "log_id": "timer tick"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Timer state: @{timer_label}"
+              },
+              {
+                "type": "text",
+                "text": "Timer ticks: @{tick_count} (expected when finished: 10)"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "Start timer",
+          "url": "div-action://timer?id=timer1&action=start"
+        },
+        {
+          "url": "div-action://set_variable?name=timer_label&value=started",
+          "log_id": "change label"
+        }
+      ],
+      "delay": 2000,
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

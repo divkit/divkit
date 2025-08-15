@@ -1,0 +1,182 @@
+{
+  "cases": [
+    {
+      "expression": "@{4.0 % 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{3.2 % 2.5}",
+      "expected": {
+        "type": "number",
+        "value": 0.7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{0.0 % 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-3.0 % 2.0}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{3.0 % -2.0}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-3.0 % -2.0}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 3.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": -3.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-a % b}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": -3.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a % -b}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 3.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": -2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

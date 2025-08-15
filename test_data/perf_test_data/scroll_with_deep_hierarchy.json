@@ -1,0 +1,150 @@
+{
+  "templates": {
+    "pager_element": {
+      "type": "image",
+      "image_url": "https://empty.com/stub_image",
+      "height": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 400
+      },
+      "width": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 400
+      }
+    },
+    "pagers": {
+      "type": "pager",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F5F3F1"
+        }
+      ],
+      "items": [
+        {
+          "type": "pager_element"
+        },
+        {
+          "type": "pager_element"
+        },
+        {
+          "type": "pager_element"
+        },
+        {
+          "type": "pager_element"
+        },
+        {
+          "type": "pager_element"
+        }
+      ],
+      "layout_mode": {
+        "type": "wrap_content"
+      }
+    },
+    "containers": {
+      "type": "container",
+      "items": [
+        {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "container",
+                  "items": [
+                    {
+                      "type": "container",
+                      "items": [
+                        {
+                          "type": "container",
+                          "items": [
+                            {
+                              "type": "container",
+                              "items": [
+                                {
+                                  "type": "container",
+                                  "items": [
+                                    {
+                                      "type": "container",
+                                      "items": [
+                                        {
+                                          "type": "container",
+                                          "items": [
+                                            {
+                                              "type": "container",
+                                              "items": [
+                                                {
+                                                  "type": "container",
+                                                  "items": [
+                                                    {
+                                                      "type": "container",
+                                                      "$items": "inner_items"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "clip_to_bounds": 0,
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "containers",
+                  "inner_items": [
+                    {
+                      "type": "containers",
+                      "inner_items": [
+                        {
+                          "type": "pagers"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

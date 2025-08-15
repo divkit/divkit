@@ -1,0 +1,184 @@
+// Generated code. Do not modify.
+
+import Foundation
+import Serialization
+import VGSL
+
+public final class DivRoundedRectangleShapeTemplate: TemplateValue, Sendable {
+  public static let type: String = "rounded_rectangle"
+  public let parent: String?
+  public let backgroundColor: Field<Expression<Color>>?
+  public let cornerRadius: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(5))
+  public let itemHeight: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(10))
+  public let itemWidth: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(10))
+  public let stroke: Field<DivStrokeTemplate>?
+
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+    self.init(
+      parent: dictionary["type"] as? String,
+      backgroundColor: dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
+      cornerRadius: dictionary.getOptionalField("corner_radius", templateToType: templateToType),
+      itemHeight: dictionary.getOptionalField("item_height", templateToType: templateToType),
+      itemWidth: dictionary.getOptionalField("item_width", templateToType: templateToType),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
+    )
+  }
+
+  init(
+    parent: String?,
+    backgroundColor: Field<Expression<Color>>? = nil,
+    cornerRadius: Field<DivFixedSizeTemplate>? = nil,
+    itemHeight: Field<DivFixedSizeTemplate>? = nil,
+    itemWidth: Field<DivFixedSizeTemplate>? = nil,
+    stroke: Field<DivStrokeTemplate>? = nil
+  ) {
+    self.parent = parent
+    self.backgroundColor = backgroundColor
+    self.cornerRadius = cornerRadius
+    self.itemHeight = itemHeight
+    self.itemWidth = itemWidth
+    self.stroke = stroke
+  }
+
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRoundedRectangleShapeTemplate?) -> DeserializationResult<DivRoundedRectangleShape> {
+    let backgroundColorValue = { parent?.backgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
+    let cornerRadiusValue = { parent?.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let itemHeightValue = { parent?.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let itemWidthValue = { parent?.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let strokeValue = { parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let errors = mergeErrors(
+      backgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_color", error: $0) },
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_height", error: $0) },
+      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_width", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
+    )
+    let result = DivRoundedRectangleShape(
+      backgroundColor: { backgroundColorValue.value }(),
+      cornerRadius: { cornerRadiusValue.value }(),
+      itemHeight: { itemHeightValue.value }(),
+      itemWidth: { itemWidthValue.value }(),
+      stroke: { strokeValue.value }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  public static func resolveValue(context: TemplatesContext, parent: DivRoundedRectangleShapeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRoundedRectangleShape> {
+    if useOnlyLinks {
+      return resolveOnlyLinks(context: context, parent: parent)
+    }
+    var backgroundColorValue: DeserializationResult<Expression<Color>> = { parent?.backgroundColor?.value() ?? .noValue }()
+    var cornerRadiusValue: DeserializationResult<DivFixedSize> = .noValue
+    var itemHeightValue: DeserializationResult<DivFixedSize> = .noValue
+    var itemWidthValue: DeserializationResult<DivFixedSize> = .noValue
+    var strokeValue: DeserializationResult<DivStroke> = .noValue
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "background_color" {
+           backgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: backgroundColorValue)
+          }
+        }()
+        _ = {
+          if key == "corner_radius" {
+           cornerRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: cornerRadiusValue)
+          }
+        }()
+        _ = {
+          if key == "item_height" {
+           itemHeightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemHeightValue)
+          }
+        }()
+        _ = {
+          if key == "item_width" {
+           itemWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemWidthValue)
+          }
+        }()
+        _ = {
+          if key == "stroke" {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.backgroundColor?.link {
+           backgroundColorValue = backgroundColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.cornerRadius?.link {
+           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.itemHeight?.link {
+           itemHeightValue = itemHeightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.itemWidth?.link {
+           itemWidthValue = itemWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.stroke?.link {
+           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+          }
+        }()
+      }
+    }()
+    if let parent = parent {
+      _ = { cornerRadiusValue = cornerRadiusValue.merged(with: { parent.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { itemHeightValue = itemHeightValue.merged(with: { parent.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { itemWidthValue = itemWidthValue.merged(with: { parent.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+    }
+    let errors = mergeErrors(
+      backgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_color", error: $0) },
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_height", error: $0) },
+      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_width", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
+    )
+    let result = DivRoundedRectangleShape(
+      backgroundColor: { backgroundColorValue.value }(),
+      cornerRadius: { cornerRadiusValue.value }(),
+      itemHeight: { itemHeightValue.value }(),
+      itemWidth: { itemWidthValue.value }(),
+      stroke: { strokeValue.value }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivRoundedRectangleShapeTemplate {
+    guard let parent = parent, parent != Self.type else { return self }
+    guard let parentTemplate = templates[parent] as? DivRoundedRectangleShapeTemplate else {
+      throw DeserializationError.unknownType(type: parent)
+    }
+    let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
+
+    return DivRoundedRectangleShapeTemplate(
+      parent: nil,
+      backgroundColor: backgroundColor ?? mergedParent.backgroundColor,
+      cornerRadius: cornerRadius ?? mergedParent.cornerRadius,
+      itemHeight: itemHeight ?? mergedParent.itemHeight,
+      itemWidth: itemWidth ?? mergedParent.itemWidth,
+      stroke: stroke ?? mergedParent.stroke
+    )
+  }
+
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivRoundedRectangleShapeTemplate {
+    let merged = try mergedWithParent(templates: templates)
+
+    return DivRoundedRectangleShapeTemplate(
+      parent: nil,
+      backgroundColor: merged.backgroundColor,
+      cornerRadius: merged.cornerRadius?.tryResolveParent(templates: templates),
+      itemHeight: merged.itemHeight?.tryResolveParent(templates: templates),
+      itemWidth: merged.itemWidth?.tryResolveParent(templates: templates),
+      stroke: merged.stroke?.tryResolveParent(templates: templates)
+    )
+  }
+}

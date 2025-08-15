@@ -1,0 +1,173 @@
+{
+  "cases": [
+    {
+      "expression": "@{parseUnixTime(0) + parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 + 1970-01-01 00:00:01]. Operator '+' cannot be applied to DateTime type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) - parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 - 1970-01-01 00:00:01]. Operator '-' cannot be applied to DateTime type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) * parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 * 1970-01-01 00:00:01]. Operator '*' cannot be applied to DateTime type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) / parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 / 1970-01-01 00:00:01]. Operator '/' cannot be applied to DateTime type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) % parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 % 1970-01-01 00:00:01]. Operator '%' cannot be applied to DateTime type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) ^ parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) & parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) | parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) && parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 && ...]. '&&' must be called with boolean operands."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) || parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 || ...]. '||' must be called with boolean operands."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [-1970-01-01 00:00:00]. A Number is expected after a unary minus."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [+1970-01-01 00:00:00]. A Number is expected after a unary plus."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{!parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [!1970-01-01 00:00:00]. A Boolean is expected after a unary not."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

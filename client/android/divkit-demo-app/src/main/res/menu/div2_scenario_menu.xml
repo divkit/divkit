@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/div2_perform_action"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="@string/perform_action" />
+
+    <item
+        android:id="@+id/div2_variables"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="@string/variables" />
+
+    <item
+        android:id="@+id/div2_download_patch"
+        android:orderInCategory="300"
+        app:showAsAction="never"
+        android:title="@string/load_patch" />
+    <item
+        android:id="@+id/div2_load_div_json"
+        android:orderInCategory="400"
+        app:showAsAction="never"
+        android:title="@string/load_div_json" />
+    <item
+            android:id="@+id/div2_close_all_tooltips"
+            android:orderInCategory="500"
+            app:showAsAction="never"
+            android:title="@string/close_all_tooltips" />
+
+</menu>

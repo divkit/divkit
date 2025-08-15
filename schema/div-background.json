@@ -1,0 +1,24 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-linear-gradient.json",
+      "$description": "translations.json#/div_gradient_linear"
+    },
+    {
+      "$ref": "div-radial-gradient.json",
+      "$description": "translations.json#/div_gradient_radial"
+    },
+    {
+      "$ref": "div-image-background.json",
+      "$description": "translations.json#/div_background_image"
+    },
+    {
+      "$ref": "div-solid-background.json",
+      "$description": "translations.json#/div_background_solid"
+    },
+    {
+      "$ref": "div-nine-patch-background.json",
+      "$description": "translations.json#/div_nine_patch_background"
+    }
+  ]
+}

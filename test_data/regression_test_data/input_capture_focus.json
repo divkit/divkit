@@ -1,0 +1,189 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 24,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "top": 24,
+        "bottom": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "test_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ff5500"
+          }
+        ]
+      }
+    }
+  },
+  "card": {
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "input_value_1",
+        "type": "string",
+        "value": "initial_text_1"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "test_input",
+              "id": "input_1",
+              "text_variable": "input_value_1"
+            },
+            {
+              "type": "text_block",
+              "text": "no action"
+            },
+            {
+              "type": "text_block",
+              "actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "text": "Tap: capture_focus_on_action = true",
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text_block",
+              "actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "capture_focus_on_action": false,
+              "text": "Tap: capture_focus_on_action = false"
+            },
+            {
+              "type": "text_block",
+              "doubletap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "text": "Double tap: capture_focus_on_action = true",
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text_block",
+              "doubletap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "capture_focus_on_action": false,
+              "text": "Double tap: capture_focus_on_action = false"
+            },
+            {
+              "type": "text_block",
+              "longtap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "text": "Long tap: capture_focus_on_action = true",
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text_block",
+              "longtap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "capture_focus_on_action": false,
+              "text": "Long tap: capture_focus_on_action = false"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

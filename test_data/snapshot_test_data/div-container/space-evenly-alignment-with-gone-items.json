@@ -1,0 +1,161 @@
+{
+  "description": "Horizontal container with content_alignment_horizontal = space-evenly and some items with visibility = gone",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "sample_config",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "GONE ELEMENT",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "visibility": "gone",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 1",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "GONE ELEMENT",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "visibility": "gone",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 2",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "visibility": "visible",
+              "orientation": "vertical",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "GONE ELEMENT",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "visibility": "gone",
+              "content_alignment_horizontal": "center"
+            }
+          ],
+          "orientation": "horizontal",
+          "content_alignment_horizontal": "space-evenly",
+          "margins": {
+            "left": 16,
+            "right": 16
+          },
+          "paddings": {
+            "top": 16,
+            "bottom": 16
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "300x300",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "background": [
+            {
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "type": "image",
+              "scale": "no_scale"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

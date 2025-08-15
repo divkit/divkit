@@ -1,0 +1,240 @@
+{
+  "templates": {
+    "bubble_text": {
+      "type": "text",
+      "text_color": "#FFFFFF",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 24,
+      "line_height": 28,
+      "border": {
+        "corner_radius": 36
+      },
+      "action_animation": {
+        "name": "scale",
+        "start_value": 1.0,
+        "end_value": 0.95,
+        "duration": 300,
+        "interpolator": "ease_in_out"
+      }
+    }
+  },
+  "card": {
+    "log_id": "main_screen",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "top": 10,
+            "bottom": 10,
+            "left": 20,
+            "right": 20
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "alignment_horizontal": "center",
+              "margins": {
+                "right": 20
+              },
+              "alignment_vertical": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "alignment_horizontal": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 172
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 44
+                  },
+                  "placeholder_color": "#00000000",
+                  "image_url": "divkit-asset://DivKit.png"
+                },
+                {
+                  "type": "text",
+                  "text": "welcome to DivKit — the modern SDUI layout technology",
+                  "alignment_horizontal": "center",
+                  "font_size": 18,
+                  "line_height": 24,
+                  "font_weight": "regular",
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#000000",
+                  "margins": {
+                    "top": 24,
+                    "bottom": 40
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "bubble_text",
+                      "text": "samples",
+                      "actions": [
+                        {
+                          "log_id": "open_samples",
+                          "url": "div-action://open_screen?activity=samples"
+                        }
+                      ],
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "background": [
+                        {
+                          "color": "#5A43E3",
+                          "type": "solid"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "orientation": "vertical",
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "items": [
+                        {
+                          "type": "bubble_text",
+                          "text": "demo",
+                          "height": {
+                            "type": "match_parent"
+                          },
+                          "background": [
+                            {
+                              "color": "#FF9000",
+                              "type": "solid"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "log_id": "open_demo_activity",
+                              "url": "div-action://open_screen?activity=demo"
+                            }
+                          ],
+                          "margins": {
+                            "left": 8,
+                            "bottom": 8
+                          }
+                        },
+                        {
+                          "items": [
+                            {
+                              "width": {
+                                "type": "match_parent"
+                              },
+                              "type": "image",
+                              "aspect": {
+                                "ratio": 1
+                              },
+                              "image_url": "divkit-asset://Circle.png"
+                            },
+                            {
+                              "type": "bubble_text",
+                              "text": "testing",
+                              "width": {
+                                "type": "match_parent"
+                              },
+                              "height": {
+                                "type": "match_parent"
+                              }
+                            }
+                          ],
+                          "margins": {
+                            "left": 8
+                          },
+                          "height": {
+                            "type": "wrap_content"
+                          },
+                          "alignment_vertical": "center",
+                          "actions": [
+                            {
+                              "log_id": "open_regression",
+                              "url": "div-action://open_screen?activity=regression"
+                            }
+                          ],
+                          "action_animation": {
+                            "name": "scale",
+                            "start_value": 1.0,
+                            "end_value": 0.95,
+                            "duration": 300,
+                            "interpolator": "ease_in_out"
+                          },
+                          "orientation": "overlap",
+                          "type": "container"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "bubble_text",
+                  "text": "settings",
+                  "background": [
+                    {
+                      "color": "#000000",
+                      "type": "solid"
+                    }
+                  ],
+                  "height": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "margins": {
+                    "top": 10
+                  },
+                  "border": {
+                    "corner_radius": 85
+                  },
+                  "actions": [
+                    {
+                      "log_id": "open_settings",
+                      "url": "div-action://open_screen?activity=settings"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

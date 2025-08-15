@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivIndicator tests should create card with templates 1`] = `
+{
+  "templates": {
+    "div": {
+      "type": "indicator",
+      "shape": {
+        "type": "rounded_rectangle",
+        "$item_height": "shape_height"
+      }
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "div",
+          "pager_id": "pager1",
+          "shape_height": {
+            "type": "fixed",
+            "value": 20
+          },
+          "animation": "slider"
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivIndicator tests should create simple block 1`] = `
+{
+  "type": "indicator",
+  "active_item_color": "#fff",
+  "animation": "worm",
+  "inactive_item_color": "#000",
+  "pager_id": "pager1",
+  "shape": {
+    "type": "rounded_rectangle",
+    "corner_radius": {
+      "type": "fixed",
+      "unit": "dp",
+      "value": 10
+    },
+    "item_height": {
+      "type": "fixed",
+      "unit": "sp",
+      "value": 20
+    },
+    "item_width": {
+      "type": "fixed",
+      "value": 100
+    }
+  },
+  "space_between_centers": {
+    "type": "fixed",
+    "value": 1
+  }
+}
+`;

@@ -1,0 +1,37 @@
+{
+  "description": "div-text with empty text.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "empty_container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "text": "",
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#d31515"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

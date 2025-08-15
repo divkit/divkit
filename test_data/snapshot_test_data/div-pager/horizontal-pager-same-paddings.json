@@ -1,0 +1,110 @@
+{
+  "description": "Horizontal pager with paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "pager",
+              "layout_mode": {
+                "type": "fixed",
+                "neighbour_page_width": {
+                  "value": 10
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 10
+              },
+              "paddings": {
+                "left": 20,
+                "top": 0,
+                "right": 20,
+                "bottom": 0
+              },
+              "border": {
+                "stroke": {
+                  "color": "#FF0000",
+                  "width": 1
+                }
+              },
+              "items": [
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "neighbour_page_size = 10\nitem_spacing = 10\npaddings = 20\nPage width is equal to view below pager."
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "Then something happened which unleashed the power of our imagination"
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "We learned to talk"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "This is not pager",
+              "font_size": 12,
+              "font_weight": "medium",
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ],
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "margins": {
+                "left": 20,
+                "top": 0,
+                "right": 20,
+                "bottom": 0
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

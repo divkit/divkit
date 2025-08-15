@@ -1,0 +1,28 @@
+{
+    "features": [{
+        "id": "grid_not_fullfilled_support",
+        "name": "The grid supports empty cells at the end",
+        "compat": {
+            "android": {
+                "version_added": "29.11.0"
+            },
+            "web": {
+                "version_added": "29.11.0"
+            },
+            "ios": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "grid_intersection_resolve",
+        "name": "The grid correctly resolves self intersection between cells",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "30.13.0"
+            }
+        }
+    }]
+}

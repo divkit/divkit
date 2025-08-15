@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "enum": [
+    "source_in",
+    "source_atop",
+    "darken",
+    "lighten",
+    "multiply",
+    "screen"
+  ],
+  "$description": "translations.json#/div_blend_mode"
+}

@@ -1,0 +1,20 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_array",
+      "array": [
+        {
+          "type": "entity_with_complex_property",
+          "$property": "link_1"
+        },
+        {
+          "type": "entity_with_complex_property",
+          "$property": "link_2"
+        }
+      ]
+    }
+  },
+  "entity": {
+    "type": "t_0"
+  }
+}

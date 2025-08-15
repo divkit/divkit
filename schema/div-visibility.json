@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "visible",
+    "invisible",
+    "gone"
+  ],
+  "$description": "translations.json#/div_visibility"
+}

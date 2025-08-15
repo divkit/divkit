@@ -1,0 +1,27 @@
+{
+  "$description": "translations.json#/div_fade_transition",
+  "allOf": [
+    {
+      "$ref": "div-transition-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "fade"
+          ]
+        },
+        "alpha": {
+          "type": "number",
+          "constraint": "number >= 0.0 && number <= 1.0",
+          "default_value": "0.0",
+          "$description": "translations.json#/div_fade_transition_alpha"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

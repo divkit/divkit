@@ -1,0 +1,73 @@
+{
+  "description": "Blocks with paddings aligned left-to-right. Text in blocks should be padded accroding to text regarding to the alignment.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "height": {
+        "type": "match_parent"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#ffffff",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#808080"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "text": "start = 64",
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "start": 64,
+                "end": 0
+              }
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 5
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "end = 64",
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "start": 0,
+                "end": 64
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

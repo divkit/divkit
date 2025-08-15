@@ -1,0 +1,32 @@
+{
+  "log_id": "text",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "font_size": 16,
+        "line_height": 20,
+
+        "width": {
+          "type": "fixed",
+          "value": 80
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "max_lines": 3,
+        "ellipsis": {
+          "text": "… more",
+          "ranges": [
+            {
+              "start": 2,
+              "end": 5
+            }
+          ]
+        },
+        "text": "Su\u00ADper\u00ADcal\u00ADifrag\u00ADilis\u00ADtic\u00ADex\u00ADpi\u00ADali\u00ADdo\u00ADcious",
+        "type": "text"
+      }
+    }
+  ]
+}

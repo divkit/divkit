@@ -1,0 +1,309 @@
+{
+  "cases": [
+    {
+      "expression": "@{toString(1)}",
+      "expected": {
+        "type": "string",
+        "value": "1"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(-1)}",
+      "expected": {
+        "type": "string",
+        "value": "-1"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(3.1415)}",
+      "expected": {
+        "type": "string",
+        "value": "3.1415"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(-3.1415)}",
+      "expected": {
+        "type": "string",
+        "value": "-3.1415"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(1e23)}",
+      "expected": {
+        "type": "string",
+        "value": "1.0E23"
+      },
+      "platforms": [
+        "web",
+        "flutter"
+      ],
+      "unsupported_platforms": {
+        "android": "Double precision loss during conversion (1e23 → 9.999999999999999E22)"
+      }
+    },
+    {
+      "expression": "@{toString(number_var)}",
+      "expected": {
+        "type": "string",
+        "value": "123.0"
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(true)}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(false)}",
+      "expected": {
+        "type": "string",
+        "value": "false"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(rgb_color_var)}",
+      "expected": {
+        "type": "string",
+        "value": "#FFFFCCEE"
+      },
+      "variables": [
+        {
+          "name": "rgb_color_var",
+          "type": "color",
+          "value": "#fce"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(argb_color_var)}",
+      "expected": {
+        "type": "string",
+        "value": "#DDFFCCEE"
+      },
+      "variables": [
+        {
+          "name": "argb_color_var",
+          "type": "color",
+          "value": "#dfce"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(rrggbb_color_var)}",
+      "expected": {
+        "type": "string",
+        "value": "#FFFFCCEE"
+      },
+      "variables": [
+        {
+          "name": "rrggbb_color_var",
+          "type": "color",
+          "value": "#ffCCeE"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(aarrggbb_color_var)}",
+      "expected": {
+        "type": "string",
+        "value": "#DDFFCCEE"
+      },
+      "variables": [
+        {
+          "name": "aarrggbb_color_var",
+          "type": "color",
+          "value": "#DdffCCeE"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(url_var)}",
+      "expected": {
+        "type": "string",
+        "value": "https://ya.ru/?hello=1"
+      },
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://ya.ru/?hello=1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(array_var)}",
+      "expected": {
+        "type": "string",
+        "value": "[\"string\",[123,123.45,true]]"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "string",
+            [
+              123,
+              123.45,
+              true
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(dict_var)}",
+      "expected": {
+        "type": "string",
+        "value": "{\"boolean\":true,\"dict\":{\"integer\":123,\"number\":123.45},\"string\":\"value\"}"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "boolean": true,
+            "dict": {
+              "integer": 123,
+              "number": 123.45
+            },
+            "string": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString('abc')}",
+      "expected": {
+        "type": "string",
+        "value": "abc"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toString()]. Function requires non empty argument list."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toString(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

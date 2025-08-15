@@ -1,0 +1,48 @@
+{
+  "type": "state",
+  "width": {
+    "type": "fixed",
+    "value": 320
+  },
+  "height": {
+    "type": "fixed",
+    "value": 200
+  },
+  "id": "state_container",
+  "default_state_id": "default",
+  "states": [
+    {
+      "state_id": "nondefaut",
+      "div": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "match_parent"
+        },
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text": "First state"
+      }
+    },
+    {
+      "state_id": "default",
+      "div": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "match_parent"
+        },
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text": "Second state"
+      }
+    },
+    {
+      "state_id": "empty"
+    }
+  ]
+}

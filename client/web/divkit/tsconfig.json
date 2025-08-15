@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "target": "ES2022",
+        "strict": true,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "verbatimModuleSyntax": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true
+    },
+    "exclude": [
+        "src/dev.ts"
+    ]
+}

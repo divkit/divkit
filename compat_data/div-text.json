@@ -1,0 +1,213 @@
+{
+    "features": [{
+        "id": "text_truncate",
+        "name": "Text <code>truncate</code> property",
+        "status": {
+            "notes": "The property was deprecated, and then lost this status and was re-implemented."
+        },
+        "compat": {
+            "android": {
+                "version_added": "31.10.0"
+            },
+            "ios": {
+                "version_added": "31.10.0"
+            }
+        }
+    }, {
+        "id": "text_auto_ellipsize",
+        "name": "Text <code>auto_ellipsize</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "29.2.0"
+            },
+            "flutter": {
+                "version_added": "0.1.0"
+            },
+            "ios": {
+                "version_added": "31.3.0",
+                "notes": "Default value is true"
+            }
+        }
+    }, {
+        "id": "text_font_feature_settings",
+        "name": "Text <code>font_feature_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            },
+            "ios": {
+                "version_added": "30.3.0"
+            }
+        }
+    }, {
+        "id": "text_font_variation_settings",
+        "name": "Text <code>font_variation_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
+            }
+        }
+    }, {
+        "id": "text_font_weight_value",
+        "name": "Text <code>font_weight_value</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.6.0"
+            },
+            "ios": {
+                "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
+            }
+        }
+    }, {
+        "id": "text_images_accessibility",
+        "name": "<code>accessibility</code> property for images inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
+            }
+        }
+    }, {
+        "id": "text_items_alignment_vertical",
+        "name": "<code>alignment_vertical</code> property for images and ranges inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
+            },
+            "ios": {
+                "version_added": "32.11.0"
+            }
+        }
+    }, {
+        "id": "text_tighten_width",
+        "name": "Text <code>tighten_width</code> property, that removes unnecessary horizontal paddings in multiline texts",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "text_optional_start_end",
+        "name": "Optional properties of the <code>start</code> and <code>end</code> of the <code>text</code> <code>range</code>, which were originally required",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "ios": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
+            }
+        }
+    }, {
+        "id": "text_range_background_cloud",
+        "name": "<code>cloud</code> background type for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.24.0"
+            }
+        }
+    }, {
+        "id": "text_image_indexing_direction",
+        "name": "<code>indexing_direction</code> property for the image of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.29.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
+            },
+            "ios": {
+                "version_added": "31.3.0"
+            }
+        }
+    }, {
+        "id": "text_image_tint_mode",
+        "name": "<code>tint_mode</code> property for the image of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "13.0.0"
+            },
+            "web": {
+                "version_added": "13.0.0"
+            },
+            "ios": {
+                "version_added": "31.3.0"
+            }
+        }
+    }, {
+        "id": "text_image_preload_required",
+        "name": "<code>preload_required</code> property for the image of a <code>text</code>",
+        "compat": {
+            "web": {
+                "version_added": "29.6.0"
+            },
+            "ios": {
+                "version_added": "32.5.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
+            }
+        }
+    }, {
+        "id": "text_range_baseline_offset",
+        "name": "<code>baseline_offset</code> property for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
+            },
+            "ios": {
+                "version_added": "31.0.0"
+            }
+        }
+    }, {
+        "id": "text_mask",
+        "name": "<code>mask</code> property for the range of a <code>text</code>",
+        "compat": {
+            "web": {
+                "version_added": "31.8.0"
+            }
+        }
+    }, {
+        "id": "text_focused_text_color",
+        "name": "Text <code>focused_text_color</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "32.4.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "27.2.0"
+            }
+        }
+    }]
+}

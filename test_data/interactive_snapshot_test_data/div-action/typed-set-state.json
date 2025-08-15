@@ -1,0 +1,67 @@
+{
+  "description": "Typed action set_state switches one state to another and back",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "id": "sample",
+            "states": [
+              {
+                "state_id": "first",
+                "div": {
+                  "type": "text",
+                  "text": "first state"
+                }
+              },
+              {
+                "state_id": "second",
+                "div": {
+                  "type": "text",
+                  "text": "second state"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "set_state",
+            "state_id": "0/sample/second"
+          },
+          "log_id": "set_second_state"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "set_state",
+            "state_id": "0/sample/first"
+          },
+          "log_id": "return_first_state"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

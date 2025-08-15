@@ -1,0 +1,65 @@
+{
+  "description": "Div background blur with different radii.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "font_size": 12,
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "font_weight": "bold",
+      "text_color": "#ff0000",
+      "height": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "filters": [
+            {
+              "type": "blur",
+              "$radius": "blur_radius"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "text_with_background",
+              "text": "Blur radius 0",
+              "blur_radius": 0
+            },
+            {
+              "type": "text_with_background",
+              "text": "Blur radius 4",
+              "blur_radius": 4
+            },
+            {
+              "type": "text_with_background",
+              "text": "Blur radius 8",
+              "blur_radius": 8
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

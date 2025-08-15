@@ -1,0 +1,50 @@
+{
+  "description": "Container with centered green shadow",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          },
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "has_shadow": 1,
+            "shadow": {
+              "color": "#00FFAA",
+              "offset": {
+                "x": {
+                  "value": 0
+                },
+                "y": {
+                  "value": 0
+                }
+              }
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}

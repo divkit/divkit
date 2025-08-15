@@ -1,0 +1,166 @@
+{
+  "cases": [
+    {
+      "expression": "@{3 - 1}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{30000000000 - 10000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 20000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{3 - 1 - 2}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1 - +1}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1 - -1}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{5000000000000000000 - -6000000000000000000}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [5000000000000000000 - -6000000000000000000]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1 - 9223372036854775808}",
+      "expected": {
+        "type": "error",
+        "value": "Value 9223372036854775808 can't be converted to Integer type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 - b}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 5,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a - b => -7",
+      "expression": "@{a - b}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -10,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -3,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a - +b}",
+      "expected": {
+        "type": "integer",
+        "value": 5
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

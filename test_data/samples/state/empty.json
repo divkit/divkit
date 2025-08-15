@@ -1,0 +1,104 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "visible_text",
+      "id": "visible_id",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 88
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3F28C3"
+        }
+      ],
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "text_color": "#ffffff",
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Empty state"
+            },
+            {
+              "type": "subtitle",
+              "text": "You can specify an empty state in the list of possible states. In this case, when switching to this state, the block will disappear.\n\nIn the example, the button disappears when tapped.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "state",
+              "id": "sample",
+              "states": [
+                {
+                  "state_id": "visible",
+                  "div": {
+                    "type": "text_block",
+                    "text": "Click to make this button invisible",
+                    "actions": [
+                      {
+                        "log_id": "switch_visible",
+                        "url": "div-action://set_state?state_id=0/sample/empty"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "empty"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

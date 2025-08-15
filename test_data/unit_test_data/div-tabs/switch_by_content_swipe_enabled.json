@@ -1,0 +1,12 @@
+{
+  "type": "tabs",
+  "items": [
+    {
+      "title": "test1",
+      "div": {
+        "type": "text",
+        "text": "Ул. Льва Толстого, 16"
+      }
+    }
+  ]
+}

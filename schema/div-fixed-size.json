@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_fixed_size",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "value"
+      ]
+    }
+  },
+  "properties": {
+    "value": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_fixed_size_value"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "$description": "translations.json#/div_fixed_size_unit",
+      "default_value": "dp"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    }
+  },
+  "required": [
+    "value",
+    "type"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_transform",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "properties": {
+    "rotation": {
+      "type": "number",
+      "$description": "translations.json#/div_transform_rotation"
+    },
+    "pivot_x": {
+      "$ref": "div-pivot.json",
+      "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+      "$description": "translations.json#/div_transform_pivot_x"
+    },
+    "pivot_y": {
+      "$ref": "div-pivot.json",
+      "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+      "$description": "translations.json#/div_transform_pivot_y"
+    }
+  }
+}

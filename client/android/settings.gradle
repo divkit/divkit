@@ -1,0 +1,65 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    includeBuild('api-generator-plugin')
+    includeBuild('screenshot-test-plugin')
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        def internalVersions = file("gradle/internal.versions.toml")
+        if (internalVersions.exists()) {
+            create("internalLibs") {
+                from(files(internalVersions))
+            }
+        }
+    }
+}
+
+rootProject.name = 'divkit-android'
+
+include ':api-generator-test'
+include ':assertion'
+include ':beacon'
+include ':coil'
+include ':compose-interop'
+include ':div'
+include ':div-core'
+include ':div-data'
+include ':div-evaluable'
+include ':div-gesture'
+include ':div-histogram'
+include ':div-json'
+include ':div-lottie'
+include ':div-markdown'
+include ':div-pinch-to-zoom'
+include ':div-rive'
+include ':div-shimmer'
+include ':div-shine'
+include ':div-size-provider'
+include ':div-states'
+include ':div-storage'
+include ':div-svg'
+include ':div-video'
+include ':divkit-demo-app'
+include ':divkit-perftests'
+include ':divkit-regression-testing'
+include ':expression-test-common'
+include ':fonts'
+include ':glide'
+include ':lint-rules'
+include ':logging'
+include ':picasso'
+include ':sample'
+include ':screenshot-test-runtime'
+include ':ui-test-common'
+include ':utils'
+include ':video-custom'
+
+def internalSettings = file("settings.internal.gradle")
+if (internalSettings.exists()) {
+    apply from: internalSettings
+}

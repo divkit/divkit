@@ -1,0 +1,44 @@
+{
+  "description": "Markdown extension and text params",
+  "platforms": [
+    "android",
+    "flutter"
+  ],
+  "unsupported_platforms": {
+    "web": "The markdown library is not part of the DivKit library"
+  },
+  "templates": {
+    "md_text": {
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
+      },
+      "type": "text",
+      "text": "# Header 1 \n## Header 2 \n### Header 3\n\n 1. *Italic text* \n 2. > **Bold quote** \n 3. ***Bold italic text***\n\n [*italic link*](ya.ru) • <https://ya.ru> \n\n ```\n let x = 12; \n let y = 6;\n ```",
+      "extensions": [
+        {
+          "id": "markdown"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "md_text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "description": "div-pager with empty items.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "empty_container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "type": "percentage",
+              "value": 75
+            }
+          },
+          "items": [],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#d31515"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

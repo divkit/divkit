@@ -1,0 +1,73 @@
+{
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 16,
+      "paddings": {
+        "left": 20,
+        "right": 20,
+        "top": 10,
+        "bottom": 10
+      },
+      "action": {
+        "log_id": "update_variable",
+        "url": "div-action://set_variable?name=string_var&value=new value"
+      }
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "variables": [
+      {
+        "name": "string_var",
+        "type": "string",
+        "value": "global value"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "item",
+              "text": "global string_var = '@{string_var}'"
+            },
+            {
+              "type": "item",
+              "text": "local string_var = '@{string_var}'",
+              "variables": [
+                {
+                  "name": "string_var",
+                  "type": "string",
+                  "value": "local value"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "variables": [
+                {
+                  "name": "string_var",
+                  "type": "string",
+                  "value": "local value"
+                }
+              ],
+              "items": [
+                {
+                  "type": "item",
+                  "text": "parent local string_var = '@{string_var}'"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

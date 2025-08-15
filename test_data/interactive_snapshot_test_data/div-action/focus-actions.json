@@ -1,0 +1,76 @@
+{
+  "description": "Focus input and clear focus",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "input_value_1",
+          "type": "string",
+          "value": "input view"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "id": "input",
+                "text_variable": "input_value_1",
+                "type": "input",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "focus": {
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#ff5500"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "focus the input",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "input"
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "clear focus",
+          "typed": {
+            "type": "clear_focus"
+          }
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}

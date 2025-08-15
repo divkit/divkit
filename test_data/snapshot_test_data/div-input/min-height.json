@@ -1,0 +1,56 @@
+{
+  "description": "Input with min size height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "x",
+        "type": "string",
+        "value": "Initial text"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "input",
+          "text_variable": "x",
+          "text_alignment_vertical": "center",
+          "line_height": 20,
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "bottom": 16,
+            "right": 16
+          },
+          "height": {
+            "type": "wrap_content",
+            "min_size": {
+              "type": "fixed",
+              "value": 100
+            }
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFCC"
+            }
+          ],
+          "border": {
+            "corner_radius": 8,
+            "has_shadow": 1,
+            "stroke": {
+              "color": "#0000FF"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

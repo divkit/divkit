@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_corners_radius",
+  "properties": {
+    "top-left": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_corners_radius_top_left"
+    },
+    "top-right": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_corners_radius_top_right"
+    },
+    "bottom-left": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_corners_radius_bottom_left"
+    },
+    "bottom-right": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_corners_radius_bottom_right"
+    }
+  }
+}

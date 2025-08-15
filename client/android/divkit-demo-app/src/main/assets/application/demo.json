@@ -1,0 +1,196 @@
+{
+  "templates": {
+    "button": {
+      "type": "container",
+      "orientation": "overlap",
+      "border": {
+        "corner_radius": 70
+      },
+      "action_animation": {
+        "name": "scale",
+        "start_value": 1.0,
+        "end_value": 0.95,
+        "duration": 300,
+        "interpolator": "ease_in_out"
+      },
+      "background": [
+        {
+          "color": "#EBEBEB",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 70
+      }
+    },
+    "text_button": {
+      "type": "button",
+      "items": [
+        {
+          "type": "text",
+          "text_color": "#000000",
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "alignment_horizontal": "center",
+          "alignment_vertical": "center",
+          "font_size": 22,
+          "font_weight": "medium",
+          "$text": "text_button",
+          "line_height": 30,
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "button_image": {
+      "type": "button",
+      "items": [
+        {
+          "type": "image",
+          "alignment_horizontal": "center",
+          "alignment_vertical": "center",
+          "$image_url": "image_url",
+          "width": {
+            "type": "fixed",
+            "value": 30
+          },
+          "height": {
+            "type": "fixed",
+            "value": 30
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "main_screen",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "top": 35,
+            "bottom": 7,
+            "left": 20,
+            "right": 20
+          },
+          "items": [
+            {
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "bottom": 10
+              },
+              "alignment_vertical": "top",
+              "font_size": 20,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "text_variable": "div2activity_text",
+              "hint_text": "enter link or JSON\n\nSupported JSON formats:\n- Card-only: '{ \"states\": [ ... ] }' \n- Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'\n- Card and global variables:\n    '{\n         \"card\": { ... },\n         \"templates\": { ... },\n         \"variables\": [ ... ]\n    }'",
+              "hint_color": "#88000000",
+              "highlight_color": "#1DFF9000",
+              "line_height": 28,
+              "select_all_on_focus": 1,
+              "keyboard_type": "multi_line_text"
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "alignment_vertical": "bottom",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "text_button",
+                  "text_button": "show the result",
+                  "margins": {
+                    "bottom": 10
+                  },
+                  "actions": [
+                    {
+                      "log_id": "show result",
+                      "url": "div-action://demo_activity?action=show_result"
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "orientation": "horizontal",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "button_image",
+                      "image_url": "divkit-asset://samples/file.png",
+                      "actions": [
+                        {
+                          "log_id": "paste",
+                          "url": "div-action://demo_activity?action=paste"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button_image",
+                      "image_url": "divkit-asset://samples/qr_code_scanner.png",
+                      "margins": {
+                        "left": 12
+                      },
+                      "actions": [
+                        {
+                          "log_id": "qr scanner",
+                          "url": "div-action://demo_activity?action=open_qr"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button_image",
+                      "image_url": "divkit-asset://samples/folder_open.png",
+                      "margins": {
+                        "left": 12
+                      },
+                      "actions": [
+                        {
+                          "log_id": "open file",
+                          "url": "div-action://demo_activity?action=open_file"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

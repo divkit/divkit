@@ -1,0 +1,79 @@
+{
+  "description": "Shadows of children are drawn correctly in overlap container.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "shadow_in_overlap_container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "width": {
+            "type": "fixed",
+            "value": 60
+          },
+          "items": [
+            {
+              "type": "container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#f0f0f0"
+                }
+              ],
+              "height": {
+                "type": "match_parent"
+              },
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#F8604A"
+                }
+              ],
+              "border": {
+                "has_shadow": true,
+                "shadow": {
+                  "alpha": 0.5,
+                  "blur": 10,
+                  "color": "#000000",
+                  "offset": {
+                    "x": {
+                      "value": 5.0
+                    },
+                    "y": {
+                      "value": 5.0
+                    }
+                  }
+                }
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "width": {
+                "type": "fixed",
+                "value": 40
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

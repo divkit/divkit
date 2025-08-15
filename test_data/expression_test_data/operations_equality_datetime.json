@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "expression": "@{parseUnixTime(0) == parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) != parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) != parseUnixTime(1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(0) == parseUnixTime(1)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

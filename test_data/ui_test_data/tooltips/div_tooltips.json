@@ -1,0 +1,397 @@
+{
+  "log_id": "snapshot_test_card",
+  "variables": [
+    {
+      "type": "string",
+      "name": "outside_actions_called",
+      "value": "false"
+    },
+    {
+      "type": "string",
+      "name": "non_modal_button_clicked",
+      "value": "false"
+    }
+  ],
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "container",
+            "orientation": "overlap",
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "width": {
+              "type": "match_parent"
+            },
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "items": [
+              {
+                "type": "button",
+                "gravity": "top-left",
+                "div_action": "div-action://show_tooltip?id=top-left",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "top",
+                "div_action": "div-action://show_tooltip?id=top",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "center"
+              },
+              {
+                "type": "button",
+                "gravity": "top-right",
+                "div_action": "div-action://show_tooltip?id=top-right",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "left",
+                "div_action": "div-action://show_tooltip?id=left",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "right",
+                "div_action": "div-action://show_tooltip?id=right",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom-left",
+                "div_action": "div-action://show_tooltip?id=bottom-left",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom",
+                "div_action": "div-action://show_tooltip?id=bottom",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "center"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom-right",
+                "div_action": "div-action://show_tooltip?id=bottom-right",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "center",
+                "div_action": "div-action://show_tooltip?id=center",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "center"
+              }
+            ]
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "type": "state",
+            "alignment_horizontal": "center",
+            "id": "status",
+            "states": [
+              {
+                "state_id": "hidden",
+                "div": {
+                  "type": "status",
+                  "text": "hidden"
+                }
+              },
+              {
+                "state_id": "showing",
+                "div": {
+                  "type": "status",
+                  "text": "showing",
+                  "action": {
+                    "log_id": "label",
+                    "url": "div-action://set_state?state_id=0/status/hidden"
+                  }
+                }
+              },
+              {
+                "state_id": "clicked",
+                "div": {
+                  "type": "status",
+                  "text": "clicked"
+                }
+              }
+            ]
+          },
+          {
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "type": "state",
+            "alignment_horizontal": "center",
+            "id": "status_disappear_work",
+            "states": [
+              {
+                "state_id": "disappear_not_work",
+                "div": {
+                  "type": "status",
+                  "text": "disappear_not_work"
+                }
+              },
+              {
+                "state_id": "disappear_work",
+                "div": {
+                  "type": "status",
+                  "text": "disappear_work"
+                }
+              }
+            ]
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "type": "button",
+            "text": "tooltip with close_by_tap_outside: false",
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "tooltips": [
+              {
+                "id": "tooltip_1",
+                "position": "bottom",
+                "gravity": "bottom",
+                "close_by_tap_outside": false,
+                "duration": 0,
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 4
+                  }
+                },
+                "div": {
+                  "type": "text",
+                  "text": "tooltip_text",
+                  "text_color": "#2C3E50",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#799eb7"
+                    }
+                  ],
+                  "paddings": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "border": {
+                    "corner_radius": 6
+                  }
+                }
+              }
+            ],
+            "actions": [
+              {
+                "log_id": "show_tooltip",
+                "url": "div-action://show_tooltip?id=tooltip_1&multiple=true"
+              }
+            ]
+          },
+          {
+            "type": "button",
+            "text": "tooltip with tap_outside_actions",
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "tooltips": [
+              {
+                "id": "tooltip_2",
+                "position": "bottom",
+                "gravity": "bottom",
+                "tap_outside_actions": [
+                  {
+                    "log_id": "outside_actions",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "outside_actions_called",
+                      "value": {
+                        "type": "string",
+                        "value": "true"
+                      }
+                    }
+                  }
+                ],
+                "duration": 0,
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 4
+                  }
+                },
+                "div": {
+                  "type": "text",
+                  "text": "tooltip_text",
+                  "text_color": "#2C3E50",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#799eb7"
+                    }
+                  ],
+                  "paddings": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "border": {
+                    "corner_radius": 6
+                  }
+                }
+              }
+            ],
+            "actions": [
+              {
+                "log_id": "show_tooltip",
+                "url": "div-action://show_tooltip?id=tooltip_2&multiple=true"
+              }
+            ]
+          },
+          {
+            "id": "tooltip_2_result",
+            "type": "text",
+            "text": "Outside actions called: @{outside_actions_called}",
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "text_color": "@{(outside_actions_called == 'true') ? '#00FF00' : '#000000'}"
+          },
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "items": [
+              {
+                "type": "button",
+                "text": "tooltip mode = non_modal",
+                "gravity": "center",
+                "margins": {
+                  "right": 10
+                },
+                "tooltips": [
+                  {
+                    "id": "tooltip_3",
+                    "position": "top",
+                    "gravity": "top",
+                    "duration": 0,
+                    "mode": {
+                      "type": "non_modal"
+                    },
+                    "close_by_tap_outside": true,
+                    "div": {
+                      "type": "text",
+                      "text": "tooltip_text",
+                      "text_color": "#2C3E50",
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#799eb7"
+                        }
+                      ],
+                      "paddings": {
+                        "left": 16,
+                        "top": 16,
+                        "right": 16,
+                        "bottom": 16
+                      },
+                      "border": {
+                        "corner_radius": 6
+                      }
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "show_tooltip",
+                    "url": "div-action://show_tooltip?id=tooltip_3&multiple=true"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "text": "non modal test",
+                "gravity": "center",
+                "actions": [
+                  {
+                    "log_id": "non_modal_test",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "non_modal_button_clicked",
+                      "value": {
+                        "type": "string",
+                        "value": "true"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "non_modal_result",
+            "type": "text",
+            "text": "Non modal button clicked: @{non_modal_button_clicked}",
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "text_color": "@{(non_modal_button_clicked == 'true') ? '#00FF00' : '#000000'}"
+          }
+        ]
+      }
+    }
+  ]
+}

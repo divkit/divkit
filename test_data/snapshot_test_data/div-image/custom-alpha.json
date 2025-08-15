@@ -1,0 +1,27 @@
+{
+  "description": "Image with 0.5 transparency",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "alpha": 0.5,
+          "height": {
+            "type": "fixed",
+            "value": 150
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+// Generated code. Do not modify.
+
+import Foundation
+import Serialization
+import VGSL
+
+public final class DivPageSizeTemplate: TemplateValue, Sendable {
+  public static let type: String = "percentage"
+  public let parent: String?
+  public let pageWidth: Field<DivPercentageSizeTemplate>?
+
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+    self.init(
+      parent: dictionary["type"] as? String,
+      pageWidth: dictionary.getOptionalField("page_width", templateToType: templateToType)
+    )
+  }
+
+  init(
+    parent: String?,
+    pageWidth: Field<DivPercentageSizeTemplate>? = nil
+  ) {
+    self.parent = parent
+    self.pageWidth = pageWidth
+  }
+
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPageSizeTemplate?) -> DeserializationResult<DivPageSize> {
+    let pageWidthValue = { parent?.pageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    var errors = mergeErrors(
+      pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }
+    )
+    if case .noValue = pageWidthValue {
+      errors.append(.requiredFieldIsMissing(field: "page_width"))
+    }
+    guard
+      let pageWidthNonNil = pageWidthValue.value
+    else {
+      return .failure(NonEmptyArray(errors)!)
+    }
+    let result = DivPageSize(
+      pageWidth: { pageWidthNonNil }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  public static func resolveValue(context: TemplatesContext, parent: DivPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPageSize> {
+    if useOnlyLinks {
+      return resolveOnlyLinks(context: context, parent: parent)
+    }
+    var pageWidthValue: DeserializationResult<DivPercentageSize> = .noValue
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "page_width" {
+           pageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self).merged(with: pageWidthValue)
+          }
+        }()
+        _ = {
+         if key == parent?.pageWidth?.link {
+           pageWidthValue = pageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self) })
+          }
+        }()
+      }
+    }()
+    if let parent = parent {
+      _ = { pageWidthValue = pageWidthValue.merged(with: { parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true) }) }()
+    }
+    var errors = mergeErrors(
+      pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }
+    )
+    if case .noValue = pageWidthValue {
+      errors.append(.requiredFieldIsMissing(field: "page_width"))
+    }
+    guard
+      let pageWidthNonNil = pageWidthValue.value
+    else {
+      return .failure(NonEmptyArray(errors)!)
+    }
+    let result = DivPageSize(
+      pageWidth: { pageWidthNonNil }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivPageSizeTemplate {
+    guard let parent = parent, parent != Self.type else { return self }
+    guard let parentTemplate = templates[parent] as? DivPageSizeTemplate else {
+      throw DeserializationError.unknownType(type: parent)
+    }
+    let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
+
+    return DivPageSizeTemplate(
+      parent: nil,
+      pageWidth: pageWidth ?? mergedParent.pageWidth
+    )
+  }
+
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPageSizeTemplate {
+    let merged = try mergedWithParent(templates: templates)
+
+    return DivPageSizeTemplate(
+      parent: nil,
+      pageWidth: try merged.pageWidth?.resolveParent(templates: templates)
+    )
+  }
+}

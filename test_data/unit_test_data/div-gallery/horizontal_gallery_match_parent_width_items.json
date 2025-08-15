@@ -1,0 +1,16 @@
+{
+  "type": "gallery",
+  "items": [
+    {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      }
+    }
+  ]
+}

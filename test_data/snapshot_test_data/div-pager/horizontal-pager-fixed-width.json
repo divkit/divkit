@@ -1,0 +1,77 @@
+{
+  "description": "Pager with fixed width",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page_fixed_height",
+              "text": "Pager width = 200"
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "Then something happened which unleashed the power of our imagination"
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

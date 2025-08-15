@@ -1,0 +1,275 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "orientation": "overlap",
+      "height": {
+        "type": "fixed",
+        "value": 56
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 12,
+        "has_shadow": true,
+        "$shadow": "shadow"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_color": "#073642"
+    },
+    "floating_button": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "value": 64
+      },
+      "height": {
+        "type": "fixed",
+        "value": 64
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FDF6E3"
+        }
+      ],
+      "border": {
+        "corner_radius": 32,
+        "has_shadow": true,
+        "shadow": {
+          "offset": {
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "value": 2
+            }
+          },
+          "alpha": 0.2,
+          "blur": 12,
+          "color": "#073642"
+        }
+      },
+      "items": [
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 32
+          },
+          "width": {
+            "type": "fixed",
+            "value": 32
+          },
+          "tint_color": "#073642",
+          "image_url": "https://avatars.mds.yandex.net/get-bunker/998550/f61f515d49626bd0d4d93e0ab938c293de8274f8/orig",
+          "appearance_animation": {
+            "type": "fade",
+            "duration": 200,
+            "alpha": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "transient_div_with_shadow",
+    "variables": [
+      {
+        "type": "boolean",
+        "name": "button_1_is_visible",
+        "value": true
+      },
+      {
+        "type": "boolean",
+        "name": "button_2_is_visible",
+        "value": true
+      },
+      {
+        "type": "boolean",
+        "name": "button_3_is_visible",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "button",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background_color": "#2AA198",
+              "text": "Reset",
+              "actions": [
+                {
+                  "log_id": "reset_button_1",
+                  "url": "div-action://set_variable?name=button_1_is_visible&value=true"
+                },
+                {
+                  "log_id": "reset_button_2",
+                  "url": "div-action://set_variable?name=button_2_is_visible&value=true"
+                },
+                {
+                  "log_id": "reset_button_3",
+                  "url": "div-action://set_variable?name=button_3_is_visible&value=true"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background_color": "#FDF6E3",
+              "text": "Outline shadow",
+              "actions": [
+                {
+                  "log_id": "toggle_button_1_visibility",
+                  "url": "div-action://set_variable?name=button_1_is_visible&value=@{!button_1_is_visible}"
+                }
+              ],
+              "visibility": "@{button_1_is_visible ? 'visible' : 'invisible'}",
+              "transition_in": {
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
+              },
+              "transition_out": {
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "button",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background_color": "#FDF6E3",
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 4
+                  }
+                },
+                "alpha": 0.25,
+                "blur": 12,
+                "color": "#073642"
+              },
+              "text": "Custom shadow",
+              "actions": [
+                {
+                  "log_id": "toggle_button_2_visibility",
+                  "url": "div-action://set_variable?name=button_2_is_visible&value=@{!button_2_is_visible}"
+                }
+              ],
+              "visibility": "@{button_2_is_visible ? 'visible' : 'invisible'}",
+              "transition_in": {
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
+              },
+              "transition_out": {
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "background_color": "#FDF6E3",
+                  "shadow": {
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 4
+                      }
+                    },
+                    "alpha": 0.25,
+                    "blur": 12,
+                    "color": "#073642"
+                  },
+                  "text": "Inner custom shadow",
+                  "actions": [
+                    {
+                      "log_id": "toggle_button_3_visibility",
+                      "url": "div-action://set_variable?name=button_3_is_visible&value=@{!button_3_is_visible}"
+                    }
+                  ]
+                }
+              ],
+              "visibility": "@{button_3_is_visible ? 'visible' : 'invisible'}",
+              "transition_in": {
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
+              },
+              "transition_out": {
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

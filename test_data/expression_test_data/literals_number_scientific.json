@@ -1,0 +1,745 @@
+{
+  "cases": [
+    {
+      "expression": "@{11e2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11e2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11e2}",
+      "expected": {
+        "type": "number",
+        "value": -1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11E2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11E2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11E2}",
+      "expected": {
+        "type": "number",
+        "value": -1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11e+2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11e+2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11e+2}",
+      "expected": {
+        "type": "number",
+        "value": -1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11E+2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11E+2}",
+      "expected": {
+        "type": "number",
+        "value": 1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11E+2}",
+      "expected": {
+        "type": "number",
+        "value": -1100.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1100e-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+1100e-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1100e-2}",
+      "expected": {
+        "type": "number",
+        "value": -11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1100E-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+1100E-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1100E-2}",
+      "expected": {
+        "type": "number",
+        "value": -11.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11.09e2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11.09e2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11.09e2}",
+      "expected": {
+        "type": "number",
+        "value": -1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11.09E2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11.09E2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11.09E2}",
+      "expected": {
+        "type": "number",
+        "value": -1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": -1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{11.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+11.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": 1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-11.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": -1109.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1100.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+1100.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1100.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": -11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1100.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+1100.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": 11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1100.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": -11.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09e2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09e2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09e2}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09E2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09E2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09E2}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09e+2}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09E+2}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": 0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": 0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09e-2}",
+      "expected": {
+        "type": "number",
+        "value": -0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": 0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{+.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": 0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-.09E-2}",
+      "expected": {
+        "type": "number",
+        "value": -0.0009
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{2_147.0e3}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{2147.0_0093e+5}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{2147.00093E-1_000}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

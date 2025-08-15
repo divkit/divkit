@@ -1,0 +1,22 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-linear-gradient.json",
+      "$description": "translations.json#/div_gradient_linear",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "$ref": "div-radial-gradient.json",
+      "$description": "translations.json#/div_gradient_radial",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

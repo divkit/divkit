@@ -1,0 +1,169 @@
+{
+  "templates": {
+    "header": {
+      "type": "text",
+      "font_size": 16,
+      "text_color": "#000000",
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 8
+      }
+    },
+    "pretty_switch": {
+      "type": "switch",
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "paddings": {
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "my_edit_text",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "spell_checking_enabled",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "return_key_auto_enabled",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "autocorrection_enabled",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "header",
+              "text": "Spell checking:"
+            },
+            {
+              "type": "pretty_switch",
+              "id": "spell_switch",
+              "is_on_variable": "spell_checking_enabled",
+              "on_change": [
+                {
+                  "log_id": "spell_checking_changed",
+                  "url": "div-action://set_variable?name=spell_checking_enabled&value=${spell_checking_enabled}"
+                }
+              ]
+            },
+            {
+              "type": "header",
+              "text": "Return key automatically:"
+            },
+            {
+              "type": "pretty_switch",
+              "id": "return_switch",
+              "is_on_variable": "return_key_auto_enabled",
+              "on_change": [
+                {
+                  "log_id": "return_changed",
+                  "url": "div-action://set_variable?name=return_key_auto_enabled&value=${return_key_auto_enabled}"
+                }
+              ]
+            },
+            {
+              "type": "header",
+              "text": "Autocorrection:"
+            },
+            {
+              "type": "pretty_switch",
+              "id": "autocorrection_switch",
+              "is_on_variable": "autocorrection_enabled",
+              "on_change": [
+                {
+                  "log_id": "autocorrection_changed",
+                  "url": "div-action://set_variable?name=autocorrection_switch&value=${autocorrection_switch}"
+                }
+              ]
+            },
+            {
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 20,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "extensions": [
+                {
+                  "id": "input_properties",
+                  "params": {
+                    "enables_return_key_automatically": "@{return_key_auto_enabled}",
+                    "spell_checking": "@{spell_checking_enabled}"
+                  }
+                },
+                {
+                  "id": "input_autocorrection",
+                  "params": {
+                    "enabled": "@{autocorrection_enabled}"
+                  }
+                }
+              ],
+              "alpha": 1,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "text_variable": "my_edit_text",
+              "hint_text": "Reopen the keyboard to apply changes",
+              "hint_color": "#888888",
+              "highlight_color": "#e0bae3",
+              "line_height": 22,
+              "select_all_on_focus": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

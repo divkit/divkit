@@ -1,0 +1,47 @@
+{
+  "description": "Decl two variables with cicular expressions.",
+  "div_data": {
+    "card": {
+      "log_id": "decl_expressions",
+      "variables": [
+        {
+          "name": "val",
+          "type": "integer",
+          "value": "@{val2 + 2}"
+        },
+        {
+          "name": "val2",
+          "type": "integer",
+          "value": "@{val + 1}"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'val2' is missing. Expression: @{val2 + 2}"
+        },
+        {
+          "type": "error",
+          "value": "Variable 'val' is missing. Expression: @{val + 1}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

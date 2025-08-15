@@ -1,0 +1,65 @@
+{
+  "description": "Text ranges with line_height and top_offset",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "div": {
+          "font_size": 18,
+          "line_height": 18,
+          "max_lines": 12,
+          "paddings": {
+            "bottom": 0,
+            "left": 8,
+            "right": 8,
+            "top": 0
+          },
+          "ranges": [
+            {
+              "start": 0,
+              "end": 29,
+              "font_size": 18,
+              "font_weight": "bold",
+              "text_color": "#000000",
+              "top_offset": 10
+            },
+            {
+              "start": 29,
+              "end": 195,
+              "font_size": 14,
+              "font_weight": "regular",
+              "text_color": "#80000088",
+              "top_offset": 10,
+              "line_height": 34
+            },
+            {
+              "start": 195,
+              "end": 435,
+              "font_size": 14,
+              "font_weight": "regular",
+              "text_color": "#80000000",
+              "top_offset": 30
+            },
+            {
+              "start": 435,
+              "end": 562,
+              "font_size": 14,
+              "font_weight": "regular",
+              "text_color": "#80000088",
+              "line_height": 34
+            }
+          ],
+          "text": "<Range1>Lorem Ipsum</Range1>\n<Range2>Paragraph 1.\nParagraph 2: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Range2><Range3>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nParagraph 3: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</Range3><Range4>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Range4>",
+          "type": "text"
+        },
+        "state_id": 0
+      }
+    ]
+  }
+}

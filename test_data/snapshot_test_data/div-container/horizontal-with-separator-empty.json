@@ -1,0 +1,73 @@
+{
+  "description": "Horizontal container with no visible items having separator.show_at_start and separator.show_at_end. Separators should not be visible.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 20,
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 2
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "item",
+              "text": "Item 0",
+              "visibility": "gone"
+            },
+            {
+              "type": "item",
+              "text": "Item 1",
+              "visibility": "gone"
+            }
+          ],
+          "separator": {
+            "show_at_start": true,
+            "show_at_end": true,
+            "margins": {
+              "left": 10,
+              "right": 10
+            },
+            "style": {
+              "type": "shape_drawable",
+              "color": "#000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

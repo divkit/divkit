@@ -1,0 +1,95 @@
+{
+  "description": "Text with focused text color and focus background",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "right": 8,
+          "left": 8
+        },
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "font_size": 30,
+        "text_color": "#ffff",
+        "focused_text_color": "#00FF00",
+        "font_weight": "bold",
+        "height": {
+          "type": "fixed",
+          "value": 200
+        },
+        "width": {
+          "type": "fixed",
+          "value": 200
+        },
+        "border": {
+          "corner_radius": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0000FF"
+          }
+        ],
+        "focus": {
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ff5500"
+            }
+          ]
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "margins": {
+              "top": 24,
+              "bottom": 24
+            },
+            "items": [
+              {
+                "id": "button_for_focus",
+                "type": "button",
+                "text": "button for focus"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "focus",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "button_for_focus"
+          }
+        }
+      ],
+      "delay": 300,
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

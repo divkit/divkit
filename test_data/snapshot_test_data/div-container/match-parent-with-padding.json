@@ -1,0 +1,69 @@
+{
+  "platforms": [
+    "android",
+    "ios",
+    "flutter"
+  ],
+  "description": "match_parent should calculate size without padding",
+  "card": {
+    "log_id": "abc",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "border": {
+            "stroke": {
+              "color": "#000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#f00"
+                }
+              ],
+              "text": "width=match_parent",
+              "font_size": 20
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "paddings": {
+                "left": 100
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#00f"
+                }
+              ],
+              "text": "width=match_parent + padding-left=100",
+              "font_size": 20
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

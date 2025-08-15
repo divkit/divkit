@@ -1,0 +1,207 @@
+{
+  "$description": "translations.json#/div_input",
+  "definitions": {
+    "native_interface": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_input_native_interface_color"
+        }
+      },
+      "required": [
+        "color"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-font-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "input"
+          ]
+        },
+        "filters": {
+          "type": "array",
+          "$description": "translations.json#/div_input_filters",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ],
+          "items": {
+            "$ref": "div-input-filter.json"
+          }
+        },
+        "text_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_input_text_variable"
+        },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "start",
+          "$description": "translations.json#/div_text_text_alignment_horizontal"
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "center",
+          "$description": "translations.json#/div_text_text_alignment_vertical"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_input_line_height"
+        },
+        "max_visible_lines": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_input_max_visible_lines"
+        },
+        "max_length": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_input_max_length",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "hint_text": {
+          "type": "string",
+          "$description": "translations.json#/div_input_hint_text"
+        },
+        "hint_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#73000000",
+          "$description": "translations.json#/div_input_hint_color"
+        },
+        "highlight_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_input_highlight_color",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "native_interface": {
+          "$ref": "#/definitions/native_interface",
+          "$description": "translations.json#/div_input_native_interface",
+          "platforms": [
+            "android"
+          ],
+          "unsupported_platforms": {
+            "ios": "Android specific property",
+            "web": "Android specific property"
+          }
+        },
+        "autocapitalization": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "none",
+            "words",
+            "sentences",
+            "all_characters"
+          ],
+          "default_value": "auto",
+          "$description": "translations.json#/div_input_autocapitalization",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "enter_key_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_input_enter_key_actions",
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ]
+        },
+        "enter_key_type": {
+          "type": "string",
+          "enum": [
+            "default",
+            "go",
+            "search",
+            "send",
+            "done"
+          ],
+          "default_value": "default",
+          "$description": "translations.json#/div_input_enter_key_type",
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ]
+        },
+        "keyboard_type": {
+          "type": "string",
+          "enum": [
+            "single_line_text",
+            "multi_line_text",
+            "phone",
+            "number",
+            "email",
+            "uri",
+            "password"
+          ],
+          "default_value": "multi_line_text",
+          "$description": "translations.json#/div_input_keyboard_type"
+        },
+        "select_all_on_focus": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_input_select_all_on_focus",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "mask": {
+          "$ref": "div-input-mask.json",
+          "$description": "translations.json#/div_input_mask",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "validators": {
+          "type": "array",
+          "$description": "translations.json#/div_input_validators",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ],
+          "items": {
+            "$ref": "div-input-validator.json"
+          }
+        },
+        "is_enabled": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_input_is_enabled"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text_variable"
+  ]
+}

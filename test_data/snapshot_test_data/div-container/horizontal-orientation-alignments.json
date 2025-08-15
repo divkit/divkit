@@ -1,0 +1,135 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "testcase_name",
+              "text": "Different vertical children alignments with some default on container level"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default top:"
+            },
+            {
+              "type": "horizontal_orientation_alignments_testcase",
+              "content_alignment_vertical": "top"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default center:"
+            },
+            {
+              "type": "horizontal_orientation_alignments_testcase",
+              "content_alignment_vertical": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default bottom:"
+            },
+            {
+              "type": "horizontal_orientation_alignments_testcase",
+              "content_alignment_vertical": "bottom"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "text_white_bg_50x40": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "height": {
+        "type": "fixed",
+        "value": 40
+      }
+    },
+    "testcase_name": {
+      "type": "text",
+      "paddings": {
+        "top": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#DDD",
+          "type": "solid"
+        }
+      ]
+    },
+    "horizontal_fixed_h120_container_black": {
+      "type": "container",
+      "orientation": "horizontal",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ]
+    },
+    "horizontal_orientation_alignments_testcase": {
+      "type": "horizontal_fixed_h120_container_black",
+      "items": [
+        {
+          "type": "text_white_bg_50x40",
+          "text": "^",
+          "alignment_vertical": "top"
+        },
+        {
+          "type": "text_white_bg_50x40",
+          "text": "*",
+          "alignment_vertical": "center",
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "type": "text_white_bg_50x40",
+          "text": "˅",
+          "alignment_vertical": "bottom"
+        },
+        {
+          "type": "text_white_bg_50x40",
+          "text": "default"
+        }
+      ]
+    }
+  }
+}

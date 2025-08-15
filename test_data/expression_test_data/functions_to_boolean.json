@@ -1,0 +1,160 @@
+{
+  "cases": [
+    {
+      "expression": "@{toBoolean(1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(2)]. Unable to convert value to Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(-1)]. Unable to convert value to Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(3.1415)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(3.1415)]. Function has no matching overload for given argument types: Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(true)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(true)]. Function has no matching overload for given argument types: Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean()]. Function requires non empty argument list."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean('true')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean('false')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean('true&&false')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean('true&&false')]. Unable to convert value to Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toBoolean('hello')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean('hello')]. Unable to convert value to Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

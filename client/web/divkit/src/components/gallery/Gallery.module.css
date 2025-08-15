@@ -1,0 +1,98 @@
+.gallery {
+    display: block;
+}
+
+.gallery__scroller {
+    width: 100%;
+    height: 100%;
+
+    /** inherit max_size from parent node (100% may be bigger than the actual size of the parent) */
+    max-width: inherit;
+    max-height: inherit;
+
+    pointer-events: auto;
+}
+
+.gallery_scrollbar_none .gallery__scroller {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.gallery_scrollbar_none .gallery__scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.gallery_orientation_vertical > .gallery__scroller {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.gallery_scroll-snap > .gallery__scroller {
+    scroll-snap-type: mandatory;
+    scroll-snap-type: both mandatory;
+}
+
+.gallery_scroll-snap > .gallery__scroller > .gallery__items-grid {
+    scroll-snap-align: start;
+}
+
+.gallery__items-grid {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller > .gallery__items-grid {
+    flex-direction: column;
+}
+
+.gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid {
+    flex-direction: row;
+}
+
+.gallery__items {
+    box-sizing: border-box;
+    display: inline-grid;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    justify-content: start;
+    grid-template-rows: 100%;
+    grid-auto-flow: column;
+    height: 100%;
+    min-width: min-content;
+    min-height: 0;
+}
+
+.gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    align-content: start;
+    grid-template-columns: 100%;
+    grid-auto-flow: row;
+    width: 100%;
+    min-width: 0;
+    min-height: min-content;
+}
+
+.gallery__arrow::before {
+    background: var(--divkit-gallery-arrow-bg, #fff);
+    box-shadow: 0 .2em .4em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.gallery__arrow:hover::before {
+    box-shadow: 0 .2em .8em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.gallery__arrow:active::before {
+    box-shadow: 0 .1em .4em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.gallery__arrow-icon-path {
+    fill: var(--divkit-gallery-arrow-fg, #000);
+}

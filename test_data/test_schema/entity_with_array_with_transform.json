@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_array_with_transform"
+      ]
+    },
+    "array": {
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/color"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "array"
+  ]
+}

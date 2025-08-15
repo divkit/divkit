@@ -1,0 +1,89 @@
+{
+  "description": "Horizontal gallery with paddings and elements which don't fit in it",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 70
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            },
+            "corner_radius": 10
+          },
+          "items": [
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent"
+              },
+              "text": "match_parent"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "text": "fixed height = 100"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "wrap_content",
+                "constrained": false
+              },
+              "text": "not constrained element with very very very very very long text"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "wrap_content",
+                "constrained": true
+              },
+              "text": "constrained element with very very very very very long text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

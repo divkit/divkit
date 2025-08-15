@@ -1,0 +1,18 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.histogram'
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-core')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+
+    implementation libs.yatagan.api.compiled
+
+    implementation libs.androidx.coreKtx
+}

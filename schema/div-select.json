@@ -1,0 +1,74 @@
+{
+  "$description": "translations.json#/div_select",
+  "definitions": {
+    "option": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "$description": "translations.json#/div_select_option_text"
+        },
+        "value": {
+          "type": "string",
+          "$description": "translations.json#/div_select_option_value"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-font-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "select"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/option",
+            "$description": "translations.json#/div_select_option"
+          },
+          "minItems": 1
+        },
+        "value_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_select_value_variable"
+        },
+        "hint_text": {
+          "type": "string",
+          "$description": "translations.json#/div_select_hint_text"
+        },
+        "hint_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#73000000",
+          "$description": "translations.json#/div_select_hint_color"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_select_line_height"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "options",
+    "value_variable"
+  ]
+}

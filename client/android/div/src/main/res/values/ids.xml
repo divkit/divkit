@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <item name="div_gallery" type="id"/>
+    <item name="div_gallery_item_index" type="id"/>
+    <item name="div_tabs_block" type="id"/>
+    <item name="div_tabs_pager_container" type="id"/>
+    <item name="overflow_menu" type="id"/>
+    <item name="load_references_tag" type="id"/>
+
+    <item name="tab_sliding_oval_indicator" type="id" />
+    <item name="tab_height_cache" type="id" />
+
+    <item name="base_tabbed_title_container_scroller" type="id"/>
+    <item name="div_tabs_divider" type="id"/>
+    <item name="div_tabs_container_helper" type="id"/>
+    <item name="div_tabbed_tab_title_item" type="id"/>
+
+    <item name="bitmap_load_references_tag" type="id"/>
+    <item name="image_loaded_flag" type="id"/>
+    <item name="div_default_background_list_tag" type="id"/>
+    <item name="div_focused_background_list_tag" type="id"/>
+    <item name="div_additional_background_layer_tag" type="id"/>
+    <item name="div_tooltips_tag" type="id"/>
+    <item name="div_custom_tag" type="id"/>
+    <item name="div_penetrating_longtap_tag" type="id"/>
+
+    <item name="div_non_transition_alpha" type="id"/>
+    <item name="div_transition_position" type="id"/>
+
+    <item name="div_releasable_list" type="id"/>
+
+    <item name="div_layout_provider_listener_id" type="id"/>
+</resources>

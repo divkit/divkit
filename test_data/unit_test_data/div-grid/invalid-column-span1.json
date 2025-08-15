@@ -1,0 +1,12 @@
+{
+  "description": "no space for the first item",
+  "type": "grid",
+  "column_count": 1,
+  "items": [
+    {
+      "type": "text",
+      "text": "1",
+      "column_span": 2
+    }
+  ]
+}

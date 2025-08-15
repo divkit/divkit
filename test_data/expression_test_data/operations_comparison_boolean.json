@@ -1,0 +1,150 @@
+{
+  "cases": [
+    {
+      "name": "a < b => error",
+      "expression": "@{a < b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false < true]. Operator '<' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a <= b => error",
+      "expression": "@{a <= b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false <= true]. Operator '<=' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a > b => error",
+      "expression": "@{a > b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false > true]. Operator '>' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a >= b => error",
+      "expression": "@{a >= b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false >= true]. Operator '>=' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{d.getBoolean('b') == false}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "value": {
+            "b": false
+          },
+          "name": "d"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{(1 >= 2) == a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "$description": "translations.json#/div_gallery",
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gallery"
+          ]
+        },
+        "cross_content_alignment": {
+          "$description": "translations.json#/div_gallery_cross_content_alignment",
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default_value": "start"
+        },
+        "column_count": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_gallery_column_count",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "item_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "8",
+          "$description": "translations.json#/div_gallery_item_spacing"
+        },
+        "cross_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_gallery_cross_spacing",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "scroll_mode": {
+          "type": "string",
+          "default_value": "default",
+          "enum": [
+            "paging",
+            "default"
+          ],
+          "$description": "translations.json#/div_gallery_scroll_mode",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "$description": "translations.json#/div_gallery_items"
+        },
+        "item_builder": {
+          "$ref": "div-collection-item-builder.json",
+          "$description": "translations.json#/div_collection_item_builder",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "orientation": {
+          "type": "string",
+          "default_value": "horizontal",
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "$description": "translations.json#/div_gallery_orientation"
+        },
+        "restrict_parent_scroll": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_gallery_restrict_parent_scroll",
+          "platforms": [
+            "android",
+            "web"
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, breaks the current behaviour, no plans for support."
+          }
+        },
+        "default_item": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_gallery_default_item",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "scrollbar": {
+          "type": "string",
+          "enum": [
+            "none",
+            "auto"
+          ],
+          "default_value": "none",
+          "$description": "translations.json#/div_scrollbar",
+          "platforms": [
+            "web",
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

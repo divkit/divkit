@@ -1,0 +1,4 @@
+source "https://rubygems.org" do
+  gem 'cocoapods', '1.13.0'
+  gem 'activesupport', '~> 7.0', '<= 7.0.8'
+end

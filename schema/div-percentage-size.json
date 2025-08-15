@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_percentage_size",
+  "properties": {
+    "value": {
+      "$ref": "common.json#/positive_number",
+      "$description": "translations.json#/div_percentage_size_value"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "percentage"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "value"
+  ]
+}

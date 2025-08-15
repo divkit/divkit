@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_infinity_count",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "infinity"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type"
+  ]
+}

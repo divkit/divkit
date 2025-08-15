@@ -1,0 +1,78 @@
+{
+  "templates": {
+    "basic_text": {
+      "type": "text",
+      "font_size": 15,
+      "margins": {
+        "top": 12,
+        "bottom": 12
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10,
+        "start": 10,
+        "end": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#600000ff"
+        }
+      ],
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      }
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 350
+          },
+          "margins": {
+            "top": 10,
+            "left": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#000"
+            }
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "basic_text",
+                  "text": "Block 1.1 has a larger width"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 1.2"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 1.3"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "description": "Slider with ranges",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {},
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "slider_variable",
+          "type": "integer",
+          "value": 90
+        },
+        {
+          "name": "slider_variable_second",
+          "type": "integer",
+          "value": 50
+        },
+        {
+          "name": "range_start",
+          "type": "integer",
+          "value": 40
+        },
+        {
+          "name": "range_end",
+          "type": "integer",
+          "value": 40
+        },
+        {
+          "name": "margin_start",
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "name": "margin_end",
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "name": "active_color",
+          "type": "color",
+          "value": "#80FFCC00"
+        },
+        {
+          "name": "active_height",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "active_radius",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "inactive_color",
+          "type": "color",
+          "value": "#40000000"
+        },
+        {
+          "name": "inactive_height",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "inactive_radius",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "slider",
+            "margins": {
+              "top": 16,
+              "bottom": 16
+            },
+            "thumb_style": {
+              "type": "shape_drawable",
+              "color": "#FFCC00",
+              "stroke": {
+                "color": "#ffffff",
+                "width": 3
+              },
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 100
+                }
+              }
+            },
+            "thumb_value_variable": "slider_variable",
+            "thumb_secondary_value_variable": "slider_variable_second",
+            "track_active_style": {
+              "type": "shape_drawable",
+              "color": "#FFCC00",
+              "shape": {
+                "type": "rounded_rectangle"
+              }
+            },
+            "track_inactive_style": {
+              "type": "shape_drawable",
+              "color": "#80000000",
+              "shape": {
+                "type": "rounded_rectangle"
+              }
+            },
+            "ranges": [
+              {
+                "start": 19,
+                "end": "@{range_end}",
+                "margins": {
+                  "left": 4,
+                  "right": 2
+                },
+                "track_inactive_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_height": {
+                      "type": "fixed",
+                      "value": "@{inactive_height}"
+                    },
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": "@{inactive_radius}"
+                    }
+                  },
+                  "color": "#40000000"
+                },
+                "track_active_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "#80FFCC00"
+                }
+              },
+              {
+                "start": "@{range_start}",
+                "end": 60,
+                "margins": {
+                  "start": 2,
+                  "end": "@{margin_end}"
+                },
+                "track_inactive_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "@{inactive_color}"
+                },
+                "track_active_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "@{active_color}"
+                }
+              },
+              {
+                "start": 60,
+                "end": 81,
+                "margins": {
+                  "left": "@{margin_start}",
+                  "right": 4
+                },
+                "track_inactive_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "#40000000"
+                },
+                "track_active_style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_height": {
+                      "type": "fixed",
+                      "value": "@{active_height}"
+                    },
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": "@{active_radius}"
+                    }
+                  },
+                  "color": "#80FFCC00"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=range_end&value=30",
+          "log_id": "decrease second range"
+        },
+        {
+          "url": "div-action://set_variable?name=range_start&value=30",
+          "log_id": "increase third range"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=margin_end&value=4",
+          "log_id": "increase margins"
+        },
+        {
+          "url": "div-action://set_variable?name=margin_start&value=8",
+          "log_id": "increase margins"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=active_color&value=%2380FF8000",
+          "log_id": "change active color"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_color&value=%23CC000000",
+          "log_id": "change inactive color"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=active_height&value=16",
+          "log_id": "increase active height"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_height&value=4",
+          "log_id": "decrease active height"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=active_radius&value=4",
+          "log_id": "change active radius"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_radius&value=2",
+          "log_id": "change inactive radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=range_end&value=40",
+          "log_id": "decrease second range"
+        },
+        {
+          "url": "div-action://set_variable?name=range_start&value=40",
+          "log_id": "increase third range"
+        },
+        {
+          "url": "div-action://set_variable?name=margin_end&value=2",
+          "log_id": "increase margins"
+        },
+        {
+          "url": "div-action://set_variable?name=margin_start&value=2",
+          "log_id": "increase margins"
+        },
+        {
+          "url": "div-action://set_variable?name=active_color&value=%2380FFCC00",
+          "log_id": "change active color"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_color&value=%2340000000",
+          "log_id": "change inactive color"
+        },
+        {
+          "url": "div-action://set_variable?name=active_height&value=10",
+          "log_id": "increase active height"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_height&value=10",
+          "log_id": "decrease active height"
+        },
+        {
+          "url": "div-action://set_variable?name=active_radius&value=0",
+          "log_id": "change active radius"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_radius&value=0",
+          "log_id": "change inactive radius"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

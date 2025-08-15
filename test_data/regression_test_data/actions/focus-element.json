@@ -1,0 +1,379 @@
+{
+  "templates": {
+    "number_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ff5500"
+          }
+        ]
+      }
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "margins": {
+        "right": 8,
+        "left": 8
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 12,
+      "text_color": "#ffff",
+      "font_weight": "bold",
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0000FF"
+        }
+      ],
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ff5500"
+          }
+        ]
+      }
+    }
+  },
+  "card": {
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "input_value_1",
+        "type": "string",
+        "value": "initial_text_1"
+      },
+      {
+        "name": "input_value_2",
+        "type": "string",
+        "value": "initial_text_2"
+      },
+      {
+        "name": "input_value_3",
+        "type": "string",
+        "value": "initial_text_3"
+      },
+      {
+        "name": "select_value",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "slide_value",
+        "type": "integer",
+        "value": 2
+      },
+      {
+        "name": "slide_value2",
+        "type": "integer",
+        "value": 5
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "number_input",
+              "id": "input_1",
+              "text_variable": "input_value_1"
+            },
+            {
+              "type": "number_input",
+              "id": "input_2",
+              "text_variable": "input_value_2"
+            },
+            {
+              "type": "number_input",
+              "id": "input_3",
+              "text_variable": "input_value_3"
+            },
+            {
+              "type": "select",
+              "id": "select_1",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 20,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "alpha": 1,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#0000FF"
+                }
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "value_variable": "select_variable",
+              "hint_text": "Select country",
+              "hint_color": "#888888",
+              "line_height": 22,
+              "options": [
+                {
+                  "value": "ru",
+                  "text": "Russia"
+                },
+                {
+                  "value": "uk",
+                  "text": "United Kingdom"
+                },
+                {
+                  "value": "kz"
+                }
+              ],
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "slider",
+              "id": "slider_1",
+              "width": {
+                "type": "match_parent"
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8,
+                "top": 8,
+                "bottom": 8
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "slide_value",
+              "thumb_secondary_value_variable": "slide_value2",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "thumb_secondary_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Focus 1",
+                  "id": "button_1",
+                  "action": {
+                    "log_id": "focus_1",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_1"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus 2",
+                  "action": {
+                    "log_id": "focus_2",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_2"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus 3",
+                  "action": {
+                    "log_id": "focus_3",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input_3"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Focus select",
+                  "action": {
+                    "log_id": "select_1",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "select_1"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus slider",
+                  "action": {
+                    "log_id": "slider_1",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "slider_1"
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Focus button 1",
+                  "action": {
+                    "log_id": "focus_4",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "button_1"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

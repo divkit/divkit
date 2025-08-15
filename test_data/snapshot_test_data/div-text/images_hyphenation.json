@@ -1,0 +1,148 @@
+{
+  "description": "Text with images hyphenation",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "items": [
+            {
+              "description": "image will be on the second line after 'de'",
+              "type": "text",
+              "text": "abc de",
+              "font_size": 20,
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "images": [
+                {
+                  "start": 6,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 18
+                  }
+                }
+              ]
+            },
+            {
+              "type": "red_separator"
+            },
+            {
+              "description": "image will be on the second line alone",
+              "type": "text",
+              "text": "abc de ",
+              "font_size": 20,
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "images": [
+                {
+                  "start": 7,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 18
+                  }
+                }
+              ]
+            },
+            {
+              "type": "red_separator"
+            },
+            {
+              "description": "image will be on the second line after ' de'",
+              "type": "text",
+              "text": "abc de\u00A0",
+              "font_size": 20,
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "images": [
+                {
+                  "start": 7,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 18
+                  }
+                }
+              ]
+            },
+            {
+              "type": "red_separator"
+            },
+            {
+              "description": "image will be on the second line alone",
+              "type": "text",
+              "text": "abc de\n",
+              "font_size": 20,
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "images": [
+                {
+                  "start": 7,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 18
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "red_separator": {
+      "type": "separator",
+      "background": [
+        {
+          "color": "#F00",
+          "type": "solid"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 1
+      }
+    }
+  }
+}

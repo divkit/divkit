@@ -1,0 +1,87 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_focus",
+  "properties": {
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "$description": "translations.json#/div_focus_background"
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "$description": "translations.json#/div_focus_border"
+    },
+    "on_focus": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_focus_on_focus"
+    },
+    "on_blur": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_focus_on_blur"
+    },
+    "next_focus_ids": {
+      "type": "object",
+      "$description": "translations.json#/div_focus_next_focus_ids",
+      "properties": {
+        "forward": {
+          "type": "string",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
+        },
+        "right": {
+          "type": "string",
+          "platforms": [
+            "android"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
+          }
+        },
+        "down": {
+          "type": "string",
+          "platforms": [
+            "android"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
+          }
+        },
+        "left": {
+          "type": "string",
+          "platforms": [
+            "android"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
+          }
+        },
+        "up": {
+          "type": "string",
+          "platforms": [
+            "android"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
+          }
+        }
+      }
+    }
+  }
+}

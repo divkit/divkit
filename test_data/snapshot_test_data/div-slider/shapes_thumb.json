@@ -1,0 +1,92 @@
+{
+  "description": "Two sliders with different thumb shapes - Rounded Rectangle and Circle",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "slider_template": {
+      "type": "slider",
+      "paddings": {
+        "top": 15,
+        "bottom": 15,
+        "left": 15,
+        "right": 15
+      },
+      "thumb_value_variable": "slider_variable",
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle"
+        },
+        "color": "#000000"
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle"
+        },
+        "color": "#0000ff"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "id": "container_demo",
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "slider_template",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 20
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 20
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  }
+                },
+                "color": "#ff0000"
+              }
+            },
+            {
+              "type": "slider_template",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "circle",
+                  "radius": {
+                    "type": "fixed",
+                    "value": 10
+                  }
+                },
+                "color": "#ff0000"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

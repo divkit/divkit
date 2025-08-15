@@ -1,0 +1,84 @@
+{
+  "description": "Vertical pager with paddings and items with match_parent width",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "orientation": "vertical",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page",
+              "text": "Page width = match_parent\nPaddings = 10\nLeft and right paddings are shown and left and right borders are drawn."
+            },
+            {
+              "type": "text_page",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

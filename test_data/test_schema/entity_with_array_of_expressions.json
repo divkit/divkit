@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_array_of_expressions"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

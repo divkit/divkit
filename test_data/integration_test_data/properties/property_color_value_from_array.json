@@ -1,0 +1,111 @@
+{
+  "description": "Property setting color value from array",
+  "div_data": {
+    "card": {
+      "log_id": "property-color-value-from-array",
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "#AABBCC"
+          ]
+        },
+        {
+          "name": "color_prop",
+          "type": "property",
+          "value_type": "color",
+          "get": "@{getColorFromArray(source, 0)}",
+          "set": [
+            {
+              "log_id": "set_action_color",
+              "typed": {
+                "type": "array_set_value",
+                "variable_name": "source",
+                "index": 0,
+                "value": {
+                  "type": "color",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Current color: @{color_prop}",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "@{color_prop}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "array",
+            "value": [
+              "#AABBCC"
+            ]
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "color_prop",
+          "value": {
+            "type": "color",
+            "value": "#AABBCC"
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=color_prop&value=#FF00FF",
+          "log_id": "set_color_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "array",
+            "value": [
+              "#FF00FF"
+            ]
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "color_prop",
+          "value": {
+            "type": "color",
+            "value": "#FF00FF"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

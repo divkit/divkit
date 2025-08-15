@@ -1,0 +1,130 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "font_size": 15,
+      "text_color": "#000000",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "top": 4,
+        "bottom": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Text properties"
+            },
+            {
+              "type": "subtitle",
+              "text": "All possible properties that can be applied to text",
+              "margins": {
+                "bottom": 12
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "paddings": {
+                "top": 12,
+                "bottom": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "Change the text size",
+                  "font_size": 22
+                },
+                {
+                  "type": "text_block",
+                  "text": "Change the font style",
+                  "font_weight": "bold"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Underline text",
+                  "underline": "single"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Cross out text (strikethrough)",
+                  "strike": "single"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Change the space between characters",
+                  "letter_spacing": 3
+                },
+                {
+                  "type": "text_block",
+                  "text": "Change the text color",
+                  "text_color": "#3F28C3"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Change the alignment",
+                  "text_alignment_horizontal": "right"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Change the height of a line",
+                  "line_height": 52
+                },
+                {
+                  "type": "text_block",
+                  "text": "Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text.",
+                  "max_lines": 2
+                },
+                {
+                  "type": "text_block",
+                  "text": "You can highlight and copy this text",
+                  "selectable": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

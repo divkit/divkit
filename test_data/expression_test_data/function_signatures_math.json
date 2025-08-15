@@ -1,0 +1,473 @@
+{
+  "signatures": [
+    {
+      "function_name": "div",
+      "doc": "Calculates division between the first number and the second. Returns integer quotient of division.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Divisible integer value."
+        },
+        {
+          "type": "integer",
+          "doc": "Divisor integer value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "div",
+      "doc": "Calculates division between the first number and the second. Returns number quotient of division.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Divisible number value."
+        },
+        {
+          "type": "number",
+          "doc": "Divisor number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "mod",
+      "doc": "Calculates remainder of division the first number and the second. Returns integer remainder of division.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Divisible integer value."
+        },
+        {
+          "type": "integer",
+          "doc": "Divisor integer value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "mod",
+      "doc": "Calculates remainder of division the first number and the second. Returns number remainder of division.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Divisible number value."
+        },
+        {
+          "type": "number",
+          "doc": "Divisor number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "mul",
+      "doc": "Calculates multiplication between argument values. Returns integer result of multiplication.",
+      "arguments": [
+        {
+          "type": "integer",
+          "vararg": true,
+          "doc": "Integer value to multiply."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "mul",
+      "doc": "Calculates multiplication between argument values. Returns number result of multiplication.",
+      "arguments": [
+        {
+          "type": "number",
+          "vararg": true,
+          "doc": "Number value to multiply."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "sub",
+      "doc": "Calculates subtraction between argument values. Returns integer result of subtraction.",
+      "arguments": [
+        {
+          "type": "integer",
+          "vararg": true,
+          "doc": "Integer value to subtract."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "sub",
+      "doc": "Calculates subtraction between argument values. Returns number result of subtraction.",
+      "arguments": [
+        {
+          "type": "number",
+          "vararg": true,
+          "doc": "Number value to subtract."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "sum",
+      "doc": "Calculates sum between argument values. Returns integer result of sum.",
+      "arguments": [
+        {
+          "type": "integer",
+          "vararg": true,
+          "doc": "Integer value to sum."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "sum",
+      "doc": "Calculates sum between argument values. Returns number result of sum.",
+      "arguments": [
+        {
+          "type": "number",
+          "vararg": true,
+          "doc": "Number value to sum."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "maxInteger",
+      "doc": "Gets max value of integer type. Returns max integer value.",
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "maxNumber",
+      "doc": "Gets max value of number type. Returns max number value.",
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "minInteger",
+      "doc": "Gets min value of integer type. Returns min integer value.",
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "minNumber",
+      "doc": "Gets min value of number type. Returns min number value.",
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "max",
+      "doc": "Gets max value of argument values. Returns max integer value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "vararg": true,
+          "doc": "Integer value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "max",
+      "doc": "Gets max value of argument values. Returns max number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "vararg": true,
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "min",
+      "doc": "Gets min value of argument values. Returns min integer value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "vararg": true,
+          "doc": "Integer value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "min",
+      "doc": "Gets min value of argument values. Returns min number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "vararg": true,
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "abs",
+      "doc": "Gets absolute value of argument. Returns integer value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to get absolute."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "abs",
+      "doc": "Gets absolute value of argument. Returns number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to get absolute."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "signum",
+      "doc": "Gets sign value from argument. Returns -1 if value is negative, 0 if value is equal to 0, 1 if value is positive.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to get sign value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "signum",
+      "doc": "Gets sign value from argument. Returns -1.0 if value is negative, 0.0 if value is equal to 0, 1.0 if value is positive.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to get sign value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "round",
+      "doc": "Rounds argument value to the closest integer value. 1.49 -> 1.0, 1.5 -> 2.0. Returns number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to round."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "floor",
+      "doc": "Rounds argument value down. 1.49 -> 1.0, 1.5 -> 1.0. Returns number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to round."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "ceil",
+      "doc": "Rounds argument value up. 1.49 -> 2.0, 1.5 -> 2.0. Returns number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to round."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "copySign",
+      "doc": "Gets value of first argument with sign of the second argument. Returns integer value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to copy value from."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value to copy sign from."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "copySign",
+      "doc": "Gets value of first argument with sign of the second argument. Returns number value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to copy value from."
+        },
+        {
+          "type": "number",
+          "doc": "Number value to copy sign from."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

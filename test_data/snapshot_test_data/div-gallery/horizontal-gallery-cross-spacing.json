@@ -1,0 +1,94 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#AAAAAA"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 60
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "paddings": {
+        "left": 5,
+        "top": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "column_count": 3,
+          "item_spacing": 5,
+          "cross_spacing": 10,
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "item",
+              "text": "Item 1"
+            },
+            {
+              "type": "item",
+              "text": "Item 2"
+            },
+            {
+              "type": "item",
+              "text": "Item 3"
+            },
+            {
+              "type": "item",
+              "text": "Item 4"
+            },
+            {
+              "type": "item",
+              "text": "Item 5"
+            },
+            {
+              "type": "item",
+              "text": "Item 6"
+            },
+            {
+              "type": "item",
+              "text": "Item 7"
+            },
+            {
+              "type": "item",
+              "text": "Item 8"
+            },
+            {
+              "type": "item",
+              "text": "Item 9"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

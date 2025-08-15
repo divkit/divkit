@@ -1,0 +1,123 @@
+{
+  "templates": {
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "variables": [
+      {
+        "name": "catched_action",
+        "type": "string",
+        "value": "none"
+      },
+      {
+        "name": "is_enabled",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Tested text",
+              "text_alignment_vertical": "center",
+              "actions": [
+                {
+                  "log_id": "click_id",
+                  "url": "div-action://set_variable?name=catched_action&value=click",
+                  "is_enabled": "@{is_enabled}"
+                }
+              ],
+              "longtap_actions": [
+                {
+                  "log_id": "long_click_id",
+                  "url": "div-action://set_variable?name=catched_action&value=long_click",
+                  "is_enabled": "@{is_enabled}"
+                }
+              ],
+              "doubletap_actions": [
+                {
+                  "log_id": "double_click_id",
+                  "url": "div-action://set_variable?name=catched_action&value=double_click",
+                  "is_enabled": "@{is_enabled}"
+                }
+              ],
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "bottom": 16,
+                "right": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "bottom": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#000000"
+                }
+              }
+            },
+            {
+              "type": "subtitle",
+              "text": "Last catched action: @{catched_action}",
+              "ranges": [
+                {
+                  "start": 21,
+                  "end": 40,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "@{is_enabled ? 'Disable actions' : 'Enable actions'}",
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "font_size": 15,
+              "line_height": 20,
+              "action": {
+                "log_id": "switch_is_enabled",
+                "url": "div-action://set_variable?name=is_enabled&value=@{!is_enabled}"
+              },
+              "border": {
+                "corner_radius": 16,
+                "stroke": {
+                  "color": "#000000",
+                  "width": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

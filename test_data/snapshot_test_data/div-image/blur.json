@@ -1,0 +1,73 @@
+{
+  "description": "Images of different size with blur",
+  "platforms": [
+    "android",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "chess_card": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "margins": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "filters": [
+        {
+          "type": "blur",
+          "radius": 4
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "width": {
+                "type": "fixed",
+                "value": 50
+              }
+            },
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "fixed",
+                "value": 300
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

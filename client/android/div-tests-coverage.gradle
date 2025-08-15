@@ -1,0 +1,78 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
+}
+
+def testVariant = project.property('testVariant')
+
+def coverageSourceDirs = [
+        'src/main/java',
+        'src/impl/java',
+        'src/gen'
+]
+
+ext.readLinesFromFile = { filepath, skipSymbol ->
+    final BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)))
+    String line
+    List<String> linesAsList = new ArrayList<>()
+    while ((line = reader.readLine()) != null) {
+        if (line.trim().isEmpty() || line.startsWith(skipSymbol)) {
+            continue
+        }
+        linesAsList.add(line)
+    }
+    return linesAsList
+}
+
+if (!tasks.names.contains('jacocoTestReport')) {
+    tasks.register('jacocoTestReport', JacocoReport) {
+        final classesDir = project.layout.buildDirectory.get().dir("intermediates/javac").dir(testVariant) as Directory
+
+        if (classesDir.asFile.exists()) {
+            classDirectories.from {
+                fileTree(dir: classesDir)
+            }
+
+            doFirst {
+                classesDir.asFileTree.visit { file ->
+                    if (file.name.contains('$$')) {
+                        file.renameTo(file.path.replace('$$', '$'))
+                    }
+                }
+            }
+        }
+    }
+}
+
+jacocoTestReport {
+    dependsOn "test${testVariant.capitalize()}UnitTest"
+
+    def excludes = readLinesFromFile("${project.projectDir}/jacoco.excludes", "#")
+
+    classDirectories.setFrom(
+        files(classDirectories.files.collect {
+            fileTree(dir: it, excludes: excludes)
+        })
+    )
+
+    group = "reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml {
+            enabled true // coveralls plugin depends on xml format report
+        }
+        html {
+            enabled true
+        }
+        csv {
+            enabled true
+        }
+    }
+    sourceDirectories.from {
+        files(coverageSourceDirs)
+    }
+    executionData.from {
+        files("build/jacoco/test${testVariant.capitalize()}UnitTest.exec")
+    }
+}

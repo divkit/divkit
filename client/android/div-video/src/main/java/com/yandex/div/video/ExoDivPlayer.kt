@@ -1,0 +1,220 @@
+package com.yandex.div.video
+
+import android.app.Activity
+import android.app.Application
+import android.content.Context
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SeekParameters
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
+import com.yandex.div.core.ObserverList
+import com.yandex.div.core.player.DivPlayer
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_FULL
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_MUTED
+import com.yandex.div.core.player.DivPlayerPlaybackConfig
+import com.yandex.div.core.player.DivVideoSource
+import com.yandex.div.internal.KAssert
+
+internal class ExoDivPlayer(
+    private val context: Context,
+    private var src: List<DivVideoSource>,
+    config: DivPlayerPlaybackConfig,
+    cacheDataSourceFactory: CacheDataSource.Factory?
+) : DivPlayer {
+    val player: ExoPlayer by lazy {
+        ExoPlayer.Builder(context).build()
+    }
+
+    private val mediaSourceAbstractFactory by lazy {
+        ExoDivMediaSourceAbstractFactory(context, cacheDataSourceFactory)
+    }
+
+    private val observers = ObserverList<DivPlayer.Observer>()
+    private val updateTimeHandler = Handler(Looper.getMainLooper())
+    private var currentSource: DivVideoSource? = null
+    private var needToRenderFrameExplicitly = false
+
+    private var lastUnmutedVolume = VOLUME_FULL
+    private var isMuted = config.isMuted
+
+    private var targetResolutionArea = 0
+
+    private val playerPauseListener = object : Player.Listener {
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            if (isPlaying) {
+                observers.forEach { it.onPlay() }
+                startUpdatingPlaybackTime()
+            } else {
+                observers.forEach { it.onPause() }
+            }
+        }
+
+        override fun onPlaybackStateChanged(state: Int) {
+            if (state == Player.STATE_ENDED) needToRenderFrameExplicitly = true
+
+            observers.forEach {
+                when (state) {
+                    Player.STATE_BUFFERING -> it.onBuffering()
+                    Player.STATE_ENDED -> it.onEnd()
+                    Player.STATE_READY -> it.onReady()
+                    else -> Unit
+                }
+            }
+        }
+
+        override fun onPlayerError(error: PlaybackException) {
+            observers.forEach {
+                it.onFatal()
+            }
+        }
+    }
+
+    private val playerActivityCallback = object : Application.ActivityLifecycleCallbacks {
+        override fun onActivityPaused(activity: Activity) = Unit
+
+        override fun onActivityStarted(activity: Activity) = Unit
+
+        override fun onActivityDestroyed(activity: Activity) {
+            (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(this)
+        }
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+
+        override fun onActivityStopped(activity: Activity) = Unit
+
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+
+        override fun onActivityResumed(activity: Activity) {
+            if (needToRenderFrameExplicitly) {
+                needToRenderFrameExplicitly = false
+                player.setSeekParameters(SeekParameters.CLOSEST_SYNC)
+                seek(player.currentPosition)
+                pause()
+                player.setSeekParameters(SeekParameters.EXACT)
+            }
+        }
+    }
+
+    init {
+        if (src.isNotEmpty()) {
+            player.addListener(playerPauseListener)
+            setConfig(config)
+        } else {
+            KAssert.fail { "Attempt to create a player with an empty source" }
+        }
+        player.volume = if (isMuted) VOLUME_MUTED else VOLUME_FULL
+
+        (context.applicationContext as Application).registerActivityLifecycleCallbacks(playerActivityCallback)
+    }
+
+    private fun updatePlaybackTime() {
+        observers.forEach {
+            it.onCurrentTimeChange(player.currentPosition)
+        }
+    }
+
+    private fun startUpdatingPlaybackTime() {
+        updateTimeHandler.removeCallbacksAndMessages(null)
+        keepUpdatingPlaybackTime()
+    }
+
+    private fun keepUpdatingPlaybackTime() {
+        updatePlaybackTime()
+
+        updateTimeHandler.postDelayed({
+            if (player.isPlaying) {
+                keepUpdatingPlaybackTime()
+            }
+        }, 1000)
+    }
+
+    private fun setConfig(config: DivPlayerPlaybackConfig) {
+        setMuted(config.isMuted)
+        player.repeatMode = if (config.repeatable) {
+            Player.REPEAT_MODE_ONE
+        } else {
+            Player.REPEAT_MODE_OFF
+        }
+        player.playWhenReady = config.autoplay
+    }
+
+    private fun applyMediaSource() {
+        var minSourceGreaterThanTarget: DivVideoSource? = null
+        var minArea = 0
+
+        src.forEach {
+            if (it.resolution != null) {
+                val area = it.resolution!!.width * it.resolution!!.height
+                if (area in targetResolutionArea until minArea) {
+                    minSourceGreaterThanTarget = it
+                    minArea = area
+                }
+            }
+        }
+
+        currentSource = minSourceGreaterThanTarget ?: src.first()
+
+        currentSource?.let { source ->
+            mediaSourceAbstractFactory.create(source.url.toString())?.let { factory ->
+                val mediaItem = MediaItem.Builder()
+                    .setMimeType(source.mimeType)
+                    .setUri(source.url)
+                    .build()
+                val mediaSource = factory.createMediaSource(mediaItem)
+
+                player.setMediaSource(mediaSource)
+                player.prepare()
+            }
+        }
+    }
+
+    override fun setMuted(muted: Boolean) {
+        if (isMuted == muted) return
+
+        player.volume = if (muted) VOLUME_MUTED else lastUnmutedVolume
+        isMuted = muted
+    }
+
+    override fun addObserver(observer: DivPlayer.Observer) {
+        observers.addObserver(observer)
+    }
+
+    override fun removeObserver(observer: DivPlayer.Observer) {
+        observers.removeObserver(observer)
+    }
+
+    override fun setSource(sourceVariants: List<DivVideoSource>, config: DivPlayerPlaybackConfig) {
+        setConfig(config)
+        src = sourceVariants
+        applyMediaSource()
+    }
+
+    fun setTargetResolution(width: Int, height: Int) {
+        targetResolutionArea = width * height
+
+        applyMediaSource()
+    }
+
+    override fun play() {
+        player.play()
+    }
+
+    override fun pause() {
+        player.pause()
+    }
+
+    override fun seek(toMs: Long) {
+        player.seekTo(toMs)
+        updatePlaybackTime()
+    }
+
+    override fun release() {
+        player.release()
+        (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(playerActivityCallback)
+    }
+}

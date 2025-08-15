@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivAnimation tests should create card with templates 1`] = `
+{
+  "templates": {
+    "div": {
+      "type": "text",
+      "action_animation": {
+        "name": "set",
+        "items": [
+          {
+            "name": "fade",
+            "end_value": 1,
+            "$start_value": "fade_start_value"
+          },
+          {
+            "name": "scale",
+            "end_value": 1,
+            "$start_delay": "scale_start_delay",
+            "$start_value": "scale_start_value"
+          }
+        ]
+      },
+      "text": "Some text"
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "div",
+          "fade_start_value": 0.5,
+          "scale_start_delay": 250,
+          "scale_start_value": 0
+        }
+      }
+    ]
+  }
+}
+`;

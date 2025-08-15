@@ -1,0 +1,74 @@
+{
+  "description": "Text with variables",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "variables": [
+      {
+        "name": "number_var",
+        "type": "number",
+        "value": 0.33
+      },
+      {
+        "name": "integer_var",
+        "type": "integer",
+        "value": 220
+      },
+      {
+        "name": "boolean_var",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "url_var",
+        "type": "url",
+        "value": "https://google.com"
+      },
+      {
+        "name": "color_var",
+        "type": "color",
+        "value": "#fff"
+      }
+    ],
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "@{number_var}",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "@{integer_var}",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "@{boolean_var}",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "@{url_var}",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "@{color_var}",
+              "font_size": 12
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

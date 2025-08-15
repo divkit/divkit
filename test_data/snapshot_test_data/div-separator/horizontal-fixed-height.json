@@ -1,0 +1,27 @@
+{
+  "description": "Horizontal separator with fixed height",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "delimiter_style": {
+            "color": "#FF0000"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 64
+          }
+        }
+      }
+    ]
+  }
+}

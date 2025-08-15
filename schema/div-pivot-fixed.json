@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_pivot_fixed_short",
+  "properties": {
+    "value": {
+      "type": "integer",
+      "$description": "translations.json#/div_pivot_fixed_value"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "$description": "translations.json#/div_pivot_fixed_unit",
+      "default_value": "dp"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "pivot-fixed"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
+}

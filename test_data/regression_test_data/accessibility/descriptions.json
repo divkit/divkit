@@ -1,0 +1,101 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "accessibility/descriptions",
+    "transition_animation_selector": "data_change",
+    "variables": [
+      {
+        "name": "button_1_active",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "top": 16
+          },
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "button",
+              "text": "Элемент 1",
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 1",
+                "state_description": "Сейчас в состоянии @{button_1_active}"
+              },
+              "actions": [
+                {
+                  "log_id": "change_button_1_state",
+                  "url": "div-action://set_variable?name=button_1_active&value=true"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Элемент 2",
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 2",
+                "hint": "Нажмите на кнопку, чтобы что-то произошло"
+              }
+            },
+            {
+              "type": "button",
+              "text": "Элемент 3",
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 3"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

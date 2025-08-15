@@ -1,0 +1,550 @@
+{
+  "cases": [
+    {
+      "expression": "@{getIntervalSeconds(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalSeconds(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalSeconds(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalSeconds(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalSeconds(1000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalSeconds(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalSeconds(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalSeconds(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalSeconds(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalSeconds(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalSeconds(1000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalSeconds(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 196330
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalMinutes(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalMinutes(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalMinutes(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalMinutes(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalMinutes(60000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalMinutes(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 32
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalMinutes(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalMinutes(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalMinutes(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalMinutes(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalMinutes(60000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalMinutes(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 3272
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalHours(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalHours(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalHours(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalHours(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalHours(3600000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalHours(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalHours(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(3600000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 54
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalDays(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalDays(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalDays(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalDays(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalDays(86400000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalDays(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalWeeks(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(604800000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalWeeks(1296330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntervalTotalHours(39010000)}:@{getIntervalMinutes(39010000)}:@{getIntervalSeconds(39010000)}",
+      "expected": {
+        "type": "string",
+        "value": "10:50:10"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

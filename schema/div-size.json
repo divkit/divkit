@@ -1,0 +1,16 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-fixed-size.json",
+      "$description": "translations.json#/div_size_fixed"
+    },
+    {
+      "$ref": "div-match-parent-size.json",
+      "$description": "translations.json#/div_size_match_parent"
+    },
+    {
+      "$ref": "div-wrap-content-size.json",
+      "$description": "translations.json#/div_size_wrap_content"
+    }
+  ]
+}

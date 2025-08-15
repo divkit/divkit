@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_array_remove_value",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "array_remove_value"
+      ]
+    },
+    "variable_name": {
+      "type": "string"
+    },
+    "index": {
+      "type": "integer"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "variable_name",
+    "index"
+  ]
+}

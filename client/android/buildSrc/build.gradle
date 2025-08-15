@@ -1,0 +1,21 @@
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation libs.kotlin.reflect
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath libs.kotlin.gradle.plugin
+    }
+}

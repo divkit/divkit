@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_aspect",
+  "properties": {
+    "ratio": {
+      "$ref": "common.json#/positive_number",
+      "$description": "translations.json#/div_aspect_ratio"
+    }
+  },
+  "required": [
+    "ratio"
+  ]
+}

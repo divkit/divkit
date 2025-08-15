@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="overflow_menu_margin_horizontal">8dp</dimen>
+    <dimen name="overflow_menu_margin_vertical">12dp</dimen>
+    <dimen name="overflow_menu_size">24dp</dimen>
+
+    <dimen name="tab_scrollable_min_width">72dp</dimen>
+
+    <dimen name="div_horizontal_padding">12dp</dimen>
+    <dimen name="div_padding_zero">0dp</dimen>
+    <dimen name="div_shadow_elevation">3dp</dimen>
+
+    <dimen name="div_text_size_s">11sp</dimen>
+    <dimen name="div_text_size_m">13sp</dimen>
+
+    <dimen name="div_separator_delimiter_height">1dp</dimen>
+
+
+    <dimen name="div_horizontal_padding_s">68dp</dimen>
+    <dimen name="div_horizontal_padding_m">88dp</dimen>
+    <dimen name="div_horizontal_padding_l">148dp</dimen>
+
+    <dimen name="div_table_padding_zero">0dp</dimen>
+    <dimen name="div_table_padding_xxs">4dp</dimen>
+    <dimen name="div_table_padding_xs">8dp</dimen>
+    <dimen name="div_table_padding_s">12dp</dimen>
+    <dimen name="div_table_padding_m">16dp</dimen>
+    <dimen name="div_table_padding_l">20dp</dimen>
+    <dimen name="div_table_padding_xl">32dp</dimen>
+    <dimen name="div_table_padding_xxl">48dp</dimen>
+
+    <dimen name="div_table_image_size_xs">16dp</dimen>
+    <dimen name="div_table_image_size_s">18dp</dimen>
+    <dimen name="div_table_image_size_m">20dp</dimen>
+    <dimen name="div_table_image_size_l">24dp</dimen>
+    <dimen name="div_table_image_size_xl">36dp</dimen>
+    <dimen name="div_table_image_size_xxl">40dp</dimen>
+
+    <dimen name="div_button_text_horizontal_padding">14dp</dimen>
+    <dimen name="div_button_text_horizontal_image_padding">8dp</dimen>
+    <dimen name="div_button_text_vertical_padding">8dp</dimen>
+    <dimen name="div_button_height">36sp</dimen>
+    <dimen name="div_button_image_size">24sp</dimen>
+
+    <dimen name="div_style_text_size_numbers_l">40sp</dimen>
+    <dimen name="div_style_text_size_numbers_m">28sp</dimen>
+    <dimen name="div_style_text_size_numbers_s">24sp</dimen>
+    <dimen name="div_style_text_size_title_s">16sp</dimen>
+    <dimen name="div_style_text_size_title_m">18sp</dimen>
+    <dimen name="div_style_text_size_title_l">20sp</dimen>
+    <dimen name="div_style_text_size_text_s">13sp</dimen>
+    <dimen name="div_style_text_size_text_m">14sp</dimen>
+    <dimen name="div_style_text_size_text_l">16sp</dimen>
+    <dimen name="div_style_text_size_button">12sp</dimen>
+    <dimen name="div_style_text_size_card_header">11sp</dimen>
+
+    <item name="div_style_text_letter_spacing_no" format="float" type="dimen">0.0</item>
+    <item name="div_style_text_letter_spacing_numbers_l" format="float" type="dimen">-0.06</item>
+    <item name="div_style_text_letter_spacing_numbers_m" format="float" type="dimen">-0.04</item>
+    <item name="div_style_text_letter_spacing_numbers_s" format="float" type="dimen">-0.04</item>
+    <item name="div_style_text_letter_spacing_button" format="float" type="dimen">0.04</item>
+    <item name="div_style_text_letter_spacing_card_header" format="float" type="dimen">0.09</item>
+
+    <dimen name="div_style_text_line_space_extra_no">0sp</dimen>
+    <dimen name="div_style_text_line_space_extra_numbers_s">2sp</dimen>
+    <dimen name="div_style_text_line_space_extra_numbers_m">4sp</dimen>
+    <dimen name="div_style_text_line_space_extra_numbers_l">1sp</dimen>
+    <dimen name="div_style_text_line_space_extra_title_s">2sp</dimen>
+    <dimen name="div_style_text_line_space_extra_title_m">-1sp</dimen>
+    <dimen name="div_style_text_line_space_extra_title_l">4sp</dimen>
+    <dimen name="div_style_text_line_space_extra_text_s">1sp</dimen>
+    <dimen name="div_style_text_line_space_extra_text_m">2sp</dimen>
+    <dimen name="div_style_text_line_space_extra_text_l">4sp</dimen>
+    <dimen name="div_style_text_line_space_extra_card_header">5sp</dimen>
+
+    <dimen name="div_compound_drawable_padding">8dp</dimen>
+    <dimen name="div_compound_drawable_vertical_padding">6dp</dimen>
+    <dimen name="div_footer_image_size">24dp</dimen>
+
+    <dimen name="title_tab_title_height">40dp</dimen>
+    <dimen name="title_tab_title_margin_vertical">8dp</dimen>
+    <dimen name="title_tab_title_margin_horizontal">8dp</dimen>
+    <dimen name="title_tab_title_separator_margin_top">4dp</dimen>
+
+    <dimen name="div_indicator_minimum_width">4dp</dimen>
+    <dimen name="div_indicator_default_width">7dp</dimen>
+    <dimen name="div_indicator_selected_width">12dp</dimen>
+    <dimen name="div_indicator_default_height">3dp</dimen>
+    <dimen name="div_indicator_default_gap">20dp</dimen>
+    <dimen name="div_indicator_corner_radius">3dp</dimen>
+
+</resources>

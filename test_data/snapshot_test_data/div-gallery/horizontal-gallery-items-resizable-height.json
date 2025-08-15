@@ -1,0 +1,74 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "For millions of years mankind lived just like animals",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "font_weight": "medium",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

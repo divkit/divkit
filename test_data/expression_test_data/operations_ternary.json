@@ -1,0 +1,237 @@
+{
+  "cases": [
+    {
+      "expression": "@{3 < a + 1 ? 1 : 'some string'}",
+      "expected": {
+        "type": "string",
+        "value": "some string"
+      },
+      "variables": [
+        {
+          "name": "a",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{3 > a + 1 ? 1 : 'some string'}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "name": "a",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{false_var ? 'true' : 'false'}",
+      "expected": {
+        "type": "string",
+        "value": "false"
+      },
+      "variables": [
+        {
+          "name": "false_var",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true_var ? 'true' : 'false'}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "variables": [
+        {
+          "name": "true_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true ? (3 + 1) * -2 : false || (true && false)}",
+      "expected": {
+        "type": "integer",
+        "value": -8
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{false ? (3 + 1) * -2 : false || (true && false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{2 ? 1 : 0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [2 ? 1 : 0]. Ternary must be called with a Boolean value as a condition."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true ? 0 : true ? 1 : 2}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true ? false ? 1 : 2 : 0}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{false ? 1 : false ? 2 : false ? 3 : 4}",
+      "expected": {
+        "type": "integer",
+        "value": 4
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{false?1.2:3.4}",
+      "expected": {
+        "type": "number",
+        "value": 3.4
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{var == 'L1' ? var == 'L2' ? 'L2-true' : 'L2-false' : var == 'L' + '3' ? 'L3-true' : var == 'L4' ? 'L4-true' : 'L4-false'}",
+      "expected": {
+        "type": "string",
+        "value": "L3-true"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "L3"
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{var=='L1'?'L1-true':var=='L'+'2'?'L2-true':var=='L3'?'L3-true':'L3-false'}",
+      "expected": {
+        "type": "string",
+        "value": "L2-true"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "L2"
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{false ? (true ? 'P1-true' : 'P1-false') + ' ' + (true ? 'P2-true' : 'P2-false') : (true ? 'P3-true' : 'P3-false') + ' ' + (false ? 'P4-true' : 'P4-false')}",
+      "expected": {
+        "type": "string",
+        "value": "P3-true P4-false"
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true ? 'value'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

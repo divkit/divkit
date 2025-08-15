@@ -1,0 +1,48 @@
+{
+  "description": "Long text trimmed with an ellipsis and an image.",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "unsupported_platforms": {
+    "web": "It cannot be implemented in css, and the implementation will be too heavy on js."
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "This is very very very very very very very very very very very very long text with ranges and custom ellipsis",
+          "font_size": 18,
+          "max_lines": 2,
+          "ellipsis": {
+            "text": "… READ MORE ",
+            "ranges": [
+              {
+                "start": 2,
+                "end": 12,
+                "text_color": "#7E7E7E"
+              }
+            ],
+            "images": [
+              {
+                "start": 12,
+                "url": "https://yastatic.net/s3/home/divkit/down_arrow.png",
+                "width": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 5
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "description": "Separator with fixed sizes and paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "delimiter_style": {
+            "orientation": "vertical",
+            "color": "#FF0000"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "paddings": {
+            "left": 20,
+            "top": 5,
+            "right": 15,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

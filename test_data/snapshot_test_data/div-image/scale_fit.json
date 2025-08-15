@@ -1,0 +1,31 @@
+{
+  "description": "Image with dimensions less than wrap_content and fit scaling",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "scale": "fit"
+        }
+      }
+    ]
+  }
+}

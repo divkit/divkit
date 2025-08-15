@@ -1,0 +1,50 @@
+{
+  "description": "text_gradient must be more important than the text_color, but the text_color in ranges should be more important, than text_gradient",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion. Although the Death Star has been destroyed, Imperial troops have driven the Rebel forces from their hidden base and pursued them across the galaxy.",
+              "font_size": 12,
+              "paddings": {
+                "left": 12,
+                "right": 12,
+                "top": 4,
+                "bottom": 4
+              },
+              "text_gradient": {
+                "type": "gradient",
+                "colors": [
+                  "#0000FF",
+                  "#00FFFF",
+                  "#FF00FF"
+                ],
+                "angle": 180
+              },
+              "text_color": "#f00",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 25,
+                  "text_color": "#f00"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

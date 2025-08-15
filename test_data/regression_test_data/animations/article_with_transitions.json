@@ -1,0 +1,512 @@
+{
+  "templates": {
+    "title_text": {
+      "type": "text",
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "content_text": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 20,
+      "text_color": "#000000"
+    },
+    "comment_text": {
+      "type": "text",
+      "font_size": 14,
+      "text_color": "#5e5e5e"
+    },
+    "comment": {
+      "type": "grid",
+      "$id": "comment_id",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "column_count": 3,
+      "items": [
+        {
+          "type": "separator",
+          "id": "separator",
+          "width": {
+            "type": "fixed",
+            "value": 4
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "row_span": 2,
+          "delimiter_style": {
+            "color": "#00000000"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "$color": "marker_color"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "match_parent",
+            "weight": 1
+          },
+          "height": {
+            "type": "fixed",
+            "value": 20
+          },
+          "margins": {
+            "left": 8,
+            "right": 8
+          },
+          "font_size": 12,
+          "font_weight": "light",
+          "max_lines": 1,
+          "text_alignment_vertical": "center",
+          "text_color": "#3498DB",
+          "$text": "author"
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 20
+          },
+          "margins": {
+            "right": 8
+          },
+          "font_size": 12,
+          "max_lines": 1,
+          "text_alignment_vertical": "center",
+          "text_color": "#1ABC9C",
+          "$text": "date"
+        },
+        {
+          "type": "state",
+          "margins": {
+            "left": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "column_span": 2,
+          "$id": "comment_id",
+          "states": [
+            {
+              "state_id": "collapsed",
+              "div": {
+                "id": "comment",
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 250
+                },
+                "type": "comment_text",
+                "max_lines": 2,
+                "$text": "comment",
+                "ellipsis": {
+                  "text": "… SHOW MORE",
+                  "ranges": [
+                    {
+                      "start": 2,
+                      "end": 11,
+                      "font_size": 11,
+                      "font_weight": "medium",
+                      "text_color": "#95A5A6",
+                      "$actions": "collapsed_actions"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "state_id": "expanded",
+              "div": {
+                "id": "comment",
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 250
+                },
+                "type": "comment_text",
+                "$text": "comment",
+                "$actions": "expanded_actions"
+              }
+            }
+          ]
+        }
+      ],
+      "transition_in": {
+        "type": "slide",
+        "$edge": "transition_in_edge",
+        "duration": 250
+      },
+      "transition_out": {
+        "type": "set",
+        "items": [
+          {
+            "type": "fade",
+            "alpha": 0.33,
+            "duration": 250
+          },
+          {
+            "type": "slide",
+            "$edge": "transition_in_edge",
+            "duration": 250
+          }
+        ]
+      }
+    },
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 36
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f1dff2"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "borderless_button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "font_size": 14,
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#2980B9"
+    },
+    "space": {
+      "type": "separator",
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    },
+    "article_card": {
+      "type": "container",
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "orientation": "vertical"
+    }
+  },
+  "card": {
+    "log_id": "article_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "article_card",
+          "items": [
+            {
+              "type": "title_text",
+              "margins": {
+                "bottom": 8
+              },
+              "text": "Title",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "state",
+              "id": "content",
+              "states": [
+                {
+                  "state_id": "collapsed",
+                  "div": {
+                    "type": "content_text",
+                    "id": "content_text",
+                    "margins": {
+                      "bottom": 16
+                    },
+                    "max_lines": 3,
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 250
+                    }
+                  }
+                },
+                {
+                  "state_id": "expanded",
+                  "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "content_text",
+                        "id": "content_text",
+                        "margins": {
+                          "bottom": 8
+                        },
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                        "transition_change": {
+                          "type": "change_bounds",
+                          "duration": 250
+                        }
+                      },
+                      {
+                        "type": "state",
+                        "margins": {
+                          "bottom": 8
+                        },
+                        "id": "comments_button",
+                        "states": [
+                          {
+                            "state_id": "text_show_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "SHOW COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
+                                },
+                                {
+                                  "log_id": "button_text_hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "text_hide_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "HIDE COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
+                                },
+                                {
+                                  "log_id": "button_text_show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "id": "comments",
+                        "states": [
+                          {
+                            "state_id": "collapsed",
+                            "div": {
+                              "type": "space",
+                              "height": {
+                                "type": "fixed",
+                                "value": 0
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "expanded",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "left": 8,
+                                "right": 8,
+                                "bottom": 20
+                              },
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "comment",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "comment_id": "comment_01",
+                                  "marker_color": "#F1C40F",
+                                  "author": "username",
+                                  "date": "today, 12:00",
+                                  "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                  "collapsed_actions": [
+                                    {
+                                      "log_id": "expand_comment_01",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_01/expanded"
+                                    }
+                                  ],
+                                  "expanded_actions": [
+                                    {
+                                      "log_id": "collapse_comment_01",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_01/collapsed"
+                                    }
+                                  ],
+                                  "transition_in_edge": "left"
+                                },
+                                {
+                                  "type": "comment",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "comment_id": "comment_02",
+                                  "marker_color": "#E67E22",
+                                  "author": "username",
+                                  "date": "today, 12:00",
+                                  "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                  "collapsed_actions": [
+                                    {
+                                      "log_id": "expand_comment_02",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_02/expanded"
+                                    }
+                                  ],
+                                  "expanded_actions": [
+                                    {
+                                      "log_id": "collapse_comment_02",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_02/collapsed"
+                                    }
+                                  ],
+                                  "transition_in_edge": "right"
+                                },
+                                {
+                                  "type": "comment",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "comment_id": "comment_03",
+                                  "marker_color": "#E74C3C",
+                                  "author": "username",
+                                  "date": "today, 12:00",
+                                  "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                  "collapsed_actions": [
+                                    {
+                                      "log_id": "expand_comment_03",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_03/expanded"
+                                    }
+                                  ],
+                                  "expanded_actions": [
+                                    {
+                                      "log_id": "collapse_comment_03",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_03/collapsed"
+                                    }
+                                  ],
+                                  "transition_in_edge": "left"
+                                },
+                                {
+                                  "type": "comment",
+                                  "comment_id": "comment_04",
+                                  "marker_color": "#9B59B6",
+                                  "author": "username",
+                                  "date": "today, 12:00",
+                                  "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                  "collapsed_actions": [
+                                    {
+                                      "log_id": "expand_comment_04",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_04/expanded"
+                                    }
+                                  ],
+                                  "expanded_actions": [
+                                    {
+                                      "log_id": "collapse_comment_04",
+                                      "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_04/collapsed"
+                                    }
+                                  ],
+                                  "transition_in_edge": "right"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "button",
+              "states": [
+                {
+                  "state_id": "text_expand",
+                  "div": {
+                    "type": "button",
+                    "text": "EXPAND",
+                    "actions": [
+                      {
+                        "log_id": "expand_content",
+                        "url": "div-action://set_state?state_id=0/content/expanded"
+                      },
+                      {
+                        "log_id": "button_text_collapse",
+                        "url": "div-action://set_state?state_id=0/button/text_collapse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "text_collapse",
+                  "div": {
+                    "type": "button",
+                    "text": "COLLAPSE",
+                    "actions": [
+                      {
+                        "log_id": "collapse_content",
+                        "url": "div-action://set_state?state_id=0/content/collapsed"
+                      },
+                      {
+                        "log_id": "button_text_expand",
+                        "url": "div-action://set_state?state_id=0/button/text_expand"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

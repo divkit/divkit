@@ -1,0 +1,64 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 20,
+            "top": 5,
+            "right": 15,
+            "bottom": 10
+          },
+          "width": {
+            "type": "fixed",
+            "value": 150
+          },
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "border": {
+            "corner_radius": 4,
+            "corners_radius": {
+              "top-left": 10,
+              "bottom-right": 15,
+              "bottom-left": 0
+            },
+            "stroke": {
+              "color": "#BBFF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "For millions of years mankind lived just like animals",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "Then something happened which unleashed the power of our imagination",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "font_weight": "medium"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "description": "Line height of single-line text with image span",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium"
+    }
+  },
+  "card": {
+    "log_id": "line_height_with_image",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_block",
+              "background_color": "#F8F8F8",
+              "text": "Text with embedded  image",
+              "images": [
+                {
+                  "start": 19,
+                  "width": {
+                    "value": 24
+                  },
+                  "height": {
+                    "value": 24
+                  },
+                  "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+                }
+              ]
+            },
+            {
+              "type": "text_block",
+              "background_color": "#E0E0E0",
+              "line_height": 16,
+              "text": "Text with embedded  image and line height",
+              "images": [
+                {
+                  "start": 19,
+                  "width": {
+                    "value": 24
+                  },
+                  "height": {
+                    "value": 24
+                  },
+                  "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

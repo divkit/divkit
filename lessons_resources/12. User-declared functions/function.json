@@ -1,0 +1,215 @@
+{
+  "templates": {
+    "block": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "border": {
+        "corner_radius": 50
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    },
+    "color_input": {
+      "type": "input",
+      "font_size": 16,
+      "margins": {
+        "top": 10
+      },
+      "text_alignment_horizontal": "center",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "border": {
+        "corner_radius": 4,
+        "stroke": {
+          "color": "#000"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "variables": [
+      {
+        "name": "input_1",
+        "type": "string",
+        "value": "00ff00"
+      },
+      {
+        "name": "input_2",
+        "type": "string",
+        "value": "0000ff"
+      },
+      {
+        "name": "input_3",
+        "type": "string",
+        "value": "ff0000"
+      },
+      {
+        "name": "color_1",
+        "type": "color",
+        "value": "#5500ff00"
+      },
+      {
+        "name": "color_2",
+        "type": "color",
+        "value": "#550000ff"
+      },
+      {
+        "name": "color_3",
+        "type": "color",
+        "value": "#55ff0000"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "margins": {
+                "left": 10,
+                "right": 10
+              },
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "height": {
+                "type": "fixed",
+                "value": 150
+              },
+              "items": [
+                {
+                  "type": "block",
+                  "background_color": "@{color_1}",
+                  "alignment_horizontal": "center"
+                },
+                {
+                  "type": "block",
+                  "background_color": "@{color_2}",
+                  "alignment_horizontal": "end",
+                  "alignment_vertical": "bottom"
+                },
+                {
+                  "type": "block",
+                  "background_color": "@{color_3}",
+                  "alignment_horizontal": "start",
+                  "alignment_vertical": "bottom"
+                }
+              ]
+            },
+            {
+              "type": "color_input",
+              "text_variable": "input_1",
+              "margins": {
+                "top": 40
+              }
+            },
+            {
+              "type": "color_input",
+              "text_variable": "input_2"
+            },
+            {
+              "type": "color_input",
+              "text_variable": "input_3"
+            },
+            {
+              "type": "text",
+              "text": "Mix!",
+              "text_alignment_horizontal": "center",
+              "font_size": 20,
+              "margins": {
+                "top": 10
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#600000ff"
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "border": {
+                "corner_radius": 4
+              },
+              "functions": [
+                {
+                  "name": "reduce_alpha",
+                  "arguments": [
+                    {
+                      "name": "init_color",
+                      "type": "string"
+                    }
+                  ],
+                  "return_type": "color",
+                  "body": "@{toColor('#55@{init_color}')}"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "set_color_1",
+                  "typed":{
+                    "type": "set_variable",
+                    "variable_name": "color_1",
+                    "value": {
+                      "type": "color",
+                      "value": "@{reduce_alpha(input_1)}"
+                    }
+                  }
+                },
+                {
+                  "log_id": "set_color_2",
+                  "typed":{
+                    "type": "set_variable",
+                    "variable_name": "color_2",
+                    "value": {
+                      "type": "color",
+                      "value": "@{reduce_alpha(input_2)}"
+                    }
+                  }
+                },
+                {
+                  "log_id": "set_color_3",
+                  "typed":{
+                    "type": "set_variable",
+                    "variable_name": "color_3",
+                    "value": {
+                      "type": "color",
+                      "value": "@{reduce_alpha(input_3)}"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "templates": {},
+  "entity": {
+    "type": "entity_with_complex_property",
+    "property": {}
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "description": "Property setting boolean value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-boolean-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "flag": true
+          }
+        },
+        {
+          "name": "flag_prop",
+          "type": "property",
+          "value_type": "boolean",
+          "get": "@{getBooleanFromDict(source, 'flag')}",
+          "set": [
+            {
+              "log_id": "set_action_bool",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "flag",
+                "value": {
+                  "type": "boolean",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Flag: @{flag_prop}"
+              },
+              {
+                "type": "switch",
+                "is_on_variable": "flag_prop"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "flag": true
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "flag_prop",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=flag_prop&value=false",
+          "log_id": "set_bool_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "flag": false
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "flag_prop",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

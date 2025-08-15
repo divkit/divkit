@@ -1,0 +1,116 @@
+{
+  "description": "Text element with auto_ellipsize in small container is trimmed with ellipsis",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "label": {
+      "type": "text",
+      "font_size": 16,
+      "text_color": "#173863",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "top": 5,
+        "bottom": 5,
+        "right": 8,
+        "left": 8
+      }
+    },
+    "text_container": {
+      "type": "container",
+      "margins": {
+        "top": 5,
+        "bottom": 5,
+        "right": 5,
+        "left": 5
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#c7c4ef"
+        }
+      ],
+      "orientation": "vertical"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_container",
+              "height": {
+                "type": "fixed",
+                "value": 55
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "auto_ellipsize = default"
+                },
+                {
+                  "type": "label",
+                  "text": "Carroll began writing the manuscript of the story the next day, although that earliest version is lost. The girls and Carroll took another boat trip a month later, when he elaborated the plot to the story of Alice, and in November he began working on the manuscript in earnest.",
+                  "max_lines": 6
+                }
+              ]
+            },
+            {
+              "type": "text_container",
+              "height": {
+                "type": "fixed",
+                "value": 55
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "auto_ellipsize = true"
+                },
+                {
+                  "type": "label",
+                  "text": "Carroll began writing the manuscript of the story the next day, although that earliest version is lost. The girls and Carroll took another boat trip a month later, when he elaborated the plot to the story of Alice, and in November he began working on the manuscript in earnest.",
+                  "max_lines": 6,
+                  "auto_ellipsize": true
+                }
+              ]
+            },
+            {
+              "type": "text_container",
+              "height": {
+                "type": "fixed",
+                "value": 55
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "auto_ellipsize = false"
+                },
+                {
+                  "type": "label",
+                  "text": "Carroll began writing the manuscript of the story the next day, although that earliest version is lost. The girls and Carroll took another boat trip a month later, when he elaborated the plot to the story of Alice, and in November he began working on the manuscript in earnest.",
+                  "max_lines": 6,
+                  "auto_ellipsize": false
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

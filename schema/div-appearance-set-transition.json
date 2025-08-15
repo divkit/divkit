@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_appearance_set_transition",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-appearance-transition.json"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_appearance_set_transition_items"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

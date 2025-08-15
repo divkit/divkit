@@ -1,0 +1,2928 @@
+{
+  "cases": [
+    {
+      "expression": "@{'abc' == 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == 7]. Operator '==' cannot be applied to different types: String and Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 == 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 == 'abc']. Operator '==' cannot be applied to different types: Integer and String."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'abc' != 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 != 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 != 'abc']. Operator '!=' cannot be applied to different types: Integer and String."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 == true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true == 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 != true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true != 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7.0 == 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 == 'abc']. Operator '==' cannot be applied to different types: Number and String."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'abc' == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == 7.0]. Operator '==' cannot be applied to different types: String and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7.0 != 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 != 'abc']. Operator '!=' cannot be applied to different types: Number and String."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'abc' != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != 7.0]. Operator '!=' cannot be applied to different types: String and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7.0 == true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7.0 != true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true == a => error (1)",
+      "expression": "@{true == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == true => error (1)",
+      "expression": "@{a == true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true != a => error (1)",
+      "expression": "@{true != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != true => error (1)",
+      "expression": "@{a != true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 == a => error (2)",
+      "expression": "@{7 == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 == 'abc']. Operator '==' cannot be applied to different types: Integer and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7 => error (2)",
+      "expression": "@{a == 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == 7]. Operator '==' cannot be applied to different types: String and Integer."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 != a => error (2)",
+      "expression": "@{7 != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 != 'abc']. Operator '!=' cannot be applied to different types: Integer and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7 => error (2)",
+      "expression": "@{a != 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true == a => error (2)",
+      "expression": "@{true == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 'abc']. Operator '==' cannot be applied to different types: Boolean and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == true => error (2)",
+      "expression": "@{a == true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == true]. Operator '==' cannot be applied to different types: String and Boolean."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true != a => error (2)",
+      "expression": "@{true != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 'abc']. Operator '!=' cannot be applied to different types: Boolean and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != true => error (2)",
+      "expression": "@{a != true}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != true]. Operator '!=' cannot be applied to different types: String and Boolean."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 == a => error (3)",
+      "expression": "@{7 == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7 => error (3)",
+      "expression": "@{a == 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 != a => error (3)",
+      "expression": "@{7 != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7 => error (3)",
+      "expression": "@{a != 7}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 == a => error (4)",
+      "expression": "@{7 == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7 => error (4)",
+      "expression": "@{a == 7}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 != a => error (4)",
+      "expression": "@{7 != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7 => error (4)",
+      "expression": "@{a != 7}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 == a => error (5)",
+      "expression": "@{7 == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7 => error (5)",
+      "expression": "@{a == 7}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 != a => error (5)",
+      "expression": "@{7 != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7 => error (5)",
+      "expression": "@{a != 7}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 == a => error (1)",
+      "expression": "@{7.0 == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 == 'abc']. Operator '==' cannot be applied to different types: Number and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7.0 => error (1)",
+      "expression": "@{a == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == 7.0]. Operator '==' cannot be applied to different types: String and Number."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 != a => error (1)",
+      "expression": "@{7.0 != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 != 'abc']. Operator '!=' cannot be applied to different types: Number and String."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7.0 => error (1)",
+      "expression": "@{a != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != 7.0]. Operator '!=' cannot be applied to different types: String and Number."
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 == a => error (2)",
+      "expression": "@{7.0 == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7.0 => error (2)",
+      "expression": "@{a == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 != a => error (2)",
+      "expression": "@{7.0 != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7.0 => error (2)",
+      "expression": "@{a != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 == a => error (3)",
+      "expression": "@{7.0 == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7.0 => error (3)",
+      "expression": "@{a == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 != a => error (3)",
+      "expression": "@{7.0 != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7.0 => error (3)",
+      "expression": "@{a != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 == a => error (4)",
+      "expression": "@{7.0 == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 7.0 => error (4)",
+      "expression": "@{a == 7.0}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7.0 != a => error (4)",
+      "expression": "@{7.0 != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 7.0 => error (4)",
+      "expression": "@{a != 7.0}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' == a => error (1)",
+      "expression": "@{'abc' == a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' == true]. Operator '==' cannot be applied to different types: String and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 'abc' => error (1)",
+      "expression": "@{a == 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true == 'abc']. Operator '==' cannot be applied to different types: Boolean and String."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' != a => error (1)",
+      "expression": "@{'abc' != a}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != true]. Operator '!=' cannot be applied to different types: String and Boolean."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 'abc' => error (1)",
+      "expression": "@{a != 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true != 'abc']. Operator '!=' cannot be applied to different types: Boolean and String."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' == a => error (2)",
+      "expression": "@{'abc' == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 'abc' => error (2)",
+      "expression": "@{a == 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' != a => error (2)",
+      "expression": "@{'abc' != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 'abc' => error (2)",
+      "expression": "@{a != 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' == a => error (3)",
+      "expression": "@{'abc' == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == 'abc' => error (3)",
+      "expression": "@{a == 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "'abc' != a => error (3)",
+      "expression": "@{'abc' != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != 'abc' => error (3)",
+      "expression": "@{a != 'abc'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true == a => error (3)",
+      "expression": "@{true == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == true => error (3)",
+      "expression": "@{a == true}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true != a => error (3)",
+      "expression": "@{true != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != true => error (3)",
+      "expression": "@{a != true}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true == a => error (4)",
+      "expression": "@{true == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == true => error (4)",
+      "expression": "@{a == true}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "true != a => error (4)",
+      "expression": "@{true != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != true => error (4)",
+      "expression": "@{a != true}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (2)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (2)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (2)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (2)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (3)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (3)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (3)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (3)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (4)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (4)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (4)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (4)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (5)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (5)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (5)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (5)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (6)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (6)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (6)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (6)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (7)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (7)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (7)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (7)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (8)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (8)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (8)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (8)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (9)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (9)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (9)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (9)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (10)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (10)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (10)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (10)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (11)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (11)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (11)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (11)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (12)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (12)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (12)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (12)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (13)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (13)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (13)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (13)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (14)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (14)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (14)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (14)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b == a => error (15)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a == b => error (15)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "b != a => error (15)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "a != b => error (15)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#00FF00",
+          "name": "b"
+        },
+        {
+          "type": "url",
+          "value": "https://yandex.ru",
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

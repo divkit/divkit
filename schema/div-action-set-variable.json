@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_set_variable",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set_variable"
+      ]
+    },
+    "variable_name": {
+      "type": "string"
+    },
+    "value": {
+      "$ref": "div-typed-value.json"
+    }
+  },
+  "required": [
+    "type",
+    "variable_name",
+    "value"
+  ]
+}

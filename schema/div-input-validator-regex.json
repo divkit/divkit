@@ -1,0 +1,28 @@
+{
+  "$description": "translations.json#/div_input_validators_regex",
+  "allOf": [
+    {
+      "$ref": "div-input-validator-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "regex"
+          ]
+        },
+        "pattern": {
+          "type": "string",
+          "$description": "translations.json#/div_input_validators_regex_pattern"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "pattern",
+    "label_id",
+    "variable"
+  ]
+}

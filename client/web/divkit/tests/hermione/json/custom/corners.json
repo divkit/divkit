@@ -1,0 +1,56 @@
+{
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "top": 3,
+            "bottom": 3,
+            "left": 16,
+            "right": 16
+          },
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#ffffffff",
+                  "width": 6
+                },
+                "corner_radius": 24
+              },
+              "height": {
+                "type": "fixed",
+                "value": 102
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ff1d6d52"
+                }
+              ],
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Hello",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

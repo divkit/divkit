@@ -1,0 +1,6 @@
+{
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.reference\n\nimport org.json.JSONArray\nimport org.json.JSONObject\n",
+  "generateTemplates": false,
+  "generateSerialization": false
+}

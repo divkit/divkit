@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:buttonStyle">@style/Widget.AppTheme.Button</item>
+        <item name="android:buttonBarButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="buttonStyle">@style/Widget.AppTheme.Button</item>
+        <item name="buttonBarButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
+        <item name="actionBarStyle">@style/Widget.AppTheme.ActionBar</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">?android:isLightTheme</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.White">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">?colorPrimary</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+    </style>
+
+    <style name="Widget.AppTheme.Button" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@drawable/ripple_button</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Widget.Button</item>
+    </style>
+
+    <style name="Widget.AppTheme.Button.Bar" parent="@style/TextAppearance.MaterialComponents.Button">
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+    <style name="Widget.AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="background">?colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Settings">
+        <item name="colorPrimary">@color/setting_background</item>
+        <item name="colorPrimaryDark">@color/setting_background</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+    </style>
+
+    <style name="DivScreenshotTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Samples">
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryDark">@color/purple</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Demo">
+        <item name="colorPrimary">@color/demo_orange</item>
+        <item name="colorPrimaryDark">@color/demo_orange</item>
+        <item name="colorSecondary">@color/demo_orange</item>
+        <item name="colorControlNormal">#ffaf47</item>
+        <item name="colorAccent">#ffaf47</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="android:actionMenuTextColor">#000000</item>
+    </style>
+
+    <style name="ActivitySubtitleStyle">
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/toolbar_desctiption_text_size</item>
+    </style>
+
+    <style name="ActivityExpandedTitleStyle.Light">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="SwitchStyle" parent="AppTheme.NoActionBar.Settings">
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+    </style>
+
+    <style name="Div.Theme.Demo" parent="Div.Theme">
+        <item name="divTextStyle">@style/Div.Text.Demo</item>
+        <item name="divImageStyle">@style/Div.Image.Demo</item>
+    </style>
+
+    <style name="Div.Text.Demo"/>
+
+    <style name="Div.Image.Demo"/>
+
+    <style name="AppTheme.NoActionBar.QrScan">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

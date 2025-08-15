@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivExtension tests should create block with extension 1`] = `
+{
+  "type": "text",
+  "extensions": [
+    {
+      "id": "text_extension",
+      "params": {
+        "string_param": "param1",
+        "integer_param": 100
+      }
+    }
+  ],
+  "text": "Some text"
+}
+`;

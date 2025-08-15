@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-infinity-count.json",
+      "$description": "translations.json#/div_count_infinity"
+    },
+    {
+      "$ref": "div-fixed-count.json",
+      "$description": "translations.json#/div_count_fixed"
+    }
+  ]
+}

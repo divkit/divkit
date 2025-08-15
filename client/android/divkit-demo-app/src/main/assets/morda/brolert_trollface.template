@@ -1,0 +1,11 @@
+brolert|Потроллить|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"description":"Мы просто хотели отвлечь твое внимание, прости.",
+		"icon":"http://img01.deviantart.net/f38e/i/2012/002/8/b/trollface_xd_by_x3nice_chuux3-d4l39w7.png"
+	},
+	"type":"brolert",
+	"id":"troll42"
+}

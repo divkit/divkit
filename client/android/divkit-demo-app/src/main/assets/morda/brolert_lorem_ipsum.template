@@ -1,0 +1,13 @@
+brolert|Lorem Ipsum (длинный)|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"title":"Lorem Ipsum",
+		"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eleifend, nisi eget rhoncus tincidunt, lorem eros ornare dui, vel blandit erat sapien et leo. Sed vel ullamcorper augue. Donec tempus enim justo, ac interdum felis bibendum non. Integer in eros in enim congue ornare vitae eu erat. Nulla sollicitudin, felis ac dictum euismod, nulla quam vehicula libero, a posuere ante nisi rhoncus ante. Ut et nulla orci. Sed mollis lacus id luctus pharetra. Donec metus arcu, interdum id justo et, bibendum mollis dolor. Ut id aliquam sem. Praesent dui magna, ullamcorper sit amet fermentum a, viverra sed libero. Maecenas auctor.",
+		"icon":"http://emilsabitov.ru/images/stories/tip/comp-progs/lorem-ipsum_small.png",
+		"url":"https://www.lipsum.com/"
+	},
+	"type":"brolert",
+	"id":"brolert_lorem_ipsum:0x:deadbeef"
+}

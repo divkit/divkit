@@ -1,0 +1,86 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content",
+        "constrained": false
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "width match_parent",
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content max_size = 100",
+              "width": {
+                "type": "wrap_content",
+                "max_size": {
+                  "value": 100
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content min_size = 250",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 250
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content",
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

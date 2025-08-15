@@ -1,0 +1,67 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-action-animator-start.json"
+    },
+    {
+      "$ref": "div-action-animator-stop.json"
+    },
+    {
+      "$ref": "div-action-array-insert-value.json"
+    },
+    {
+      "$ref": "div-action-array-remove-value.json"
+    },
+    {
+      "$ref": "div-action-array-set-value.json"
+    },
+    {
+      "$ref": "div-action-clear-focus.json"
+    },
+    {
+      "$ref": "div-action-copy-to-clipboard.json"
+    },
+    {
+      "$ref": "div-action-dict-set-value.json"
+    },
+    {
+      "$ref": "div-action-download.json"
+    },
+    {
+      "$ref": "div-action-focus-element.json"
+    },
+    {
+      "$ref": "div-action-hide-tooltip.json"
+    },
+    {
+      "$ref": "div-action-scroll-by.json"
+    },
+    {
+      "$ref": "div-action-scroll-to.json"
+    },
+    {
+      "$ref": "div-action-set-state.json"
+    },
+    {
+      "$ref": "div-action-set-stored-value.json"
+    },
+    {
+      "$ref": "div-action-set-variable.json"
+    },
+    {
+      "$ref": "div-action-show-tooltip.json"
+    },
+    {
+      "$ref": "div-action-submit.json"
+    },
+    {
+      "$ref": "div-action-timer.json"
+    },
+    {
+      "$ref": "div-action-update-structure.json"
+    },
+    {
+      "$ref": "div-action-video.json"
+    }
+  ]
+}

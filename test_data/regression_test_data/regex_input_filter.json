@@ -1,0 +1,180 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "$text_variable": "variable",
+      "$hint_text": "hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "pretty_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 32,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "non_empty_input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "non_empty_regex",
+        "type": "string",
+        "value": "[a-zA-Z0-9]+"
+      },
+      {
+        "name": "input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "regex",
+        "type": "string",
+        "value": "[a-zA-Z0-9]*"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "pretty_text",
+              "text": "Input with text at least 1 character long:"
+            },
+            {
+              "id": "non_empty_input",
+              "type": "pretty_input",
+              "variable": "non_empty_input",
+              "filters": [
+                {
+                  "type": "regex",
+                  "pattern": "@{non_empty_regex}"
+                }
+              ],
+              "hint": "value"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Regex filter:"
+            },
+            {
+              "id": "non_empty_regex_input",
+              "type": "pretty_input",
+              "variable": "non_empty_regex",
+              "hint": "non empty regex"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{non_empty_input}"
+            },
+            {
+              "type": "separator",
+              "margins": {
+                "top": 10,
+                "bottom": 10
+              }
+            },
+            {
+              "type": "pretty_text",
+              "text": "Possibly empty input:"
+            },
+            {
+              "id": "input",
+              "type": "pretty_input",
+              "variable": "input",
+              "filters": [
+                {
+                  "type": "regex",
+                  "pattern": "@{regex}"
+                }
+              ],
+              "hint": "value"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Regex filter:"
+            },
+            {
+              "id": "regex_input",
+              "type": "pretty_input",
+              "variable": "regex",
+              "hint": "regex"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{input}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

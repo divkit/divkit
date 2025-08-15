@@ -1,0 +1,162 @@
+{
+  "description": "Check local variable keeps its value when item builder data changes but id, item data and index are the same.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "data",
+          "type": "array",
+          "value": [
+            {
+              "item_type": "expected"
+            },
+            {
+              "item_type": "test",
+              "id": "tested"
+            }
+          ]
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "expected",
+          "type": "string",
+          "value": "initial text"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "item_builder": {
+              "data": "@{data}",
+              "prototypes": [
+                {
+                  "selector": "@{it.getString('item_type') == 'test'}",
+                  "id": "@{it.getString('id')}",
+                  "div": {
+                    "type": "text",
+                    "text": "@{text} text",
+                    "variables": [
+                      {
+                        "name": "text",
+                        "type": "string",
+                        "value": "initial"
+                      }
+                    ],
+                    "variable_triggers": [
+                      {
+                        "condition": "@{step == 1}",
+                        "actions": [
+                          {
+                            "log_id": "step @{step}",
+                            "url": "div-action://set_variable?name=text&value=changed"
+                          },
+                          {
+                            "log_id": "reset step",
+                            "url": "div-action://set_variable?name=step&value=0"
+                          }
+                        ]
+                      }
+                    ],
+                    "margins": {
+                      "top": 8
+                    }
+                  }
+                },
+                {
+                  "selector": "@{it.getString('item_type') == 'expected'}",
+                  "div": {
+                    "type": "text",
+                    "text": "Expected text: @{expected}",
+                    "margins": {
+                      "top": 8
+                    }
+                  }
+                },
+                {
+                  "selector": "@{it.getString('item_type') == 'stub'}",
+                  "div": {
+                    "type": "text",
+                    "text": "Stub item",
+                    "margins": {
+                      "top": 8
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "div_actions": [
+        {
+          "log_id": "change text",
+          "url": "div-action://set_variable?name=step&value=1"
+        },
+        {
+          "log_id": "change expected text",
+          "url": "div-action://set_variable?name=expected&value=changed%20text"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "add item",
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "data",
+            "index": 2,
+            "value": {
+              "type": "dict",
+              "value": {
+                "item_type": "stub"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set new data",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "data",
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "item_type": "stub"
+                },
+                {
+                  "item_type": "test",
+                  "id": "tested"
+                },
+                {
+                  "item_type": "expected"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

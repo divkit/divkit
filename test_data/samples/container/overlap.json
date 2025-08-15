@@ -1,0 +1,130 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#ffffff",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "top": 8,
+        "bottom": 8,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#48000000"
+        }
+      ]
+    },
+    "image_block": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "scale_type": "fill",
+      "height": {
+        "type": "match_parent"
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Overlay container"
+            },
+            {
+              "type": "subtitle",
+              "text": "The elements are layered on top of each other in the order of their position in the items array.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "height": {
+                "type": "fixed",
+                "value": 150
+              },
+              "items": [
+                {
+                  "type": "image_block"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Upper-left corner",
+                  "alignment_horizontal": "left"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Text on top",
+                  "margins": {
+                    "left": 16,
+                    "top": 16
+                  },
+                  "paddings": {
+                    "top": 16,
+                    "bottom": 16,
+                    "left": 16,
+                    "right": 16
+                  },
+                  "alignment_horizontal": "left"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Upper-right corner",
+                  "alignment_horizontal": "right"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Lower-right corner",
+                  "alignment_vertical": "bottom",
+                  "alignment_horizontal": "right"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

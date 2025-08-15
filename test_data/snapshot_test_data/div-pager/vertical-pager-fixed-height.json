@@ -1,0 +1,74 @@
+{
+  "description": "Vertical pager with fixed height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_match_parent_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "orientation": "vertical",
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page_match_parent_height",
+              "text": "Pager height = 120"
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              }
+            },
+            {
+              "type": "text_page_match_parent_height",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

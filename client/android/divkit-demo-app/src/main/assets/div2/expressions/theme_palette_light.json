@@ -1,0 +1,329 @@
+{
+  "variables": [
+    {
+      "value": "#3376c7",
+      "type": "string",
+      "name": "portal.accent.link.resting"
+    },
+    {
+      "name": "portal.accent.link.selected",
+      "type": "string",
+      "value": "#0054b9"
+    },
+    {
+      "name": "portal.accent.purple",
+      "type": "string",
+      "value": "#8533ff"
+    },
+    {
+      "name": "portal.accent.green",
+      "type": "string",
+      "value": "#00b341"
+    },
+    {
+      "value": "#0077ff",
+      "type": "string",
+      "name": "portal.accent.blue"
+    },
+    {
+      "value": "#ffcc00",
+      "type": "string",
+      "name": "portal.accent.yellow"
+    },
+    {
+      "value": "#ff3333",
+      "type": "string",
+      "name": "portal.accent.red"
+    },
+    {
+      "name": "portal.accent.carrot",
+      "type": "string",
+      "value": "#ff5317"
+    },
+    {
+      "value": "#5036e6",
+      "type": "string",
+      "name": "portal.strict.accent.blue_violet"
+    },
+    {
+      "value": "#009465",
+      "type": "string",
+      "name": "portal.strict.accent.light_green"
+    },
+    {
+      "value": "#ff99ea",
+      "type": "string",
+      "name": "portal.strict.accent.pink"
+    },
+    {
+      "value": "#ff5317",
+      "type": "string",
+      "name": "portal.strict.accent.orange"
+    },
+    {
+      "name": "portal.strict.accent.orange_red",
+      "type": "string",
+      "value": "#fc3f1d"
+    },
+    {
+      "value": "#29ffffff",
+      "type": "string",
+      "name": "portal.strict.white.quinary"
+    },
+    {
+      "value": "#52ffffff",
+      "type": "string",
+      "name": "portal.strict.white.quaternary"
+    },
+    {
+      "value": "#80ffffff",
+      "type": "string",
+      "name": "portal.strict.white.tertiary"
+    },
+    {
+      "name": "portal.strict.white.secondary",
+      "type": "string",
+      "value": "#cfff"
+    },
+    {
+      "name": "portal.strict.white.primary",
+      "type": "string",
+      "value": "#fff"
+    },
+    {
+      "value": "#29000000",
+      "type": "string",
+      "name": "portal.strict.black.quinary"
+    },
+    {
+      "value": "#5a000000",
+      "type": "string",
+      "name": "portal.strict.black.quaternary"
+    },
+    {
+      "name": "portal.strict.black.tertiary",
+      "type": "string",
+      "value": "#80000000"
+    },
+    {
+      "name": "portal.strict.black.secondary",
+      "type": "string",
+      "value": "#b000"
+    },
+    {
+      "value": "#000",
+      "type": "string",
+      "name": "portal.strict.black.primary"
+    },
+    {
+      "value": "#10000000",
+      "type": "string",
+      "name": "portal.support.bars.omnibox.fill"
+    },
+    {
+      "value": "#fff",
+      "type": "string",
+      "name": "portal.support.bars.searchline.fill"
+    },
+    {
+      "value": "#ffcc00",
+      "type": "string",
+      "name": "portal.support.bars.searchline.stroke"
+    },
+    {
+      "name": "portal.support.bars.bar",
+      "type": "string",
+      "value": "#eeffffff"
+    },
+    {
+      "value": "#a4000000",
+      "type": "string",
+      "name": "portal.support.bars.snackbar"
+    },
+    {
+      "name": "portal.support.tooltip.text",
+      "type": "string",
+      "value": "#FFFFFF"
+    },
+    {
+      "value": "#2F2F32",
+      "type": "string",
+      "name": "portal.support.tooltip.background"
+    },
+    {
+      "value": "#fff",
+      "type": "string",
+      "name": "portal.support.control.tertiary"
+    },
+    {
+      "value": "#10000000",
+      "type": "string",
+      "name": "portal.support.control.secondary"
+    },
+    {
+      "name": "portal.support.control.primary",
+      "type": "string",
+      "value": "#ffcc00"
+    },
+    {
+      "value": "#66000000",
+      "type": "string",
+      "name": "portal.support.overlay"
+    },
+    {
+      "name": "portal.support.image_fill",
+      "type": "string",
+      "value": "#10000000"
+    },
+    {
+      "name": "portal.support.separator",
+      "type": "string",
+      "value": "#1f000000"
+    },
+    {
+      "value": "#4d000000",
+      "type": "string",
+      "name": "portal.fill.x30"
+    },
+    {
+      "name": "portal.fill.x24",
+      "type": "string",
+      "value": "#3e000000"
+    },
+    {
+      "name": "portal.fill.x18",
+      "type": "string",
+      "value": "#2e000000"
+    },
+    {
+      "value": "#1f000000",
+      "type": "string",
+      "name": "portal.fill.x12"
+    },
+    {
+      "name": "portal.fill.x6",
+      "type": "string",
+      "value": "#10000000"
+    },
+    {
+      "name": "portal.fill.x5",
+      "type": "string",
+      "value": "#0d000000"
+    },
+    {
+      "name": "portal.text.quinary",
+      "type": "string",
+      "value": "#61000000"
+    },
+    {
+      "name": "portal.text.quaternary",
+      "type": "string",
+      "value": "#73000000"
+    },
+    {
+      "name": "portal.text.tertiary",
+      "type": "string",
+      "value": "#99000000"
+    },
+    {
+      "name": "portal.text.secondary",
+      "type": "string",
+      "value": "#de000000"
+    },
+    {
+      "value": "#000",
+      "type": "string",
+      "name": "portal.text.primary"
+    },
+    {
+      "name": "portal.background.tertiary",
+      "type": "string",
+      "value": "#fff"
+    },
+    {
+      "value": "#fff",
+      "type": "string",
+      "name": "portal.background.secondary"
+    },
+    {
+      "value": "#fff",
+      "type": "string",
+      "name": "portal.background.primary"
+    },
+    {
+      "name": "portal.background.overflow",
+      "type": "string",
+      "value": "#f3f3f2"
+    },
+    {
+      "name": "stocks.fadeEnd",
+      "type": "string",
+      "value": "#fff"
+    },
+    {
+      "name": "stocks.fadeStart",
+      "type": "string",
+      "value": "#0FFF"
+    },
+    {
+      "value": "#EFF8F7",
+      "type": "string",
+      "name": "covid_gallery.covid_distrib.0"
+    },
+    {
+      "value": "#e0e0e0",
+      "type": "string",
+      "name": "geoblock.alertSeparator"
+    },
+    {
+      "value": "#ffffff",
+      "type": "string",
+      "name": "geoblock.shortcutWhiteLayer"
+    },
+    {
+      "value": "#3399CCEE",
+      "type": "string",
+      "name": "geoblock.shortcuts.market8"
+    },
+    {
+      "name": "geoblock.shortcuts.tv7",
+      "type": "string",
+      "value": "#33BEBEBE"
+    },
+    {
+      "name": "geoblock.shortcuts.taxi6",
+      "type": "string",
+      "value": "#33EEDD66"
+    },
+    {
+      "name": "geoblock.shortcuts.devices5",
+      "type": "string",
+      "value": "#33DDBBFF"
+    },
+    {
+      "name": "geoblock.shortcuts.market4",
+      "type": "string",
+      "value": "#33EEDD66"
+    },
+    {
+      "name": "geoblock.shortcuts.q3",
+      "type": "string",
+      "value": "#33BBBBFF"
+    },
+    {
+      "name": "geoblock.shortcuts.games2",
+      "type": "string",
+      "value": "#33BBBBFF"
+    },
+    {
+      "value": "#33EEDD66",
+      "type": "string",
+      "name": "geoblock.shortcuts.mail1"
+    },
+    {
+      "value": "#3377AAEE",
+      "type": "string",
+      "name": "geoblock.shortcuts.weather0"
+    }
+  ]
+}

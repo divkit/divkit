@@ -1,0 +1,195 @@
+{
+  "description": "Horizontal wrap container with separators in right-to-left layout direction.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "item_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#B2B2B2"
+        }
+      },
+      "font_size": 10,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Horizontal wrap container with separators (RTL):",
+              "paddings": {
+                "left": 10,
+                "top": 10,
+                "right": 10,
+                "bottom": 10
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "layout_mode": "wrap",
+              "content_alignment_horizontal": "center",
+              "border": {
+                "stroke": {
+                  "color": "#FF00EE"
+                }
+              },
+              "separator": {
+                "show_at_start": true,
+                "show_at_end": true,
+                "show_between": true,
+                "style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 10
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 15
+                    },
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "#FF0000"
+                },
+                "margins": {
+                  "left": 10,
+                  "top": 10,
+                  "right": 10,
+                  "bottom": 10
+                }
+              },
+              "line_separator": {
+                "show_at_start": true,
+                "show_at_end": true,
+                "show_between": true,
+                "style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 100
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 5
+                    }
+                  },
+                  "color": "#0000ff"
+                },
+                "margins": {
+                  "left": 10,
+                  "top": 10,
+                  "right": 10,
+                  "bottom": 10
+                }
+              },
+              "items": [
+                {
+                  "type": "item_text",
+                  "text": "Item 0\nmatch_parent",
+                  "width": {
+                    "type": "match_parent"
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "Item 1\n50",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "Item 2\n50",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "Item 3\n50",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "Item 4\n100",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "Item 5\n50",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

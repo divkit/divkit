@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "data_element_name": {
+      "type": "string",
+      "default_value": "it",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_collection_item_builder_prototypes_data_element_name"
+    },
+    "data": {
+      "type": "array",
+      "$description": "translations.json#/div_collection_item_builder_data"
+    },
+    "prototypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "$ref": "common.json#/boolean_int",
+            "default_value": "true",
+            "$description": "translations.json#/div_collection_item_builder_prototypes_selector"
+          },
+          "id": {
+            "type": "string",
+            "$description": "translations.json#/div_collection_item_builder_prototypes_id"
+          },
+          "div": {
+            "$ref": "div.json",
+            "$description": "translations.json#/div_collection_item_builder_prototypes_div"
+          }
+        },
+        "required": [
+          "div"
+        ]
+      },
+      "$description": "translations.json#/div_collection_item_builder_prototypes"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "data",
+    "prototypes"
+  ]
+}

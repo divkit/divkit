@@ -1,0 +1,59 @@
+{
+  "description": "Text with custom font family",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "tests",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "left": 16,
+            "right": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion.",
+              "font_family": "display",
+              "font_weight": "light"
+            },
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion.",
+              "font_family": "display",
+              "font_weight": "regular"
+            },
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion.",
+              "font_size": 12,
+              "font_family": "display",
+              "font_weight": "medium"
+            },
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion.",
+              "font_size": 12,
+              "font_family": "display",
+              "font_weight": "bold"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

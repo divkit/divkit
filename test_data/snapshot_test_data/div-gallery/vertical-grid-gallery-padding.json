@@ -1,0 +1,213 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "paddings": {
+            "left": 8,
+            "top": 32,
+            "right": 16,
+            "bottom": 24
+          },
+          "orientation": "vertical",
+          "item_spacing": 8,
+          "column_count": 3,
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0000FF"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Item 1",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 2",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 3",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 4",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 5",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 6",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 7",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 8",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 9",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 10",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 11",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 12",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 13",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 14",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 15",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 16",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Item 17",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

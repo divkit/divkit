@@ -1,0 +1,300 @@
+div|Новости района|{
+  "topic": null,
+  "ttl": 900,
+  "data": {
+    "background": [
+      {
+        "color": "#ffffff",
+        "type": "div-solid-background"
+      }
+    ],
+    "states": [
+      {
+        "blocks": [
+          {
+            "text_style": "title_m",
+            "text": "Новости района",
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%3Ffrom%3Dhome%26utm_campaign%3D2%26utm_content%3Dbodyblock%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/card_title"
+            },
+            "type": "div-title-block"
+          },
+          {
+            "has_delimiter": 1,
+            "type": "div-separator-block",
+            "size": "s"
+          },
+          {
+            "type": "div-separator-block",
+            "size": "s"
+          },
+          {
+            "text_style": "text_s",
+            "text": "<font color=\"#7f7f7f\">Моховая ул., 18</font>",
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/post"
+            },
+            "title_style": "text_m_medium",
+            "title": "iprudnik",
+            "side_element": {
+              "position": "left",
+              "size": "s",
+              "element": {
+                "ratio": 1,
+                "image_url": "https://avatars.mds.yandex.net/get-yapic/59871/165033575-1551923707/islands-200",
+                "type": "div-image-element"
+              }
+            },
+            "type": "div-universal-block"
+          },
+          {
+            "padding_modifier": {
+              "position": "left",
+              "size": "s"
+            },
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/post"
+            },
+            "title_style": "text_m",
+            "title": "С сегодняшнего дня на фасаде «Манежа» начнут показывать световое шоу. Буйство красок и мешанину образов…",
+            "type": "div-universal-block"
+          },
+          {
+            "type": "div-separator-block",
+            "size": "xxs"
+          },
+          {
+            "text_style": "card_header",
+            "padding_modifier": {
+              "position": "left",
+              "size": "s"
+            },
+            "text": "<font color=\"#4ca6ff\">МЕРОПРИЯТИЕ &#183; НОВЫЙ ГОД 2018</font>",
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/post"
+            },
+            "type": "div-universal-block"
+          },
+          {
+            "padding_modifier": {
+              "position": "left",
+              "size": "s"
+            },
+            "columns": [
+              {
+                "right_padding": "zero"
+              },
+              {
+                "right_padding": "s",
+                "left_padding": "xxs"
+              },
+              {
+                "right_padding": "zero"
+              },
+              {
+                "left_padding": "xxs"
+              }
+            ],
+            "type": "div-table-block",
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "image_size": "xs",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    },
+                    "horizontal_alignment": "center",
+                    "image": {
+                      "ratio": 1,
+                      "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/comments.1.png",
+                      "type": "div-image-element"
+                    }
+                  },
+                  {
+                    "text_style": "card_header",
+                    "text": "<font color=\"#c3cad9\">0</font>",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    }
+                  },
+                  {
+                    "image_size": "xs",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    },
+                    "horizontal_alignment": "center",
+                    "image": {
+                      "ratio": 1,
+                      "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/camera.1.png",
+                      "type": "div-image-element"
+                    }
+                  },
+                  {
+                    "text_style": "card_header",
+                    "text": "<font color=\"#c3cad9\">0</font>",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72342%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    }
+                  }
+                ],
+                "type": "row_element"
+              }
+            ]
+          },
+          {
+            "type": "div-separator-block",
+            "size": "m"
+          },
+          {
+            "text_style": "text_s",
+            "text": "<font color=\"#7f7f7f\">Красная пл.</font>",
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/post"
+            },
+            "title_style": "text_m_medium",
+            "title": "Серёга Гришаев",
+            "side_element": {
+              "position": "left",
+              "size": "s",
+              "element": {
+                "ratio": 1,
+                "image_url": "https://avatars.mds.yandex.net/get-yapic/62162/575952079-1552922927/islands-200",
+                "type": "div-image-element"
+              }
+            },
+            "type": "div-universal-block"
+          },
+          {
+            "padding_modifier": {
+              "position": "left",
+              "size": "s"
+            },
+            "action": {
+              "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+              "log_id": "morda_card_district/post"
+            },
+            "title_style": "text_m",
+            "title": "Скажите! Где погулять с детьми 4-6 лет",
+            "type": "div-universal-block"
+          },
+          {
+            "type": "div-separator-block",
+            "size": "xxs"
+          },
+          {
+            "padding_modifier": {
+              "position": "left",
+              "size": "s"
+            },
+            "columns": [
+              {
+                "right_padding": "zero"
+              },
+              {
+                "right_padding": "s",
+                "left_padding": "xxs"
+              },
+              {
+                "right_padding": "zero"
+              },
+              {
+                "left_padding": "xxs"
+              }
+            ],
+            "type": "div-table-block",
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "image_size": "xs",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    },
+                    "horizontal_alignment": "center",
+                    "image": {
+                      "ratio": 1,
+                      "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/comments.1.png",
+                      "type": "div-image-element"
+                    }
+                  },
+                  {
+                    "text_style": "card_header",
+                    "text": "<font color=\"#c3cad9\">1</font>",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    }
+                  },
+                  {
+                    "image_size": "xs",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    },
+                    "horizontal_alignment": "center",
+                    "image": {
+                      "ratio": 1,
+                      "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/camera.1.png",
+                      "type": "div-image-element"
+                    }
+                  },
+                  {
+                    "text_style": "card_header",
+                    "text": "<font color=\"#c3cad9\">0</font>",
+                    "action": {
+                      "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Fevent_id%3D72261%26from%3Dhome%26utm_campaign%3D2%26utm_content%3Dpost%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                      "log_id": "morda_card_district/post"
+                    }
+                  }
+                ],
+                "type": "row_element"
+              }
+            ]
+          },
+          {
+            "has_delimiter": 1,
+            "type": "div-separator-block",
+            "size": "m"
+          },
+          {
+            "type": "div-buttons-block",
+            "items": [
+              {
+                "text": "<font color=\"#000000\">Все посты</font>",
+                "action": {
+                  "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fnear%3Ffrom%3Dhome%26utm_campaign%3D2%26utm_content%3Dall_posts%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                  "log_id": "morda_card_district/all_posts_button"
+                }
+              },
+              {
+                "background_color": "#FED94D",
+                "text": "<font color=\"#000000\">Написать</font>",
+                "action": {
+                  "url": "yellowskin://?primary_color=%23f3f1ed&secondary_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Flocal%2Fcreate%3Ffrom%3Dhome%26utm_campaign%3D2%26utm_content%3Dwrite%26utm_medium%3Dpromoblock%26utm_source%3Dappsearch%26appsearch_header%3D1",
+                  "log_id": "morda_card_district/write_post_button"
+                }
+              }
+            ]
+          }
+        ],
+        "state_id": 1
+      }
+    ]
+  },
+  "ttv": 1200,
+  "utime": 1513252358,
+  "id": "district",
+  "type": "div",
+  "title": "Новости района"
+}

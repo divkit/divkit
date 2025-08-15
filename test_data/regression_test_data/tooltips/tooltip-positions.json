@@ -1,0 +1,219 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "left": 12,
+        "right": 12
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "visibility",
+    "variables": [
+      {
+        "type": "string",
+        "name": "position",
+        "value": "bottom"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "button",
+              "text": "tooltip with close button",
+              "margins": {
+                "top": 60
+              },
+              "tooltips": [
+                {
+                  "id": "tooltip",
+                  "position": "@{position}",
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "background_accessibility_description": "close tooltip",
+                  "div": {
+                    "type": "container",
+                    "orientation": "overlap",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "items": [
+                      {
+                        "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 20,
+                          "top": 20,
+                          "right": 20,
+                          "bottom": 20
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "Title tooltip"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "image",
+                        "width": {
+                          "type": "fixed",
+                          "value": 44
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 44
+                        },
+                        "paddings": {
+                          "left": 12,
+                          "right": 12,
+                          "top": 12,
+                          "bottom": 12
+                        },
+                        "action": {
+                          "log_id": "hide_tooltip",
+                          "url": "div-action://hide_tooltip?id=tooltip"
+                        },
+                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                        "tint_color": "#000000",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "top"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip&multiple=true"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Tooltip position: @{position}"
+            },
+            {
+              "type": "button",
+              "text": "Set top position",
+              "margins": {
+                "top": 150,
+                "right": 15,
+                "left": 15
+              },
+              "actions": [
+                {
+                  "log_id": "set_top_pos",
+                  "url": "div-action://set_variable?name=position&value=top"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Set right position",
+              "margins": {
+                "top": 15,
+                "right": 15,
+                "left": 15
+              },
+              "actions": [
+                {
+                  "log_id": "set_right_pos",
+                  "url": "div-action://set_variable?name=position&value=right"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Set center position",
+              "margins": {
+                "top": 15,
+                "right": 15,
+                "left": 15
+              },
+              "actions": [
+                {
+                  "log_id": "set_center_pos",
+                  "url": "div-action://set_variable?name=position&value=center"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Restore bottom position",
+              "margins": {
+                "top": 15,
+                "right": 15,
+                "left": 15
+              },
+              "actions": [
+                {
+                  "log_id": "restore_bottom_pos",
+                  "url": "div-action://set_variable?name=position&value=bottom"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

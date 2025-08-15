@@ -1,0 +1,144 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "item_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#B2B2B2"
+        }
+      },
+      "font_size": 12,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 250
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Vertical container with between separators:",
+              "paddings": {
+                "left": 10,
+                "top": 10,
+                "bottom": 10
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "layout_mode": "no_wrap",
+              "content_alignment_horizontal": "center",
+              "border": {
+                "stroke": {
+                  "color": "#FF00EE"
+                }
+              },
+              "separator": {
+                "show_at_start": false,
+                "show_at_end": false,
+                "show_between": true,
+                "style": {
+                  "type": "shape_drawable",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 15
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 10
+                    },
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 0
+                    }
+                  },
+                  "color": "#FF0000"
+                }
+              },
+              "items": [
+                {
+                  "type": "item_text",
+                  "text": "50",
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "100",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "50",
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "item_text",
+                  "text": "50",
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

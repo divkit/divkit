@@ -1,0 +1,238 @@
+{
+  "description": "Local triggers in gallery with item-builder",
+  "div_data": {
+    "templates": {
+      "item": {
+        "type": "text",
+        "text": "@{it.getString('text')}",
+        "height": {
+          "type": "fixed",
+          "value": 120
+        }
+      }
+    },
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "gallery_trigger_state",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "item_trigger_state",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "data",
+          "type": "array",
+          "value": [
+            {
+              "text": "item/1",
+              "has_triggers": false
+            },
+            {
+              "text": "item/2",
+              "has_triggers": false
+            },
+            {
+              "text": "item/3",
+              "has_triggers": false
+            },
+            {
+              "text": "item/4",
+              "has_triggers": true
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "gallery",
+                "id": "gallery1",
+                "height": {
+                  "type": "match_parent"
+                },
+                "orientation": "vertical",
+                "variable_triggers": [
+                  {
+                    "condition": "@{counter > 100}",
+                    "actions": [
+                      {
+                        "log_id": "gallery_trigger_invoke",
+                        "url": "div-action://set_variable?name=gallery_trigger_state&value=activated"
+                      }
+                    ]
+                  }
+                ],
+                "item_builder": {
+                  "data": "@{data}",
+                  "prototypes": [
+                    {
+                      "selector": "@{it.getBoolean('has_triggers') == false}",
+                      "div": {
+                        "type": "item"
+                      }
+                    },
+                    {
+                      "selector": "@{it.getBoolean('has_triggers') == true}",
+                      "div": {
+                        "type": "item",
+                        "variable_triggers": [
+                          {
+                            "condition": "@{counter > 200}",
+                            "actions": [
+                              {
+                                "log_id": "item_trigger_invoke",
+                                "url": "div-action://set_variable?name=item_trigger_state&value=activated"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "gallery_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "item_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

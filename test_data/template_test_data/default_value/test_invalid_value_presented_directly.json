@@ -1,0 +1,14 @@
+{
+  "description": "'int' field is required to be non-negative and 'url' requires `https` scheme",
+  "templates": {},
+  "entity": {
+    "type": "entity_with_property_with_default_value",
+    "int": -1,
+    "url": "http://notsecure.yandex.ru",
+    "nested": {
+      "int": -1,
+      "url": "http://notsecure.yandex.ru",
+      "non_optional": "Some text"
+    }
+  }
+}

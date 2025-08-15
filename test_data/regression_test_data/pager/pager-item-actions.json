@@ -1,0 +1,354 @@
+{
+  "templates": {
+      "custom_indicator": {
+          "type": "container",
+          "alignment_horizontal": "center",
+          "content_alignment_horizontal": "center",
+          "items": [
+              {
+                  "type": "indicator",
+                  "active_item_color": "#000000",
+                  "active_item_size": 1.5,
+                  "height": {
+                      "type": "fixed",
+                      "value": 10
+                  },
+                  "width": {
+                      "type": "fixed",
+                      "value": 60
+                  },
+                  "margins": {
+                      "top": 10,
+                      "bottom": 10
+                  },
+                  "space_between_centers": 10,
+                  "inactive_item_color": "#D0D1D9",
+                  "pager_id": "my_pager",
+                  "shape": {
+                      "type": "rounded_rectangle",
+                      "corner_radius": {
+                          "type": "fixed",
+                          "value": 2
+                      },
+                      "item_height": {
+                          "type": "fixed",
+                          "value": 2
+                      },
+                      "item_width": {
+                          "type": "fixed",
+                          "value": 10
+                      }
+                  }
+              }
+          ]
+      },
+      "button": {
+          "type": "text",
+          "height": {
+              "type": "fixed",
+              "value": 28
+          },
+          "width": {
+              "type": "fixed",
+              "value": 56
+          },
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 18,
+          "font_weight": "bold",
+          "text_color": "#ffffff",
+          "background": [
+              {
+                  "color": "#D098D3",
+                  "type": "solid"
+              }
+          ],
+          "margins": {
+              "left": 8,
+              "top": 8,
+              "right": 8,
+              "bottom": 8
+          },
+          "border": {
+              "corner_radius": 8
+          }
+      },
+      "text_block": {
+          "type": "text",
+          "background": [
+              {
+                  "type": "solid",
+                  "color": "#0e000000"
+              }
+          ],
+          "height": {
+              "type": "fixed",
+              "value": 240,
+              "unit": "sp"
+          },
+          "border": {
+              "corner_radius": 16
+          },
+          "font_size": 20,
+          "text_alignment_vertical": "center",
+          "text_alignment_horizontal": "center",
+          "text_color": "#000000"
+      },
+      "image_block": {
+          "type": "image",
+          "border": {
+              "corner_radius": 16
+          },
+          "alpha": 0.8,
+          "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+          "placeholder_color": "#C0C0B0",
+          "preload_required": 1,
+          "width": {
+              "type": "match_parent"
+          },
+          "height": {
+              "type": "fixed",
+              "value": 240
+          }
+      }
+  },
+  "card": {
+      "log_id": "card",
+      "variables": [
+          {
+              "name": "last_logged_item",
+              "type": "string",
+              "value": "-"
+          }
+      ],
+      "states": [
+          {
+              "div": {
+                  "items": [
+                      {
+                          "id": "my_pager",
+                          "item_spacing": {
+                              "type": "fixed",
+                              "value": 4
+                          },
+                          "margins": {
+                              "top": 8
+                          },
+                          "paddings": {
+                              "right": 4,
+                              "left": 4
+                          },
+                          "items": [
+                              {
+                                  "type": "text_block",
+                                  "text": "Item 0",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:0",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item0",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              },
+                              {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:1",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item1",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              },
+                              {
+                                  "type": "text_block",
+                                  "text": "Item 2",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:2",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item2",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              },
+                              {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:3",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item3",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              },
+                              {
+                                  "type": "text_block",
+                                  "text": "Item 4",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:4",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item4",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              },
+                              {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                      {
+                                          "log_id": "content_item_show:5",
+                                          "url": "div-action://set_variable?name=last_logged_item&value=item5",
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0,
+                                          "log_limit": 0
+                                      }
+                                  ]
+                              }
+                          ],
+                          "layout_mode": {
+                              "neighbour_page_width": {
+                                  "type": "fixed",
+                                  "value": 20
+                              },
+                              "type": "fixed"
+                          },
+                          "restrict_parent_scroll": 1,
+                          "type": "pager"
+                      },
+                      {
+                          "type": "custom_indicator"
+                      },
+                      {
+                          "type": "text",
+                          "text": "Last logged item: @{last_logged_item}",
+                          "text_alignment_horizontal": "center"
+                      },
+                      {
+                          "items": [
+                              {
+                                  "id": "scroll_click_1",
+                                  "actions": [
+                                      {
+                                          "log_id": "prev",
+                                          "url": "div-action://set_current_item?id=my_pager&item=0"
+                                      }
+                                  ],
+                                  "text": "<<",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_2",
+                                  "actions": [
+                                      {
+                                          "log_id": "prev",
+                                          "url": "div-action://set_previous_item?id=my_pager"
+                                      }
+                                  ],
+                                  "text": "<",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_3",
+                                  "actions": [
+                                      {
+                                          "log_id": "next",
+                                          "url": "div-action://set_next_item?id=my_pager"
+                                      }
+                                  ],
+                                  "text": ">",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_4",
+                                  "actions": [
+                                      {
+                                          "log_id": "next",
+                                          "url": "div-action://set_current_item?id=my_pager&item=5"
+                                      }
+                                  ],
+                                  "text": ">>",
+                                  "type": "button"
+                              }
+                          ],
+                          "orientation": "horizontal",
+                          "content_alignment_horizontal": "center",
+                          "alignment_horizontal": "center",
+                          "type": "container"
+                      },
+                      {
+                          "items": [
+                              {
+                                  "id": "scroll_click_1",
+                                  "actions": [
+                                      {
+                                          "log_id": "scroll_to_start",
+                                          "url": "div-action://scroll_to_start?id=my_pager"
+                                      }
+                                  ],
+                                  "text": "<<",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_2",
+                                  "actions": [
+                                      {
+                                          "log_id": "prev_by_2",
+                                          "url": "div-action://set_previous_item?id=my_pager&step=2"
+                                      }
+                                  ],
+                                  "text": "<",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_3",
+                                  "actions": [
+                                      {
+                                          "log_id": "next_by_2",
+                                          "url": "div-action://set_next_item?id=my_pager&step=2"
+                                      }
+                                  ],
+                                  "text": ">",
+                                  "text_alignment_horizontal": "center",
+                                  "type": "button"
+                              },
+                              {
+                                  "id": "scroll_click_4",
+                                  "actions": [
+                                      {
+                                          "log_id": "scroll_to_end",
+                                          "url": "div-action://scroll_to_end?id=my_pager"
+                                      }
+                                  ],
+                                  "text": ">>",
+                                  "type": "button"
+                              }
+                          ],
+                          "orientation": "horizontal",
+                          "content_alignment_horizontal": "center",
+                          "alignment_horizontal": "center",
+                          "type": "container"
+                      }
+                  ],
+                  "orientation": "vertical",
+                  "type": "container"
+              },
+              "state_id": 0
+          }
+      ]
+  }
+}

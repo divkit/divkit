@@ -1,0 +1,31 @@
+{
+  "protocol_name": "div-sight-action",
+  "type": "object",
+  "codegen": {
+    "documentation": {
+      "include_in_toc": false
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-action-base.json"
+    },
+    {
+      "properties": {
+        "log_limit": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "1",
+          "$description": "translations.json#/div_log_limit"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "log_id"
+  ]
+}

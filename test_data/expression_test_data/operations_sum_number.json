@@ -1,0 +1,139 @@
+{
+  "cases": [
+    {
+      "expression": "@{1.0 + 1.0}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.5 + 1.5 + 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 5.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 + +1.0}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 + -1.0}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 + -1e1}",
+      "expected": {
+        "type": "number",
+        "value": -9.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 + b}",
+      "expected": {
+        "type": "number",
+        "value": 7
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 6.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a + b}",
+      "expected": {
+        "type": "number",
+        "value": 7.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 10.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": -3.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a + -b}",
+      "expected": {
+        "type": "number",
+        "value": 5.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

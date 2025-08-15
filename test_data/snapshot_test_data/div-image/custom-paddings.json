@@ -1,0 +1,42 @@
+{
+  "description": "Image with different paddings and border with red stroke",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "paddings": {
+            "left": 20,
+            "top": 5,
+            "right": 15,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,171 @@
+.markdown-extension {
+    display: block;
+    white-space: normal;
+}
+
+.markdown-extension :global(.emoji) {
+    height: 1.2em;
+}
+
+.markdown-extension :global(a) {
+    color: #428bca;
+    text-decoration: none;
+}
+
+.markdown-extension :global(b),
+.markdown-extension :global(strong) {
+    font-weight: bold;
+}
+
+.markdown-extension :global(h1),
+.markdown-extension :global(h2),
+.markdown-extension :global(h3),
+.markdown-extension :global(h4),
+.markdown-extension :global(h5),
+.markdown-extension :global(h6) {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+.markdown-extension :global(h1) {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 36px;
+}
+
+.markdown-extension :global(h2) {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.markdown-extension :global(h3) {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.markdown-extension :global(h4) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.markdown-extension :global(h5) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.markdown-extension :global(h6) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.markdown-extension :global(hr) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.markdown-extension :global(blockquote) {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 17.5px;
+    border-left: 5px solid #eee;
+}
+
+.markdown-extension :global(blockquote p) {
+    margin: 0;
+}
+
+.markdown-extension :global(code) {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+.markdown-extension :global(pre) {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.markdown-extension :global(pre code) {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.markdown-extension :global(table) {
+    box-sizing: border-box;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: transparent;
+}
+
+.markdown-extension :global(table) {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.markdown-extension :global(td),
+.markdown-extension :global(th) {
+    padding: 0;
+}
+
+.markdown-extension :global(th) {
+    text-align: left;
+}
+
+.markdown-extension :global(table > thead > tr > th),
+.markdown-extension :global(table > tbody > tr > th),
+.markdown-extension :global(table > tfoot > tr > th),
+.markdown-extension :global(table > thead > tr > td),
+.markdown-extension :global(table > tbody > tr > td),
+.markdown-extension :global(table > tfoot > tr > td) {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.markdown-extension :global(table > thead > tr > th) {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+
+.markdown-extension :global(table > caption + thead > tr:first-child > th),
+.markdown-extension :global(table > colgroup + thead > tr:first-child > th),
+.markdown-extension :global(table > thead:first-child > tr:first-child > th),
+.markdown-extension :global(table > caption + thead > tr:first-child > td),
+.markdown-extension :global(table > colgroup + thead > tr:first-child > td),
+.markdown-extension :global(table > thead:first-child > tr:first-child > td) {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.markdown-extension :global(img) {
+    vertical-align: middle;
+    max-width: 100%;
+}

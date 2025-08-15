@@ -1,0 +1,820 @@
+{
+  "signatures": [
+    {
+      "function_name": "getDictString",
+      "doc": "Returns a string value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictNumber",
+      "doc": "Returns a number value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictInteger",
+      "doc": "Returns an integer value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictBoolean",
+      "doc": "Returns a boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictColor",
+      "doc": "Returns a color property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictUrl",
+      "doc": "Returns an url property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptString",
+      "doc": "Returns an optional string property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a string."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptNumber",
+      "doc": "Returns an optional number property from dictionary.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Fallback value if property does not exist or a property value is not a number."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptInteger",
+      "doc": "Returns an optional integer property from dictionary.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptBoolean",
+      "doc": "Returns an optional boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Fallback value if property does not exist or a property value is not a boolean."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptColor",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptColor",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptUrl",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictOptUrl",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getStringFromDict",
+      "doc": "Returns a string value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getNumberFromDict",
+      "doc": "Returns a number value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getIntegerFromDict",
+      "doc": "Returns an integer value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getBooleanFromDict",
+      "doc": "Returns a boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getColorFromDict",
+      "doc": "Returns a color property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getUrlFromDict",
+      "doc": "Returns an url property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getDictFromDict",
+      "doc": "Returns an dict property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getArrayFromDict",
+      "doc": "Returns an array property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptStringFromDict",
+      "doc": "Returns an optional string property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a string."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptNumberFromDict",
+      "doc": "Returns an optional number property from dictionary.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Fallback value if property does not exist or a property value is not a number."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptIntegerFromDict",
+      "doc": "Returns an optional integer property from dictionary.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptBooleanFromDict",
+      "doc": "Returns an optional boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Fallback value if property does not exist or a property value is not a boolean."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptColorFromDict",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptColorFromDict",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptUrlFromDict",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptUrlFromDict",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptArrayFromDict",
+      "doc": "Returns an array value from dict if exist or empty array otherwise.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "getOptDictFromDict",
+      "doc": "Returns an dict value from dict if exist or empty dict otherwise.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "len",
+      "doc": "Counts the number of elements in a dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getDictKeys",
+      "doc": "Return a collection containing just the keys of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getDictValues",
+      "doc": "Return a collection containing just the values of the dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

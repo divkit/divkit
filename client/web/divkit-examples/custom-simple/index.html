@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="node_modules/@divkitframework/divkit/dist/client.css">
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="module">
+        import { render } from './node_modules/@divkitframework/divkit/dist/esm/client.mjs';
+        import './customElement.js';
+
+        render({
+            id: 'test',
+            target: document.querySelector('#root'),
+            customComponents: new Map([
+                ['custom_card', {
+                    element: 'custom-card'
+                }]
+            ]),
+            json: {
+                "templates": {
+                },
+                "card": {
+                    "log_id": "snapshot_test_card",
+                    "states": [
+                        {
+                            "state_id": 0,
+                            "div": {
+                                "type": "custom",
+                                "custom_type": "custom_card",
+                                "custom_props": {
+                                    "start": 15
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

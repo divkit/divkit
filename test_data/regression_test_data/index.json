@@ -1,0 +1,3883 @@
+{
+  "tests": [
+    {
+      "title": "Transition animations with delay",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Tap \"Test Button\"",
+        "Tap \"Test Button\" again"
+      ],
+      "expected_results": [
+        "The purple rectangle should appear animatedly",
+        "The purple rectangle should disappear animatedly"
+      ],
+      "file": "animations/transition-animations-with-delay.json",
+      "case_id": 471
+    },
+    {
+      "title": "Copy to clipboard",
+      "case_id": 13,
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Tap to copy url button and paste clipboard to input",
+        "Tap to copy string button and paste clipboard to input"
+      ],
+      "expected_results": [
+        "At input pasted url - 'https://yandex.ru'",
+        "At input pasted string - 'Copied string'"
+      ],
+      "file": "actions/copy-to-clipboard.json"
+    },
+    {
+      "title": "Focus action 2",
+      "case_id": 14,
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on every button",
+        "same, but click buttons with the keyboard (Tab + Enter)"
+      ],
+      "expected_results": [
+        "related element is selected"
+      ],
+      "file": "actions/focus-element.json"
+    },
+    {
+      "title": "Clear focus actions",
+      "case_id": 165,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json"
+      },
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on button",
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "input has focus, label says that timer is started",
+        "input had lost the focus, label says that timer is finished"
+      ],
+      "file": "actions/clear-focus.json"
+    },
+    {
+      "title": "Focus action",
+      "case_id": 14,
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on Focus 1, 2, 3 button",
+        "click on \"Change state and focus\""
+      ],
+      "expected_results": [
+        "related element is selected",
+        "button changes to input and it gets focus"
+      ],
+      "file": "actions/focus-element-mobile.json"
+    },
+    {
+      "title": "Simple tap",
+      "case_id": 15,
+      "tags": [
+        "DivAction"
+      ],
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Tap on text 'Click on me'"
+      ],
+      "expected_results": [
+        "Text 'Click on me' changed to 'You clicked on me'",
+        "Second click changes text to 'Click on me'"
+      ],
+      "file": "simple_tap.json"
+    },
+    {
+      "title": "Long tap",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Long tap on button 'Long tap menu'"
+      ],
+      "expected_results": [
+        "Menu with buttons 'show' and 'hide' is appearing",
+        "longtap_actions logged"
+      ],
+      "file": "long_tap.json",
+      "case_id": 443
+    },
+    {
+      "title": "Hover and press",
+      "case_id": 208,
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Hover the top button with cursor or stylus",
+        "Move the cursor away from the top button",
+        "Press and hold the bottom button",
+        "Release the bottom button"
+      ],
+      "expected_results": [
+        "Button state changes to 'Hovered'",
+        "Button state changes to 'Not hovered'",
+        "Button state changes to 'Pressed'",
+        "Button state changes to 'Not pressed'"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "file": "actions/hover-and-press.json"
+    },
+    {
+      "title": "Tab swipe",
+      "case_id": 16,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivTabs",
+        "swipe"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Tab changes depending on the swipe direction",
+        "Tabs changes is logged"
+      ],
+      "file": "tabs_max_height.json"
+    },
+    {
+      "title": "Tab swipe restricted",
+      "case_id": 17,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivTabs",
+        "swipe"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Tab not changed",
+        "Tab changes on header click"
+      ],
+      "file": "tabs_disabled_switch_tabs_by_swipe.json"
+    },
+    {
+      "title": "Gallery scroll",
+      "case_id": 18,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivGallery",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction",
+        "Gallery scroll is logged"
+      ],
+      "file": "gallery/gallery_swipe.json"
+    },
+    {
+      "title": "Incompletely filled gallery throws taps",
+      "case_id": 19,
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on the empty space inside the gallery"
+      ],
+      "expected_results": [
+        "Check view shown with text 'Last caught action: tap_container'"
+      ],
+      "file": "gallery/incompletely_filled_gallery_throws_taps.json"
+    },
+    {
+      "title": "Paged gallery scroll",
+      "case_id": 20,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivGallery",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Gallery scroll is logged"
+      ],
+      "file": "gallery/gallery_swipe_paged.json"
+    },
+    {
+      "title": "Gallery item actions",
+      "case_id": 21,
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right",
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction or clicked buttons",
+        "Gallery scroll is logged"
+      ],
+      "file": "gallery/gallery-item-actions.json"
+    },
+    {
+      "title": "Gallery item actions typed",
+      "case_id": 172,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivGallery",
+        "TypedActions"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right",
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction or clicked buttons",
+        "Gallery scroll is logged",
+        "first and last galleries are scrolled without animation"
+      ],
+      "file": "gallery/gallery-item-actions-typed.json"
+    },
+    {
+      "title": "Gallery default item states",
+      "case_id": 22,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on button 'Expand' in gallery item",
+        "Click on button 'Collapse' in expanded items"
+      ],
+      "expected_results": [
+        "Only clicked gallery item change state"
+      ],
+      "file": "gallery/gallery_default_item_states.json"
+    },
+    {
+      "title": "Gallery paging default item states",
+      "case_id": 23,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on button 'Expand' in gallery item",
+        "Click on button 'Collapse' in expanded items",
+        "Scroll gallery"
+      ],
+      "expected_results": [
+        "Only clicked gallery item change state",
+        "Gallery scrolls page by page"
+      ],
+      "file": "gallery/gallery_paging_default_item_states.json"
+    },
+    {
+      "title": "Zoomable gallery",
+      "case_id": 24,
+      "tags": [
+        "DivGallery"
+      ],
+      "expected_results": [
+        "Image in gallery can be zoomed"
+      ],
+      "file": "gallery/zoomable-gallery.json"
+    },
+    {
+      "title": "Gallery bottom multiline",
+      "case_id": 25,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "file": "gallery/gallery-bottom-multiline.json"
+    },
+    {
+      "title": "Gallery bottom multiline selected actions",
+      "case_id": 26,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "file": "gallery/gallery-bottom-multiline-selected-action.json"
+    },
+    {
+      "title": "Gallery bottom singleline",
+      "case_id": 27,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "file": "gallery/gallery-bottom-singleline.json"
+    },
+    {
+      "title": "Gallery top multiline",
+      "case_id": 28,
+      "tags": [
+        "DivGallery"
+      ],
+      "file": "gallery/gallery-top-multiline.json"
+    },
+    {
+      "title": "Pager scroll",
+      "case_id": 29,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivPager",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Page change is logged"
+      ],
+      "file": "pager/pager.json"
+    },
+    {
+      "title": "Pager item actions",
+      "case_id": 30,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivPager"
+      ],
+      "file": "pager/pager-item-actions.json"
+    },
+    {
+      "title": "Pager selected actions",
+      "case_id": 31,
+      "tags": [
+        "DivPager"
+      ],
+      "file": "pager/pager-selected-actions.json"
+    },
+    {
+      "title": "Pager default item states",
+      "case_id": 32,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivPager"
+      ],
+      "file": "pager/pager_default_item_states.json"
+    },
+    {
+      "title": "Pager with infinite scroll",
+      "case_id": 144,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "file": "pager/pager_infinite_scroll.json"
+    },
+    {
+      "title": "Pager with infinite scroll, start scroll alignment and paddings",
+      "case_id": 161,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "file": "pager/pager_infinite_scroll_with_start_paddings.json"
+    },
+    {
+      "title": "Action animations",
+      "case_id": 33,
+      "tags": [
+        "DivAnimation"
+      ],
+      "steps": [
+        "Click on each button with animations"
+      ],
+      "expected_results": [
+        "The animation written on the button appears",
+        "Animation finished on long click finish"
+      ],
+      "file": "action_animation/animations.json"
+    },
+    {
+      "title": "Recommendation slider",
+      "case_id": 1,
+      "tags": [
+        "Slider"
+      ],
+      "automated": [
+        "android"
+      ],
+      "priority": "blocker",
+      "steps": [
+        "Interact with the slider"
+      ],
+      "expected_results": [
+        "Pointer position is changes and change button text"
+      ],
+      "file": "slider_nps.json"
+    },
+    {
+      "title": "Slider with two pointers",
+      "case_id": 12,
+      "tags": [
+        "Slider"
+      ],
+      "automated": [
+        "android"
+      ],
+      "priority": "critical",
+      "steps": [
+        "Interact with the slider"
+      ],
+      "expected_results": [
+        "Pointer position is changes and change button text"
+      ],
+      "file": "double_slider.json"
+    },
+    {
+      "title": "Slider preferences",
+      "case_id": 34,
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Interact with slider"
+      ],
+      "expected_results": [
+        "Slider pointer change it's position"
+      ],
+      "file": "slider_presets.json"
+    },
+    {
+      "title": "Disabled slider",
+      "case_id": 182,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Tap the \"Disable\" button and try to change slider value",
+        "Tap the \"Enable\" button and try to change slider value"
+      ],
+      "expected_results": [
+        "Value is not changed",
+        "Value changes"
+      ],
+      "file": "slider_is_enabled.json"
+    },
+    {
+      "title": "Root state switching",
+      "case_id": 35,
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Press 'CHANGE STATE (TEMPORARY)'",
+        "Restart the app",
+        "Turn back to this scenario",
+        "Press 'CHANGE STATE'",
+        "Restart the app",
+        "Turn back to this scenario"
+      ],
+      "expected_results": [
+        "button 'CHANGE STATE (TEMPORARY)' change state and save it between app restart",
+        "button 'CHANGE STATE' change state, but state resets after app restart"
+      ],
+      "file": "root_state_switching.json"
+    },
+    {
+      "title": "Focus",
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Switch focus"
+      ],
+      "expected_results": [
+        "Elements focus changes in order to switch"
+      ],
+      "file": "focus.json",
+      "case_id": 444
+    },
+    {
+      "title": "Focus events",
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "steps": [
+        "Switch focus to handler",
+        "Switch focus to idle"
+      ],
+      "expected_results": [
+        "Start state of the right element is 'init'",
+        "When handler gets focus, state of the right element is 'focus'",
+        "When handler lost focus, state of the right element is 'blur'"
+      ],
+      "file": "focus_actions.json",
+      "case_id": 445
+    },
+    {
+      "title": "Accessibility descriptions",
+      "case_id": 196,
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Set russian language on device",
+        "Turn on Screen reader and set order of elements description to 'Состояние,название,тип'",
+        "Set focus on 'Элемент 1'",
+        "Listen to Screen reader",
+        "Double tap on screen",
+        "Set focus on 'Элемент 2'",
+        "Listen to Screen reader",
+        "Set focus on 'Элемент 3'"
+      ],
+      "expected_results": [
+        "On 'Элемент 1' Screen reader should say 'Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать'",
+        "After double tap Screen reader should say 'Сейчас в состоянии 1'",
+        "On 'Элемент 2' Screen reader should say 'Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло'",
+        "On 'Элемент 3' Screen reader should say 'Элемент 3; Кнопка'"
+      ],
+      "file": "accessibility/descriptions.json"
+    },
+    {
+      "title": "Accessibility image range",
+      "case_id": 197,
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Set focus on text",
+        "Listen to Screen reader",
+        "Set focus on image in text",
+        "Listen to Screen reader",
+        "Click on image in text"
+      ],
+      "expected_results": [
+        "After setting focus to text you can hear the text itself.",
+        "After setting focus on image, you should here that this image is a button and you can click on it to trigger an action.",
+        "After click on image action triggered"
+      ],
+      "file": "accessibility/image_and_clickable_range.json"
+    },
+    {
+      "title": "Accessibility types",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Tap on elements"
+      ],
+      "expected_results": [
+        "Screen reader should read elements correctly according to their accessibility types."
+      ],
+      "file": "accessibility/types.json",
+      "case_id": 446
+    },
+    {
+      "title": "Accessibility auto types",
+      "case_id": 198,
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Tap on elements"
+      ],
+      "expected_results": [
+        "Screen reader should read correct element types. Separator and image without description must be not focusable with screen reader."
+      ],
+      "file": "accessibility/auto_types.json"
+    },
+    {
+      "title": "Default Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "When focusing on 1 item you'll hear 'Это Элемент 1'",
+        "When focusing on group of 2 and 3 items you will hear 'Это Элемент 2, Это Элемент 3'",
+        "Can't focus 4 element"
+      ],
+      "file": "accessibility/mode/default.json",
+      "case_id": 447
+    },
+    {
+      "title": "Merge Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "Focusing on all card",
+        "You will hear 'Это Элемент 1, Это Элемент 2, Это Элемент 3'",
+        "On activation menu with text 'Элемент 1, Элемент 2, Элемент 3' appears",
+        "On focus Screen reader should not say 'Коснитесь дважды и удерживайте'"
+      ],
+      "file": "accessibility/mode/merge.json",
+      "case_id": 448
+    },
+    {
+      "title": "Exclude Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "Focus on 5-th item",
+        "Услышим 'Это Элемент 5'",
+        "При выключенном Screen reader на каждой кнопке при тапе должно появляться меню с названием этой кнопки"
+      ],
+      "file": "accessibility/mode/exclude.json",
+      "case_id": 449
+    },
+    {
+      "title": "Accessibility mode changes",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Change accessibility mode for items",
+        "Try to focus"
+      ],
+      "expected_results": [
+        "Elements should be focusable if their accessibility mode is default or merge and they have no ancestors with merge accessibility mode",
+        "Elements shouldn't be focusable if their accessibility mode if exclude"
+      ],
+      "file": "accessibility/mode/mode_change.json",
+      "case_id": 450
+    },
+    {
+      "title": "Checkbox with accessibility",
+      "case_id": 194,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Toggle checkbox"
+      ],
+      "expected_results": [
+        "Checkbox with text can be focused. Checkbox is read by screen reader as 'approved'.",
+        "Checkbox changes state on activasion. State changes is read by screen reader in a appropriate way ('Checked' / 'Unchecked' or similar)."
+      ],
+      "file": "accessibility/checkbox.json"
+    },
+    {
+      "title": "Actions on tap",
+      "case_id": 36,
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Tap on top button",
+        "Double tap on top button",
+        "Long tap on top button",
+        "Tap on 2-nd button",
+        "Double tap on 2-nd button",
+        "Long tap on 2-nd button",
+        "Tap on 3-rd button",
+        "Double tap on 3-rd button",
+        "Long tap on 3-rd button",
+        "Tap on image on the bottom button",
+        "Long tap between buttons"
+      ],
+      "expected_results": [
+        "Menu with text 'Single tap' appears with delay",
+        "Menu with text 'Double tap' appears",
+        "Menu with text 'Long tap' appears",
+        "Menu with text 'Single tap' appears without delay",
+        "Menu with text 'Single tap' appears and than disappears",
+        "Menu with text 'Long tap' appears",
+        "Menu with text 'Single tap' appears with delay",
+        "Menu with text 'Double tap' appears",
+        "Menu with text 'Long tap on container' appears for container",
+        "Menu with text 'Single tap on child' appears",
+        "Menu with text 'Long tap on container' appears for container"
+      ],
+      "file": "button_actions.json"
+    },
+    {
+      "title": "Div errors visualization",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "priority": "critical",
+      "expected_results": [
+        "The card displays a red button with the number 1",
+        "Click on red button shows error INVALID_VALUE",
+        "Click on the cross hide screen with error details",
+        "Click on save button copy json with errors",
+        "Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'"
+      ],
+      "file": "error_visual_monitor.json",
+      "case_id": 451
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Fade full",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears changing the transparency"
+      ],
+      "file": "animations/transition/fade_full_src.json",
+      "case_id": 452
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Fade part",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears changing the transparency starting or ending with transparency = 0.5"
+      ],
+      "file": "animations/transition/fade_part_src.json",
+      "case_id": 453
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Scale full",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears changing the scale"
+      ],
+      "file": "animations/transition/scale_full_src.json",
+      "case_id": 454
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Scale part",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears changing the scale starting or ending with scale = 0.75"
+      ],
+      "file": "animations/transition/scale_part_src.json",
+      "case_id": 455
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Slide full",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears sliding from under the top edge of the card"
+      ],
+      "file": "animations/transition/slide_full_src.json",
+      "case_id": 456
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Slide part",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears sliding from under the top edge of the card, but not reaching it"
+      ],
+      "file": "animations/transition/slide_part_src.json",
+      "case_id": 457
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Set",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and disappears changing transparency and sliding from center to edge"
+      ],
+      "file": "animations/transition/set_src.json",
+      "case_id": 458
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff ids",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears from different edges of card"
+      ],
+      "file": "animations/transition/change_bounds_diff_ids_src.json",
+      "case_id": 459
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff sizes",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should change it's size"
+      ],
+      "file": "animations/transition/change_bounds_diff_sizes_src.json",
+      "case_id": 460
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff types",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should change text moving across the screen"
+      ],
+      "file": "animations/transition/change_bounds_diff_types_src.json",
+      "case_id": 461
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Change bounds same ids",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should move horizontally across the screen"
+      ],
+      "file": "animations/transition/change_bounds_same_ids_src.json",
+      "case_id": 462
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Article",
+      "case_id": 38,
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'EXPAND'",
+        "Click on 'SHOW COMMENTS'",
+        "After expanding of elements click on 'COLLAPSE'"
+      ],
+      "expected_results": [
+        "Expanding and collapsing the elements should be with animation"
+      ],
+      "file": "animations/article.json"
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Article with transitions",
+      "case_id": 39,
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'EXPAND'",
+        "Click on 'SHOW COMMENTS'",
+        "After expanding of elements click on 'COLLAPSE'"
+      ],
+      "expected_results": [
+        "Expanding end collapsing the elements should be with animation"
+      ],
+      "file": "animations/article_with_transitions.json"
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Blink",
+      "case_id": 40,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "animation_in/animation_out is deprecated"
+      },
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'BLINK'"
+      ],
+      "expected_results": [
+        "Red circle should appear and disappear"
+      ],
+      "file": "animations/blink.json"
+    },
+    {
+      "title": "Scale transition ignore pivot_x/pivot_y",
+      "case_id": 151,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press on 'GO'"
+      ],
+      "expected_results": [
+        "Image should scale from left edge to right one"
+      ],
+      "file": "animations/scale_pivot_src.json"
+    },
+    {
+      "title": "Change bounds transitions ignore start_delay",
+      "case_id": 41,
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on tooltip"
+      ],
+      "expected_results": [
+        "A few seconds after the card is shown, a tooltip should appear",
+        "The text should disappear first, and the background after a short delay"
+      ],
+      "file": "animations/mute_notification.json"
+    },
+    {
+      "title": "Div with corner radius and shadow set is clipped during transition animation",
+      "case_id": 184,
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on yellow rectangle",
+        "Repeat if necessary"
+      ],
+      "expected_results": [
+        "Blue circle still a circle while transition is in progress"
+      ],
+      "file": "animations/transient_div_with_clip_and_shadow.json"
+    },
+    {
+      "title": "State transition any change",
+      "case_id": 42,
+      "file": "animations/transition/state_transition_any_change.json"
+    },
+    {
+      "title": "State transition data change",
+      "case_id": 44,
+      "file": "animations/transition/state_transition_data_change.json"
+    },
+    {
+      "title": "State transition state change",
+      "case_id": 45,
+      "file": "animations/transition/state_transition_state_change.json"
+    },
+    {
+      "title": "Inner state transition any change",
+      "case_id": 46,
+      "file": "animations/transition/inner_state_transition_any_change.json"
+    },
+    {
+      "title": "Inner state transition data change",
+      "case_id": 46,
+      "file": "animations/transition/inner_state_transition_data_change.json"
+    },
+    {
+      "title": "Disappear transition of div with shadow",
+      "case_id": 171,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "ios": "Android-specific test",
+        "web": "Android-specific test"
+      },
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'Outline shadow'.",
+        "Click on 'Custom shadow'.",
+        "Click on 'Inner custom shadow'."
+      ],
+      "expected_results": [
+        "Shadow of the 'Outline shadow' button should dissapear before animation start.",
+        "Shadow of the 'Custom shadow' button should dissapear before animation start.",
+        "Shadow should disappear along with the 'Inner custom shadow' button."
+      ],
+      "file": "animations/transition/transition_out_of_div_with_shadow.json"
+    },
+    {
+      "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
+      "case_id": 48,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Spinner animation will continue 5 times and then stop"
+      ],
+      "file": "animations/lottie/spinner_restart_repeat_mode.json"
+    },
+    {
+      "title": "Lottie animation (repeat_mode=reverse, repeat_count=3)",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Spinner changes spin direction 3 times and stops"
+      ],
+      "file": "animations/lottie/spinner_reverse_repeat_mode.json",
+      "case_id": 463
+    },
+    {
+      "title": "Lottie animation (repeat_mode=restart, repeat_count=-1)",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Infinite spinner animation."
+      ],
+      "file": "animations/lottie/spinner.json",
+      "case_id": 464
+    },
+    {
+      "title": "Lottie params",
+      "case_id": 190,
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Animation should be rendered correctly with the different combination of properties"
+      ],
+      "file": "animations/lottie/params.json"
+    },
+    {
+      "title": "For the reverse animation of the action, a direct interpolator is used",
+      "case_id": 51,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "file": "action_animation/button_press_action_animations.json"
+    },
+    {
+      "title": "Simple variable animator",
+      "case_id": 178,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color. If stopped it stands still."
+      ],
+      "file": "animations/animators/simple_variable_animator.json"
+    },
+    {
+      "title": "Repeating variable animator",
+      "case_id": 177,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color 4 times. If stopped it stands still."
+      ],
+      "file": "animations/animators/repeating_variable_animator.json"
+    },
+    {
+      "title": "Infinite variable animator",
+      "case_id": 174,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_variable_animator.json"
+    },
+    {
+      "title": "Infinite alternating variable animator",
+      "case_id": 173,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles alternating direction until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_alternating_variable_animator.json"
+    },
+    {
+      "title": "Visibility actions in gallery",
+      "case_id": 52,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Scroll the gallery",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Gallery data was opened",
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+      ],
+      "file": "gallery/gallery_swipe.json"
+    },
+    {
+      "title": "Disappear actions in gallery",
+      "case_id": 54,
+      "automated": [
+        "web"
+      ],
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "Disappear_actions"
+      ],
+      "steps": [
+        "Scroll the gallery",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Gallery data was opened",
+        "The text changes along with the item that disappeared",
+        "Items disappearing logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+      ],
+      "file": "gallery/gallery_swipe_disappear_action.json"
+    },
+    {
+      "title": "Visibility actions in pager",
+      "case_id": 55,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Scroll the pager",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Pager data was opened",
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
+      ],
+      "file": "visibility_actions/pager.json"
+    },
+    {
+      "title": "Visibility actions performed and logged in pager",
+      "case_id": 56,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Swipe cards",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Logged evens logViewShown(cardId = ..., id = content_item_show0) logViewShown(cardId = ..., id = container)",
+        "Cards description was changed"
+      ],
+      "file": "visibility_actions/swipe_div_pager.json"
+    },
+    {
+      "title": "Visibility action for child of item in gallery",
+      "case_id": 57,
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "visibility_actions",
+        "DivGallery"
+      ],
+      "steps": [
+        "Scroll to positions from 0 to 4",
+        "Check view shown with text 'Last caught visibility action: item_{item_position}'"
+      ],
+      "expected_results": [
+        "View shown with text 'Last caught visibility action: item_{item_position}'"
+      ],
+      "file": "visibility_actions/gallery_child_of_item.json"
+    },
+    {
+      "title": "Visibility actions is_enabled",
+      "case_id": 58,
+      "automated": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
+        "disappear_actions"
+      ],
+      "steps": [
+        "Scroll to last position",
+        "Check view shown with text 'Last caught visibility action: none'",
+        "Click on view with text 'Enable actions'",
+        "Check view shown with text 'Last caught visibility action: item_4'"
+      ],
+      "expected_results": [
+        "When actions disabled view shown with text 'Last caught visibility action: none'",
+        "When actions enabled view shown with text 'Last caught visibility action: item_{index}'"
+      ],
+      "file": "visibility_actions/is_enabled.json"
+    },
+    {
+      "title": "Actions is_enabled",
+      "case_id": 59,
+      "automated": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "actions"
+      ],
+      "steps": [
+        "Click text 'Tested text'",
+        "Long click text 'Tested text'",
+        "Double click text 'Tested text'",
+        "Click on view with text 'Enable actions' and repeat steps before"
+      ],
+      "expected_results": [
+        "When actions disabled view shown with text 'Last caught action: none'",
+        "When actions enabled view shown with text 'Last caught action: {click | long_click | double_click}'"
+      ],
+      "file": "actions/is_enabled.json"
+    },
+    {
+      "title": "Send select Pager using Div2View.tryLogVisibility",
+      "case_id": 209,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
+        "DivPager"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Check first item visibility logged",
+        "Swipe to the next item",
+        "Check second item visibility logged"
+      ],
+      "expected_results": [
+        "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
+        "Second element logged, example logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
+      ],
+      "file": "visibility_actions/pager_selected_actions.json"
+    },
+    {
+      "title": "Visibility actions for default_item",
+      "case_id": 60,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Check logs"
+      ],
+      "expected_results": [
+        "Card is opened",
+        "Card visibility logged, example logViewShown(cardId = ..., id = comments_counter_show:4)"
+      ],
+      "file": "visibility_actions/default_item.json"
+    },
+    {
+      "title": "Nested visibility actions",
+      "case_id": 61,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Click EXPAND",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Elements are expanded",
+        "Visibility actions logged, example logViewShown(cardId = ..., id = separator) logViewShown(cardId = ..., id = text) logViewShown(cardId = ..., id = text2) logViewShown(cardId = ..., id = comment_state) logViewShown(cardId = ..., id = comment_01) logViewShown(cardId = ..., id = comment_02) logViewShown(cardId = ..., id = comment_03) logViewShown(cardId = ..., id = comment_04)"
+      ],
+      "file": "visibility_actions/article.json"
+    },
+    {
+      "title": "Visibility action in visible block",
+      "case_id": 62,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json"
+      },
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/visibility_action.json"
+    },
+    {
+      "title": "Visibility actions in DivState",
+      "case_id": 63,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json"
+      },
+      "tags": [
+        "DivState",
+        "visibility_actions"
+      ],
+      "steps": [
+        "Press 'State 2' button",
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "State changes",
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/states.json"
+    },
+    {
+      "title": "Variables in gallery",
+      "case_id": 64,
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Check different combinations of gallery properties"
+      ],
+      "expected_results": [
+        "'orientation=horizontal' - sets gallery orientation to horizontal",
+        "'orientation=vertical' - sets gallery orientation to vertical",
+        "'column_count=1' - sets amount of columns to 1",
+        "'column_count=2' - sets amount of columns to 2",
+        "'item_spacing=5' - sets spacing between items along main axis to 5",
+        "'item_spacing=25' - sets spacing between items along main axis to 25",
+        "'cross_spacing=5' - sets spacing between items along cross axis to 5 (if column_count > 1)",
+        "'cross_spacing=25' - sets spacing between items along cross axis to 25 (if column_count > 1)",
+        "'restrict_parent_scroll=false' - gallery scroll gestures don't get passed to parent element",
+        "'restrict_parent_scroll_true' - gallery scrolls gestures get passed to parent element",
+        "'item_color=#80ff0000' - sets color of items in gallery to pink",
+        "'item_color=#9614e000' - sets color of items in gallery to green",
+        "'paddings.left=10' - paddings of gallery: left - 10",
+        "'paddings.left=50' - paddings of gallery: left - 50",
+        "'paddings.right=10' - paddings of gallery: right - 10",
+        "'paddings.right=50' - paddings of gallery: right - 50",
+        "'paddings.top=10' - paddings of gallery: top - 10",
+        "'paddings.top=50' - paddings of gallery: top - 50",
+        "'paddings.bottom=10' - paddings of gallery: bottom - 10",
+        "'paddings.bottom=50' - paddings of gallery: bottom - 50",
+        "'item_text=Item text' - sets text in gallery items to 'Item text'",
+        "'item_text=ITEM TEXT' - sets text in gallery items to 'ITEM TEXT'"
+      ],
+      "file": "variables/div_gallery.json"
+    },
+    {
+      "title": "Variables in pager",
+      "case_id": 65,
+      "tags": [
+        "DivPager"
+      ],
+      "steps": [
+        "Check different combinations of pager properties"
+      ],
+      "expected_results": [
+        "'orientation=horizontal' - sets pager orientation to horizontal",
+        "'orientation=vertical' - sets pager orientation to vertical",
+        "'fixed_width=50' - sets visible width of adjacent card to 50",
+        "'fixed_width=20' - sets visible width of adjacent card to 20",
+        "'percentage_width=75' - sets current card's width to 75% of pager's width",
+        "'percentage_width=95' - sets current card's width to 95% of pager's width",
+        "'paddings.left=10' - paddings of pager: left - 10",
+        "'paddings.left=50' - paddings of pager: left - 50",
+        "'paddings.right=10' - paddings of pager: right - 10",
+        "'paddings.right=50' - paddings of pager: right - 50",
+        "'paddings.top=0' - paddings of pager: top - 0",
+        "'paddings.top=20' - paddings of pager: top - 20",
+        "'paddings.bottom=0' - paddings of pager: bottom - 0",
+        "'paddings.bottom=20' - paddings of pager: bottom - 20",
+        "'item_text=Item' - sets text of text_blocks in format 'Item #'",
+        "'item_text=ITEM' - sets text of text_blocks in format 'ITEM #'"
+      ],
+      "file": "variables/div_pager.json"
+    },
+    {
+      "title": "Variables in tabs",
+      "case_id": 66,
+      "tags": [
+        "DivTabs"
+      ],
+      "steps": [
+        "Check different combinations of tabs properties"
+      ],
+      "expected_results": [
+        "'dynamic_height=DYNAMIC' - each tab has height equals content height",
+        "'dynamic_height=MAX_HEIGHT(for non-first-page)' - from the second tab each tab has height equals max tabs content height",
+        "'tab.line_height=10' - line spacing of tabs text equals 10",
+        "'tab.line_height=30' - line spacing of tabs text equals 30",
+        "'tab.theme=GREEN' - tabs become green",
+        "'tab.theme=RED' - tabs become red",
+        "'selected_tab=0' - set first tab",
+        "'selected_tab=1' - set second tab",
+        "'selected_tab=6' - set 'Page index 6' tab",
+        "'has_separator=0' - turn off horizontal delimiter",
+        "'has_separator=1' - turn on horizontal delimiter",
+        "'separator.color=RED' - set red delimiter color",
+        "'separator.color=BLUE' - set blue delimiter color",
+        "'separator_paddings.top=0' - padding of horizontal delimiter: top - 0",
+        "'separator_paddings.top=50' - padding of horizontal delimiter: top - 50",
+        "'separator_paddings.bottom=0' - padding of horizontal delimiter: bottom - 0",
+        "'separator_paddings.bottom=50' - padding of horizontal delimiter: bottom - 50",
+        "'separator_paddings.left=0' - padding of horizontal delimiter: left - 0",
+        "'separator_paddings.left=50' - padding of horizontal delimiter: left - 50",
+        "'separator_paddings.right=0' - padding of horizontal delimiter: right - 0",
+        "'separator_paddings.right=50' - padding of horizontal delimiter: right - 50",
+        "'title_paddings.top=0' - padding of tabs container: top - 0",
+        "'title_paddings.top=50' - padding of tabs container: top - 50",
+        "'title_paddings.bottom=0' - padding of tabs container: bottom - 0",
+        "'title_paddings.bottom=50' - padding of tabs container: bottom - 50",
+        "'title_paddings.left=0' - padding of tabs container: left - 0",
+        "'title_paddings.left=50' - padding of tabs container: left - 50",
+        "'title_paddings.right=0' - padding of tabs container: right - 0",
+        "'title_paddings.right=50' - padding of tabs container: right - 50"
+      ],
+      "file": "variables/div_tabs.json"
+    },
+    {
+      "title": "Visibility in div-base",
+      "case_id": 67,
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Check different combinations of visibility properties"
+      ],
+      "expected_results": [
+        "On click on test button text field set correct visibility.",
+        "Showing text field is logged."
+      ],
+      "file": "set_visibility.json"
+    },
+    {
+      "title": "Showing animation on image loaded",
+      "case_id": 68,
+      "tags": [
+        "Animations"
+      ],
+      "expected_results": [
+        "Image appears with described animation"
+      ],
+      "file": "action_animation/image_loading_animation.json"
+    },
+    {
+      "title": "Variables in DivIndicator",
+      "case_id": 69,
+      "tags": [
+        "DivIndicator"
+      ],
+      "file": "variables/div_indicator.json"
+    },
+    {
+      "title": "Variables in DivImage",
+      "case_id": 153,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json"
+      },
+      "tags": [
+        "DivImage"
+      ],
+      "steps": [
+        "Click on blue label \"tint color\"",
+        "Click on label \"img#1\"",
+        "Click on red label \"tint color\"",
+        "Click on label \"img#2\"",
+        "Click on blue label \"tint color\""
+      ],
+      "expected_results": [
+        "Initially, there should be a red parallelogram on a green background",
+        "The red parallelogram has changed color to blue",
+        "The blue parallelogram has changed to the blue camera icon",
+        "The blue camera icon has changed color to red",
+        "The red camera icon has become a red stripe pattern",
+        "The red stripe pattern has changed color to blue"
+      ],
+      "file": "variables/div_image.json"
+    },
+    {
+      "title": "Variables triggers",
+      "case_id": 71,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "Triggers"
+      ],
+      "steps": [
+        "When only left button clicked, text changes to 'left switched'",
+        "When only right button clicked, text changes to 'right switched'",
+        "When both button clicked, text changes to 'both switched'",
+        "When both buttons is inactive text state changes to initial"
+      ],
+      "expected_results": [
+        "Text changes according to the button description"
+      ],
+      "file": "variables/div_variable_triggers.json"
+    },
+    {
+      "title": "Variable triggers (modes)",
+      "case_id": 72,
+      "tags": [
+        "Triggers"
+      ],
+      "steps": [
+        "'Thumb value' show current thumb position",
+        "'First selected positive position' show first selected positive thumb value",
+        "'Last selected positive position' show last selected positive value or move with thumb, if value > 0"
+      ],
+      "expected_results": [
+        "The layout corresponds to switching buttons"
+      ],
+      "file": "variables/div_variable_trigger_modes.json"
+    },
+    {
+      "title": "Variable triggers (closures)",
+      "case_id": 73,
+      "tags": [
+        "DivInput",
+        "Slider",
+        "Triggers",
+        "Functions"
+      ],
+      "expected_results": [
+        "Slider and input values should be synchronized",
+        "When entering an incorrect value in text input - error shows"
+      ],
+      "file": "variables/div_variable_trigger_loops.json"
+    },
+    {
+      "title": "Local variables",
+      "case_id": 155,
+      "automated": [
+        "android"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "variables"
+      ],
+      "expected_results": [
+        "Click items",
+        "Corresponding variable values change"
+      ],
+      "file": "variables/local.json"
+    },
+    {
+      "title": "Sequential animations",
+      "case_id": 74,
+      "steps": [
+        "Click on image"
+      ],
+      "expected_results": [
+        "Heart will increase by 2 times in 2 seconds, then will increase by 4 times in 2 seconds"
+      ],
+      "file": "animations/transition/transition_set.json"
+    },
+    {
+      "title": "Animations of switching tabs headers",
+      "case_id": 164,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivTabs",
+        "Animations"
+      ],
+      "steps": [
+        "Switch items on each tab by clicking on the tab headers",
+        "Slowly swipe each tab"
+      ],
+      "expected_results": [
+        "Look at the headers animation",
+        "1 tab has slide animation",
+        "2 tab has fade animation",
+        "3 tab has no animation"
+      ],
+      "file": "animations/tab_titles_animations.json"
+    },
+    {
+      "title": "Text copying",
+      "case_id": 75,
+      "tags": [
+        "DivText"
+      ],
+      "steps": [
+        "Double tap or long click on first text",
+        "Double tap or long click on second text"
+      ],
+      "expected_results": [
+        "First text has a system highlighting, you can copy it. Second text has no highlighting."
+      ],
+      "file": "selectable_text.json"
+    },
+    {
+      "title": "Text mask",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivText"
+      ],
+      "steps": [
+        "Click on both types of masks"
+      ],
+      "expected_results": [
+        "Text should be revealed on click. Text layout should not change, masked and non-masked text should have the same width and height. Mask should not contain any extra space inside of it"
+      ],
+      "file": "text-mask.json",
+      "case_id": 465
+    },
+    {
+      "title": "Nested change bounds transitions",
+      "case_id": 77,
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Click 'PRESS HERE'",
+        "Click 'PRESS AGAIN'"
+      ],
+      "expected_results": [
+        "After first click image appears with animation, the container extends with animation.",
+        "After second click extends button, text changes, container extends again."
+      ],
+      "file": "action_animation/nested_change_bounds.json"
+    },
+    {
+      "title": "Text input (multiline)",
+      "case_id": 78,
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text"
+      ],
+      "expected_results": [
+        "Text under the input should be equal to text in input and change on input changes.",
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Enter key tapped!'",
+        "Keyboard is hidden"
+      ],
+      "file": "input_multiline.json"
+    },
+    {
+      "title": "Text input (single line)",
+      "case_id": 79,
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text"
+      ],
+      "expected_results": [
+        "Text under the input should be equal to text in input and change on input changes.",
+        "Max lines = 1. Line break is unavailable.",
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Done key tapped!'",
+        "Keyboard is hidden"
+      ],
+      "file": "input_single_line.json"
+    },
+    {
+      "title": "Text input max_length",
+      "case_id": 163,
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Enter text with more than 10 characters"
+      ],
+      "expected_results": [
+        "text in the field should not be longer than 10 characters"
+      ],
+      "file": "input_max_length.json"
+    },
+    {
+      "title": "Text input (search input)",
+      "case_id": 170,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text",
+        "Tap on enter key"
+      ],
+      "expected_results": [
+        "Enter key on keyboard has \"search\" type",
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Search key tapped!'",
+        "Keyboard is hidden"
+      ],
+      "file": "input_search.json"
+    },
+    {
+      "title": "Select",
+      "case_id": 80,
+      "tags": [
+        "DivSelect"
+      ],
+      "steps": [
+        "Tap on select field",
+        "Select item"
+      ],
+      "expected_results": [
+        "When selecting, the text in the select should change."
+      ],
+      "file": "select.json"
+    },
+    {
+      "title": "Select with default item",
+      "case_id": 81,
+      "tags": [
+        "DivSelect"
+      ],
+      "steps": [
+        "Tap on select field",
+        "Select item"
+      ],
+      "expected_results": [
+        "When selecting, the text in the select should change."
+      ],
+      "file": "select_with_default.json"
+    },
+    {
+      "title": "Manage VideoCustom",
+      "case_id": 210,
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "VideoCustom"
+      ],
+      "steps": [
+        "Tap on 'play', 'pause', 'reset'"
+      ],
+      "expected_results": [
+        "On tap on 'play' video continue",
+        "On tap on 'pause' video pause",
+        "On tap on 'reset' video starts from the beginning",
+        "If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused",
+        "If video wasn't paused, on tap on 'reset' the video starts playing from beginning"
+      ],
+      "file": "video/video_controls.json"
+    },
+    {
+      "title": "State transition trigger",
+      "case_id": 82,
+      "steps": [
+        "Press 'To liked'"
+      ],
+      "expected_results": [
+        "First - there should be animation, there are only old triggers",
+        "Second - there should be no animation, the old 'state_change' is rubbed with an empty list of new ones",
+        "Third - there should be animation, old and new are allowed by default"
+      ],
+      "file": "animations/transition/transition_triggers_state_change.json"
+    },
+    {
+      "title": "Data transition trigger",
+      "case_id": 211,
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Press 'Change data'"
+      ],
+      "expected_results": [
+        "First - there should be animation, there are only old triggers",
+        "Second - there should be no animation, the old 'state_change' is rubbed with an empty list of new ones",
+        "Third - there should be an animation, the old 'none' is rubbed by the new 'state_change'"
+      ],
+      "file": "animations/transition/transition_triggers_data_change_src.json"
+    },
+    {
+      "title": "Actions logging",
+      "case_id": 83,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "automated": [
+        "web"
+      ],
+      "steps": [
+        "Click on Test button",
+        "Double click Test button",
+        "Long click on Test button",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Click logged 2 times",
+        "Double click logged 2 times",
+        "Long click logged 2 times"
+      ],
+      "file": "logging.json"
+    },
+    {
+      "title": "Lottie animations",
+      "case_id": 86,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_animations.json"
+    },
+    {
+      "title": "Lottie gallery",
+      "case_id": 87,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_gallery.json"
+    },
+    {
+      "title": "Lottie from divkit-asset",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "divkit-asset support is not expected"
+      },
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/asset_lottie.json",
+      "case_id": 475
+    },
+    {
+      "title": "Lottie gallery with expressions",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_gallery_with_expressions.json",
+      "case_id": 466
+    },
+    {
+      "title": "Lottie cycled animations",
+      "case_id": 154,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "expected_results": [
+        "Red circle appears with animation, then blink"
+      ],
+      "file": "animations/lottie/lottie_cycled_animations.json"
+    },
+    {
+      "title": "States default state",
+      "case_id": 88,
+      "automated": [
+        "web"
+      ],
+      "file": "states_default_state.json"
+    },
+    {
+      "title": "Tabs item actions",
+      "case_id": 89,
+      "file": "tabs-item-actions.json"
+    },
+    {
+      "title": "Image Shimmer Preview",
+      "case_id": 143,
+      "file": "image_shimmer_preview.json",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "expected_results": [
+        "Shimmer animation is running"
+      ]
+    },
+    {
+      "title": "Custom container",
+      "case_id": 92,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "file": "custom-container.json"
+    },
+    {
+      "title": "Custom card",
+      "case_id": 93,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "file": "custom-card.json"
+    },
+    {
+      "title": "Rive animations",
+      "case_id": 150,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "expected_results": [
+        "Two-column grid with seven cards playing different rive animations"
+      ],
+      "file": "animations/rive/rive_animation.json"
+    },
+    {
+      "title": "Rive gallery",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "expected_results": [
+        "Gallery with seven cards playing different rive animations"
+      ],
+      "file": "animations/rive/rive_gallery.json",
+      "case_id": 467
+    },
+    {
+      "title": "Rive animation (loop=pingPong)",
+      "case_id": 149,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "expected_results": [
+        "Infinite animation with changing direction"
+      ],
+      "file": "animations/rive/rive_ping_pong_loop.json"
+    },
+    {
+      "title": "Rive animation (loop=oneShot)",
+      "case_id": 148,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Animation plays once then stops",
+        "Press Restart"
+      ],
+      "expected_results": [
+        "Animation plays once then stops"
+      ],
+      "file": "animations/rive/rive_one_shot_loop.json"
+    },
+    {
+      "title": "Visibility transition trigger",
+      "case_id": 94,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "file": "animations/transition/transition_triggers_visibility_change.json",
+      "steps": [
+        "1. Click on 'Visible', then on 'Invisible'",
+        "2. Click on 'Visible', then on 'Gone'",
+        "3. Click on 'Invisible', then on 'Visible'",
+        "4. Click on 'Invisible', then on 'Gone'",
+        "5. Click on 'Gone', then on 'Visible'",
+        "6. Click on 'Gone', then on 'Invisible'"
+      ],
+      "expected_results": [
+        "1, 2 - animated, 3 - instant, 4 - always visible",
+        "'Invisible' -> 'Gone' or 'Gone' -> 'Invisible' - not animated, last item changes position",
+        "'Visible' -> 'Invisible' or 'Invisible' -> 'Visible' - items animated, last item static",
+        "'Visible' -> 'Gone' or 'Gone' -> 'Visible' - items animated, last item changes position"
+      ]
+    },
+    {
+      "title": "Complex transition triggers",
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Click on 'Change data'",
+        "Click on 'Go back'",
+        "Click on 'To state two'",
+        "Click on 'Visible' / 'Invisible' / 'Gone'"
+      ],
+      "expected_results": [
+        "If item 'Visible' or 'Invisible' - blue background visible, otherwise hidden"
+      ],
+      "file": "animations/transition/transition_triggers_complex_src.json",
+      "case_id": 468
+    },
+    {
+      "title": "Gallery items posing",
+      "case_id": 95,
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Scroll the items to the gallery end",
+        "Try to scroll again"
+      ],
+      "expected_results": [
+        "Current item always stick to the text."
+      ],
+      "file": "gallery/gallery-items-posing.json"
+    },
+    {
+      "title": "Common timer",
+      "case_id": 96,
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/common-timer.json"
+    },
+    {
+      "title": "Common timer with typed action",
+      "case_id": 166,
+      "tags": [
+        "Timers",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/typed-common-timer.json"
+    },
+    {
+      "title": "Endless timer",
+      "case_id": 97,
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "The timer is endless and can be stopped only by an action."
+      ],
+      "file": "timers/endless-timer.json"
+    },
+    {
+      "title": "Countdown timer",
+      "case_id": 98,
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer changes the value of the variable only at the end of the work."
+      ],
+      "file": "timers/countdown-timer.json"
+    },
+    {
+      "title": "Change bounds transition allows input focus",
+      "case_id": 162,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "The bug is caused by the peculiarities of animation implementation on iOS",
+        "web": "The bug is caused by the peculiarities of animation implementation on iOS"
+      },
+      "tags": [
+        "DivInput",
+        "Animations"
+      ],
+      "expected_results": [
+        "Text can be entered into the input field, focus does not disappear. The check is related to the implementation features of change_bounds on iOS"
+      ],
+      "file": "change_bounds_transition_input.json"
+    },
+    {
+      "title": "Blur in DivImage",
+      "case_id": 99,
+      "tags": [
+        "DivImage"
+      ],
+      "steps": [
+        "Click on images under the text"
+      ],
+      "expected_results": [
+        "Images are blurred according to blur radius",
+        "Starting blur radius is 4",
+        "Blur radius is changed to 0 or 8 when clicking on images"
+      ],
+      "file": "div_image_blur.json"
+    },
+    {
+      "title": "LayoutProvider",
+      "case_id": 188,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size"
+      ],
+      "file": "layout_provider.json"
+    },
+    {
+      "title": "LayoutProvider recursive",
+      "case_id": 189,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size",
+        "Warning about recursive layout, depends on platform"
+      ],
+      "file": "layout_provider_recursive.json"
+    },
+    {
+      "title": "SizeProvider extension",
+      "case_id": 102,
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by snapshot_test_data/div-container/size_provider.json"
+      },
+      "tags": [
+        "extensions",
+        "SizeProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size"
+      ],
+      "file": "size_provider.json"
+    },
+    {
+      "title": "SizeProvider extension (recursive)",
+      "case_id": 103,
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by snapshot_test_data/div-container/size_provider_recursive.json"
+      },
+      "tags": [
+        "extensions",
+        "SizeProvider"
+      ],
+      "expected_results": [
+        "No relayout"
+      ],
+      "file": "size_provider_recursive.json"
+    },
+    {
+      "title": "Fixed length input mask",
+      "case_id": 104,
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Enter an inappropriate character for the place",
+        "Enter the appropriate character",
+        "Switch show/hide placeholders"
+      ],
+      "expected_results": [
+        "The symbol did not appear",
+        "The symbol appeared",
+        "Placeholders shown/hidden"
+      ],
+      "file": "fixed_length_input_mask.json"
+    },
+    {
+      "title": "Fixed length phone input mask",
+      "case_id": 105,
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "fixed_length_phone_input_mask.json"
+    },
+    {
+      "title": "Phone input mask",
+      "case_id": 146,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Enter an inappropriate character for the place",
+        "Enter the appropriate character",
+        "Enter phone number"
+      ],
+      "expected_results": [
+        "The symbol did not appear",
+        "The symbol appeared",
+        "Mask for phone number is correct"
+      ],
+      "file": "phone_input_mask.json"
+    },
+    {
+      "title": "Regex input filter",
+      "case_id": 158,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entered text must be filtered by a regular expression from corresponding field",
+        "The first input cannot be empty after entering at least 1 character",
+        "The second input can be emptied"
+      ],
+      "file": "regex_input_filter.json"
+    },
+    {
+      "title": "Regex input validator",
+      "case_id": 147,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "regex_input_validator.json"
+    },
+    {
+      "title": "Expression input filter",
+      "case_id": 159,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entering in the input field should be filtered depending on whether the filter condition is enabled or disabled"
+      ],
+      "file": "expression_input_filter.json"
+    },
+    {
+      "title": "Expression input validator",
+      "case_id": 142,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "expression_input_validator.json"
+    },
+    {
+      "title": "Currency input mask",
+      "case_id": 106,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "currency_input_mask.json"
+    },
+    {
+      "title": "Video with controls",
+      "case_id": 107,
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_with_controls.json"
+    },
+    {
+      "title": "Video with controls and typed actions",
+      "case_id": 180,
+      "tags": [
+        "DivVideo",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "file": "video/typed_video_with_controls.json"
+    },
+    {
+      "title": "Video volume control",
+      "case_id": 108,
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_volume_control.json"
+    },
+    {
+      "title": "Disappearing actions with DivVideo",
+      "case_id": 109,
+      "tags": [
+        "DivVideo",
+        "Disappear action",
+        "visibility_actions",
+        "DivGallery"
+      ],
+      "file": "video/video_in_gallery.json"
+    },
+    {
+      "title": "Video stream",
+      "case_id": 152,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_stream.json"
+    },
+    {
+      "title": "Video fullscreen",
+      "case_id": 110,
+      "tags": [
+        "DivVideo",
+        "Disappear action",
+        "visibility_actions",
+        "DivGallery"
+      ],
+      "file": "video/fullscreen_video_in_recycler.json"
+    },
+    {
+      "title": "Video in pager",
+      "case_id": 111,
+      "tags": [
+        "DivVideo",
+        "DivPager"
+      ],
+      "file": "video/video_in_pager.json"
+    },
+    {
+      "title": "Video callbacks",
+      "case_id": 112,
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_callbacks.json"
+    },
+    {
+      "title": "Video scale",
+      "case_id": 113,
+      "tags": [
+        "DivVideo"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "file": "video/video_scale.json"
+    },
+    {
+      "title": "Video aspect",
+      "case_id": 114,
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_aspect.json"
+    },
+    {
+      "title": "Tooltips with typed actions",
+      "case_id": 179,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips",
+        "visibility_actions",
+        "TypedActions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "typed-tooltips.json"
+    },
+    {
+      "title": "Tooltips",
+      "case_id": 117,
+      "tags": [
+        "Tooltips",
+        "visibility_actions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips/tooltips.json"
+    },
+    {
+      "title": "Tooltips with tap outside properties",
+      "case_id": 305,
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap on first button",
+        "Try to tap outside of tooltip",
+        "Close tooltip by cross button",
+        "Tap on second button",
+        "Tap outside of tooltip",
+        "Tap on third button",
+        "Tap on other buttons"
+      ],
+      "expected_results": [
+        "First tooltip is shown",
+        "First tooltip isn't closed by tapping outside of the tooltip",
+        "First tooltip is closed",
+        "Second tooltip is shown",
+        "Label text changed to `Outside actions called: true`, label text color is green",
+        "Third tooltip is shown",
+        "First and second buttons are clickable during showing of third non modal tooltip"
+      ],
+      "file": "tooltips-with-tap-outside-properties.json"
+    },
+    {
+      "title": "Tooltip on different positions",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Click on buttons to set different positions of the tooltip",
+        "After that, click the \"tooltip with close button\" button to display the tooltip"
+      ],
+      "expected_results": [
+        "The tooltip is always fully visible on the screen",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips/tooltip-positions.json",
+      "case_id": 469
+    },
+    {
+      "title": "Tooltips with animations",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips",
+        "Animations"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown with custom animations",
+        "Tooltips are hidden with custom animations"
+      ],
+      "file": "tooltips/tooltips-animations.json",
+      "case_id": 470
+    },
+    {
+      "title": "Switching state in the tooltip",
+      "case_id": 207,
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap 'Show tooltip' button",
+        "Tap 'Set root state 2' button on the tooltip",
+        "Tap 'Set tooltip state 2' button on the tooltip"
+      ],
+      "expected_results": [
+        "Tooltip is shown",
+        "State in the root view is changed to 'State 2'",
+        "State in the tooltip is changed to 'State 2'"
+      ],
+      "file": "tooltips/tooltip-with-states.json"
+    },
+    {
+      "title": "Persistent values storage",
+      "case_id": 145,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "steps": [
+        "Press 'Store value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'Nothing stored'",
+        "In the second open there should be the text 'Stored'",
+        "In the last open there should be again the text 'Nothing stored'"
+      ],
+      "file": "stored_value.json"
+    },
+    {
+      "title": "Persistent values storage with typed actions",
+      "case_id": 206,
+      "tags": [
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Press 'Store string value for 10 seconds'",
+        "Press 'Store color value for 10 seconds'",
+        "Press 'Store url value for 10 seconds'",
+        "Press 'Store array value for 10 seconds'",
+        "Press 'Store dict value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'No String value, https://no-stored-url.com, [], {}'.",
+        "In the second open there should new values should appear 'Stored typed, https://yandex.ru, [1, 2, 3], {\"key\": \"value\"}' on a green background.",
+        "In the last open there should be again as it was at first open."
+      ],
+      "file": "typed_stored_value.json"
+    },
+    {
+      "title": "Patch container",
+      "case_id": 118,
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/container.json"
+    },
+    {
+      "title": "Patch container typed action",
+      "case_id": 191,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "patch",
+        "TypedActions"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red",
+        "In case of success, 'Success!' text appears",
+        "In case of fail 'Fail!' text appears"
+      ],
+      "file": "patch/typed-container.json"
+    },
+    {
+      "title": "Patch container internal items",
+      "case_id": 119,
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/inside_container.json"
+    },
+    {
+      "title": "Patch gallery with typed action",
+      "case_id": 192,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "TypedActions",
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/typed-gallery.json"
+    },
+    {
+      "title": "Patch gallery",
+      "case_id": 120,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/gallery.json"
+    },
+    {
+      "title": "Patch gallery internal items",
+      "case_id": 121,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space. That look like 2-nd and 3-rd elements became red and has slightly more free space after 3-rd"
+      ],
+      "file": "patch/inside_gallery.json"
+    },
+    {
+      "title": "Patch grid",
+      "case_id": 122,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json"
+      },
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/grid.json"
+    },
+    {
+      "title": "Patch grid internal items",
+      "case_id": 123,
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space"
+      ],
+      "file": "patch/inside_grid.json"
+    },
+    {
+      "title": "Patch pager",
+      "case_id": 124,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json"
+      },
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/pager.json"
+    },
+    {
+      "title": "Patch pager internal items",
+      "case_id": 125,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space"
+      ],
+      "file": "patch/inside_pager.json"
+    },
+    {
+      "title": "Patch state partial",
+      "case_id": 126,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json"
+      },
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "First state should be replaced",
+        "Second state should persist without changes"
+      ],
+      "file": "patch/state_partial.json"
+    },
+    {
+      "title": "Patch state transactional broken",
+      "case_id": 127,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json"
+      },
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "Both states should have no changes"
+      ],
+      "file": "patch/state_transactional_broken.json"
+    },
+    {
+      "title": "Patch state transactional success",
+      "case_id": 128,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json"
+      },
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "First state should be replaced",
+        "Second state should persist without changes"
+      ],
+      "file": "patch/state_transactional_success.json"
+    },
+    {
+      "title": "Patch tabs partial",
+      "case_id": 129,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "Second tab should be replaced, other should have no changes"
+      ],
+      "file": "patch/tabs_partial.json"
+    },
+    {
+      "title": "Patch tabs transactional broken",
+      "case_id": 130,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "All tabs should have no changes"
+      ],
+      "file": "patch/tabs_transactional_broken.json"
+    },
+    {
+      "title": "Patch tabs transactional success",
+      "case_id": 132,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "First tab should be replaced, other should have no changes"
+      ],
+      "file": "patch/tabs_transactional_success.json"
+    },
+    {
+      "title": "Track visibility action from patch",
+      "case_id": 160,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Should be lorem ipsum text"
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "priority": "blocker",
+      "expected_results": [
+        "Lorem ipsum text, showed with animation"
+      ],
+      "file": "patch/patchable_card_with_visibility_actions.json"
+    },
+    {
+      "title": "Patch root div",
+      "case_id": 176,
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Second element is gallery"
+      ],
+      "file": "patch/root.json"
+    },
+    {
+      "title": "Patch on_applied_actions",
+      "case_id": 167,
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "2 elements should become red",
+        "Patch status text should become success"
+      ],
+      "file": "patch/actions_applied.json"
+    },
+    {
+      "title": "Patch on_failed_actions",
+      "case_id": 168,
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Patch status text should become fail",
+        "No other elements hould be changed"
+      ],
+      "file": "patch/actions_failed.json"
+    },
+    {
+      "title": "State with variable binding",
+      "case_id": 133,
+      "tags": [
+        "DivState"
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
+      "steps": [
+        "Press buttons with div-actions."
+      ],
+      "expected_results": [
+        "DivState change state."
+      ],
+      "file": "state_binding.json"
+    },
+    {
+      "title": "Multiple state switching with different root state",
+      "case_id": 175,
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Press button \"STATE 0 (INITIAL)\"",
+        "Press button \"STATE 1\""
+      ],
+      "expected_results": [
+        "Button with text \"STATE 0 (FINAL)\". No crashes at state change."
+      ],
+      "file": "state/multiple_root_state_switching.json"
+    },
+    {
+      "title": "Input inside pager",
+      "case_id": 134,
+      "tags": [
+        "DivPager",
+        "DivInput"
+      ],
+      "steps": [
+        "Click on a number."
+      ],
+      "expected_results": [
+        "A keyboard appears and the number can be edited."
+      ],
+      "file": "input_inside_pager.json"
+    },
+    {
+      "title": "Input keyboard types",
+      "case_id": 157,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "The keyboard type when clicking on an input field should differ depending on the select"
+      ],
+      "file": "input_keyboard_types.json"
+    },
+    {
+      "title": "Slider vertical scroll interruption",
+      "case_id": 135,
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Drag slider view up."
+      ],
+      "expected_results": [
+        "The entire gallery should be moved upwards."
+      ],
+      "file": "slider_scroll_vertical.json"
+    },
+    {
+      "title": "Slider horizontal scroll interruption",
+      "case_id": 136,
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Drag slider to the left."
+      ],
+      "expected_results": [
+        "Slider should change value, but its view shouldn't be moved."
+      ],
+      "file": "slider_scroll_horizontal.json"
+    },
+    {
+      "title": "Gesture (extension)",
+      "case_id": 137,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "extensions"
+      ],
+      "steps": [
+        "Swipe up",
+        "Swipe down",
+        "Swipe left",
+        "Swipe right"
+      ],
+      "expected_results": [
+        "Rect turns yellow",
+        "Rect turns green",
+        "Rect turns blue",
+        "Rect turns purple"
+      ],
+      "file": "gesture.json"
+    },
+    {
+      "title": "Rebind container",
+      "case_id": 205,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/container/un_added.json"
+    },
+    {
+      "title": "Rebind grid",
+      "case_id": 204,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/grid/un_added.json"
+    },
+    {
+      "title": "Rebind gallery",
+      "case_id": 203,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/gallery/un_added.json"
+    },
+    {
+      "title": "Rebind pager",
+      "case_id": 202,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/pager/un_added.json"
+    },
+    {
+      "title": "Rebind tabs",
+      "case_id": 201,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/tabs/un_added.json"
+    },
+    {
+      "title": "Container with item_builder",
+      "case_id": 138,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "actions",
+        "DivContainer"
+      ],
+      "steps": [
+        "Tap to cards. Their description is displayed in the first card."
+      ],
+      "file": "container/item_builder.json"
+    },
+    {
+      "title": "Container with item_builder and id for each item",
+      "case_id": 193,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "actions",
+        "DivContainer"
+      ],
+      "steps": [
+        "Tap on button. Second input should be focused"
+      ],
+      "file": "container/Item_builder_with_id_override.json"
+    },
+    {
+      "title": "Input password",
+      "case_id": 139,
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Type something inside password",
+        "Tap the \"toggle\" button"
+      ],
+      "expected_results": [
+        "Password inside input shown as dots, text field below input is showing original text",
+        "Text inside password input became readable"
+      ],
+      "file": "input_password.json"
+    },
+    {
+      "title": "Disabled input",
+      "case_id": 141,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap the \"Disable\" button and try to edit text",
+        "Tap the \"Enable\" button and try to edit text"
+      ],
+      "expected_results": [
+        "Text is not editable",
+        "Text became editable"
+      ],
+      "file": "input_is_enabled.json"
+    },
+    {
+      "title": "Vector scale",
+      "case_id": 187,
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "Vector"
+      ],
+      "steps": [
+        "Move slider"
+      ],
+      "expected_results": [
+        "The left image should be rasterized and blurry.",
+        "The right image should scale perfectly."
+      ],
+      "file": "svg_scale.json"
+    },
+    {
+      "title": "Rebind custom",
+      "case_id": 200,
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Next\" several times to check that forward and backward rebind works correctly"
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/custom/custom-container.json"
+    },
+    {
+      "title": "Pager page transformation",
+      "case_id": 156,
+      "tags": [
+        "DivPager",
+        "scroll"
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Swipe a bit both of pagers"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "On swipe on the top pager pages change alpha and size",
+        "On swipe on the bottom pager pages change alpha, size and stack in the middle of screen"
+      ],
+      "file": "pager/pagers-with-page-transformation.json"
+    },
+    {
+      "title": "Pager accessibility scroll",
+      "case_id": 195,
+      "tags": [
+        "DivPager",
+        "Accessibility"
+      ],
+      "steps": [
+        "Enter accessibility mode",
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Page change is logged"
+      ],
+      "file": "pager/pager.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items",
+      "case_id": 185,
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "steps": [
+        "Swipe pages in both directions"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items and infinite scroll",
+      "case_id": 186,
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 10 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Page with number 0 appears after the page with number 10",
+        "Page with number 10 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items_and_infinite_scroll.json"
+    },
+    {
+      "title": "Shine (extension)",
+      "case_id": 181,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "extensions"
+      ],
+      "steps": [
+        "Wait 1 second for shine animation to start",
+        "Wait 1 second for 1 shine animation cycle to pass",
+        "Wait 1 second for a second shine animation cycle to start",
+        "Wait several seconds for 3 animation cycles to pass"
+      ],
+      "expected_results": [
+        "Shine animation cycle started and cycle counter equals 1",
+        "Shine animation cycle ended and cycle counter still equals 1",
+        "Second animation cycle started and counter equals 2",
+        "There is no 4th animation cycle and the counter equals 3"
+      ],
+      "file": "shine.json"
+    },
+    {
+      "title": "Input focus",
+      "case_id": 199,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap in the middle of the input text",
+        "Tap the focus button"
+      ],
+      "expected_results": [
+        "Cursor is at the place you tapped",
+        "Cursor at the last position"
+      ],
+      "file": "input_focus.json"
+    },
+    {
+      "title": "Indicator auto-binding (no pager ids)",
+      "case_id": 200,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivIndicator"
+      ],
+      "steps": [
+        "Scroll pagers"
+      ],
+      "expected_results": [
+        "Each indicator is bound to the nearest pager"
+      ],
+      "file": "indicator_auto_binding_no_ids.json"
+    },
+    {
+      "title": "Indicator auto-binding (same pager ids)",
+      "case_id": 201,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivIndicator"
+      ],
+      "steps": [
+        "Scroll pagers"
+      ],
+      "expected_results": [
+        "Each indicator is bound to the nearest pager"
+      ],
+      "file": "indicator_auto_binding_same_ids.json"
+    },
+    {
+      "title": "Input with capture on focus actions",
+      "case_id": 220,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput",
+        "DivAction"
+      ],
+      "steps": [
+        "Tap the input",
+        "Tap the first button",
+        "Tap the input",
+        "Tap the second button",
+        "Tap the input",
+        "Tap the third button"
+      ],
+      "expected_results": [
+        "Only last tap doesn't affect input focus"
+      ],
+      "file": "input_capture_focus.json"
+    },
+    {
+      "title": "Submit action test",
+      "case_id": 221,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivAction",
+        "TypedActions"
+      ],
+      "steps": [
+        "Tap the 'Submit Form' button",
+        "Enter a different URL in the API endpoint field",
+        "Tap the 'Submit Form' button"
+      ],
+      "expected_results": [
+        "Form data is submitted to the specified endpoint",
+        "Status changes to 'Form submitted successfully' on successful submission",
+        "Status changes to 'Form submission failed' on failed submission"
+      ],
+      "file": "submit_action.json"
+    },
+    {
+      "title": "Input Properties Extension",
+      "case_id": 222,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Input Properties Extension is supported only on iOS",
+        "android": "Input Properties Extension is supported only on iOS"
+      },
+      "tags": [
+        "extensions",
+        "DivInput"
+      ],
+      "steps": [
+        "Toggle the switches to enable or disable spell checking, automatic return key and autocorrection",
+        "Close and reopen the keyboard by tapping outside the text input and then selecting it again"
+      ],
+      "expected_results": [
+        "Spell checking: Misspelled words should appear highlighted if enabled",
+        "Return key: The return key is only enabled when text is not empty, if the option is on"
+      ],
+      "file": "input_properties_extension.json"
+    }
+  ]
+}

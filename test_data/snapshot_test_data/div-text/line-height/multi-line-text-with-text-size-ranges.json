@@ -1,0 +1,44 @@
+{
+  "description": "Line height of multi-line text with text size spans",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "line_height_with_size_range",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "paddings": {
+            "left": 4,
+            "top": 4,
+            "right": 4,
+            "bottom": 4
+          },
+          "font_size": 14,
+          "line_height": 18,
+          "text": "Multiline text with line overall height containing:\n\t1. font size range\n\t2. line height range",
+          "ranges": [
+            {
+              "start": 56,
+              "end": 65,
+              "font_size": 24,
+              "font_weight": "medium"
+            },
+            {
+              "start": 76,
+              "end": 87,
+              "font_size": 24,
+              "font_weight": "medium",
+              "line_height": 28
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

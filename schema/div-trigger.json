@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_trigger",
+  "properties": {
+    "condition": {
+      "$ref": "common.json#/boolean_int",
+      "supports_expressions": true,
+      "$description": "translations.json#/div_trigger_condition"
+    },
+    "mode": {
+      "type": "string",
+      "default_value": "on_condition",
+      "enum": [
+        "on_condition",
+        "on_variable"
+      ],
+      "$description": "translations.json#/div_trigger_mode"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_trigger_actions"
+    }
+  },
+  "required": [
+    "condition",
+    "actions"
+  ]
+}

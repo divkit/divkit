@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ScenarioText">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="RegressionTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary</item>
+        <item name="colorAccent">@color/color_primary</item>
+        <item name="android:textColorPrimary">#ff000000</item>
+        <item name="android:titleTextColor" tools:ignore="NewApi" tools:targetApi="m">@android:color/black</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+    </style>
+
+    <style name="ActivityExpandedTitleStyle">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+</resources>

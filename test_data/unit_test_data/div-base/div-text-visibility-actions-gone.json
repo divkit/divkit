@@ -1,0 +1,11 @@
+{
+  "type": "text",
+  "text": "text",
+  "visibility": "gone",
+  "visibility_actions": [
+    {
+      "log_id": "some",
+      "log_limit": 0
+    }
+  ]
+}

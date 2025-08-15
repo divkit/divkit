@@ -1,0 +1,196 @@
+{
+  "cases": [
+    {
+      "expression": "@{4.0 / 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{0.0 / 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{0.0 / 0.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [0.0 / 0.0]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 / 0.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1.0 / 0.0]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1.0 / 2.0}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1.0 / 2.0}",
+      "expected": {
+        "type": "number",
+        "value": -0.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-2.0 / 2.0}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{2.0 / -2.0}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{4.0 / 1.0 / 4.0}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a / b}",
+      "expected": {
+        "type": "number",
+        "value": 2.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 8.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 4.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-a / b}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a / -b}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 2.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

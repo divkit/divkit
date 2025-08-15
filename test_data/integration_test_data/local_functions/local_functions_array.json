@@ -1,0 +1,81 @@
+{
+  "description": "Local functions with array arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            123,
+            123.45
+          ]
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "getArrayLengthFunction",
+                "body": "@{len(array)}",
+                "return_type": "integer",
+                "arguments": [
+                  {
+                    "name": "array",
+                    "type": "array"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{getArrayLengthFunction(array_var)}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check getArrayLengthFunction",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 2
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

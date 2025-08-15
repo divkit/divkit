@@ -1,0 +1,11 @@
+{
+  "$description": "translations.json#/div_tooltip_mode",
+  "anyOf": [
+    {
+      "$ref": "div-tooltip-mode-non-modal.json"
+    },
+    {
+      "$ref": "div-tooltip-mode-modal.json"
+    }
+  ]
+}

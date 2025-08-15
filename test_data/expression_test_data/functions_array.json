@@ -1,0 +1,917 @@
+{
+  "cases": [
+    {
+      "expression": "@{getStringFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Requested index (0) out of bounds array size (0)."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntegerFromArray(array, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntegerFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntegerFromArray(<array>, 0)]. Incorrect value type: expected Integer, got String."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptIntegerFromArray(array, 1, 321)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptIntegerFromArray(array, 0, 321)}",
+      "expected": {
+        "type": "integer",
+        "value": 321
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getNumberFromArray(array, 0)}",
+      "expected": {
+        "type": "number",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getNumberFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getNumberFromArray(<array>, 0)]. Incorrect value type: expected Number, got String."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptNumberFromArray(array, 1, 321.00)}",
+      "expected": {
+        "type": "number",
+        "value": 123.00
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptNumberFromArray(array, 0, 321.00)}",
+      "expected": {
+        "type": "number",
+        "value": 321.00
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStringFromArray(array, 0)}",
+      "expected": {
+        "type": "string",
+        "value": "string"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStringFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Incorrect value type: expected String, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptStringFromArray(array, 0, 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "string"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptStringFromArray(array, 1, 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getBooleanFromArray(array, 0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            true
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getBooleanFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getBooleanFromArray(<array>, 0)]. Incorrect value type: expected Boolean, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptBooleanFromArray(array, 0, true)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            false
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptBooleanFromArray(array, 0, true)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorFromArray(array, 0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF001122"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#012"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getColorFromArray(<array>, 0)]. Incorrect value type: expected Color, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptColorFromArray(array, 0, '#FF009988')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF112233"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#123"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptColorFromArray(array, 1, color_fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF009988"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_fallback",
+          "value": "#098"
+        },
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#FF112233",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptColorFromArray(array, 1, '#FF009988')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF009988"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#123",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlFromArray(array, 0)}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getUrlFromArray(<array>, 0)]. Incorrect value type: expected Url, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptUrlFromArray(array, 0, 'https://fallback.ru')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptUrlFromArray(array, 0, 'https://fallback.ru')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptUrlFromArray(array, 0, toUrl('https://fallback.ru'))}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptUrlFromArray(array, 0, toUrl('https://fallback.ru'))}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          123,
+          "string_value"
+        ]
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            [
+              123,
+              "string_value"
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayFromArray(<array>, 0)]. Incorrect value type: expected Array, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          123,
+          "string_value"
+        ]
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            [
+              123,
+              "string_value"
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": []
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123,
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "key": "value"
+        }
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDictFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected Dict, got Number."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "key": "value"
+        }
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {}
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123,
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDictFromArray(null_array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected Dict, got Null."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "null_array",
+          "value": [
+            null
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            1
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            1,
+            "a",
+            true
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

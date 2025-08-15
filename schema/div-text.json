@@ -1,0 +1,480 @@
+{
+  "$description": "translations.json#/div_text",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "text"
+      ]
+    }
+  },
+  "definitions": {
+    "range": {
+      "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_text_range_start"
+        },
+        "end": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_text_range_end"
+        },
+        "alignment_vertical": {
+          "$ref": "div-text-alignment-vertical.json",
+          "$description": "translations.json#/div_text_range_alignment_vertical",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "baseline_offset": {
+          "type": "number",
+          "$description": "translations.json#/div_text_range_baseline_offset",
+          "default_value": "0",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_font_size"
+        },
+        "font_family": {
+          "type": "string",
+          "$description": "translations.json#/div_font_family"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "$description": "translations.json#/div_font_size_unit"
+        },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "font_variation_settings": {
+          "type": "dict",
+          "$description": "translations.json#/div_font_variation_settings",
+          "platforms": [
+            "ios",
+            "android"
+          ]
+        },
+        "letter_spacing": {
+          "type": "number",
+          "$description": "translations.json#/div_text_range_letter_spacing"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "$description": "translations.json#/div_font_weight"
+        },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": [
+            "ios",
+            "web",
+            "android"
+          ]
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_range_text_color"
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "$description": "translations.json#/div_text_range_underline"
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "$description": "translations.json#/div_text_range_strike"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_text_range_actions"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_range_line_height"
+        },
+        "top_offset": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_range_top_offset"
+        },
+        "border": {
+          "$ref": "div-text-range-border.json",
+          "$description": "translations.json#/div_text_range_border"
+        },
+        "background": {
+          "$ref": "div-text-range-background.json",
+          "$description": "translations.json#/div_text_range_background"
+        },
+        "text_shadow": {
+          "$ref": "div-shadow.json",
+          "$description": "translations.json#/div_text_range_shadow",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "mask": {
+          "$ref": "div-text-range-mask.json",
+          "$description": "translations.json#/div_text_range_mask",
+          "platforms": [
+            "web"
+          ]
+        }
+      },
+      "$description": "translations.json#/div_text_range"
+    },
+    "image": {
+      "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_image_start"
+        },
+        "url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_text_image_url"
+        },
+        "width": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "$description": "translations.json#/div_text_image_width"
+        },
+        "height": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "$description": "translations.json#/div_text_image_height"
+        },
+        "tint_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_image_tint_color"
+        },
+        "tint_mode": {
+          "$ref": "div-blend-mode.json",
+          "default_value": "source_in",
+          "$description": "translations.json#/div_text_image_tint_mode",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "preload_required": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_image_base_preload_required",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "accessibility": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string",
+              "$description": "translations.json#/div_accessibility_description"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "none",
+                "button",
+                "image",
+                "text",
+                "auto"
+              ],
+              "default_value": "auto",
+              "supports_expressions": false,
+              "$description": "translations.json#/div_accessibility_type"
+            }
+          },
+          "platforms": [
+            "android",
+            "web"
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, no plans for support."
+          }
+        },
+        "alignment_vertical": {
+          "$ref": "div-text-alignment-vertical.json",
+          "default_value": "center",
+          "$description": "translations.json#/div_text_image_alignment_vertical",
+          "platforms": [
+            "android",
+            "web"
+          ]
+        },
+        "indexing_direction": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "reversed"
+          ],
+          "default_value": "normal",
+          "$description": "translations.json#/div_text_image_indexing_direction",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        }
+      },
+      "required": [
+        "url",
+        "start"
+      ],
+      "$description": "translations.json#/div_text_image"
+    },
+    "ellipsis": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "$description": "translations.json#/div_text_ellipsis_text"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_text_ellipsis_actions"
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "$description": "translations.json#/div_text_ellipsis_ranges"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "$description": "translations.json#/div_text_ellipsis_images"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "$description": "translations.json#/div_text_ellipsis",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "There is no css implementation for this."
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "$ref": "div-font-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text"
+          ]
+        },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_line_height"
+        },
+        "max_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_max_lines"
+        },
+        "min_hidden_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_min_hidden_lines",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
+        },
+        "auto_ellipsize": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_text_auto_ellipsize",
+          "platforms": [
+            "android",
+            "ios",
+            "web",
+            "flutter"
+          ]
+        },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "start",
+          "$description": "translations.json#/div_text_text_alignment_horizontal"
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "$description": "translations.json#/div_text_text_alignment_vertical"
+        },
+        "focused_text_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_focused_text_color",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "text_gradient": {
+          "$ref": "div-text-gradient.json",
+          "$description": "translations.json#/div_text_text_gradient",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "$description": "translations.json#/div_text_text"
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "$description": "translations.json#/div_text_underline"
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "$description": "translations.json#/div_text_strike"
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "$description": "translations.json#/div_text_ranges",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "$description": "translations.json#/div_text_images",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "ellipsis": {
+          "$ref": "#/definitions/ellipsis"
+        },
+        "selectable": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_selectable",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "tighten_width": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_tighten_width",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
+        },
+        "truncate": {
+          "type": "string",
+          "enum": [
+            "none",
+            "start",
+            "end",
+            "middle"
+          ],
+          "default_value": "end",
+          "$description": "translations.json#/div_text_truncate",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
+        },
+        "text_shadow": {
+          "$ref": "div-shadow.json",
+          "$description": "translations.json#/div_text_shadow",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text"
+  ]
+}

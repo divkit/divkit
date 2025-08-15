@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_without_properties"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

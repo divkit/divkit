@@ -1,0 +1,131 @@
+{
+  "log_id": "omnibox",
+  "states": [
+    {
+      "div": {
+        "background": [
+          {
+            "color": "#FFF",
+            "type": "solid"
+          }
+        ],
+        "items": [
+          {
+            "background": [
+              {
+                "color": "#FFF",
+                "type": "solid"
+              }
+            ],
+            "border": {
+              "corner_radius": 10,
+              "stroke": {
+                "color": "#FFCC00",
+                "width": 2
+              }
+            },
+            "content_alignment_vertical": "center",
+            "height": {
+              "type": "fixed",
+              "value": 52
+            },
+            "items": [
+              {
+                "action": {
+                  "log_id": "image_search",
+                  "url": "native://image_search"
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 24
+                },
+                "image_url": "https://yastatic.net/s3/home/div/bottomsheet/bender/cam.2.png",
+                "preview": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABaUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAItJXlEAAAAedFJOUwABDQ4ZGhsmMzRAQU1ZZnN/gIyYmaWmsbKzvr/LzB4iMrQAAAJASURBVFjDxZjhlpsgEIUNNYXaEcSyVou+/2vWBAeFsCZMOCfza/dEvgN34DJMVQXBOEitjaxOojW9liDYtx8w0NPiQp+Buu2jQUMKViu7+HgJtIbV1/hXuRzjVdAaoQr1sFBBy3iYVD0tdNCRFHHsdJo1Ndnw++FRH9u3zZVVz4OLtrexTjX+b0SVFY1X9hqsWVbZgWtR931oyRxPsjc5IFIsL4wbDfvKGhpI7PvFKWYrYjhhplUih+ypoN6NZzi3lgpq3XiOWgsqqEG1JRKJUePmUe4PKgc11ptY5KRh2vS2oyY6yFmHqVp9C3Vy0AGgOZFQ3gHPDpgwFg2moU+6EoHjjUDNh4o8dVGMxBmWhxhYGQ6J5NdlzXqHe39WuRzwCrs5AOouSNts6Vgs/UiakEpcjIJgV2MgLcPDkH8SITXNrPPNk0O2i4tn255J3z2QrbVO1yEfBH2ztCZfbJbMJf9E+rdFJDdk3p0sErWkIlUbU+yJrCMdWpwSGjXzNgKfMrZyVlvM/MtdR0ejdrqTa6gbCut7+7Saf1oD8GatIk7Ol7oD2nJlTVem0OrxkmFkEG5UeXzfEIJjMQpvvSD8oQQkvluwi3JPiC19bz5qBmptEL8g9F54GBpo2HNV7CnqvTCfdJFBw8E/14eszXS5/DLhcz1sIAj+AuLHz9+JBoJXbG9pnFq8jFsaX4WaLH9P2jU5oK9rkUbU/JDrustvjc3/VMp+WNMNL4PmeR7TzboNJkCq3pyaivyzXhbAI8h/U6WJgMgoCEMAAAAASUVORK5CYII=",
+                "type": "image",
+                "width": {
+                  "type": "fixed",
+                  "value": 24
+                }
+              },
+              {
+                "id": "text",
+                "height": {
+                  "type": "match_parent"
+                },
+                "states": [
+                  {
+                    "div": {
+                      "action": {
+                        "log_id": "text_search",
+                        "url": "viewport://"
+                      },
+                      "font_size": 16,
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "line_height": 20,
+                      "max_lines": 1,
+                      "text": "найдётся всё",
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "text_color": "#66000000",
+                      "type": "text"
+                    },
+                    "state_id": "online"
+                  },
+                  {
+                    "div": {
+                      "action": {
+                        "log_id": "text_search_offline",
+                        "url": "viewport://"
+                      },
+                      "font_size": 16,
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "line_height": 20,
+                      "max_lines": 1,
+                      "text": "поиск без интернета",
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "text_color": "#000",
+                      "type": "text"
+                    },
+                    "state_id": "offline"
+                  }
+                ],
+                "type": "state"
+              },
+              {
+                "custom_type": "bender_omnibox_tab_manager_button",
+                "height": {
+                  "type": "fixed",
+                  "value": 24
+                },
+                "type": "custom",
+                "width": {
+                  "type": "fixed",
+                  "value": 24
+                }
+              }
+            ],
+            "orientation": "horizontal",
+            "paddings": {
+              "left": 13,
+              "right": 13
+            },
+            "type": "container"
+          }
+        ],
+        "paddings": {
+          "bottom": 6,
+          "left": 14,
+          "right": 14,
+          "top": 6
+        },
+        "type": "container"
+      },
+      "state_id": 0
+    }
+  ]
+}

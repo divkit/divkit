@@ -1,0 +1,205 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "$text_variable": "variable",
+      "$hint_text": "hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "pretty_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 32,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "selector": {
+      "type": "select",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "keyboard_type",
+        "type": "string",
+        "value": "single_line_text"
+      },
+      {
+        "name": "autocapitalization_type",
+        "type": "string",
+        "value": "auto"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "pretty_text",
+              "text": "Keyboard type:"
+            },
+            {
+              "type": "selector",
+              "options": [
+                {
+                  "value": "single_line_text"
+                },
+                {
+                  "value": "multi_line_text"
+                },
+                {
+                  "value": "phone"
+                },
+                {
+                  "value": "number"
+                },
+                {
+                  "value": "email"
+                },
+                {
+                  "value": "uri"
+                },
+                {
+                  "value": "password"
+                }
+              ],
+              "value_variable": "keyboard_type"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Autocapitalization type:"
+            },
+            {
+              "type": "selector",
+              "options": [
+                {
+                  "value": "auto"
+                },
+                {
+                  "value": "none"
+                },
+                {
+                  "value": "words"
+                },
+                {
+                  "value": "sentences"
+                },
+                {
+                  "value": "all_characters"
+                }
+              ],
+              "value_variable": "autocapitalization_type"
+            },
+            {
+              "id": "input",
+              "type": "pretty_input",
+              "variable": "input",
+              "autocapitalization": "@{autocapitalization_type}",
+              "keyboard_type": "@{keyboard_type}",
+              "hint": "value"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

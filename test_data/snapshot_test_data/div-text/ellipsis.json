@@ -1,0 +1,32 @@
+{
+  "description": "Text with custom ellipsis",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "This is very very very very very very very very very very very very long text with ranges and custom ellipsis",
+          "font_size": 18,
+          "max_lines": 2,
+          "ellipsis": {
+            "text": "… READ MORE",
+            "ranges": [
+              {
+                "start": 2,
+                "end": 11,
+                "text_color": "#0000ff"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

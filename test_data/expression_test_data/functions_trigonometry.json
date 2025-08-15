@@ -1,0 +1,546 @@
+{
+  "cases": [
+    {
+      "expression": "@{pi()}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toRadians(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toRadians(-90.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5707963267948966
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toRadians(degrees)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "variables": [
+        {
+          "name": "degrees",
+          "type": "number",
+          "value": 90.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toDegrees(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toDegrees(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": -90.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toDegrees(radians)}",
+      "expected": {
+        "type": "number",
+        "value": 90.0
+      },
+      "variables": [
+        {
+          "name": "radians",
+          "type": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{sin(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{sin(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{sin(var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 1.0471975512
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{tan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{tan(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.55740772465
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{tan(var)}",
+      "expected": {
+        "type": "number",
+        "value": -1.55740772465
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": -1
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.570796326795
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": -0.523598775598
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(2.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [asin(2.0)]. Arcsine is undefined for the given value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(sin_var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "variables": [
+        {
+          "name": "sin_var",
+          "type": "number",
+          "value": 1.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{acos(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.570796326795
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{acos(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{acos(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 2.094395102393
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{acos(2.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [acos(2.0)]. Arccosine is undefined for the given value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 0.665773750028
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 0.54630248984
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(y,x)}",
+      "expected": {
+        "type": "number",
+        "value": 0.78539816340
+      },
+      "variables": [
+        {
+          "name": "y",
+          "type": "number",
+          "value": 1.0
+        },
+        {
+          "name": "x",
+          "type": "number",
+          "value": 1.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,-1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(1.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(-1.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5707963267948966
+      },
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [cot(0.0)]. Cotangent is undefined for the given value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(pi())}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [cot(3.141592653589793)]. Cotangent is undefined for the given value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(-pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cot(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.57735026919
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 1.0471975512
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

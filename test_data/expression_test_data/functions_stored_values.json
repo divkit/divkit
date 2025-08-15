@@ -1,0 +1,148 @@
+{
+  "cases": [
+    {
+      "expression": "@{getStoredIntegerValue('unknown_var', 123)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredNumberValue('unknown_var', 123.45)}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredBooleanValue('unknown_var', true)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredStringValue('unknown_var', 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredColorValue('unknown_var', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "name": "fallback",
+          "type": "color",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredColorValue('unknown_var', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredUrlValue('unknown_var', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "name": "fallback",
+          "type": "url",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredUrlValue('unknown_var', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStoredArrayValue('unknown_var')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStoredArrayValue('unknown_var')]. Missing value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "flutter",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getStoredDictValue('unknown_var')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStoredDictValue('unknown_var')]. Missing value."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "flutter",
+        "web"
+      ]
+    }
+  ]
+}

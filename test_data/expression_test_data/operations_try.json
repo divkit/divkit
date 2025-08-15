@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "expression": "@{declared_variable !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "try"
+      },
+      "variables": [
+        {
+          "name": "declared_variable",
+          "type": "string",
+          "value": "try"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{undeclared_variable !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'infinity' / 0 !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true ? undefined_var : 'else' !: 'fallback'}",
+      "expected": {
+        "type": "error",
+        "value": "Variable 'undefined_var' is missing."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{(padStart(12, 3, '') == undefined_var) !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

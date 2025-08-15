@@ -1,0 +1,90 @@
+// Generated code. Do not modify.
+
+@testable import DivKit
+import Foundation
+import Serialization
+import VGSL
+
+import enum DivKit.Expression
+
+public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue, Sendable {
+  public typealias Value = EntityWithStringEnumPropertyWithDefaultValue.Value
+
+  public static let type: String = "entity_with_string_enum_property_with_default_value"
+  public let parent: String?
+  public let value: Field<Expression<Value>>? // default value: second
+
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+    self.init(
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalExpressionField("value")
+    )
+  }
+
+  init(
+    parent: String?,
+    value: Field<Expression<Value>>? = nil
+  ) {
+    self.parent = parent
+    self.value = value
+  }
+
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
+    let valueValue = { parent?.value?.resolveOptionalValue(context: context) ?? .noValue }()
+    let errors = mergeErrors(
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
+    )
+    let result = EntityWithStringEnumPropertyWithDefaultValue(
+      value: { valueValue.value }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
+    if useOnlyLinks {
+      return resolveOnlyLinks(context: context, parent: parent)
+    }
+    var valueValue: DeserializationResult<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>> = { parent?.value?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue).merged(with: valueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+      }
+    }()
+    let errors = mergeErrors(
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
+    )
+    let result = EntityWithStringEnumPropertyWithDefaultValue(
+      value: { valueValue.value }()
+    )
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+  }
+
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+    guard let parent = parent, parent != Self.type else { return self }
+    guard let parentTemplate = templates[parent] as? EntityWithStringEnumPropertyWithDefaultValueTemplate else {
+      throw DeserializationError.unknownType(type: parent)
+    }
+    let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
+
+    return EntityWithStringEnumPropertyWithDefaultValueTemplate(
+      parent: nil,
+      value: value ?? mergedParent.value
+    )
+  }
+
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+    return try mergedWithParent(templates: templates)
+  }
+}

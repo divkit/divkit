@@ -1,0 +1,47 @@
+{
+  "description": "Setting property without setter.",
+  "div_data": {
+    "card": {
+      "log_id": "property-without-setter",
+      "variables": [
+        {
+          "name": "prop",
+          "type": "property",
+          "value_type": "string",
+          "get": "getter"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{prop}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=prop&value=setter",
+          "log_id": "set_prop"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Cannot set property. No setters provided. (name=prop, path=0/container/0/text)"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

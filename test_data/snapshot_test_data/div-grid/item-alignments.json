@@ -1,0 +1,283 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "30x30_white": {
+      "type": "text_cell",
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "width": {
+        "type": "fixed",
+        "value": 30
+      }
+    },
+    "50x50_black": {
+      "type": "separator",
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "delimiter_style": {
+        "color": "#000"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "color": "#F00",
+              "type": "solid"
+            }
+          ],
+          "items": [
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "top",
+              "alignment_horizontal": "left",
+              "text": "⌜"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "top",
+              "alignment_horizontal": "center",
+              "text": "^"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "top",
+              "alignment_horizontal": "right",
+              "text": "⌝"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "center",
+              "alignment_horizontal": "left",
+              "text": "<"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "text": "*"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "center",
+              "alignment_horizontal": "right",
+              "text": ">"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "left",
+              "text": "⌞"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "center",
+              "text": "⌄"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "30x30_white",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "right",
+              "text": "⌟"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            },
+            {
+              "type": "50x50_black"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "templates": {
+    "lottie_card": {
+      "type": "container",
+      "height": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "text",
+          "$text": "title",
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 22,
+          "font_weight": "medium",
+          "paddings": {
+            "top": 20
+          }
+        },
+        {
+          "type": "gif",
+          "gif_url": "https://i.gifer.com/VhdJ.gif",
+          "aspect": {
+            "ratio": 0.8
+          },
+          "scale": "fit",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "root",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "lottie_card",
+          "title": "Cycled",
+          "lottie_params": {
+            "lottie_url": "https://yastatic.net/s3/home/divkit/DivGif23.json",
+            "repeats": [
+              {
+                "repeat_count": 0,
+                "repeat_mode": "reverse"
+              },
+              {
+                "repeat_count": -1,
+                "repeat_mode": "restart",
+                "min_frame": 110
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

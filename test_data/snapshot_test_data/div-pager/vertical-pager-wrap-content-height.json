@@ -1,0 +1,299 @@
+{
+  "description": "Vertical pager with wrap_content layout mode and children with different heights.",
+  "platforms": [
+    "android",
+    "ios",
+    "flutter",
+    "web"
+  ],
+  "templates": {
+    "text_page_wrap_content": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "items": [
+        {
+          "type": "text_page_wrap_content",
+          "height": {
+            "type": "fixed",
+            "value": 90
+          },
+          "text": "First page\nPage content size = 90\nbottom neighbour = 30"
+        },
+        {
+          "type": "text_page_wrap_content",
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "text": "Middle page\nPage content size = 60\nTop neighbour = 30, bottom neighbour = 30"
+        },
+        {
+          "type": "text_page_wrap_content",
+          "height": {
+            "type": "fixed",
+            "value": 70
+          },
+          "text": "Last page\nPage content size = 70\ntop neighbour = 50"
+        }
+      ]
+    },
+    "scale": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "item_builder": {
+        "data": [
+          {
+            "style": "scale"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          }
+        ],
+        "prototypes": [
+          {
+            "selector": "@{getStringFromDict(it, 'style') == 'scale'}",
+            "div": {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 2
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "delimiter_style": {
+                "orientation": "vertical",
+                "color": "#AAAAAA"
+              },
+              "alignment_horizontal": "center"
+            }
+          },
+          {
+            "selector": "@{getStringFromDict(it, 'style') == 'mark'}",
+            "div": {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 6
+              },
+              "height": {
+                "type": "fixed",
+                "value": 1
+              },
+              "margins": {
+                "top": "@{index * 10}"
+              },
+              "delimiter_style": {
+                "color": "#000000"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "test_pager",
+                  "default_item": 0,
+                  "margins": {
+                    "bottom": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 1,
+                  "margins": {
+                    "bottom": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 2
+                }
+              ]
+            },
+            {
+              "type": "scale",
+              "margins": {
+                "left": 16
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

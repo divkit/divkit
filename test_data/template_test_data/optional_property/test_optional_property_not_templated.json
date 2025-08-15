@@ -1,0 +1,7 @@
+{
+  "templates": {},
+  "entity": {
+    "type": "entity_with_optional_property",
+    "property": "Some text"
+  }
+}

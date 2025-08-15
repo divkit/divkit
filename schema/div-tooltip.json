@@ -1,0 +1,106 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_tooltip",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_tooltip_id"
+    },
+    "div": {
+      "$ref": "div.json",
+      "$description": "translations.json#/div_tooltip_div"
+    },
+    "position": {
+      "type": "string",
+      "enum": [
+        "left",
+        "top-left",
+        "top",
+        "top-right",
+        "right",
+        "bottom-right",
+        "bottom",
+        "bottom-left",
+        "center"
+      ],
+      "$description": "translations.json#/div_tooltip_position"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "5000",
+      "$description": "translations.json#/div_tooltip_duration"
+    },
+    "offset": {
+      "$ref": "div-point.json",
+      "$description": "translations.json#/div_tooltip_offset"
+    },
+    "animation_in": {
+      "$ref": "div-animation.json",
+      "$description": "translations.json#/div_tooltip_animation_in",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "animation_out": {
+      "$ref": "div-animation.json",
+      "$description": "translations.json#/div_tooltip_animation_out",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "mode": {
+      "$ref": "div-tooltip-mode.json",
+      "default_value": "{ \"type\": \"modal\" }",
+      "$description": "translations.json#/div_tooltip_mode",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "tap_outside_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_tooltip_tap_outside_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "close_by_tap_outside": {
+      "type": "boolean",
+      "$description": "translations.json#/div_tooltip_close_by_tap_outside",
+      "default_value": "true",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "background_accessibility_description": {
+      "type": "string",
+      "$description": "translations.json#/div_tooltip_background_accessibility_description",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "div",
+    "position"
+  ]
+}

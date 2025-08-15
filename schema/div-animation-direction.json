@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "normal",
+    "reverse",
+    "alternate",
+    "alternate_reverse"
+  ]
+}

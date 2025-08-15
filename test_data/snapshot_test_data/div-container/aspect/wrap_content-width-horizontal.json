@@ -1,0 +1,59 @@
+{
+  "description": "DivContainer with wrap_content width and aspect height. Height must be equal width / 2.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "wrap_content"
+          },
+          "aspect": {
+            "ratio": 2
+          },
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 20,
+            "bottom": 20
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0FFA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "width\norientation\naspect",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "right": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "wrap_content\nhorizontal\n2",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "signatures": [
+    {
+      "function_name": "pi",
+      "doc": "Returns value of the `π`: ratio of the circumference of a circle to its diameter",
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toRadians",
+      "doc": "Converts the argument value from degrees to radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing degrees."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toDegrees",
+      "doc": "Converts the argument value from radians to degrees",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "sin",
+      "doc": "Calculates the sine of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "cos",
+      "doc": "Calculates the cosine of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "tan",
+      "doc": "Calculates the tangent of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "asin",
+      "doc": "Calculates the angle in radians of the given sine value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Sine value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "acos",
+      "doc": "Calculates the angle in radians of the given cosine value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Cosine value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "atan",
+      "doc": "Calculates the angle in radians for a given tangent value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Tangent value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "atan2",
+      "doc": "Calculates the angle in radians for given values (y,x)",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Y coordinate of the point"
+        },
+        {
+          "type": "number",
+          "doc": "X coordinate of the point"
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "function_name": "cot",
+      "doc": "Calculates the cotangent of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

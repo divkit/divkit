@@ -1,0 +1,67 @@
+gallery|Коллекции|{
+		"type": "gallery",
+		"title": "Коллекции",
+		"ttv": 1200,
+		"data": {
+			"action_url": "https://collections.yandex.ru/?utm_source=yandex_app&utm_medium=informer&utm_campaign=regular&utm_content=personal-feed",
+			"action_text": "ВСЕ КОЛЛЕКЦИИ",
+			"url": "https://collections.yandex.ru/?utm_source=yandex_app&utm_medium=informer&utm_campaign=regular&utm_content=personal-feed",
+			"background_color": "#ffffff",
+			"items": [{
+				"url": "https://yandex.ru/collections/channel/dekor-kukhni-svoimi-rukami/?utm_medium=informer&utm_term=dekor-kukhni-svoimi-rukami&utm_content=podelki-svoimi-rukami&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451",
+				"title": "Декор кухни своими руками",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/231404/aa0d4bbf-0168-4800-b6bf-63b9a5e25e60/480x360"
+			}, {
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/202366/48263b04-5dcb-4bc8-b673-565a5f831194/480x360",
+				"title": "Женские причёски с чёлкой",
+				"url": "https://yandex.ru/collections/channel/zhenskie-pricheski-s-chelkoy/?utm_medium=informer&utm_term=zhenskie-pricheski-s-chelkoy&utm_content=pricheski&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451"
+			}, {
+				"url": "https://yandex.ru/collections/channel/zhenskoe-palto/?utm_medium=informer&utm_term=zhenskoe-palto&utm_content=odezhda-i-obuv&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/69339/8ea61302-11bc-4293-be89-164c742bb749/480x360",
+				"title": "Женские пальто"
+			}, {
+				"title": "Фотосессия в стиле пин-ап",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/251121/5bc9e045-a266-4da5-9a50-666172d960ee/480x360",
+				"url": "https://yandex.ru/collections/channel/fotosessiya-v-stile-pin-ap/?utm_medium=informer&utm_term=fotosessiya-v-stile-pin-ap&utm_content=&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451"
+			}, {
+				"url": "https://yandex.ru/collections/channel/zimnie-platya/?utm_medium=informer&utm_term=zimnie-platya&utm_content=odezhda-i-obuv&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/194708/678de4a9-650d-44de-9288-a5605493fd76/480x360",
+				"title": "Зимние платья"
+			}, {
+				"url": "https://yandex.ru/collections/channel/yubki-svoimi-rukami/?utm_medium=informer&utm_term=yubki-svoimi-rukami&utm_content=podelki-svoimi-rukami&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451",
+				"title": "Юбки своими руками",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/202366/85a8781f-e524-4df9-9aac-07d71ab46949/480x360"
+			}, {
+				"url": "https://yandex.ru/collections/channel/mebel-svoimi-rukami/?utm_medium=informer&utm_term=mebel-svoimi-rukami&utm_content=podelki-svoimi-rukami&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/251121/9ede6418-003d-43ee-b76b-91a95798e7bd/480x360",
+				"title": "Мебель своими руками"
+			}, {
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/202366/172f44b1-1592-4e9c-803a-021bf7cf6bfb/480x360",
+				"title": "Дизайн балкона",
+				"url": "https://yandex.ru/collections/channel/dizayn-balkona/?utm_medium=informer&utm_term=dizayn-balkona&utm_content=interery&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451"
+			}, {
+				"title": "Природа Кавказа",
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/231404/aa51c3ad-f357-4640-bdf0-9ed9f50123a4/480x360",
+				"url": "https://yandex.ru/collections/channel/priroda-kavkaza/?utm_medium=informer&utm_term=priroda-kavkaza&utm_content=priroda&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451"
+			}, {
+				"image_url": "https://avatars.mds.yandex.net/get-pdb/51720/f5c06fee-0651-4da5-bb61-ba16c3b3d15d/480x360",
+				"title": "Тёмный маникюр",
+				"url": "https://yandex.ru/collections/channel/temnyy-manikyur/?utm_medium=informer&utm_term=temnyy-manikyur&utm_content=krasota-i-ukhod&utm_source=yandex_app&utm_campaign=regular&rec_flags=viewed_channels=5821e4caeae4cc0027114838,58a43d40eae4cc002c4e0a2a,5891c849eae4cc0029d65dd2,58b859261bb60400486f2864,58a41b46eae4cc002c4d54fb,585956851bb604001b12181a,5821e5c4eae4cc0025115227,5821fddceae4cc0025f48f02,58b0411f1bb60400470ce8c2,585956d31bb6040026125451"
+			}],
+			"item_layout_kind": "square",
+			"text_color": "#000000"
+		},
+		"id": "collections",
+		"utime": 1548324248,
+		"ttl": 900,
+		"menu": {
+			"menu_list": [{
+				"action": "opensettings://?screen=feed",
+				"text": "Настройки ленты"
+			}, {
+				"action": "hidecard://?topic_card_ids=collections_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83",
+				"text": "Скрыть карточку"
+			}]
+		},
+		"topic": "collections_card"
+}

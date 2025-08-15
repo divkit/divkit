@@ -1,0 +1,5 @@
+{
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n\n@file:Suppress(\"DEPRECATION\", \"TYPEALIAS_EXPANSION_DEPRECATION\")\n\npackage com.yandex.testing\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.data.*\nimport com.yandex.div.internal.parser.*\nimport com.yandex.div.internal.template.*\nimport com.yandex.div.internal.util.*\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.*\nimport com.yandex.div.serialization.*\nimport org.json.JSONArray\nimport org.json.JSONObject\n",
+  "generateEquality": true
+}

@@ -1,0 +1,292 @@
+{
+  "cases": [
+    {
+      "expression": "@{'Hello!'.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{123.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{123.45.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123.45"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{color_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "#FFAABBCC"
+      },
+      "variables": [
+        {
+          "name": "color_var",
+          "type": "color",
+          "value": "#AABBCC"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{url_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "https://some.url"
+      },
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://some.url"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "[\"value 1\"]"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "value 1"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{dict_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "{\"param1\":\"value 1\"}"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "param1": "value 1"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'Hello!'.toString().toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(123).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{string.var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [
+        {
+          "name": "string.var",
+          "type": "string",
+          "value": "Hello!"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "unsupported_platforms": {
+        "flutter": "Useless and limiting feature"
+      }
+    },
+    {
+      "expression": "@{(2 + 3).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "5"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{(!false).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{!false.toString()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [!'false']. A Boolean is expected after a unary not."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'Hello!' .toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'Hello!'. toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'Hello!'.toString ()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'Hello!'.toString}",
+      "expected": {
+        "type": "error",
+        "value": "Method expected after ."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'#FFAABBCCC'.getColorAlpha()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getColorAlpha()]. Unknown method name: getColorAlpha."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

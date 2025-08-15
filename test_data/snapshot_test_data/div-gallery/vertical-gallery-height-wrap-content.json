@@ -1,0 +1,56 @@
+{
+  "description": "The height of the gallery is equal to the height of its contents",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "text",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#e0e0e0"
+            }
+          ],
+          "height": {
+            "type": "wrap_content",
+            "max_size": {
+              "value": 180
+            }
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Wrap_content height element in wrap_content height gallery",
+              "font_size": 14,
+              "font_weight": "regular",
+              "height": {
+                "type": "wrap_content"
+              },
+              "line_height": 20,
+              "margins": {
+                "top": 2
+              },
+              "border": {
+                "stroke": {
+                  "color": "#0e9f3f"
+                }
+              }
+            }
+          ],
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          }
+        }
+      }
+    ]
+  }
+}

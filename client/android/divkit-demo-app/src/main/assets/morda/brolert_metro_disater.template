@@ -1,0 +1,13 @@
+brolert|Алерты в метро|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"title":"Метро",
+		"description":"В метро обнаружены 5-метровые крысы!",
+		"icon":"https://yt3.ggpht.com/-QIMa0qeXcMc/AAAAAAAAAAI/AAAAAAAAAAA/9esPoMKZuTE/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
+		"url":"https://metro.yandex.ru/"
+	},
+	"type":"brolert",
+	"id":"metro666"
+}

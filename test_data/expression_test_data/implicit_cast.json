@@ -1,0 +1,257 @@
+{
+  "cases": [
+    {
+      "expression": "@{7 == 7.0}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var == number_var}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 7
+        },
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 7.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{7 < 7.2}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var > number_var}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 7
+        },
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 7.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var >= number_var}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 7
+        },
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 7.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "7 + 8.9 => 15.9",
+      "expression": "@{7 + 8.9}",
+      "expected": {
+        "type": "number",
+        "value": 15.9
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{number_var - integer_var}",
+      "expected": {
+        "type": "number",
+        "value": -1.8
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 1.2
+        },
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{number_var * integer_var}",
+      "expected": {
+        "type": "number",
+        "value": 3.6
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 1.2
+        },
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{number_var / integer_var}",
+      "expected": {
+        "type": "number",
+        "value": 0.4
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 1.2
+        },
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var % number_var}",
+      "expected": {
+        "type": "number",
+        "value": 1.4
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 1.6
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{max(0, 1, 2, 3.5)}",
+      "expected": {
+        "type": "number",
+        "value": 3.5
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{argb(1.0, number_var, 0.0, integer_var)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF8000FF"
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 0.5
+        },
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

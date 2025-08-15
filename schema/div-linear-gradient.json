@@ -1,0 +1,64 @@
+{
+  "$description": "translations.json#/div_gradient_linear",
+  "definitions": {
+    "color_point": {
+      "type": "object",
+      "suppress_inline": true,
+      "$description": "translations.json#/div_gradient_color_point",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_gradient_color_point_color"
+        },
+        "position": {
+          "type": "number",
+          "constraint": "number >= 0.0 && number <= 1.0",
+          "$description": "translations.json#/div_gradient_color_point_position"
+        }
+      },
+      "required": [
+        "color",
+        "position"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "color_map": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/color_point"
+      },
+      "minItems": 2,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "$description": "translations.json#/div_gradient_color_map"
+    },
+    "colors": {
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/color"
+      },
+      "minItems": 2,
+      "$description": "translations.json#/div_gradient_colors"
+    },
+    "angle": {
+      "type": "integer",
+      "constraint": "number >= 0 && number <= 360",
+      "default_value": "0",
+      "$description": "translations.json#/div_gradient_linear_angle"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "gradient"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

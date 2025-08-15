@@ -1,0 +1,278 @@
+{
+  "definitions": {
+    "string_variable": {
+      "alias_kotlin": "str_variable",
+      "type": "object",
+      "$description": "translations.json#/div_variable_string",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "integer_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_integer",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "integer"
+          ]
+        },
+        "value": {
+          "long_type": true,
+          "type": "integer",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "number_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_number",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "number"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "boolean_variable": {
+      "alias_kotlin": "bool_variable",
+      "type": "object",
+      "$description": "translations.json#/div_variable_boolean",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "boolean"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "color_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_color",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "color"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "url_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_url",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "url"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "dict_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_dict",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dict"
+          ]
+        },
+        "value": {
+          "type": "dict",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "array_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_array",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        "value": {
+          "type": "array",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "type"
+      ]
+    },
+    "property_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_property",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_property_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "property"
+          ]
+        },
+        "value_type": {
+          "$ref": "div-evaluable-type.json",
+          "$desciption": "translations.json#/div_property_value_type"
+        },
+        "new_value_variable_name": {
+          "$ref": "div-variable-name.json",
+          "default_value": "new_value",
+          "$description": "translations.json#/div_property_new_value_variable_name"
+        },
+        "get": {
+          "type": "string",
+          "$description": "translations.json#/div_property_value"
+        },
+        "set": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_property_action"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "value_type",
+        "get"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/definitions/string_variable"
+    },
+    {
+      "$ref": "#/definitions/number_variable"
+    },
+    {
+      "$ref": "#/definitions/integer_variable"
+    },
+    {
+      "$ref": "#/definitions/boolean_variable"
+    },
+    {
+      "$ref": "#/definitions/color_variable"
+    },
+    {
+      "$ref": "#/definitions/url_variable"
+    },
+    {
+      "$ref": "#/definitions/dict_variable"
+    },
+    {
+      "$ref": "#/definitions/array_variable"
+    },
+    {
+      "$ref": "#/definitions/property_variable"
+    }
+  ]
+}

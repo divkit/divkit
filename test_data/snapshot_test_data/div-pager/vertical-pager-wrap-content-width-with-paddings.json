@@ -1,0 +1,82 @@
+{
+  "description": "Vertical pager with paddings and items which are wider than pager",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content",
+        "constrained": false
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "orientation": "vertical",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page",
+              "text": "Pager width = 200\nPage width = wrap_content,\nconstrained = false\nand is bigger than pager width.\nRight padding is ignored\nand right border is not drawn. Some long text"
+            },
+            {
+              "type": "text_page",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

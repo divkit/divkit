@@ -1,0 +1,50 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "content_alignment_vertical": "center",
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            }
+          },
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

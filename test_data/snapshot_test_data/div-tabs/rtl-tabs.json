@@ -1,0 +1,133 @@
+{
+  "description": "Tabs with items aligned right-to-left. First tab must be on the right edge.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 28,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 184
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "tab_container": {
+      "type": "container",
+      "paddings": {
+        "left": 16,
+        "right": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "tabs",
+              "height": {
+                "type": "wrap_content"
+              },
+              "tab_title_style": {
+                "animation_type": "slide"
+              },
+              "items": [
+                {
+                  "title": "Tab 0",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 0",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Tab 1",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 1",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Tab 2",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 2",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Tab 3",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 3",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

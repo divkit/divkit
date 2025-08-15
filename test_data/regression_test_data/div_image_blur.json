@@ -1,0 +1,93 @@
+{
+  "templates": {
+    "chess_card": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "margins": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "filters": [
+        {
+          "type": "blur",
+          "radius": "@{blur}"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "blur",
+        "type": "integer",
+        "value": 4
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "width": {
+                "type": "fixed",
+                "value": 50
+              }
+            },
+            {
+              "type": "text",
+              "text": "Current blur radius: @{blur}",
+              "margins": {
+                "left": 10
+              }
+            },
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "actions": [
+                {
+                  "url": "div-action://set_variable?name=blur&value=8",
+                  "log_id": "change blur: value = 8"
+                }
+              ]
+            },
+            {
+              "type": "chess_card",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "actions": [
+                {
+                  "url": "div-action://set_variable?name=blur&value=0",
+                  "log_id": "change blur: value = 0"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

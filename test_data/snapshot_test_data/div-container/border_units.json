@@ -1,0 +1,96 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "height": {
+            "type": "wrap_content"
+          },
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "dp",
+              "paddings": {
+                "left": 20,
+                "top": 5,
+                "right": 15,
+                "bottom": 10,
+                "unit": "dp"
+              },
+              "margins": {
+                "left": 20,
+                "top": 5,
+                "right": 15,
+                "bottom": 10,
+                "unit": "dp"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFF0000",
+                  "width": 4,
+                  "unit": "dp"
+                }
+              },
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "height": {
+                "type": "fixed",
+                "value": 150
+              }
+            },
+            {
+              "type": "text",
+              "text": "sp",
+              "paddings": {
+                "left": 20,
+                "top": 5,
+                "right": 15,
+                "bottom": 10,
+                "unit": "sp"
+              },
+              "margins": {
+                "left": 20,
+                "top": 5,
+                "right": 15,
+                "bottom": 10,
+                "unit": "sp"
+              },
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "height": {
+                "type": "fixed",
+                "value": 150
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFFE000",
+                  "width": 4,
+                  "unit": "sp"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {}
+}

@@ -1,0 +1,90 @@
+{
+  "description": "Text with font variations",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "templates": {
+    "text_template": {
+      "type": "text",
+      "font_size": 24,
+      "font_family": "roboto_flex",
+      "paddings": {
+        "left": 8,
+        "top": 4,
+        "right": 8,
+        "bottom": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "top": 4,
+            "bottom": 4
+          },
+          "items": [
+            {
+              "type": "text_template",
+              "text": "Roboto Flex as is"
+            },
+            {
+              "type": "text_template",
+              "font_weight": "medium",
+              "text": "Roboto Flex with weight 'medium'"
+            },
+            {
+              "type": "text_template",
+              "font_weight_value": 620,
+              "text": "Roboto Flex with weight value 620"
+            },
+            {
+              "type": "text_template",
+              "font_variation_settings": {
+                "wght": 620
+              },
+              "text": "Roboto Flex with weight variation 620"
+            },
+            {
+              "type": "text_template",
+              "font_variation_settings": {
+                "slnt": -7
+              },
+              "text": "Roboto Flex with slant -7"
+            },
+            {
+              "type": "text_template",
+              "font_weight": "medium",
+              "font_variation_settings": {
+                "slnt": -7
+              },
+              "text": "Roboto Flex with weight 'medium' and slant -7"
+            },
+            {
+              "type": "text_template",
+              "font_weight_value": 620,
+              "font_variation_settings": {
+                "slnt": -7
+              },
+              "text": "Roboto Flex with weight value 620 and slant -7"
+            },
+            {
+              "type": "text_template",
+              "font_variation_settings": {
+                "wght": 620,
+                "slnt": -7
+              },
+              "text": "Roboto Flex with weight variation 620 and slant -7"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

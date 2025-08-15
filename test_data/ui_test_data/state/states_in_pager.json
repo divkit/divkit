@@ -1,0 +1,120 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 24,
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "text_alignment_horizontal": "center"
+    },
+    "item": {
+      "variables": [
+        {
+          "name": "state_var",
+          "type": "string",
+          "$value": "start_state"
+        }
+      ],
+      "type": "state",
+      "state_id_variable": "state_var",
+      "states": [
+        {
+          "state_id": "enabled",
+          "div": {
+            "type": "title",
+            "text": "@{it.getString('text_enabled')}",
+            "action": {
+              "log_id": "disable",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "state_var",
+                "value": {
+                  "type": "string",
+                  "value": "disabled"
+                }
+              }
+            }
+          }
+        },
+        {
+          "state_id": "disabled",
+          "div": {
+            "type": "title",
+            "text": "@{it.getString('text_disabled')}",
+            "action": {
+              "log_id": "enable",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "state_var",
+                "value": {
+                  "type": "string",
+                  "value": "enabled"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "id": "root1",
+            "text_enabled": "State 1 is enabled",
+            "text_disabled": "State 1 is disabled",
+            "state": "enabled"
+          },
+          {
+            "id": "root2",
+            "text_enabled": "State 2 is enabled",
+            "text_disabled": "State 2 is disabled",
+            "state": "disabled"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 50
+            }
+          },
+          "item_builder": {
+            "data": "@{data}",
+            "prototypes": [
+              {
+                "id": "@{it.getString('id')}",
+                "selector": "@{it.getString('state') == 'enabled'}",
+                "div": {
+                  "type": "item",
+                  "start_state": "enabled"
+                }
+              },
+              {
+                "id": "@{it.getString('id')}",
+                "selector": "@{it.getString('state') != 'enabled'}",
+                "div": {
+                  "type": "item",
+                  "start_state": "disabled"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

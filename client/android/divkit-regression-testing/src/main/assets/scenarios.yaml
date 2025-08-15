@@ -1,0 +1,974 @@
+title: Simple tap
+tags: [ 'DivAction' ]
+steps:
+  - Tap on text "Click on me"
+expect:
+  - Text "Click on me" changed to "You clicked on me"
+  - Second click chande text to "Click on me"
+paths:
+  - 'regression_test_data/simple_tap.json'
+---
+title: Long tap
+tags: [ 'DivAction' ]
+steps:
+  - Long tap on button "Long tap menu"
+expect:
+  - Menu with butons "show" and "hide" is appearing
+  - longtap_actions logged
+paths:
+  - 'regression_test_data/long_tap.json'
+---
+title: Tab swipe
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Tab changes depending on the swipe direction
+  - Tabs changes is logged
+paths:
+  - 'regression_test_data/tabs_max_height.json'
+---
+title: Tab swipe restricted
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Tab not changed
+  - Tab changes on header click
+paths:
+  - 'regression_test_data/tabs_disabled_switch_tabs_by_swipe.json'
+---
+title: Gallery scroll
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes depending on scroll direction
+  - Gallery scroll is logged
+paths:
+  - 'regression_test_data/gallery/gallery_swipe.json'
+---
+title: Paged gallery scroll
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes page by page
+  - Gallery scroll is logged
+paths:
+  - 'regression_test_data/gallery/gallery_swipe_paged.json'
+---
+title: Gallery columns
+tags: [ 'DivGallery' ]
+expect:
+  - Gallery has 2 columns. First column has 2 elements, second - 4 elements.
+paths:
+  - 'regression_test_data/gallery/gallery-columns.json'
+---
+title: Gallery item actions
+tags: [ 'DivGallery']
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+  - Click on buttons
+expect:
+  - Content is changes depending on scroll direction or clicked buttons
+  - Gallery scroll is logged
+paths:
+  - 'regression_test_data/gallery/gallery-item-actions.json'
+---
+title: Gallery default item states
+tags: [ 'DivGallery']
+steps:
+  - Click on button "Expand" in gallery item
+  - Click on button "Collpse" in expanded items
+expect:
+  - Only clicked gallery item change state
+paths:
+  - 'regression_test_data/gallery/gallery_default_item_states.json'
+---
+title: Gallery paging default item states
+tags: [ 'DivGallery']
+steps:
+  - Click on button "Expand" in gallery item
+  - Click on button "Collpse" in expanded items
+  - Scroll gallery
+expect:
+  - Only clicked gallery item change state
+  - Gallery scrolls page by page
+paths:
+  - 'regression_test_data/gallery/gallery_paging_default_item_states.json'
+---
+title: Zoomable gallery
+tags: [ 'DivGallery']
+expect:
+  - Image in gallery can be zoomed
+paths:
+  - 'regression_test_data/gallery/zoomable-gallery.json'
+---
+title: Gallery bottom multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'regression_test_data/gallery/gallery-bottom-multiline.json'
+---
+title: Gallery bottom multiline selected actions
+tags: [ 'DivGallery' ]
+paths:
+  - 'regression_test_data/gallery/gallery-bottom-multiline-selected-action.json'
+---
+title: Gallery bottom singleline
+tags: [ 'DivGallery' ]
+paths:
+  - 'regression_test_data/gallery/gallery-bottom-singleline.json'
+---
+title: Gallery top multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'regression_test_data/gallery/gallery-top-multiline.json'
+---
+title: Pager scroll
+tags: [ 'DivPager', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes page by page
+  - Page change is logged
+paths:
+  - 'regression_test_data/pager/pager.json'
+---
+title: Pager item actions
+tags: [ 'DivPager']
+paths:
+  - 'regression_test_data/pager/pager-item-actions.json'
+---
+title: Pager selected actions
+tags: [ 'DivPager']
+paths:
+  - 'regression_test_data/pager/pager-selected-actions.json'
+---
+title: Pager default item states
+tags: [ 'DivPager']
+paths:
+  - 'regression_test_data/pager/pager_default_item_states.json'
+---
+title: Action animations
+tags: [ 'DivAnimation' ]
+steps:
+  - Click on each button with animations
+expect:
+  - The animation written on the button appears
+  - Animation finished on long click finish
+paths:
+  - 'regression_test_data/action_animation/interpolator_linear/scale.json'
+  - 'regression_test_data/action_animation/interpolator_linear/fade.json'
+  - 'regression_test_data/action_animation/interpolator_linear/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/set.json'
+  - 'regression_test_data/action_animation/interpolator_spring/scale.json'
+  - 'regression_test_data/action_animation/interpolator_spring/fade.json'
+  - 'regression_test_data/action_animation/interpolator_spring/set.json'
+  - 'regression_test_data/action_animation/no_animation.json'
+---
+title: Recomendation slider
+tags: [ 'Slider' ]
+priority: blocker
+steps:
+  - Interact with the slider
+expect:
+  - Pointer position is changes and change button text
+paths:
+  - 'regression_test_data/slider_nps.json'
+---
+title: Slider with two pointers
+tags: [ 'Slider' ]
+priority: critical
+steps:
+  - Interact with the slider
+expect:
+  - Pointer position is changes and change button text
+paths:
+  - 'regression_test_data/double_slider.json'
+---
+title: Slider preferences
+tags: [ 'Slider' ]
+steps:
+  - Interact with slider
+expect:
+  - Slider poiner shange it's position
+paths:
+  - 'regression_test_data/slider_presets.json'
+---
+title: Root state switching
+paths:
+  - 'regression_test_data/root_state_switching.json'
+steps:
+  - Press "CHANGE STATE (TEMPORARY)"
+  - Restart the app
+  - Turn back to this scenario
+  - Press "CHANGE STATE"
+  - Restart the app
+  - Turn back to this scenario
+expect:
+  - button "CHANGE STATE (TEMPORARY)" change state and save it between app restart
+  - button "CHANGE STATE" change state, but state resets after app restart
+---
+title: Focus
+steps:
+  - Switch focus
+expect:
+  - Elements focus changes in order to switch
+paths:
+  - 'regression_test_data/focus.json'
+---
+title: Focus events
+steps:
+  - Switch focus to handler
+  - Switch focus to idle
+expect:
+  - Start state of the right evement is "init"
+  - When handler gets focus, state of the right element is "focus"
+  - When handler lost focus, state of the right element is "blur"
+paths:
+  - 'regression_test_data/focus_actions.json'
+---
+title: "Accessibility descriptions"
+tags: [ 'Accessibility' ]
+steps:
+  - Set russian language on device
+  - Turn on TalkBack and set order of elements description to "Состояние,название,тип"
+  - Set focus on "Элемент 1"
+  - Listen to TalkBack
+  - Double tap on screen
+  - Set focus on "Элемент 2"
+  - Listen to TalkBack
+  - Set focus on "Элемент 3"
+expect:
+  - On "Элемент 1" TalkBack should say "Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать"
+  - After double tap TalkBack should say "Сейчас в состоянии 1"
+  - On "Элемент 2" TalkBack should say "Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло"
+  - On "Элемент 3" TalkBack should say "Элемент 3; Кнопка"
+paths:
+  - 'regression_test_data/accessibility/descriptions.json'
+---
+title: "Accessibility types"
+tags: [ 'Accessibility' ]
+steps:
+  - Set russian language on device
+  - Turn on TalkBack and set order of elements description to "Состояние,название,тип"
+  - Focus on top button
+  - Move focuse rom one button to another
+expect:
+  - On each elements will be text "Тип - X", you should hear "Тип - X; X"; For example "Тип - кнопка; кнопка"
+  - For "Тип - текст" and "Без типа" you will hear "Тип - текст" and "Без типа".
+paths:
+  - 'regression_test_data/accessibility/types.json'
+---
+title: "Default Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - When focusing on 1 item you'll hear "Это Элемент 1"
+  - When focusing on group of 2 and 3 items you will hear "Это Элемент 2, Это Элемент 3"
+  - Can't focus 4 element
+paths:
+  - 'regression_test_data/accessibility/mode/default.json'
+---
+title: "Merge Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - Focusing on all card
+  - You will hear "Это Элемент 1, Это Элемент 2, Это Элемент 3"
+  - On activation menu with text "Элемент 1, Элемент 2, Элемент 3" appears
+  - On focus TalkBack should not say "Коснитесь дважды и удерживайте"
+paths:
+  - 'regression_test_data/accessibility/mode/merge.json'
+---
+title: "Exclude Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - Focuse on 5-th item
+  - Услышим "Это Элемент 5"
+  - При выключенном TalkBack на каждой кнопке при тапе должно появляться меню с названием этой кнопки
+paths:
+  - 'regression_test_data/accessibility/mode/exclude.json'
+---
+title: Actions on tap
+steps:
+  - Tap on top button
+  - Double tap on top button
+  - Long click on top button
+  - Tap on middle button
+  - Double tap on middle button
+  - Long click on middle button
+  - Tap on image on he bottom button
+  - Long click between buttons
+expect:
+  - Menu with text "Single tap" appears with delay
+  - Menu with text "Double tap" appears
+  - Menu with text "Long tap" appears
+  - Menu with text "Single tap" appears without delay
+  - Menu with text "Single tap" appears and than desappears
+  - Menu with text "Long tap on container" appears for container
+  - Menu with text "Single tap on child" appears
+  - Menu with text "Long tap on container" appears for container
+paths:
+  - 'regression_test_data/button_actions.json'
+---
+title: Longtap actions
+paths:
+  - 'regression_test_data/pinch-to-zoom-longtap-actions.json'
+---
+title: Div errors visualization
+priority: critical
+expect:
+  - The card displays a red button with the number 1
+  - Click on red button shows error INVALID_VALUE
+  - Click on the cross hide screen with error details
+  - Click on save button copy json with errors
+  - Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'
+paths:
+  - 'regression_test_data/error_visual_monitor.json'
+---
+title: Synchronizing multiple change bounds animations. Fade full
+tags: [ 'Animations' ]
+steps:
+ - Press button with text "GO"
+ - After image appears press "GO BACK"
+expect:
+ - Image should appears and desapears changing the transparency
+paths:
+  - 'regression_test_data/animations/transition/fade_full_src.json'
+---
+title: Synchronizing multiple change bounds animations. Fade part
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the transparency starting or ending with transparency = 0.5
+paths:
+  - 'regression_test_data/animations/transition/fade_part_src.json'
+---
+title: Synchronizing multiple change bounds animations. Scale full
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the scale
+paths:
+  - 'regression_test_data/animations/transition/scale_full_src.json'
+---
+title: Synchronizing multiple change bounds animations. Scale part
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the scale starting or ending with scale = 0.75
+paths:
+  - 'regression_test_data/animations/transition/scale_part_src.json'
+---
+title: Synchronizing multiple change bounds animations. Slide full
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears sliding from under the top edge of the card
+paths:
+  - 'regression_test_data/animations/transition/slide_full_src.json'
+---
+title: Synchronizing multiple change bounds animations. Slide part
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears sliding from under the top edge of the card, but not reaching it
+paths:
+  - 'regression_test_data/animations/transition/slide_part_src.json'
+---
+title: Synchronizing multiple change bounds animations. Set
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing trancparency and sliding from center to edge
+paths:
+  - 'regression_test_data/animations/transition/set_src.json'
+---
+title: Synchronizing multiple change bounds animations. Diff ids
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears from diffrent edges of card
+paths:
+  - 'regression_test_data/animations/transition/change_bounds_diff_ids_src.json'
+---
+title: Synchronizing multiple change bounds animations. Diff sizes
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should change it's size
+paths:
+  - 'regression_test_data/animations/transition/change_bounds_diff_sizes_src.json'
+---
+title: Synchronizing multiple change bounds animations. Diff types
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should change text moving across the screen
+paths:
+  - 'regression_test_data/animations/transition/change_bounds_diff_types_src.json'
+---
+title: Synchronizing multiple change bounds animations. Change bounds same ids
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should move horizontally across the screen
+paths:
+  - 'regression_test_data/animations/transition/change_bounds_same_ids_src.json'
+---
+title: Synchronizing multiple change bounds animations. Article
+tags: [ 'Animations' ]
+steps:
+ - Click on "EXPAND"
+ - Click on "SHOW COMMENTS"
+ - After expanding of elements click on "COLLAPSE"
+expect:
+ - Expanding end collapsing the elements shoud be with animation
+paths:
+  - 'regression_test_data/animations/article.json'
+---
+title: Synchronizing multiple change bounds animations. Article with transitions
+tags: [ 'Animations' ]
+steps:
+ - Click on "EXPAND"
+ - Click on "SHOW COMMENTS"
+ - After expanding of elements click on "COLLAPSE"
+expect:
+ - Expanding end collapsing the elements shoud be with animation
+paths:
+  - 'regression_test_data/animations/article_with_transitions.json'
+---
+title: Synchronizing multiple change bounds animations. Blink
+tags: [ 'Animations' ]
+steps:
+ - Click on "BLINK"
+expect:
+ - Red sircle should appear and disappear
+paths:
+  - 'regression_test_data/animations/blink.json'
+---
+title: Example of tooltip animation
+tags: [ 'Animations' ]
+steps:
+ - A few seconds after the card is shown, a tooltip should appear
+expect:
+ - Toolip hides a few seconds later
+paths:
+  - 'regression_test_data/animations/mute_notification.json'
+---
+title: Scale transition ignore pivot_x/pivot_y
+tags: [ 'Animations' ]
+steps:
+ - Press on "GO"
+expect:
+ - Image should scale from left edge to right one
+paths:
+  - 'regression_test_data/animations/scale_pivot_src.json'
+---
+title: Change bounds transitions ignore start_delay
+tags: [ 'Animations' ]
+steps:
+ - Click on notificattion
+expect:
+ - The text should disappear first, and the background after a short delay
+paths:
+  - 'regression_test_data/animations/mute_notification.json'
+---
+title: State transition any change
+paths:
+  - 'regression_test_data/animations/transition/state_transition_any_change.json'
+---
+title: State transition data change
+paths:
+  - 'regression_test_data/animations/transition/state_transition_data_change.json'
+---
+title: State transition state change
+paths:
+  - 'regression_test_data/animations/transition/state_transition_state_change.json'
+---
+title: Inner state transition any change
+paths:
+  - 'regression_test_data/animations/transition/inner_state_transition_any_change.json'
+---
+title: Inner state transition data change
+paths:
+  - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
+---
+title: Inner state transition data change
+paths:
+  - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
+---
+title: Lottie animation restart repeate_mode. Repeate count = 5
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Spinner animation will continue 5 times and then stop
+ - Press RESET
+expect:
+ - Spinner animation will continue 5 times and then stop
+paths:
+ - 'regression_test_data/animations/lottie/spinner_restart_repeat_mode.json'
+---
+title: Lottie animation revese repeate_mode. Repeate count = 3
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Spinner change spin dirrection 3 times and then stops
+ - Нажать RESET
+expect:
+ - Spinner change spin dirrection 3 times and then stops
+paths:
+ - 'regression_test_data/animations/lottie/spinner_reverse_repeat_mode.json'
+---
+title: Lottie animation restart repeate_mode. Repeate count = -1
+tags: [ 'Animations', 'lottie' ]
+expect:
+  - Infinite spinner animation.
+paths:
+  - 'regression_test_data/animations/lottie/spinner.json'
+---
+title: For the reverse animation of the action, a direct interpolator is used
+tags: [ 'Animations' ]
+paths:
+  - 'regression_test_data/action_animation/button_press_action_animations.json'
+---
+title: Visibility_actions in gallery
+tags: [ 'Visibility_actions' ]
+steps:
+  - Scroll the gallery
+  - Check logs
+expect:
+  - Gallery data was opened
+  - items visibility logged, for example "logViewShown(cardId = ..., id = ...item_changed0)"
+paths:
+  - 'regression_test_data/gallery/gallery_swipe.json'
+---
+title: Visibility_actions in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Scroll the pager
+  - Check logs
+expect:
+  - Pager data was opened
+  - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
+paths:
+  - 'regression_test_data/visibility_actions/pager.json'
+---
+title: Visibility_actions on change page in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Swipe cards
+  - Check logs
+expect:
+  - Pager data is logged
+  - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
+paths:
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
+---
+title: Visibility actions performed and logged in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Swipe cards
+  - Check logs
+expect:
+  - Logged evens
+    logViewShown(cardId = ..., id = content_item_show0)
+    logViewShown(cardId = ..., id = container)
+  - Cards description was changed
+paths:
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
+---
+title: Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Check logs
+expect:
+  - First element logged, example
+    logViewShown(cardId = ..., id = content_item_show:0)
+    logViewShown(cardId = ..., id = goose_shown)
+paths:
+  - 'regression_test_data/visibility_actions/pager.json'
+---
+title: Send select Pager using Div2View.tryLogVisibility
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Check first item visibility logged
+  - Swipe to the next item
+  - Check second item visibility logged
+expect:
+  - First element logged, example
+    Ya:PagerSelectedActionsTracker onPageSelected(0)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 0
+  - Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1)
+    Logcat
+    Ya:PagerSelectedActionsTracker onPageSelected(1)
+    DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 1
+paths:
+  - 'regression_test_data/visibility_actions/pager_selected_actions.json'
+---
+title: Grouped bulkActions logged in "dispatchActions:"
+tags: [ 'Visibility_actions' ]
+steps:
+  - Swipe to change tab
+  - Check logs
+expect:
+  - Tabs changes on swipe
+  - Logged item's visibility, exaple
+    logViewShown(cardId = ..., id = content_item_show)
+    logViewShown(cardId = ..., id = container)
+paths:
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
+---
+title: visibility_actions for default_item
+tags: [ 'Visibility_actions' ]
+steps:
+  - Check logs
+expect:
+  - Card is opened
+  - Card visibility logged, example
+    logViewShown(cardId = ..., id = comments_counter_show:4)
+paths:
+  - 'regression_test_data/visibility_actions/default_item.json'
+---
+title: Nested visibility actions
+tags: [ 'Visibility_actions' ]
+steps:
+  - Click on items
+  - Check logs
+expect:
+  - Card article.json is opened
+  - Elements are expanded
+  - Visibility actions logged, example
+    logViewShown(cardId = ..., id = separator)
+    logViewShown(cardId = ..., id = text)
+    logViewShown(cardId = ..., id = text2)
+    logViewShown(cardId = ..., id = comment_state)
+    logViewShown(cardId = ..., id = comment_01)
+    logViewShown(cardId = ..., id = comment_02)
+    logViewShown(cardId = ..., id = comment_03)
+    logViewShown(cardId = ..., id = comment_04)
+paths:
+  - 'regression_test_data/visibility_actions/article.json'
+---
+title: 'Variables in tabs'
+tags: [ 'DivTabs' ]
+steps:
+  - Check different combinations of tabs properties
+expect:
+  - '"dynamic_height=DYNAMIC" - each tab has height equals content height'
+  - '"dynamic_height=MAX_HEIGHT(for non-first-page)" - from the second tab each tab has height equals max tabs content height'
+  - '"tab.line_height=10" - line spacing of tabs text equals 10'
+  - '"tab.line_height=30" - line spacing of tabs text equals 30'
+  - '"tab.theme=GREEN" - tabs become green'
+  - '"tab.theme=RED" - tabs become red'
+  - '"selected_tab=0" - set first tab'
+  - '"selected_tab=1" - set second tab'
+  - '"selected_tab=6" - set "Page index 6" tab'
+  - '"has_separator=0" - turn off horizontal delimiter'
+  - '"has_separator=1" - turn on horizontal delimiter'
+  - '"separator.color=RED" - set red delimiter color'
+  - '"separator.color=BLUE" - set blue delimiter color'
+  - '"separator_paddings.top=0" - padding of horizontal delimiter: top - 0'
+  - '"separator_paddings.top=50" - padding of horizontal delimiter: top - 50'
+  - '"separator_paddings.bottom=0" - padding of horizontal delimiter: bottom - 0'
+  - '"separator_paddings.bottom=50" - padding of horizontal delimiter: bottom - 50'
+  - '"separator_paddings.left=0" - padding of horizontal delimiter: left - 0'
+  - '"separator_paddings.left=50" - padding of horizontal delimiter: left - 50'
+  - '"separator_paddings.right=0" - padding of horizontal delimiter: right - 0'
+  - '"separator_paddings.right=50" - padding of horizontal delimiter: right - 50'
+  - '"title_paddings.top=0" - padding of tabs container: top - 0'
+  - '"title_paddings.top=50" - padding of tabs container: top - 50'
+  - '"title_paddings.bottom=0" - padding of tabs container: bottom - 0'
+  - '"title_paddings.bottom=50" - padding of tabs container: bottom - 50'
+  - '"title_paddings.left=0" - padding of tabs container: left - 0'
+  - '"title_paddings.left=50" - padding of tabs container: left - 50'
+  - '"title_paddings.right=0" - padding of tabs container: right - 0'
+  - '"title_paddings.right=50" - padding of tabs container: right - 50'
+paths:
+  - 'regression_test_data/variables/div_tabs.json'
+---
+title: Visibility in div-base
+steps:
+  - Check different combinations of visibility properties
+expect:
+  - On click on test button text field set correct visibility.
+  - Showing text field is logged.
+paths:
+  - 'regression_test_data/set_visibility.json'
+---
+title: Showing animation on image loaded
+tags: [ 'Animations' ]
+expect:
+  - Image appeares with described animation
+paths:
+  - 'regression_test_data/action_animation/image_loading_animation.json'
+---
+title: Variables in DivIndicator
+steps:
+  - Click on buttons, check the indicator appearance and animation
+  - Click on last button to reset
+  - Scroll pager to the center, click on buttons, check the indicator
+  - Click on last button to reset
+  - Scroll pager to the end, click on buttons, check the indicator
+expect:
+  - Indicator appearence changes and it changes according to the clicked buttin description
+paths:
+  - 'regression_test_data/variables/div_indicator.json'
+---
+title: Variables in DivImage
+tags: [ 'DivImage' ]
+steps:
+  - Click on blue label "tint color"
+  - Click on label "img#1"
+  - Click on red label "tint color"
+  - Click on label "img#2"
+  - Click on blue label "tint color"
+expect:
+  - Initially, there should be a red parallelogram on a green background
+  - The red parallelogram has changed color to blue
+  - The blue parallelogram has changed to the blue camera icon
+  - The blue camera icon has changed color to red
+  - The red camera icon has become a red stripe pattern
+  - The red stripe pattern has changed color to blue
+paths:
+  - 'regression_test_data/variables/div_image.json'
+---
+title: Variables triggers
+tags: [ 'Triggers' ]
+steps:
+  - When only left button clicked, text changes to "left switched"
+  - When only right button clicked, text changes to "right switched"
+  - When both button clicked, text changes to "both switched"
+  - When both buttons is inactive text state changes to initial
+expect:
+  - Text changes according to the button description
+paths:
+  - 'regression_test_data/variables/div_variable_triggers.json'
+---
+title: Variable triggers (modes)
+tags: [ 'Triggers' ]
+steps:
+  - '"Thumb value" show current thumb position'
+  - '"First selected positive position" show first selected positive thumb value'
+  - '"Last selected positive position" show last selected positive value or move with thumb, if value > 0'
+expect:
+  - The layout corresponds to switching buttons
+paths:
+  - 'regression_test_data/variables/div_variable_trigger_modes.json'
+---
+title: Variable triggers (closures)
+tags: [ 'DivInput', 'DivSlider', 'Triggers', 'Functions' ]
+expect:
+  - Slider and input values should be synchronized
+  - When entering an incorrect value in text input - error shows
+paths:
+  - 'regression_test_data/variables/div_variable_trigger_loops.json'
+---
+title: Sequential animations
+steps:
+  - Click on image
+expect:
+  - Heart will increase by 2 times in 2 seconds, then will increase by 4 times in 2 seconds
+paths:
+  - 'regression_test_data/animations/transition/transition_set.json'
+---
+title: 'Animations of switching tabs headers'
+tags: [ 'DivTabs', 'Animations' ]
+steps:
+  - Switch items on each tab by clicking on the tab headers
+  - Slowly swipe each tab
+expect:
+  - Look at the headers animation
+  - 1 tab has slide animation
+  - 2 tab has fade animation
+  - 3 tab has no animation
+paths:
+  - 'regression_test_data/animations/tab_titles_animations.json'
+---
+title: Text copying
+tags: [ 'DivText' ]
+steps:
+  - Double tap or long click on first text
+  - Double tap or long click on second text
+expect:
+  - First text has a system highlighting, you can copy it. Second text has no highlighting.
+paths:
+  - 'regression_test_data/selectable_text.json'
+---
+title: DivText
+tags: [ 'DivText' ]
+paths:
+  - 'regression_test_data/div-text.json'
+---
+title: 'Nested change bounds transitions'
+steps:
+  - Click "PRESS HERE"
+  - Click "PRESS AGAIN"
+expect:
+  - After first click image appers with animation, the container extendes with animation.
+  - After second click extendes buton, text changes, container extendes again.
+paths:
+  - 'regression_test_data/action_animation/nested_change_bounds.json'
+---
+title: Text input
+tags: [ 'DivInput' ]
+steps:
+  - Tap on input field
+  - Change text
+expect:
+  - Text under the input should be equal to text in input and change on input changes.
+paths:
+  - 'regression_test_data/input.json'
+---
+title: Text input (single line)
+tags: [ 'DivInput' ]
+steps:
+  - Tap on input field
+  - Change text
+expect:
+  - Text under the input should be equal to text in input and change on input changes.
+  - Max lines = 1. Line break is unavailable.
+paths:
+  - 'regression_test_data/single_line_input.json'
+---
+title: Manage VideoCustom
+tags: [ 'VideoCustom' ]
+steps:
+  - Tap on 'play', 'pause', 'reset'
+expect:
+  - On tap on 'play' video continue
+  - On tap on 'pause' video pause
+  - On tap on 'reset' video starts from the beginning
+  - If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused
+  - If video wasn't paused, on tap on 'reset' the video starts playing from beginnging
+paths:
+  - 'regression_test_data/video/video_controls.json'
+---
+title: 'State transition trigger'
+steps:
+  - Press "To liked"
+expect:
+  - First - there should be animation, there are only old triggers
+  - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
+  - Third - there should be animation, old and new are allowed by default
+paths:
+  - 'regression_test_data/animations/transition/transition_triggers_state_change.json'
+---
+title: 'Data transition trigger'
+steps:
+  - Press "Change data"
+expect:
+  - First - there should be animation, there are only old triggers
+  - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
+  - Third - there should be an animation, the old "none" is rubbed by the new "state_change"
+paths:
+  - 'regression_test_data/animations/transition/transition_triggers_data_change_src.json'
+---
+title: 'Actions logging'
+steps:
+  - Click on Test button
+  - Double click Test button
+  - Long click on Test button
+  - Check logs
+expect:
+  - Click logged 2 times
+  - Double click logged 2 times
+  - Long click logged 2 times
+paths:
+  - 'regression_test_data/logging.json'
+
+---
+title: 'Shortcuts'
+paths:
+  - 'regression_test_data/shortcuts.json'
+---
+title: 'Auto ellipsize'
+paths:
+  - 'regression_test_data/auto-ellipsize.json'
+---
+title: 'Expand cutout 1'
+paths:
+  - 'regression_test_data/expand-cutout-1.json'
+---
+title: 'Expand cutout 2'
+paths:
+  - 'regression_test_data/expand-cutout-2.json'
+---
+title: 'Lottie animations'
+paths:
+  - 'regression_test_data/lottie_animations.json'
+---
+title: 'Lottie cycled animations'
+expect:
+  - Red circle appears with animation, then blink
+paths:
+  - 'regression_test_data/lottie_cycled_animations.json'
+---
+title: 'States default state'
+paths:
+  - 'regression_test_data/states_default_state.json'
+---
+title: 'Tabs item actions'
+paths:
+  - 'regression_test_data/tabs-item-actions.json'
+---
+title: 'Grid layout'
+paths:
+  - 'regression_test_data/grid_layout.json'
+---
+title: 'Grid with weights'
+paths:
+  - 'regression_test_data/grid-with-weights.json'
+---
+title: 'Custom container'
+paths:
+  - 'regression_test_data/custom-container.json'
+---
+title: 'Custom card'
+paths:
+  - 'regression_test_data/custom-card.json'

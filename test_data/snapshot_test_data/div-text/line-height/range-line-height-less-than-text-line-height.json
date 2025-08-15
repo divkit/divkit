@@ -1,0 +1,62 @@
+{
+  "description": "Range line height less than text line height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "font_size": 24,
+      "line_height": 28
+    }
+  },
+  "card": {
+    "log_id": "range_line_height",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_block",
+              "background_color": "#F8F8F8",
+              "text": "Short text with small font range",
+              "ranges": [
+                {
+                  "start": 16,
+                  "end": 32,
+                  "font_size": 12,
+                  "line_height": 14
+                }
+              ]
+            },
+            {
+              "type": "text_block",
+              "background_color": "#E0E0E0",
+              "text": "Long text with small\nfont range\nin the middle",
+              "ranges": [
+                {
+                  "start": 15,
+                  "end": 32,
+                  "font_size": 12,
+                  "line_height": 14
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

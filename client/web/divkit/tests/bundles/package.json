@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "name": "test-bundles",
+  "dependencies": {
+    "@divkitframework/divkit": "file:../.."
+  }
+}

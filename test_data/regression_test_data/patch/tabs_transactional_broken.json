@@ -1,0 +1,98 @@
+{
+  "templates": {
+    "alert_card": {
+      "type": "container",
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 76
+      },
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "background": [
+        {
+          "color": "#FFFFFF",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 6,
+        "stroke": {
+          "color": "#E5E5E5"
+        }
+      },
+      "orientation": "horizontal",
+      "items": [
+        {
+          "type": "text",
+          "max_lines": 3,
+          "font_size": 14,
+          "line_height": 18,
+          "margins": {
+            "top": 9,
+            "left": 8
+          },
+          "font_weight": "medium",
+          "$text": "alert_text"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "tabs",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "visibility_action": {
+            "log_id": "visibility",
+            "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftabs-patch-transactional-broken.json"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12,
+            "bottom": 12
+          },
+          "items": [
+            {
+              "title": "Tab1",
+              "div": {
+                "id": "tab1",
+                "type": "alert_card",
+                "alert_text": "1 item"
+              }
+            },
+            {
+              "title": "Tab2",
+              "div": {
+                "id": "tab2",
+                "type": "alert_card",
+                "alert_text": "1 item"
+              }
+            },
+            {
+              "title": "Tab3",
+              "div": {
+                "id": "tab3",
+                "type": "alert_card",
+                "alert_text": "1 item"
+              }
+            },
+            {
+              "title": "Tab4",
+              "div": {
+                "type": "alert_card",
+                "alert_text": "1 item"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

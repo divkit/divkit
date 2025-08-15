@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'screenshot-test-plugin'

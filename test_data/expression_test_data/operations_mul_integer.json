@@ -1,0 +1,145 @@
+{
+  "cases": [
+    {
+      "expression": "@{3 * 2}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(3000000000 * 2000000000)}",
+      "expected": {
+        "type": "string",
+        "value": "6000000000000000000"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{300000000000000 * 2000000000}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [300000000000000 * 2000000000]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{3 * 2 * 4}",
+      "expected": {
+        "type": "integer",
+        "value": 24
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1 * -1}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{-1 * -1}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{1 * 0}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a * b}",
+      "expected": {
+        "type": "integer",
+        "value": -70
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -10,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{a * -b}",
+      "expected": {
+        "type": "integer",
+        "value": 50
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 25,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

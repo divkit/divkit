@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../dist/client.css">
+    <style>
+        @font-face {
+            font-family: 'YS Text';
+            font-weight: 300;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(https://yastatic.net/s3/home/fonts/ys/1/text-light.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text';
+            font-weight: 400;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(https://yastatic.net/s3/home/fonts/ys/1/text-regular.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text';
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(https://yastatic.net/s3/home/fonts/ys/1/text-medium.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text';
+            font-weight: 700;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(https://yastatic.net/s3/home/fonts/ys/1/text-bold.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 300;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-light.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 400;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-regular.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-medium.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 700;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-bold.woff2) format('woff2');
+        }
+
+        body {
+            font-family: 'YS Text', 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-feature-settings: 'liga', 'kern';
+            -moz-font-feature-settings: 'liga', 'kern';
+            font-feature-settings: 'liga', 'kern';
+
+            margin: 0;
+
+            background: repeat 0 0;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQY02NkYGAwZkAFZ5E5TAwEAOUKGLGIGdPZDQAWUwFC/UpibwAAAABJRU5ErkJggg==);
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #root {
+            display: flex;
+            flex-direction: column;
+            /* So it would take at least some place */
+            min-height: 100%;
+            height: max-content;
+        }
+
+        #root > div {
+            width: 100%;
+            flex: 1 0 auto;
+        }
+
+        .log-item {
+            font-family: monospace;
+            margin: 0;
+        }
+    </style>
+    <title>DivKit</title>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="../../../dist/browser/client-devtool.js"></script>
+
+<script>
+    (function () {
+        const params = new URLSearchParams(location.search);
+        const json = params.get('json');
+        const crossplatformJson = params.get('crossplatform_json');
+        const resultType = params.get('result_type');
+
+        function getJson(json) {
+            return fetch(json)
+                .then(res => res.json());
+        }
+
+        function getCrossplatformJson(crossplatformJson) {
+            const templatesJson = crossplatformJson.replace(/\/[^\/]+\.json/, '/templates.json');
+
+            return Promise.all([
+                getJson(crossplatformJson),
+                getJson(templatesJson).catch(() => {
+                    return {};
+                })
+            ]).then(([card, templates]) => {
+                if (card.div_data) {
+                    return {
+                        card: card.div_data.card || card.div_data,
+                        templates: card.div_data.templates || {}
+                    };
+                }
+
+                if (!card.log_id && !card.card && !card.templates) {
+                    return {
+                        card: {
+                            log_id: 'test',
+                            states: [{
+                                state_id: 0,
+                                div: card
+                            }]
+                        },
+                        templates: {}
+                    };
+                }
+
+                return {
+                    configuration: card.configuration,
+                    card: card.card || card,
+                    templates: card.templates || templates || {}
+                };
+            });
+        }
+
+        const fn = json ?
+            () => getJson(json) :
+            () => getCrossplatformJson(crossplatformJson);
+
+        const origScroll = Element.prototype.scroll;
+        Element.prototype.scroll = function (options) {
+            if (typeof options === 'object') {
+                options.behavior = 'instant';
+            }
+            origScroll.call(this, options);
+        };
+
+        window.divkitLogs = [];
+
+        Promise.all([
+            document.fonts.load('400 12px "YS Text"', 'test'),
+            document.fonts.load('500 12px "YS Text"', 'test'),
+            document.fonts.load('700 12px "YS Text"', 'test')
+        ])
+            .then(() => fn())
+            .then(json => {
+                const root = document.querySelector('#root');
+
+                let globalVariablesController;
+                if (resultType) {
+                    globalVariablesController = Ya.DivKit.createGlobalVariablesController();
+
+                    let value = '';
+                    if (resultType === 'integer' || resultType === 'number') {
+                        value = 0;
+                    } else if (resultType === 'boolean') {
+                        value = false;
+                    } else if (resultType === 'url') {
+                        value = 'empty://';
+                    } else if (resultType === 'color') {
+                        value = '#000';
+                    } else if (resultType === 'dict') {
+                        value = {};
+                    } else if (resultType === 'array') {
+                        value = [];
+                    }
+
+                    window.result = Ya.DivKit.createVariable('result', resultType, value);
+                    globalVariablesController.setVariable(window.result);
+                }
+
+                window.divkitRoot = Ya.DivKit.render({
+                    id: 'test',
+                    target: root,
+                    json,
+                    platform: 'touch',
+                    direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
+                    globalVariablesController,
+                    extensions: new Map([
+                        ['size_provider', Ya.DivKit.SizeProvider],
+                    ]),
+                    typefaceProvider(fontFamily) {
+                        if (fontFamily === 'condensed') {
+                            return 'YS Text Condenced';
+                        }
+                        return '';
+                    },
+                    onStat(arg) {
+                        window.divkitLogs.push(arg);
+                    },
+                    onError(event) {
+                        if (event && event.error && event.error.level === 'warn') {
+                            return;
+                        }
+
+                        const elem = document.createElement('p');
+                        elem.className = 'log-item';
+                        elem.textContent = String(event && event.error || '<unknown>');
+                        root.appendChild(elem);
+
+                        window.errors = window.errors || [];
+                        window.errors.push(event.error);
+                    },
+                    onComponent(details) {
+                        if (details.type === 'mount' && details.json.id) {
+                            details.node.setAttribute('data-test-id', details.json.id);
+                        }
+                    }
+                });
+
+            /*const checkNode = (node) => {
+                const isAllText = Array.from(node.childNodes || []).every(it => it.nodeType === 3);
+
+                if (!isAllText) {
+                    (node.childNodes || []).forEach(item => {
+                        if (item.nodeType === 3) {
+                            if (item.nodeValue) {
+                                throw new Error('Multiline html!');
+                            }
+                        } else {
+                            checkNode(item);
+                        }
+                    });
+                }
+            };
+
+            checkNode(root);*/
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/close" />
+
+        <TextView
+            android:id="@+id/scenario_label"
+            style="@style/ScenarioText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:text="@string/scenario_label"
+            app:layout_constraintBottom_toBottomOf="@id/toggle_scenario_button"
+            app:layout_constraintEnd_toStartOf="@+id/toggle_scenario_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/close_button" />
+
+        <Button
+            android:id="@+id/toggle_scenario_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/hide_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/close_button" />
+
+        <TextView
+            android:id="@+id/scenario_steps_label"
+            style="@style/ScenarioText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:text="@string/scenario_steps"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scenario_label" />
+
+        <TextView
+            android:id="@+id/scenario_steps"
+            style="@style/ScenarioText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scenario_steps_label" />
+
+        <TextView
+            android:id="@+id/scenario_expectations_label"
+            style="@style/ScenarioText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/scenario_expectations"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scenario_steps" />
+
+        <TextView
+            android:id="@+id/scenario_expectations"
+            style="@style/ScenarioText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scenario_expectations_label" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/scenario_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="scenario_label,toggle_scenario_button,scenario_steps_label,scenario_steps,scenario_expectations_label,scenario_expectations"
+            tools:layout_editor_absoluteY="747dp" />
+
+        <TextView
+            android:id="@+id/logging_label"
+            style="@style/ScenarioText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:text="@string/logging"
+            app:layout_constraintBottom_toBottomOf="@+id/toggle_logging_button"
+            app:layout_constraintEnd_toStartOf="@+id/toggle_logging_button"
+            app:layout_constraintTop_toBottomOf="@id/scenario_barrier" />
+
+        <Button
+            android:id="@+id/toggle_logging_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/hide_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scenario_barrier" />
+
+        <Button
+            android:id="@+id/clear_logging_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/clear"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@id/toggle_logging_button"
+            app:layout_constraintTop_toBottomOf="@id/scenario_barrier"
+            tools:visibility="visible" />
+
+        <com.yandex.divkit.regression.LogView
+            android:id="@+id/logging"
+            style="@style/ScenarioText"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:gravity="bottom"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/toggle_logging_button"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/logging_barrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="logging_label,toggle_logging_button,logging"
+            tools:layout_editor_absoluteY="731dp" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/scenario_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="scenario_steps_label,scenario_steps,scenario_expectations_label,scenario_expectations"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

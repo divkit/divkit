@@ -1,0 +1,58 @@
+{
+  "definitions": {
+    "resolution": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "resolution"
+          ]
+        },
+        "width": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_video_source_resolution_width"
+        },
+        "height": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_video_source_resolution_height"
+        }
+      },
+      "required": [
+        "type",
+        "width",
+        "height"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "video_source"
+      ]
+    },
+    "url": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_video_source_url"
+    },
+    "resolution": {
+      "$ref": "#/definitions/resolution",
+      "$description": "translations.json#/div_video_source_resolution"
+    },
+    "mime_type": {
+      "type": "string",
+      "$description": "translations.json#/div_video_source_mime_type"
+    },
+    "bitrate": {
+      "type": "integer",
+      "$description": "translations.json#/div_video_source_bitrate"
+    }
+  },
+  "required": [
+    "type",
+    "url",
+    "mime_type"
+  ]
+}

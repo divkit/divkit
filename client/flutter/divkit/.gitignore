@@ -1,0 +1,124 @@
+# This is a complete gitignore for Flutter client.
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.packages
+build/
+.fvm
+.flutter-plugins-dependencies
+.flutter-plugins
+/test_data
+
+## Example
+# Flutter/Dart/Pub related
+/example/**/doc/api/
+/example/**/ios/Flutter/.last_build_id
+/example/.dart_tool/
+/example/.flutter-plugins
+/example/.flutter-plugins-dependencies
+/example/.packages
+/example/.pub-cache/
+/example/.pub/
+/example/build/
+/example/assets/samples
+/example/assets/regression
+/example/assets/perf
+
+# Symbolication related
+/example/app.*.symbols
+
+# Obfuscation related
+/example/app.*.map.json
+
+# Android Studio will place build artifacts here
+/example/android/app/debug
+/example/android/app/profile
+/example/android/app/release
+
+### Android
+example/android/gradle-wrapper.jar
+example/android/.gradle
+example/android/captures/
+example/android/gradlew
+example/android/gradlew.bat
+example/android/local.properties
+example/android/GeneratedPluginRegistrant.java
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
+example/android/key.properties
+example/android/**/*.keystore
+example/android/**/*.jks
+
+### IOS
+example/ios/**/dgph
+example/ios/*.mode1v3
+example/ios/*.mode2v3
+example/ios/*.moved-aside
+example/ios/*.pbxuser
+example/ios/*.perspectivev3
+example/ios/**/*sync/
+example/ios/.sconsign.dblite
+example/ios/.tags*
+example/ios/**/.vagrant/
+example/ios/**/DerivedData/
+example/ios/Icon?
+example/ios/**/Pods/
+example/ios/**/.symlinks/
+example/ios/profile
+example/ios/xcuserdata
+example/ios/**/.generated/
+example/ios/Flutter/App.framework
+example/ios/Flutter/Flutter.framework
+example/ios/Flutter/Flutter.podspec
+example/ios/Flutter/Generated.xcconfig
+example/ios/Flutter/ephemeral/
+example/ios/Flutter/app.flx
+example/ios/Flutter/app.zip
+example/ios/Flutter/flutter_assets/
+example/ios/Flutter/flutter_export_environment.sh
+example/ios/ServiceDefinitions.json
+example/ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+example/ios/!default.mode1v3
+example/ios/!default.mode2v3
+example/ios/!default.pbxuser
+example/ios/!default.perspectivev3
+
+### Linux
+example/linux/flutter/ephemeral
+
+### macOS
+# Flutter-related
+example/macos/**/Flutter/ephemeral/
+example/macos/**/Pods/
+
+# Xcode-related
+example/macos/**/dgph
+example/macos/**/xcuserdata/
+
+### Windows
+example/windows/flutter/ephemeral
+
+# Visual Studio user-specific files.
+example/windows/*.suo
+example/windows/*.user
+example/windows/*.userosscache
+example/windows/*.sln.docstates
+
+# Visual Studio build-related files.
+example/windows/x64/
+example/windows/x86/
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+example/windows/*.[Cc]ache
+# but keep track of directories ending in .cache
+example/windows/!*.[Cc]ache/
+
+# Golden tests failures output
+**/failures/*.png

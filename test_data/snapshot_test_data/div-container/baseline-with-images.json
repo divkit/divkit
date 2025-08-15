@@ -1,0 +1,96 @@
+{
+  "description": "Images' bottom must be baseline aligned",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "orientation": "horizontal",
+          "width": {
+            "type": "wrap_content"
+          },
+          "content_alignment_vertical": "baseline",
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 5,
+                "top": 5,
+                "right": 5,
+                "bottom": 5
+              },
+              "font_size": 16,
+              "text": "Text with baseline"
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 15
+              },
+              "height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "margins": {
+                "left": 4
+              }
+            },
+            {
+              "type": "gif",
+              "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 15
+              },
+              "height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "margins": {
+                "left": 4
+              }
+            },
+            {
+              "type": "video",
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "mime_type": "video/mp4"
+                }
+              ],
+              "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
+              "width": {
+                "type": "fixed",
+                "value": 15
+              },
+              "height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "margins": {
+                "left": 4
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "description": "Pager with match_parent width",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "border": {
+            "stroke": {
+              "color": "#00FF00"
+            }
+          },
+          "items": [
+            {
+              "type": "pager",
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "value": 90
+                }
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFF0000",
+                  "width": 2
+                }
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "Container width = 200\nPager width = match_parent"
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "For millions of years mankind lived just like animals"
+                },
+                {
+                  "type": "text_page_fixed_height",
+                  "text": "We learned to talk"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

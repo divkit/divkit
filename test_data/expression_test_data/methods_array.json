@@ -1,0 +1,308 @@
+{
+  "cases": [
+    {
+      "expression": "@{array_var.getArray(1)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          "string",
+          123.45
+        ]
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            [
+              "string",
+              123.45
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getBoolean(1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            true
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getColor(1)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFAABBCC"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "#AABBCC"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getDict(1)}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "string_param": "value",
+          "number_param": 123.45
+        }
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            {
+              "string_param": "value",
+              "number_param": 123.45
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getInteger(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getNumber(1)}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            123.45
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getString(1)}",
+      "expected": {
+        "type": "string",
+        "value": "one"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "one"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getUrl(1)}",
+      "expected": {
+        "type": "url",
+        "value": "https://some.url"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "https://some.url"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getBoolean(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getBoolean(0)]. Incorrect value type: expected Boolean, got Number."
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            1
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getInteger(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getInteger(0)]. Incorrect value type: expected Integer, got String."
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "123"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.getString(2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString(2)]. Requested index (2) out of bounds array size (2)."
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "one"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{array_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "one"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{array_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

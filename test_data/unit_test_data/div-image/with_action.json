@@ -1,0 +1,16 @@
+{
+  "type": "image",
+  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+  "action": {
+    "url": "https://ya.ru",
+    "log_id": "test_log_id"
+  },
+  "width": {
+    "type": "fixed",
+    "value": 100
+  },
+  "height": {
+    "type": "fixed",
+    "value": 100
+  }
+}

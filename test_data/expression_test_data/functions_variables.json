@@ -1,0 +1,515 @@
+{
+  "cases": [
+    {
+      "expression": "@{getIntegerValue('integer_var', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntegerValue('number_var', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 456
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "number_var",
+          "value": 123.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getIntegerValue('unknown_var', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 456
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getNumberValue('number_var', 456.78)}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "number_var",
+          "value": 123.45
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getNumberValue('integer_var', 456.78)}",
+      "expected": {
+        "type": "number",
+        "value": 456.78
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getNumberValue('unknown_var', 456.78)}",
+      "expected": {
+        "type": "number",
+        "value": 456.78
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getBooleanValue('boolean_var', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "name": "boolean_var",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getBooleanValue('integer_var', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getBooleanValue('unknown_var', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStringValue('string_var', 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "value"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "name": "string_var",
+          "value": "value"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStringValue('integer_var', 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getStringValue('unknown_var', 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('color_var', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_var",
+          "value": "#FF000000"
+        },
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('integer_var', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        },
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('unknown_var', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('color_var', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_var",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('integer_var', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('unknown_var', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('color_var', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_var",
+          "value": "#000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('integer_var', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorValue('unknown_var', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('url_var', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://var"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "url_var",
+          "value": "https://var"
+        },
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('integer_var', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        },
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('unknown_var', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('url_var', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://var"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "url_var",
+          "value": "https://var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('integer_var', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "integer_var",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getUrlValue('unknown_var', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

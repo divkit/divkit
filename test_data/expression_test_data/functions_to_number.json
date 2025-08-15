@@ -1,0 +1,355 @@
+{
+  "cases": [
+    {
+      "expression": "@{toNumber(1)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber(-1)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('3')}",
+      "expected": {
+        "type": "number",
+        "value": 3.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('+3')}",
+      "expected": {
+        "type": "number",
+        "value": 3.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-3')}",
+      "expected": {
+        "type": "number",
+        "value": -3.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": 3.1415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('+3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": 3.1415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": -3.1415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('+3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": -3.141592653589793
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 31.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('+3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 31.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": -31.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 1.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('+.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 1.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": -1.415
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('3.141592653589793e2048')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('3.141592653589793e2048')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('-3.141592653589793e2048')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('-3.141592653589793e2048')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('2.7182+3.1415')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('2.7182+3.1415')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber('hello')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('hello')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber(true)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber(true)]. Function has no matching overload for given argument types: Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber(false)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber(false)]. Function has no matching overload for given argument types: Boolean."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber(1.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber(1.0)]. Function has no matching overload for given argument types: Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber()]. Function requires non empty argument list."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toNumber(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

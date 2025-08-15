@@ -1,0 +1,83 @@
+{
+  "description": "Line height of single-line text with size span",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "line_height_with_size_range",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_block",
+              "background_color": "#F8F8F8",
+              "text": "Text with font size range",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 19,
+                  "font_size": 20,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text_block",
+              "background_color": "#E0E0E0",
+              "line_height": 14,
+              "text": "Text with font size range and overall line height",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 19,
+                  "font_size": 20,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text_block",
+              "background_color": "#F8F8F8",
+              "line_height": 14,
+              "text": "Text with line height range and overall line height",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 21,
+                  "font_size": 20,
+                  "font_weight": "bold",
+                  "line_height": 24
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

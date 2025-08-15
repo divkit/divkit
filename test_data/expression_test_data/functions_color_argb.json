@@ -1,0 +1,95 @@
+{
+  "cases": [
+    {
+      "expression": "@{argb(1.0, 0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF8000FF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{argb(1.0, 1.0, 0.5, 1.0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFF80FF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{argb(0.5039, 0.5040, 0.9980, 0.9981)}",
+      "expected": {
+        "type": "color",
+        "value": "#8081FEFF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{rgb(0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF8000FF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{rgb(1.0, 0.5, 1.0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFF80FF"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{argb(15.0, 0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [argb(15.0, 0.5, 0.0, 1.0)]. Value out of range 0..1."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{rgb(0.5, 10.0, 1.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [rgb(0.5, 10.0, 1.0)]. Value out of range 0..1."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

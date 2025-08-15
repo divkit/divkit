@@ -1,0 +1,126 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "height": {
+        "type": "match_parent"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "paddings": {
+        "top": 16,
+        "bottom": 16,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ]
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Horizontal container",
+              "margins": {
+                "bottom": 8
+              }
+            },
+            {
+              "type": "subtitle",
+              "text": "Similar to a vertical container, but the elements are arranged horizontally.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "height": {
+                "type": "fixed",
+                "value": 60
+              },
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "wrap_content"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Weight = 1",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "margins": {
+                    "left": 2
+                  }
+                },
+                {
+                  "type": "text_block",
+                  "text": "Weight = 2",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 2
+                  },
+                  "margins": {
+                    "left": 2
+                  }
+                },
+                {
+                  "type": "text_block",
+                  "text": "wrap_content",
+                  "margins": {
+                    "left": 2
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

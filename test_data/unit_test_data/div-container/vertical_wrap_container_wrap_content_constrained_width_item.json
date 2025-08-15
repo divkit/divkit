@@ -1,0 +1,18 @@
+{
+  "type": "container",
+  "orientation": "vertical",
+  "layout_mode": "wrap",
+  "items": [
+    {
+      "type": "text",
+      "text": "It is a dark time for the Rebellion",
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "height": {
+        "type": "wrap_content"
+      }
+    }
+  ]
+}

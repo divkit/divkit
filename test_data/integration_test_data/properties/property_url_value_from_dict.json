@@ -1,0 +1,110 @@
+{
+  "description": "Property setting url value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-url-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "site": "https://example.com"
+          }
+        },
+        {
+          "name": "site_prop",
+          "type": "property",
+          "value_type": "url",
+          "get": "@{getUrlFromDict(source, 'site')}",
+          "set": [
+            {
+              "log_id": "set_action_url",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "site",
+                "value": {
+                  "type": "url",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "URL: @{site_prop}"
+              },
+              {
+                "type": "input",
+                "text_variable": "site_prop",
+                "keyboard_type": "url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "site": "https://example.com"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "site_prop",
+          "value": {
+            "type": "url",
+            "value": "https://example.com"
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=site_prop&value=https://ya.ru",
+          "log_id": "set_url_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "site": "https://ya.ru"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "site_prop",
+          "value": {
+            "type": "url",
+            "value": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

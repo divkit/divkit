@@ -1,0 +1,175 @@
+{
+  "templates": {
+    "button": {
+      "type": "container",
+      "orientation": "overlap",
+      "border": {
+        "corner_radius": 70
+      },
+      "action_animation": {
+        "name": "scale",
+        "start_value": 1.0,
+        "end_value": 0.95,
+        "duration": 300,
+        "interpolator": "ease_in_out"
+      },
+      "background": [
+        {
+          "color": "#EBEBEB",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 40
+      }
+    },
+    "button_image": {
+      "type": "button",
+      "items": [
+        {
+          "type": "image",
+          "alignment_horizontal": "center",
+          "alignment_vertical": "center",
+          "$image_url": "image_url",
+          "width": {
+            "type": "fixed",
+            "value": 30
+          },
+          "height": {
+            "type": "fixed",
+            "value": 30
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "main_screen",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "top": 20,
+            "bottom": 8,
+            "left": 20,
+            "right": 20
+          },
+          "items": [
+            {
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "bottom": 10
+              },
+              "alignment_vertical": "top",
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "text_variable": "input_variable",
+              "hint_text": "Supported Data:\n• Link to file :\n    'http://link.to/file.json'\n• Card-only: \n    '{ \"states\": [ ... ] }' \n• Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'",
+              "hint_color": "#88000000",
+              "highlight_color": "#1DFF9000",
+              "line_height": 24,
+              "select_all_on_focus": 1,
+              "keyboard_type": "multi_line_text"
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "alignment_vertical": "bottom",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "orientation": "horizontal",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "button_image",
+                      "image_url": "divkit-asset://application/images/show.svg",
+                      "actions": [
+                        {
+                          "log_id": "show result",
+                          "url": "div-action://demo_activity?action=show_result"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button_image",
+                      "image_url": "divkit-asset://application/images/file.webp",
+                      "margins": {
+                        "left": 12
+                      },
+                      "actions": [
+                        {
+                          "log_id": "paste",
+                          "url": "div-action://demo_activity?action=paste"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button_image",
+                      "alpha": 0.3,
+                      "image_url": "divkit-asset://application/images/qr_code_scanner.png",
+                      "margins": {
+                        "left": 12
+                      },
+                      "actions": [
+                        {
+                          "log_id": "qr scanner",
+                          "url": "div-action://demo_activity?action=open_qr"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button_image",
+                      "alpha": 0.3,
+                      "image_url": "divkit-asset://application/images/folder_open.png",
+                      "margins": {
+                        "left": 12
+                      },
+                      "actions": [
+                        {
+                          "log_id": "open file",
+                          "url": "div-action://demo_activity?action=open_file"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

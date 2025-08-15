@@ -1,0 +1,123 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "column_count": 2,
+          "item_spacing": 5,
+          "width": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 10,
+            "left": 5
+          },
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 80
+              },
+              "height": {
+                "type": "fixed",
+                "value": 80
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "margins": {
+                "right": 5
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "height": {
+                "type": "fixed",
+                "value": 20
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "margins": {
+                "right": 5
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 80
+              },
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "margins": {
+                "right": 5
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 80
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "margins": {
+                "right": 5
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 70
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "margins": {
+                "right": 5
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

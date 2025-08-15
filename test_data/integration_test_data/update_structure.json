@@ -1,0 +1,1535 @@
+{
+  "description": "Update array and dict variable structure.",
+  "div_data": {
+    "card": {
+      "log_id": "dict_variable",
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "level_1_dict": {
+              "level_2_dict": {
+                "int_value": 1
+              }
+            },
+            "level_1_array": [
+              1
+            ]
+          }
+        },
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            [
+              [
+                1
+              ]
+            ],
+            {
+              "int_value": 1
+            }
+          ]
+        },
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": ""
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_2_dict_item_updated",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 10
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_item_updated",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                10
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_2_dict_new_item_inserted",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/level_3_dict",
+            "value": {
+              "type": "dict",
+              "value": {
+                "value": "inserted"
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1,
+                  "level_3_dict": {
+                    "value": "inserted"
+                  }
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_new_item_inserted",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/1",
+            "value": {
+              "type": "dict",
+              "value": {
+                "value": "inserted"
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1,
+                {
+                  "value": "inserted"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_insert_failed_negative_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/-1",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Position '-1' is out of array bounds"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_insert_failed_out_of_range_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/2",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Position '2' is out of array bounds"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_2_dict_item_replaced_with_other_type_value",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/int_value",
+            "value": {
+              "type": "string",
+              "value": "replaced"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": "replaced"
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_item_replaced_with_other_type_value",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/0",
+            "value": {
+              "type": "string",
+              "value": "replaced"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value":
+            {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                "replaced"
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_2_dict_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict//level_2_dict////int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 10
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array////0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                10
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_empty_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_effectively_empty_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "////",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '////' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_path_starts_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "/level_1_dict/level_2_dict/int_value",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '/level_1_dict/level_2_dict/int_value' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_path_ends_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/int_value/",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value 'level_1_dict/level_2_dict/int_value/' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_missing_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/missing_dict/missing_value",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with path 'level_1_dict/missing_dict' is not found"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_path_segment_is_not_a_structure",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/int_value/missing",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with path 'level_1_dict/level_2_dict/int_value' is not a structure"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_non_integer_array_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array/non_integer/int_value",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Unable to use 'non_integer' as array index"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_2_array_item_updated",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  10
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_dict_item_updated",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "1/int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 10
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_2_array_new_item_inserted",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/1",
+            "value": {
+              "type": "dict",
+              "value": {
+                "value": "inserted"
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1,
+                  {
+                    "value": "inserted"
+                  }
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_dict_new_item_inserted",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "1/level_2_dict",
+            "value": {
+              "type": "dict",
+              "value": {
+                "value": "inserted"
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1,
+                "level_2_dict": {
+                  "value": "inserted"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_array_insert_failed_negative_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/-1",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Position '-1' is out of array bounds"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_array_insert_failed_out_of_range_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/2",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Position '2' is out of array bounds"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_2_array_item_replaced_with_other_type_value",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/0",
+            "value": {
+              "type": "string",
+              "value": "replaced"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  "replaced"
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_dict_item_replaced_with_other_type_value",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "1/int_value",
+            "value": {
+              "type": "string",
+              "value": "replaced"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value":
+            [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": "replaced"
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_2_array_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0//0////0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  10
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_dict_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "1////int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 10
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_empty_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_effectively_empty_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "////",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '////' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_path_starts_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "/0/0/0",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '/0/0/0' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_path_ends_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/0/",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '0/0/0/' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_missing_path",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/2/0",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with path '0/2' is not found"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_path_segment_is_not_a_structure",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/0/missing",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with path '0/0/0' is not a structure"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_non_integer_array_index",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/non_integer/0",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Unable to use 'non_integer' as array index"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "string_var_update_failed_nonstructural_variable",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "string_var",
+            "path": "missing",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Action requires array or dictionary variable"
+        },
+        {
+          "type": "variable",
+          "variable_name": "string_var",
+          "value": {
+            "type": "string",
+            "value": ""
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

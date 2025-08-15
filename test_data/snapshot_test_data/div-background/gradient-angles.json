@@ -1,0 +1,116 @@
+{
+  "description": "Linear gradient with different angles.",
+  "platforms": [
+    "ios",
+    "web",
+    "android"
+  ],
+  "templates": {
+    "color_block": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "border": {
+        "stroke": {
+          "width": 2,
+          "color": "#000"
+        }
+      },
+      "margins": {
+        "left": 12
+      },
+      "background": [
+        {
+          "$angle": "angle",
+          "type": "gradient",
+          "color_map": [
+            {
+              "color": "#5367ff",
+              "position": 0.25
+            },
+            {
+              "color": "#fff",
+              "position": 0.25
+            },
+            {
+              "color": "#fff",
+              "position": 0.5
+            },
+            {
+              "color": "#5367ff",
+              "position": 0.5
+            },
+            {
+              "color": "#5367ff",
+              "position": 0.75
+            },
+            {
+              "color": "#fff",
+              "position": 0.75
+            }
+          ]
+        }
+      ]
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "margins": {
+        "top": 4,
+        "bottom": 8,
+        "left": 12
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "From left to right"
+            },
+            {
+              "type": "color_block"
+            },
+            {
+              "type": "title",
+              "text": "From top to bottom"
+            },
+            {
+              "type": "color_block",
+              "angle": 270
+            },
+            {
+              "type": "title",
+              "text": "From top left to bottom right"
+            },
+            {
+              "type": "color_block",
+              "angle": 315
+            },
+            {
+              "type": "title",
+              "text": "Parallelogram"
+            },
+            {
+              "type": "color_block",
+              "angle": 288
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

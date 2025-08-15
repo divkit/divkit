@@ -1,0 +1,169 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "div_base": {
+        "type": "container",
+        "width": {
+          "type": "fixed",
+          "value": 360
+        },
+        "height": {
+          "type": "fixed",
+          "value": 200
+        }
+      },
+      "test_container": {
+        "type": "container",
+        "orientation": "overlap",
+        "border": {
+          "stroke": {
+            "color": "#000000"
+          }
+        },
+        "paddings": {
+          "top": 20,
+          "bottom": 20,
+          "left": 20,
+          "right": 20
+        }
+      },
+      "text_block": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8,
+          "top": 16,
+          "bottom": 16
+        },
+        "width": {
+          "type": "fixed",
+          "value": 125
+        },
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "orientation",
+          "type": "string",
+          "value": "horizontal"
+        },
+        {
+          "name": "content_alignment_horizontal",
+          "type": "string",
+          "value": "left"
+        },
+        {
+          "name": "content_alignment_vertical",
+          "type": "string",
+          "value": "top"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "test_container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "div_base",
+                "orientation": "@{orientation}",
+                "content_alignment_horizontal": "@{content_alignment_horizontal}",
+                "content_alignment_vertical": "@{content_alignment_vertical}",
+                "items": [
+                  {
+                    "type": "text_block",
+                    "text": "Item0 fixed top-left",
+                    "alignment_horizontal": "left",
+                    "alignment_vertical": "top"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item1 not fixed"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=content_alignment_horizontal&value=right",
+          "log_id": "content_alignment_horizontal"
+        },
+        {
+          "url": "div-action://set_variable?name=content_alignment_vertical&value=bottom",
+          "log_id": "content_alignment_vertical"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=orientation&value=vertical",
+          "log_id": "orientation"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=content_alignment_horizontal&value=left",
+          "log_id": "restore: content_alignment_horizontal"
+        },
+        {
+          "url": "div-action://set_variable?name=content_alignment_vertical&value=top",
+          "log_id": "restore: content_alignment_vertical"
+        },
+        {
+          "url": "div-action://set_variable?name=orientation&value=horizontal",
+          "log_id": "restore: orientation"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

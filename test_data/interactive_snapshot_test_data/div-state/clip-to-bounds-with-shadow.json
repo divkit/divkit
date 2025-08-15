@@ -1,0 +1,155 @@
+{
+  "description": "State with clip_to_bounds and shadow",
+  "platforms": [
+    "android",
+    "web",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "square_with_shadow": {
+        "type": "container",
+        "orientation": "overlap",
+        "height": {
+          "type": "fixed",
+          "$value": "size"
+        },
+        "width": {
+          "type": "fixed",
+          "$value": "size"
+        },
+        "background": [
+          {
+            "type": "solid",
+            "$color": "fill"
+          }
+        ],
+        "margins": {
+          "top": 4,
+          "bottom": 4,
+          "end": 4,
+          "start": 4
+        },
+        "border": {
+          "has_shadow": true,
+          "shadow": {
+            "offset": {
+              "x": {
+                "value": 10
+              },
+              "y": {
+                "value": 10
+              }
+            },
+            "blur": 5,
+            "color": "#777777",
+            "alpha": 1.0
+          }
+        }
+      }
+    },
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "clipping_to_bounds",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "overlap",
+            "width": {
+              "type": "wrap_content"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "top": 10,
+              "bottom": 20,
+              "end": 20,
+              "start": 10
+            },
+            "items": [
+              {
+                "type": "state",
+                "id": "tested",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "border": {
+                  "stroke": {
+                    "type": "solid",
+                    "color": "#000000"
+                  }
+                },
+                "clip_to_bounds": "@{clipping_to_bounds}",
+                "states": [
+                  {
+                    "state_id": "red_50",
+                    "div": {
+                      "type": "square_with_shadow",
+                      "size": 50,
+                      "fill": "#ff8888"
+                    }
+                  },
+                  {
+                    "state_id": "green_100",
+                    "div": {
+                      "type": "square_with_shadow",
+                      "size": 100,
+                      "fill": "#88ff88"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=clipping_to_bounds&value=false",
+          "log_id": "clip_to_bounds=false"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/tested/green_100",
+          "log_id": "switch to green"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=clipping_to_bounds&value=true",
+          "log_id": "clip_to_bounds=true"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/tested/red_50",
+          "log_id": "back to red"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

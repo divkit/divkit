@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="app_name">DivKit Playground</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="action_start_animation">Start animation</string>
+    <string name="action_stop_animation">Stop animation</string>
+    <string name="action_all">All</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_save">Save</string>
+    <string name="action_open_file">Open File</string>
+    <string name="action_open_from_url">Open from Url</string>
+    <string name="action_json_to_from">To Json -> From Json</string>
+
+    <string name="action_exit">Exit</string>
+
+    <string name="permission_rationale_read_external_storage">Read storage permission is required if you want to push div cards</string>
+    <string name="bad_div_json">Bad div json</string>
+    <string name="unhandled_uri_error">Wrong uri: only diveditor websocket, http and asset is supported</string>
+    <string name="unknown_host_error">Probably trying to access your company host from wrong network.</string>
+
+    <string name="button_permission_yes">ALLOW</string>
+    <string name="button_permission_no">LATER</string>
+    <string name="samples_description">Here you can check, how Div technology might be useful for your projects</string>
+    <string name="samples">Samples</string>
+    <string name="settings">Settings</string>
+    <string name="demo">Demo</string>
+    <string name="refresh">Refresh</string>
+    <string name="perform_action">Perform action</string>
+    <string name="variables">Load variables</string>
+    <string name="load_patch">Load patch</string>
+    <string name="load_div_json">Load another div json</string>
+    <string name="close_all_tooltips">Close all tooltips</string>
+</resources>

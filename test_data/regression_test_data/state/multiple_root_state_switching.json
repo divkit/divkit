@@ -1,0 +1,101 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "width": 4,
+          "$color": "border_color"
+        }
+      },
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#073642"
+    }
+  },
+  "card": {
+    "log_id": "multiple_root_state_switching",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "div_id": "button_state",
+          "states": [
+            {
+              "state_id": "initial",
+              "div": {
+                "type": "button",
+                "background_color": "#2AA198",
+                "border_color": "#00FFFFFF",
+                "text": "STATE 0 (INITIAL)",
+                "actions": [
+                  {
+                    "log_id": "update_button_state",
+                    "url": "div-action://set_state?state_id=0"
+                  },
+                  {
+                    "log_id": "update_button_state",
+                    "url": "div-action://set_state?state_id=0/button_state/final&temporary=true"
+                  },
+                  {
+                    "log_id": "update_root_state",
+                    "url": "div-action://set_state?state_id=1"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "final",
+              "div": {
+                "type": "button",
+                "background_color": "#2AA198",
+                "border_color": "#00FFFFFF",
+                "text": "STATE 0 (FINAL)",
+                "actions": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 1,
+        "div": {
+          "type": "button",
+          "background_color": "#00FFFFFF",
+          "border_color": "#CB4B16",
+          "text": "STATE 1",
+          "actions": [
+            {
+              "log_id": "update_root_state",
+              "url": "div-action://set_state?state_id=0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

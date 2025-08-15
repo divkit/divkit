@@ -1,0 +1,18 @@
+apply from: "../div-library.gradle"
+apply from: "../div-tests.gradle"
+apply from: "../publish-android.gradle"
+
+android {
+    namespace "com.yandex.divkit.coil"
+}
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':div-core')
+    implementation(libs.coil.gif)
+    implementation libs.coil.network
+    implementation libs.coil.network.cachecontrol
+
+    api libs.coil
+    api libs.coil.svg
+}

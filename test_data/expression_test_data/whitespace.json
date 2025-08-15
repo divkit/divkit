@@ -1,0 +1,201 @@
+{
+  "cases": [
+    {
+      "expression": "@{integer_var  +  10}",
+      "expected": {
+        "type": "integer",
+        "value": 15
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 5
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var\t+\t10}",
+      "expected": {
+        "type": "integer",
+        "value": 15
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 5
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var+10}",
+      "expected": {
+        "type": "integer",
+        "value": 15
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 5
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{5-2}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{10>-10}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{10>+10}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{10<-10}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{10>=-10}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{len('12345')-2}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{5 + - 3}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{5 - + 3}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{( integer_var + 3 ) * 4}",
+      "expected": {
+        "type": "integer",
+        "value": 20
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 2
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString (123)}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

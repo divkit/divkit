@@ -1,0 +1,473 @@
+{
+  "cases": [
+    {
+      "name": "string template with datetime",
+      "expression": "Timestamp starts at: @{parseUnixTime(0)}",
+      "expected": {
+        "type": "string",
+        "value": "Timestamp starts at: 1970-01-01 00:00:00"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template without expression",
+      "expression": "Hello, World!",
+      "expected": {
+        "type": "string",
+        "value": "Hello, World!"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template without expression and with single quoted part",
+      "expression": "Hello, 'World'!",
+      "expected": {
+        "type": "string",
+        "value": "Hello, 'World'!"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with escaped expression symbol",
+      "expression": "Hello, \\@{World}!",
+      "expected": {
+        "type": "string",
+        "value": "Hello, @{World}!"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with empty expression",
+      "expression": "This is a@{} string",
+      "expected": {
+        "type": "string",
+        "value": "This is a string"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with positive integer literal expression",
+      "expression": "You have @{5} messages",
+      "expected": {
+        "type": "string",
+        "value": "You have 5 messages"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with negative integer literal expression",
+      "expression": "Today is @{-5} C",
+      "expected": {
+        "type": "string",
+        "value": "Today is -5 C"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with positive number literal expression",
+      "expression": "You have @{5.0} dollars",
+      "expected": {
+        "type": "string",
+        "value": "You have 5.0 dollars"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with negative number literal expression",
+      "expression": "Today is @{-5.0} C",
+      "expected": {
+        "type": "string",
+        "value": "Today is -5.0 C"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with string literal expression",
+      "expression": "This is @{'a'} string",
+      "expected": {
+        "type": "string",
+        "value": "This is a string"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with positive integer variable expression",
+      "expression": "You have @{count} messages",
+      "expected": {
+        "type": "string",
+        "value": "You have 5 messages"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 5,
+          "name": "count"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with negative integer variable expression",
+      "expression": "Today is @{degree} C",
+      "expected": {
+        "type": "string",
+        "value": "Today is -5 C"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -5,
+          "name": "degree"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with positive number variable expression",
+      "expression": "You have @{amount} dollars",
+      "expected": {
+        "type": "string",
+        "value": "You have 5.0 dollars"
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 5.0,
+          "name": "amount"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with negative number variable expression",
+      "expression": "Today is @{degree} C",
+      "expected": {
+        "type": "string",
+        "value": "Today is -5.0 C"
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": -5.0,
+          "name": "degree"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with string variable expression",
+      "expression": "This is @{article} string",
+      "expected": {
+        "type": "string",
+        "value": "This is a string"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "a",
+          "name": "article"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with true boolean variable expression",
+      "expression": "This is a @{var} story.",
+      "expected": {
+        "type": "string",
+        "value": "This is a true story."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with false boolean variable expression",
+      "expression": "a @{var} boolean literal",
+      "expected": {
+        "type": "string",
+        "value": "a false boolean literal"
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with color variable expression",
+      "expression": "Sky color is @{color}",
+      "expected": {
+        "type": "string",
+        "value": "Sky color is #FF75BBFD"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "value": "#75bbfd",
+          "name": "color"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with url variable expression",
+      "expression": "Use @{engine_url} as default search engine?",
+      "expected": {
+        "type": "string",
+        "value": "Use https://ya.ru as default search engine?"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://ya.ru",
+          "name": "engine_url"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "",
+      "expected": {
+        "type": "string",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with starting expression",
+      "expression": "@{3.2} kilometers to destination",
+      "expected": {
+        "type": "string",
+        "value": "3.2 kilometers to destination"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with expression at the end",
+      "expression": "Sky color is @{'#75bbfd'}",
+      "expected": {
+        "type": "string",
+        "value": "Sky color is #75bbfd"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with expression at the start and end",
+      "expression": "@{'Sky'} color is @{'#75bbfd'}",
+      "expected": {
+        "type": "string",
+        "value": "Sky color is #75bbfd"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with expression at all positions",
+      "expression": "@{'Sky'} color is @{'#75bbfd'} and ground color is @{'#3a2e27'}",
+      "expected": {
+        "type": "string",
+        "value": "Sky color is #75bbfd and ground color is #3a2e27"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with just 2 expression",
+      "expression": "@{'Sky color is '}@{'#75bbfd'}",
+      "expected": {
+        "type": "string",
+        "value": "Sky color is #75bbfd"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with nested expression",
+      "expression": "@{'var = @{'@{var}'}'}",
+      "expected": {
+        "type": "string",
+        "value": "var = abcd"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "abcd"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "string template with expression surrounded by apostrophes",
+      "expression": "Set '@{engine_url}' as your homepage?",
+      "expected": {
+        "type": "string",
+        "value": "Set 'https://ya.ru' as your homepage?"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "value": "https://ya.ru",
+          "name": "engine_url"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

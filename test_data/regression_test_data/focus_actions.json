@@ -1,0 +1,173 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "state_id": 0,
+      "font_size": 24,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "focused_text_color": "#FFFFFF",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 6
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 8,
+        "right": 8
+      }
+    },
+    "label": {
+      "type": "button",
+      "focused_text_color": "#888888",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "text_color": "#888888"
+    }
+  },
+  "card": {
+    "log_id": "focus",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "id": "container",
+          "paddings": {
+            "left": 8,
+            "right": 8,
+            "top": 4,
+            "bottom": 4
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_vertical": "center",
+          "border": {
+            "corner_radius": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "id": "container",
+              "orientation": "horizontal",
+              "content_horizontal_alignment": "center",
+              "items": [
+                {
+                  "type": "button",
+                  "id": "focus",
+                  "text": "handler",
+                  "focus": {
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#ff7f50"
+                      }
+                    ],
+                    "on_focus": [
+                      {
+                        "log_id": "focus",
+                        "url": "div-action://set_state?state_id=0/indicator/focus"
+                      }
+                    ],
+                    "on_blur": [
+                      {
+                        "log_id": "focus",
+                        "url": "div-action://set_state?state_id=0/indicator/blur"
+                      }
+                    ]
+                  },
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_state?state_id=0/focus/click"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "id": "focus",
+                  "text": "idle",
+                  "focus": {
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#4183d7"
+                      }
+                    ]
+                  },
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_state?state_id=0/focus/click"
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "id": "indicator",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "label",
+                        "font_weight": "light",
+                        "text": "init"
+                      }
+                    },
+                    {
+                      "state_id": "focus",
+                      "div": {
+                        "type": "label",
+                        "font_weight": "light",
+                        "text": "focus"
+                      }
+                    },
+                    {
+                      "state_id": "blur",
+                      "div": {
+                        "type": "label",
+                        "font_weight": "light",
+                        "text": "blur"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

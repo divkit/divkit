@@ -1,0 +1,77 @@
+{
+  "description": "Pager with fixed height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page_fixed_height",
+              "text": "Pager height = 120\nPage height = 80\nPaddings = 0\nTop and bottom borders are drawn."
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "For millions of years mankind lived just like animals"
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

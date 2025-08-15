@@ -1,0 +1,76 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "block": {
+      "type": "text",
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test-container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "block",
+                  "text": "Text in inner\ncontainer",
+                  "height": {
+                    "type": "match_parent"
+                  }
+                },
+                {
+                  "type": "gallery",
+                  "alignment_vertical": "bottom",
+                  "alignment_horizontal": "left",
+                  "items": [
+                    {
+                      "type": "block",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "text": "Text in \ngallery",
+                      "font_size": 16
+                    }
+                  ]
+                }
+              ],
+              "orientation": "overlap"
+            },
+            {
+              "type": "block",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "Text in external\ncontainer",
+              "alignment_horizontal": "right",
+              "alignment_vertical": "top"
+            }
+          ],
+          "orientation": "overlap"
+        }
+      }
+    ]
+  }
+}

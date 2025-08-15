@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "definitions": {
+    "item": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string"
+        },
+        "entity": {
+          "$ref": "entity.json"
+        }
+      },
+      "required": [
+        "property",
+        "entity"
+      ]
+    }
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_array_of_nested_items"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/item"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

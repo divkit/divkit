@@ -1,0 +1,27 @@
+.grid {
+    display: grid;
+}
+
+.grid_halign_start {
+    justify-content: start;
+}
+
+.grid_halign_center {
+    justify-content: center;
+}
+
+.grid_halign_end {
+    justify-content: end;
+}
+
+.grid_valign_start {
+    align-content: start;
+}
+
+.grid_valign_center {
+    align-content: center;
+}
+
+.grid_valign_end {
+    align-content: end;
+}

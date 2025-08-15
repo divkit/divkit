@@ -1,0 +1,97 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    },
+    "fixed_cell": {
+      "type": "cell_with_one_pixel_margin",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#BB0000FF"
+            },
+            "corner_radius": 4,
+            "corners_radius": {
+              "top-left": 10,
+              "bottom-right": 15,
+              "bottom-left": 0
+            }
+          },
+          "items": [
+            {
+              "type": "fixed_cell",
+              "text": "1"
+            },
+            {
+              "type": "fixed_cell",
+              "text": "2"
+            },
+            {
+              "type": "fixed_cell",
+              "text": "3"
+            },
+            {
+              "type": "fixed_cell",
+              "text": "4"
+            },
+            {
+              "type": "fixed_cell",
+              "text": "5"
+            },
+            {
+              "type": "fixed_cell",
+              "text": "6"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

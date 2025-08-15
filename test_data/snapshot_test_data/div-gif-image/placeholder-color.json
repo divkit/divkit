@@ -1,0 +1,30 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gif",
+          "gif_url": "empty://",
+          "placeholder_color": "#f00",
+          "width": {
+            "type": "fixed",
+            "value": 50
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}

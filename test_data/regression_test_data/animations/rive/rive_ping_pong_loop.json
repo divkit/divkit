@@ -1,0 +1,41 @@
+{
+  "card": {
+    "log_id": "rive",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 480
+          },
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "custom",
+              "custom_type": "rive_animation",
+              "width": {
+                "type": "fixed",
+                "value": 240
+              },
+              "height": {
+                "type": "fixed",
+                "value": 240
+              },
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "placeholder_color": "#2C3E50",
+              "custom_props": {
+                "url": "https://public.rive.app/community/runtime-files/3370-7083-cup-walk.riv",
+                "fit": "FitWidth",
+                "alignment": "Center",
+                "loop": "PingPong"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

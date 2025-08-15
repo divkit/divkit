@@ -1,0 +1,170 @@
+weather|Winter is coming!|{
+  "data" : {
+    "background" : "#31bcff",
+    "background_color" : "#a8b3b9",
+    "background_color_bottom" : "#a7b5c5",
+    "background_color_top" : "#7687ae",
+    "background_overcast" : "#a8b3b9",
+    "city" : "Winterfell",
+    "cloudness" : 1,
+    "color" : "#f4f1e0",
+    "daytime" : "d",
+    "extra_info" : [
+      {
+        "info" : "Ветер: Штиль"
+      },
+      {
+        "info" : "Давление: 767 мм рт. ст."
+      },
+      {
+        "info" : "Влажность: 59%"
+      }
+    ],
+    "fetch_ts" : 1,
+    "forecast" : [
+      {
+        "date" : "2017-09-29",
+        "day" : {
+          "color" : "#f4f1e0",
+          "unit" : "C",
+          "value" : -5
+        },
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/ovc.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/ovc.1.png",
+        "night" : {
+          "color" : "#f3f1e3",
+          "unit" : "C",
+          "value" : -12
+        },
+        "url" : "https://yandex.ru/pogoda/213/details?appsearch_header=1#d_29",
+        "week_day" : "Пятница, 29 сентября"
+      },
+      {
+        "date" : "2017-09-30",
+        "day" : {
+          "color" : "#f5f2dc",
+          "unit" : "C",
+          "value" : -12
+        },
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/bkn_-ra_d.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/bkn_-ra_d.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/bkn_-ra_d.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/bkn_-ra_d.1.png",
+        "night" : {
+          "color" : "#f2f0e6",
+          "unit" : "C",
+          "value" : -5
+        },
+        "url" : "https://yandex.ru/pogoda/213/details?appsearch_header=1#d_30",
+        "week_day" : "Суббота, 30 "
+      },
+      {
+        "date" : "2017-10-01",
+        "day" : {
+          "color" : "#f4f1e0",
+          "unit" : "C",
+          "value" : -10
+        },
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/ovc.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/ovc.1.png",
+        "night" : {
+          "color" : "#f1f0e9",
+          "unit" : "C",
+          "value" : -3
+        },
+        "url" : "https://yandex.ru/pogoda/213/details?appsearch_header=1#d_1",
+        "week_day" : "Воскресенье, 1 "
+      }
+    ],
+    "generate_ts" : 1506603240,
+    "geoid" : "213",
+    "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+    "icon_big_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_big1/ovc.1.png",
+    "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white-big/ovc.1.png",
+    "iconalt" : "снег",
+    "important_info" : "Зима близко!",
+    "is_rain" : 1,
+    "is_snow" : 1,
+    "is_storm" : 0,
+    "iv3u1" : "ovc",
+    "noalert" : 1,
+    "notice_url" : "https://yandex.ru/pogoda/213/details?appsearch_header=1#tomorrow",
+    "now_url" : "https://yandex.ru/pogoda/213/details?appsearch_header=1",
+    "prec_strength" : 1,
+    "prec_type" : 0,
+    "short_forecast" : [
+      {
+        "condition" : "clear",
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/skc_n.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/skc_n.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/skc_n.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/skc_n.1.png",
+        "name" : "evening",
+        "temp" : {
+          "color" : "#f3f1e3",
+          "unit" : "C",
+          "value" : -8
+        },
+        "text" : "Вечером",
+        "url" : "https://yandex.ru/pogoda/213/hourly?appsearch_header=1#t_evening"
+      },
+      {
+        "condition" : "clear",
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/skc_n.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/skc_n.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/skc_n.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/skc_n.1.png",
+        "name" : "night",
+        "temp" : {
+          "color" : "#f2f0e6",
+          "unit" : "C",
+          "value" : -6
+        },
+        "text" : "Ночью",
+        "url" : "https://yandex.ru/pogoda/213/hourly?appsearch_header=1#t_night"
+      },
+      {
+        "condition" : "overcast",
+        "icon" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_colored" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/colored_small1/ovc.1.png",
+        "icon_daynight" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/black1/ovc.1.png",
+        "icon_white" : "https://api.yastatic.net/morda-logo/i/yandex-app/weather/white1/ovc.1.png",
+        "name" : "morning",
+        "temp" : {
+          "color" : "#f3f1e3",
+          "unit" : "C",
+          "value" : -7
+        },
+        "text" : "Утром",
+        "url" : "https://yandex.ru/pogoda/213/hourly?appsearch_header=1#t_morning"
+      }
+    ],
+    "t1" : {
+      "unit" : "C",
+      "value" : -3
+    },
+    "t2" : {
+      "unit" : "C",
+      "value" : -4
+    },
+    "t2name" : "Вечером",
+    "t3" : {
+      "unit" : "C",
+      "value" : -6
+    },
+    "t3name" : "Ночью",
+    "url" : "https://yandex.ru/pogoda/213",
+    "url_v5" : "https://yandex.ru/pogoda/213/details?appsearch_header=1",
+    "wt" : ""
+  },
+  "id" : "weather",
+  "title" : "Погода",
+  "ttl" : 300,
+  "ttv" : 1200,
+  "type" : "weather",
+  "utime" : 1506603508
+}

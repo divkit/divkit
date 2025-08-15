@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="regression_label" translatable="false">Testing</string>
+    <string name="scenario_steps" translatable="false">Steps:</string>
+    <string name="scenario_expectations" translatable="false">Expected result:</string>
+    <string name="scenario_label" translatable="false">Scenario</string>
+    <string name="show_toggle" translatable="false">Show</string>
+    <string name="hide_toggle" translatable="false">Hide</string>
+    <string name="logging" translatable="false">Log</string>
+    <string name="clear" translatable="false">Clean</string>
+    <string name="prev_scenario" translatable="false">Forward</string>
+    <string name="next_scenario" translatable="false">Backward</string>
+    <string name="screen_record_disabled" translatable="false">Screen recording is enabled</string>
+    <string name="screen_record_failed" translatable="false">Screen recording error</string>
+    <string name="loading_scenario" translatable="false">Loading scenario...</string>
+    <string name="record_screen" translatable="false">Record screen</string>
+    <string name="scenario_name">Scenario name..</string>
+</resources>

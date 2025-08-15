@@ -1,0 +1,44 @@
+{
+  "description": "Images aligned to the end in RTL context. Image must be on the left side",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "chess_card": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "margins": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "chess_card",
+          "height": {
+            "type": "fixed",
+            "value": 400
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "scale": "no_scale",
+          "content_alignment_horizontal": "end"
+        }
+      }
+    ]
+  }
+}

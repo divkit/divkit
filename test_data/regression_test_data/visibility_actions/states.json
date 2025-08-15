@@ -1,0 +1,92 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 18,
+      "margins": {
+        "left": 20,
+        "right": 20,
+        "top": 20,
+        "bottom": 20
+      }
+    },
+    "button": {
+      "type": "title",
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f1dff2"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "paddings": {
+        "left": 20,
+        "right": 20,
+        "top": 10,
+        "bottom": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "name": "message",
+        "type": "string",
+        "value": "State 2: visibility action will trigger in 2 seconds"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "state",
+              "id": "states",
+              "states": [
+                {
+                  "state_id": "state1",
+                  "div": {
+                    "type": "title",
+                    "text": "State 1"
+                  }
+                },
+                {
+                  "state_id": "state2",
+                  "div": {
+                    "type": "title",
+                    "text": "@{message}",
+                    "visibility_actions": [
+                      {
+                        "log_id": "state2",
+                        "url": "div-action://set_variable?name=message&value=Triggered!",
+                        "visibility_duration": 2000
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "State 2",
+              "actions": [
+                {
+                  "log_id": "state2",
+                  "url": "div-action://set_state?state_id=0/states/state2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

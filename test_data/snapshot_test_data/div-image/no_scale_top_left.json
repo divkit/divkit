@@ -1,0 +1,33 @@
+{
+  "description": "Image with dimensions greater than wrap_content and disabled scaling, content aligned to top left corner",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "scale": "no_scale",
+          "content_alignment_horizontal": "left",
+          "content_alignment_vertical": "top"
+        }
+      }
+    ]
+  }
+}

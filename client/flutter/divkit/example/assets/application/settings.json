@@ -1,0 +1,654 @@
+{
+  "templates": {
+    "list_delimiter": {
+      "type": "separator",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 7
+      },
+      "margins": {
+        "left": 2,
+        "right": 2,
+        "unit": "dp"
+      },
+      "delimiter_style": {
+        "color": "#1D000000"
+      }
+    },
+    "switch_pointer": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 16
+      },
+      "height": {
+        "type": "fixed",
+        "value": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "margins": {
+        "left": 2,
+        "right": 2,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "transition_change": {
+        "type": "change_bounds",
+        "duration": 500
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    },
+    "setting_switch": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 34
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "content_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "setting_switch_state": {
+      "type": "state",
+      "width": {
+        "type": "fixed",
+        "value": 34
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "alignment_vertical": "center",
+      "states": [
+        {
+          "state_id": "active",
+          "div": {
+            "type": "setting_switch",
+            "content_alignment_horizontal": "right",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#5A43E3"
+              }
+            ],
+            "items": [
+              {
+                "type": "switch_pointer",
+                "id": "pointer"
+              }
+            ],
+            "actions": [
+              {
+                "$log_id": "active_click_log_id",
+                "$url": "active_click_change_settings_url"
+              },
+              {
+                "$log_id": "active_click_log_id",
+                "$url": "active_click_change_state_url"
+              }
+            ]
+          }
+        },
+        {
+          "state_id": "inactive",
+          "div": {
+            "type": "setting_switch",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1D000000"
+              }
+            ],
+            "items": [
+              {
+                "type": "switch_pointer",
+                "id": "pointer"
+              }
+            ],
+            "content_alignment_horizontal": "left",
+            "actions": [
+              {
+                "$log_id": "inactive_click_log_id",
+                "$url": "inactive_click_change_settings_url"
+              },
+              {
+                "$log_id": "inactive_click_log_id",
+                "$url": "inactive_click_change_state_url"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "slider_preset": {
+      "type": "slider",
+      "width": {
+        "type": "match_parent"
+      },
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 8,
+        "bottom": 8
+      },
+      "max_value": 10,
+      "min_value": 1,
+      "thumb_value_variable": "first_thumb_value",
+      "thumb_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "stroke": {
+          "color": "#ffffff",
+          "width": 3
+        },
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 32
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 32
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "color": "#d3d3d3",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      },
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "color": "#d3d3d3",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      }
+    },
+    "settings_category": {
+      "type": "text",
+      "font_size": 20,
+      "font_weight": "medium",
+      "line_height": 24,
+      "margins": {
+        "top": 13
+      }
+    },
+    "settings_item_title": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "regular",
+      "line_height": 24,
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      }
+    },
+    "settings_item_subtitle": {
+      "type": "text",
+      "font_size": 16,
+      "font_weight": "regular",
+      "line_height": 24,
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "text_color": "#88000000"
+    },
+    "settings_item": {
+      "type": "container",
+      "orientation": "horizontal",
+      "paddings": {
+        "top": 22,
+        "bottom": 22,
+        "left": 20,
+        "right": 20
+      },
+      "margins": {
+        "top": 15,
+        "bottom": 5
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#ffffff",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 22,
+        "stroke": {
+          "color": "#1D333333",
+          "width": 1
+        }
+      }
+    },
+    "theme_tooltip_text": {
+      "type": "settings_item_subtitle",
+      "text_color": "#333333",
+      "text": "AUTO",
+      "actions": [
+        {
+          "log_id": "setting_item_tooltip_shown",
+          "$url": "set_variable_url"
+        },
+        {
+          "log_id": "item_log_id",
+          "url": "div-action://hide_tooltip?id=theme_tooltip",
+          "log_limit": 0,
+          "visibility_duration": 2000,
+          "visibility_percentage": 100
+        },
+        {
+          "log_id": "change_theme",
+          "$url": "change_settings_url"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "settings",
+    "variable_triggers": [
+      {
+        "condition": "@{image_loader != prev_image_loader}",
+        "actions": [
+          {
+            "log_id": "change_image_loader",
+            "url": "div-action://set_preferences?name=image_loader&value=@{image_loader}"
+          },
+          {
+            "log_id": "change_prev_image_loader",
+            "url": "div-action://set_variable?name=prev_image_loader&value=@{image_loader}"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "night_mode",
+        "type": "string",
+        "value": "DAY"
+      },
+      {
+        "name": "app_version",
+        "type": "string",
+        "value": "DivKit"
+      },
+      {
+        "name": "image_loader",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "prev_image_loader",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12,
+            "left": 20,
+            "right": 20
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "border": {
+            "corners_radius": {
+              "top-left": 32,
+              "top-right": 32
+            }
+          },
+          "items": [
+            {
+              "type": "settings_category",
+              "text": "Div"
+            },
+            {
+              "type": "settings_item",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "Complex Rebind enabled"
+                },
+                {
+                  "type": "setting_switch_state",
+                  "id": "complex_rebind",
+                  "active_click_log_id": "set_complex_rebind_disabled",
+                  "active_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/inactive",
+                  "active_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=0",
+                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/active",
+                  "inactive_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=1",
+                  "inactive_click_log_id": "set_complex_rebind_enabled"
+                }
+              ]
+            },
+            {
+              "type": "settings_item",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "View Pool enabled"
+                },
+                {
+                  "type": "setting_switch_state",
+                  "id": "div2_view_pool",
+                  "active_click_log_id": "set_div2_view_pool_disabled",
+                  "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/inactive",
+                  "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=0",
+                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/active",
+                  "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=1",
+                  "inactive_click_log_id": "set_div2_view_pool_enabled"
+                }
+              ]
+            },
+            {
+              "type": "settings_item",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "View Pool profiling enabled"
+                },
+                {
+                  "type": "setting_switch_state",
+                  "id": "div2_view_pool_profiling",
+                  "active_click_log_id": "set_div2_view_pool_profilingl_disabled",
+                  "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=0",
+                  "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/inactive",
+                  "inactive_click_log_id": "set_div2_view_pool_profiling",
+                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/active",
+                  "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=1"
+                }
+              ]
+            },
+            {
+              "type": "settings_item",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "Multiple state change enabled"
+                },
+                {
+                  "type": "setting_switch_state",
+                  "id": "multiple_state_change",
+                  "active_click_log_id": "set_multiple_state_change_disabled",
+                  "active_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/inactive",
+                  "active_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=0",
+                  "inactive_click_log_id": "set_multiple_state_change",
+                  "inactive_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=1",
+                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/active"
+                }
+              ]
+            },
+            {
+              "type": "settings_item",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "Div image loader"
+                },
+                {
+                  "type": "slider_preset",
+                  "id": "slider_default",
+                  "min_value": 0,
+                  "max_value": 2,
+                  "thumb_value_variable": "image_loader",
+                  "accessibility": {
+                    "description": "Min - 0, max - 2"
+                  },
+                  "tick_mark_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "stroke": {
+                      "color": "#ffffff",
+                      "width": 2
+                    },
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 8
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 8
+                      },
+                      "corner_radius": {
+                        "type": "fixed",
+                        "value": 5
+                      }
+                    }
+                  },
+                  "tick_mark_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "stroke": {
+                      "color": "#ffffff",
+                      "width": 2
+                    },
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 8
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 8
+                      },
+                      "corner_radius": {
+                        "type": "fixed",
+                        "value": 5
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "width": {
+                    "type": "fixed",
+                    "value": 410
+                  },
+                  "content_alignment_horizontal": "space-between",
+                  "items": [
+                    {
+                      "type": "settings_item_subtitle",
+                      "text": "Picasso"
+                    },
+                    {
+                      "type": "settings_item_subtitle",
+                      "text": "Glide"
+                    },
+                    {
+                      "type": "settings_item_subtitle",
+                      "text": "Coil"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "settings_category",
+              "text": "Theme",
+              "visibility": "gone"
+            },
+            {
+              "type": "settings_item",
+              "orientation": "vertical",
+              "visibility": "gone",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "Night mode"
+                },
+                {
+                  "type": "settings_item_subtitle",
+                  "text": "@{night_mode}"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=theme_tooltip"
+                }
+              ],
+              "tooltips": [
+                {
+                  "id": "theme_tooltip",
+                  "position": "top-right",
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": -180
+                    },
+                    "y": {
+                      "value": 5
+                    }
+                  },
+                  "div": {
+                    "type": "settings_item",
+                    "width": {
+                      "type": "fixed",
+                      "value": 180
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#f1f1f1"
+                      }
+                    ],
+                    "paddings": {
+                      "top": 7,
+                      "bottom": 7,
+                      "left": 10,
+                      "right": 10
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "theme_tooltip_text",
+                        "text": "DAY",
+                        "set_variable_url": "div-action://set_variable?name=night_mode&value=DAY",
+                        "change_settings_url": "div-action://set_preferences?name=night_mode&value=DAY"
+                      },
+                      {
+                        "type": "list_delimiter"
+                      },
+                      {
+                        "type": "theme_tooltip_text",
+                        "text": "NIGHT",
+                        "set_variable_url": "div-action://set_variable?name=night_mode&value=NIGHT",
+                        "change_settings_url": "div-action://set_preferences?name=night_mode&value=NIGHT"
+                      },
+                      {
+                        "type": "list_delimiter"
+                      },
+                      {
+                        "type": "theme_tooltip_text",
+                        "text": "AUTO",
+                        "set_variable_url": "div-action://set_variable?name=night_mode&value=AUTO",
+                        "change_settings_url": "div-action://set_preferences?name=night_mode&value=AUTO"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "settings_category",
+              "text": "Demo Activity"
+            },
+            {
+              "type": "settings_item",
+              "items": [
+                {
+                  "type": "settings_item_title",
+                  "text": "Show rendering time"
+                },
+                {
+                  "type": "setting_switch_state",
+                  "id": "demo_activity_rendering_time",
+                  "active_click_log_id": "demo_activity_rendering_time_disabled",
+                  "active_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/inactive",
+                  "active_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=0",
+                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/active",
+                  "inactive_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=1",
+                  "inactive_click_log_id": "demo_activity_rendering_time_enabled"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "@{app_version}",
+              "font_size": 16,
+              "font_weight": "regular",
+              "line_height": 24,
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 15,
+                "bottom": 7
+              },
+              "text_color": "#88000000"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

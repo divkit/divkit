@@ -1,0 +1,391 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "animation_title": {
+      "type": "text",
+      "font_weight": "bold",
+      "font_size": 14,
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 12,
+        "top": 24
+      }
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "in_out_transition_demo_block": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 88
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3F28C3"
+        }
+      ],
+      "text_color": "#ffffff",
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "change_state",
+        "type": "string",
+        "value": "none"
+      },
+      {
+        "name": "scale_state",
+        "type": "string",
+        "value": "visible"
+      },
+      {
+        "name": "slide_state",
+        "type": "string",
+        "value": "visible"
+      },
+      {
+        "name": "fade_state",
+        "type": "string",
+        "value": "visible"
+      },
+      {
+        "name": "set_state",
+        "type": "string",
+        "value": "visible"
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{change_state == 'scale' && scale_state == 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update scale_state",
+            "url": "div-action://set_variable?name=scale_state&value=invisible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'scale' && scale_state != 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update scale_state",
+            "url": "div-action://set_variable?name=scale_state&value=visible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'fade' && fade_state == 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update fade_state",
+            "url": "div-action://set_variable?name=fade_state&value=invisible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'fade' && fade_state != 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update fade_state",
+            "url": "div-action://set_variable?name=fade_state&value=visible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'slide' && slide_state == 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update slide_state",
+            "url": "div-action://set_variable?name=slide_state&value=invisible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'slide' && slide_state != 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update slide_state",
+            "url": "div-action://set_variable?name=slide_state&value=visible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'set' && set_state == 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=set_state&value=invisible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'set' && set_state == 'invisible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=set_state&value=visible"
+          }
+        ]
+      }
+    ],
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Transition animations"
+            },
+            {
+              "type": "subtitle",
+              "text": "For each div, you can customize the transition animation to be played when the div appears or disappears."
+            },
+            {
+              "type": "animation_title",
+              "text": "Scale"
+            },
+            {
+              "type": "in_out_transition_demo_block",
+              "id": "scale_in_out",
+              "text": "Scale",
+              "visibility": "@{scale_state}",
+              "transition_out": {
+                "type": "scale",
+                "duration": 1000
+              },
+              "transition_in": {
+                "type": "scale",
+                "duration": 1000
+              }
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Test Button",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=scale"
+                }
+              ]
+            },
+            {
+              "type": "animation_title",
+              "text": "Slide"
+            },
+            {
+              "type": "in_out_transition_demo_block",
+              "id": "slide_in_out",
+              "text": "Slide",
+              "visibility": "@{slide_state}",
+              "transition_out": {
+                "type": "slide",
+                "duration": 1000,
+                "edge": "left"
+              },
+              "transition_in": {
+                "type": "slide",
+                "duration": 1000,
+                "edge": "right"
+              }
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Test Button",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=slide"
+                }
+              ]
+            },
+            {
+              "type": "animation_title",
+              "text": "Fade"
+            },
+            {
+              "type": "in_out_transition_demo_block",
+              "id": "fade_in_out",
+              "text": "Fade",
+              "visibility": "@{fade_state}",
+              "transition_out": {
+                "type": "fade",
+                "duration": 1000
+              },
+              "transition_in": {
+                "type": "fade",
+                "duration": 1000
+              }
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Test Button",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=fade"
+                }
+              ]
+            },
+            {
+              "type": "animation_title",
+              "text": "Set"
+            },
+            {
+              "type": "in_out_transition_demo_block",
+              "id": "set_in_out",
+              "text": "Set",
+              "visibility": "@{set_state}",
+              "transition_out": {
+                "type": "set",
+                "items": [
+                  {
+                    "type": "fade",
+                    "duration": 1000
+                  },
+                  {
+                    "type": "scale",
+                    "duration": 1000
+                  }
+                ]
+              },
+              "transition_in": {
+                "type": "set",
+                "items": [
+                  {
+                    "type": "slide",
+                    "duration": 1000,
+                    "edge": "right"
+                  },
+                  {
+                    "type": "fade",
+                    "duration": 1000
+                  }
+                ]
+              }
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Test Button",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=set"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

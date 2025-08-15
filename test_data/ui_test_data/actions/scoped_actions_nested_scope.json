@@ -1,0 +1,132 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#586E75"
+    },
+    "base_text": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_color": "#002B36"
+    },
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#FDF6E3"
+    }
+  },
+  "card": {
+    "log_id": "scoped_actions_nested_scope",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#EEE8D5"
+            }
+          ],
+          "items": [
+            {
+              "type": "title",
+              "id": "title",
+              "text": "@{title_text}",
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "base_text",
+              "id": "content",
+              "text": "@{content_text}",
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "button",
+                  "margins": {
+                    "right": 16
+                  },
+                  "background_color": "#2AA198",
+                  "text": "Title scope",
+                  "actions": [
+                    {
+                      "log_id": "change_title",
+                      "scope_id": "title",
+                      "url": "div-action://set_variable?name=title_text&value=Title%20has%20been%20changed%20from%20'title'%20scope"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "background_color": "#268BD2",
+                  "text": "Content scope",
+                  "actions": [
+                    {
+                      "log_id": "change_title",
+                      "scope_id": "content",
+                      "url": "div-action://set_variable?name=title_text&value=Title%20has%20been%20changed%20from%20'content'%20scope"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "variables": [
+            {
+              "name": "title_text",
+              "type": "string",
+              "value": "Lorem ipsum"
+            },
+            {
+              "name": "content_text",
+              "type": "string",
+              "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

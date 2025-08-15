@@ -1,0 +1,116 @@
+{
+  "description": "Vertical gallery with scroll_mode=paging and paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "item": {
+        "type": "text",
+        "text": "",
+        "height": {
+          "type": "fixed",
+          "value": 180
+        },
+        "border": {
+          "corner_radius": 10
+        },
+        "margins": {
+          "left": 10,
+          "right": 10
+        }
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "id": "gallery",
+            "orientation": "vertical",
+            "scroll_mode": "paging",
+            "paddings": {
+              "top": 40,
+              "bottom": 80
+            },
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "background": [
+              {
+                "color": "#dfdfff",
+                "type": "solid"
+              }
+            ],
+            "items": [
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#49a5a5",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#49a141",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#4975a5",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#11e5a5",
+                    "type": "solid"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=gallery",
+          "log_id": "scroll_forward"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=gallery",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}

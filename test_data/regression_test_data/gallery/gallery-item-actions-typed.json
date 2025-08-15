@@ -1,0 +1,717 @@
+{
+  "templates": {
+    "header": {
+      "type": "text",
+      "font_size": 18,
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 5
+      }
+    },
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "width": {
+        "type": "fixed",
+        "value": 60
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 18,
+      "font_weight": "bold",
+      "text_color": "#ffffff",
+      "background": [
+        {
+          "color": "#D098D3",
+          "type": "solid"
+        }
+      ],
+      "margins": {
+        "left": 5,
+        "right": 5
+      },
+      "border": {
+        "corner_radius": 6
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "margins": {
+        "left": 10,
+        "right": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "header",
+              "text": "scroll_mode = default"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery1",
+              "scroll_mode": "default",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block"
+                }
+              ]
+            },
+            {
+              "type": "header",
+              "text": "scroll_mode = default. overflow=ring"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery4",
+              "scroll_mode": "default",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                }
+              ]
+            },
+            {
+              "type": "header",
+              "text": "scroll_mode = paging"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery2",
+              "scroll_mode": "paging",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block"
+                }
+              ]
+            },
+            {
+              "type": "header",
+              "text": "scroll_mode = paging. overflow=ring"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery3",
+              "scroll_mode": "paging",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "<<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/first",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery1",
+                        "animated": false,
+                        "destination": {
+                          "type": "index",
+                          "value": 0
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/first",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery2",
+                        "destination": {
+                          "type": "index",
+                          "value": 0
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/first",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery3",
+                        "animated": false,
+                        "destination": {
+                          "type": "index",
+                          "value": 0
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/first",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery4",
+                        "destination": {
+                          "type": "index",
+                          "value": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/prev",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery1",
+                        "item_count": -1,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/prev",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery2",
+                        "item_count": -1
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/prev",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery3",
+                        "overflow": "ring",
+                        "item_count": -1,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/prev",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery4",
+                        "overflow": "ring",
+                        "item_count": -1
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/next",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery1",
+                        "item_count": 1,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/next",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery2",
+                        "item_count": 1
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/next",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery3",
+                        "overflow": "ring",
+                        "item_count": 1,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/next",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery4",
+                        "overflow": "ring",
+                        "item_count": 1
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">>",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/last",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery1",
+                        "animated": false,
+                        "destination": {
+                          "type": "index",
+                          "value": 5
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/last",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery2",
+                        "destination": {
+                          "type": "index",
+                          "value": 5
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/last",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery3",
+                        "animated": false,
+                        "destination": {
+                          "type": "index",
+                          "value": 5
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/last",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery4",
+                        "destination": {
+                          "type": "index",
+                          "value": 5
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "paddings": {
+                "top": 10
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "<<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_to_start",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "start"
+                        },
+                        "id": "gallery1",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/scroll_to_start",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "start"
+                        },
+                        "id": "gallery2"
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/scroll_to_start",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "start"
+                        },
+                        "id": "gallery3",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/scroll_to_start",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "start"
+                        },
+                        "id": "gallery4"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_backward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery1",
+                        "offset": -50,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/scroll_backward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery2",
+                        "offset": -50
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/scroll_backward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery3",
+                        "offset": -50,
+                        "overflow": "ring",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/scroll_backward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery4",
+                        "offset": -50,
+                        "overflow": "ring"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "*",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll to position 300dp",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery1",
+                        "animated": false,
+                        "destination": {
+                          "type": "offset",
+                          "value": 300
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/scroll to position 300dp",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery2",
+                        "destination": {
+                          "type": "offset",
+                          "value": 300
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/scroll to position 300dp",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery3",
+                        "animated": false,
+                        "destination": {
+                          "type": "offset",
+                          "value": 300
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/scroll to position 300dp",
+                      "typed": {
+                        "type": "scroll_to",
+                        "id": "gallery4",
+                        "destination": {
+                          "type": "offset",
+                          "value": 300
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_forward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery1",
+                        "offset": 50,
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/scroll_forward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery2",
+                        "offset": 50
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/scroll_forward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery3",
+                        "offset": 50,
+                        "overflow": "ring",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/scroll_forward by 50dp",
+                      "typed": {
+                        "type": "scroll_by",
+                        "id": "gallery4",
+                        "offset": 50,
+                        "overflow": "ring"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">>",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_to_end",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "end"
+                        },
+                        "id": "gallery1",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery2/scroll_to_end",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "end"
+                        },
+                        "id": "gallery2"
+                      }
+                    },
+                    {
+                      "log_id": "gallery3/scroll_to_end",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "end"
+                        },
+                        "id": "gallery3",
+                        "animated": false
+                      }
+                    },
+                    {
+                      "log_id": "gallery4/scroll_to_end",
+                      "typed": {
+                        "type": "scroll_to",
+                        "destination": {
+                          "type": "end"
+                        },
+                        "id": "gallery4"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "paddings": {
+                "top": 10
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

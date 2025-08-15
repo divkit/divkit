@@ -1,0 +1,13 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+
+android {
+    namespace 'com.yandex.test.screenshot'
+}
+
+dependencies {
+    implementation project(path: ':ui-test-common')
+
+    implementation libs.androidx.test.uiautomator
+    implementation libs.kotlin.corountines.core
+    implementation libs.kotlin.corountines.android
+}

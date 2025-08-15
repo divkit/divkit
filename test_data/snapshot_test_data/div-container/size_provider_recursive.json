@@ -1,0 +1,83 @@
+{
+  "description": "SizeProvider extension recursive",
+  "platforms": [
+    "android",
+    "flutter",
+    "web"
+  ],
+  "templates": {
+    "block": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "text",
+          "font_size": 16,
+          "width": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          }
+        }
+      ],
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0FFA0"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "name": "block1_width",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "block",
+              "text": "width = match_parent",
+              "extensions": [
+                {
+                  "id": "size_provider",
+                  "params": {
+                    "width_variable_name": "block1_width"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 2
+              }
+            },
+            {
+              "type": "block",
+              "text": "width = block1.width x 0.75",
+              "width": {
+                "type": "fixed",
+                "value": "@{block1_width * 3 / 4}"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

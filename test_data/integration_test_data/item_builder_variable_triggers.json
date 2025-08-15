@@ -1,0 +1,92 @@
+{
+  "description": "Item builder with variable triggers.",
+  "div_data": {
+    "card": {
+      "log_id": "item_builder",
+      "variables": [
+        {
+          "name": "data",
+          "type": "array",
+          "value": [
+            {
+              "key": 90
+            }
+          ]
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "item_builder": {
+              "data": "@{data}",
+              "data_element_name": "item",
+              "prototypes": [
+                {
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "container",
+                        "items": [],
+                        "variable_triggers": [
+                          {
+                            "condition": "@{step == 0}",
+                            "actions": [
+                              {
+                                "log_id": "setter",
+                                "typed": {
+                                  "type": "set_variable",
+                                  "variable_name": "result",
+                                  "value": {
+                                    "type": "integer",
+                                    "value": "@{item.getInteger('key')}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check item_builder item availability in trigger",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 90
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

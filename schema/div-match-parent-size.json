@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_match_parent_size",
+  "properties": {
+    "weight": {
+      "$ref": "common.json#/positive_number",
+      "$description": "translations.json#/div_match_parent_size_weight"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "match_parent"
+      ]
+    },
+    "min_size": {
+      "$ref": "div-size-unit-value.json",
+      "$description": "translations.json#/div_size_min",
+      "platforms": []
+    },
+    "max_size": {
+      "$ref": "div-size-unit-value.json",
+      "$description": "translations.json#/div_size_max",
+      "platforms": []
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

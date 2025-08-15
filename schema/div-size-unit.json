@@ -1,0 +1,16 @@
+{
+  "type": "string",
+  "enum": [
+    "dp",
+    "sp",
+    "px"
+  ],
+  "$description": "translations.json#/div_size_unit",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "All sizes are set in dp or sp, controlled by integration code. There is no concept of device px."
+  }
+}

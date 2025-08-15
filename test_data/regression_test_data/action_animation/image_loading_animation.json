@@ -1,0 +1,269 @@
+{
+  "templates": {
+    "label_text": {
+      "type": "text",
+      "font_size": 12,
+      "height": {
+        "type": "fixed",
+        "value": 70
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    },
+    "tested_image": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 70
+      },
+      "height": {
+        "type": "fixed",
+        "value": 70
+      },
+      "image_url": "https://yastatic.net/s3/home/divkit/big_image_circle.webp"
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12,
+            "bottom": 12
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/small_image_circle.jpeg",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 8000.0,
+                    "start_delay": 0.0,
+                    "interpolator": "linear"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "mini image"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "linear"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: linear, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "ease"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: ease, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "ease_in"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: ease_in, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "ease_out"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: ease_out, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "ease_in_out"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: ease_in_out, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 4000.0,
+                    "interpolator": "spring"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: spring, duration: 4000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 8000.0,
+                    "interpolator": "linear"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: linear, duration: 8000,\nalpha: 0.0, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.5,
+                    "duration": 8000.0,
+                    "interpolator": "linear"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: linear, duration: 8000,\nalpha: 0.5, delay: 0.0"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "tested_image",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "alpha": 0.0,
+                    "duration": 8000.0,
+                    "start_delay": 3000.0,
+                    "interpolator": "linear"
+                  }
+                },
+                {
+                  "type": "label_text",
+                  "text": "interpolator: linear, duration: 8000,\nalpha: 0.0, delay: 3000"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

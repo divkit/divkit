@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="div_size_provider_data" type="id"/>
+    <item name="div_size_provider_listener" type="id"/>
+    <item name="div_size_provider_clear_variables_listener" type="id"/>
+</resources>

@@ -1,0 +1,36 @@
+{
+  "description": "Image with label_image_preview extension",
+  "platforms": [
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "No such extension"
+  },
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "empty://",
+          "placeholder_color": "#f00",
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "extensions": [
+            {
+              "id": "label_image_preview"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

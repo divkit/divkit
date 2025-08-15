@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_set_stored_value",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set_stored_value"
+      ]
+    },
+    "name": {
+      "$description": "translations.json#/div_action_set_stored_value_name",
+      "type": "string"
+    },
+    "value": {
+      "$description": "translations.json#/div_action_set_stored_value_value",
+      "$ref": "div-typed-value.json"
+    },
+    "lifetime": {
+      "$description": "translations.json#/div_action_set_stored_value_lifetime",
+      "type": "integer"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "name",
+    "value",
+    "lifetime"
+  ]
+}

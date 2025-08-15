@@ -1,0 +1,17 @@
+{
+  "entity-4": {
+    "type": "base",
+    "child": {
+      "type": "entity-2"
+    }
+  },
+  "entity-3": {
+    "type": "entity-1"
+  },
+  "entity-2": {
+    "type": "base"
+  },
+  "entity-1": {
+    "type": "base"
+  }
+}

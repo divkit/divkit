@@ -1,0 +1,59 @@
+{
+  "description": "Line height of multi-line text with image span",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "line_height_with_image",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "paddings": {
+            "left": 4,
+            "top": 4,
+            "right": 4,
+            "bottom": 4
+          },
+          "font_size": 14,
+          "line_height": 16,
+          "text": "Multiline text with overall line height containing:\n\t1. embedded  image\n\t2. embedded  image and line height range",
+          "images": [
+            {
+              "start": 65,
+              "width": {
+                "value": 24
+              },
+              "height": {
+                "value": 24
+              },
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+            },
+            {
+              "start": 85,
+              "width": {
+                "value": 24
+              },
+              "height": {
+                "value": 24
+              },
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+            }
+          ],
+          "ranges": [
+            {
+              "start": 96,
+              "end": 113,
+              "font_weight": "medium",
+              "line_height": 32
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

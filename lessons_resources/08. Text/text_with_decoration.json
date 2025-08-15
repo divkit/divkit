@@ -1,0 +1,128 @@
+{
+  "templates": {
+    "example_text": {
+      "type": "text",
+      "font_size": 20,
+      "margins": {
+        "bottom": 10,
+        "top": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "margins": {
+            "left": 10,
+            "right": 10
+          },
+          "type": "container",
+          "separator": {
+            "show_between": true,
+            "style": {
+              "color": "#999",
+              "type": "shape_drawable",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 1000
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 1
+                }
+              }
+            }
+          },
+          "items": [
+            {
+              "type": "example_text",
+              "text": "Long text that should not take up more than 1 line",
+              "max_lines": 1,
+              "ellipsis": {
+                "text": "… SHOW MORE",
+                "ranges": [
+                  {
+                    "start": 2,
+                    "end": 11,
+                    "font_size": 11,
+                    "font_weight": "medium",
+                    "text_color": "#95A5A6"
+                  }
+                ]
+              },
+              "text_shadow": {
+                "color": "#30d5c8",
+                "alpha": 1,
+                "blur": 1,
+                "offset": {
+                  "x": {
+                    "value": 3
+                  },
+                  "y": {
+                    "value": 3
+                  }
+                }
+              }
+            },
+            {
+              "type": "example_text",
+              "text": "Long text with many possibilities for highlighting and adding some  elements. For example,\n Su\u00ADper\u00ADcal\u00ADifrag\u00ADilis\u00ADtic\u00ADex\u00ADpi\u00ADali\u00ADdo\u00ADcious",
+              "alignment_horizontal": "end",
+              "width":{
+                "type": "fixed",
+                "value": 260
+              },
+              "text_alignment_horizontal": "end",
+              "text_gradient": {
+                "type": "gradient",
+                "angle": 60,
+                "colors": [
+                  "#8b00ff",
+                  "#ffa500"
+                ]
+              },
+              "images": [
+                {
+                  "start": 67,
+                  "url": "https://yastatic.net/s3/doc-binary/src/divkit/divkitfav.png"
+                }
+              ],
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 4,
+                  "letter_spacing": 2
+                },
+                {
+                  "start": 38,
+                  "end": 50,
+                  "font_weight": "bold"
+                },
+                {
+                  "start": 78,
+                  "end": 89,
+                  "underline": "single"
+                }
+              ]
+            },
+            {
+              "type": "example_text",
+              "text_alignment_horizontal": "center",
+              "text": "**Info**: no error in code `println(\"Hello World!\")`",
+              "extensions": [
+                {
+                  "id": "markdown"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

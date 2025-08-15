@@ -1,0 +1,98 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "top_input",
+        "type": "string",
+        "value": "initial_text"
+      },
+      {
+        "name": "highlight_color",
+        "type": "color",
+        "value": "#CCCCFF"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "id": "top_input",
+              "type": "test_input",
+              "text_variable": "top_input",
+              "highlight_color": "@{highlight_color}",
+              "select_all_on_focus": 1
+            },
+            {
+              "id": "action_button",
+              "type": "text",
+              "text": "Change highlight color",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#0000FF"
+                }
+              },
+              "actions": [
+                {
+                  "log_id": "change highlight color",
+                  "url": "div-action://set_variable?name=highlight_color&value=%23FFCCCC"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "test_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      }
+    }
+  }
+}

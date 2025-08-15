@@ -1,0 +1,104 @@
+{
+  "$description": "translations.json#/div_indicator",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "indicator"
+          ]
+        },
+        "pager_id": {
+          "$ref": "common.json#/id",
+          "$description": "translations.json#/div_indicator_pager_id"
+        },
+        "items_placement": {
+          "$ref": "div-indicator-item-placement.json",
+          "$description": "translations.json#/div_indicator_item_placement"
+        },
+        "space_between_centers": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":15}",
+          "$description": "translations.json#/div_indicator_space_between_centers",
+          "deprecated": true
+        },
+        "inactive_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#33919cb5",
+          "$description": "translations.json#/div_indicator_inactive_item_color",
+          "deprecated": true
+        },
+        "active_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#ffdc60",
+          "$description": "translations.json#/div_indicator_active_item_color",
+          "deprecated": true
+        },
+        "shape": {
+          "$ref": "div-shape.json",
+          "default_value": "{\"type\":\"rounded_rectangle\"}",
+          "$description": "translations.json#/div_indicator_shape",
+          "deprecated": true
+        },
+        "active_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "1.3",
+          "$description": "translations.json#/div_indicator_active_item_size",
+          "deprecated": true
+        },
+        "minimum_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "0.5",
+          "$description": "translations.json#/div_indicator_minimum_item_size",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "active_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_active_shape"
+        },
+        "inactive_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_inactive_shape"
+        },
+        "inactive_minimum_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_inactive_minimum_shape",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "animation": {
+          "type": "string",
+          "enum": [
+            "scale",
+            "worm",
+            "slider"
+          ],
+          "default_value": "scale",
+          "$description": "translations.json#/div_indicator_animation",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type"
+  ]
+}

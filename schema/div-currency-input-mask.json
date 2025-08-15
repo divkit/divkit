@@ -1,0 +1,30 @@
+{
+  "$description": "translations.json#/div_input_mask_currency",
+  "allOf": [
+    {
+      "$ref": "div-input-mask-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "currency"
+          ]
+        },
+        "locale": {
+          "type": "string",
+          "$description": "translations.json#/div_input_mask_currency_locale"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type"
+  ]
+}

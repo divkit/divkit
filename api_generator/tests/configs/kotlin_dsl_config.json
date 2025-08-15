@@ -1,0 +1,4 @@
+{
+    "lang": "kotlinDsl",
+    "header": "// Generated code. Do not modify.\n\npackage com.yandex.api_generator.test\n\nimport java.net.URI\nimport com.fasterxml.jackson.annotation.*\nimport com.yandex.div.dsl.*\nimport com.yandex.div.dsl.context.*\nimport com.yandex.div.dsl.type.*\nimport com.yandex.div.dsl.util.*\n"
+}

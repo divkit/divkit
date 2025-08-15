@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_page_content_size",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "wrap_content"
+      ]
+    }
+  },
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "required": [
+    "type"
+  ]
+}

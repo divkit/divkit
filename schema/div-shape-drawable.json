@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_shape_drawable",
+  "properties": {
+    "shape": {
+      "$ref": "div-shape.json",
+      "$description": "translations.json#/div_shape_drawable_shape"
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "$description": "translations.json#/div_shape_drawable_color",
+      "deprecated": true
+    },
+    "stroke": {
+      "$ref": "div-stroke.json",
+      "$description": "translations.json#/div_shape_drawable_stroke",
+      "deprecated": true
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "shape_drawable"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "shape",
+    "color"
+  ]
+}

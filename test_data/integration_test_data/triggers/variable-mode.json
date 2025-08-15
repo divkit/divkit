@@ -1,0 +1,208 @@
+{
+  "description": "Trigger with mode 'on_variable'",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "total_likes",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "trigger_state",
+          "type": "string",
+          "value": "unset"
+        }
+      ],
+      "variable_triggers": [
+        {
+          "condition": "@{total_likes > 100}",
+          "mode": "on_variable",
+          "actions": [
+            {
+              "log_id": "trigger_invoke",
+              "url": "div-action://set_variable?name=trigger_state&value=activated"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=total_likes&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=total_likes&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=total_likes&value=110",
+          "log_id": "set_110"
+        },
+        {
+          "url": "div-action://set_variable?name=trigger_state&value=unset",
+          "log_id": "reset_trigger_state"
+        },
+        {
+          "url": "div-action://set_variable?name=total_likes&value=130",
+          "log_id": "set_130"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=total_likes&value=110",
+          "log_id": "set_110"
+        },
+        {
+          "url": "div-action://set_variable?name=trigger_state&value=unset",
+          "log_id": "reset_trigger_state"
+        },
+        {
+          "url": "div-action://set_variable?name=total_likes&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=total_likes&value=110",
+          "log_id": "set_110"
+        },
+        {
+          "url": "div-action://set_variable?name=trigger_state&value=unset",
+          "log_id": "reset_trigger_state"
+        },
+        {
+          "url": "div-action://set_variable?name=total_likes&value=50",
+          "log_id": "repeat_set_50 (to trigger variable change)"
+        },
+        {
+          "url": "div-action://set_variable?name=total_likes&value=130",
+          "log_id": "repeat_set_130"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

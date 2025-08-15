@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_hide_tooltip",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "hide_tooltip"
+      ]
+    },
+    "id": {
+      "$description": "translations.json#/div_action_tooltip_id",
+      "type": "string"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "id"
+  ]
+}

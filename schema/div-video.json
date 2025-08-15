@@ -1,0 +1,122 @@
+{
+  "$description": "translations.json#/div_video",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "video"
+          ]
+        },
+        "video_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "div-video-source.json",
+            "$description": "translations.json#/div_video_source"
+          },
+          "minItems": 1
+        },
+        "repeatable": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_repeatable"
+        },
+        "autostart": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_autostart"
+        },
+        "preload_required": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_preload_required",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "muted": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_muted"
+        },
+        "preview": {
+          "type": "string",
+          "$description": "translations.json#/div_video_preview"
+        },
+        "elapsed_time_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_video_elapsed_time_variable"
+        },
+        "resume_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_video_resume_actions"
+        },
+        "pause_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_video_pause_actions"
+        },
+        "end_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_video_end_actions"
+        },
+        "buffering_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_video_buffering_actions"
+        },
+        "fatal_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_video_fatal_actions"
+        },
+        "player_settings_payload": {
+          "type": "object",
+          "additionalProperties": true,
+          "$description": "translations.json#/div_video_player_settings_payload",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "aspect": {
+          "$ref": "div-aspect.json",
+          "$description": "translations.json#/div_aspect"
+        },
+        "scale": {
+          "$ref": "div-video-scale.json",
+          "default_value": "fit",
+          "$description": "translations.json#/div_video_scale"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "type",
+    "video_sources"
+  ]
+}

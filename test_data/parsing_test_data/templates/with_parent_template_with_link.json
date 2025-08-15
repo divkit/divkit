@@ -1,0 +1,59 @@
+{
+  "description": "Template with parent template with link",
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "paddings": {
+        "$top": "top_padding",
+        "bottom": 10
+      }
+    },
+    "title": {
+      "type": "base_text",
+      "actions": [
+        {
+          "log_id": "test_action",
+          "$url": "action_url"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "title",
+          "text": "Hello!",
+          "top_padding": 20,
+          "action_url": "action://url"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!",
+            "paddings": {
+              "top": 20,
+              "bottom": 10
+            },
+            "actions": [
+              {
+                "log_id": "test_action",
+                "url": "action://url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

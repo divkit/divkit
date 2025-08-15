@@ -1,0 +1,100 @@
+{
+  "description": "Text with different masks",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "text_template": {
+      "type": "text",
+      "font_size": 20
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_template",
+              "text": "Solid mask value. Text end",
+              "ranges": [
+                {
+                  "start": 11,
+                  "end": 16,
+                  "mask": {
+                    "type": "solid",
+                    "color": "#ccc"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.2 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "color": "#000",
+                    "density": 0.2
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.4 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "color": "#000",
+                    "density": 0.4
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.8 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "color": "#000",
+                    "density": 0.8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 1.0 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "color": "#000",
+                    "density": 1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

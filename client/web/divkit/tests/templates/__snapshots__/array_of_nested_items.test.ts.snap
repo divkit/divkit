@@ -1,0 +1,723 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template_without_data 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template_without_data 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_item_template_without_item_required_property 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_link_for_items 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_link_for_items 2`] = `[]`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_link_for_items_with_item_template 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_with_link_for_items_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_without_item_required_property 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_without_templates 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items > test_array_of_nested_items_without_templates 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_data 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_data 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_item_required_property 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items 2`] = `[]`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items_with_item_template 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {
+    "items_link": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_item_required_property 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_item_required_property 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_templates 1`] = `
+{
+  "json": {
+    "items": [
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      {
+        "entity": {
+          "property": {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_templates 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;

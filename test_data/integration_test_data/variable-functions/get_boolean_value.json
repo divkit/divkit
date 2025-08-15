@@ -1,0 +1,203 @@
+{
+  "description": "Check getBooleanValue subscription.",
+  "div_data": {
+    "card": {
+      "log_id": "get_integer_value",
+      "variables": [
+        {
+          "name": "part_of_name",
+          "type": "string",
+          "value": "1"
+        },
+        {
+          "name": "var_1",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "var_2",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "variable_triggers": [
+        {
+          "condition": "@{toString(getBooleanValue('var_' + part_of_name, false)) != ''}",
+          "mode": "on_variable",
+          "actions": [
+            {
+              "log_id": "check result",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "result",
+                "value": {
+                  "type": "boolean",
+                  "value": "@{getBooleanValue('var_' + part_of_name, false)}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_1&value=true"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_2&value=false"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change old value",
+          "url": "div-action://set_variable?name=var_1&value=true"
+        },
+        {
+          "log_id": "change old value",
+          "url": "div-action://set_variable?name=var_1&value=false"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change another value",
+          "url": "div-action://set_variable?name=var_2&value=false"
+        },
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

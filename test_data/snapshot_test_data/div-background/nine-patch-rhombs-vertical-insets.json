@@ -1,0 +1,35 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "background": [
+            {
+              "image_url": "https://yastatic.net/s3/home/divkit/ninepatch2.png",
+              "type": "nine_patch_image",
+              "insets": {
+                "top": 33,
+                "right": 0,
+                "bottom": 33,
+                "left": 0
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

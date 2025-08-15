@@ -1,0 +1,86 @@
+{
+  "card": {
+    "variables": [
+      {
+        "name": "title",
+        "type": "string",
+        "value": " "
+      },
+      {
+        "name": "background_color",
+        "type": "string",
+        "value": "#F2F2F2"
+      }
+    ],
+    "log_id": "switcher",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "paddings": {
+            "top": 22,
+            "bottom": 22,
+            "left": 20,
+            "right": 20
+          },
+          "margins": {
+            "top": 10,
+            "bottom": 10,
+            "left": 20,
+            "right": 20
+          },
+          "action_animation": {
+            "name": "native"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "color": "@{background_color}",
+              "type": "solid"
+            }
+          ],
+          "border": {
+            "corner_radius": 22
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "@{title}",
+              "font_size": 18,
+              "font_weight": "regular",
+              "line_height": 24,
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "file:///android_asset/application/images/ic_forward.png",
+              "width": {
+                "type": "fixed",
+                "value": 9
+              },
+              "height": {
+                "type": "fixed",
+                "value": 16
+              },
+              "margins": {
+                "top": 4,
+                "bottom": 4,
+                "left": 20
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

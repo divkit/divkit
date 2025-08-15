@@ -1,0 +1,100 @@
+{
+  "description": "Overlap container aligned right-to-left. Start/end text blocks should be aligned according to the alignment (right-to-left).",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#ffffff",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "top": 8,
+        "bottom": 8,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#808080"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "text": "Upper-start corner",
+              "alignment_horizontal": "start"
+            },
+            {
+              "type": "text_block",
+              "text": "Lower-start corner",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "start"
+            },
+            {
+              "type": "text_block",
+              "text": "Text on top",
+              "margins": {
+                "start": 16,
+                "top": 20
+              },
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#CD6155"
+                }
+              ],
+              "alignment_horizontal": "start"
+            },
+            {
+              "type": "text_block",
+              "text": "Upper-end corner",
+              "alignment_horizontal": "end"
+            },
+            {
+              "type": "text_block",
+              "text": "Lower-end corner",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "end"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+import 'dart:async';
+
+import 'package:divkit/divkit.dart';
+import 'package:example/src/pages/settings.dart';
+
+import 'package:flutter/material.dart';
+
+import '../pages/playground.dart';
+import '../pages/samples.dart';
+import '../pages/testing/testing.dart';
+
+const _openScreen = 'open_screen';
+const _schemeDivAction = 'div-action';
+const _activityDemo = 'demo';
+const _activitySamples = 'samples';
+const _activityRegression = 'regression';
+const _activitySettings = 'settings';
+const _paramActivity = 'activity';
+
+class PlaygroundAppRootActionHandler implements DivActionHandler {
+  final _typedHandler = DefaultDivActionHandlerTyped();
+  final GlobalKey<NavigatorState> _navigator;
+
+  NavigatorState get _navigationManager =>
+      Navigator.of(_navigator.currentContext!);
+
+  PlaygroundAppRootActionHandler({
+    required GlobalKey<NavigatorState> navigator,
+  }) : _navigator = navigator;
+
+  @override
+  bool canHandle(DivContext context, DivActionModel action) {
+    if (_typedHandler.canHandle(context, action)) {
+      return true;
+    }
+
+    final uri = action.url;
+    if (uri != null) {
+      if (uri.scheme == _schemeDivAction &&
+          uri.host == _openScreen &&
+          [
+            _activityDemo,
+            _activitySamples,
+            _activityRegression,
+            _activitySettings,
+          ].contains(uri.queryParameters[_paramActivity])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  FutureOr<bool> handleAction(
+    DivContext context,
+    DivActionModel action,
+  ) async {
+    if (_typedHandler.canHandle(context, action)) {
+      return _typedHandler.handleAction(context, action);
+    }
+
+    final uri = action.url;
+    if (uri == null) {
+      return false;
+    }
+
+    return handleUrlAction(context, uri);
+  }
+
+  bool handleUrlAction(DivContext context, Uri uri) {
+    if (uri.scheme != _schemeDivAction || uri.host != _openScreen) {
+      return false;
+    }
+    switch (uri.queryParameters[_paramActivity]) {
+      case _activityDemo:
+        _navigationManager.push(
+          MaterialPageRoute(
+            builder: (_) => const PlaygroundPage(),
+          ),
+        );
+        break;
+      case _activitySamples:
+        _navigationManager.push(
+          MaterialPageRoute(
+            builder: (_) => const SamplesPage(),
+          ),
+        );
+        break;
+      case _activityRegression:
+        _navigationManager.push(
+          MaterialPageRoute(
+            builder: (_) => const TestingPage(),
+          ),
+        );
+        break;
+      case _activitySettings:
+        _navigationManager.push(
+          MaterialPageRoute(
+            builder: (_) => const SettingsPage(),
+          ),
+        );
+        break;
+      default:
+        return false;
+    }
+
+    return true;
+  }
+
+  void showSnackBar(String text) {
+    ScaffoldMessenger.of(_navigator.currentContext!).hideCurrentSnackBar();
+    ScaffoldMessenger.of(_navigator.currentContext!).showSnackBar(
+      SnackBar(content: Text(text)),
+    );
+  }
+}

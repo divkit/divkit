@@ -1,0 +1,66 @@
+{
+  "description": "Horizontal container with element with wrap_content constrained width which does not fit in container but affects container's height.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 150
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0A0FF"
+            }
+          ],
+          "items": [
+            {
+              "type": "item",
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "text": "Fixed width = 150.\nNo place for constrained element, it tries to place its text vertically and its height is considered.",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#A0FFA0"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true
+              },
+              "text": "constrained",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFA0A0"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

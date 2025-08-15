@@ -1,0 +1,313 @@
+{
+  "description": "Text with base properties",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "text",
+          "type": "string",
+          "value": "initial_text"
+        },
+        {
+          "name": "font_size",
+          "type": "integer",
+          "value": 24
+        },
+        {
+          "name": "font_size_unit",
+          "type": "string",
+          "value": "sp"
+        },
+        {
+          "name": "font_weight",
+          "type": "string",
+          "value": "medium"
+        },
+        {
+          "name": "font_family",
+          "type": "string",
+          "value": "text"
+        },
+        {
+          "name": "letter_spacing",
+          "type": "number",
+          "value": 0
+        },
+        {
+          "name": "text_alignment_horizontal",
+          "type": "string",
+          "value": "left"
+        },
+        {
+          "name": "text_alignment_vertical",
+          "type": "string",
+          "value": "top"
+        },
+        {
+          "name": "text_color",
+          "type": "color",
+          "value": "#FF000000"
+        },
+        {
+          "name": "line_height",
+          "type": "number",
+          "value": 30
+        },
+        {
+          "name": "max_lines",
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "name": "font_variations",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "match_parent"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#fff"
+              }
+            ],
+            "paddings": {
+              "left": 16,
+              "right": 16
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "@{text}",
+                "font_size": "@{font_size}",
+                "font_size_unit": "@{font_size_unit}",
+                "font_family": "@{font_family}",
+                "font_weight": "@{font_weight}",
+                "font_variation_settings": "@{font_variations}",
+                "letter_spacing": "@{letter_spacing}",
+                "line_height": "@{line_height}",
+                "max_lines": "@{max_lines}",
+                "text_alignment_horizontal": "@{text_alignment_horizontal}",
+                "text_alignment_vertical": "@{text_alignment_vertical}",
+                "text_color": "@{text_color}",
+                "width": {
+                  "type": "match_parent"
+                },
+                "horizontal_alignment": "center",
+                "vertical_alignment": "center"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=1-gravity_n_color",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=text_color&value=%23E67E22",
+          "log_id": "text_color"
+        },
+        {
+          "url": "div-action://set_variable?name=text_alignment_horizontal&value=center",
+          "log_id": "text_alignment_horizontal"
+        },
+        {
+          "url": "div-action://set_variable?name=text_alignment_vertical&value=center",
+          "log_id": "text_alignment_vertical"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=2-font_attributes",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_weight&value=bold",
+          "log_id": "font_weight"
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=display",
+          "log_id": "font_family"
+        },
+        {
+          "url": "div-action://set_variable?name=letter_spacing&value=2.5",
+          "log_id": "letter_spacing"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=3-font_size_unit_px",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=px",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=4-font_size_unit_dp",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=dp",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=5-font_size",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size&value=18",
+          "log_id": "font_size"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=6-max_lines%0Aline_2%0Aline_3%0Aline_4",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=max_lines&value=1",
+          "log_id": "max_lines"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=7-line_height%0Aline_2%0Aline_3",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=line_height&value=40",
+          "log_id": "line_height"
+        },
+        {
+          "url": "div-action://set_variable?name=max_lines&value=3",
+          "log_id": "max_lines"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=8-font_variations",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=roboto_flex",
+          "log_id": "font_family"
+        },
+        {
+          "log_id": "font_variations",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "font_variations",
+            "value": {
+              "type": "dict",
+              "value": {
+                "slnt": -7
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=initial_text",
+          "log_id": "restore: text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size&value=24",
+          "log_id": "restore: font_size"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=sp",
+          "log_id": "restore: font_size_unit"
+        },
+        {
+          "url": "div-action://set_variable?name=font_weight&value=medium",
+          "log_id": "restore: font_weight"
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=text",
+          "log_id": "restore: font_family"
+        },
+        {
+          "log_id": "restore: font_variations",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "font_variations",
+            "value": {
+              "type": "dict",
+              "value": {}
+            }
+          }
+        },
+        {
+          "url": "div-action://set_variable?name=letter_spacing&value=0",
+          "log_id": "restore: letter_spacing"
+        },
+        {
+          "url": "div-action://set_variable?name=text_alignment_horizontal&value=left",
+          "log_id": "restore: text_alignment_horizontal"
+        },
+        {
+          "url": "div-action://set_variable?name=text_alignment_vertical&value=top",
+          "log_id": "restore: text_alignment_vertical"
+        },
+        {
+          "url": "div-action://set_variable?name=text_color&value=%23FF000000",
+          "log_id": "restore: text_color"
+        },
+        {
+          "url": "div-action://set_variable?name=line_height&value=30",
+          "log_id": "restore: line_height"
+        },
+        {
+          "url": "div-action://set_variable?name=max_lines&value=3",
+          "log_id": "restore: max_lines"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

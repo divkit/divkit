@@ -1,0 +1,27 @@
+plugins {
+    id 'java-gradle-plugin'
+    alias(libs.plugins.kotlin.jvm)
+}
+
+group = 'com.yandex.test'
+version = '1.0.0'
+
+dependencies {
+    implementation libs.androidx.annotations
+    implementation libs.agp.gradleApi
+    implementation libs.agp.gradle
+    implementation libs.gson
+    implementation libs.protobuf
+    implementation libs.webp.imageio
+
+    implementation libs.google.testing.platform.proto
+}
+
+gradlePlugin {
+    plugins {
+        screenshotTests {
+            id = 'com.yandex.test.screenshot-test-plugin'
+            implementationClass = 'com.yandex.test.screenshot.ScreenshotTestPlugin'
+        }
+    }
+}

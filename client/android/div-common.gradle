@@ -1,0 +1,52 @@
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-allopen"
+
+android {
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionName divkitVersion.baseVersionName
+        versionCode divkitVersion.versionCode
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+}
+
+tasks.register('sourceJar', Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier = "sources"
+}
+
+def tanker(String action, String keySet) {
+    rootProject.exec {
+        commandLine rootProject.file('buildSrc/src/scripts/tanker/tanker.py').absolutePath
+        args '--action', action, '--res-path', project.file('src/main/res/'), '--keyset', keySet
+    }.assertNormalExitValue()
+}
+
+ext {
+    tanker = this.&tanker
+}
+
+allOpen {
+    annotation("com.yandex.div.core.annotations.Mockable")
+}

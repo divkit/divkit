@@ -1,0 +1,31 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gif",
+          "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "scale": "fit",
+          "content_alignment_vertical": "bottom"
+        }
+      }
+    ]
+  }
+}

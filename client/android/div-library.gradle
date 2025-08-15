@@ -1,0 +1,7 @@
+apply plugin: 'com.android.library'
+
+apply from: "${buildscript.sourceFile.parent}/div-common.gradle"
+
+dependencies {
+    lintChecks project(path: ':lint-rules')
+}

@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_edge_insets",
+  "properties": {
+    "left": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_left"
+    },
+    "right": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_right"
+    },
+    "top": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_top"
+    },
+    "bottom": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_bottom"
+    },
+    "start": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_edge_insets_start"
+    },
+    "end": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_edge_insets_end"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  }
+}

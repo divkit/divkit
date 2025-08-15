@@ -1,0 +1,62 @@
+{
+  "description": "Grid without items",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "empty_grid",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ECF0F1"
+            }
+          ],
+          "items": [
+            {
+              "type": "grid",
+              "column_count": 2,
+              "width": {
+                "type": "fixed",
+                "value": 168
+              },
+              "height": {
+                "type": "fixed",
+                "value": 168
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "items": []
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

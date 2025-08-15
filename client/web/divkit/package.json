@@ -1,0 +1,129 @@
+{
+    "name": "@divkitframework/divkit",
+    "version": "32.13.0",
+    "description": "DivKit for the web",
+    "keywords": [
+        "server-driven-ui",
+        "ssr",
+        "web",
+        "divkit",
+        "renderer"
+    ],
+    "author": "",
+    "homepage": "https://github.com/divkit/divkit",
+    "repository": "github:divkit/divkit",
+    "license": "Apache-2.0",
+    "files": [
+        "dist/*",
+        "typings/*",
+        "client/*",
+        "client-hydratable/*",
+        "client-devtool/*",
+        "server/*"
+    ],
+    "sideEffects": [
+        "dist/client.css"
+    ],
+    "main": "./dist/server.js",
+    "module": "./dist/esm/server.mjs",
+    "types": "./typings/server.d.ts",
+    "exports": {
+        ".": {
+            "types": "./typings/server.d.ts",
+            "require": "./dist/server.js",
+            "import": "./dist/esm/server.mjs"
+        },
+        "./client": {
+            "types": "./typings/client.d.ts",
+            "require": "./dist/client.js",
+            "import": "./dist/esm/client.mjs"
+        },
+        "./client-hydratable": {
+            "types": "./typings/client-hydratable.d.ts",
+            "require": "./dist/client-hydratable.js",
+            "import": "./dist/esm/client-hydratable.mjs"
+        },
+        "./client-devtool": {
+            "types": "./typings/client-devtool.d.ts",
+            "require": "./dist/client-devtool.js",
+            "import": "./dist/esm/client-devtool.mjs"
+        },
+        "./server": {
+            "types": "./typings/server.d.ts",
+            "require": "./dist/server.js",
+            "import": "./dist/esm/server.mjs"
+        },
+        "./dist/": "./dist/",
+        "./typings/": "./typings/",
+        "./client/": "./client/",
+        "./client-hydratable/": "./client-hydratable/",
+        "./client-devtool/": "./client-devtool/",
+        "./server/": "./server/"
+    },
+    "scripts": {
+        "test:unit": "vitest",
+        "test:testplane": "cd ci && ./node_modules/.bin/testplane",
+        "test:testplane:gui": "cd ci && ./node_modules/.bin/testplane gui",
+        "test:testplane:update": "cd ci && ./node_modules/.bin/testplane --update-refs",
+        "check:ts": "tsc --noEmit",
+        "check:eslint": "eslint --quiet .",
+        "check:svelte": "svelte-check --threshold error",
+        "build:watch": "npm run build:peggy && vite",
+        "build:peggy": "peggy src/expressions/expressions.peggy --allowed-start-rules start,JsonStringContents --format es",
+        "build:prod": "npm run build:peggy && rm -rf dist/ && concurrently \"npm run build:prod:*\"",
+        "build:prod:cjs-client": "vite build",
+        "build:prod:cjs-client-hydratable": "HYDRATABLE=1 vite build",
+        "build:prod:cjs-client-devtool": "DEVTOOL=1 vite build",
+        "build:prod:cjs-server": "vite build --ssr",
+        "build:prod:es-client": "FORMAT=es vite build",
+        "build:prod:es-client-hydratable": "FORMAT=es HYDRATABLE=1 vite build",
+        "build:prod:es-client-devtool": "FORMAT=es DEVTOOL=1 vite build",
+        "build:prod:es-server": "FORMAT=es vite build --ssr",
+        "build:prod:iife-client": "FORMAT=iife vite build",
+        "build:prod:iife-client-hydratable": "FORMAT=iife HYDRATABLE=1 vite build",
+        "build:prod:iife-client-devtool": "FORMAT=iife DEVTOOL=1 vite build",
+        "perf:expressions": "npx vite-node tests/expressions/perf.ts",
+        "prepublishOnly": "cp ../../../LICENSE ./"
+    },
+    "browserslist": {
+        "production": [
+            "chrome >= 67",
+            "safari >= 14",
+            "firefox >= 68",
+            "node >= 10"
+        ],
+        "ssr": [
+            "chrome >= 67",
+            "safari >= 14",
+            "firefox >= 68",
+            "node >= 10"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@sveltejs/vite-plugin-svelte": "3.1.2",
+        "@typescript-eslint/eslint-plugin": "5.59.1",
+        "@typescript-eslint/parser": "5.59.1",
+        "@vitest/ui": "2.1.8",
+        "chai": "4.3.7",
+        "concurrently": "9.1.1",
+        "eslint": "8.47.0",
+        "eslint-plugin-ascii": "1.0.0",
+        "eslint-plugin-import": "2.28.0",
+        "eslint-plugin-mocha": "10.1.0",
+        "eslint-plugin-svelte": "2.46.1",
+        "jsdom": "25.0.1",
+        "lottie-web": "5.11.0",
+        "markdown-it": "14.1.0",
+        "peggy": "3.0.2",
+        "svelte": "4.2.19",
+        "svelte-check": "4.1.1",
+        "typescript": "5.7.2",
+        "vite": "5.4.11",
+        "vitest": "2.1.8"
+    }
+}

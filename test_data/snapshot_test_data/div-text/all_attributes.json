@@ -1,0 +1,87 @@
+{
+  "description": "Text elements with basic properties",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrap_content_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "wrap_content_text",
+              "text": "Main  attributes",
+              "strike": "single",
+              "underline": "single",
+              "text_color": "#F00",
+              "letter_spacing": 5,
+              "font_size": 40,
+              "font_weight": "bold",
+              "images": [
+                {
+                  "start": 5,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 24
+                  }
+                }
+              ]
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Range  attributes",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 17,
+                  "strike": "single",
+                  "underline": "single",
+                  "text_color": "#F00",
+                  "letter_spacing": 5,
+                  "font_size": 40,
+                  "font_weight": "bold"
+                }
+              ],
+              "images": [
+                {
+                  "start": 5,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 24
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

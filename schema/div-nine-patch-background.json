@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_nine_patch_background",
+  "properties": {
+    "image_url": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_image_background_image_url"
+    },
+    "insets": {
+      "$ref": "div-absolute-edge-insets.json",
+      "$description": "translations.json#/div_nine_patch_background_insets"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "nine_patch_image"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "image_url",
+    "type",
+    "insets"
+  ]
+}

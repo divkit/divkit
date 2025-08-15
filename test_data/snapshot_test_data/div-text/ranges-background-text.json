@@ -1,0 +1,135 @@
+{
+  "description": "Text ranges with background and borders",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "font_size": 12,
+      "line_height": 18
+    },
+    "horizontal_text_container": {
+      "type": "container",
+      "orientation": "horizontal",
+      "margins": {
+        "top": 7,
+        "bottom": 7,
+        "left": 7,
+        "right": 7
+      },
+      "items": [
+        {
+          "type": "text_block",
+          "$text": "header",
+          "ranges": [
+            {
+              "$start": "range_start",
+              "$end": "range_end",
+              "background": {
+                "type": "solid",
+                "color": "#e6e6fa"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#c5d0e6",
+                  "width": 4
+                },
+                "corner_radius": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "text_block",
+          "$text": "header",
+          "text_alignment_horizontal": "center",
+          "ranges": [
+            {
+              "$start": "range_start",
+              "$end": "range_end",
+              "border": {
+                "stroke": {
+                  "color": "#3F28C3",
+                  "width": 1
+                },
+                "corner_radius": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "text_block",
+          "$text": "header",
+          "font_size": 12,
+          "text_alignment_horizontal": "center",
+          "ranges": [
+            {
+              "$start": "range_start",
+              "$end": "range_end",
+              "background": {
+                "type": "solid",
+                "color": "#e6e6fa"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text_block",
+          "$text": "header",
+          "font_size": 12,
+          "text_alignment_horizontal": "right",
+          "ranges": [
+            {
+              "$start": "range_start",
+              "$end": "range_end",
+              "background": {
+                "type": "solid",
+                "color": "#e6e6fa"
+              },
+              "border": {
+                "corner_radius": 7
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "horizontal_text_container",
+              "header": "Single  line ",
+              "range_start": 7,
+              "range_end": 13
+            },
+            {
+              "type": "horizontal_text_container",
+              "header": "Two  lines\nTwo  lines",
+              "range_start": 4,
+              "range_end": 15
+            },
+            {
+              "type": "horizontal_text_container",
+              "header": "Multiple  lines\nMultiple  lines\nMultiple  lines",
+              "range_start": 9,
+              "range_end": 41
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

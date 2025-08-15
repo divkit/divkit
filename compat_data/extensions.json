@@ -1,0 +1,157 @@
+{
+  "features": [
+    {
+      "id": "ext_lottie",
+      "name": "<code>lottie</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "1.0.0"
+        },
+        "ios": {
+          "version_added": "6.0.0"
+        },
+        "web": {
+          "version_added": "24.3.0"
+        }
+      }
+    },
+    {
+      "id": "ext_size_provider",
+      "name": "<code>size_provider</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "24.0.0"
+        },
+        "ios": {
+          "version_added": "23.2.0"
+        },
+        "web": {
+          "version_added": "24.3.0"
+        }
+      }
+    },
+    {
+      "id": "ext_pinch_to_zoom",
+      "name": "<code>pinch-to-zoom</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "1.0.0"
+        },
+        "ios": {
+          "version_added": "1.0.0"
+        }
+      }
+    },
+    {
+      "id": "ext_lottie_scale",
+      "name": "Lottie extension <code>scale</code> property",
+      "compat": {
+        "ios": {
+          "version_added": "29.15.0"
+        },
+        "android": {
+          "version_added": "1.0.0"
+        },
+        "web": {
+          "version_added": "30.25.0"
+        }
+      }
+    },
+    {
+      "id": "ext_lottie_is_playing",
+      "name": "Lottie extension <code>is_playing</code> property",
+      "compat": {
+        "android": {
+          "version_added": "30.5.0"
+        },
+        "web": {
+          "version_added": "31.4.0"
+        },
+        "ios": {
+          "version_added": "32.9.0"
+        }
+      }
+    },
+    {
+      "id": "ext_lottie_params_expressions",
+      "name": "Lottie extension expressions in params (<code>lottie_url</code>, <code>repeat_count</code>)",
+      "compat": {
+        "android": {
+          "version_added": "31.11.0"
+        },
+        "ios": {
+          "version_added": "32.8.0"
+        },
+        "web": {
+          "version_added": "32.11.0"
+        }
+      }
+    },
+    {
+      "id": "ext_gesture",
+      "name": "<code>gesture</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "30.0.0"
+        },
+        "ios": {
+          "version_added": "29.8.0"
+        },
+        "web": {
+          "version_added": "30.3.0"
+        }
+      }
+    },
+    {
+      "id": "ext_markdown",
+      "name": "<code>markdown</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "30.8.0"
+        },
+        "web": {
+          "version_added": "30.14.0"
+        },
+        "ios": {
+          "version_added": "30.17.0"
+        }
+      }
+    },
+    {
+      "id": "ext_shimmer",
+      "name": "<code>shimmer</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "23.4.0"
+        },
+        "ios": {
+          "version_added": "23.0.0"
+        }
+      }
+    },
+    {
+      "id": "ext_shimmer_corner_radius",
+      "name": "Custom corner radius for the <code>shimmer</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "30.12.0"
+        },
+        "ios": {
+          "version_added": "30.33.0"
+        }
+      }
+    },
+    {
+      "id": "ext_shine",
+      "name": "<code>shine</code> extension",
+      "compat": {
+        "ios": {
+          "version_added": "30.29.0"
+        },
+        "android": {
+          "version_added": "30.33.0"
+        }
+      }
+    }
+  ]
+}

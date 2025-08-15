@@ -1,0 +1,53 @@
+{
+  "description": "Text with text_alignment_horizontal",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "text_alignment_horizontal": "center",
+          "font_size": 12,
+          "images": [
+            {
+              "start": 0,
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 24
+              },
+              "height": {
+                "type": "fixed",
+                "value": 24
+              }
+            },
+            {
+              "start": 0,
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 10
+              },
+              "height": {
+                "type": "fixed",
+                "value": 10
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

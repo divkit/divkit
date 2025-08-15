@@ -1,0 +1,103 @@
+{
+  "description": "Pager aligned right-to-left.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "div": {
+          "items": [
+            {
+              "default_item": 0,
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "items": [
+                {
+                  "item_text": "Item 0",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 1",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 2",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 3",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 4",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 5",
+                  "type": "item_text"
+                },
+                {
+                  "item_text": "Item 6",
+                  "type": "item_text"
+                }
+              ],
+              "layout_mode": {
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 50
+                },
+                "type": "fixed"
+              },
+              "restrict_parent_scroll": 1,
+              "type": "pager"
+            }
+          ],
+          "orientation": "vertical",
+          "type": "container"
+        },
+        "state_id": 0
+      }
+    ]
+  },
+  "templates": {
+    "item_text": {
+      "$selected_actions": "item_selected_actions",
+      "$text": "item_text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#a0000000"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#FFF",
+      "type": "text"
+    }
+  }
+}

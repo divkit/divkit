@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "expression": "@{'a' + 'b'}",
+      "expected": {
+        "type": "string",
+        "value": "ab"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

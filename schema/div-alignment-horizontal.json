@@ -1,0 +1,10 @@
+{
+  "type": "string",
+  "enum": [
+    "left",
+    "center",
+    "right",
+    "start",
+    "end"
+  ]
+}

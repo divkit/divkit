@@ -1,0 +1,111 @@
+{
+  "description": "Property setting color value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-color-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "color_key": "#AABBCC"
+          }
+        },
+        {
+          "name": "color_prop",
+          "type": "property",
+          "value_type": "color",
+          "get": "@{getColorFromDict(source, 'color_key')}",
+          "set": [
+            {
+              "log_id": "set_action_color",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "color_key",
+                "value": {
+                  "type": "color",
+                  "value": "@{new_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Current color: @{color_prop}",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "@{color_prop}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "color_key": "#AABBCC"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "color_prop",
+          "value": {
+            "type": "color",
+            "value": "#AABBCC"
+          }
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div-actions": [
+        {
+          "url": "div-action://set_variable?name=color_prop&value=#FF00FF",
+          "log_id": "set_color_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "color_key": "#FF00FF"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "color_prop",
+          "value": {
+            "type": "color",
+            "value": "#FF00FF"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

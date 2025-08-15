@@ -1,0 +1,21 @@
+{
+  "type": "text",
+  "background": [
+    {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+    }
+  ],
+  "text": "Image",
+  "reuse_id": "test_reuse_id",
+  "extensions": [
+    {
+      "id": "lottie",
+      "params": {
+        "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif1.json",
+        "repeat_count": 3,
+        "repeat_mode": "reverse"
+      }
+    }
+  ]
+}

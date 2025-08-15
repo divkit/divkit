@@ -1,0 +1,169 @@
+import com.yandex.div.gradle.FileExtensions
+import groovy.json.JsonOutput
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-parcelize'
+    alias(libs.plugins.screenshotTestPlugin)
+}
+
+apply from: "${project.projectDir}/../div-application.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "ui-tests.gradle"
+
+repositories {
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+}
+
+android {
+    namespace 'com.yandex.divkit.demo'
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
+    defaultConfig {
+        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
+        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
+        buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(project.findProperty("metricaApiKey") ?: "")
+        buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
+        buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(project.findProperty("httpHeaders") ?: "{}")
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments useTestStorageService: 'true'
+
+        if (!project.hasProperty("include-regression-tests")) {
+            testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
+        }
+        if (project.hasProperty("shardIndex")) {
+            testInstrumentationRunnerArguments.shardIndex = project.property("shardIndex")
+        }
+        if (project.hasProperty("numShards")) {
+            testInstrumentationRunnerArguments.numShards = project.property("numShards")
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs += "../../../test_data/"
+        }
+
+        debug {
+            java.srcDirs = ['src/public/java']
+        }
+
+        release {
+            java.srcDirs = ['src/public/java']
+        }
+
+        test {
+            resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests.
+        }
+
+        androidTest {
+            java.srcDirs += 'src/screenshotTest/java'
+        }
+    }
+
+    lint {
+        baseline file("lint-baseline.xml")
+    }
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':div-gesture')
+    implementation project(path: ':div-json')
+    implementation project(path: ':div-lottie')
+    implementation project(path: ':div-markdown')
+    implementation project(path: ':div-pinch-to-zoom')
+    implementation project(path: ':div-rive')
+    implementation project(path: ':div-shimmer')
+    implementation project(path: ':div-shine')
+    implementation project(path: ':div-size-provider')
+    implementation project(path: ':divkit-regression-testing')
+    implementation project(path: ':fonts')
+    implementation project(path: ':logging')
+    implementation project(path: ':screenshot-test-runtime')
+    implementation project(path: ':ui-test-common')
+    implementation project(path: ':utils')
+    implementation project(path: ':video-custom')
+    implementation project(path: ':div-storage')
+    implementation project(path: ':div-video')
+    implementation project(path: ':picasso')
+    implementation project(path: ':glide')
+    implementation project(path: ':coil')
+
+    implementation libs.androidx.browser
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.preference
+    implementation libs.androidx.work
+
+    implementation libs.javax
+
+    implementation libs.kotlin.reflect
+
+    implementation libs.okhttp
+
+    implementation libs.markwon
+
+    implementation(libs.appmetrica.lib) {
+        exclude group: 'io.appmetrica.analytics', module: 'analytics-identifiers'
+    }
+
+    implementation libs.stetho.core
+    implementation libs.stetho.okhttp3
+
+    implementation libs.nvWebsocket
+    implementation libs.androidx.test.uiautomator
+
+    // QR code stuff
+    implementation libs.zxing.embedded
+    implementation libs.zxing.core
+
+    androidTestUtil libs.androidx.test.services
+    androidTestImplementation libs.hamcrest.library
+    androidTestImplementation libs.androidx.lifecycle.viewmodel
+    androidTestImplementation libs.androidx.viewpager2
+}
+
+screenshotTests {
+    var isInIde = System.getProperty("idea.active") == "true"
+    enabled = project.hasProperty("screenshot-tests") || isInIde
+    enableComparison = !project.hasProperty("disable-screenshot-comparison")
+    strictComparison = project.hasProperty("screenshot-strict-comparison")
+    testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
+    referencesDir = "src/screenshotTest/screenshots"
+    if (project.hasProperty("screenshot-dir")) {
+        screenshotDir = project.property("screenshot-dir")
+    }
+}
+
+android.applicationVariants.configureEach { variant ->
+
+    variant.outputs.configureEach {
+        boolean isPerf = variant.baseName.contains("perf")
+
+        if (!isPerf) {
+            outputFileName = divkitVersion.buildNumber != 0 ?
+                    "${project.archivesBaseName}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
+                    "${project.archivesBaseName}-v${versionName}-${variant.baseName}.apk"
+        }
+    }
+}
+
+FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
+    apply from: it
+}

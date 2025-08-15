@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "pydivkit"
+version = "32.13.0"
+description = "DivKit python library"
+readme = "README.md"
+repository = "https://github.com/divkit/divkit/tree/main/json-builder/python"
+keywords = ["divkit", "sdk"]
+authors = [
+    "Vladislav Bakaev <bakaev-vlad@yandex-team.ru>",
+    "Pavel Mosein <p-mosein@yandex-team.ru>",
+    "Dmitry Orlov <mosquito@yandex-team.ru>",
+]
+include = ["pydivkit/div/*", "pydivkit/py.typed"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Natural Language :: Russian",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: User Interfaces",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.group.dev.dependencies]
+gray = "^0.10.2"
+mypy = "^0.931"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.0.1"
+pytest-asyncio = "^0.18.1"
+
+[tool.mypy]
+cache_dir = "/dev/null"
+strict = true
+ignore_missing_imports = true
+allow_subclassing_any = true
+allow_untyped_calls = true
+pretty = true
+show_error_codes = true
+implicit_reexport = true
+allow_untyped_decorators = true
+warn_return_any = false
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

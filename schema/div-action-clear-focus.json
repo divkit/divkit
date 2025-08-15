@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_clear_focus",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "clear_focus"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

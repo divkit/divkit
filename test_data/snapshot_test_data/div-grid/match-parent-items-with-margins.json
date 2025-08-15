@@ -1,0 +1,182 @@
+{
+  "description": "Cells with match parent size and margins fills column space",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "cell": {
+      "type": "separator",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "margins": {
+        "left": 2,
+        "top": 2,
+        "right": 2,
+        "bottom": 2
+      },
+      "border": {
+        "corner_radius": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    }
+  },
+  "card": {
+    "log_id": "grid",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "paddings": {
+            "left": 6,
+            "top": 6,
+            "right": 6,
+            "bottom": 6
+          },
+          "border": {
+            "corner_radius": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ECF0F1"
+            }
+          ],
+          "column_count": 4,
+          "items": [
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "fixed",
+                "value": 240
+              },
+              "column_span": 2,
+              "background_color": "#3498DB"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "fixed",
+                "value": 40
+              },
+              "background_color": "#E74C3C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent"
+              },
+              "background_color": "#F1C40F"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "fixed",
+                "value": 60
+              },
+              "background_color": "#E74C3C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent"
+              },
+              "background_color": "#F1C40F"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "fixed",
+                "value": 80
+              },
+              "background_color": "#E74C3C"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent"
+              },
+              "background_color": "#F1C40F"
+            },
+            {
+              "type": "cell",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "background_color": "#1ABC9C"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "description": "Horizontal container with layout_mode = wrap and elements with wrap_content constrained size",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "layout_mode": "wrap",
+          "orientation": "horizontal",
+          "border": {
+            "stroke": {
+              "color": "#A0FFA0"
+            }
+          },
+          "items": [
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "max_size": {
+                  "value": 100
+                }
+              },
+              "text": "max width = 100"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "min_size": {
+                  "value": 150
+                }
+              },
+              "text": "min width = 150"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "min_size": {
+                  "value": 100
+                },
+                "max_size": {
+                  "value": 120
+                }
+              },
+              "text": "min width = 100\nmax width = 120"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "min_size": {
+                  "value": 320
+                }
+              },
+              "text": "min width = 320"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "min_size": {
+                  "value": 350
+                }
+              },
+              "text": "min width = 350 with very very very long text"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "max_size": {
+                  "value": 250
+                }
+              },
+              "text": "max width = 250 with very very very long text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

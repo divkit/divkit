@@ -1,0 +1,86 @@
+{
+  "templates": {
+    "input_text_borderless": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 20,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "input_text": {
+      "type": "input_text_borderless",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "my_single_text",
+        "type": "string",
+        "value": "This is single-line input"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "id": "1",
+          "transition_change": {
+            "type": "change_bounds",
+            "duration": 100
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "margins": {
+                "top": 24,
+                "bottom": 24
+              },
+              "items": [
+                {
+                  "type": "input_text",
+                  "text_variable": "my_single_text",
+                  "keyboard_type": "single_line_text"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+    "features": [{
+        "id": "gallery_scroll_action_start_end",
+        "name": "Gallery scroll action <code>scroll_to_start</code> / <code>scroll_to_end</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.8.0"
+            },
+            "ios": {
+                "version_added": "29.9.0"
+            },
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }, {
+        "id": "gallery_scroll_action_dp",
+        "name": "Gallery scroll action <code>scroll_backward</code>, <code>scroll_forward</code>, <code>scroll_to_position</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.8.0"
+            },
+            "ios": {
+                "version_added": "29.9.0"
+            },
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }, {
+        "id": "gallery_scroll_action_move_with_step",
+        "name": "Gallery scroll action <code>set_previous_item</code> and <code>set_next_item</code> with the <code>step</code> argument",
+        "compat": {
+            "android": {
+                "version_added": "29.4.0"
+            },
+            "ios": {
+                "version_added": "30.31.0"
+            },
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }, {
+        "id": "gallery_item_builder",
+        "name": "Gallery property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.12.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
+            }
+        }
+    }, {
+        "id": "gallery_scrollbar",
+        "name": "Gallery property <code>scrollbar</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.0.0"
+            },
+            "android": {
+                "version_added": "29.0.0"
+            },
+            "web": {
+                "version_added": "28.12.0"
+            }
+        }
+    }]
+}

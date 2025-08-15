@@ -1,0 +1,341 @@
+{
+  "cases": [
+    {
+      "expression": "@{integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 7
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{negative_integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "variables": [
+        {
+          "name": "negative_integer_var",
+          "type": "integer",
+          "value": -7
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{number_var}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 123.45
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{negative_number_var}",
+      "expected": {
+        "type": "number",
+        "value": -123.45
+      },
+      "variables": [
+        {
+          "name": "negative_number_var",
+          "type": "number",
+          "value": -123.45
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{string_var}",
+      "expected": {
+        "type": "string",
+        "value": "value"
+      },
+      "variables": [
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "value"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{boolean_var}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "boolean_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{boolean_int_var}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "boolean_int_var",
+          "type": "boolean",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{color_var}",
+      "expected": {
+        "type": "color",
+        "value": "#00FF00"
+      },
+      "variables": [
+        {
+          "name": "color_var",
+          "type": "color",
+          "value": "#00FF00"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{url_var}",
+      "expected": {
+        "type": "url",
+        "value": "https://yandex.ru"
+      },
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://yandex.ru"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{integer_var_with_expression}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "integer_var_with_expression",
+          "type": "integer",
+          "value": "@{123}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{number_var_with_expression}",
+      "expected": {
+        "type": "number",
+        "value": 123.0
+      },
+      "variables": [
+        {
+          "name": "number_var_with_expression",
+          "type": "number",
+          "value": "@{123.0}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{string_var_with_expression}",
+      "expected": {
+        "type": "string",
+        "value": "test string"
+      },
+      "variables": [
+        {
+          "name": "string_var_with_expression",
+          "type": "string",
+          "value": "@{'test string'}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{boolean_var_with_expression}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "boolean_var_with_expression",
+          "type": "boolean",
+          "value": "@{true && false}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{color_var_with_expression}",
+      "expected": {
+        "type": "color",
+        "value": "#FF0000"
+      },
+      "variables": [
+        {
+          "name": "color_var_with_expression",
+          "type": "color",
+          "value": "@{'#FF0000'}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{url_var_with_expression}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "name": "url_var_with_expression",
+          "type": "url",
+          "value": "@{'https://ya.ru'}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{var_from_func}",
+      "expected": {
+        "type": "integer",
+        "value": 5
+      },
+      "variables": [
+        {
+          "name": "var_from_func",
+          "type": "integer",
+          "value": "@{len('Hello')}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{circular_ref}",
+      "expected": {
+        "type": "error",
+        "value": "Variable 'circular_ref' is missing."
+      },
+      "variables": [
+        {
+          "name": "circular_ref",
+          "type": "integer",
+          "value": "@{circular_ref}"
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{undeclred_var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

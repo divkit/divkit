@@ -1,0 +1,817 @@
+{
+  "card": {
+    "log_id": "tabs",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "border": {
+            "corner_radius": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "tabs",
+              "tab_title_style": {
+                "active_text_color": "#CC000000",
+                "inactive_text_color": "#CC000000",
+                "font_weight": "medium",
+                "font_size": 14,
+                "line_height": 18
+              },
+              "title_paddings": {
+                "left": 14,
+                "right": 14,
+                "bottom": 8
+              },
+              "dynamic_height": 1,
+              "items": [
+                {
+                  "title": "Таб 0",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/0"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/0/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/0/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/0/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/0/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/0/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/0/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/0/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/0/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/0/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/0/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/0/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/0/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/0/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Таб 1",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/1"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/1/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/1/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/1/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/1/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/1/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/1/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/1/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/1/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/1/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/1/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/1/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/1/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/1/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Таб 2",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/2"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/2/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/2/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/2/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/2/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/2/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/2/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/2/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/2/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/2/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/2/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/2/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/2/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/2/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Таб 3",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/3"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/3/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/3/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/3/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/3/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/3/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/3/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/3/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/3/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/3/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/3/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/3/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/3/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/3/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Таб 4",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/4"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/4/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/4/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/4/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/4/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/4/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/4/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/4/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/4/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/4/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/4/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/4/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/4/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/4/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "Таб 5",
+                  "title_click_action": {
+                    "log_id": "tab_title/click/5"
+                  },
+                  "div": {
+                    "type": "customTabs",
+                    "items": [
+                      {
+                        "type": "tabStories",
+                        "items": [
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/5/item 0"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/5/item 1"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/5/item 2"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/5/item 3"
+                            }
+                          },
+                          {
+                            "type": "tabItem",
+                            "action": {
+                              "log_id": "tabs/5/item 4"
+                            }
+                          },
+                          {
+                            "type": "tabState",
+                            "id": "hidden_stories",
+                            "buttonStateId": "button_show_0",
+                            "buttonText": "Показать ещё",
+                            "showMoreAction": {
+                              "log_id": "tabs/5/show more/0",
+                              "url": "div-action://set_state?state_id=1/hidden_stories/stories_0&temporary=true"
+                            },
+                            "storiesStateId": "stories_0",
+                            "stateItems": [
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/5/item 5"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/5/item 6"
+                                }
+                              },
+                              {
+                                "type": "tabItem",
+                                "action": {
+                                  "log_id": "tabs/5/item 7"
+                                }
+                              },
+                              {
+                                "type": "tabState",
+                                "id": "hidden_stories",
+                                "buttonStateId": "button_show_1",
+                                "buttonText": "Показать ещё",
+                                "showMoreAction": {
+                                  "log_id": "tabs/5/show more/1",
+                                  "url": "div-action://set_state?state_id=1/hidden_stories/stories_0/hidden_stories/stories_1&temporary=true"
+                                },
+                                "storiesStateId": "stories_1",
+                                "stateItems": [
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/5/item 8"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/5/item 9"
+                                    }
+                                  },
+                                  {
+                                    "type": "tabItem",
+                                    "action": {
+                                      "log_id": "tabs/5/item 10"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "customTabs": {
+      "type": "container",
+      "height": {
+        "type": "match_parent"
+      }
+    },
+    "tabPageWithItem": {
+      "type": "state",
+      "states": [
+        {
+          "div": {
+            "type": "container",
+            "$items": "closedItems"
+          },
+          "$state_id": "closedStateId"
+        },
+        {
+          "div": {
+            "type": "tabStoriesBase",
+            "height": {
+              "type": "wrap_content"
+            },
+            "margins": {
+              "left": 6,
+              "right": 6
+            },
+            "paddings": {
+              "top": 0,
+              "bottom": 0
+            },
+            "$items": "extraItems"
+          },
+          "$state_id": "openedStateId"
+        }
+      ]
+    },
+    "tabStoriesBase": {
+      "type": "container",
+      "paddings": {
+        "top": 5,
+        "bottom": 5
+      },
+      "margins": {
+        "left": 4,
+        "right": 4
+      },
+      "border": {
+        "corner_radius": 20
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F3F3F2"
+        }
+      ]
+    },
+    "tabState": {
+      "type": "state",
+      "states": [
+        {
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "margins": {
+                  "top": 16,
+                  "left": 20,
+                  "right": 20,
+                  "bottom": 11
+                },
+                "font_size": 14,
+                "font_weight": "medium",
+                "line_height": 18,
+                "text_alignment_horizontal": "center",
+                "$text": "buttonText",
+                "$action": "showMoreAction"
+              }
+            ]
+          },
+          "$state_id": "buttonStateId"
+        },
+        {
+          "div": {
+            "type": "container",
+            "$items": "stateItems"
+          },
+          "$state_id": "storiesStateId"
+        }
+      ]
+    },
+    "tabStories": {
+      "type": "tabStoriesBase",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFF"
+        }
+      ]
+    },
+    "tabItem": {
+      "type": "text",
+      "margins": {
+        "right": 12,
+        "top": 16,
+        "bottom": 16,
+        "left": 12
+      },
+      "line_height": 20,
+      "font_size": 16,
+      "max_lines": 3,
+      "background": [
+        {
+          "color": "#E0E2E6",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 5
+      },
+      "text": "   "
+    }
+  }
+}

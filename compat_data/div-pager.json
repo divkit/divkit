@@ -1,0 +1,123 @@
+{
+    "features": [{
+        "id": "pager_scroll_action_start_end",
+        "name": "Pager scroll action <code>scroll_to_start</code> / <code>scroll_to_end</code>",
+        "compat": {
+            "web": {
+                "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
+            }
+        }
+    }, {
+        "id": "pager_scroll_action_move_with_step",
+        "name": "Pager scroll action <code>set_previous_item</code> and <code>set_next_item</code> with the <code>step</code> argument",
+        "compat": {
+            "web": {
+                "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
+            },
+            "ios": {
+                "version_added": "30.31.0"
+            }
+        }
+    }, {
+        "id": "pager_page_transformation",
+        "name": "Pager property <code>page_transformation</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.5.0"
+            },
+            "ios": {
+                "version_added": "30.11.0"
+            }
+        }
+    }, {
+        "id": "pager_infinite_scroll",
+        "name": "Pager property <code>infinite_scroll</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.9.0"
+            },
+            "ios": {
+                "version_added": "28.11.0"
+            },
+            "web": {
+                "version_added": "32.0.0"
+            }
+        }
+    }, {
+        "id": "pager_item_builder",
+        "name": "Pager property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.12.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.29.0"
+            }
+        }
+    }, {
+        "id": "pager_default_item",
+        "name": "Pager property <code>default_item</code>",
+        "compat": {
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "pager_layout_mode_wrap_content",
+        "name": "Pager <code>layout_mode</code> = <code>wrap_content</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.32.0"
+            },
+            "android": {
+                "version_added": "31.0.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "pager_cross_axis_alignment",
+        "name": "Pager property <code>cross_axis_alignment</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.1.0"
+            },
+            "ios": {
+                "version_added": "31.1.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "pager_scroll_axis_alignment",
+        "name": "Pager property <code>scroll_axis_alignment</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.1.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "31.10.0"
+            }
+        }
+    }]
+}

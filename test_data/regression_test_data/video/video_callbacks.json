@@ -1,0 +1,415 @@
+{
+  "templates": {
+    "tested_video": {
+      "type": "video",
+      "id": "bears_video",
+      "preview": "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",
+      "video_sources": [
+        {
+          "type": "video_source",
+          "$url": "video_url",
+          "mime_type": "video/mp4"
+        }
+      ],
+      "preload_required": true,
+      "repeatable": false,
+      "autostart": false,
+      "muted": true,
+      "elapsed_time_variable": "video_time",
+      "height": {
+        "type": "fixed",
+        "value": 320
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#000000"
+        }
+      ],
+      "resume_actions": [
+        {
+          "log_id": "video_playing",
+          "url": "div-action://set_state?state_id=0/play_signal/play_called"
+        }
+      ],
+      "pause_actions": [
+        {
+          "log_id": "video_paused",
+          "url": "div-action://set_state?state_id=0/pause_signal/pause_called"
+        }
+      ],
+      "buffering_actions": [
+        {
+          "log_id": "video_buffering",
+          "url": "div-action://set_state?state_id=0/buffering_signal/buffering_called"
+        }
+      ],
+      "end_actions": [
+        {
+          "log_id": "video_ended",
+          "url": "div-action://set_state?state_id=0/end_signal/end_called"
+        }
+      ],
+      "fatal_actions": [
+        {
+          "log_id": "video_error",
+          "url": "div-action://set_state?state_id=0/fatal_signal/fatal_called"
+        }
+      ]
+    },
+    "control_button": {
+      "type": "image",
+      "aspect": {
+        "ratio": 1
+      },
+      "scale": "fit",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    },
+    "signal_block": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16
+      },
+      "margins": {
+        "top": 10,
+        "bottom": 10,
+        "left": 20,
+        "right": 20
+      },
+      "items": [
+        {
+          "type": "text",
+          "$text": "text",
+          "paddings": {
+            "right": 10,
+            "left": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "font_size": 14
+        }
+      ]
+    },
+    "bad_signal": {
+      "type": "signal_block",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ff4040"
+        }
+      ]
+    },
+    "good_signal": {
+      "type": "signal_block",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#42e73a"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "video",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "state",
+              "id": "video",
+              "states": [
+                {
+                  "state_id": "normal",
+                  "div": {
+                    "type": "tested_video",
+                    "video_url": "https://yastatic.net/s3/home/divkit/bears.mp4"
+                  }
+                },
+                {
+                  "state_id": "crashed",
+                  "div": {
+                    "type": "tested_video",
+                    "video_url": "..."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 30000,
+              "min_value": 0,
+              "thumb_value_variable": "video_time",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
+                  "margins": {
+                    "right": 20
+                  },
+                  "actions": [
+                    {
+                      "log_id": "rewind",
+                      "url": "div-action://set_variable?name=video_time&value=0"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
+                  "margins": {
+                    "right": 16
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "play",
+                      "url": "div-action://video?id=bears_video&action=start"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "pause",
+                      "url": "div-action://video?id=bears_video&action=pause"
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 130
+                  },
+                  "border": {
+                    "corner_radius": 16
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#604bd8"
+                    }
+                  ],
+                  "margins": {
+                    "left": 10
+                  },
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Crash video",
+                      "text_color": "#ffffff",
+                      "paddings": {
+                        "right": 15,
+                        "left": 15,
+                        "top": 10,
+                        "bottom": 10
+                      },
+                      "font_size": 18
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "log_id": "do_crash",
+                      "url": "div-action://set_state?state_id=0/video/crashed"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "play_signal",
+              "states": [
+                {
+                  "state_id": "play_not_called",
+                  "div": {
+                    "type": "bad_signal",
+                    "text": "Play event not called"
+                  }
+                },
+                {
+                  "state_id": "play_called",
+                  "div": {
+                    "type": "good_signal",
+                    "text": "Play event called"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "pause_signal",
+              "states": [
+                {
+                  "state_id": "pause_not_called",
+                  "div": {
+                    "type": "bad_signal",
+                    "text": "Pause event not called"
+                  }
+                },
+                {
+                  "state_id": "pause_called",
+                  "div": {
+                    "type": "good_signal",
+                    "text": "Pause event called"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "buffering_signal",
+              "states": [
+                {
+                  "state_id": "buffering_not_called",
+                  "div": {
+                    "type": "bad_signal",
+                    "text": "Buffering event not called"
+                  }
+                },
+                {
+                  "state_id": "buffering_called",
+                  "div": {
+                    "type": "good_signal",
+                    "text": "Buffering event called"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "end_signal",
+              "states": [
+                {
+                  "state_id": "end_not_called",
+                  "div": {
+                    "type": "bad_signal",
+                    "text": "End event not called"
+                  }
+                },
+                {
+                  "state_id": "end_called",
+                  "div": {
+                    "type": "good_signal",
+                    "text": "End event called"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "fatal_signal",
+              "states": [
+                {
+                  "state_id": "fatal_not_called",
+                  "div": {
+                    "type": "bad_signal",
+                    "text": "Fatal event not called (Wait a little after press crash)"
+                  }
+                },
+                {
+                  "state_id": "fatal_called",
+                  "div": {
+                    "type": "good_signal",
+                    "text": "Fatal event called"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

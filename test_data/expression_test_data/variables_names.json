@@ -1,0 +1,510 @@
+{
+  "cases": [
+    {
+      "name": "all lowercase variable name characters",
+      "expression": "@{abcdefghijklmnopqrstuvwxyz}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "abcdefghijklmnopqrstuvwxyz"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "all uppercase variable name",
+      "expression": "@{ABCDEFGHIJKLMNOPQRSTUVWXYZ}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "camelcase variable name",
+      "expression": "@{isAtEnd}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "isAtEnd"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains numbers",
+      "expression": "@{st1t2}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "st1t2"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains _",
+      "expression": "@{var_1}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var_1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with _",
+      "expression": "@{_var}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "_var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name ends with _",
+      "expression": "@{var_}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var_"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name is _",
+      "expression": "@{_}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "_"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains dot symbol",
+      "expression": "@{var.1}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var.1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "unsupported_platforms": {
+        "flutter": "Useless and limiting feature"
+      }
+    },
+    {
+      "name": "variable name ends with dot symbol",
+      "expression": "@{var.}",
+      "expected": {
+        "type": "error",
+        "value": "Unexpected token: ."
+      },
+      "variables": [
+        {
+          "name": "var.",
+          "type": "string",
+          "value": "ok"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name with several dot symbols",
+      "expression": "@{var..dots}",
+      "expected": {
+        "type": "error",
+        "value": "Unexpected token: ."
+      },
+      "variables": [
+        {
+          "name": "var..dots",
+          "type": "string",
+          "value": "ok"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name is dot symbol",
+      "expression": "@{.}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "."
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with dot symbol",
+      "expression": "@{.var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": ".var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with number",
+      "expression": "@{1var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "1var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name is boolean literal 'true'",
+      "expression": "@{true}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "true"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name is boolean literal 'false'",
+      "expression": "@{false}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "false"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name same as function name",
+      "expression": "@{maxInteger}",
+      "expected": {
+        "type": "string",
+        "value": "ok"
+      },
+      "variables": [
+        {
+          "name": "maxInteger",
+          "type": "string",
+          "value": "ok"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with #",
+      "expression": "@{#var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "#var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains #",
+      "expression": "@{var#1}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var#1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with @",
+      "expression": "@{@var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "@var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains @",
+      "expression": "@{var@1}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var@1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name starts with $",
+      "expression": "@{$var}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "$var"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "variable name contains $",
+      "expression": "@{var$1}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "var$1"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "non latin variable name",
+      "expression": "@{переменная}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "ok",
+          "name": "переменная"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

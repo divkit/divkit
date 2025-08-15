@@ -1,0 +1,21 @@
+{
+  "$description": "translations.json#/div_appearance_transition",
+  "anyOf": [
+    {
+      "$ref": "div-appearance-set-transition.json",
+      "$description": "translations.json#/div_appearance_transition_set"
+    },
+    {
+      "$ref": "div-fade-transition.json",
+      "$description": "translations.json#/div_appearance_transition_fade"
+    },
+    {
+      "$ref": "div-scale-transition.json",
+      "$description": "translations.json#/div_appearance_transition_scale"
+    },
+    {
+      "$ref": "div-slide-transition.json",
+      "$description": "translations.json#/div_appearance_transition_slide"
+    }
+  ]
+}

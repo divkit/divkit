@@ -1,0 +1,255 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "text_block": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "fixed",
+          "value": 80
+        },
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      },
+      "text_button": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#000000",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "wrap_content"
+        },
+        "height": {
+          "type": "wrap_content"
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "items": [
+              {
+                "type": "tabs",
+                "log_id": "tabs",
+                "id": "test_tabs",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "wrap_content"
+                },
+                "items": [
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "log_id": "item/00",
+                      "text": "Item0",
+                      "width": {
+                        "type": "fixed",
+                        "value": 200
+                      }
+                    },
+                    "log_id": "item/00",
+                    "title": "Item0"
+                  },
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "log_id": "item/01",
+                      "text": "Item1",
+                      "width": {
+                        "type": "fixed",
+                        "value": 200
+                      }
+                    },
+                    "log_id": "item/01",
+                    "title": "Item1"
+                  },
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "log_id": "item/02",
+                      "text": "Item2",
+                      "width": {
+                        "type": "fixed",
+                        "value": 200
+                      }
+                    },
+                    "log_id": "item/02",
+                    "title": "Item2"
+                  },
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "log_id": "item/03",
+                      "text": "Item3",
+                      "width": {
+                        "type": "fixed",
+                        "value": 200
+                      }
+                    },
+                    "log_id": "item/03",
+                    "title": "Item3"
+                  },
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "log_id": "item/04",
+                      "text": "Item4",
+                      "width": {
+                        "type": "fixed",
+                        "value": 200
+                      }
+                    },
+                    "log_id": "item/04",
+                    "title": "Item4"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_tabs",
+          "log_id": "second item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_tabs",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_tabs&overflow=clamp",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_tabs&overflow=ring",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_tabs&overflow=clamp",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_tabs&overflow=ring",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_tabs&item=2",
+          "log_id": "middle item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_tabs&item=-1",
+          "log_id": "middle (nonexistent) item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_tabs&item=0",
+          "log_id": "first item"
+        }
+      ],
+      "expected_screenshot": "step0.png",
+      "delay": 500
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "border": {
+        "corners_radius": {
+          "top-right": 8,
+          "top-left": 8
+        }
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "fixed",
+        "value": 240
+      },
+      "height": {
+        "type": "fixed",
+        "value": 200
+      }
+    },
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color",
+      "margins": {
+        "left": 12,
+        "right": 12
+      }
+    }
+  },
+  "card": {
+    "log_id": "gallery-paging",
+    "variables": [
+      {
+        "name": "text_position",
+        "type": "string",
+        "value": "start"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "border": {
+            "corner_radius": 16,
+            "stroke": {
+              "color": "#1F000000",
+              "width": 1
+            }
+          },
+          "alignment_horizontal": "center",
+          "margins": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "gallery",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 4,
+                "right": 200,
+                "start": 4,
+                "end": 200
+              },
+              "scroll_mode": "paging",
+              "items": [
+                {
+                  "id": "block_1",
+                  "type": "text_block",
+                  "text": "Item 0",
+                  "visibility_action": {
+                    "log_id": "item0",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=start"
+                  }
+                },
+                {
+                  "id": "block_2",
+                  "type": "text_block",
+                  "text": "Item 1",
+                  "visibility_action": {
+                    "log_id": "item1",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
+                },
+                {
+                  "id": "block_3",
+                  "type": "text_block",
+                  "text": "Item 2",
+                  "visibility_action": {
+                    "log_id": "item2",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
+                },
+                {
+                  "type": "text_block",
+                  "text": "Item 3",
+                  "visibility_action": {
+                    "log_id": "item3",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
+                }
+              ]
+            },
+            {
+              "width": {
+                "type": "fixed",
+                "value": 240
+              },
+              "margins": {
+                "start": 4,
+                "left": 4,
+                "bottom": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corners_radius": {
+                  "bottom-right": 8,
+                  "bottom-left": 8
+                }
+              },
+              "alignment_horizontal": "@{text_position}",
+              "alignment_vertical": "center",
+              "type": "text_14_18_regular",
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              },
+              "text_alignment_horizontal": "center",
+              "text": "CORRECT ITEM POSITION"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$description": "translations.json#/div_visibility_action",
+  "allOf": [
+    {
+      "$ref": "div-sight-action.json"
+    },
+    {
+      "properties": {
+        "visibility_percentage": {
+          "type": "integer",
+          "constraint": "number > 0 && number <= 100",
+          "default_value": "50",
+          "$description": "translations.json#/div_visibility_action_visibility_percentage"
+        },
+        "visibility_duration": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "800",
+          "$description": "translations.json#/div_visibility_action_visibility_duration"
+        }
+      }
+    }
+  ]
+}

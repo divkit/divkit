@@ -1,0 +1,169 @@
+{
+  "description": "DivIndicator with red border in active state and blue border in incative state",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "slide": {
+      "type": "text",
+      "paddings": {
+        "right": 4,
+        "left": 4,
+        "top": 4,
+        "bottom": 4
+      },
+      "border": {
+        "corner_radius": 16,
+        "stroke": {
+          "color": "#1F000000",
+          "width": 1
+        }
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "indicator",
+              "pager_id": "pager_id",
+              "alignment_horizontal": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ],
+              "active_shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 20
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 20
+                },
+                "stroke": {
+                  "width": 2,
+                  "color": "#ff0000"
+                },
+                "background_color": "#000000"
+              },
+              "inactive_shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 12
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 12
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 6
+                },
+                "stroke": {
+                  "width": 1,
+                  "color": "#0000ee"
+                },
+                "background_color": "#d0d1d9"
+              },
+              "items_placement": {
+                "type": "default",
+                "space_between_centers": {
+                  "value": 50
+                }
+              }
+            },
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 95
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "items": [
+                {
+                  "type": "slide",
+                  "text": "slide1"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide2"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide3"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide4"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide5"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide6"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide7"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide8"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide9"
+                },
+                {
+                  "type": "slide",
+                  "text": "slide10"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

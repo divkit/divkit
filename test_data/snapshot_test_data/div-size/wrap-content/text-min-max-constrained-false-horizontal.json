@@ -1,0 +1,93 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "height min_size = 100",
+              "width": {
+                "type": "wrap_content",
+                "constrained": false
+              },
+              "height": {
+                "type": "wrap_content",
+                "constrained": false,
+                "min_size": {
+                  "value": 100
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "height max_size = 60, width max_size = 60",
+              "height": {
+                "type": "wrap_content",
+                "constrained": false,
+                "max_size": {
+                  "value": 60
+                }
+              },
+              "width": {
+                "type": "wrap_content",
+                "constrained": false,
+                "max_size": {
+                  "value": 60
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "wrap_content",
+              "height": {
+                "type": "wrap_content",
+                "constrained": false
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "match_parent",
+              "height": {
+                "type": "match_parent"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

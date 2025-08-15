@@ -1,0 +1,84 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.allopen'
+}
+
+apply from: "${project.projectDir}/../publish-java.gradle"
+apply from: "${project.projectDir}/../div-tests-coverage.gradle"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+def buildDir = layout.buildDirectory.get().asFile
+def generatorOutputDir = "build/generated/sources/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir(generatorOutputDir)
+        }
+    }
+    generator {
+        java {
+            srcDir("src/main/java")
+            srcDir("src/generator/java")
+        }
+    }
+}
+
+tasks.register("generateFunctionProvider", JavaExec) {
+    classpath = sourceSets.generator.runtimeClasspath
+    getMainClass().set("com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator")
+    workingDir(generatorOutputDir)
+    outputs.dir(generatorOutputDir)
+}
+
+tasks.named("compileKotlin").configure {
+    dependsOn(generateFunctionProvider)
+}
+
+tasks.named("sourcesJar").configure {
+    dependsOn(generateFunctionProvider)
+}
+
+tasks.register("test${testVariant.capitalize()}UnitTest") {
+    dependsOn test
+}
+
+tasks.register('replJar', Jar) {
+    dependsOn "testClasses"
+    from "$buildDir/classes/kotlin/test"
+    from "$buildDir/classes/kotlin/main"
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes 'Main-Class': 'com.yandex.div.evaluable.repl.EvaluableRepl'
+    }
+    archiveClassifier = "repl"
+}
+
+allOpen {
+    annotation("com.yandex.div.evaluable.internal.Mockable")
+}
+
+dependencies {
+    implementation libs.javax
+    compileOnly libs.json
+
+    generatorImplementation libs.kotlin.stdlib
+    generatorImplementation libs.javax
+    generatorCompileOnly libs.json
+    generatorImplementation libs.kotlinpoet
+
+    testImplementation project(path: ':expression-test-common')
+
+    testImplementation libs.json
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+}

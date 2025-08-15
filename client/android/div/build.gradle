@@ -1,0 +1,75 @@
+import com.android.build.api.variant.BuildConfigField
+import groovy.json.JsonOutput
+
+plugins {
+    alias(libs.plugins.kotlin.ksp)
+}
+
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+apply plugin: 'de.mobilej.unmock'
+apply plugin: 'kotlinx-serialization'
+
+def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
+
+android {
+    namespace 'com.yandex.div'
+
+    buildFeatures { buildConfig = true }
+
+    defaultConfig {
+        buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)
+    }
+}
+
+androidComponents.onVariants(androidComponents.selector().all()) {
+    def versionName = divkitVersion.getVersionNameForBuildType(buildType)
+    buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
+}
+
+unMock {
+    keep "android.net.Uri"
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-json')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+
+    api project(path: ':beacon')
+    api project(path: ':div-core')
+    api project(path: ':div-data')
+    api project(path: ':div-evaluable')
+    api project(path: ':div-histogram')
+    api project(path: ':div-json')
+    api project(path: ':div-states')
+    api project(path: ':div-storage')
+    api project(path: ':div-svg')
+
+    implementation libs.yatagan.api.compiled
+    ksp libs.yatagan.processor.ksp
+
+    implementation(libs.androidx.appcompat) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    implementation libs.androidx.activity
+    implementation libs.androidx.coreKtx
+    implementation libs.androidx.core
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.transition
+    implementation libs.androidx.viewpager
+    implementation(libs.androidx.viewpager2) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+
+    implementation libs.androidx.datastore
+    implementation libs.kotlin.serialization.json
+
+    testImplementation project(path: ':expression-test-common')
+
+    testImplementation libs.androidx.test.coreKtx
+    testImplementation libs.json
+}

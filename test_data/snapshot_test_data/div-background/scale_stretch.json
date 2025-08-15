@@ -1,0 +1,38 @@
+{
+  "description": "Text with image background with stretch scaling",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "stretch background",
+          "text_color": "#ff0000",
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "background": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "scale": "stretch"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

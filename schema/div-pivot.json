@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-pivot-fixed.json",
+      "$description": "translations.json#/div_pivot_fixed"
+    },
+    {
+      "$ref": "div-pivot-percentage.json",
+      "$description": "translations.json#/div_pivot_percentage"
+    }
+  ]
+}

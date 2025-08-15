@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "fill",
+    "no_scale",
+    "fit",
+    "stretch"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "description": "Text with gradient background",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "font_size": 12,
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "background": [
+            {
+              "colors": [
+                "#FF000000",
+                "#AAFF0000",
+                "#FFFFFFFF"
+              ],
+              "angle": 90,
+              "type": "gradient"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

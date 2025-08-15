@@ -1,0 +1,42 @@
+{
+  "description": "Intersected text ranges with top_offset (top_offset should work only once)",
+  "platforms": [
+    "android",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "div": {
+          "font_size": 18,
+          "line_height": 18,
+          "paddings": {
+            "bottom": 0,
+            "left": 8,
+            "right": 8,
+            "top": 0
+          },
+          "ranges": [
+            {
+              "start": 0,
+              "end": 157,
+              "text_color": "#ff0000",
+              "top_offset": 30
+            },
+            {
+              "start": 72,
+              "end": 148,
+              "font_size": 30,
+              "line_height": 32
+            }
+          ],
+          "text": "<Range1>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do <Range2>eiusmod tempor incididunt ut labore et dolore magna aliqua.</Range2></Range1>",
+          "type": "text"
+        },
+        "state_id": 0
+      }
+    ]
+  }
+}

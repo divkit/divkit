@@ -1,0 +1,212 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "data_change/dst",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Change data to SRC",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "change_data",
+                  "url": "div-demo-action://set_data?path=animations/transition/transition_triggers_data_change_src.json"
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "delimiter_style": {
+                "color": "#00000000"
+              }
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 7
+              },
+              "delimiter_style": {
+                "color": "#1D000000"
+              }
+            },
+            {
+              "type": "text",
+              "id": "item_one",
+              "text": "Old - 'data_change', new - null",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 14,
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "transition_in": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 1500
+              },
+              "transition_out": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 1500
+              }
+            },
+            {
+              "type": "text",
+              "id": "item_two",
+              "text": "Old - 'data_change', new - []",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 14,
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "transition_animation_selector": "data_change",
+              "transition_in": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 2000
+              },
+              "transition_out": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 2000
+              }
+            },
+            {
+              "type": "text",
+              "id": "item_three",
+              "text": "Old - 'none', new - ['data_change']",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 14,
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "transition_animation_selector": "none",
+              "transition_triggers": [
+                "data_change"
+              ],
+              "transition_in": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 2500
+              },
+              "transition_out": {
+                "type": "fade",
+                "alpha": 0,
+                "duration": 2500
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

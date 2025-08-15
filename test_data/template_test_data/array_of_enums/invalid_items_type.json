@@ -1,0 +1,6 @@
+{
+  "entity": {
+    "type": "entity_with_array_of_enums",
+    "items": "first"
+  }
+}

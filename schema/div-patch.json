@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_patch",
+  "typescript_templatable": false,
+  "codegen": {
+    "divan": {
+      "plus_operator": false,
+      "required_properties_at_factory": true
+    }
+  },
+  "definitions": {
+    "change": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.json#/id",
+          "$description": "translations.json#/div_patch_change_id"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "$description": "translations.json#/div_patch_change_items"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "transactional",
+        "partial"
+      ],
+      "default_value": "partial",
+      "$description": "translations.json#/div_patch_mode",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/change"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_patch_changes"
+    },
+    "on_applied_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_patch_on_applied_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "on_failed_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_patch_on_failed_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  },
+  "required": [
+    "changes"
+  ]
+}

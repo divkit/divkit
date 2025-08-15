@@ -1,0 +1,83 @@
+{
+  "card": {
+    "log_id": "transient_div_with_clip_and_shadow",
+    "variables": [
+      {
+        "name": "circle_is_visible",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 240
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 120
+              },
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "border": {
+                "corner_radius": 60,
+                "has_shadow": 1
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#268BD2"
+                }
+              ],
+              "delimiter_style": {
+                "color": "#00000000"
+              },
+              "transition_triggers": [
+                "visibility_change"
+              ],
+              "transition_in": {
+                "type": "slide",
+                "duration": 500,
+                "edge": "left",
+                "interpolator": "ease_in_out"
+              },
+              "transition_out": {
+                "type": "slide",
+                "duration": 500,
+                "edge": "right",
+                "interpolator": "ease_in_out"
+              },
+              "visibility": "@{circle_is_visible ? 'visible' : 'invisible'}"
+            }
+          ],
+          "actions": [
+            {
+              "log_id": "hide_content",
+              "url": "div-action://set_variable?name=circle_is_visible&value=@{!circle_is_visible}"
+            }
+          ],
+          "action_animation": {
+            "name": "no_animation"
+          }
+        }
+      }
+    ]
+  }
+}

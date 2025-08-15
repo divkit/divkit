@@ -1,0 +1,107 @@
+{
+  "description": "DivContainer with horizontal wrap layout and aspect height. Height must be equal width / 2.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "aspect": {
+            "ratio": 2
+          },
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0FFA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "width = match_parent",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "text",
+              "text": "•",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "orientation = horizontal",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "text",
+              "text": "•",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "layout_mode = wrap",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "text",
+              "text": "•",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 10,
+                "right": 10
+              }
+            },
+            {
+              "type": "text",
+              "text": "aspect = 2",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "text",
+  "text": "text",
+  "visibility": "visibile",
+  "visibility_actions": [
+    {
+      "log_id": "some",
+      "log_limit": 0,
+      "visibility_duration": 0
+    }
+  ]
+}

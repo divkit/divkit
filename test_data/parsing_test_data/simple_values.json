@@ -1,0 +1,63 @@
+{
+  "description": "All values are parsed corectly",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "auto_ellipsize": true,
+          "background": [
+            {
+              "type": "gradient",
+              "colors": [
+                "#112233",
+                "#332211"
+              ]
+            }
+          ],
+          "font_weight": "bold",
+          "font_size": 20,
+          "text": "Hello!",
+          "text_color": "#AABBCC",
+          "transition_triggers": [
+            "data_change",
+            "state_change"
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "auto_ellipsize": true,
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#112233",
+                  "#332211"
+                ]
+              }
+            ],
+            "font_weight": "bold",
+            "font_size": 20,
+            "text": "Hello!",
+            "text_color": "#AABBCC",
+            "transition_triggers": [
+              "data_change",
+              "state_change"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "expression": "@{true || 7.0}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{false || 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false || 7.0]. Operator '||' cannot be applied to different types: Boolean and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true && 7.0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [true && 7.0]. Operator '&&' cannot be applied to different types: Boolean and Number."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{true || undefined}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

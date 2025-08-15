@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".RegressionActivity"
+            android:label="@string/regression_label"
+            android:theme="@style/RegressionTheme"/>
+
+        <activity
+            android:name=".ScenarioActivity"
+            android:theme="@style/RegressionTheme" />
+    </application>
+</manifest>

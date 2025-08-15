@@ -1,0 +1,137 @@
+{
+    "features": [{
+        "id": "base_component_variables",
+        "name": "Base component property <code>variables</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.8.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
+            },
+            "web": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "base_component_variable_triggers",
+        "name": "Base component property <code>variable_triggers</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.13.0"
+            },
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
+            }
+        }
+    }, {
+        "id": "base_component_layout_provider",
+        "name": "Base component property <code>layout_provider</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.9.0"
+            },
+            "android": {
+                "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "base_component_reuse_id",
+        "name": "Base component property <code>reuse_id</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.11.0"
+            },
+            "ios": {
+                "version_added": "30.11.0"
+            },
+            "web": {
+                "notes": "Web support is not planned, it works on other principles"
+            }
+        }
+    }, {
+        "id": "base_component_animators",
+        "name": "Base component property <code>animators</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.23.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "base_component_functions",
+        "name": "Base component property <code>functions</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.20.0"
+            },
+            "android": {
+                "version_added": "30.29.0"
+            },
+            "web": {
+                "version_added": "30.29.0"
+            }
+        }
+    }, {
+        "id": "stroke_dashed",
+        "name": "Border stroke type <code>dashed</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.4.0"
+            },
+            "ios": {
+                "version_added": "31.4.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "background_linear_color_map",
+        "name": "Linear gradient in the background with positions using <code>color_map</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.4.0"
+            },
+            "ios": {
+                "version_added": "31.4.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "background_radial_color_map",
+        "name": "Radial gradient in the background with positions using <code>color_map</code>",
+        "compat": {
+            "web": {
+                "version_added": "31.10.0"
+            },
+            "ios": {
+                "version_added": "31.11.0"
+            }
+        }
+    }, {
+        "id": "background_preload_required",
+        "name": "<code>preload_required</code> for the background images",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "32.5.0"
+            }
+        }
+    }]
+}

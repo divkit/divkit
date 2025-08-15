@@ -1,0 +1,104 @@
+{
+  "description": "Decl variable with expression inside item_builder.",
+  "div_data": {
+    "card": {
+      "log_id": "prototypes",
+      "variables": [
+        {
+          "name": "text_variable",
+          "type": "string",
+          "value": "Text displaying the description of the card."
+        },
+        {
+          "name": "data",
+          "type": "array",
+          "value": [
+            {
+              "title": "First text card"
+            }
+          ]
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "item_builder": {
+                  "data": "@{data}",
+                  "prototypes": [
+                    {
+                      "div": {
+                        "variables": [
+                          {
+                            "name": "str",
+                            "type": "string",
+                            "value": "@{'Hello ' + it.getString('title')}"
+                          }
+                        ],
+                        "type": "text",
+                        "text": "@{str}",
+                        "variable_triggers": [
+                          {
+                            "condition": "@{step == 0}",
+                            "actions": [
+                              {
+                                "log_id": "step 0",
+                                "typed": {
+                                  "type": "set_variable",
+                                  "variable_name": "result",
+                                  "value": {
+                                    "type": "string",
+                                    "value": "@{str}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "run_setter",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "string",
+            "value": "Hello First text card"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

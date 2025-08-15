@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="Div"/>
+
+    <style name="Div.Text"/>
+
+    <style name="Div.Input">
+        <item name="android:imeOptions">flagNoFullscreen</item>
+    </style>
+
+    <style name="Div.Image"/>
+
+    <style name="Div.Tabs"/>
+
+    <style name="Div.Tabs.IndicatorTabLayout">
+        <item name="tabTextAppearance">@style/Div.Tabs.IndicatorTabLayout.Text</item>
+        <item name="tabIndicatorColor">@color/div_tab_indicator</item>
+        <item name="tabMinWidth">0dp</item>
+        <item name="tabPaddingStart">8dp</item>
+        <item name="tabPaddingEnd">8dp</item>
+        <item name="tabContentEnd">0dp</item>
+        <item name="tabContentStart">0dp</item>
+        <item name="tabPaddingBottom">1dp</item>
+        <item name="tabTextColor">@color/div_text_dark_disabled_50</item>
+        <item name="tabSelectedTextColor">@color/div_text_dark_disabled_80</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="Div.Tabs.IndicatorTabLayout.Text">
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Div.Theme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/div_accent_color</item>
+        <item name="colorPrimaryDark">@color/div_accent_color</item>
+        <item name="colorAccent">@color/div_accent_color</item>
+        <item name="divTextStyle">@style/Div.Text</item>
+        <item name="divImageStyle">@style/Div.Image</item>
+        <item name="divInputStyle">@style/Div.Input</item>
+        <item name="divTabIndicatorLayoutStyle">@style/Div.Tabs.IndicatorTabLayout</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
+    </style>
+
+    <style name="Div.Gallery" parent="android:Widget">
+        <item name="android:scrollbars">vertical</item>
+    </style>
+
+</resources>

@@ -1,0 +1,484 @@
+{
+  "cases": [
+    {
+      "expression": "@{parseUnixTime(0)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(1)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:01"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{parseUnixTime(10921)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 03:02:01"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{nowLocal() > parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{addMillis(parseUnixTime(0), 5000)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:05"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{addMillis(parseUnixTime(0), 1000) < addMillis(parseUnixTime(0), 1001) }",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setYear(parseUnixTime(0), 2022)}",
+      "expected": {
+        "type": "datetime",
+        "value": "2022-01-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMonth(parseUnixTime(0), 3)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-03-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMonth(parseUnixTime(0), 17)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMonth(1970-01-01 00:00:00, 17)]. Expecting month in [1..12], instead got 17."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMonth(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMonth(1970-01-01 00:00:00, -5)]. Expecting month in [1..12], instead got -5."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setDay(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-10 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setDay(setMonth(parseUnixTime(0), 2), 29)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-02-01 00:00:00, 29)]. Unable to set day 29 for date 1970-02-01 00:00:00."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setDay(parseUnixTime(0), 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-01-01 00:00:00, 0)]. Unable to set day 0 for date 1970-01-01 00:00:00."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setDay(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-01-01 00:00:00, -5)]. Unable to set day -5 for date 1970-01-01 00:00:00."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setDay(setMonth(parseUnixTime(0), 2), -1)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-31 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{setHours(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 10:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setHours(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setHours(1970-01-01 00:00:00, 77)]. Expecting hours in [0..23], instead got 77."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setHours(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setHours(1970-01-01 00:00:00, -5)]. Expecting hours in [0..23], instead got -5."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMinutes(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:10:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMinutes(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMinutes(1970-01-01 00:00:00, 77)]. Expecting minutes in [0..59], instead got 77."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMinutes(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMinutes(1970-01-01 00:00:00, -5)]. Expecting minutes in [0..59], instead got -5."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setSeconds(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:10"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setSeconds(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setSeconds(1970-01-01 00:00:00, 77)]. Expecting seconds in [0..59], instead got 77."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setSeconds(parseUnixTime(0), -10)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setSeconds(1970-01-01 00:00:00, -10)]. Expecting seconds in [0..59], instead got -10."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMillis(parseUnixTime(0), 2) > setMillis(parseUnixTime(0), 1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMillis(parseUnixTime(0), 80988)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMillis(1970-01-01 00:00:00, 80988)]. Expecting millis in [0..999], instead got 80988."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{setMillis(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMillis(1970-01-01 00:00:00, -5)]. Expecting millis in [0..999], instead got -5."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getYear(setYear(parseUnixTime(0), 2022))}",
+      "expected": {
+        "type": "integer",
+        "value": 2022
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getMonth(setMonth(parseUnixTime(0), 11))}",
+      "expected": {
+        "type": "integer",
+        "value": 11
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDay(setDay(parseUnixTime(0), 13))}",
+      "expected": {
+        "type": "integer",
+        "value": 13
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDayOfWeek(parseUnixTime(0))}",
+      "expected": {
+        "type": "integer",
+        "value": 4
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getDayOfWeek(parseUnixTime(259200))}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getHours(setHours(parseUnixTime(0), 17))}",
+      "expected": {
+        "type": "integer",
+        "value": 17
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getMinutes(setMinutes(parseUnixTime(0), 23))}",
+      "expected": {
+        "type": "integer",
+        "value": 23
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getSeconds(setSeconds(parseUnixTime(0), 27))}",
+      "expected": {
+        "type": "integer",
+        "value": 27
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getMillis(setMillis(parseUnixTime(0), 31))}",
+      "expected": {
+        "type": "integer",
+        "value": 31
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getMillis(setHours(setMillis(parseUnixTime(0), 31), 17))}",
+      "expected": {
+        "type": "integer",
+        "value": 31
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "accessibility/mode/merge",
+    "transition_animation_selector": "data_change",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "button",
+              "text": "Элемент 1",
+              "accessibility": {
+                "description": "Это Элемент 1"
+              },
+              "border": {
+                "corner_radius": 8
+              }
+            },
+            {
+              "type": "container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "accessibility": {
+                "mode": "merge"
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Элемент 2",
+                  "margins": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "accessibility": {
+                    "description": "Это Элемент 2"
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "Элемент 3",
+                  "margins": {
+                    "left": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "accessibility": {
+                    "description": "Это Элемент 3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text_color": "#FFFFFF",
+              "text": "Элемент 4",
+              "accessibility": {
+                "mode": "exclude",
+                "description": "Это Элемент 4"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#cc0605"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

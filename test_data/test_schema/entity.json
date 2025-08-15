@@ -1,0 +1,61 @@
+{
+  "anyOf": [
+    {
+      "$ref": "entity_with_array.json"
+    },
+    {
+      "$ref": "entity_with_array_of_enums.json"
+    },
+    {
+      "$ref": "entity_with_array_of_expressions.json"
+    },
+    {
+      "$ref": "entity_with_array_of_nested_items.json"
+    },
+    {
+      "$ref": "entity_with_array_with_transform.json"
+    },
+    {
+      "$ref": "entity_with_complex_property.json"
+    },
+    {
+      "$ref": "entity_with_complex_property_with_default_value.json"
+    },
+    {
+      "$ref": "entity_with_entity_property.json"
+    },
+    {
+      "$ref": "entity_with_optional_complex_property.json"
+    },
+    {
+      "$ref": "entity_with_optional_property.json"
+    },
+    {
+      "$ref": "entity_with_optional_string_enum_property.json"
+    },
+    {
+      "$ref": "entity_with_property_with_default_value.json"
+    },
+    {
+      "$ref": "entity_with_raw_array.json"
+    },
+    {
+      "$ref": "entity_with_required_property.json"
+    },
+    {
+      "$ref": "entity_with_simple_properties.json"
+    },
+    {
+      "$ref": "entity_with_string_array_property.json"
+    },
+    {
+      "$ref": "entity_with_string_enum_property.json"
+    },
+    {
+      "$ref": "entity_with_string_enum_property_with_default_value.json"
+    },
+    {
+      "$ref": "entity_without_properties.json"
+    }
+  ]
+}

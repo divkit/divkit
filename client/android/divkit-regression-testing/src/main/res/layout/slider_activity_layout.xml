@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <com.yandex.div.internal.widget.slider.SliderView
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="20dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/secondary_thumb_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="secondary thumb" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/tick_marks_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="tick marks" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/interactive_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="interactive"
+        android:checked="true" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:padding="20dp"
+            android:text="max value" />
+
+        <EditText
+            android:id="@+id/max_value"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:inputType="numberSigned" />
+    </FrameLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/anim_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:padding="20dp"
+        android:text="animation" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:padding="20dp"
+            android:text="animation duration" />
+
+        <EditText
+            android:id="@+id/anim_duration"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:text="300"
+            android:inputType="numberSigned" />
+    </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,4 @@
+{
+    "lang": "typescript",
+    "header": "// Generated code. Do not modify.\n\nimport { TemplateBlock } from '../blocks';\nimport { Exact, IntBoolean, NonEmptyArray } from '../helper';\nimport { Type } from '../template';\n"
+}

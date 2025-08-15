@@ -1,0 +1,75 @@
+{
+  "type": "container",
+  "description": "Layout of this file's contents should be identical to that from vertical_orientation_axial_alignments.json contents",
+  "items": [
+    {
+      "type": "container",
+      "orientation": "vertical",
+      "content_alignment_vertical": "top",
+      "items": [
+        {
+          "type": "text",
+          "text": "top"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "bottom"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "vertical",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "text",
+          "text": "top"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "bottom"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "vertical",
+      "content_alignment_vertical": "bottom",
+      "items": [
+        {
+          "type": "text",
+          "text": "top"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "bottom"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    }
+  ]
+}

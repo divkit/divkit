@@ -1,0 +1,28 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.lottie'
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-data')
+    implementation project(path: ':div')
+    implementation project(path: ':div-json')
+    implementation libs.okio
+
+    implementation(libs.lottie) {
+        // lottie depends on old okio with CVE
+        exclude group: 'com.squareup.okio', module: 'okio'
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    implementation(libs.androidx.appcompat) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    implementation libs.kotlin.corountines.core
+    implementation libs.kotlin.corountines.android
+
+    testImplementation libs.androidx.test.core
+}

@@ -1,0 +1,220 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "gallery_item_text": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "text_color": "#ffffff",
+      "font_size": 16
+    },
+    "gallery_item_content": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#80ff0000"
+        }
+      ],
+      "items": [
+        {
+          "type": "text",
+          "text_color": "#ffffff",
+          "font_size": 24,
+          "text_alignment_horizontal": "center",
+          "$text": "header_text"
+        },
+        {
+          "type": "state",
+          "$id": "content_id",
+          "states": [
+            {
+              "state_id": "collapsed",
+              "div": {
+                "type": "gallery_item_text",
+                "margins": {
+                  "bottom": 16
+                },
+                "max_lines": 3,
+                "$text": "item_text"
+              }
+            },
+            {
+              "state_id": "expanded",
+              "div": {
+                "type": "gallery_item_text",
+                "margins": {
+                  "bottom": 16
+                },
+                "$text": "item_text"
+              }
+            }
+          ]
+        },
+        {
+          "type": "state",
+          "$id": "button_id",
+          "states": [
+            {
+              "state_id": "text_expand",
+              "div": {
+                "type": "gallery_item_button",
+                "text": "EXPAND",
+                "actions": [
+                  {
+                    "log_id": "expand_content",
+                    "$url": "content_expand_action"
+                  },
+                  {
+                    "log_id": "button_text_collapse",
+                    "$url": "text_collapse_action"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "text_collapse",
+              "div": {
+                "type": "gallery_item_button",
+                "text": "COLLAPSE",
+                "actions": [
+                  {
+                    "log_id": "collapse_content",
+                    "$url": "content_collapse_action"
+                  },
+                  {
+                    "log_id": "button_text_expand",
+                    "$url": "text_expand_action"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "gallery_item_button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#2C3E50"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "default_item": 2,
+          "orientation": "horizontal",
+          "scroll_mode": "default",
+          "items": [
+            {
+              "type": "gallery_item_content",
+              "header_text": "0",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_0",
+              "button_id": "button_0",
+              "content_expand_action": "div-action://set_state?state_id=0/content_0/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_0/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_0/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_0/text_collapse"
+            },
+            {
+              "type": "gallery_item_content",
+              "header_text": "1",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_1",
+              "button_id": "button_1",
+              "content_expand_action": "div-action://set_state?state_id=0/content_1/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_1/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_1/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_1/text_collapse"
+            },
+            {
+              "type": "gallery_item_content",
+              "header_text": "2",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_2",
+              "button_id": "button_2",
+              "content_expand_action": "div-action://set_state?state_id=0/content_2/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_2/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_2/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_2/text_collapse"
+            },
+            {
+              "type": "gallery_item_content",
+              "header_text": "3",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_3",
+              "button_id": "button_3",
+              "content_expand_action": "div-action://set_state?state_id=0/content_3/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_3/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_3/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_3/text_collapse"
+            },
+            {
+              "type": "gallery_item_content",
+              "header_text": "4",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_4",
+              "button_id": "button_4",
+              "content_expand_action": "div-action://set_state?state_id=0/content_4/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_4/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_4/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_4/text_collapse"
+            },
+            {
+              "type": "gallery_item_content",
+              "header_text": "5",
+              "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+              "content_id": "content_5",
+              "button_id": "button_5",
+              "content_expand_action": "div-action://set_state?state_id=0/content_5/expanded",
+              "content_collapse_action": "div-action://set_state?state_id=0/content_5/collapsed",
+              "text_expand_action": "div-action://set_state?state_id=0/button_5/text_expand",
+              "text_collapse_action": "div-action://set_state?state_id=0/button_5/text_collapse"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

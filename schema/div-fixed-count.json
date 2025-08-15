@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_fixed_count",
+  "properties": {
+    "value": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_fixed_count_value"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "required": [
+    "value",
+    "type"
+  ]
+}

@@ -1,0 +1,193 @@
+@value outer from "../Cls.module.css";
+@value root__clickable, root__clickable-no-transition from "../Cls.module.css";
+
+.outer {
+    position: relative;
+    z-index: 0;
+    box-sizing: border-box;
+    /* test tabs/fixed-width */
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+@supports (overflow: clip) {
+    .outer {
+        overflow: clip;
+    }
+}
+
+.outer {
+    color: inherit;
+}
+
+.outer_hide-on-transition-in {
+    visibility: hidden;
+}
+
+.outer_halign-self_start {
+    justify-self: start;
+}
+
+.outer_halign-self_center {
+    justify-self: center;
+}
+
+.outer_halign-self_end {
+    justify-self: end;
+}
+
+.outer_halign-self_stretch {
+    justify-self: stretch;
+}
+
+.outer_valign-self_start {
+    align-self: start;
+}
+
+.outer_valign-self_center {
+    align-self: center;
+}
+
+.outer_valign-self_end {
+    align-self: end;
+}
+
+.outer_valign-self_stretch {
+    align-self: stretch;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_start {
+    align-self: flex-start;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_center {
+    align-self: center;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_end {
+    align-self: flex-end;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_stretch {
+    align-self: stretch;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_start {
+    align-self: flex-start;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_center {
+    align-self: center;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_end {
+    align-self: flex-end;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_stretch {
+    align-self: stretch;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_baseline {
+    align-self: baseline;
+}
+
+.outer_width_content {
+    width: max-content;
+}
+
+.outer_height_content {
+    height: max-content;
+}
+
+.outer_width-constrained {
+    max-width: 100%;
+}
+
+.outer_width-constrained.outer_parent-grid {
+    width: auto;
+}
+
+.outer_height-constrained {
+    max-height: 100%;
+}
+
+.outer_height-constrained.outer_parent-grid {
+    height: auto;
+}
+
+.outer_parent-overlap {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.outer_scroll-snap_start {
+    scroll-snap-align: start;
+}
+
+.outer_scroll-snap_center {
+    scroll-snap-align: center;
+}
+
+.outer_scroll-snap_end {
+    scroll-snap-align: end;
+}
+
+.outer__border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+@supports (overflow: clip) {
+    .outer__border {
+        overflow: clip;
+    }
+}
+
+.outer__border::before {
+    content: '';
+    position: absolute;
+    top: -0.1em;
+    left: -0.1em;
+    box-sizing: border-box;
+    width: calc(100% + 0.2em);
+    height: calc(100% + 0.2em);
+    border: var(--divkit-border);
+    border-radius: var(--divkit-border-radius, 0);
+}
+
+.outer_visibility_invisible {
+    visibility: hidden;
+}
+
+.outer_visibility_gone {
+    display: none !important;
+}
+
+.outer_has-action-animation {
+    opacity: var(--divkit-animation-opacity-start, 1);
+    transform: scale(var(--divkit-animation-scale-start, 1));
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.outer_has-action-animation.root__clickable:active,
+.outer_has-action-animation.root__clickable-no-transition:active {
+    opacity: var(--divkit-animation-opacity-end, 1);
+    transform: scale(var(--divkit-animation-scale-end, 1));
+}
+
+.outer_has-custom-focus:focus,
+.outer_has-custom-focus:focus-visible {
+    outline: none;
+}

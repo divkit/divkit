@@ -1,0 +1,824 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivCard tests should create Market card 1`] = `
+{
+  "templates": {
+    "title_text": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 22,
+        "top": 14,
+        "right": 22,
+        "bottom": 4
+      },
+      "text_color": "#000000"
+    },
+    "market_card_container": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "bg_color"
+        }
+      ],
+      "orientation": "vertical",
+      "$alignment_vertical": "align",
+      "$items": "content"
+    },
+    "market_card": {
+      "type": "market_card_container",
+      "align": "center",
+      "content": [
+        {
+          "type": "container",
+          "orientation": "horizontal",
+          "$items": "title_items"
+        },
+        {
+          "type": "gallery",
+          "$items": "cards"
+        }
+      ]
+    },
+    "market_item": {
+      "type": "container",
+      "border": {
+        "corner_radius": 6,
+        "has_shadow": 1
+      },
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 222
+      },
+      "items": [
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 108
+          },
+          "margins": {
+            "bottom": 6,
+            "$top": "logo_margin_top"
+          },
+          "scale": "fit",
+          "width": {
+            "type": "match_parent"
+          },
+          "$image_url": "logo"
+        },
+        {
+          "type": "text",
+          "font_size": 14,
+          "font_weight": "medium",
+          "line_height": 18,
+          "margins": {
+            "top": 6,
+            "left": 12
+          },
+          "ranges": [
+            {
+              "$start": "custom_range_start",
+              "$end": "custom_range_end",
+              "$text_color": "custom_range_color"
+            }
+          ],
+          "text_color": "#000000",
+          "$text": "price"
+        },
+        {
+          "type": "text",
+          "font_size": 14,
+          "line_height": 18,
+          "margins": {
+            "top": 2,
+            "left": 12,
+            "right": 12
+          },
+          "max_lines": 2,
+          "text_color": "#000000",
+          "$text": "desc"
+        },
+        {
+          "type": "text",
+          "alpha": 0.4,
+          "font_size": 14,
+          "line_height": 16,
+          "margins": {
+            "top": 3,
+            "left": 12,
+            "right": 12
+          },
+          "max_lines": 1,
+          "text_color": "#000000",
+          "$text": "host"
+        }
+      ],
+      "margins": {
+        "top": 10,
+        "bottom": 15
+      },
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 148
+      },
+      "$action": "action_link"
+    }
+  },
+  "card": {
+    "log_id": "market_card",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "market_card",
+          "bg_color": "ya.ru",
+          "title_items": [
+            {
+              "type": "title_text",
+              "text": "Маркет",
+              "action": {
+                "log_id": "market.title",
+                "url": "https://m.market.yandex.ru?pp=110&clid=903&distr_type=7"
+              }
+            }
+          ],
+          "cards": [
+            {
+              "type": "market_item",
+              "action_link": {
+                "log_id": "link",
+                "url": "ya.ru"
+              },
+              "price": "1 000 000$",
+              "desc": "Дрова",
+              "host": "Село",
+              "logo": "Дерево",
+              "logo_margin_top": 6,
+              "custom_range_start": 1,
+              "custom_range_end": 3,
+              "custom_range_color": "red"
+            }
+          ],
+          "margins": {
+            "bottom": 10
+          }
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivCard tests should create POI card 1`] = `
+{
+  "templates": {
+    "footer": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 16,
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "paddings": {
+        "bottom": 12,
+        "top": 12
+      },
+      "text_color": "#999",
+      "$action": "footer_action_link",
+      "$text": "footer_text"
+    },
+    "poi_card": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      ],
+      "items": [
+        {
+          "type": "container",
+          "orientation": "horizontal",
+          "$items": "title_items"
+        },
+        {
+          "type": "tabs",
+          "dynamic_height": 1,
+          "switch_tabs_by_content_swipe_enabled": 0,
+          "tab_title_style": {
+            "font_weight": "medium"
+          },
+          "title_paddings": {
+            "left": 12,
+            "right": 12,
+            "bottom": 8
+          },
+          "$items": "tab_items_link"
+        },
+        {
+          "type": "footer"
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "star": {
+      "type": "image",
+      "height": {
+        "type": "fixed",
+        "value": 14
+      },
+      "width": {
+        "type": "fixed",
+        "value": 14
+      }
+    },
+    "star_full": {
+      "type": "star",
+      "image_url": "https://avatars.mds.yandex.net/get-bass/787408/poi_48x48_ee9550bc195fdc5d7c1d281ea5d8d776320345e0a67b0663c4fdde14e194393b.png/orig"
+    },
+    "star_half": {
+      "type": "star",
+      "image_url": "https://avatars.mds.yandex.net/get-bass/469429/poi_48x48_188933e7030027690ed55b5614b60fa77e0e4b50b86dde48d166714096ed0b0e.png/orig"
+    },
+    "star_empty": {
+      "type": "star",
+      "image_url": "https://avatars.mds.yandex.net/get-bass/397492/poi_48x48_4ce4cec5ea8f8336bc3792a4899c1e9958531fcf9f8aabc4dd319ddaf5deafa0.png/orig"
+    },
+    "poi_gallery_item": {
+      "type": "container",
+      "background": [
+        {
+          "type": "image",
+          "content_alignment_vertical": "top",
+          "$image_url": "background_url"
+        },
+        {
+          "type": "gradient",
+          "angle": 270,
+          "colors": [
+            "#00293445",
+            "#293445"
+          ]
+        }
+      ],
+      "border": {
+        "corner_radius": 6
+      },
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 240
+      },
+      "items": [
+        {
+          "type": "text",
+          "alignment_horizontal": "right",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#3A4F71"
+            }
+          ],
+          "border": {
+            "corner_radius": 4
+          },
+          "font_size": 13,
+          "line_height": 16,
+          "max_lines": 1,
+          "paddings": {
+            "bottom": 4,
+            "top": 4,
+            "left": 6,
+            "right": 6
+          },
+          "text_color": "#fff",
+          "width": {
+            "type": "wrap_content"
+          },
+          "$text": "badge_text"
+        },
+        {
+          "type": "text",
+          "font_size": 11,
+          "height": {
+            "type": "match_parent",
+            "weight": 1
+          },
+          "letter_spacing": 0.75,
+          "line_height": 12,
+          "max_lines": 6,
+          "paddings": {
+            "top": 8
+          },
+          "text_alignment_vertical": "bottom",
+          "text_color": "#FFFFFF",
+          "$text": "place_category"
+        },
+        {
+          "type": "text",
+          "font_size": 16,
+          "line_height": 20,
+          "max_lines": 6,
+          "paddings": {
+            "top": 8
+          },
+          "text_color": "#FFFFFF",
+          "$text": "place_title"
+        },
+        {
+          "type": "text",
+          "font_size": 13,
+          "line_height": 16,
+          "max_lines": 6,
+          "paddings": {
+            "top": 8
+          },
+          "text_color": "#99FFFFFF",
+          "$text": "address"
+        },
+        {
+          "type": "container",
+          "content_alignment_vertical": "center",
+          "orientation": "horizontal",
+          "paddings": {
+            "top": 8
+          },
+          "$items": "poi_stars"
+        },
+        {
+          "type": "container",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "text",
+              "font_size": 11,
+              "letter_spacing": 0.75,
+              "line_height": 12,
+              "max_lines": 1,
+              "text_color": "#99FFFFFF",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "$text": "time"
+            },
+            {
+              "type": "image",
+              "height": {
+                "type": "fixed",
+                "value": 16
+              },
+              "image_url": "http://imgur.com/7y1xr5j.png",
+              "width": {
+                "type": "fixed",
+                "value": 16
+              }
+            },
+            {
+              "type": "text",
+              "font_size": 13,
+              "max_lines": 1,
+              "text_color": "#99FFFFFF",
+              "width": {
+                "type": "wrap_content"
+              },
+              "$text": "distance"
+            }
+          ],
+          "orientation": "horizontal",
+          "paddings": {
+            "top": 11
+          }
+        }
+      ],
+      "orientation": "vertical",
+      "paddings": {
+        "left": 12,
+        "right": 12,
+        "top": 16,
+        "bottom": 14
+      },
+      "width": {
+        "type": "fixed",
+        "value": 244
+      },
+      "$action": "poi_gallery_item_action_link"
+    },
+    "gallery_tail_light": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "height": {
+        "type": "match_parent",
+        "weight": 0
+      },
+      "items": [
+        {
+          "type": "image",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "border": {
+            "corner_radius": 20,
+            "stroke": {
+              "color": "#DCDEE0"
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 40
+          },
+          "image_url": "https://i.imgur.com/CPmGi24.png",
+          "placeholder_color": "#00ffffff",
+          "width": {
+            "type": "fixed",
+            "value": 40
+          }
+        },
+        {
+          "type": "text",
+          "font_size": 14,
+          "height": {
+            "type": "wrap_content"
+          },
+          "line_height": 16,
+          "paddings": {
+            "left": 0,
+            "right": 0,
+            "top": 10,
+            "bottom": 0
+          },
+          "text_alignment_horizontal": "center",
+          "text_color": "#6b7a80",
+          "$text": "tail_text_link"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 104
+      },
+      "$action": "gallery_tail_action_link"
+    },
+    "title_text": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "line_height": 24,
+      "paddings": {
+        "left": 16,
+        "top": 12,
+        "right": 16
+      },
+      "text_color": "#CC000000"
+    },
+    "title_menu": {
+      "type": "image",
+      "height": {
+        "type": "fixed",
+        "value": 44
+      },
+      "image_url": "https://i.imgur.com/qNJQKU8.png",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "poi_card",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "poi_card",
+          "title_items": [
+            {
+              "type": "title_text",
+              "text": "Around"
+            },
+            {
+              "type": "title_menu",
+              "action": {
+                "log_id": "menu",
+                "menu_items": [
+                  {
+                    "text": "Feed options",
+                    "action": {
+                      "url": "http://ya.ru",
+                      "log_id": "settings"
+                    }
+                  },
+                  {
+                    "text": "Hide the card",
+                    "action": {
+                      "url": "http://ya.ru",
+                      "log_id": "hide"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "footer_text": "OPEN MAPS",
+          "tab_items_link": [
+            {
+              "title": "POPULAR",
+              "div": {
+                "type": "gallery",
+                "height": {
+                  "type": "fixed",
+                  "unit": "sp",
+                  "value": 240
+                },
+                "items": [
+                  {
+                    "type": "poi_gallery_item",
+                    "badge_text": "Best",
+                    "background_url": "https://avatars.mds.yandex.net/get-pdb/1340633/88a085e7-7254-43ff-805a-660b96f0e6ce/s1200?webp=false",
+                    "place_category": "RESTAURANT",
+                    "place_title": "Bakery",
+                    "address": "221b, Baker Street",
+                    "time": "till 23:00",
+                    "distance": "150m",
+                    "poi_stars": [
+                      {
+                        "type": "star_full"
+                      },
+                      {
+                        "type": "star_full"
+                      },
+                      {
+                        "type": "star_full"
+                      },
+                      {
+                        "type": "star_half"
+                      },
+                      {
+                        "type": "star_empty"
+                      }
+                    ],
+                    "poi_gallery_item_action_link": "ya.ru"
+                  },
+                  {
+                    "type": "poi_gallery_item",
+                    "badge_text": "Best",
+                    "background_url": "https://avatars.mds.yandex.net/get-pdb/1340633/88a085e7-7254-43ff-805a-660b96f0e6ce/s1200?webp=false",
+                    "place_category": "CONCERT",
+                    "place_title": "Violin concert",
+                    "address": "221b, Baker Street",
+                    "time": "21:30",
+                    "distance": "150m",
+                    "poi_stars": [],
+                    "poi_gallery_item_action_link": "ya.ru"
+                  },
+                  {
+                    "type": "gallery_tail_light",
+                    "tail_text_link": "More",
+                    "visibility_action": {
+                      "log_id": "a66",
+                      "visibility_duration": 10000
+                    },
+                    "gallery_tail_action_link": "ya.ru"
+                  }
+                ],
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "width": {
+                  "type": "match_parent",
+                  "weight": 40
+                }
+              }
+            }
+          ],
+          "footer_action_link": "ya.ru"
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivCard tests should create Znatoki card 1`] = `
+{
+  "templates": {
+    "znatoki_question": {
+      "type": "text",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "bold",
+      "height": {
+        "type": "wrap_content"
+      },
+      "line_height": 20,
+      "max_lines": 4,
+      "paddings": {
+        "left": 12,
+        "right": 12,
+        "top": 8,
+        "bottom": 8
+      },
+      "text_color": "#ffffff",
+      "$text": "question_title"
+    },
+    "znatoki_card": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "border": {
+        "corner_radius": 6,
+        "stroke": {
+          "color": "#DCDEE0",
+          "width": 1
+        }
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "items": [
+        {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#e9edf2"
+            },
+            {
+              "type": "image",
+              "$image_url": "question_cover_url"
+            },
+            {
+              "type": "solid",
+              "color": "#80000000"
+            }
+          ],
+          "content_alignment_vertical": "center",
+          "height": {
+            "type": "fixed",
+            "unit": "sp",
+            "value": 96
+          },
+          "items": [
+            {
+              "type": "znatoki_question"
+            }
+          ],
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "content_alignment_vertical": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "alignment_vertical": "center",
+                  "border": {
+                    "corner_radius": 16
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "$image_url": "author_avater_url"
+                },
+                {
+                  "type": "container",
+                  "items": [
+                    {
+                      "type": "text",
+                      "$text": "author_name"
+                    }
+                  ],
+                  "paddings": {
+                    "left": 8,
+                    "right": 8
+                  }
+                }
+              ],
+              "orientation": "horizontal",
+              "paddings": {
+                "bottom": 4
+              }
+            },
+            {
+              "type": "text",
+              "$text": "answer_text"
+            },
+            {
+              "type": "container",
+              "content_alignment_vertical": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "alignment_vertical": "center",
+                  "alpha": 0.24,
+                  "height": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "image_url": "https://avatars.mds.yandex.net/get-znatoki/1649112/2a0000016c29fff42cb526006c69e437cd43/orig",
+                  "placeholder_color": "#00ffffff",
+                  "width": {
+                    "type": "fixed",
+                    "value": 16
+                  }
+                },
+                {
+                  "type": "text",
+                  "$text": "answers_more"
+                }
+              ],
+              "orientation": "horizontal"
+            }
+          ],
+          "paddings": {
+            "left": 12,
+            "right": 12,
+            "top": 12,
+            "bottom": 12
+          }
+        }
+      ],
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 272
+      }
+    }
+  },
+  "card": {
+    "log_id": "znatoki_card",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "znatoki_card",
+          "author_name": "name",
+          "question_cover_url": "ya.ru",
+          "question_title": "title",
+          "author_avater_url": "ya.ru",
+          "answer_text": "text",
+          "answers_more": "more"
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivCard tests should escape unsafe chars 1`] = `
+{
+  "templates": {},
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "type": "string",
+        "name": "variable",
+        "value": "value"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Hello \\\\\\\\\\\\\\\\ unsafe \\\\@{variable}"
+            },
+            {
+              "type": "text",
+              "text": "Hello \\\\\\\\ safe @{variable}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+`;

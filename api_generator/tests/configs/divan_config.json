@@ -1,0 +1,12 @@
+{
+    "lang": "divan",
+    "header": "@file:Suppress(\n    \"unused\",\n    \"UNUSED_PARAMETER\",\n)\n\npackage divan\n\nimport com.fasterxml.jackson.annotation.JsonAnyGetter\nimport com.fasterxml.jackson.annotation.JsonIgnore\nimport divan.annotation.Generated\nimport divan.core.Guard\nimport divan.core.Property\nimport divan.core.ReferenceProperty\nimport divan.core.tryPutProperty\nimport divan.core.valueOrNull\nimport divan.scope.DivScope\nimport divan.scope.TemplateScope\nimport kotlin.Any\nimport kotlin.String\nimport kotlin.Suppress\nimport kotlin.collections.List\nimport kotlin.collections.Map\n",
+    "kotlinAnnotations": {
+        "topLevelDefinitions": ["@Generated"]
+    },
+    "supertypeEntities": [
+      "div",
+      "entity"
+    ],
+    "removePrefix": "entity"
+}

@@ -1,0 +1,126 @@
+{
+  "$description": "translations.json#/div_state",
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "alias_divan": "item",
+      "codegen": {
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
+      "properties": {
+        "state_id": {
+          "$ref": "common.json#/id",
+          "$description": "translations.json#/div_state_div_state_state_id"
+        },
+        "div": {
+          "$ref": "div.json",
+          "$description": "translations.json#/div_state_div_state_div"
+        },
+        "animation_in": {
+          "$ref": "div-animation.json",
+          "$description": "translations.json#/div_state_div_state_animation_in",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "animation_out": {
+          "$ref": "div-animation.json",
+          "$description": "translations.json#/div_state_div_state_animation_out",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "swipe_out_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_state_div_state_swipe_out_actions",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        }
+      },
+      "required": [
+        "state_id"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "state"
+          ]
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/div_state"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_state_states"
+        },
+        "state_id_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_state_state_id_variable"
+        },
+        "div_id": {
+          "$ref": "common.json#/id",
+          "$description": "translations.json#/div_state_div_id",
+          "deprecated": true
+        },
+        "default_state_id": {
+          "type": "string",
+          "$description": "translations.json#/div_state_default_state_id"
+        },
+        "transition_animation_selector": {
+          "$ref": "div-transition-selector.json",
+          "default_value": "state_change",
+          "$description": "translations.json#/div_state_transition_animation_selector",
+          "deprecated": true
+        },
+        "clip_to_bounds": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_clip_to_bounds",
+          "platforms": [
+            "android",
+            "web",
+            "ios"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "states"
+      ]
+    }
+  ]
+}

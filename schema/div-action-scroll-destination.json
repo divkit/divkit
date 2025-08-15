@@ -1,0 +1,89 @@
+{
+  "$description": "translations.json#/div_action_scroll_destination",
+  "definitions": {
+    "offset_destination": {
+      "$description": "translations.json#/div_action_scroll_destination_offset",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "offset"
+          ]
+        },
+        "value": {
+          "$description": "translations.json#/div_action_scroll_destination_offset_value",
+          "$ref": "common.json#/non_negative_integer"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "index_destination": {
+      "$description": "translations.json#/div_action_scroll_destination_index",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "index"
+          ]
+        },
+        "value": {
+          "$description": "translations.json#/div_action_scroll_destination_index_value",
+          "$ref": "common.json#/non_negative_integer"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "start_destination": {
+      "$description": "translations.json#/div_action_scroll_destination_start",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "start"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "end_destination": {
+      "$description": "translations.json#/div_action_scroll_destination_end",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "end"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/definitions/offset_destination"
+    },
+    {
+      "$ref": "#/definitions/index_destination"
+    },
+    {
+      "$ref": "#/definitions/start_destination"
+    },
+    {
+      "$ref": "#/definitions/end_destination"
+    }
+  ]
+}

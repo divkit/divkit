@@ -1,0 +1,65 @@
+#if os(iOS)
+import Foundation
+import LayoutKit
+import VGSL
+
+public final class RiveAnimationBlock: BlockWithTraits {
+  public let widthTrait: LayoutTrait
+  public let heightTrait: LayoutTrait
+
+  let animationHolder: AnimationHolder
+  let animatableView: Lazy<AsyncSourceAnimatableView>
+
+  public var debugDescription: String {
+    "Sized Animation Block is playing animation with \(animationHolder)"
+  }
+
+  public var intrinsicContentWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case let .intrinsic(_, minSize, _):
+      minSize
+    case .weighted:
+      0
+    }
+  }
+
+  public init(
+    animationHolder: AnimationHolder,
+    animatableView: Lazy<AsyncSourceAnimatableView>,
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait
+  ) {
+    self.animationHolder = animationHolder
+    self.animatableView = animatableView
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
+  }
+
+  public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
+    switch heightTrait {
+    case let .fixed(value):
+      value
+    case let .intrinsic(_, minSize, _):
+      minSize
+    case .weighted:
+      0
+    }
+  }
+
+  public func equals(_ other: Block) -> Bool {
+    guard let other = other as? RiveAnimationBlock else {
+      return false
+    }
+    return self.widthTrait == other.widthTrait &&
+      self.heightTrait == other.heightTrait &&
+      self.animationHolder == other.animationHolder
+  }
+
+  public func getImageHolders() -> [ImageHolder] { [] }
+}
+
+extension RiveAnimationBlock: LayoutCachingDefaultImpl {}
+extension RiveAnimationBlock: ElementStateUpdatingDefaultImpl {}
+#endif

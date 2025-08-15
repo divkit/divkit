@@ -1,0 +1,79 @@
+{
+  "description": "Vertical container with separator. Separators between gone items should not be visible.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 20,
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 2
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "item",
+              "text": "Item 0",
+              "visibility": "gone"
+            },
+            {
+              "type": "item",
+              "text": "Item 1",
+              "visibility": "gone"
+            },
+            {
+              "type": "item",
+              "text": "Item 2"
+            },
+            {
+              "type": "item",
+              "text": "Item 3"
+            }
+          ],
+          "separator": {
+            "margins": {
+              "top": 10,
+              "bottom": 10
+            },
+            "style": {
+              "type": "shape_drawable",
+              "color": "#000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 2
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 50
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

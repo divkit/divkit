@@ -1,0 +1,178 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "margins": {
+        "right": 8,
+        "left": 8
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 12,
+      "text_color": "#ffff",
+      "font_weight": "bold",
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0000FF"
+        }
+      ],
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ff5500"
+          }
+        ]
+      }
+    }
+  },
+  "card": {
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "input_value_1",
+        "type": "string",
+        "value": "input view"
+      },
+      {
+        "name": "timer_label",
+        "type": "string",
+        "value": "finished"
+      }
+    ],
+    "timers": [
+      {
+        "id": "clear_focus",
+        "duration": 2000,
+        "end_actions": [
+          {
+            "log_id": "clear focus",
+            "typed": {
+              "type": "clear_focus"
+            }
+          },
+          {
+            "url": "div-action://set_variable?name=timer_label&value=finished",
+            "log_id": "timer finished"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "margins": {
+                "left": 16,
+                "top": 16
+              },
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Timer for clear focus: ",
+                  "font_weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "@{timer_label}"
+                }
+              ]
+            },
+            {
+              "id": "input",
+              "text_variable": "input_value_1",
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#0000FF"
+                }
+              },
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "button",
+              "text": "Focus input",
+              "id": "button_1",
+              "alignment_horizontal": "center",
+              "width": {
+                "type": "wrap_content"
+              },
+              "actions": [
+                {
+                  "log_id": "focus_1",
+                  "typed": {
+                    "type": "focus_element",
+                    "element_id": "input"
+                  }
+                },
+                {
+                  "log_id": "Start timer",
+                  "url": "div-action://timer?id=clear_focus&action=start"
+                },
+                {
+                  "url": "div-action://set_variable?name=timer_label&value=started",
+                  "log_id": "timer started"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

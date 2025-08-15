@@ -1,0 +1,84 @@
+{
+  "description": "Vertical pager with paddings and items which are wider than pager",
+  "platforms": [
+    "android",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 70
+          },
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "value": 90
+            }
+          },
+          "orientation": "vertical",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text_page",
+              "text": "Page width = wrap_content, constrained = true.\nLeft and right paddings are shown\nand left and right borders are drawn. Some additional long text for big size"
+            },
+            {
+              "type": "text_page",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

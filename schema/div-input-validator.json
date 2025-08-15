@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-input-validator-regex.json",
+      "$description": "translations.json#/div_input_validators_regex"
+    },
+    {
+      "$ref": "div-input-validator-expression.json",
+      "$description": "translations.json#/div_input_validators_expression"
+    }
+  ]
+}

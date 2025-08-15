@@ -1,0 +1,7 @@
+{
+  "description": "boolean property represented by int value must fail",
+  "entity": {
+    "type": "entity_with_simple_properties",
+    "boolean": 1
+  }
+}

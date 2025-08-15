@@ -1,0 +1,90 @@
+{
+  "description": "Vertical pager with match_parent height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_match_parent_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "border": {
+            "stroke": {
+              "color": "#00FF00"
+            }
+          },
+          "items": [
+            {
+              "type": "pager",
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "value": 90
+                }
+              },
+              "orientation": "vertical",
+              "height": {
+                "type": "match_parent"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFF0000",
+                  "width": 2
+                }
+              },
+              "items": [
+                {
+                  "type": "text_page_match_parent_height",
+                  "text": "Container height = 120\nPager height = match_parent"
+                },
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  }
+                },
+                {
+                  "type": "text_page_match_parent_height",
+                  "text": "We learned to talk"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

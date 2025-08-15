@@ -1,0 +1,104 @@
+{
+  "templates": {
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "catched_action",
+        "type": "string",
+        "value": "none"
+      }
+    ],
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "action": {
+            "log_id": "tap_container",
+            "url": "div-action://set_variable?name=catched_action&value=tap_container"
+          },
+          "items": [
+            {
+              "type": "gallery",
+              "margins": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "border": {
+                "corner_radius": 16,
+                "stroke": {
+                  "color": "#000000",
+                  "width": 2
+                }
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "bottom": 16,
+                "right": 16
+              },
+              "item_spacing": 16,
+              "items": [
+                {
+                  "type": "text",
+                  "text": "block",
+                  "font_size": 12,
+                  "line_height": 15,
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "text_color": "#000000",
+                  "width": {
+                    "type": "fixed",
+                    "value": 104
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 104
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0E000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 16
+                  }
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "Last catched action: @{catched_action}",
+              "ranges": [
+                {
+                  "start": 21,
+                  "end": 40,
+                  "font_weight": "bold"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

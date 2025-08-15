@@ -1,0 +1,3 @@
+tasks.register('runUiTests') {
+    dependsOn "connectedDebugAndroidTest" // encapsulating test variant
+}

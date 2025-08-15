@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_array"
+      ]
+    },
+    "array": {
+      "type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ],
+      "items": {
+        "$ref": "entity.json"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "array"
+  ]
+}

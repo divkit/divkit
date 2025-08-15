@@ -1,0 +1,30 @@
+{
+  "description": "Image with red tint color",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/test/omni_icon.png",
+          "tint_color": "#FF0000",
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}

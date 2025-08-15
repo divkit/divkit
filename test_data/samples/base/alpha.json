@@ -1,0 +1,83 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Transparency"
+            },
+            {
+              "type": "subtitle",
+              "text": "You can set the transparency for any div: from 0 to 1",
+              "margins": {
+                "bottom": 12
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "margins": {
+                "bottom": 12
+              },
+              "items": [
+                {
+                  "type": "image",
+                  "height": {
+                    "type": "fixed",
+                    "value": 200
+                  },
+                  "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+                },
+                {
+                  "type": "image",
+                  "height": {
+                    "type": "fixed",
+                    "value": 200
+                  },
+                  "alpha": 0.5,
+                  "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "The transparency of the first image is 1 and the second is 0.5."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

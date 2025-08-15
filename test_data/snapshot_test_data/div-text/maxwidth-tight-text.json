@@ -1,0 +1,52 @@
+{
+  "description": "Text with max width with tighten_width enabled and disabled",
+  "platforms": [
+    "android",
+    "ios",
+    "flutter"
+  ],
+  "templates": {
+    "max_width_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content",
+        "constrained": 1,
+        "max_size": {
+          "value": 300
+        }
+      },
+      "alignment_horizontal": "end",
+      "text": "It is a dark time for the Rebellion.",
+      "font_size": 24,
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ACAEA0"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "max_width_text"
+            },
+            {
+              "type": "max_width_text",
+              "margins": {
+                "top": 16
+              },
+              "tighten_width": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

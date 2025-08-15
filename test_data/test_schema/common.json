@@ -1,0 +1,32 @@
+{
+  "color": {
+    "type": "string",
+    "format": "color"
+  },
+  "url": {
+    "type": "string",
+    "format": "uri"
+  },
+  "positive_integer": {
+    "type": "integer",
+    "constraint": "number > 0"
+  },
+  "non_negative_integer": {
+    "type": "integer",
+    "constraint": "number >= 0"
+  },
+  "boolean_int": {
+    "oneOf": [
+      {
+        "type": "boolean"
+      },
+      {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ]
+      }
+    ]
+  }
+}

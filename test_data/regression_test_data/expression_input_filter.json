@@ -1,0 +1,203 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "$text_variable": "variable",
+      "$hint_text": "hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "pretty_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 32,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffdc60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4,
+        "has_shadow": 1
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "text",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "input_enabled",
+        "type": "boolean",
+        "value": 0
+      },
+      {
+        "name": "input_state",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{input_enabled}",
+        "actions": [
+          {
+            "log_id": "change_input_enabled_text",
+            "url": "div-action://set_variable?name=input_state&value=Input enabled"
+          }
+        ]
+      },
+      {
+        "condition": "@{!input_enabled}",
+        "actions": [
+          {
+            "log_id": "change_input_enabled_text",
+            "url": "div-action://set_variable?name=input_state&value=Input disabled"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "button",
+              "text": "Enable input",
+              "action": {
+                "log_id": "enable_input",
+                "url": "div-action://set_variable?name=input_enabled&value=1"
+              }
+            },
+            {
+              "type": "button",
+              "text": "Disable input",
+              "action": {
+                "log_id": "enable_input",
+                "url": "div-action://set_variable?name=input_enabled&value=0"
+              }
+            },
+            {
+              "type": "pretty_text",
+              "text": "@{input_state}"
+            },
+            {
+              "id": "input",
+              "type": "pretty_input",
+              "variable": "text",
+              "hint": "text",
+              "filters": [
+                {
+                  "type": "expression",
+                  "condition": "@{input_enabled}"
+                }
+              ]
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{text}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

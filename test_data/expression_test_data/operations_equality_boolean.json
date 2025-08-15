@@ -1,0 +1,212 @@
+{
+  "cases": [
+    {
+      "name": "var_a == var_b => true (1)",
+      "expression": "@{var_a == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_a != var_b => false (1)",
+      "expression": "@{var_a != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_a == var_b => true (2)",
+      "expression": "@{var_a == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_a != var_b => false (2)",
+      "expression": "@{var_a != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_a == var_b => false",
+      "expression": "@{var_a == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_b == var_a => false",
+      "expression": "@{var_b == var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_a != var_b => true",
+      "expression": "@{var_a != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "var_b != var_a => true",
+      "expression": "@{var_b != var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": true,
+          "name": "var_a"
+        },
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "image_block": {
+      "type": "image",
+      "border": {
+        "corner_radius": 16
+      },
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "placeholder_color": "#C0C0B0",
+      "preload_required": 1,
+      "visibility_actions": [
+        {
+          "log_id": "content_item_show:2",
+          "visibility_percentage": 80,
+          "visibility_duration": 0
+        }
+      ],
+      "alpha": 0.8,
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240
+      }
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "text": "Item ",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "border": {
+            "corner_radius": 20
+          },
+          "items": [
+            {
+              "type": "state",
+              "id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "state",
+                        "id": "slider",
+                        "states": [
+                          {
+                            "state_id": "without_ad",
+                            "div": {
+                              "type": "pager",
+                              "id": "gallery",
+                              "item_spacing": {
+                                "type": "fixed",
+                                "value": 4
+                              },
+                              "items": [
+                                {
+                                  "type": "text_block",
+                                  "header": "Item 0",
+                                  "id": "block_1",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:0",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "image_block",
+                                  "id": "block_2",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:1",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text_block",
+                                  "header": "Item 2",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:2",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:3",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text_block",
+                                  "header": "Item 4",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:4",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:5",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text_block",
+                                  "header": "Item 6",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:6",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:7",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text_block",
+                                  "header": "Item 8",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:8",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "image_block",
+                                  "visibility_actions": [
+                                    {
+                                      "log_id": "content_item_show:9",
+                                      "visibility_percentage": 80,
+                                      "visibility_duration": 0
+                                    }
+                                  ]
+                                }
+                              ],
+                              "layout_mode": {
+                                "type": "fixed",
+                                "neighbour_page_width": {
+                                  "type": "fixed",
+                                  "value": 10
+                                }
+                              },
+                              "margins": {
+                                "top": 8
+                              },
+                              "paddings": {
+                                "right": 4,
+                                "left": 4
+                              },
+                              "restrict_parent_scroll": 1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "max_lines": 1,
+              "type": "text",
+              "font_size": 14,
+              "line_height": 18,
+              "text": "Goooooose…",
+              "text_color": "#808080",
+              "margins": {
+                "top": 10,
+                "bottom": 10,
+                "left": 20,
+                "start": 20
+              },
+              "visibility_actions": [
+                {
+                  "log_id": "goose_shown"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

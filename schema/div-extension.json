@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_extension",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_extension_id"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "$description": "translations.json#/div_extension_params"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

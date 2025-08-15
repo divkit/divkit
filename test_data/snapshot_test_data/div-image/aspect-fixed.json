@@ -1,0 +1,51 @@
+{
+  "description": "Image with fixed width and aspect ratio equal to 2 (height = width / 2)",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#AAA"
+            }
+          ],
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "aspect": {
+                "ratio": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

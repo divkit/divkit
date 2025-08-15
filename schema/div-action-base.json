@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "log_id": {
+      "type": "string",
+      "$description": "translations.json#/div_action_base_log_id"
+    },
+    "scope_id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_action_base_scope_id",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "url": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_action_base_url"
+    },
+    "referer": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_action_base_referer",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Controlled by the browser."
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "$description": "translations.json#/div_action_base_payload"
+    },
+    "download_callbacks": {
+      "$ref": "div-download-callbacks.json",
+      "$description": "translations.json#/div_action_base_download_callbacks"
+    },
+    "typed": {
+      "$ref": "div-action-typed.json"
+    },
+    "is_enabled": {
+      "$ref": "common.json#/boolean_int",
+      "$description": "translations.json#/div_action_base_is_enabled",
+      "default_value": "true"
+    }
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "description": "Check getNumberValue subscription.",
+  "div_data": {
+    "card": {
+      "log_id": "get_number_value",
+      "variables": [
+        {
+          "name": "part_of_name",
+          "type": "string",
+          "value": "1"
+        },
+        {
+          "name": "var_1",
+          "type": "number",
+          "value": 10.5
+        },
+        {
+          "name": "var_2",
+          "type": "number",
+          "value": 20.5
+        }
+      ],
+      "variable_triggers": [
+        {
+          "condition": "@{getNumberValue('var_' + part_of_name, 0.0) != 0}",
+          "mode": "on_variable",
+          "actions": [
+            {
+              "log_id": "check result",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "result",
+                "value": {
+                  "type": "number",
+                  "value": "@{getNumberValue('var_' + part_of_name, 0.0)}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 10.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 20.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_1&value=11.5"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 11.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_2&value=21.5"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 21.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change old value",
+          "url": "div-action://set_variable?name=var_1&value=11.5"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 20.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change another value",
+          "url": "div-action://set_variable?name=var_2&value=21.5"
+        },
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "number",
+            "value": 21.5
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

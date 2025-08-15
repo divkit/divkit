@@ -1,0 +1,30 @@
+{
+  "description": "Image with fixed width less than wrap_content",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+          "width": {
+            "type": "fixed",
+            "value": 50
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}

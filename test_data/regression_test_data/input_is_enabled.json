@@ -1,0 +1,116 @@
+{
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "multiline_input_value",
+        "type": "string",
+        "value": "Multiline\ntext"
+      },
+      {
+        "name": "singleline_input_value",
+        "type": "string",
+        "value": "Singleline text"
+      },
+      {
+        "name": "is_input_enabled",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "input",
+              "is_enabled": "@{is_input_enabled}",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "text_variable": "multiline_input_value"
+            },
+            {
+              "type": "input",
+              "is_enabled": "@{is_input_enabled}",
+              "keyboard_type": "single_line_text",
+              "margins": {
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "text_variable": "singleline_input_value"
+            },
+            {
+              "type": "text",
+              "text": "@{is_input_enabled ? 'Disable' : 'Enable'}",
+              "margins": {
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0077FF"
+                }
+              ],
+              "text_color": "#ffffff",
+              "border": {
+                "corner_radius": 8
+              },
+              "text_alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "toogle_enabled",
+                  "url": "div-action://set_variable?name=is_input_enabled&value=@{!is_input_enabled}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "accessibility/types",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 16,
+            "bottom": 8
+          },
+          "orientation": "vertical",
+          "accessibility": {
+            "type": "list",
+            "description": "List"
+          },
+          "items": [
+            {
+              "type": "button",
+              "accessibility": {
+                "type": "button"
+              },
+              "text": "type: button"
+            },
+            {
+              "type": "button",
+              "accessibility": {
+                "type": "image"
+              },
+              "text": "type: image"
+            },
+            {
+              "type": "button",
+              "accessibility": {
+                "type": "text"
+              },
+              "text": "type: text"
+            },
+            {
+              "type": "button",
+              "accessibility": {
+                "type": "header"
+              },
+              "text": "type: header"
+            },
+            {
+              "type": "button",
+              "accessibility": {
+                "type": "none"
+              },
+              "text": "type: none"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

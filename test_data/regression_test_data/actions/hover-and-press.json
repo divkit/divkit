@@ -1,0 +1,100 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "text": " ",
+      "width": {
+        "type": "fixed",
+        "value": 250
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#00B341"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#ffffff"
+    }
+  },
+  "card": {
+    "log_id": "hover_screen",
+    "variables": [
+      {
+        "name": "is_hovered",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "is_pressed",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "button",
+              "text": "@{is_hovered ? 'Hovered' : 'Not hovered'}",
+              "margins": {
+                "bottom": 10
+              },
+              "hover_start_actions": [
+                {
+                  "log_id": "press_enter",
+                  "url": "div-action://set_variable?name=is_hovered&value=true"
+                }
+              ],
+              "hover_end_actions": [
+                {
+                  "log_id": "press_exit",
+                  "url": "div-action://set_variable?name=is_hovered&value=false"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "@{is_pressed ? 'Pressed' : 'Not pressed'}",
+              "press_start_actions": [
+                {
+                  "log_id": "press_enter",
+                  "url": "div-action://set_variable?name=is_pressed&value=true"
+                }
+              ],
+              "press_end_actions": [
+                {
+                  "log_id": "press_exit",
+                  "url": "div-action://set_variable?name=is_pressed&value=false"
+                }
+              ]
+            }
+          ],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}

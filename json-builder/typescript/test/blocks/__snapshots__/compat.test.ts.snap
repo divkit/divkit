@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compat tests block with DivGradientBackground 1`] = `
+{
+  "type": "text",
+  "background": [
+    {
+      "type": "gradient",
+      "angle": 270,
+      "colors": [
+        "#112233",
+        "#332211"
+      ]
+    }
+  ],
+  "text": "Text with gradient background"
+}
+`;

@@ -1,0 +1,43 @@
+{
+  "description": "Text with font features",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_template": {
+      "type": "text",
+      "font_size": 24
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_template",
+              "text": "Yandex Sans as is"
+            },
+            {
+              "type": "text_template",
+              "font_feature_settings": "'kern' off",
+              "text": "Yandex Sans without kerning"
+            },
+            {
+              "type": "text_template",
+              "font_feature_settings": "'frac' 1",
+              "text": "Fraction ligature 1/2"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "cases": [
+    {
+      "expression": "@{getColorAlpha('#80000000')}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorAlpha(color)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "variables": [
+        {
+          "name": "color",
+          "type": "color",
+          "value": "#80000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorAlpha('#FF000000')}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorAlpha(color)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "name": "color",
+          "type": "color",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorRed('#FF800000')}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorRed(color)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "variables": [
+        {
+          "name": "color",
+          "type": "color",
+          "value": "#FF800000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorGreen('#FF008000')}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorGreen(color)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "variables": [
+        {
+          "name": "color",
+          "type": "color",
+          "value": "#FF008000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorBlue('#FF000080')}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorBlue(color)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5019607843137255
+      },
+      "variables": [
+        {
+          "name": "color",
+          "type": "color",
+          "value": "#FF000080"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{getColorAlpha('not_color')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getColorAlpha('not_color')]. Unable to convert value to Color, expected format #AARRGGBB."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

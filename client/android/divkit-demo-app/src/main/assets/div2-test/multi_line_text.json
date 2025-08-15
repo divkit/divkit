@@ -1,0 +1,20 @@
+{
+  "log_id": "text",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "font_size": 16,
+        "height": {
+          "type": "wrap_content",
+          "constrained": true
+        },
+        "line_height": 20,
+        "text": "multi\nline",
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "type": "text"
+      }
+    }
+  ]
+}

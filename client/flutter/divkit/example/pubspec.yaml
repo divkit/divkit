@@ -1,0 +1,79 @@
+name: example
+description: Usage samples, testing space and simple editor.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  shared_preferences: ^2.0.0
+  flutter_riverpod: ^2.0.0
+  equatable: ^2.0.5
+
+  divkit:
+    path: ../
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/application/
+    - assets/application/images/
+    - assets/samples/animations/
+    - assets/samples/base/
+    - assets/samples/container/
+    - assets/samples/gallery/
+    - assets/samples/grid/
+    - assets/samples/image/
+    - assets/samples/input/
+    - assets/samples/pager/
+    - assets/samples/select/
+    - assets/samples/separator/
+    - assets/samples/slider/
+    - assets/samples/state/
+    - assets/samples/tabs/
+    - assets/samples/text/
+    - assets/samples/video/
+    - assets/regression/
+    - assets/regression/accessibility/
+    - assets/regression/accessibility/mode/
+    - assets/regression/action_animation/
+    - assets/regression/actions/
+    - assets/regression/animations/
+    - assets/regression/animations/animators/
+    - assets/regression/animations/lottie/
+    - assets/regression/animations/rive/
+    - assets/regression/animations/transition/
+    - assets/regression/container/
+    - assets/regression/gallery/
+    - assets/regression/indicator/
+    - assets/regression/pager/
+    - assets/regression/patch/
+    - assets/regression/rebind/
+    - assets/regression/rebind/container/
+    - assets/regression/rebind/custom/
+    - assets/regression/rebind/gallery/
+    - assets/regression/rebind/grid/
+    - assets/regression/rebind/pager/
+    - assets/regression/rebind/tabs/
+    - assets/regression/state/
+    - assets/regression/timers/
+    - assets/regression/tooltips/
+    - assets/regression/variables/
+    - assets/regression/video/
+    - assets/regression/visibility_actions/
+    - assets/perf/
+
+  fonts:
+    - family: ProtestGuerrilla
+      fonts:
+        - asset: assets/fonts/ProtestGuerrilla/ProtestGuerrilla-Regular.ttf

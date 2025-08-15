@@ -1,0 +1,18 @@
+###########################
+# Android support classes #
+###########################
+android/support/design/**
+android/support/v7/**
+android/support/constraint/**
+
+###########################
+# Dagger
+###########################
+
+#####################
+# Generated classes #
+#####################
+**/R.class
+**/R$*.class
+**/BuildConfig.*
+**/Manifest*.*

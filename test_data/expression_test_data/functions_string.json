@@ -1,0 +1,705 @@
+{
+  "cases": [
+    {
+      "expression": "@{len('Sentence with 4 words.')}",
+      "expected": {
+        "type": "integer",
+        "value": 22
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{len('')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{contains('abc', 'b')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{contains('abc', 'z')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{contains('abc', '')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{contains('', '')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{contains('word', 'word123')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('0123456789', 0, 5)}",
+      "expected": {
+        "type": "string",
+        "value": "01234"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('0123456789', 0, 10)}",
+      "expected": {
+        "type": "string",
+        "value": "0123456789"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('0123456789', 2, 2)}",
+      "expected": {
+        "type": "string",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('0123456789', 6, 2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('0123456789', 6, 2)]. Indexes should be in ascending order."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('012', 2, 5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('012', 2, 5)]. Indexes are out of bounds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{substring('012', -2, 5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('012', -2, 5)]. Indexes are out of bounds."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{replaceAll('0000', '0', '11')}",
+      "expected": {
+        "type": "string",
+        "value": "11111111"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{replaceAll('0000', '00', '1')}",
+      "expected": {
+        "type": "string",
+        "value": "11"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{replaceAll('0000', 'ab', 'd')}",
+      "expected": {
+        "type": "string",
+        "value": "0000"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{replaceAll('abc 123 abc123', '123', '')}",
+      "expected": {
+        "type": "string",
+        "value": "abc  abc"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{replaceAll('123', '', '_')}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{index('123123', '1')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{index('123', '')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{index('', '')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{index('123', 'a')}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{index('123123123', '23')}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{lastIndex('1__1__1', '1')}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{lastIndex('123', 'a')}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{encodeUri('AZaz09_.-* ;,/?:@&=+$!~\\'()[]{}#')}",
+      "expected": {
+        "type": "string",
+        "value": "AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~'()%5B%5D%7B%7D%23"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{decodeUri('AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~\\'()%5B%5D%7B%7D%23')}",
+      "expected": {
+        "type": "string",
+        "value": "AZaz09_.-* ;,/?:@&=+$!~'()[]{}#"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trim('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trim('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trimLeft('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trimLeft('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34   "
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trimRight('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{trimRight('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "   12 34"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toUpperCase('abCDefG')}",
+      "expected": {
+        "type": "string",
+        "value": "ABCDEFG"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toLowerCase('abCDefG')}",
+      "expected": {
+        "type": "string",
+        "value": "abcdefg"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toUpperCase('аАбБвВ')}",
+      "expected": {
+        "type": "string",
+        "value": "ААББВВ"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toLowerCase('аАбБвВ')}",
+      "expected": {
+        "type": "string",
+        "value": "ааббвв"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('0', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('00', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('000', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "000"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('0', 2, '00')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('0', 4, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "1210"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart(0, 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padStart('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('0', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "0 "
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('00', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('000', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "000"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('0', 2, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "01"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('0', 4, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "0121"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd(0, 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "0 "
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{padEnd('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

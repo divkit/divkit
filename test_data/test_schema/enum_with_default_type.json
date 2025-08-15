@@ -1,0 +1,37 @@
+{
+  "anyOf": [
+    {
+      "$ref": "#definitions/with_default"
+    },
+    {
+      "$ref": "#definitions/without_default"
+    }
+  ],
+  "definitions": {
+    "with_default": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "default"
+          ]
+        }
+      }
+    },
+    "without_default": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "non_default"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "templates": {
+    "round": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#e1bae3"
+        }
+      ],
+      "border": {
+        "corner_radius": 60
+      },
+      "delimiter_style": {
+        "color": "#0000"
+      }
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "blink_animation",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "state",
+              "id": "blink",
+              "width": {
+                "type": "fixed",
+                "value": 120
+              },
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "margins": {
+                "left": 16,
+                "top": 40,
+                "right": 16,
+                "bottom": 30
+              },
+              "alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "states": [
+                {
+                  "state_id": "alpha",
+                  "animation_in": {
+                    "name": "set",
+                    "items": [
+                      {
+                        "name": "fade",
+                        "start_value": 1.0,
+                        "interpolator": "ease_in_out",
+                        "start_delay": 250,
+                        "duration": 250
+                      },
+                      {
+                        "name": "scale",
+                        "start_value": 0.8,
+                        "interpolator": "ease_in_out",
+                        "start_delay": 250,
+                        "duration": 250
+                      }
+                    ]
+                  },
+                  "animation_out": {
+                    "name": "set",
+                    "items": [
+                      {
+                        "name": "fade",
+                        "end_value": 1.0,
+                        "interpolator": "ease_in_out",
+                        "duration": 250
+                      },
+                      {
+                        "name": "scale",
+                        "end_value": 0.8,
+                        "interpolator": "ease_in_out",
+                        "duration": 250
+                      }
+                    ]
+                  },
+                  "div": {
+                    "type": "round",
+                    "alpha": 0.33
+                  }
+                },
+                {
+                  "state_id": "omega",
+                  "animation_in": {
+                    "name": "set",
+                    "items": [
+                      {
+                        "name": "fade",
+                        "start_value": 1.0,
+                        "interpolator": "ease_in_out",
+                        "start_delay": 250,
+                        "duration": 250
+                      },
+                      {
+                        "name": "scale",
+                        "start_value": 0.8,
+                        "interpolator": "ease_in_out",
+                        "start_delay": 250,
+                        "duration": 250
+                      }
+                    ]
+                  },
+                  "animation_out": {
+                    "name": "set",
+                    "items": [
+                      {
+                        "name": "fade",
+                        "end_value": 1.0,
+                        "interpolator": "ease_in_out",
+                        "duration": 250
+                      },
+                      {
+                        "name": "scale",
+                        "end_value": 0.8,
+                        "interpolator": "ease_in_out",
+                        "duration": 250
+                      }
+                    ]
+                  },
+                  "div": {
+                    "type": "round",
+                    "alpha": 0.33
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "button",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "alignment_vertical": "bottom",
+              "states": [
+                {
+                  "state_id": "alpha",
+                  "div": {
+                    "type": "button",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "text": "BLINK",
+                    "actions": [
+                      {
+                        "log_id": "blink",
+                        "url": "div-action://set_state?state_id=0/blink/omega"
+                      },
+                      {
+                        "log_id": "button_press",
+                        "url": "div-action://set_state?state_id=0/button/omega"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "omega",
+                  "div": {
+                    "type": "button",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "text": "BLINK",
+                    "actions": [
+                      {
+                        "log_id": "blink",
+                        "url": "div-action://set_state?state_id=0/blink/alpha"
+                      },
+                      {
+                        "log_id": "button_press",
+                        "url": "div-action://set_state?state_id=0/button/alpha"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

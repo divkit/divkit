@@ -1,0 +1,180 @@
+import com.asarkar.gradle.buildtimetracker.Sort
+import com.yandex.div.gradle.FileExtensions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+apply from: "$projectDir/version.gradle"
+
+ext {
+    minSdkVersion = 21
+    compileSdkVersion = 35
+    targetSdkVersion = 35
+    buildToolsVersion = "35.0.0"
+}
+
+buildscript {
+    FileExtensions.ifExists("${project.projectDir}/bootstrap.internal.gradle") {
+        apply from: it
+    }
+
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath libs.agp.gradle
+        classpath libs.appmetrica.plugin
+        classpath libs.buildTimeTracker
+        classpath libs.nexusPublishPlugin
+        classpath libs.dokka
+        classpath libs.kotlin.allopen
+        classpath libs.kotlin.gradle.plugin
+        classpath libs.kotlin.serialization.plugin
+        classpath libs.kotlin.binaryCompatibilityValidator
+        classpath libs.unmock.plugin
+    }
+}
+
+apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
+apply plugin: "com.asarkar.gradle.build-time-tracker"
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    configurations.configureEach {
+        resolutionStrategy {
+            eachDependency { details ->
+                if (details.requested.group == "com.christophsturm" &&  details.requested.name == "filepeek") {
+                    details.useVersion "0.1.3"
+                }
+            }
+        }
+    }
+
+    tasks.withType(KotlinCompile).configureEach {
+        compilerOptions {
+            freeCompilerArgs = [
+                    "-Xjvm-default=all",
+                    "-opt-in=com.yandex.div.data.DivModelInternalApi",
+                    "-opt-in=com.yandex.yatagan.ConditionsApi",
+                    "-opt-in=com.yandex.div.core.annotations.InternalApi",
+                    "-opt-in=com.yandex.div.core.annotations.ExperimentalApi"
+            ]
+            languageVersion = KotlinVersion.KOTLIN_1_8
+            apiVersion = KotlinVersion.KOTLIN_1_8
+            jvmTarget = JvmTarget.JVM_1_8
+        }
+    }
+}
+
+subprojects {
+    tasks.withType(Test).configureEach {
+        // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
+        maxParallelForks = 1
+        maxHeapSize = "4g"
+    }
+
+    configurations.configureEach {
+        exclude group: "com.intellij", module: "annotations"
+        exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"
+    }
+
+    afterEvaluate {
+        if (plugins.hasPlugin("jacoco")) {
+            project.tasks.named("jacocoTestReport").get().configure { task ->
+                unitTests.dependsOn(task)
+            }
+        }
+
+        if (project.tasks.names.contains("lint")) {
+            project.tasks.named("lint").get().configure { task ->
+                unitTests.dependsOn(task)
+            }
+        }
+
+        project.tasks.withType(PublishToMavenRepository).configureEach { task ->
+            task.finalizedBy(reportBuildNumber)
+        }
+
+        project.tasks.withType(PublishToMavenLocal).configureEach { task ->
+            task.finalizedBy(reportVersion)
+        }
+    }
+}
+
+buildTimeTracker {
+    minTaskDuration = Duration.ofSeconds(1)
+    sortBy = Sort.DESC
+    showBars = false
+}
+
+wrapper {
+    gradleVersion "8.13"
+    distributionType = Wrapper.DistributionType.ALL
+    distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+apiValidation {
+    ignoredProjects += [
+        "api-generator-test",
+        "divkit-demo-app",
+        "divkit-perftests",
+        "divkit-regression-testing",
+        "lint-rules",
+        "sample",
+        "screenshot-test-runtime",
+        "ui-test-common",
+    ]
+    ignoredPackages += ["com.yandex.div.internal"]
+    nonPublicMarkers += [
+            "com.yandex.yatagan.internal.YataganGenerated",
+            "com.yandex.div.core.annotations.ExperimentalApi",
+            "com.yandex.div.core.annotations.InternalApi"
+    ]
+}
+
+tasks.register('reportVersion') {
+    def version = divkitVersion.releaseLibraryVersion
+    doLast {
+        println "DivKit version $version"
+    }
+}
+
+tasks.register('reportBuildNumber') {
+    def version = divkitVersion.releaseLibraryVersion
+    doLast {
+        println "buildNumber $version"
+    }
+}
+
+tasks.register('assembleDemoDebug') {
+    dependsOn ":divkit-demo-app:assembleDebug"
+}
+
+tasks.register('assembleDemoDebugBundle') {
+    dependsOn ":divkit-demo-app:bundleDebug"
+}
+
+tasks.register('assembleDemoRelease') {
+    dependsOn ":divkit-demo-app:assembleRelease"
+}
+
+tasks.register('assembleDemoReleaseBundle') {
+    dependsOn ":divkit-demo-app:bundleRelease"
+}
+
+tasks.register('unitTests')
+
+tasks.register('finalVerification') {
+    dependsOn unitTests
+}
+
+FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
+    apply from: it
+}

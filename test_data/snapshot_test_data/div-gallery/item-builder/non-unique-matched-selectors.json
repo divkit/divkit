@@ -1,0 +1,54 @@
+{
+  "description": "Only the first matched selector should be used. Zero matched selectors means no error.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "prototypes",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "type": "first_type"
+          },
+          {
+            "type": "second_type"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "item_builder": {
+            "type": "prototype",
+            "data": "@{data}",
+            "prototypes": [
+              {
+                "selector": "@{getStringFromDict(it, 'type') == 'first_type'}",
+                "div": {
+                  "type": "text",
+                  "text": "First proto: @{getStringFromDict(it, 'type')}"
+                }
+              },
+              {
+                "selector": "@{getStringFromDict(it, 'type') == 'first_type'}",
+                "div": {
+                  "type": "text",
+                  "text": "Second proto: @{getStringFromDict(it, 'type')}"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

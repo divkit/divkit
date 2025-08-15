@@ -1,0 +1,95 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 450
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000FF"
+            }
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "bottom",
+          "layout_mode": "wrap",
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "One"
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Two",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Three",
+              "height": {
+                "type": "fixed",
+                "value": 150
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Four",
+              "height": {
+                "type": "fixed",
+                "value": 250
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Five",
+              "height": {
+                "type": "fixed",
+                "value": 400
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

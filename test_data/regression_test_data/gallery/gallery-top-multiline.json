@@ -1,0 +1,512 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      }
+    },
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color",
+      "margins": {
+        "left": 12,
+        "right": 12
+      }
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "top": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "heartbeat",
+              "visibility_duration": 4000,
+              "visibility_percentage": 80
+            }
+          ],
+          "items": [
+            {
+              "type": "state",
+              "id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "indicator",
+                        "paddings": {
+                          "bottom": 0
+                        },
+                        "margins": {
+                          "bottom": 0
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 2
+                        },
+                        "pager_id": "gallery",
+                        "inactive_item_color": "#D0D1D9",
+                        "active_item_color": "#000000",
+                        "shape": {
+                          "type": "rounded_rectangle",
+                          "item_width": {
+                            "type": "fixed",
+                            "value": 10
+                          },
+                          "item_height": {
+                            "type": "fixed",
+                            "value": 2
+                          },
+                          "corner_radius": {
+                            "type": "fixed",
+                            "value": 2
+                          }
+                        }
+                      },
+                      {
+                        "id": "description",
+                        "type": "state",
+                        "states": [
+                          {
+                            "state_id": "0",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "The cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Expand",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 9,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "The cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "1",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling and grunting as well as cat-specific body language.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Expand",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 9,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling and grunting as well as cat-specific body language.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "2",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "It was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Expand",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 9,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "It was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "3",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Vizslas are very energetic, gentle-mannered, loyal, caring, and very affectionate. They quickly form close bonds with their owners, children, and even strangers.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Expand",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 9,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Vizslas are very energetic, gentle-mannered, loyal, caring, and very affectionate. They quickly form close bonds with their owners, children, and even strangers.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "pager",
+                        "id": "gallery",
+                        "paddings": {
+                          "right": 4,
+                          "left": 4
+                        },
+                        "margins": {
+                          "top": 8
+                        },
+                        "items": [
+                          {
+                            "type": "text_block",
+                            "header": "Item 0",
+                            "visibility_actions": [
+                              {
+                                "log_id": "006",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/0"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text_block",
+                            "header": "Item 1",
+                            "visibility_actions": [
+                              {
+                                "log_id": "106",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/1"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text_block",
+                            "header": "Item 2",
+                            "visibility_actions": [
+                              {
+                                "log_id": "206",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/2"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text_block",
+                            "header": "Item 3",
+                            "visibility_actions": [
+                              {
+                                "log_id": "306",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/3"
+                              }
+                            ]
+                          }
+                        ],
+                        "layout_mode": {
+                          "type": "fixed",
+                          "neighbour_page_width": {
+                            "type": "fixed",
+                            "value": 10
+                          }
+                        },
+                        "item_spacing": {
+                          "type": "fixed",
+                          "value": 4
+                        },
+                        "restrict_parent_scroll": 1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

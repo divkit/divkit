@@ -1,0 +1,98 @@
+{
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "description": "match_parent inside wrap_content should transform into the wrap_content with constrained",
+  "templates": {
+    "row": {
+      "type": "container",
+      "orientation": "horizontal",
+      "border": {
+        "stroke": {
+          "color": "#000",
+          "width": 1
+        }
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "items": [
+        {
+          "type": "text",
+          "$text": "row_text",
+          "max_lines": 1,
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "type": "separator",
+          "width": {
+            "type": "fixed",
+            "value": 16
+          },
+          "height": {
+            "type": "fixed",
+            "value": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#fc0"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "$text": "row_text2",
+          "max_lines": 1,
+          "width": {
+            "type": "match_parent",
+            "weight": 2
+          }
+        },
+        {
+          "type": "separator",
+          "width": {
+            "type": "fixed",
+            "value": 16
+          },
+          "height": {
+            "type": "fixed",
+            "value": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#fc0"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "row",
+              "row_text": "Text with weight=1",
+              "row_text2": "Text with weight=2"
+            },
+            {
+              "type": "row",
+              "row_text": "Long text with weight=1 Long text with weight=1 Long text with weight=1",
+              "row_text2": "Long text with weight=2 Long text with weight=2 Long text with weight=2"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "description": "Vertical pager with neighbour page width bigger than page",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "text_page_match_parent_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 90
+      },
+      "height": {
+        "type": "fixed",
+        "value": 360
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "value": 130
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "items": [
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 0"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 1"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 2"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 3"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 4"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Pager height = 360\nneighbour_page_width = 130\nitem_spacing = 10\npaddings = 10",
+              "text_alignment_horizontal": "center",
+              "margins": {
+                "bottom": 20
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "test_pager",
+                  "default_item": 0,
+                  "margins": {
+                    "right": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 2,
+                  "margins": {
+                    "right": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 4
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

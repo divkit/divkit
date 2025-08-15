@@ -1,0 +1,268 @@
+{
+  "description": "Check subscriptions for getStringValue inside getIntegerValue.",
+  "div_data": {
+    "card": {
+      "log_id": "nested_get_value",
+      "variables": [
+        {
+          "name": "part_of_name",
+          "type": "string",
+          "value": "1"
+        },
+        {
+          "name": "name_1",
+          "type": "string",
+          "value": "var_1"
+        },
+        {
+          "name": "name_2",
+          "type": "string",
+          "value": "var_2"
+        },
+        {
+          "name": "var_1",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "var_2",
+          "type": "integer",
+          "value": 20
+        },
+        {
+          "name": "var_3",
+          "type": "integer",
+          "value": 30
+        }
+      ],
+      "variable_triggers": [
+        {
+          "condition": "@{getIntegerValue(getStringValue('name_' + part_of_name, ''), 0) != 0}",
+          "mode": "on_variable",
+          "actions": [
+            {
+              "log_id": "check result",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "result",
+                "value": {
+                  "type": "integer",
+                  "value": "@{getIntegerValue(getStringValue('name_' + part_of_name, ''), 0)}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 10
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 20
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_1&value=11"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 11
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_2&value=21"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 21
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change another value",
+          "url": "div-action://set_variable?name=var_2&value=21"
+        },
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 21
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change name",
+          "url": "div-action://set_variable?name=name_1&value=var_3"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 30
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change name",
+          "url": "div-action://set_variable?name=name_1&value=var_3"
+        },
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_3&value=31"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 31
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change part of name",
+          "url": "div-action://set_variable?name=part_of_name&value=2"
+        },
+        {
+          "log_id": "change name",
+          "url": "div-action://set_variable?name=name_2&value=var_3"
+        },
+        {
+          "log_id": "change value",
+          "url": "div-action://set_variable?name=var_3&value=31"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 31
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

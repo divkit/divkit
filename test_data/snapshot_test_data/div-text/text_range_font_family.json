@@ -1,0 +1,82 @@
+{
+  "description": "Ranges with font family",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "test_text": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "font_size": 20,
+      "font_weight": "regular",
+      "text_color": "#002B36"
+    }
+  },
+  "card": {
+    "log_id": "text_range_font_family",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "items": [
+            {
+              "type": "test_text",
+              "background_color": "#FDF6E3",
+              "text": "Text with condensed font family range",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 31,
+                  "font_family": "condensed"
+                }
+              ]
+            },
+            {
+              "type": "test_text",
+              "background_color": "#EEE8D5",
+              "text": "Text with medium font weight range",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 28,
+                  "font_weight": "medium"
+                }
+              ]
+            },
+            {
+              "type": "test_text",
+              "background_color": "#FDF6E3",
+              "text": "Text with condensed font family and bold weight range",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 47,
+                  "font_family": "condensed",
+                  "font_weight": "bold"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

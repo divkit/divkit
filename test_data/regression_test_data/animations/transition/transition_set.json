@@ -1,0 +1,146 @@
+{
+  "templates": {
+    "album_cover": {
+      "type": "container",
+      "orientation": "overlap",
+      "items": [
+        {
+          "type": "separator",
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "delimiter_style": {
+            "color": "#00000000"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "border": {
+            "corner_radius": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#e0bae3"
+            }
+          ],
+          "$image_url": "album_cover_url",
+          "action_animation": {
+            "name": "no_animation"
+          }
+        },
+        {
+          "type": "state",
+          "$id": "album_cover_id",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "states": [
+            {
+              "state_id": "normal",
+              "div": {
+                "type": "image",
+                "id": "album_cover_overlay_normal",
+                "width": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "alignment_vertical": "center",
+                "alignment_horizontal": "center",
+                "alpha": 1.0,
+                "content_alignment_horizontal": "center",
+                "content_alignment_vertical": "center",
+                "preload_required": 1,
+                "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png",
+                "transition_out": {
+                  "type": "set",
+                  "items": [
+                    {
+                      "type": "scale",
+                      "scale": 2,
+                      "duration": 2000
+                    },
+                    {
+                      "type": "scale",
+                      "scale": 8,
+                      "start_delay": 2000,
+                      "duration": 2000
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "state_id": "liked",
+              "div": {
+                "type": "image",
+                "id": "album_cover_overlay_liked",
+                "width": {
+                  "type": "fixed",
+                  "value": 112
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 112
+                },
+                "alignment_vertical": "center",
+                "alignment_horizontal": "center",
+                "alpha": 0.0,
+                "content_alignment_horizontal": "center",
+                "content_alignment_vertical": "center",
+                "preload_required": 1,
+                "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "transition/animation/transition_set",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "album_cover",
+          "id": "album_cover_01_next",
+          "album_cover_id": "album_cover_01",
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "height": {
+            "type": "fixed",
+            "value": 240
+          },
+          "alignment_horizontal": "center",
+          "margins": {
+            "top": 16
+          },
+          "row_span": 4,
+          "album_cover_url": "https://avatars.yandex.net/get-music-content/49876/c5a39142.a.77947-1/400x400",
+          "actions": [
+            {
+              "log_id": "album_cover_pressed",
+              "url": "div-action://set_state?state_id=0/album_cover_01/liked"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Profile" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="additionalArgs" value="--profile --no-pub --trace-systrace --trace-allowlist --define=TRACE_DIVKIT=true" />
+    <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

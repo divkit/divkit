@@ -1,0 +1,105 @@
+.indicator {
+    visibility: hidden;
+}
+
+.indicator_visible {
+    visibility: visible;
+}
+
+.indicator__scroller {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.indicator__scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.indicator__items {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: var(--divkit-indicator-active-height);
+}
+
+.indicator__item {
+    flex-shrink: 0;
+    width: var(--divkit-indicator-inactive-width);
+    height: var(--divkit-indicator-inactive-height);
+    border-radius: var(--divkit-indicator-inactive-border-radius);
+}
+
+.indicator_placement_default .indicator__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--divkit-indicator-default-margin);
+}
+
+.indicator_placement_default .indicator__item::before {
+    flex: 0 0 auto;
+    content: '';
+    width: var(--divkit-indicator-inactive-width);
+    height: var(--divkit-indicator-inactive-height);
+    border-radius: var(--divkit-indicator-inactive-border-radius);
+    background: var(--divkit-indicator-inactive-background);
+    box-shadow: var(--divkit-indicator-inactive-box-shadow);
+}
+
+.indicator_placement_default .indicator__item_active {
+    height: var(--divkit-indicator-active-height);
+}
+
+.indicator_placement_default .indicator__item_active::before {
+    width: var(--divkit-indicator-active-width);
+    height: var(--divkit-indicator-active-height);
+    border-radius: var(--divkit-indicator-active-border-radius);
+    background: var(--divkit-indicator-active-background);
+    box-shadow: var(--divkit-indicator-active-box-shadow);
+}
+
+/* Do not use justify-content: center here, beacuse with overflow items will be still centered instead of left/right aligned */
+.indicator_placement_default.indicator_direction_ltr .indicator__item:first-child {
+    margin-left: auto;
+}
+
+.indicator_placement_default.indicator_direction_ltr .indicator__item:last-child {
+    margin-right: auto;
+}
+
+.indicator_placement_default.indicator_direction_rtl .indicator__item:first-child {
+    margin-right: auto;
+}
+
+.indicator_placement_default.indicator_direction_rtl .indicator__item:last-child {
+    margin-left: auto;
+}
+
+.indicator_placement_stretch .indicator__item {
+    /* needs both grow and shrink */
+    flex: 1 1 0;
+    min-width: calc((100% - var(--divkit-indicator-stretch-max-spacer)) / var(--divkit-indicator-stretch-max-count));
+    margin-left: var(--divkit-indicator-stretch-margin);
+    background: var(--divkit-indicator-inactive-background);
+    box-shadow: var(--divkit-indicator-inactive-box-shadow);
+}
+
+.indicator_placement_stretch .indicator__item_active {
+    width: var(--divkit-indicator-active-width);
+    height: var(--divkit-indicator-active-height);
+    border-radius: var(--divkit-indicator-active-border-radius);
+    background: var(--divkit-indicator-active-background);
+    box-shadow: var(--divkit-indicator-active-box-shadow);
+}
+
+.indicator_placement_stretch .indicator__item_active {
+    flex-grow: var(--divkit-indicator-active-scale);
+}
+
+.indicator_placement_stretch .indicator__item:first-child {
+    margin-left: 0;
+}

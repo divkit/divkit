@@ -1,0 +1,34 @@
+{
+  "description": "Object with missing required property (div-action.log_id) is ignored",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "actions": [
+            {
+              "url": "https://some.url"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator",
+            "actions": []
+          }
+        }
+      ]
+    }
+  }
+}

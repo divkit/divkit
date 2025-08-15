@@ -1,0 +1,132 @@
+{
+  "description": "Vertical pager with different content_alignment",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "text_page_wrap_content": {
+        "type": "text",
+        "background": [
+          {
+            "color": "#AAAAAA",
+            "type": "solid"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "alignment_var",
+          "type": "string",
+          "value": "start"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "pager",
+            "id": "test_pager",
+            "item_spacing": {
+              "type": "fixed",
+              "value": 10
+            },
+            "layout_mode": {
+              "type": "wrap_content"
+            },
+            "scroll_axis_alignment": "@{alignment_var}",
+            "width": {
+              "type": "fixed",
+              "value": 200
+            },
+            "height": {
+              "type": "fixed",
+              "value": 150
+            },
+            "orientation": "horizontal",
+            "default_item": 1,
+            "items": [
+              {
+                "type": "text_page_wrap_content",
+                "width": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 100
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 100
+                },
+                "text": "Page 0"
+              },
+              {
+                "type": "text_page_wrap_content",
+                "width": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 150
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 150
+                },
+                "text": "Page 1\nPage is @{alignment_var} aligned."
+              },
+              {
+                "type": "text_page_wrap_content",
+                "width": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 80
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 80
+                },
+                "text": "Page 2"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=alignment_var&value=center",
+          "log_id": "set_center_alignment"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=alignment_var&value=end",
+          "log_id": "set_end_alignment"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=alignment_var&value=start",
+          "log_id": "set_start_alignment"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

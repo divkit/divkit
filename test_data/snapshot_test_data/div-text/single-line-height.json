@@ -1,0 +1,53 @@
+{
+  "description": "Text with line_height",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "should have big vertical padding",
+              "line_height": 60,
+              "font_size": 16,
+              "max_lines": 1,
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "should not overlap the upper one",
+              "line_height": 40,
+              "font_size": 16,
+              "background": [
+                {
+                  "color": "#808A0000",
+                  "type": "solid"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

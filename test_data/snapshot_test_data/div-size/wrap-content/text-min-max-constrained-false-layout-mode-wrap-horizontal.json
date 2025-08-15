@@ -1,0 +1,101 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content",
+        "constrained": false
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12,
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000EE"
+            }
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "layout_mode": "wrap",
+          "orientation": "horizontal",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content min_size = 200",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 200
+                }
+              },
+              "height": {
+                "type": "wrap_content",
+                "constrained": false,
+                "min_size": {
+                  "value": 50
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "wrap_content",
+              "font_size": 20
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content max_size = 100",
+              "width": {
+                "type": "wrap_content",
+                "max_size": {
+                  "value": 100
+                }
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "height wrap_content min_size = 100",
+              "height": {
+                "type": "wrap_content",
+                "constrained": false,
+                "min_size": {
+                  "value": 100
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

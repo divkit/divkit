@@ -1,0 +1,199 @@
+{
+  "cases": [
+    {
+      "expression": "@{'abcd'}",
+      "expected": {
+        "type": "string",
+        "value": "abcd"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{\"abcd\"}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'This\\'s a string'}",
+      "expected": {
+        "type": "string",
+        "value": "This's a string"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'This's a string'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'This is a string}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{This is a string'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\'}",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '@{'\\'}'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\a'}",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\\\'}",
+      "expected": {
+        "type": "string",
+        "value": "\\"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\''}",
+      "expected": {
+        "type": "string",
+        "value": "'"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\@{123}'}",
+      "expected": {
+        "type": "string",
+        "value": "@{123}"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\@'}",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'a@bc.de'}",
+      "expected": {
+        "type": "string",
+        "value": "a@bc.de"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'@{ Hello there'}",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '@{'@{ Hello there'}'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{'\\@{ Hello there'}",
+      "expected": {
+        "type": "string",
+        "value": "@{ Hello there"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

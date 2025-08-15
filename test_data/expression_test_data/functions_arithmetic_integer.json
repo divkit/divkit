@@ -1,0 +1,797 @@
+{
+  "cases": [
+    {
+      "expression": "@{div(4, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(4000000000000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(0, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(2, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [div(2, 0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(1, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(1000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(-1, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(-2, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{div(2, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(4, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(30000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(2, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mod(2, 0)]. Division by zero is not supported."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(0, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-30000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": -10000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(3, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(30000000000, -20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-3, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mod(-30000000000, -20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": -10000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(mul(3000000000, 2000000000))}",
+      "expected": {
+        "type": "string",
+        "value": "6000000000000000000"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(3000000000, 5000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mul(3000000000, 5000000000)]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(-1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{mul(1, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(3, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(5000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 3000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(1, +1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(2000000000, -3000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 5000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(7000000000000000000, -3000000000000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [sub(7000000000000000000, -3000000000000000000)]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sub(0, -0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(3000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 5000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1, +1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(7000000000, -3000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 4000000000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{sum(7000000000000000000, 7000000000000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [sum(7000000000000000000, 7000000000000000000)]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(maxInteger())}",
+      "expected": {
+        "type": "string",
+        "value": "9223372036854775807"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(minInteger())}",
+      "expected": {
+        "type": "string",
+        "value": "-9223372036854775808"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{minInteger() / minInteger()}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(2147483647)}",
+      "expected": {
+        "type": "integer",
+        "value": 2147483647
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(abs(9223372036854775807))}",
+      "expected": {
+        "type": "string",
+        "value": "9223372036854775807"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(-2147483647)}",
+      "expected": {
+        "type": "integer",
+        "value": 2147483647
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(abs(-9223372036854775807))}",
+      "expected": {
+        "type": "string",
+        "value": "9223372036854775807"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{abs(-9223372036854775808)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [abs(-9223372036854775808)]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(5)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{signum(-5)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(7, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(7, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(7, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-7, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(0, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-9223372036854775808, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [copySign(-9223372036854775808, 1)]. Integer overflow."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{copySign(-2147483648, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -2147483648
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{toString(copySign(-9223372036854775808, -1))}",
+      "expected": {
+        "type": "string",
+        "value": "-9223372036854775808"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

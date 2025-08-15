@@ -1,0 +1,18 @@
+{
+  "type": "container",
+  "items": [
+    {
+      "type": "gallery",
+      "items": [
+        {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion",
+          "font_size": 12,
+          "width": {
+            "type": "wrap_content"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "signatures": [
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string representation from number.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from boolean.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Boolean."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from url.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Url."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "function_name": "toString",
+      "is_method": true,
+      "doc": "Returns a string value from dict.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dict."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

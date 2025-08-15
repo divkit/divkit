@@ -1,0 +1,91 @@
+{
+  "description": "Text with different truncate modes",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "title_template": {
+      "type": "text",
+      "font_size": 14,
+      "font_weight": "bold",
+      "margins": {
+        "bottom": 4
+      },
+      "$text": "title"
+    },
+    "truncated_text_template": {
+      "type": "text",
+      "font_size": 16,
+      "max_lines": 1,
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#EEEEEE"
+        }
+      ],
+      "margins": {
+        "bottom": 16
+      },
+      "$text": "text",
+      "$truncate": "truncate_mode"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title_template",
+              "text": "Truncate mode: none"
+            },
+            {
+              "type": "truncated_text_template",
+              "text": "This is a very very very very very very very very very very very very long text that will be truncated with mode 'none'",
+              "truncate": "none"
+            },
+            {
+              "type": "title_template",
+              "text": "Truncate mode: start"
+            },
+            {
+              "type": "truncated_text_template",
+              "text": "This is a very very very very very very very very very very very very long text that will be truncated with mode 'start'",
+              "truncate": "start"
+            },
+            {
+              "type": "title_template",
+              "text": "Truncate mode: end (default)"
+            },
+            {
+              "type": "truncated_text_template",
+              "text": "This is a very very very very very very very very very very very very long text that will be truncated with mode 'end'",
+              "truncate": "end"
+            },
+            {
+              "type": "title_template",
+              "text": "Truncate mode: middle"
+            },
+            {
+              "type": "truncated_text_template",
+              "text": "This is a very very very very very very very very very very very very long text that will be truncated with mode 'middle'",
+              "truncate": "middle",
+              "margins": {
+                "bottom": 0
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

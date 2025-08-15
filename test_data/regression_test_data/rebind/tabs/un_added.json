@@ -1,0 +1,432 @@
+{
+  "card": {
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "items": [
+            {
+              "tabs": [
+                {
+                  "title": "Tab 0",
+                  "title_click_action": {
+                    "log_id": "tab title/click/0"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/0/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/0/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/0/item 2"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/0/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 1",
+                  "title_click_action": {
+                    "log_id": "tab title/click/1"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/1/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/1/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/1/item 2"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/1/item 3"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/1/item 4"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 2",
+                  "title_click_action": {
+                    "log_id": "tab title/click/2"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 2"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 3"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 4"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/2/item 5"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/2/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 3",
+                  "title_click_action": {
+                    "log_id": "tab title/click/3"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/3/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/3/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/3/item 2"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/3/item 3"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/3/item 4"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/3/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 4",
+                  "title_click_action": {
+                    "log_id": "tab title/click/4"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/4/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/4/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/4/item 2"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/4/item 3"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 5",
+                  "title_click_action": {
+                    "log_id": "tab title/click/5"
+                  },
+                  "div": {
+                    "stories": [
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/5/item 0"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/5/item 1"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/5/item 2"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/5/item 3"
+                        }
+                      },
+                      {
+                        "type": "tabItem",
+                        "action": {
+                          "log_id": "tabs/5/item 4"
+                        }
+                      }
+                    ],
+                    "type": "page",
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                }
+              ],
+              "dynamic_height": 0,
+              "selected_tab": 0,
+              "type": "customTabs"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "space-between",
+              "margins": {
+                "top": 30,
+                "bottom": 30
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Do",
+                  "actions": [
+                    {
+                      "log_id": "rebinding",
+                      "url": "div-demo-action://set_data?path=rebind/tabs/added.json"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "Next",
+                  "actions": [
+                    {
+                      "log_id": "rebinding",
+                      "url": "div-demo-action://set_data?path=rebind/tabs/replaced_items.json"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "type": "container",
+          "border": {
+            "corner_radius": 24
+          },
+          "margins": {
+            "top": 10,
+            "bottom": 10
+          }
+        }
+      }
+    ],
+    "log_id": "card"
+  },
+  "templates": {
+    "tabItem": {
+      "type": "text",
+      "margins": {
+        "right": 12,
+        "top": 10,
+        "bottom": 10,
+        "left": 12
+      },
+      "line_height": 20,
+      "font_size": 16,
+      "max_lines": 3,
+      "background": [
+        {
+          "color": "#E0E2E6",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 5
+      },
+      "text": "   "
+    },
+    "page": {
+      "height": {
+        "type": "match_parent"
+      },
+      "items": [
+        {
+          "margins": {
+            "left": 4,
+            "right": 4
+          },
+          "border": {
+            "corner_radius": 20
+          },
+          "background": [
+            {
+              "color": "#F7F7F7",
+              "type": "solid"
+            }
+          ],
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "$items": "stories"
+        },
+        {
+          "$text": "footerText",
+          "type": "text",
+          "$action": "footerAction",
+          "margins": {
+            "top": 16,
+            "left": 20,
+            "start": 20,
+            "bottom": 16
+          },
+          "line_height": 16,
+          "font_size": 14,
+          "font_weight": "medium"
+        }
+      ],
+      "type": "container"
+    },
+    "customTabs": {
+      "title_paddings": {
+        "left": 14,
+        "bottom": 8,
+        "right": 14
+      },
+      "tab_title_style": {
+        "active_text_color": "#CC000000",
+        "font_weight": "medium",
+        "font_size": 14,
+        "inactive_text_color": "#CC000000",
+        "line_height": 18
+      },
+      "type": "tabs",
+      "$items": "tabs"
+    },
+    "button": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#550055"
+        }
+      ],
+      "paddings": {
+        "left": 50,
+        "right": 50,
+        "top": 20,
+        "bottom": 20
+      },
+      "margins": {
+        "left": 30,
+        "right": 30
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "text_color": "#FFF"
+    }
+  }
+}

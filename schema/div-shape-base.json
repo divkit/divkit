@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "background_color": {
+      "$ref": "common.json#/color",
+      "$description": "translations.json#/div_shape_base_background_color"
+    },
+    "stroke": {
+      "$ref": "div-stroke.json",
+      "$description": "translations.json#/div_shape_base_stroke"
+    }
+  }
+}

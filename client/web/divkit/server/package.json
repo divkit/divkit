@@ -1,0 +1,6 @@
+{
+    "internal": true,
+    "main": "../dist/server.js",
+    "module": "../dist/esm/server.mjs",
+    "types": "../typings/server.d.ts"
+}

@@ -1,0 +1,183 @@
+{
+  "templates": {
+    "fullscreen_video": {
+      "type": "video",
+      "$id": "video_id",
+      "video_sources": [
+        {
+          "type": "video_source",
+          "url": "https://yastatic.net/s3/home/divkit/beep_test.mp4",
+          "mime_type": "video/mp4"
+        }
+      ],
+      "preload_required": true,
+      "repeatable": true,
+      "autostart": false,
+      "muted": true,
+      "player_settings_payload": {
+        "first_frame_hash": "HBgKAwRHj0ipl3t4WLBYeAg=",
+        "first_frame_url": "https://avatars.mds.yandex.net/get-vh/6549758/2a00000186ffa4dca3d56545e0bc18edd031/orig",
+        "thumbnail": "https://avatars.mds.yandex.net/get-vh/6549758/2a00000186ffa4dca3d56545e0bc18edd031/orig",
+        "uuid": "v0qU-n6bovjg"
+      },
+      "visibility_actions": [
+        {
+          "$log_id": "visibility_log_id",
+          "$url": "visibility_url",
+          "log_limit": 0,
+          "visibility_percentage": 50,
+          "visibility_duration": 0
+        }
+      ],
+      "disappear_actions": [
+        {
+          "$log_id": "disappear_log_id",
+          "$url": "disappear_url",
+          "log_limit": 0,
+          "visibility_percentage": 50,
+          "disappear_duration": 0
+        }
+      ],
+      "$elapsed_time_variable": "time_variable",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "video_in_recycler",
+    "variables": [
+      {
+        "name": "video_time_1",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_2",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_3",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_4",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_5",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_6",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_7",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_1",
+              "visibility_log_id": "video_1_shown",
+              "visibility_url": "div-action://video?id=beep_video_1&action=start",
+              "disappear_log_id": "video_1_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_1&action=pause",
+              "time_variable": "video_time_1",
+              "background_color": "#000000"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_2",
+              "visibility_log_id": "video_2_shown",
+              "visibility_url": "div-action://video?id=beep_video_2&action=start",
+              "disappear_log_id": "video_2_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_2&action=pause",
+              "time_variable": "video_time_2",
+              "background_color": "#ada014"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_3",
+              "visibility_log_id": "video_3_shown",
+              "visibility_url": "div-action://video?id=beep_video_3&action=start",
+              "disappear_log_id": "video_3_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_3&action=pause",
+              "time_variable": "video_time_3",
+              "background_color": "#3eae1f"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_4",
+              "visibility_log_id": "video_4_shown",
+              "visibility_url": "div-action://video?id=beep_video_4&action=start",
+              "disappear_log_id": "video_4_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_4&action=pause",
+              "time_variable": "video_time_4",
+              "background_color": "#1c84bb"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_5",
+              "visibility_log_id": "video_5_shown",
+              "visibility_url": "div-action://video?id=beep_video_5&action=start",
+              "disappear_log_id": "video_5_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_5&action=pause",
+              "time_variable": "video_time_5",
+              "background_color": "#9b1abc"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_6",
+              "visibility_log_id": "video_6_shown",
+              "visibility_url": "div-action://video?id=beep_video_6&action=start",
+              "disappear_log_id": "video_6_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_6&action=pause",
+              "time_variable": "video_time_6",
+              "background_color": "#d01c55"
+            },
+            {
+              "type": "fullscreen_video",
+              "video_id": "beep_video_7",
+              "visibility_log_id": "video_7_shown",
+              "visibility_url": "div-action://video?id=beep_video_7&action=start",
+              "disappear_log_id": "video_7_disappeared",
+              "disappear_url": "div-action://video?id=beep_video_7&action=pause",
+              "time_variable": "video_time_7",
+              "background_color": "#d91515"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

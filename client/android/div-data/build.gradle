@@ -1,0 +1,47 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'com.android.library'
+    alias(libs.plugins.apiGenerator)
+}
+
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+allOpen {
+    annotation("com.yandex.div.core.annotations.Mockable")
+}
+
+android {
+    namespace 'com.yandex.div.data'
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-core')
+    implementation project(path: ':div-evaluable')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+
+    api libs.androidx.core
+
+    testImplementation libs.kotlin.reflect
+}
+
+schemas {
+    divModel {
+        schemas = file("../../../schema")
+        config = file("div2-generator-config.json")
+    }
+    sharedData {
+        schemas = file("../../../shared_data")
+        config = file("div2-shared-data-generator-config.json")
+    }
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
+}

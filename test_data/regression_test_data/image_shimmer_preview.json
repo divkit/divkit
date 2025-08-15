@@ -1,0 +1,42 @@
+{
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "image",
+              "image_url": "empty://",
+              "alignment_vertical": "top",
+              "alignment_horizontal": "center",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "extensions": [
+                {
+                  "id": "shimmer",
+                  "params": {
+                    "corner_radius": {
+                      "top-left": 0,
+                      "top-right": 8,
+                      "bottom-left": 16,
+                      "bottom-right": 32
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

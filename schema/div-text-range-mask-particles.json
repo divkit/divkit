@@ -1,0 +1,45 @@
+{
+  "allOf": [
+    {
+      "$ref": "div-text-range-mask-base.json"
+    },
+    {
+      "$description": "translations.json#/div_text_range_mask_particles",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "particles"
+          ]
+        },
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_range_mask_particles_color"
+        },
+        "is_animated": {
+          "type": "boolean",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_range_mask_particles_animated"
+        },
+        "particle_size": {
+          "$ref": "div-fixed-size.json",
+          "$description": "translations.json#/div_text_range_mask_particles_size",
+          "default_value": "{\"type\":\"fixed\",\"value\":1}"
+        },
+        "density": {
+          "type": "number",
+          "default_value": "0.8",
+          "constraint": "number > 0.0 && number <= 1.0",
+          "$description": "translations.json#/div_text_range_mask_particles_density"
+        }
+      },
+      "platforms": [
+        "web"
+      ],
+      "required": [
+        "type",
+        "color"
+      ]
+    }
+  ]
+}

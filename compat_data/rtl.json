@@ -1,0 +1,49 @@
+{
+    "features": [{
+        "id": "gallery_rtl",
+        "name": "Gallery RTL",
+        "compat": {
+            "android": {
+                "version_added": "26.0.0"
+            },
+            "ios": {
+                "version_added": "27.1.0"
+            },
+            "web": [{
+                "version_added": "29.4.0",
+                "partial_implementation": true,
+                "notes": "Doesn't support scroll actions"
+            }, {
+                "version_added": "29.10.0"
+            }]
+        }
+    }, {
+        "id": "tabs_rtl",
+        "name": "Tabs RTL",
+        "compat": {
+            "android": {
+                "version_added": "27.0.0"
+            },
+            "ios": {
+                "version_added": "27.2.0"
+            },
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }, {
+        "id": "image_rtl_mirror",
+        "name": "Image <code>rtl_mirror</code> filter",
+        "compat": {
+            "android": {
+                "version_added": "28.3.0"
+            },
+            "web": {
+                "version_added": "29.4.0"
+            },
+            "flutter": {
+                "version_added": "0.1.0"
+            }
+        }
+    }]
+}

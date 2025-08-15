@@ -1,0 +1,146 @@
+{
+  "templates": {
+    "text_base": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 12,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "grid",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "The weight of a table element."
+            },
+            {
+              "type": "subtitle",
+              "text": "The weight of an element determines how much space it occupies inside the table. It can be applied to both width and height.\n\nIn the example, elements 2 and 3 have a width weight of 2.\n",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "grid",
+              "width": {
+                "type": "match_parent",
+                "value": 240
+              },
+              "height": {
+                "type": "fixed",
+                "value": 160
+              },
+              "column_count": 3,
+              "items": [
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "height": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "margins": {
+                    "right": 8,
+                    "bottom": 8
+                  },
+                  "text": "1"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 2
+                  },
+                  "height": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "margins": {
+                    "bottom": 8
+                  },
+                  "column_span": 2,
+                  "text": "2"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 2
+                  },
+                  "height": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "margins": {
+                    "right": 8
+                  },
+                  "column_span": 2,
+                  "text": "3"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "height": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "text": "4"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

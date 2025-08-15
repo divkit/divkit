@@ -1,0 +1,118 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 24,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "A set of states"
+            },
+            {
+              "type": "subtitle",
+              "text": "States can be used to create interactive elements, such as buttons or expandable content.\n\nThe example shows a button that changes its own text when clicked.",
+              "margins": {
+                "bottom": 12
+              }
+            },
+            {
+              "type": "state",
+              "id": "sample",
+              "states": [
+                {
+                  "state_id": "first",
+                  "div": {
+                    "type": "text_block",
+                    "text": "This is first state",
+                    "actions": [
+                      {
+                        "log_id": "switch_state1",
+                        "url": "div-action://set_state?state_id=0/sample/second"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "second",
+                  "div": {
+                    "type": "text_block",
+                    "text": "This is second state",
+                    "actions": [
+                      {
+                        "log_id": "switch_state1",
+                        "url": "div-action://set_state?state_id=0/sample/first"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

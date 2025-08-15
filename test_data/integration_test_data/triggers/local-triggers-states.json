@@ -1,0 +1,288 @@
+{
+  "description": "Local triggers in states",
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "trigger_div_state",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "trigger_state_1",
+          "type": "string",
+          "value": "unset"
+        },
+        {
+          "name": "trigger_state_2",
+          "type": "string",
+          "value": "unset"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "state",
+                "id": "sample",
+                "variable_triggers": [
+                  {
+                    "condition": "@{counter > 100}",
+                    "actions": [
+                      {
+                        "log_id": "trigger_invoke_1",
+                        "url": "div-action://set_variable?name=trigger_div_state&value=activated"
+                      }
+                    ]
+                  }
+                ],
+                "states": [
+                  {
+                    "state_id": "first",
+                    "div": {
+                      "type": "text",
+                      "variable_triggers": [
+                        {
+                          "condition": "@{counter > 200}",
+                          "actions": [
+                            {
+                              "log_id": "trigger_invoke_2",
+                              "url": "div-action://set_variable?name=trigger_state_1&value=activated"
+                            }
+                          ]
+                        }
+                      ],
+                      "text": "Local trigger on state 1"
+                    }
+                  },
+                  {
+                    "state_id": "second",
+                    "div": {
+                      "type": "text",
+                      "variable_triggers": [
+                        {
+                          "condition": "@{counter > 200}",
+                          "actions": [
+                            {
+                              "log_id": "trigger_invoke_3",
+                              "url": "div-action://set_variable?name=trigger_state_2&value=activated"
+                            }
+                          ]
+                        }
+                      ],
+                      "text": "Local trigger on state 2"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_div_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_1",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_2",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=50",
+          "log_id": "set_50"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_div_state",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_1",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_2",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=110",
+          "log_id": "set_110"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_div_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_1",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_2",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_div_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_1",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_2",
+          "value": {
+            "type": "string",
+            "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=210",
+          "log_id": "set_210"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/sample/second",
+          "log_id": "set_second_state"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "trigger_div_state",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_1",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "trigger_state_2",
+          "value": {
+            "type": "string",
+            "value": "activated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

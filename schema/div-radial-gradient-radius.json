@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-fixed-size.json",
+      "$description": "translations.json#/div_size_fixed"
+    },
+    {
+      "$ref": "div-radial-gradient-relative-radius.json",
+      "$description": "translations.json#/div_radial_gradient_relative_radius"
+    }
+  ]
+}

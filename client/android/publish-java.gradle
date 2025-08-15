@@ -1,0 +1,24 @@
+apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
+
+tasks.register('sourcesJar', Jar) {
+    archiveClassifier = "sources"
+    from sourceSets.main.allSource
+}
+
+tasks.register('javadocJar', Jar) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                artifact sourcesJar
+                artifact javadocJar
+                from components.java
+                version divkitVersion.releaseLibraryVersion
+            }
+        }
+    }
+}

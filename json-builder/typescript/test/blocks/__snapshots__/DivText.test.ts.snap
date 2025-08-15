@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivText tests should create block with ellipsis 1`] = `
+{
+  "type": "text",
+  "ellipsis": {
+    "text": "...",
+    "actions": [
+      {
+        "log_id": "id",
+        "url": "https://some.url"
+      }
+    ]
+  },
+  "text": "Some text",
+  "width": {
+    "type": "fixed",
+    "value": 10
+  }
+}
+`;
+
+exports[`DivText tests should create block with expressions 1`] = `
+{
+  "type": "text",
+  "font_size": "@{font_size_var}",
+  "text": "Text: @{text_var}",
+  "width": {
+    "type": "fixed",
+    "value": "@{width_var}"
+  }
+}
+`;
+
+exports[`DivText tests should create block with ranges 1`] = `
+{
+  "type": "text",
+  "ranges": [
+    {
+      "start": 0,
+      "end": 10,
+      "underline": "single"
+    }
+  ],
+  "text": "Underlined text"
+}
+`;
+
+exports[`DivText tests should create simple block 1`] = `
+{
+  "type": "text",
+  "font_size": 18,
+  "font_size_unit": "sp",
+  "font_weight": "medium",
+  "text": "Some text"
+}
+`;

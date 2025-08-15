@@ -1,0 +1,27 @@
+--swiftversion 5.9
+
+--exclude **/generated_sources
+--exclude **/shared_data_generated_sources
+
+--enable blankLinesBetweenImports
+
+--disable redundantSelf
+--disable redundantFileprivate
+--disable wrapMultilineStatementBraces
+
+--extensionacl on-declarations
+--hexgrouping 2
+--ifdef noindent
+--indent 2
+--maxwidth 100
+--modifierorder public,private,private(set),internal,override
+--nospaceoperators ...,..<
+--operatorfunc nospace
+--symlinks ignore
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first
+
+--enable organizeDeclarations
+--organization-mode type
+--mark-categories false

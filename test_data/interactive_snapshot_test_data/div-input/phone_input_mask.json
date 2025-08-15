@@ -1,0 +1,94 @@
+{
+  "description": "Phone input mask",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": ""
+        },
+        {
+          "name": "raw_input",
+          "type": "string",
+          "value": ""
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Raw value: '@{raw_input}'"
+              },
+              {
+                "type": "input",
+                "text_variable": "input",
+                "keyboard_type": "phone",
+                "paddings": {
+                  "start": 10,
+                  "end": 10,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "margins": {
+                  "start": 5,
+                  "end": 5,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "mask": {
+                  "type": "phone",
+                  "raw_text_variable": "raw_input"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=aabb",
+          "log_id": "change_text_to_invalid"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=78005553535",
+          "log_id": "change_text_to_valid"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "description": "Text with image with tint_color",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "text_alignment_horizontal": "center",
+          "font_size": 14,
+          "images": [
+            {
+              "start": 0,
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png",
+              "width": {
+                "type": "fixed",
+                "value": 24
+              },
+              "height": {
+                "type": "fixed",
+                "value": 24
+              },
+              "tint_color": "#FF0000"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

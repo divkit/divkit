@@ -1,0 +1,54 @@
+{
+  "card": {
+    "log_id": "video",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "video",
+              "id": "stream_video",
+              "player_settings_payload": {},
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://strm.yandex.ru/kal/demo_channel/demo_channel0.m3u8",
+                  "mime_type": "application/x-mpegURL"
+                }
+              ],
+              "preload_required": true,
+              "repeatable": true,
+              "autostart": true,
+              "muted": true,
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

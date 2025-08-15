@@ -1,0 +1,45 @@
+{
+  "type": "container",
+  "orientation": "vertical",
+  "auto_animations_enabled": 1,
+  "items": [
+    {
+      "type": "text",
+      "text": "Line 1"
+    },
+    {
+      "type": "state",
+      "id": "more",
+      "states": [
+        {
+          "state_id": "collapsed"
+        },
+        {
+          "state_id": "expanded",
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Line 2"
+              },
+              {
+                "type": "text",
+                "text": "Line 3"
+              },
+              {
+                "type": "text",
+                "text": "Line 4"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Line 5"
+    }
+  ]
+}

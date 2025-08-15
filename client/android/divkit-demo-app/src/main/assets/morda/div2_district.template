@@ -1,0 +1,813 @@
+div2|Div2 district|{
+  "ttv":1200,
+  "utime":1508351555,
+  "ttl":1200,
+  "id": "div2_card",
+  "type": "div2",
+  "title": "Div2 district",
+  "data": {
+              "type": "div2",
+              "states": [{
+                  "state_id": 0,
+                  "div": {
+                      "type": "container",
+                      "paddings": {
+                          "bottom": 16
+                      },
+                      "height": {
+                          "type": "wrap_content"
+                      },
+                      "items": [{
+                          "type": "container",
+                          "orientation": "horizontal",
+                          "items": [{
+                              "type": "text",
+                              "text": "Новости района",
+                              "font_size": 20,
+                              "line_height": 24,
+                              "font_weight": "medium",
+                              "text_color": "#cc000000",
+                              "paddings": {
+                                  "top": 13,
+                                  "left": 16,
+                                  "right": 16
+                              }
+                          }, {
+                              "type": "image",
+                              "image_url": "https://i.imgur.com/qNJQKU8.png",
+                              "width": {
+                                  "type": "fixed",
+                                  "value": 44
+                              },
+                              "height": {
+                                  "type": "fixed",
+                                  "value": 44
+                              },
+                              "placeholder_color": "#00ffffff",
+                              "action": {
+                                  "log_id": "district_menu",
+                                  "menu_items": [{
+                                      "text": "tbd",
+                                      "action": {
+                                          "url": "http://ya.ru",
+                                          "log_id": "tbd"
+                                      }
+                                  }]
+                              }
+                          }]
+                      }, {
+                          "type": "tabs",
+                          "title_paddings": {
+                              "left": 4,
+                              "right": 4,
+                              "top": 8,
+                              "bottom": 8
+                          },
+                          "separator_color": "#00ffffff",
+                          "items": [{
+                              "title": "ПОПУЛЯРНОЕ",
+                              "div": {
+                                  "type": "gallery",
+                                  "width": {
+                                      "type": "match_parent",
+                                      "value": 40
+                                  },
+                                  "height": {
+                                      "type": "fixed",
+                                      "value": 204
+                                  },
+                                  "paddings": {
+                                      "left": 16,
+                                      "right": 16
+                                  },
+
+                                  "items": [{
+                                          "type": "container",
+                                          "orientation": "verical",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 272
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "border": {
+                                              "corner_radius": 6
+                                          },
+                                          "paddings": {
+                                              "left": 12,
+                                              "right": 12,
+                                              "top": 12,
+                                              "bottom": 12
+                                          },
+                                          "background": [{
+                                              "type": "solid",
+                                              "color": "#ffffff"
+                                          }],
+                                          "items": [{
+                                              "type": "text",
+                                              "text": "Ул. Льва Толстого, 16",
+                                              "font_size": 13,
+                                              "text_color": "#80000000",
+                                              "line_height": 16,
+                                              "max_lines": 1,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 0,
+                                                  "bottom": 0
+                                              }
+                                          }, {
+                                              "type": "text",
+                                              "text": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                                              "alignment_vertical": "top",
+                                              "font_size": 14,
+                                              "line_height": 20,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "top": 5
+                                              }
+                                          }, {
+                                              "type": "grid",
+                                              "column_count": 6,
+                                              "content_alignment_verical": "center",
+                                              "items": [{
+                                                  "type": "image",
+                                                  "image_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "border": {
+                                                      "corner_radius": 12
+                                                  },
+                                                  "alignment_vertical": "center"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "igorbuschina",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 126
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "paddings": {
+                                                      "left": 8,
+                                                      "right": 8
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "3",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "alignment_vertical": "center",
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "right": 10,
+                                                      "left": 4
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "1",
+                                                  "font_size": 13,
+                                                  "alignment_vertical": "center",
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "left": 4
+                                                  }
+                                              }]
+                                          }]
+
+                                      }, {
+                                          "type": "container",
+                                          "orientation": "verical",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 272
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "border": {
+                                              "corner_radius": 6
+                                          },
+                                          "paddings": {
+                                              "left": 12,
+                                              "right": 12,
+                                              "top": 12,
+                                              "bottom": 12
+                                          },
+                                          "background": [{
+                                              "type": "solid",
+                                              "color": "#ffffff"
+                                          }],
+                                          "items": [{
+                                              "type": "text",
+                                              "text": "Ул. Льва Толстого, 16",
+                                              "font_size": 13,
+                                              "text_color": "#80000000",
+                                              "line_height": 16,
+                                              "max_lines": 1,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 0,
+                                                  "bottom": 0
+                                              }
+                                          }, {
+                                              "type": "text",
+                                              "text": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                                              "alignment_vertical": "top",
+                                              "font_size": 14,
+                                              "line_height": 20,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "top": 5
+                                              }
+                                          }, {
+                                              "type": "grid",
+                                              "column_count": 6,
+                                              "content_alignment_verical": "center",
+                                              "items": [{
+                                                  "type": "image",
+                                                  "image_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "border": {
+                                                      "corner_radius": 12
+                                                  },
+                                                  "alignment_vertical": "center"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "igorbuschina",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 126
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "paddings": {
+                                                      "left": 8,
+                                                      "right": 8
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "3",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "alignment_vertical": "center",
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "right": 10,
+                                                      "left": 4
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "1",
+                                                  "font_size": 13,
+                                                  "alignment_vertical": "center",
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "left": 4
+                                                  }
+                                              }]
+                                          }]
+
+                                      },
+
+
+                                      {
+                                          "type": "container",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 104
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "items": [{
+                                              "type": "image",
+                                              "width": {
+                                                  "type": "fixed",
+                                                  "value": 40
+                                              },
+                                              "height": {
+                                                  "type": "fixed",
+                                                  "value": 40
+                                              },
+                                              "margins": {
+                                                  "top": 61
+                                              },
+                                              "border": {
+                                                  "corner_radius": 20
+                                              },
+                                              "alignment_horizontal": "center",
+                                              "background": [{
+                                                  "type": "solid",
+                                                  "color": "#ffffff"
+                                              }],
+                                              "placeholder_color": "#00ffffff",
+                                              "image_url": "https://i.imgur.com/CPmGi24.png"
+                                          }, {
+                                              "type": "text",
+                                              "text": "Все новости района",
+                                              "font_size": 14,
+                                              "text_color": "#6b7a80",
+                                              "line_height": 16,
+                                              "text_alignment_horizontal": "center",
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 10,
+                                                  "bottom": 0
+                                              }
+                                          }]
+                                      }
+                                  ]
+                              }
+                          }, {
+                              "title": "ВАШИ РАЙОНЫ",
+                              "div": {
+                                  "type": "gallery",
+                                  "width": {
+                                      "type": "match_parent",
+                                      "value": 40
+                                  },
+                                  "height": {
+                                      "type": "fixed",
+                                      "value": 204
+                                  },
+                                  "paddings": {
+                                      "left": 16,
+                                      "right": 16
+                                  },
+
+                                  "items": [{
+                                          "type": "container",
+                                          "orientation": "verical",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 272
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "border": {
+                                              "corner_radius": 6
+                                          },
+                                          "paddings": {
+                                              "left": 12,
+                                              "right": 12,
+                                              "top": 12,
+                                              "bottom": 12
+                                          },
+                                          "background": [{
+                                              "type": "solid",
+                                              "color": "#ffffff"
+                                          }],
+                                          "items": [{
+                                              "type": "text",
+                                              "text": "Ул. Льва Толстого, 16",
+                                              "font_size": 13,
+                                              "text_color": "#80000000",
+                                              "line_height": 16,
+                                              "max_lines": 1,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 0,
+                                                  "bottom": 0
+                                              }
+                                          }, {
+                                              "type": "text",
+                                              "text": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                                              "alignment_vertical": "top",
+                                              "font_size": 14,
+                                              "line_height": 20,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "top": 5
+                                              }
+                                          }, {
+                                              "type": "grid",
+                                              "column_count": 6,
+                                              "content_alignment_verical": "center",
+                                              "items": [{
+                                                  "type": "image",
+                                                  "image_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "border": {
+                                                      "corner_radius": 12
+                                                  },
+                                                  "alignment_vertical": "center"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "igorbuschina",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 126
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "paddings": {
+                                                      "left": 8,
+                                                      "right": 8
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "3",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "alignment_vertical": "center",
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "right": 10,
+                                                      "left": 4
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "1",
+                                                  "font_size": 13,
+                                                  "alignment_vertical": "center",
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "left": 4
+                                                  }
+                                              }]
+                                          }]
+
+                                      }, {
+                                          "type": "container",
+                                          "orientation": "verical",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 272
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "border": {
+                                              "corner_radius": 6
+                                          },
+                                          "paddings": {
+                                              "left": 12,
+                                              "right": 12,
+                                              "top": 12,
+                                              "bottom": 12
+                                          },
+                                          "background": [{
+                                              "type": "solid",
+                                              "color": "#ffffff"
+                                          }],
+                                          "items": [{
+                                              "type": "text",
+                                              "text": "Ул. Льва Толстого, 16",
+                                              "font_size": 13,
+                                              "text_color": "#80000000",
+                                              "line_height": 16,
+                                              "max_lines": 1,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 0,
+                                                  "bottom": 0
+                                              }
+                                          }, {
+                                              "type": "text",
+                                              "text": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                                              "alignment_vertical": "top",
+                                              "font_size": 14,
+                                              "line_height": 20,
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "top": 5
+                                              }
+                                          }, {
+                                              "type": "grid",
+                                              "column_count": 6,
+                                              "content_alignment_verical": "center",
+                                              "items": [{
+                                                  "type": "image",
+                                                  "image_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "border": {
+                                                      "corner_radius": 12
+                                                  },
+                                                  "alignment_vertical": "center"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "igorbuschina",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 126
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "paddings": {
+                                                      "left": 8,
+                                                      "right": 8
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "3",
+                                                  "font_size": 13,
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "alignment_vertical": "center",
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "right": 10,
+                                                      "left": 4
+                                                  }
+                                              }, {
+                                                  "type": "image",
+                                                  "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                                                  "width": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "alignment_vertical": "center",
+                                                  "height": {
+                                                      "type": "fixed",
+                                                      "value": 24
+                                                  },
+                                                  "placeholder_color": "#00ffffff"
+                                              }, {
+                                                  "type": "text",
+                                                  "text": "1",
+                                                  "font_size": 13,
+                                                  "alignment_vertical": "center",
+                                                  "font_weight": "medium",
+                                                  "text_color": "#80000000",
+                                                  "line_height": 16,
+                                                  "max_lines": 1,
+                                                  "paddings": {
+                                                      "left": 4
+                                                  }
+                                              }]
+                                          }]
+
+                                      },
+
+
+                                      {
+                                          "type": "container",
+                                          "width": {
+                                              "type": "fixed",
+                                              "value": 104
+                                          },
+                                          "height": {
+                                              "type": "fixed",
+                                              "value": 204
+                                          },
+                                          "items": [{
+                                              "type": "image",
+                                              "width": {
+                                                  "type": "fixed",
+                                                  "value": 40
+                                              },
+                                              "height": {
+                                                  "type": "fixed",
+                                                  "value": 40
+                                              },
+                                              "margins": {
+                                                  "top": 61
+                                              },
+                                              "border": {
+                                                  "corner_radius": 20
+                                              },
+                                              "alignment_horizontal": "center",
+                                              "background": [{
+                                                  "type": "solid",
+                                                  "color": "#ffffff"
+                                              }],
+                                              "placeholder_color": "#00ffffff",
+                                              "image_url": "https://i.imgur.com/CPmGi24.png"
+                                          }, {
+                                              "type": "text",
+                                              "text": "Все новости района",
+                                              "font_size": 14,
+                                              "text_color": "#6b7a80",
+                                              "line_height": 16,
+                                              "text_alignment_horizontal": "center",
+                                              "height": {
+                                                  "type": "wrap_content"
+                                              },
+                                              "paddings": {
+                                                  "left": 0,
+                                                  "right": 0,
+                                                  "top": 10,
+                                                  "bottom": 0
+                                              }
+                                          }]
+                                      }
+                                  ]
+                              }
+                          }]
+                      }, {
+                          "type": "text",
+                          "text": "Написать новость",
+                          "font_size": 14,
+                          "border": {
+                              "corner_radius": 4
+                          },
+                          "margins": {
+                              "left": 16,
+                              "right": 16,
+                              "top": 12
+                          },
+                          "paddings": {
+                              "bottom": 8,
+                              "top": 8
+                          },
+                          "text_alignment_horizontal": "center",
+                          "background": [{
+                              "type": "solid",
+                              "color": "#ffdc60"
+                          }]
+
+                      }],
+                      "background": [{
+                          "type": "image",
+                          "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/district_day.3.png"
+                      }]
+                  }
+              }]
+          }
+
+}

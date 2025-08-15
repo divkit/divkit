@@ -1,0 +1,25 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.rive'
+}
+
+dependencies {
+    implementation project(path: ':div-data')
+    implementation project(path: ':div')
+    implementation project(path: ':div-json')
+
+    implementation(libs.rive) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    implementation(libs.androidx.appcompat) {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
+    compileOnly libs.okhttp
+
+    testImplementation libs.kotlin.test
+    testImplementation libs.kotlin.testJunit
+    testImplementation libs.json
+}

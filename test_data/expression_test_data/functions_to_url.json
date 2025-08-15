@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "expression": "@{toUrl('https://ya.ru')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

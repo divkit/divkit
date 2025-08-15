@@ -1,0 +1,25 @@
+{
+  "type": "grid",
+  "column_count": 1,
+  "action": {
+    "url": "https://ya.ru",
+    "payload": {
+      "key": "value"
+    },
+    "menu_items": [
+      {
+        "text": "menu",
+        "action": {
+          "url": "http://menu.url"
+        }
+      }
+    ],
+    "log_id": "test_log_id"
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "1"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "description": "Text elements and text ranges with strike",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "wrap_content_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "wrap_content_text",
+              "text": "Single strike",
+              "strike": "single"
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "No strike",
+              "strike": "none"
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Partial strike",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 7,
+                  "strike": "single"
+                }
+              ]
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Excluded strike",
+              "strike": "single",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 8,
+                  "strike": "none"
+                }
+              ]
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Unaffected strike",
+              "strike": "single",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 8
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

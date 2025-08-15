@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_text_range_border",
+  "properties": {
+    "stroke": {
+      "$ref": "div-stroke.json",
+      "$description": "translations.json#/div_border_stroke"
+    },
+    "corner_radius": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_border_corner_radius"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "card": {
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "customTabs",
+              "tabs": [
+                {
+                  "title": "Tab 0",
+                  "title_click_action": {
+                    "log_id": "tab title/click/0"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/0/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 1",
+                  "title_click_action": {
+                    "log_id": "tab title/click/1"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 2",
+                  "title_click_action": {
+                    "log_id": "tab title/click/2"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/2/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 3",
+                  "title_click_action": {
+                    "log_id": "tab title/click/3"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/3/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 4",
+                  "title_click_action": {
+                    "log_id": "tab title/click/4"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                },
+                {
+                  "title": "Tab 5",
+                  "title_click_action": {
+                    "log_id": "tab title/click/5"
+                  },
+                  "div": {
+                    "type": "page",
+                    "stories": [
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      },
+                      {
+                        "type": "tabItem"
+                      }
+                    ],
+                    "footerText": "Show more",
+                    "footerAction": {
+                      "log_id": "tabs/1/full list"
+                    }
+                  }
+                }
+              ],
+              "switch_tabs_by_content_swipe_enabled": 0,
+              "selected_tab": 0
+            }
+          ],
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "border": {
+            "corner_radius": 24
+          },
+          "margins": {
+            "top": 10,
+            "bottom": 10
+          }
+        }
+      }
+    ],
+    "log_id": "card"
+  },
+  "templates": {
+    "tabItem": {
+      "type": "text",
+      "margins": {
+        "left": 10,
+        "right": 10,
+        "top": 5,
+        "bottom": 5
+      },
+      "line_height": 24,
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#E0E2E6",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 5
+      },
+      "text": "   "
+    },
+    "page": {
+      "height": {
+        "type": "match_parent"
+      },
+      "items": [
+        {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "$items": "stories",
+          "margins": {
+            "left": 5,
+            "right": 5
+          },
+          "paddings": {
+            "top": 10,
+            "bottom": 10
+          },
+          "border": {
+            "corner_radius": 20
+          },
+          "background": [
+            {
+              "color": "#F7F7F7",
+              "type": "solid"
+            }
+          ]
+        },
+        {
+          "$text": "footerText",
+          "type": "text",
+          "$action": "footerAction",
+          "paddings": {
+            "start": 20,
+            "top": 15,
+            "bottom": 15
+          },
+          "font_size": 14,
+          "font_weight": "medium"
+        }
+      ],
+      "type": "container"
+    },
+    "customTabs": {
+      "title_paddings": {
+        "left": 14,
+        "bottom": 8,
+        "right": 14
+      },
+      "tab_title_style": {
+        "active_text_color": "#CC000000",
+        "font_weight": "medium",
+        "font_size": 14,
+        "inactive_text_color": "#CC000000",
+        "line_height": 18
+      },
+      "type": "tabs",
+      "$items": "tabs"
+    }
+  }
+}

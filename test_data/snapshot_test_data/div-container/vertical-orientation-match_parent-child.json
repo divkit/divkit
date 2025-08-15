@@ -1,0 +1,47 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "For millions of years mankind lived just like animals",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "Then something happened which unleashed the power of our imagination",
+              "font_size": 12,
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "font_weight": "medium"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

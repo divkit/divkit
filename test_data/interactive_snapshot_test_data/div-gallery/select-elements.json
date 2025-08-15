@@ -1,0 +1,215 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "text_block": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "fixed",
+          "value": 80
+        },
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "width": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "gallery",
+                "id": "test_gallery",
+                "items": [
+                  {
+                    "type": "text_block",
+                    "text": "Item0",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item1",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item2",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item3",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item4",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_gallery",
+          "log_id": "second item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_gallery",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_gallery&overflow=clamp",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_gallery&overflow=ring",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_gallery&overflow=clamp",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_gallery&overflow=ring",
+          "log_id": "first item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_gallery&item=2",
+          "log_id": "middle item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_gallery&item=-1",
+          "log_id": "middle (nonexistent) item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_gallery&step=2",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_gallery&step=3",
+          "log_id": "second item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_current_item?id=test_gallery&item=0",
+          "log_id": "first item"
+        }
+      ],
+      "expected_screenshot": "step0.png",
+      "delay": 500
+    }
+  ]
+}

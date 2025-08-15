@@ -1,0 +1,69 @@
+{
+  "description": "Images with tint color and different tint modes (for reference: https://developer.apple.com/documentation/coregraphics/cgblendmode)",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "tint_card": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/gradient.png",
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "tint_color": "#4500FFFF"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "tint_card",
+              "tint_mode": "multiply"
+            },
+            {
+              "type": "tint_card",
+              "tint_mode": "source_in"
+            },
+            {
+              "type": "tint_card",
+              "tint_mode": "source_atop"
+            },
+            {
+              "type": "tint_card",
+              "tint_mode": "darken"
+            },
+            {
+              "type": "tint_card",
+              "tint_mode": "lighten"
+            },
+            {
+              "type": "tint_card",
+              "tint_mode": "screen"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

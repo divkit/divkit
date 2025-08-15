@@ -1,0 +1,274 @@
+{
+  "protocol_name": "div-base",
+  "codegen": {
+    "swift": {
+      "super_protocol": "DivBlockModeling"
+    },
+    "documentation": {
+      "include_in_toc": true
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_base_id"
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "$description": "translations.json#/div_base_border"
+    },
+    "width": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"match_parent\"}",
+      "$description": "translations.json#/div_base_width"
+    },
+    "height": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"wrap_content\"}",
+      "$description": "translations.json#/div_base_height"
+    },
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "$description": "translations.json#/div_base_background"
+    },
+    "paddings": {
+      "$ref": "div-edge-insets.json",
+      "$description": "translations.json#/div_base_paddings"
+    },
+    "margins": {
+      "$ref": "div-edge-insets.json",
+      "$description": "translations.json#/div_base_margins"
+    },
+    "alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "$description": "translations.json#/div_base_alpha"
+    },
+    "alignment_vertical": {
+      "$ref": "div-alignment-vertical.json",
+      "$description": "translations.json#/div_base_alignment_vertical"
+    },
+    "alignment_horizontal": {
+      "$ref": "div-alignment-horizontal.json",
+      "$description": "translations.json#/div_base_alignment_horizontal"
+    },
+    "animators": {
+      "type": "array",
+      "items": {
+        "$ref": "div-animator.json"
+      },
+      "$description": "translations.json#/div_base_animators",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "row_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_base_row_span",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "column_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_base_column_span",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "visibility_action": {
+      "$ref": "div-visibility-action.json",
+      "$description": "translations.json#/div_base_visibility_action"
+    },
+    "visibility_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-visibility-action.json"
+      },
+      "$description": "translations.json#/div_base_visibility_actions"
+    },
+    "disappear_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-disappear-action.json"
+      },
+      "$description": "translations.json#/div_base_disappear_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "tooltips": {
+      "type": "array",
+      "items": {
+        "$ref": "div-tooltip.json"
+      },
+      "$description": "translations.json#/div_base_tooltips",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "accessibility": {
+      "$ref": "div-accessibility.json",
+      "$description": "translations.json#/div_base_accessibility",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-extension.json"
+      },
+      "$description": "translations.json#/div_base_extensions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "transition_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-transition-trigger.json"
+      },
+      "minItems": 1,
+      "supports_expressions": false,
+      "$description": "translations.json#/div_base_transition_triggers",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "transition_in": {
+      "$ref": "div-appearance-transition.json",
+      "$description": "translations.json#/div_base_transition_in",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "transition_change": {
+      "$ref": "div-change-transition.json",
+      "$description": "translations.json#/div_base_transition_change",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "transition_out": {
+      "$ref": "div-appearance-transition.json",
+      "$description": "translations.json#/div_base_transition_out",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "selected_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_base_selected_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "focus": {
+      "$ref": "div-focus.json",
+      "$description": "translations.json#/div_base_focus"
+    },
+    "visibility": {
+      "$ref": "div-visibility.json",
+      "$description": "translations.json#/div_base_visibility",
+      "default_value": "visible"
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-function.json"
+      },
+      "$description": "translations.json#/div_base_functions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "div-variable.json"
+      },
+      "$description": "translations.json#/div_base_variables",
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ]
+    },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "$description": "translations.json#/div_base_variable_triggers",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "transform": {
+      "$ref": "div-transform.json",
+      "$description": "translations.json#/div_base_transform",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "layout_provider": {
+      "$ref": "div-layout-provider.json",
+      "$description": "translations.json#/div_layout_provider",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "reuse_id": {
+      "type": "string",
+      "$description": "translations.json#/div_reuse_id",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "No need for reuse identifier"
+      }
+    }
+  }
+}

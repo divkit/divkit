@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-default-indicator-item-placement.json",
+      "$description": "translations.json#/div_indicator_item_placement_default"
+    },
+    {
+      "$ref": "div-stretch-indicator-item-placement.json",
+      "$description": "translations.json#/div_indicator_item_placement_stretch"
+    }
+  ]
+}

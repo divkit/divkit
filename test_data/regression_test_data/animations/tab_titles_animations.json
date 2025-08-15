@@ -1,0 +1,119 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#ffffff",
+          "width": 2
+        }
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "height": {
+        "type": "fixed",
+        "value": 80
+      }
+    },
+    "tabs_preset": {
+      "type": "tabs",
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "tab_title_style": {
+        "animation_type": "none",
+        "item_spacing": 5
+      },
+      "margins": {
+        "top": 4,
+        "bottom": 28
+      },
+      "items": [
+        {
+          "title": "Tab 1",
+          "div": {
+            "type": "text_block",
+            "text": "Item 0",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 2",
+          "div": {
+            "type": "text_block",
+            "text": "Item 1",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 3",
+          "div": {
+            "type": "text_block",
+            "text": "Item 3",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 4",
+          "div": {
+            "type": "text_block",
+            "text": "Item 4",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "tabs_preset",
+              "tab_title_style": {
+                "animation_type": "slide",
+                "item_spacing": 5
+              }
+            },
+            {
+              "type": "tabs_preset",
+              "tab_title_style": {
+                "animation_type": "fade",
+                "item_spacing": 5
+              }
+            },
+            {
+              "type": "tabs_preset"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

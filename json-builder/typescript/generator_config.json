@@ -1,0 +1,4 @@
+{
+  "lang": "typescript",
+  "header": "// Generated code. Do not modify.\n\nimport { Exact, IntBoolean, NonEmptyArray } from '../helper';\nimport { TemplateBlock, Type } from '../template';\nimport { DivExpression } from '../safe-expression';\n"
+}
