@@ -3,9 +3,15 @@ import VGSL
 
 public final class PinchToZoomBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let child: Block
-  public let overlayView: ViewType
+
+  private(set) weak var overlayView: ViewType?
 
   public init(child: Block, overlayView: ViewType) {
+    self.child = child
+    self.overlayView = overlayView
+  }
+
+  private init(child: Block, overlayView: ViewType?) {
     self.child = child
     self.overlayView = overlayView
   }

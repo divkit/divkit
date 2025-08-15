@@ -29,7 +29,7 @@ extension PinchToZoomBlock {
 
 private final class PinchToZoomView: BlockView {
   private var childView: BlockView!
-  private var overlayView: UIView!
+  private weak var overlayView: UIView?
   private let shadeView = UIView()
 
   private var scale: CGFloat = 1
@@ -73,7 +73,7 @@ private final class PinchToZoomView: BlockView {
 
     let currentTransform = childView.transform
     childView.transform = .identity
-    if isZooming {
+    if isZooming, let overlayView {
       childView.frame = convert(bounds, to: overlayView)
       shadeView.frame = overlayView.frame
     } else {
@@ -88,7 +88,7 @@ private final class PinchToZoomView: BlockView {
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?,
-    overlayView: UIView
+    overlayView: UIView?
   ) {
     childView = child.reuse(
       childView,
@@ -139,6 +139,10 @@ private final class PinchToZoomView: BlockView {
   }
 
   @objc private func handlePinch(_ recognizer: UIPinchGestureRecognizer) {
+    guard let overlayView else {
+      return
+    }
+
     if recognizer.state == .began {
       let origin = recognizer.location(in: self)
       originTranslation = CGPoint(
