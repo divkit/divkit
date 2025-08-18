@@ -163,7 +163,7 @@ final class TabContentsView: BlockView {
         .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
     }
 
-    if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
+    if oldModel == nil ||  oldObserver !== observer {
       let cellModels = model.pages.map(\.block)
       cellRegistrator.register(blocks: cellModels, in: collectionView)
       dataSource.models = [cellModels]
