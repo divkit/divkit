@@ -62,6 +62,7 @@
     },
     "scripts": {
         "test:unit": "vitest",
+        "test:unit:ci": "vitest; sed -i 's/\"application\\/x-gzip\"/\"application\\/json\"/g' ci/vitest-report/assets/*",
         "test:testplane": "cd ci && ./node_modules/.bin/testplane",
         "test:testplane:gui": "cd ci && ./node_modules/.bin/testplane gui",
         "test:testplane:update": "cd ci && ./node_modules/.bin/testplane --update-refs",
@@ -108,7 +109,7 @@
         "@sveltejs/vite-plugin-svelte": "3.1.2",
         "@typescript-eslint/eslint-plugin": "5.59.1",
         "@typescript-eslint/parser": "5.59.1",
-        "@vitest/ui": "2.1.8",
+        "@vitest/ui": "3.2.4",
         "chai": "4.3.7",
         "concurrently": "9.1.1",
         "eslint": "8.47.0",
@@ -124,6 +125,6 @@
         "svelte-check": "4.1.1",
         "typescript": "5.7.2",
         "vite": "5.4.11",
-        "vitest": "2.1.8"
+        "vitest": "3.2.4"
     }
 }
