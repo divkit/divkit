@@ -390,3 +390,25 @@ private func isCastableFrom(_ type1: Any.Type, _ type2: Any.Type) -> Bool {
   }
   return false
 }
+
+extension ArgumentSignature: Hashable {
+  static func ==(lhs: ArgumentSignature, rhs: ArgumentSignature) -> Bool {
+    lhs.type == rhs.type && lhs.vararg == rhs.vararg
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(String(describing: type))
+    hasher.combine(vararg)
+  }
+}
+
+extension FunctionSignature: Hashable {
+  static func ==(lhs: FunctionSignature, rhs: FunctionSignature) -> Bool {
+    lhs.arguments == rhs.arguments && lhs.resultType == rhs.resultType
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(arguments)
+    hasher.combine(String(describing: resultType))
+  }
+}

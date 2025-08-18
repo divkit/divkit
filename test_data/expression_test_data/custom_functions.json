@@ -1,0 +1,102 @@
+{
+  "cases": [
+    {
+      "expression": "@{equalsQuery('some string', 'one')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "functions": [
+        {
+          "name": "equalsQuery",
+          "body": "@{str == query}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "str",
+              "type": "string"
+            },
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{sumUp(2, 3)}",
+      "expected": {
+        "type": "integer",
+        "value": 5
+      },
+      "functions": [
+        {
+          "name": "sumUp",
+          "body": "@{num1 + num2}",
+          "return_type": "integer",
+          "arguments": [
+            {
+              "name": "num1",
+              "type": "integer"
+            },
+            {
+              "name": "num2",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{testFunction + 1}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [testFunction + 1]. Operator '+' cannot be applied to different types: Function and Integer."
+      },
+      "variables": [],
+      "functions": [
+        {
+          "name": "testFunction",
+          "body": "@{'result'}",
+          "return_type": "string",
+          "arguments": [
+            {
+              "name": "item",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{toString(myFunction)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toString(myFunction)]. Function has no matching overload for given argument types: Function."
+      },
+      "variables": [],
+      "functions": [
+        {
+          "name": "myFunction",
+          "body": "@{num * 2}",
+          "return_type": "integer",
+          "arguments": [
+            {
+              "name": "num",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

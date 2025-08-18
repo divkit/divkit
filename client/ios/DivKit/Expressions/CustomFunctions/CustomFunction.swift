@@ -6,7 +6,7 @@ final class CustomFunction: SimpleFunction {
     var arguments: [DivEvaluableType]
   }
 
-  struct Argument {
+  struct Argument: Hashable {
     let name: String
     let type: DivEvaluableType
   }
@@ -68,4 +68,20 @@ final class CustomFunction: SimpleFunction {
 
 private func makeErrorMessage(name: String, arguments: [String], body: String) -> String {
   "Failed to evaluate custom function \(name)() with arguments: [\(arguments.joined(separator: ", "))] and body: \(body)."
+}
+
+extension CustomFunction: Hashable {
+  static func ==(lhs: CustomFunction, rhs: CustomFunction) -> Bool {
+    lhs.name == rhs.name &&
+      lhs.body == rhs.body &&
+      lhs.arguments == rhs.arguments &&
+      lhs.signature == rhs.signature
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(name)
+    hasher.combine(body)
+    hasher.combine(arguments)
+    hasher.combine(signature)
+  }
 }

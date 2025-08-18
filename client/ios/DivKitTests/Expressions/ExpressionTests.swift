@@ -67,11 +67,12 @@ private struct TestCases: Decodable {
 
 private struct ExpressionTestCase: Decodable {
   private enum CodingKeys: String, CodingKey {
-    case expression, variables, expected, platforms
+    case expression, variables, functions, expected, platforms
   }
 
   let expression: String
   let variables: DivVariables
+  let functions: [CustomFunction]
   let expected: ExpectedValue
   let platforms: [Platform]
 
@@ -91,6 +92,18 @@ private struct ExpressionTestCase: Decodable {
     expression = try container.decode(String.self, forKey: .expression)
     expected = try container.decode(ExpectedValue.self, forKey: .expected)
     platforms = try container.decode([Platform].self, forKey: .platforms)
+    let divFunctions = try container.decodeIfPresent([DivFunction].self, forKey: .functions) ?? []
+
+    functions = divFunctions.map { function in
+      CustomFunction(
+        name: function.name,
+        arguments: function.arguments.map {
+          CustomFunction.Argument(name: $0.name, type: $0.type)
+        },
+        body: function.body,
+        returnType: function.returnType.systemType
+      )
+    }
 
     guard var variablesContainer = try? container.nestedUnkeyedContainer(
       forKey: .variables
@@ -146,10 +159,14 @@ private struct ExpressionTestCase: Decodable {
   private func makeExpressionResolver(
     errorTracker: ExpressionErrorTracker? = nil
   ) -> ExpressionResolver {
-    ExpressionResolver(
-      functionsProvider: FunctionsProvider(
-        persistentValuesStorage: DivPersistentValuesStorage()
-      ),
+    let functionsProvider = FunctionsProvider(
+      persistentValuesStorage: DivPersistentValuesStorage()
+    )
+    for function in functions {
+      functionsProvider.functions.addFunction(function.name, function)
+    }
+    return ExpressionResolver(
+      functionsProvider: functionsProvider,
       variableValueProvider: {
         variables[DivVariableName(rawValue: $0)]?.typedValue()
       },
@@ -171,12 +188,14 @@ extension ExpressionTestCase: Hashable {
   static func ==(lhs: ExpressionTestCase, rhs: ExpressionTestCase) -> Bool {
     lhs.expression == rhs.expression &&
       lhs.variables == rhs.variables &&
+      lhs.functions == rhs.functions &&
       lhs.expected.description == rhs.expected.description
   }
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(expression)
     hasher.combine(variables)
+    hasher.combine(functions)
     hasher.combine(expected.description)
   }
 }
@@ -284,7 +303,6 @@ enum ExpectedValue: Decodable {
       )
     }
   }
-
 }
 
 extension DivVariable: Swift.Decodable {
@@ -295,3 +313,42 @@ extension DivVariable: Swift.Decodable {
     ).unwrap()
   }
 }
+
+extension DivFunction: Swift.Decodable {
+  private enum CodingKeys: String, CodingKey {
+    case arguments
+    case body
+    case name
+    case returnType = "return_type"
+  }
+
+  public convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let arguments = try container.decode([DivFunctionArgument].self, forKey: .arguments)
+    let body = try container.decode(String.self, forKey: .body)
+    let name = try container.decode(String.self, forKey: .name)
+    let returnType = try container.decode(DivEvaluableType.self, forKey: .returnType)
+    self.init(
+      arguments: arguments,
+      body: body,
+      name: name,
+      returnType: returnType
+    )
+  }
+}
+
+extension DivFunctionArgument: Swift.Decodable {
+  private enum CodingKeys: String, CodingKey {
+    case name
+    case type
+  }
+
+  public convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let name = try container.decode(String.self, forKey: .name)
+    let type = try container.decode(DivEvaluableType.self, forKey: .type)
+    self.init(name: name, type: type)
+  }
+}
+
+extension DivEvaluableType: Swift.Decodable {}

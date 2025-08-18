@@ -89,7 +89,6 @@ private struct SignatureTestCase: Decodable {
     resultType = try parseType(container.decode(String.self, forKey: .resultType))
     platforms = try container.decode([Platform].self, forKey: .platforms)
   }
-
 }
 
 extension Function {
@@ -105,12 +104,6 @@ extension Function {
   }
 }
 
-extension FunctionSignature: Swift.Equatable {
-  public static func ==(lhs: FunctionSignature, rhs: FunctionSignature) -> Bool {
-    lhs.arguments == rhs.arguments && lhs.resultType == rhs.resultType
-  }
-}
-
 extension ArgumentSignature: Swift.Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -123,12 +116,6 @@ extension ArgumentSignature: Swift.Decodable {
   private enum CodingKeys: String, CodingKey {
     case type
     case vararg
-  }
-}
-
-extension ArgumentSignature: Swift.Equatable {
-  public static func ==(lhs: ArgumentSignature, rhs: ArgumentSignature) -> Bool {
-    lhs.type == rhs.type && lhs.vararg == rhs.vararg
   }
 }
 
