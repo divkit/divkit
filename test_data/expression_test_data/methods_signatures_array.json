@@ -193,6 +193,23 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "function_name": "filter",
+      "is_method": true,
+      "doc": "Returns filtered array by calling boolean function to each element of array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "function",
+          "doc": "Accepts each element of array, returns bool."
+        }
+      ],
+      "result_type": "array",
+      "platforms": []
     }
   ]
 }

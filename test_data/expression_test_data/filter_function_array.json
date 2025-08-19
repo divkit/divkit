@@ -1,0 +1,301 @@
+{
+  "cases": [
+    {
+      "expression": "@{source.filter(equalsOneFromDict)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          {
+            "value": "one"
+          }
+        ]
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            },
+            {
+              "value": "three"
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "equalsOneFromDict",
+          "body": "@{it.getString('value') == 'one'}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "it",
+              "type": "dict"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(equalsOne)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          "one"
+        ]
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "one",
+            "two",
+            "three"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "equalsOne",
+          "body": "@{str == 'one'}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "str",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(lessThanThree)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "lessThanThree",
+          "body": "@{num < 3}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "num",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(alwaysFalse)}",
+      "expected": {
+        "type": "array",
+        "value": []
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "one",
+            "two",
+            "three"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "alwaysFalse",
+          "body": "@{false}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "item",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{boolArray.filter(isTrue)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          true,
+          true
+        ]
+      },
+      "variables": [
+        {
+          "name": "boolArray",
+          "type": "array",
+          "value": [
+            true,
+            false,
+            true,
+            false
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "isTrue",
+          "body": "@{value == true}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "value",
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(nonExistentFunction)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [filter(nonExistentFunction)]. Unknown function name: nonExistentFunction."
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "one",
+            "two"
+          ]
+        }
+      ],
+      "functions": [],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(wrongReturnType)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [filter(wrongReturnType)]. Function must return boolean value."
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "one",
+            "two"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "wrongReturnType",
+          "body": "@{'not_boolean'}",
+          "return_type": "string",
+          "arguments": [
+            {
+              "name": "item",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{source.filter(containsQuery)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [containsQuery]. Exactly 2 argument(s) expected."
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "array",
+          "value": [
+            "one",
+            "two",
+            "three"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "containsQuery",
+          "body": "@{contains(it, query)}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "it",
+              "type": "string"
+            },
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "expression": "@{heterogeneousArray.filter(isStringOne)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [filter(isStringOne)]. Incorrect value type: expected String, got Integer."
+      },
+      "variables": [
+        {
+          "name": "heterogeneousArray",
+          "type": "array",
+          "value": [
+            "one",
+            42,
+            true
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "isStringOne",
+          "body": "@{str == 'one'}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "str",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}
