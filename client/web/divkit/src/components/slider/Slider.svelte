@@ -102,8 +102,8 @@
     $: firstVariable = componentContext.json.thumb_value_variable;
     $: secondVariable = componentContext.json.thumb_secondary_value_variable;
 
-    $: valueVariable = firstVariable && componentContext.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
-    $: value2Variable = secondVariable && componentContext.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);
+    $: valueVariable = firstVariable && (componentContext.getVariable(firstVariable, 'integer') || rootCtx.awaitGlobalVariable(firstVariable, 'integer', 0)) || createVariable('temp', 'integer', 0);
+    $: value2Variable = secondVariable && (componentContext.getVariable(secondVariable, 'integer') || rootCtx.awaitGlobalVariable(secondVariable, 'integer', 0)) || createVariable('temp', 'integer', 0);
 
     $: jsonMinValue = componentContext.getDerivedFromVars(componentContext.json.min_value);
     $: jsonMaxValue = componentContext.getDerivedFromVars(componentContext.json.max_value);

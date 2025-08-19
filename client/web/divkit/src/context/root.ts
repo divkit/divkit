@@ -1,4 +1,4 @@
-import type { Readable, Writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VariableTrigger, VideoPlayerProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
@@ -7,6 +7,7 @@ import type { TintMode } from '../types/image';
 import type { Customization } from '../../typings/common';
 import type { CustomComponentDescription } from '../../typings/custom';
 import type { ComponentContext } from '../types/componentContext';
+import type { VariableType } from '../../typings/variables';
 
 export const ROOT_CTX = Symbol('root');
 
@@ -71,6 +72,7 @@ export interface RootCtxValue {
     pagerChildrenClipEnabled: boolean;
     pagerMouseDragEnabled: boolean;
     videoPlayerProvider?: VideoPlayerProvider | undefined;
+    awaitGlobalVariable(variableName: string, variableType: VariableType, value: unknown): Variable;
 
     // Devtool
     componentDevtool?({

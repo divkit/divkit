@@ -126,7 +126,7 @@
     }
 
     $: elapsedVariableName = componentContext.json.elapsed_time_variable;
-    $: elapsedVariable = elapsedVariableName && componentContext.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
+    $: elapsedVariable = elapsedVariableName && (componentContext.getVariable(elapsedVariableName, 'integer') || rootCtx.awaitGlobalVariable(elapsedVariableName, 'integer', 0)) || createVariable('temp', 'integer', 0);
 
     function variableListener(val: number): void {
         if (isSelfVariableSet) {

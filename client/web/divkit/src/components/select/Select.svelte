@@ -71,7 +71,7 @@
     $: items = componentContext.json.options;
     $: filteredItems = Array.isArray(items) && items.filter(it => typeof it.value === 'string') || [];
 
-    $: valueVariable = variable && componentContext.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+    $: valueVariable = variable && (componentContext.getVariable(variable, 'string') || rootCtx.awaitGlobalVariable(variable, 'string', '')) || createVariable('temp', 'string', '');
 
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonHintText = componentContext.getDerivedFromVars(componentContext.json.hint_text);

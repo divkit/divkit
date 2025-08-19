@@ -148,8 +148,8 @@
     $: variable = componentContext.json.text_variable;
     $: rawVariable = componentContext.json.mask?.raw_text_variable;
 
-    $: valueVariable = variable && componentContext.getVariable(variable, 'string') || createVariable('temp', 'string', '');
-    $: rawValueVariable = rawVariable && componentContext.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
+    $: valueVariable = variable && (componentContext.getVariable(variable, 'string') || rootCtx.awaitGlobalVariable(variable, 'string', '')) || createVariable('temp', 'string', '');
+    $: rawValueVariable = rawVariable && (componentContext.getVariable(rawVariable, 'string') || rootCtx.awaitGlobalVariable(rawVariable, 'string', '')) || createVariable('temp', 'string', '');
 
     $: jsonHintText = componentContext.getDerivedFromVars(componentContext.json.hint_text);
     $: jsonHintColor = componentContext.getDerivedFromVars(componentContext.json.hint_color);

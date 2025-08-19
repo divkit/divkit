@@ -229,6 +229,7 @@
     const variables = new Map<string, Variable>();
     // Stores for notify unset global variables
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
+    const awaitingGlobalVariablesFacades = new Map<string, Variable>();
 
     let timersController: TimersController | null = null;
 
@@ -1817,6 +1818,19 @@
         return store;
     }
 
+    function awaitGlobalVariable(variableName: string, variableType: VariableType, value: unknown): Variable {
+        const exist = awaitingGlobalVariablesFacades.get(variableName);
+        if (exist) {
+            return exist;
+        }
+
+        const instance = createVariable(variableName, variableType, value);
+
+        awaitingGlobalVariablesFacades.set(variableName, instance);
+
+        return instance;
+    }
+
     function updateTheme(): void {
         if (!palette) {
             return;
@@ -2238,6 +2252,7 @@
         customComponents,
         direction: directionStore,
         videoPlayerProvider,
+        awaitGlobalVariable,
         componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
     });
 
@@ -2435,11 +2450,17 @@
             variables.set(newVarName, varInstance);
 
             const awaitingStore = awaitingGlobalVariables.get(newVarName);
-
             if (awaitingStore) {
                 let counter = 0;
                 varInstance.subscribe(() => {
                     awaitingStore.set(++counter);
+                });
+            }
+
+            const facade = awaitingGlobalVariablesFacades.get(newVarName);
+            if (facade && facade.getType() === varInstance.getType()) {
+                varInstance.subscribe(val => {
+                    facade.set(val);
                 });
             }
         }

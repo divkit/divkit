@@ -47,7 +47,7 @@
 
     $: stateVariableName = componentContext.json.state_id_variable;
     $: stateVariable = stateVariableName ?
-        componentContext.getVariable(stateVariableName, 'string') :
+        componentContext.getVariable(stateVariableName, 'string') || rootCtx.awaitGlobalVariable(stateVariableName, 'string', '') :
         null;
     let inited = false;
 
