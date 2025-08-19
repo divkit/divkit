@@ -194,7 +194,11 @@ final class TabContentsView: BlockView {
           )
         }
       layout = nil
-      collectionView.reloadData()
+      if oldModel?.pages.count == model.pages.count {
+        configureVisibleCells(cellModels)
+      } else {
+        collectionView.reloadData()
+      }
     }
 
     collectionView.isScrollEnabled = model.scrollingEnabled
@@ -217,6 +221,19 @@ final class TabContentsView: BlockView {
     }
 
     selectedPageIndex = idx
+  }
+
+  private func configureVisibleCells(_ blocks: [Block]) {
+    let cells = collectionView.visibleCells.map { $0 as! GenericCollectionViewCell }
+    for (cell, indexPath) in zip(cells, collectionView.indexPathsForVisibleItems) {
+      cell.configure(
+        model: blocks[indexPath.row],
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate,
+        accessibilityElement: blocks[indexPath.row].accessibilityElement
+      )
+    }
   }
 
   private func updateContentOffset(animated: Bool = true) {
