@@ -14,6 +14,7 @@ public enum DivVariable: Sendable {
   case urlVariable(UrlVariable)
   case dictVariable(DictVariable)
   case arrayVariable(ArrayVariable)
+  case propertyVariable(PropertyVariable)
 
   public var value: Serializable {
     switch self {
@@ -32,6 +33,8 @@ public enum DivVariable: Sendable {
     case let .dictVariable(value):
       return value
     case let .arrayVariable(value):
+      return value
+    case let .propertyVariable(value):
       return value
     }
   }
@@ -56,6 +59,8 @@ extension DivVariable: Equatable {
     case let (.dictVariable(l), .dictVariable(r)):
       return l == r
     case let (.arrayVariable(l), .arrayVariable(r)):
+      return l == r
+    case let (.propertyVariable(l), .propertyVariable(r)):
       return l == r
     default:
       return false

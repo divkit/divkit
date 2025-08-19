@@ -141,7 +141,13 @@ extension DivBase {
 
     context.variablesStorage.initializeIfNeeded(
       path: context.path,
-      variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:]
+      variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:],
+      properties: variables?.extractDivPropertiesValues(
+        expressionResolver: context.expressionResolver,
+        variablesStorage: context.variablesStorage,
+        path: context.path,
+        actionHandler: context.actionHandler
+      ) ?? [:]
     )
   }
 

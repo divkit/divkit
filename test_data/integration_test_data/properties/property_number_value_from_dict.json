@@ -70,10 +70,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=price_prop&value=123.45",
           "log_id": "set_num_var"
@@ -99,7 +101,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

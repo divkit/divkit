@@ -1,0 +1,89 @@
+{
+  "description": "Property setting string value from dict",
+  "div_data": {
+    "card": {
+      "log_id": "property-string-value-from-dict",
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "title": "Title"
+          }
+        },
+        {
+          "name": "title",
+          "type": "property",
+          "value_type": "string",
+          "new_value_variable_name": "updated_value",
+          "get": "@{getStringFromDict(source, 'title')}",
+          "set": [
+            {
+              "log_id": "set_action",
+              "typed": {
+                "type": "dict_set_value",
+                "variable_name": "source",
+                "key": "title",
+                "value": {
+                  "type": "string",
+                  "value": "@{updated_value}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "@{title}"
+              },
+              {
+                "type": "input",
+                "text_variable": "title"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=title&value=New Title",
+          "log_id": "set_string_var"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "source",
+          "value": {
+            "type": "dict",
+            "value": {
+              "title": "New Title"
+            }
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "title",
+          "value": {
+            "type": "string",
+            "value": "New Title"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

@@ -355,12 +355,22 @@ public final class DivKitComponents {
         reporter: reporter
       )
       let divDataVariables = divData.variables?.extractDivVariableValues(resolver) ?? [:]
+      let divDataProperties = divData.variables?.extractDivPropertiesValues(
+        expressionResolver: resolver,
+        variablesStorage: variablesStorage,
+        path: cardId.path,
+        actionHandler: actionHandler
+      ) ?? [:]
       variablesStorage.append(
         variables: divDataVariables,
         for: cardId,
         replaceExisting: false
       )
-
+      variablesStorage.append(
+        properties: divDataProperties,
+        for: cardId,
+        replaceExisting: false
+      )
       triggersStorage.set(
         cardId: cardId,
         triggers: divData.variableTriggers ?? []

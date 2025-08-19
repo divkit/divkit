@@ -74,10 +74,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=flag_prop&value=false",
           "log_id": "set_bool_var"
@@ -103,7 +105,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

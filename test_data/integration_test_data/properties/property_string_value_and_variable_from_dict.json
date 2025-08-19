@@ -93,10 +93,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=title&value=New Value",
           "log_id": "set_string_var"
@@ -131,7 +133,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

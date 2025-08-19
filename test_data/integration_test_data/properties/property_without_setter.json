@@ -29,7 +29,7 @@
   },
   "cases": [
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=prop&value=setter",
           "log_id": "set_prop"

@@ -36,6 +36,7 @@ public final class DivVariablesStorage {
 
   private let globalStorage: DivVariableStorage
   private var localStorages: [UIElementPath: DivVariableStorage] = [:]
+  private var propertiesStorages: [UIElementPath: DivPropertiesStorage] = [:]
   private let lock = AllocatedUnfairLock()
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
@@ -57,7 +58,7 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     name: DivVariableName
   ) -> T? {
-    getVariableValue(path: cardId.path, name: name)
+    getNearestPropertiesStorage(cardId.path)?.getValue(name) ?? getVariableValue(path: cardId.path, name: name)
   }
 
   public func getVariableValue(
@@ -65,7 +66,7 @@ public final class DivVariablesStorage {
     name: DivVariableName
   ) -> DivVariableValue? {
     lock.withLock {
-      getNearestStorage(cardId.path).getVariableValue(name)
+      getNearestPropertiesStorage(cardId.path)?.getVariableValue(name) ?? getNearestStorage(cardId.path).getVariableValue(name)
     }
   }
 
@@ -147,6 +148,7 @@ public final class DivVariablesStorage {
     lock.withLock {
       globalStorage.clear()
       localStorages = [:]
+      propertiesStorages = [:]
     }
   }
 
@@ -155,11 +157,45 @@ public final class DivVariablesStorage {
       localStorages.keys
         .filter { $0.root == cardId.rawValue }
         .forEach { localStorages[$0] = nil }
+      propertiesStorages.keys
+        .filter { $0.root == cardId.rawValue }
+        .forEach { propertiesStorages[$0] = nil }
     }
   }
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
     changeEvents.addObserver(action)
+  }
+
+  func set(
+    cardId: DivCardID,
+    properties: DivProperties
+  ) {
+    let propertiesStorage = lock.withLock {
+      let path = cardId.path
+      if let propertiesStorage = propertiesStorages[path] {
+        return propertiesStorage
+      }
+      let propertiesStorage = DivPropertiesStorage(outerStorage: nil, initialPath: path)
+      propertiesStorages[path] = propertiesStorage
+      return propertiesStorage
+    }
+
+    propertiesStorage.replaceAll(properties)
+  }
+
+  func append(
+    properties newProperties: DivProperties,
+    for cardId: DivCardID,
+    replaceExisting: Bool = true
+  ) {
+    let oldProperties = lock.withLock {
+      propertiesStorages[cardId.path]?.values ?? [:]
+    }
+    let resultProperties = replaceExisting ?
+    oldProperties + newProperties :
+    newProperties + oldProperties
+    set(cardId: cardId, properties: resultProperties)
   }
 
   func getOnlyElementVariables(cardId: DivCardID, elementId: String) -> DivVariables? {
@@ -181,6 +217,11 @@ public final class DivVariablesStorage {
         return [:]
       }
 
+      if let propertiesValues = getOnlyElementProperties(cardId: cardId, elementId: elementId) {
+        let propertiesWithVariableValues = propertiesValues.compactMapValues{ $0.toVariableValue() }
+        return storage.values.merging(propertiesWithVariableValues) { (_, new) in new }
+      }
+
       return storage.values
     }
   }
@@ -190,24 +231,43 @@ public final class DivVariablesStorage {
     name: DivVariableName
   ) -> T? {
     lock.withLock {
-      getNearestStorage(path).getValue(name)
+      getNearestPropertiesStorage(path)?.getValue(name) ?? getNearestStorage(path).getValue(name)
     }
   }
 
-  func initializeIfNeeded(path: UIElementPath, variables: DivVariables) {
+  func getVariableValueWithoutLock<T>(
+    path: UIElementPath,
+    name: DivVariableName
+  ) -> T? {
+    getNearestPropertiesStorage(path)?.getValue(name) ?? getNearestStorage(path).getValue(name)
+  }
+
+  func initializeIfNeeded(
+    path: UIElementPath,
+    variables: DivVariables,
+    properties: DivProperties = [:]
+  ) {
     lock.withLock {
-      if localStorages[path] != nil {
-        // storage is already initialized
-        return
+      if localStorages[path] == nil {
+        let nearestStorage = getNearestStorage(path.parent)
+        if variables.isEmpty {
+          // optimization that allows to access the local storage for one operation
+          localStorages[path] = nearestStorage
+        } else {
+          let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
+          localStorage.replaceAll(variables, notifyObservers: false)
+          localStorages[path] = localStorage
+        }
       }
-      let nearestStorage = getNearestStorage(path.parent)
-      if variables.isEmpty {
-        // optimization that allows to access the local storage for one operation
-        localStorages[path] = nearestStorage
-      } else {
-        let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
-        localStorage.replaceAll(variables, notifyObservers: false)
-        localStorages[path] = localStorage
+      if propertiesStorages[path] == nil {
+        let nearestStorage = getNearestPropertiesStorage(path.parent)
+        if properties.isEmpty {
+          propertiesStorages[path] = nearestStorage
+        } else {
+          let localStorage = DivPropertiesStorage(outerStorage: nearestStorage, initialPath: path)
+          localStorage.replaceAll(properties)
+          propertiesStorages[path] = localStorage
+        }
       }
     }
   }
@@ -222,6 +282,48 @@ public final class DivVariablesStorage {
       currentPath = path.parent
     }
     return globalStorage
+  }
+
+  func getNearestPropertiesStorage(_ path: UIElementPath?) -> DivPropertiesStorage? {
+    var currentPath: UIElementPath? = path
+    while let path = currentPath {
+      let localStorage = propertiesStorages[path]
+      if let localStorage {
+        return localStorage
+      }
+      currentPath = path.parent
+    }
+    return nil
+  }
+
+  private func getOnlyElementProperties(cardId: DivCardID, elementId: String) -> DivProperties? {
+    let storages = propertiesStorages.filter {
+      $0.key.leaf == elementId && $0.key.cardId == cardId
+    }.map(\.value)
+
+    guard let storage = storages.first else {
+      DivKitLogger.error("Element with id \(elementId) not found")
+      return nil
+    }
+    guard storages.count == 1 else {
+      DivKitLogger.error("Found multiple elements that respond to id: \(elementId)")
+      return nil
+    }
+
+    guard storage.initialPath?.leaf == elementId else {
+      return [:]
+    }
+
+    return storage.values
+  }
+
+  private func getProperty(
+    path: UIElementPath,
+    name: DivVariableName
+  ) -> DivProperty? {
+    lock.withLock {
+      getNearestPropertiesStorage(path)?.getPropertyValue(name)
+    }
   }
 
   private func notify(_ event: ChangeEvent) {
@@ -245,11 +347,13 @@ extension DivVariablesStorage {
     name: DivVariableName,
     value: String
   ) {
-    update(
-      path: path,
-      name: name,
-      valueFactory: { makeDivVariableValue(oldValue: $0, name: name, value: value) }
-    )
+    if !updateProperty(path: path, name: name, value: value) {
+      update(
+        path: path,
+        name: name,
+        valueFactory: { makeDivVariableValue(oldValue: $0, name: name, value: value) }
+      )
+    }
   }
 
   func update(
@@ -257,7 +361,9 @@ extension DivVariablesStorage {
     name: DivVariableName,
     value: DivVariableValue
   ) {
-    update(path: path, name: name, valueFactory: { _ in value })
+    if !updateProperty(path: path, name: name, value: value) {
+      update(path: path, name: name, valueFactory: { _ in value })
+    }
   }
 
   private func update(
@@ -271,6 +377,36 @@ extension DivVariablesStorage {
     if storage.update(name: name, valueFactory: valueFactory), storage !== globalStorage {
       notify(ChangeEvent(.local(path.cardId, [name])))
     }
+  }
+}
+
+extension DivVariablesStorage {
+  fileprivate func updateProperty(
+    path: UIElementPath,
+    name: DivVariableName,
+    value: String
+  ) -> Bool {
+    updateProperty(
+      path: path,
+      name: name,
+      value: makeDivPropertyValue(
+        oldValue: getProperty(path: path, name: name),
+        name: name,
+        value: value
+      )
+    )
+  }
+
+  fileprivate func updateProperty(
+    path: UIElementPath,
+    name: DivVariableName,
+    value: DivVariableValue?
+  ) -> Bool {
+    let storage = lock.withLock {
+      getNearestPropertiesStorage(path)
+    }
+    let isUpdated = storage?.update(path: path, name: name, newValue: value) == true
+    return isUpdated
   }
 }
 
@@ -337,6 +473,16 @@ private func makeDivVariableValue(
   }
 
   return newValue
+}
+
+private func makeDivPropertyValue(
+  oldValue: DivProperty?,
+  name: DivVariableName,
+  value: String
+) -> DivVariableValue? {
+  guard let oldValue,
+        let oldVariableValue = oldValue.toVariableValue() else { return nil }
+  return makeDivVariableValue(oldValue: oldVariableValue, name: name, value: value)
 }
 
 private func parseCollectionVar<T>(_ val: String) -> T? {
@@ -419,9 +565,54 @@ extension Collection<DivVariable> {
         } else if let value = arrayVariable.value.rawValue {
           variables[name] = .array(makeDivArray(name: name.rawValue, value: value))
         }
+      case .propertyVariable:
+        return
       }
     }
     return variables
+  }
+
+  func extractDivPropertiesValues(
+    expressionResolver resolver: ExpressionResolver,
+    variablesStorage: DivVariablesStorage,
+    path: UIElementPath,
+    actionHandler: DivActionHandler?
+  ) -> DivProperties {
+    var properties = DivProperties()
+    let resolver = resolver.modifying(
+      variableValueProvider: {
+        variablesStorage.getVariableValueWithoutLock(
+          path: path,
+          name: DivVariableName(rawValue: $0)
+        )
+      }
+    )
+    forEach { variable in
+      let name = DivVariableName(rawValue: variable.name)
+      switch variable {
+      case let .propertyVariable(property):
+        guard !properties.keys.contains(name) else { return }
+        guard let resolvedValueType = property.resolveValueType(resolver) else { return }
+        properties[name] = DivProperty(
+          expressionResolver: resolver,
+          actionHandler: actionHandler,
+          getValue: property.get.toValidSerializationValue(),
+          newValueVariableName: property.newValueVariableName,
+          valueType: resolvedValueType,
+          actions: property.set ?? []
+        )
+      case .stringVariable,
+           .numberVariable,
+           .integerVariable,
+           .booleanVariable,
+           .colorVariable,
+           .urlVariable,
+           .dictVariable,
+           .arrayVariable:
+        return
+      }
+    }
+    return properties
   }
 }
 
@@ -473,6 +664,7 @@ extension DivVariable {
     case let .colorVariable(variable): variable.name
     case let .arrayVariable(variable): variable.name
     case let .dictVariable(variable): variable.name
+    case let .propertyVariable(variable): variable.name
     }
   }
 }

@@ -24,7 +24,7 @@
                 "variable_name": "source",
                 "key": "site",
                 "value": {
-                  "type": "url",
+                  "type": "string",
                   "value": "@{new_value}"
                 }
               }
@@ -75,10 +75,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=site_prop&value=https://ya.ru",
           "log_id": "set_url_var"
@@ -104,7 +106,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

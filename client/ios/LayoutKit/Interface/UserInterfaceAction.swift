@@ -44,6 +44,7 @@ public struct UserInterfaceAction: Equatable, Codable {
     case timer
     case trigger
     case callback
+    case property
   }
 
   public let payload: Payload

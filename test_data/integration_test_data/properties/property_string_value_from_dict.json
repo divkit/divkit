@@ -76,10 +76,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=title&value=New Title",
           "log_id": "set_string_var"
@@ -92,7 +94,7 @@
           "value": {
             "type": "dict",
             "value": {
-              "title": "New Value",
+              "title": "New Title",
               "subtitle": "Subtitle"
             }
           }
@@ -102,11 +104,13 @@
           "variable_name": "title",
           "value": {
             "type": "string",
-            "value": "New Value"
+            "value": "New Title"
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

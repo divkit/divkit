@@ -24,7 +24,7 @@
                 "variable_name": "source",
                 "index": 0,
                 "value": {
-                  "type": "color",
+                  "type": "string",
                   "value": "@{new_value}"
                 }
               }
@@ -76,10 +76,12 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
-      "div-actions": [
+      "div_actions": [
         {
           "url": "div-action://set_variable?name=color_prop&value=#FF00FF",
           "log_id": "set_color_var"
@@ -92,7 +94,7 @@
           "value": {
             "type": "array",
             "value": [
-              "#FF00FF"
+              "#FFFF00FF"
             ]
           }
         },
@@ -105,7 +107,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
