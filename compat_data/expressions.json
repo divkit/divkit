@@ -298,5 +298,13 @@
                 "version_added": "32.11.0"
             }
         }
+    }, {
+        "id": "fn_decimal-format",
+        "name": "<code>decimalFormat</code> function and method",
+        "compat": {
+            "web": {
+                "version_added": "32.13.0"
+            }
+        }
     }]
 }
