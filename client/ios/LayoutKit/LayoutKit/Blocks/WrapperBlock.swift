@@ -11,6 +11,8 @@ public protocol WrapperBlock: SizeForwardingBlock {
 extension WrapperBlock {
   public var sizeProvider: Block { child }
 
+  public var isEmpty: Bool { child.isEmpty }
+
   public var reuseId: String {
     child.reuseId
   }

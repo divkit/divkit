@@ -85,7 +85,6 @@ extension Block {
         accessibilityElement: accessibilityElement,
         reuseId: reuseId,
         path: path,
-        isEmpty: isEmpty,
         isFocused: isFocused,
         captureFocusOnAction: captureFocusOnAction ?? block.captureFocusOnAction
       )
@@ -117,7 +116,6 @@ extension Block {
       accessibilityElement: accessibilityElement,
       reuseId: reuseId,
       path: path,
-      isEmpty: isEmpty ?? false,
       isFocused: isFocused ?? false,
       captureFocusOnAction: captureFocusOnAction ?? DecoratingBlock.defaultCaptureFocusOnAction
     )

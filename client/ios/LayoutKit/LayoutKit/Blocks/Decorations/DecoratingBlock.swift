@@ -30,7 +30,6 @@ final class DecoratingBlock: WrapperBlock {
   let accessibilityElement: AccessibilityElement?
   let reuseId: String
   let path: UIElementPath?
-  let isEmpty: Bool
   let isFocused: Bool
   let captureFocusOnAction: Bool
 
@@ -64,7 +63,6 @@ final class DecoratingBlock: WrapperBlock {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
-    isEmpty: Bool = false,
     isFocused: Bool = false,
     captureFocusOnAction: Bool = DecoratingBlock.defaultCaptureFocusOnAction
   ) {
@@ -89,12 +87,11 @@ final class DecoratingBlock: WrapperBlock {
     self.accessibilityElement = accessibilityElement
     self.reuseId = reuseId ?? DecoratingBlock.defaultReuseId
     self.path = path
-    self.isEmpty = isEmpty
     self.isFocused = isFocused
     self.captureFocusOnAction = captureFocusOnAction
   }
 
-  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+  func ascent(forWidth width: CGFloat) -> CGFloat? {
     guard let childAscent = child.ascent(forWidth: width) else {
       return nil
     }
@@ -180,7 +177,6 @@ extension DecoratingBlock {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
-    isEmpty: Bool? = nil,
     isFocused: Bool? = nil,
     captureFocusOnAction: Bool? = nil
   ) -> DecoratingBlock {
@@ -206,7 +202,6 @@ extension DecoratingBlock {
       accessibilityElement: accessibilityElement ?? self.accessibilityElement,
       reuseId: reuseId ?? self.reuseId,
       path: path ?? self.path,
-      isEmpty: isEmpty ?? self.isEmpty,
       isFocused: isFocused ?? self.isFocused,
       captureFocusOnAction: captureFocusOnAction ?? self.captureFocusOnAction
     )

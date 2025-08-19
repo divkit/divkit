@@ -11,7 +11,7 @@
         "type": "text",
         "border": {
           "stroke": {
-            "color": "#aaaaaa",
+            "color": "#000",
             "width": 1
           }
         },
@@ -41,32 +41,43 @@
         {
           "state_id": 0,
           "div": {
-            "type": "gallery",
-            "orientation": "vertical",
-            "border": {
-              "stroke": {
-                "color": "#8888ff",
-                "width": 1
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#EEE"
               }
+            ],
+            "paddings": {
+              "top": 8,
+              "bottom": 8,
+              "left": 8,
+              "right": 8
             },
             "items": [
               {
-                "type": "item",
-                "text": "Item 0"
-              },
-              {
-                "type": "item",
-                "text": "Item 1",
-                "visibility": "@{visibility1}"
-              },
-              {
-                "type": "item",
-                "text": "Item 2"
-              },
-              {
-                "type": "item",
-                "text": "Item 3",
-                "visibility": "@{visibility3}"
+                "type": "gallery",
+                "orientation": "vertical",
+                "items": [
+                  {
+                    "type": "item",
+                    "text": "Item 0"
+                  },
+                  {
+                    "type": "item",
+                    "text": "Item 1",
+                    "visibility": "@{visibility1}"
+                  },
+                  {
+                    "type": "item",
+                    "text": "Item 2"
+                  },
+                  {
+                    "type": "item",
+                    "text": "Item 3",
+                    "visibility": "@{visibility3}"
+                  }
+                ]
               }
             ]
           }
@@ -92,7 +103,8 @@
           "url": "div-action://set_variable?name=visibility3&value=visible",
           "log_id": "show item 3"
         }
-      ]
+      ],
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [

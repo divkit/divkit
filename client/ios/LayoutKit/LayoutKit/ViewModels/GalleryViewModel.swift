@@ -19,6 +19,10 @@ public struct GalleryViewModel: Equatable {
     public let crossAlignment: Alignment
     public var content: Block
 
+    var existingItem: Bool {
+      !content.isEmpty
+    }
+
     public init(crossAlignment: Alignment, content: Block) {
       self.crossAlignment = crossAlignment
       self.content = content
@@ -121,7 +125,7 @@ public struct GalleryViewModel: Equatable {
 
     precondition(columnCount > 0)
 
-    self.items = items
+    self.items = items.filter(\.existingItem)
     self.layoutDirection = layoutDirection
     self.metrics = metrics
     self.scrollMode = scrollMode
@@ -157,7 +161,6 @@ public struct GalleryViewModel: Equatable {
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled ?? self.areEmptySpaceTouchesEnabled
     )
   }
-
 }
 
 extension GalleryViewModel.Item {
