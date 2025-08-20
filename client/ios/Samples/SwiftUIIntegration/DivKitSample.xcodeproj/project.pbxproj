@@ -371,7 +371,7 @@
 			repositoryURL = "https://github.com/divkit/divkit-ios.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 32.5.0;
+				minimumVersion = 32.13.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
