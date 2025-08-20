@@ -1,3 +1,17 @@
+## 32.14.0
+
+# Android Client:
+* Fix crash when applying second div patch.
+* Fix input keyboardType not being applied.
+
+# iOS Client:
+* Added property that is handeled with get and set methods.
+* Fixed a bug with empty spaces in the pager in place of elements with `visibility: gone`.
+
+# Web Client:
+* Fixed the expectation of global variables in certain fields (`state_id_variable`, `text_variable`, `thumb_value_variable` and the like).
+
+
 ## 32.13.0
 
 # iOS Client:
