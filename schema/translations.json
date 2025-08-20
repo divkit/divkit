@@ -787,6 +787,14 @@
     "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
     "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
+  "div_container_item_spacing": {
+    "en": "Spacing between items along the main axis. Ignored if `separator` is set.",
+    "ru": "Расстояние между элементами вдоль основной оси. Игнорируется, если задан `separator`."
+  },
+  "div_container_line_spacing": {
+    "en": "Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.",
+    "ru": "Расстояние между линиями элементов при `layout_mode` = `wrap`. Игнорируется, если задан `line_separator`."
+  },
   "div_container_separator": {
     "en": "Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
     "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."

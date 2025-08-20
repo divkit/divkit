@@ -135,6 +135,20 @@
             "web"
           ]
         },
+        "item_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_container_item_spacing",
+          "platforms": [
+          ]
+        },
+        "line_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_container_line_spacing",
+          "platforms": [
+          ]
+        },
         "line_separator": {
           "$ref": "#/definitions/separator",
           "$description": "translations.json#/div_container_line_separator",
