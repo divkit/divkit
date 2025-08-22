@@ -61,6 +61,7 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
       }
     }
     let textString = String(text)
+
     if let rawCursorPosition {
       let cursorIndex = rawCursorPosition.cursorPosition.rawValue
       if cursorIndex < rawText.endIndex {
@@ -76,7 +77,8 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
         newCursorPosition = .init(rawValue: textString.endIndex)
       }
     }
-    return InputData(text: String(text), cursorPosition: newCursorPosition, rawData: rawData)
+
+    return InputData(text: textString, cursorPosition: newCursorPosition, rawData: rawData)
   }
 
   public func equals(_ other: MaskFormatter) -> Bool {
