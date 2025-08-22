@@ -30,6 +30,8 @@ public final class GalleryView: BlockView {
   private let dataSource = GalleryDataSource()
   private let compoundScrollDelegate = CompoundScrollDelegate()
   private let cellRegistrator = CollectionCellRegistrator()
+
+  private var disableLooping = false
   private var contentPager: ScrollableContentPager? {
     didSet {
       if let oldDelegate = oldValue {
@@ -301,6 +303,7 @@ public final class GalleryView: BlockView {
 extension GalleryView: ScrollDelegate {
   public func onWillBeginDragging(_ scrollView: ScrollView) {
     scrollStartOffset = getOffset(scrollView)
+    disableLooping = true
   }
 
   public func onWillEndDragging(
@@ -310,44 +313,42 @@ extension GalleryView: ScrollDelegate {
   ) {
     switch model.scrollMode {
     case .default, .fixedPaging:
-      break
+      return
     case let .autoPaging(inertionEnabled):
       guard !inertionEnabled else { return }
-      let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
-      let isHorizontal = model.direction.isHorizontal
 
-      let resultOffset: CGPoint
-      if isHorizontal {
-        let delta = CGPoint(x: targetContentOffset.pointee.x - scrollStartOffset, y: 0)
-        let sign = CGPoint(x: delta.x == 0 ? 0 : delta.x / abs(delta.x), y: 1)
-        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.x) - scrollStartOffset
-        let absoluteDelta = CGPoint(x: min(abs(maxDelta), abs(delta.x)), y: 0)
-        resultOffset = CGPoint(x: scrollStartOffset + absoluteDelta.x * sign.x, y: 0)
+      let target = if model.direction.isHorizontal { targetContentOffset.pointee.x
       } else {
-        let delta = CGPoint(x: 0, y: targetContentOffset.pointee.y - scrollStartOffset)
-        let sign = CGPoint(x: 1, y: delta.y == 0 ? 0 : delta.y / abs(delta.y))
-        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.y) - scrollStartOffset
-        let absoluteDelta = CGPoint(x: 0, y: min(abs(maxDelta), abs(delta.y)))
-        resultOffset = CGPoint(x: 0, y: scrollStartOffset + absoluteDelta.y * sign.y)
+        targetContentOffset.pointee.y
       }
-      targetContentOffset.pointee = resultOffset
+      targetContentOffset.pointee = calculateFinalTarget(target)
     }
+
+    disableLooping = false
   }
 
   public func onDidScroll(_ scrollView: ScrollView) {
     var offset = getOffset(scrollView)
-    if let newPosition = calculateNewInfiniteScrollPosition(scrollView, offset: offset) {
+
+    if let newPosition = calculateNewInfiniteScrollPosition(collectionView, offset: offset),
+       !disableLooping {
+      let diff = offset - newPosition.offset
       offset = newPosition.offset
-      scrollStartOffset = offset
-      contentPager.flatMap { compoundScrollDelegate.remove($0) }
-      compoundScrollDelegate.remove(self)
-      updateContentOffset(to: .offset(newPosition.offset), animated: false)
-      compoundScrollDelegate.add(self)
-      contentPager.flatMap { compoundScrollDelegate.add($0) }
-      if !scrollView.isDragging {
-        updateContentOffset(to: .paging(index: CGFloat(newPosition.page)), animated: true)
+      scrollStartOffset -= diff
+
+      collectionView.withDetachedDelegate {
+        updateContentOffset(to: .offset(newPosition.offset), animated: false)
       }
+
+      let currentTarget = contentPager.map {
+        $0.lastTargetOffset - diff
+      } ?? offset
+
+      let targetPage = layout.pageIndex(forContentOffset: currentTarget).rounded()
+
+      updateContentOffset(to: .paging(index: targetPage), animated: true)
     }
+
     let contentPosition: GalleryViewState.Position = switch model.scrollMode {
     case .default:
       .offset(
@@ -423,6 +424,28 @@ extension GalleryView: ScrollDelegate {
       lastVisibleItemIndex: lastVisibleItemIndex,
       itemsCount: model.items.count
     ).sendFrom(self)
+  }
+
+  private func calculateFinalTarget(_ currentTarget: CGFloat) -> CGPoint {
+    let isHorizontal = model.direction.isHorizontal
+    let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
+
+    if isHorizontal {
+      let delta = CGPoint(x: currentTarget - scrollStartOffset, y: 0)
+      let sign = CGPoint(x: delta.x == 0 ? 0 : delta.x / abs(delta.x), y: 1)
+      let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.x) - scrollStartOffset
+      let absoluteDelta = CGPoint(x: min(abs(maxDelta), abs(delta.x)), y: 0)
+      let resultOffset = CGPoint(x: scrollStartOffset + absoluteDelta.x * sign.x, y: 0)
+
+      return resultOffset
+    } else {
+      let delta = CGPoint(x: 0, y: currentTarget - scrollStartOffset)
+      let sign = CGPoint(x: 1, y: delta.y == 0 ? 0 : delta.y / abs(delta.y))
+      let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.y) - scrollStartOffset
+      let absoluteDelta = CGPoint(x: 0, y: min(abs(maxDelta), abs(delta.y)))
+      let resultOffset = CGPoint(x: 0, y: scrollStartOffset + absoluteDelta.y * sign.y)
+      return resultOffset
+    }
   }
 
   private func calculateNewInfiniteScrollPosition(_: ScrollView, offset: CGFloat) -> InfiniteScroll

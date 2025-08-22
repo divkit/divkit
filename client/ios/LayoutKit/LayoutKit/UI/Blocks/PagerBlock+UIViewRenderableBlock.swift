@@ -15,6 +15,7 @@ extension PagerBlock {
     renderingDelegate: RenderingDelegate?
   ) {
     let pagerView = view as! PagerView
+
     pagerView.configure(
       model: gallery,
       selectedActions: selectedActions,
@@ -137,13 +138,21 @@ extension PagerView: ElementStateObserver {
       return
     }
 
-    let currentPage = Int(pageIndex.rounded()) - model.infiniteCorrection
+    let currentPage = (Int(pageIndex.rounded()) - model.infiniteCorrection)
+    let currentPageNormalized = switch currentPage {
+    case 0..<model.itemsCountWithoutInfinite:
+      currentPage
+    case ..<0:
+      model.itemsCountWithoutInfinite - 1
+    default:
+      0
+    }
 
     setState(
       path: model.path,
       state: PagerViewState(
         numberOfPages: model.itemsCountWithoutInfinite,
-        currentPage: currentPage,
+        currentPage: currentPageNormalized,
         animated: galleryState.animated,
         isInfiniteScrollable: model.infiniteScroll
       ),

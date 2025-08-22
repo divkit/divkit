@@ -7,6 +7,8 @@ public final class ScrollableContentPager: NSObject {
 
   private(set) var isHorizontal = true
 
+  var lastTargetOffset: CGFloat = .zero
+
   private var indexedPageOrigins: [(origin: CGFloat, index: Int)] = []
   private var isPagingEnabled = true
 
