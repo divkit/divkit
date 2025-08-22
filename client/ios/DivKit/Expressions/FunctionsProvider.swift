@@ -7,6 +7,7 @@ final class FunctionsProvider {
     methods.addArrayMethods()
     methods.addDictMethods()
     methods.addToStringFunctions()
+    methods.addDecimalFormatFunctions()
     return methods
   }()
 
@@ -64,7 +65,6 @@ final class FunctionsProvider {
   ) {
     self.persistentValuesStorage = persistentValuesStorage
   }
-
 }
 
 private struct CustomFunctionEvaluator: Function {
@@ -188,6 +188,7 @@ private let staticFunctions: [String: Function] = {
   functions.addStringFunctions()
   functions.addToStringFunctions()
   functions.addTrigonometricFunctions()
+  functions.addDecimalFormatFunctions()
   return functions
 }()
 
