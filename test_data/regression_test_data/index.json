@@ -1094,24 +1094,6 @@
       "file": "animations/blink.json"
     },
     {
-      "title": "Scale transition ignore pivot_x/pivot_y",
-      "case_id": 151,
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "tags": [
-        "Animations"
-      ],
-      "steps": [
-        "Press on 'GO'"
-      ],
-      "expected_results": [
-        "Image should scale from left edge to right one"
-      ],
-      "file": "animations/scale_pivot_src.json"
-    },
-    {
       "title": "Change bounds transitions ignore start_delay",
       "case_id": 41,
       "tags": [
