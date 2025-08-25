@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, raw_text_variable`.
  */
 @Generated
+@ExposedCopyVisibility
 data class CurrencyInputMask internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class CurrencyInputMask internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Language tag that the currency format should match, as per [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). If the language is not set, it is defined automatically.

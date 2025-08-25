@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Container internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -91,6 +92,7 @@ data class Container internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
@@ -394,6 +396,7 @@ data class Container internal constructor(
      * Required parameters: `style`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Separator internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -411,6 +414,7 @@ data class Container internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * External margins from the element stroke.

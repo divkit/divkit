@@ -1,20 +1,18 @@
 package divkit.dsl.core
 
-import kotlin.Any
-import kotlin.String
-import kotlin.Unit
-import kotlin.collections.MutableMap
-
 sealed interface Property<T>
 
+@ExposedCopyVisibility
 data class ReferenceProperty<T> internal constructor(
     val name: String,
 ) : Property<T>
 
+@ExposedCopyVisibility
 data class LiteralProperty<T> internal constructor(
     val value: T,
 ) : Property<T>
 
+@ExposedCopyVisibility
 data class ExpressionProperty<T> internal constructor(
     val expression: String,
 ) : Property<T>

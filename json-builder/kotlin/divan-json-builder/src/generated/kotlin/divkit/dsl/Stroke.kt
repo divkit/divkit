@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `color`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Stroke internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class Stroke internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Stroke color.

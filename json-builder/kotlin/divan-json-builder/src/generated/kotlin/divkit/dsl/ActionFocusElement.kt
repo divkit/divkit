@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, element_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionFocusElement internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class ActionFocusElement internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val elementId: Property<String>?,
     ) {

@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, color`.
  */
 @Generated
+@ExposedCopyVisibility
 data class TextRangeMaskSolid internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class TextRangeMaskSolid internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Color.

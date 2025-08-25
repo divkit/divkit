@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, content`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionCopyToClipboard internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class ActionCopyToClipboard internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val content: Property<ActionCopyToClipboardContent>?,
     ) {

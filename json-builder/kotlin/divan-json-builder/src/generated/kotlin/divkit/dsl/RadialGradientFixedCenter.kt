@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class RadialGradientFixedCenter internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class RadialGradientFixedCenter internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).

@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class CircleShape internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class CircleShape internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Fill color.

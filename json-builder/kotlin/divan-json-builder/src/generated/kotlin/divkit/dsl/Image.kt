@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, image_url`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Image internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -94,6 +95,7 @@ data class Image internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Direct URL to an image.

@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, array`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithStringArrayProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class WithStringArrayProperty internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val array: Property<List<ArrayElement<String>>>?,
     ) {

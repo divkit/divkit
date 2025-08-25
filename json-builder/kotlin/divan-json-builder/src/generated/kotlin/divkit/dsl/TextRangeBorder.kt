@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [textRangeBorder].
  */
 @Generated
+@ExposedCopyVisibility
 data class TextRangeBorder internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -37,6 +38,7 @@ data class TextRangeBorder internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.

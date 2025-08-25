@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type, name`.
  */
 @Generated
+@ExposedCopyVisibility
 data class IntegerVariable internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class IntegerVariable internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Variable name.

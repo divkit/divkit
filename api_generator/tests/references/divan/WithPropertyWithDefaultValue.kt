@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithPropertyWithDefaultValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -44,6 +45,7 @@ data class WithPropertyWithDefaultValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Default value: `0`.
@@ -76,6 +78,7 @@ data class WithPropertyWithDefaultValue internal constructor(
      * Required parameters: `non_optional`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Nested internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -91,6 +94,7 @@ data class WithPropertyWithDefaultValue internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Default value: `0`.

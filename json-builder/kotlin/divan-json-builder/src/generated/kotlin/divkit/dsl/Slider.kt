@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, track_inactive_style, track_active_style, thumb_style`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Slider internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -86,6 +87,7 @@ data class Slider internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -341,6 +343,7 @@ data class Slider internal constructor(
      * Can be created using the method [sliderRange].
      */
     @Generated
+    @ExposedCopyVisibility
     data class Range internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -358,6 +361,7 @@ data class Slider internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * End of section.
@@ -400,6 +404,7 @@ data class Slider internal constructor(
      * Required parameters: `font_size`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class TextStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -421,6 +426,7 @@ data class Slider internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>

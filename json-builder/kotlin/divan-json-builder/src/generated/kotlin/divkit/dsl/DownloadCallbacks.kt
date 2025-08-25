@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [downloadCallbacks].
  */
 @Generated
+@ExposedCopyVisibility
 data class DownloadCallbacks internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -37,6 +38,7 @@ data class DownloadCallbacks internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Actions in case of unsuccessful loading if the host reported it or the waiting time expired.

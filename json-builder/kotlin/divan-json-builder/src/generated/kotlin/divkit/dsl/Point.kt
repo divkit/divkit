@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `y, x`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Point internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -39,6 +40,7 @@ data class Point internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * `X` coordinate.

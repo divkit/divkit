@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, column_count`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Grid internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -85,6 +86,7 @@ data class Grid internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

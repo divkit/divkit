@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, animator_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionAnimatorStop internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class ActionAnimatorStop internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * ID of the animator to be stopped.

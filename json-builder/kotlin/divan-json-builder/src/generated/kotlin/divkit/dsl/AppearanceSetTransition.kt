@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@ExposedCopyVisibility
 data class AppearanceSetTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class AppearanceSetTransition internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * An array of animations.

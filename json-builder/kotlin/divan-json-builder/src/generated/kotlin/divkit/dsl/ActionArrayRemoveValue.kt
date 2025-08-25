@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, type, index`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionArrayRemoveValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class ActionArrayRemoveValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val index: Property<Int>?,
         val variableName: Property<String>?,

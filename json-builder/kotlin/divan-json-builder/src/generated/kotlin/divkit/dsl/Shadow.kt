@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `offset`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Shadow internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class Shadow internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Shadow transparency.

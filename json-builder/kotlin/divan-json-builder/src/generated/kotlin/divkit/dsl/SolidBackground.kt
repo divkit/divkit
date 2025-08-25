@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, color`.
  */
 @Generated
+@ExposedCopyVisibility
 data class SolidBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class SolidBackground internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Color.

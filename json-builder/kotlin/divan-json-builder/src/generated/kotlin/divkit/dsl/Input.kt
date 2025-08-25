@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, text_variable`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Input internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -98,6 +99,7 @@ data class Input internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -450,6 +452,7 @@ data class Input internal constructor(
      * Required parameters: `color`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class NativeInterface internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -463,6 +466,7 @@ data class Input internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Text input line color.

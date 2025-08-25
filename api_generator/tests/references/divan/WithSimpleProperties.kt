@@ -29,6 +29,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithSimpleProperties internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -52,6 +53,7 @@ data class WithSimpleProperties internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Boolean property.

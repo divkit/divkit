@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class RadialGradientRelativeCenter internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class RadialGradientRelativeCenter internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Coordinate value in the range "0...1".

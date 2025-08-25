@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, neighbour_page_width`.
  */
 @Generated
+@ExposedCopyVisibility
 data class NeighbourPageSize internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class NeighbourPageSize internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Width of the visible part of a neighbouring page.

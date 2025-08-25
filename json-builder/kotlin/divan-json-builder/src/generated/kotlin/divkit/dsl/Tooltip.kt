@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `position, id, div`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Tooltip internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -48,6 +49,7 @@ data class Tooltip internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.

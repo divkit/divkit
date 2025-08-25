@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionHideTooltip internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class ActionHideTooltip internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Tooltip ID.

@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithArrayOfEnums internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class WithArrayOfEnums internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val items: Property<List<ArrayElement<Item>>>?,
     ) {

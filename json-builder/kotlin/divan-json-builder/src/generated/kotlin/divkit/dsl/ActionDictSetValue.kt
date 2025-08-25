@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, type, key`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionDictSetValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class ActionDictSetValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val key: Property<String>?,
         val value: Property<TypedValue>?,

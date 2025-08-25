@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Action internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -48,6 +49,7 @@ data class Action internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Callbacks that are called after [data loading](../../interaction#loading-data).
@@ -124,6 +126,7 @@ data class Action internal constructor(
      * Required parameters: `text`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class MenuItem internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -139,6 +142,7 @@ data class Action internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * One action when clicking on a menu item. Not used if the `actions` parameter is set.

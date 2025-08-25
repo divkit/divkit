@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, pattern`.
  */
 @Generated
+@ExposedCopyVisibility
 data class InputFilterRegex internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class InputFilterRegex internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Regular expression (pattern) that the entered value must match.

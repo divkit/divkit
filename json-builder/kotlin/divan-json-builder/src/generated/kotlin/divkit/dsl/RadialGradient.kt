@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class RadialGradient internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -44,6 +45,7 @@ data class RadialGradient internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Shift of the central point of the gradient relative to the left edge along the X axis.
@@ -89,6 +91,7 @@ data class RadialGradient internal constructor(
      * Required parameters: `position, color`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class ColorPoint internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -103,6 +106,7 @@ data class RadialGradient internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Gradient color corresponding to gradient point.

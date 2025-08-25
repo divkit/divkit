@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class FadeTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -43,6 +44,7 @@ data class FadeTransition internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Value of the alpha channel which the element starts appearing from or at which it finishes disappearing.

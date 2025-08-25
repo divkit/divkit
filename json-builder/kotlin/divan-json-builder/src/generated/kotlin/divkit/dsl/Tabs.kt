@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Tabs internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -82,6 +83,7 @@ data class Tabs internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -326,6 +328,7 @@ data class Tabs internal constructor(
      * Required parameters: `title, div`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -341,6 +344,7 @@ data class Tabs internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Tab contents.
@@ -375,6 +379,7 @@ data class Tabs internal constructor(
      * Required parameters: `image_url`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class TabTitleDelimiter internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -390,6 +395,7 @@ data class Tabs internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
@@ -424,6 +430,7 @@ data class Tabs internal constructor(
      * Can be created using the method [tabsTabTitleStyle].
      */
     @Generated
+    @ExposedCopyVisibility
     data class TabTitleStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -456,6 +463,7 @@ data class Tabs internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Background color of the active tab title.

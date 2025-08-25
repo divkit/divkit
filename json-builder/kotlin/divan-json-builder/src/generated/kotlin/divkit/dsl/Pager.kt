@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, layout_mode`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Pager internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -82,6 +83,7 @@ data class Pager internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.21"
+kotlin = "2.2.10"
 
 jackson = "2.16.0"
 jsonAssert = "1.5.1"

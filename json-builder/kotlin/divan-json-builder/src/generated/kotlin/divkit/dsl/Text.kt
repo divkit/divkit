@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, text`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Text internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -108,6 +109,7 @@ data class Text internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Text.
@@ -495,6 +497,7 @@ data class Text internal constructor(
      * Required parameters: `text`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Ellipsis internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -511,6 +514,7 @@ data class Text internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Actions when clicking on a crop marker.
@@ -550,6 +554,7 @@ data class Text internal constructor(
      * Required parameters: `url, start`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Image internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -572,6 +577,7 @@ data class Text internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             val accessibility: Property<Accessibility>?,
             /**
@@ -650,6 +656,7 @@ data class Text internal constructor(
          * Can be created using the method [textImageAccessibility].
          */
         @Generated
+        @ExposedCopyVisibility
         data class Accessibility internal constructor(
             @JsonIgnore
             val properties: Properties,
@@ -664,6 +671,7 @@ data class Text internal constructor(
                 )
             )
 
+            @ExposedCopyVisibility
             data class Properties internal constructor(
                 /**
                  * Element description. It is used as the main description for screen reading applications.
@@ -702,6 +710,7 @@ data class Text internal constructor(
      * Can be created using the method [textRange].
      */
     @Generated
+    @ExposedCopyVisibility
     data class Range internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -736,6 +745,7 @@ data class Text internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Action when clicking on text.

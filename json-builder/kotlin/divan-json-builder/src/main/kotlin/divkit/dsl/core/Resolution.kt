@@ -1,14 +1,14 @@
 package divkit.dsl.core
 
-import kotlin.Any
-
 sealed interface Resolution<T>
 
+@ExposedCopyVisibility
 data class FinalResolution<T : Any> internal constructor(
     val reference: ReferenceProperty<T>,
     val value: Any,
 ) : Resolution<T>
 
+@ExposedCopyVisibility
 data class ProxyResolution<T> internal constructor(
     val reference: ReferenceProperty<T>,
     val proxy: ReferenceProperty<T>,

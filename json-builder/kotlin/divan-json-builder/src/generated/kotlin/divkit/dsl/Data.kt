@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `states, log_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Data internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -32,6 +33,7 @@ data class Data internal constructor(
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Logging ID.
@@ -84,6 +86,7 @@ data class Data internal constructor(
      * Required parameters: `state_id, div`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class State internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -98,6 +101,7 @@ data class Data internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * State ID.

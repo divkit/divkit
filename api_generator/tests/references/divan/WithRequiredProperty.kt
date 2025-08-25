@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, property`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithRequiredProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class WithRequiredProperty internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val property: Property<String>?,
     ) {

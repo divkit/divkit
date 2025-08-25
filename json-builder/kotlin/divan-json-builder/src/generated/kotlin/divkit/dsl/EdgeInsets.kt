@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [edgeInsets].
  */
 @Generated
+@ExposedCopyVisibility
 data class EdgeInsets internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class EdgeInsets internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Bottom margin.

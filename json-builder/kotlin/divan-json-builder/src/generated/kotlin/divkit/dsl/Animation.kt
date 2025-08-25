@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `name`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Animation internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -45,6 +46,7 @@ data class Animation internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Animation duration in milliseconds.

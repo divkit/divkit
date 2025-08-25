@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, raw_text_variable, pattern_elements, pattern`.
  */
 @Generated
+@ExposedCopyVisibility
 data class FixedLengthInputMask internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -43,6 +44,7 @@ data class FixedLengthInputMask internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * If this option is enabled, the text field contains the mask before being filled in.
@@ -81,6 +83,7 @@ data class FixedLengthInputMask internal constructor(
      * Required parameters: `key`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class PatternElement internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -96,6 +99,7 @@ data class FixedLengthInputMask internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * A character in the template that will be replaced with a user-defined character.

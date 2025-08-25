@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionScrollBy internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -44,6 +45,7 @@ data class ActionScrollBy internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Enables scrolling animation.

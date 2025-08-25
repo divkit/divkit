@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Extension internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -39,6 +40,7 @@ data class Extension internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Extension ID.

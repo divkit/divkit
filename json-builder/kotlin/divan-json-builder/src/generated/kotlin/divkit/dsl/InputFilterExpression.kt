@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, condition`.
  */
 @Generated
+@ExposedCopyVisibility
 data class InputFilterExpression internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class InputFilterExpression internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * [Calculated expression](../../expressions) used to verify the validity of the value.

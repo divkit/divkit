@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, color`.
  */
 @Generated
+@ExposedCopyVisibility
 data class TextRangeMaskParticles internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -44,6 +45,7 @@ data class TextRangeMaskParticles internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * The color of particles on the mask.

@@ -59,6 +59,7 @@ class DivanGenerator(Generator):
         if not has_properties:
             result_declaration += f'data object {entity_name}{entity.supertype_declaration} {{'
         else:
+            result_declaration += '@ExposedCopyVisibility'
             result_declaration += f'data class {entity_name} internal constructor('
             result_declaration += '    @JsonIgnore'
             result_declaration += '    val properties: Properties,'

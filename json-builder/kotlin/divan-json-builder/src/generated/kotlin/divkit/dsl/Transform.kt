@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [transform].
  */
 @Generated
+@ExposedCopyVisibility
 data class Transform internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -38,6 +39,7 @@ data class Transform internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * X coordinate of the rotation axis.

@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, page_width`.
  */
 @Generated
+@ExposedCopyVisibility
 data class PageSize internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class PageSize internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Page width as a percentage of the parent element width.

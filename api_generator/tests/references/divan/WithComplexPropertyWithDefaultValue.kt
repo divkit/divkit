@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithComplexPropertyWithDefaultValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class WithComplexPropertyWithDefaultValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Default value: `{ "value": "Default text" }`.
@@ -62,6 +64,7 @@ data class WithComplexPropertyWithDefaultValue internal constructor(
      * Required parameters: `value`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Property internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -75,6 +78,7 @@ data class WithComplexPropertyWithDefaultValue internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             val value: Property<String>?,
         ) {

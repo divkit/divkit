@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, custom_type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Custom internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -74,6 +75,7 @@ data class Custom internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ArrayValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -38,6 +39,7 @@ data class ArrayValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val value: Property<List<Any>>?,
     ) {

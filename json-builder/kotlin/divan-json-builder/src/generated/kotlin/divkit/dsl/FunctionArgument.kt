@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, name`.
  */
 @Generated
+@ExposedCopyVisibility
 data class FunctionArgument internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -39,6 +40,7 @@ data class FunctionArgument internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Function argument name.

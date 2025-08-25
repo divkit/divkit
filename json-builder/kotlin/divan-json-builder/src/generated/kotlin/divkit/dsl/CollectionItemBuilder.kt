@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `prototypes, data`.
  */
 @Generated
+@ExposedCopyVisibility
 data class CollectionItemBuilder internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -38,6 +39,7 @@ data class CollectionItemBuilder internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Data that will be used to create collection elements.
@@ -69,6 +71,7 @@ data class CollectionItemBuilder internal constructor(
      * Required parameters: `div`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Prototype internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -84,6 +87,7 @@ data class CollectionItemBuilder internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.

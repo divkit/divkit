@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `changes`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Patch internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -32,6 +33,7 @@ data class Patch internal constructor(
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Element changes.
@@ -76,6 +78,7 @@ data class Patch internal constructor(
      * Required parameters: `id`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Change internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -90,6 +93,7 @@ data class Patch internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * ID of an element to be replaced or removed.

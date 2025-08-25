@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Separator internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -82,6 +83,7 @@ data class Separator internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -318,6 +320,7 @@ data class Separator internal constructor(
      * Can be created using the method [separatorDelimiterStyle].
      */
     @Generated
+    @ExposedCopyVisibility
     data class DelimiterStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -332,6 +335,7 @@ data class Separator internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Separator color. To prevent the separator from being displayed, set transparency in the alpha channel. For example, `#00FFFFFF`.

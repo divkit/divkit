@@ -10,6 +10,7 @@ sealed interface ArrayElement<T>
 /**
  * [ArrayElement] that resolves as a literal value.
  */
+@ExposedCopyVisibility
 data class LiteralArrayElement<T> internal constructor(
     val value: T,
 ) : ArrayElement<T>
@@ -17,6 +18,7 @@ data class LiteralArrayElement<T> internal constructor(
 /**
  * [ArrayElement] that resolves as an expression.
  */
+@ExposedCopyVisibility
 data class ExpressionArrayElement<T> internal constructor(
     val expression: String,
 ) : ArrayElement<T>

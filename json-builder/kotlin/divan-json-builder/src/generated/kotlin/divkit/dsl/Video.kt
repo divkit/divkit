@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `video_sources, type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Video internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -86,6 +87,7 @@ data class Video internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

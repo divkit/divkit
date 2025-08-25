@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, is_on_variable`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Switch internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -74,6 +75,7 @@ data class Switch internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

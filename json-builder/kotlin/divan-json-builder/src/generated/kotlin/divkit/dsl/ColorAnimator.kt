@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, type, id, end_value, duration`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ColorAnimator internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -50,6 +51,7 @@ data class ColorAnimator internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.

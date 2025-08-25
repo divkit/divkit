@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value_type, type, name, get`.
  */
 @Generated
+@ExposedCopyVisibility
 data class PropertyVariable internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -44,6 +45,7 @@ data class PropertyVariable internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Value. Supports expressions for property initialization.

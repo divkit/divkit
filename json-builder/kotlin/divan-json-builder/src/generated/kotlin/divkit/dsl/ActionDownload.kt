@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `url, type`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionDownload internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class ActionDownload internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Actions in case of unsuccessful loading if the host reported it or the waiting time expired.

@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [pivotFixed].
  */
 @Generated
+@ExposedCopyVisibility
 data class PivotFixed internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -39,6 +40,7 @@ data class PivotFixed internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).

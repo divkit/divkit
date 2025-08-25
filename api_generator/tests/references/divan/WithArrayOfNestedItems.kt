@@ -27,6 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@ExposedCopyVisibility
 data class WithArrayOfNestedItems internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class WithArrayOfNestedItems internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         val items: Property<List<Item>>?,
     ) {
@@ -59,6 +61,7 @@ data class WithArrayOfNestedItems internal constructor(
      * Required parameters: `property, entity`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -73,6 +76,7 @@ data class WithArrayOfNestedItems internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             val entity: Property<Entity>?,
             val property: Property<String>?,

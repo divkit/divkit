@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value_variable, type, options`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Select internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -84,6 +85,7 @@ data class Select internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -332,6 +334,7 @@ data class Select internal constructor(
      * Required parameters: `value`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Option internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -346,6 +349,7 @@ data class Select internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * Text description of the option displayed in the list. If not set, `value` is used instead.

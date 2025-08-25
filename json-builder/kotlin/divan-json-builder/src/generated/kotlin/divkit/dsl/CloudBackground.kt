@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, corner_radius, color`.
  */
 @Generated
+@ExposedCopyVisibility
 data class CloudBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class CloudBackground internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Fill color.

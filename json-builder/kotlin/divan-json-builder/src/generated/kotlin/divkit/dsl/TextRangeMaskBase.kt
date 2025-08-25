@@ -21,6 +21,7 @@ import kotlin.collections.Map
  * Can be created using the method [textRangeMaskBase].
  */
 @Generated
+@ExposedCopyVisibility
 data class TextRangeMaskBase internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -34,6 +35,7 @@ data class TextRangeMaskBase internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.

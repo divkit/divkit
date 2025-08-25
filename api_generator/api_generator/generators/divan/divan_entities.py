@@ -320,6 +320,7 @@ class DivanEntity(Entity):
 
     def properties_class_declaration(self, translations: Dict[str, str]) -> Text:
         declaration = Text()
+        declaration += '@ExposedCopyVisibility'
         declaration += 'data class Properties internal constructor('
         for prop in cast(List[DivanProperty], self.instance_properties):
             declaration += f'{prop.constructor_parameter_declaration(translations, self.remove_prefix).indented(indent_width=4)},'

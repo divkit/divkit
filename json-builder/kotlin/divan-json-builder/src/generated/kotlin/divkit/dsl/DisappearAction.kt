@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class DisappearAction internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -48,6 +49,7 @@ data class DisappearAction internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.

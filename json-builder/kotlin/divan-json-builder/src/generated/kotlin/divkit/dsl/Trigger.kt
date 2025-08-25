@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `condition, actions`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Trigger internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class Trigger internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Action when a trigger is activated.

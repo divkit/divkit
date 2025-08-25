@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, image_url`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ImageBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -46,6 +47,7 @@ data class ImageBackground internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Image transparency.

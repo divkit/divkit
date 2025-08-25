@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Timer internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -43,6 +44,7 @@ data class Timer internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).

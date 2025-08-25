@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `value`.
  */
 @Generated
+@ExposedCopyVisibility
 data class SizeUnitValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -37,6 +38,7 @@ data class SizeUnitValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>

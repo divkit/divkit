@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, insets, image_url`.
  */
 @Generated
+@ExposedCopyVisibility
 data class NinePatchBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -41,6 +42,7 @@ data class NinePatchBackground internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Image URL.

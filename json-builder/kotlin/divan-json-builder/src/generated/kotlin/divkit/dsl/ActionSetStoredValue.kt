@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type, name, lifetime`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionSetStoredValue internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class ActionSetStoredValue internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Duration of storage in seconds.

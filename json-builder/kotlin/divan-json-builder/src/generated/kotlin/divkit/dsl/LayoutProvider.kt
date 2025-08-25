@@ -21,6 +21,7 @@ import kotlin.collections.Map
  * Can be created using the method [layoutProvider].
  */
 @Generated
+@ExposedCopyVisibility
 data class LayoutProvider internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -35,6 +36,7 @@ data class LayoutProvider internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Name of the variable that stores the element’s height.

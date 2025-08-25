@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `ratio`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Aspect internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -38,6 +39,7 @@ data class Aspect internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * `height = width / ratio`.

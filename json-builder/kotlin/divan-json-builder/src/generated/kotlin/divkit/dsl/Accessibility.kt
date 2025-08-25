@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [accessibility].
  */
 @Generated
+@ExposedCopyVisibility
 data class Accessibility internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -42,6 +43,7 @@ data class Accessibility internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Element description. It is used as the main description for screen reading applications.

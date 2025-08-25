@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable, type, label_id, condition`.
  */
 @Generated
+@ExposedCopyVisibility
 data class InputValidatorExpression internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -43,6 +44,7 @@ data class InputValidatorExpression internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Determines whether the empty field value is valid.

@@ -23,6 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [focus].
  */
 @Generated
+@ExposedCopyVisibility
 data class Focus internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class Focus internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Background of an element when it is in focus. It can contain multiple layers.
@@ -80,6 +82,7 @@ data class Focus internal constructor(
      * Can be created using the method [focusNextFocusIds].
      */
     @Generated
+    @ExposedCopyVisibility
     data class NextFocusIds internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -97,6 +100,7 @@ data class Focus internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             val down: Property<String>?,
             val forward: Property<String>?,

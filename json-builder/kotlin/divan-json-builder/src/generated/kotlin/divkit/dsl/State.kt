@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, states`.
  */
 @Generated
+@ExposedCopyVisibility
 data class State internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -87,6 +88,7 @@ data class State internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.
@@ -352,6 +354,7 @@ data class State internal constructor(
      * Required parameters: `state_id`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -369,6 +372,7 @@ data class State internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * State appearance animation. Use `transition_in` instead.

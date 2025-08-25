@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, radius`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Blur internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -40,6 +41,7 @@ data class Blur internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.

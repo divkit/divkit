@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, gif_url`.
  */
 @Generated
+@ExposedCopyVisibility
 data class GifImage internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -89,6 +90,7 @@ data class GifImage internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Accessibility settings.

@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, animator_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionAnimatorStart internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -47,6 +48,7 @@ data class ActionAnimatorStart internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * ID of the animator launched.

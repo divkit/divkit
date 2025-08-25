@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value`.
  */
 @Generated
+@ExposedCopyVisibility
 data class Dimension internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -39,6 +40,7 @@ data class Dimension internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * Value.

@@ -25,6 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, request, container_id`.
  */
 @Generated
+@ExposedCopyVisibility
 data class ActionSubmit internal constructor(
     @JsonIgnore
     val properties: Properties,
@@ -43,6 +44,7 @@ data class ActionSubmit internal constructor(
         )
     )
 
+    @ExposedCopyVisibility
     data class Properties internal constructor(
         /**
          * ID of the container with the variables to be sent.
@@ -80,6 +82,7 @@ data class ActionSubmit internal constructor(
      * Required parameters: `url`.
      */
     @Generated
+    @ExposedCopyVisibility
     data class Request internal constructor(
         @JsonIgnore
         val properties: Properties,
@@ -95,6 +98,7 @@ data class ActionSubmit internal constructor(
             )
         )
 
+        @ExposedCopyVisibility
         data class Properties internal constructor(
             /**
              * HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex JSON-builders.
@@ -134,6 +138,7 @@ data class ActionSubmit internal constructor(
          * Required parameters: `value, name`.
          */
         @Generated
+        @ExposedCopyVisibility
         data class Header internal constructor(
             @JsonIgnore
             val properties: Properties,
@@ -148,6 +153,7 @@ data class ActionSubmit internal constructor(
                 )
             )
 
+            @ExposedCopyVisibility
             data class Properties internal constructor(
                 val name: Property<String>?,
                 val value: Property<String>?,
