@@ -139,6 +139,7 @@
           "$ref": "div-text-range-mask.json",
           "$description": "translations.json#/div_text_range_mask",
           "platforms": [
+            "ios",
             "web"
           ]
         }

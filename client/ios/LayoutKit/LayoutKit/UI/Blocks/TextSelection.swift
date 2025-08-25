@@ -22,7 +22,7 @@ final class TextSelection {
   }
 
   struct TextModel {
-    let layout: AttributedStringLayout<ActionsAttribute>
+    let layout: StringLayout
     let text: NSAttributedString
 
     var maxSymbolIndex: Int {
@@ -47,7 +47,6 @@ final class TextSelection {
 
       return 0..<maxSymbolIndex
     }
-
   }
 
   private(set) var range: Range<Int>
@@ -195,7 +194,6 @@ final class TextSelection {
       break
     }
   }
-
 }
 
 extension AttributedStringLayout {

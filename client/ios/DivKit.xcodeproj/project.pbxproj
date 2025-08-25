@@ -1745,6 +1745,11 @@
 						CreatedOnToolsVersion = 16.1;
 					};
 				};
+				textSettings = {
+            indentWidth = 2;
+            tabWidth = 2;
+            usesTabs = 0;
+        };
 			};
 			buildConfigurationList = 8C9844F62864C2CC001ED5F3 /* Build configuration list for PBXProject "DivKit" */;
 			compatibilityVersion = "Xcode 13.0";

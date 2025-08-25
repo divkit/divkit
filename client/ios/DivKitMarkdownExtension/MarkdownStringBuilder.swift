@@ -100,7 +100,7 @@ struct MarkdownStringBuilder: MarkupVisitor {
       return result
     }
 
-    let action = ActionsAttribute(actions: [.init(url: url, path: path)])
+    let action = RunWithBoundsAttribute(actions: [.init(url: url, path: path)], mask: nil)
     action.apply(to: result, at: CFRange(location: 0, length: result.length - 1))
     result.addAttribute(.foregroundColor, value: UIColor.systemBlue)
 

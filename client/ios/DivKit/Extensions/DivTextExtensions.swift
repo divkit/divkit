@@ -176,8 +176,8 @@ extension DivText: DivBlockModeling {
     CFAttributedStringReplaceString(attributedString, CFRange(), text)
     let fullRange = CFRange(location: 0, length: length)
     typo.apply(to: attributedString, at: fullRange)
+    attributedString.apply(actions: actions, mask: nil, at: fullRange)
     ranges?.forEach { apply($0, to: attributedString, context: context, fontParams: fontParams) }
-    attributedString.apply(actions, at: fullRange)
     CFAttributedStringEndEditing(attributedString)
     return attributedString
   }
@@ -213,6 +213,10 @@ extension DivText: DivBlockModeling {
       return
     }
 
+    let actualEnd = min(end, stringLength)
+    let cfRange = CFRange(location: start, length: actualEnd - start)
+    let mask = range.makeMask(range: cfRange, resolver: expressionResolver)
+
     let rangeVariationSettings = range.resolveFontVariationSettings(expressionResolver)?
       .mapValues { $0 as? NSNumber }.filteringNilValues()
     let rangeFontParams = FontParams(
@@ -229,8 +233,9 @@ extension DivText: DivBlockModeling {
     let fontTypo = rangeFontParams == fontParams
       ? nil
       : Typo(font: context.font(rangeFontParams))
-    let colorTypo = range.resolveTextColor(expressionResolver)
-      .map { Typo(color: $0) }
+    let colorTypo = mask?.isEnabled == true
+      ? Typo(color: .black.withAlphaComponent(0))
+      : range.resolveTextColor(expressionResolver).map { Typo(color: $0) }
     let heightTypo = range.resolveLineHeight(expressionResolver)
       .map { Typo(height: CGFloat($0)) }
     let spacingTypo = range.resolveLetterSpacing(expressionResolver)
@@ -256,15 +261,13 @@ extension DivText: DivBlockModeling {
       shadowTypo,
     ].compactMap { $0 }
     let actions = range.actions?.uiActions(context: context)
-    if typos.isEmpty, actions == nil, range.background == nil, range.border == nil {
+    if typos.isEmpty, actions == nil, range.background == nil, range.border == nil,
+       range.mask == nil {
       return
     }
 
-    let actualEnd = min(end, stringLength)
-    let cfRange = CFRange(location: start, length: actualEnd - start)
     typos.forEach { $0.apply(to: string, at: cfRange) }
-    string.apply(actions, at: cfRange)
-
+    string.apply(actions: actions, mask: mask, at: cfRange)
     [
       range.makeBackground(context: context, range: cfRange),
       range.makeBorder(range: cfRange, resolver: expressionResolver),
@@ -310,12 +313,14 @@ extension DivText: FontParamsProvider {}
 
 extension CFMutableAttributedString {
   fileprivate func apply(
-    _ actions: [UserInterfaceAction]?,
+    actions: [UserInterfaceAction]?,
+    mask: TextMask?,
     at range: CFRange
   ) {
-    if let actions {
-      ActionsAttribute(actions: actions).apply(to: self, at: range)
-    }
+    RunWithBoundsAttribute(
+      actions: actions ?? [],
+      mask: mask
+    ).apply(to: self, at: range)
   }
 }
 
@@ -434,6 +439,42 @@ extension DivText.Range {
         cornerRadius: CGFloat(cornerRadius),
         range: range.location..<(range.location + range.length),
         insets: insets
+      )
+    }
+  }
+
+  fileprivate func makeMask(
+    range: CFRange,
+    resolver: ExpressionResolver
+  ) -> TextMask? {
+    guard let mask else { return nil }
+
+    switch mask {
+    case let .divTextRangeMaskSolid(solid):
+      guard let color = solid.resolveColor(resolver) else {
+        return nil
+      }
+      return TextMask(
+        color: color.cgColor,
+        range: range,
+        isEnabled: solid.resolveIsEnabled(resolver)
+      )
+
+    case let .divTextRangeMaskParticles(particles):
+      guard let color = particles.resolveColor(resolver) else {
+        return nil
+      }
+      let isAnimated = particles.resolveIsAnimated(resolver)
+      let density = particles.resolveDensity(resolver)
+      let particleSize = CGFloat(particles.particleSize.resolveValue(resolver) ?? 1)
+
+      return TextMask(
+        color: color.cgColor,
+        range: range,
+        isAnimated: isAnimated,
+        particleSize: particleSize,
+        density: density,
+        isEnabled: particles.resolveIsEnabled(resolver)
       )
     }
   }

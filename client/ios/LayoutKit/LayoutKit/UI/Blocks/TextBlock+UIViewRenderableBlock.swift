@@ -3,6 +3,8 @@ import Foundation
 import UIKit
 import VGSL
 
+typealias StringLayout = AttributedStringLayout<RunWithBoundsAttribute>
+
 extension TextBlock {
   public static func makeBlockView() -> BlockView { TextBlockContainer() }
 
@@ -208,13 +210,22 @@ private final class TextBlockView: UIView {
 
   private var lastElementIndex: Int?
 
+  private var masksLayer: TextMasksLayer?
+
   private var selection: TextSelection? {
     didSet {
       setNeedsDisplay()
     }
   }
 
-  private var textLayout: AttributedStringLayout<ActionsAttribute>?
+  private var textLayout: StringLayout? {
+    didSet {
+      let runsWithMasks = textLayout?.runsWithMasks ?? []
+      if oldValue?.runsWithMasks != runsWithMasks {
+        updateMasksLayer(with: runsWithMasks)
+      }
+    }
+  }
 
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
@@ -281,7 +292,7 @@ private final class TextBlockView: UIView {
       rect: rect,
       textInsets: model.additionalTextInsets,
       truncationToken: model.truncationToken,
-      actionKey: ActionsAttribute.Key,
+      actionKey: RunWithBoundsAttribute.Key,
       backgroundKey: BackgroundAttribute.Key,
       borderKey: BorderAttribute.Key,
       rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
@@ -335,7 +346,6 @@ private final class TextBlockView: UIView {
     )
 
     selection = TextSelection(textModel: textModel, point: point) { [weak self] in
-
       guard let delayedSelectionTapGesture = self?.delayedSelectionTapGesture else { return }
       self?.handleSelectionTapEnded(delayedSelectionTapGesture)
       self?.delayedSelectionTapGesture = nil
@@ -353,6 +363,23 @@ private final class TextBlockView: UIView {
       name: UIMenuController.willHideMenuNotification,
       object: nil
     )
+  }
+
+  private func updateMasksLayer(with runs: [MaskRun]) {
+    guard !runs.isEmpty else {
+      masksLayer?.removeFromSuperlayer()
+      masksLayer = nil
+      return
+    }
+
+    if masksLayer == nil {
+      let maskLayer = TextMasksLayer()
+      self.masksLayer = maskLayer
+      layer.addSublayer(maskLayer)
+    }
+
+    masksLayer?.frame = bounds
+    masksLayer?.update(with: runs)
   }
 
   private func configureRecognizers() {
@@ -579,10 +606,10 @@ extension NSAttributedString {
   fileprivate var hasActions: Bool {
     var hasActions = false
     enumerateAttribute(
-      ActionsAttribute.Key,
+      RunWithBoundsAttribute.Key,
       in: NSRange(location: 0, length: length)
     ) { value, _, stop in
-      if value != nil {
+      if (value as? RunWithBoundsAttribute)?.actions.isEmpty == false {
         hasActions = true
         stop.pointee = true
       }

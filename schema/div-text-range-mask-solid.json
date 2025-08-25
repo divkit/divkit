@@ -18,7 +18,8 @@
         }
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ],
       "required": [
         "color",

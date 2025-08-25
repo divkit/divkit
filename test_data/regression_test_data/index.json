@@ -1884,6 +1884,7 @@
     {
       "title": "Text mask",
       "platforms": [
+        "ios",
         "web"
       ],
       "tags": [
