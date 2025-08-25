@@ -696,10 +696,14 @@
             Promise.resolve()
                 .then(() => onSubmit(action, vals))
                 .then(() => {
-                    execAnyActions(origAction.on_success_actions);
+                    execAnyActions(origAction.on_success_actions, {
+                        componentContext
+                    });
                 })
                 .catch(() => {
-                    execAnyActions(origAction.on_fail_actions);
+                    execAnyActions(origAction.on_fail_actions, {
+                        componentContext
+                    });
                 });
 
             return;
@@ -746,7 +750,9 @@
             if (!res.ok) {
                 throw new Error('Response is not ok');
             }
-            execAnyActions(origAction.on_success_actions);
+            execAnyActions(origAction.on_success_actions, {
+                componentContext
+            });
         }).catch(err => {
             log(wrapError(new Error('Failed to submit'), {
                 additional: {
@@ -754,7 +760,9 @@
                     originalError: err
                 }
             }));
-            execAnyActions(origAction.on_fail_actions);
+            execAnyActions(origAction.on_fail_actions, {
+                componentContext
+            });
         });
     }
 
@@ -1044,13 +1052,19 @@
                             url
                         }
                     }));
-                    execAnyActions(callbacks?.on_fail_actions);
+                    execAnyActions(callbacks?.on_fail_actions, {
+                        componentContext
+                    });
                     return;
                 }
                 if (applyPatchInternal(json, log, url)) {
-                    execAnyActions(callbacks?.on_success_actions);
+                    execAnyActions(callbacks?.on_success_actions, {
+                        componentContext
+                    });
                 } else {
-                    execAnyActions(callbacks?.on_fail_actions);
+                    execAnyActions(callbacks?.on_fail_actions, {
+                        componentContext
+                    });
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {
@@ -1059,7 +1073,9 @@
                         originalError: err
                     }
                 }));
-                execAnyActions(callbacks?.on_fail_actions);
+                execAnyActions(callbacks?.on_fail_actions, {
+                    componentContext
+                });
             });
         } else {
             log(wrapError(new Error('Missing url in download action'), {
