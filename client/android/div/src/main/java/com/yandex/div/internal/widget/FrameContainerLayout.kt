@@ -37,9 +37,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private val paddingBottomWithForeground: Int
         get() = max(paddingBottom, foregroundPadding.bottom)
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    var measureAllChildren = false
-
     private val measuredMatchParentChildren = mutableSetOf<View>()
     private val skippedMatchParentChildren = mutableSetOf<View>()
     private val matchParentChildren = mutableSetOf<View>()
@@ -73,7 +70,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
             else -> makeExactSpec((MeasureSpec.getSize(widthMeasureSpec) / aspectRatio).roundToInt())
         }
 
-        forEach(!measureAllChildren) { measureChildWithDefinedSize(it, widthMeasureSpec, heightSpec) }
+        forEach(significantOnly = true) { measureChildWithDefinedSize(it, widthMeasureSpec, heightSpec) }
 
         matchParentChildren += measuredMatchParentChildren
         matchParentChildren += skippedMatchParentChildren
@@ -112,9 +109,8 @@ open class FrameContainerLayout @JvmOverloads constructor(
             exactHeight -> !matchParentWidth
             exactWidth -> !matchParentHeight
             !matchParentWidth -> true
-            matchParentHeight -> false
-            lp.height == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> !useAspect
-            else -> true
+            lp.height > 0 -> true
+            else -> false
         }
         if (!hasDefinedSize) {
             if (lp.matchDynamicSize(exactWidth, exactHeight)) {
@@ -187,10 +183,10 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private fun considerMatchParentMargins(child: View, exactWidth: Boolean, exactHeight: Boolean) {
         val lp = child.lp
         if (lp.matchDynamicWidth(exactWidth)) {
-            updateMaxWidth(lp.horizontalMargins)
+            updateMaxWidth(child.minimumWidth + lp.horizontalMargins)
         }
         if (lp.matchDynamicHeight(exactHeight)) {
-            updateMaxHeight(lp.verticalMargins)
+            updateMaxHeight(child.minimumHeight + lp.verticalMargins)
         }
     }
 
@@ -224,7 +220,9 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
     private fun remeasureWrapContentConstrainedChildren(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (!isDynamicAspect(widthMeasureSpec)) return
-        forEach(!measureAllChildren) { remeasureWrapContentConstrainedChild(it, widthMeasureSpec, heightMeasureSpec) }
+        forEach(significantOnly = true) {
+            remeasureWrapContentConstrainedChild(it, widthMeasureSpec, heightMeasureSpec)
+        }
     }
 
     private fun remeasureWrapContentConstrainedChild(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -239,19 +237,13 @@ open class FrameContainerLayout @JvmOverloads constructor(
         val childHorizontalPadding = horizontalPadding + lp.horizontalMargins
         val childVerticalPadding = verticalPadding + lp.verticalMargins
 
-        val childWidthMeasureSpec = if (lp.width == MATCH_PARENT) {
-            makeExactSpec((measuredWidth - childHorizontalPadding).coerceAtLeast(0))
-        } else {
-            getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding,
-                lp.width, child.minimumWidth, lp.maxWidth)
-        }
+        val parentWidth = if (lp.width == MATCH_PARENT) makeExactSpec(measuredWidth) else widthMeasureSpec
+        val childWidthMeasureSpec =
+            getChildMeasureSpec(parentWidth, childHorizontalPadding, lp.width, child.minimumWidth, lp.maxWidth)
 
-        val childHeightMeasureSpec = if (lp.height == MATCH_PARENT) {
-            makeExactSpec((measuredHeight - childVerticalPadding).coerceAtLeast(0))
-        } else {
-            getChildMeasureSpec(heightMeasureSpec, childVerticalPadding,
-                lp.height, child.minimumHeight, lp.maxHeight)
-        }
+        val parentHeight = if (lp.height == MATCH_PARENT) makeExactSpec(measuredHeight) else heightMeasureSpec
+        val childHeightMeasureSpec =
+            getChildMeasureSpec(parentHeight, childVerticalPadding, lp.height, child.minimumHeight, lp.maxHeight)
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
         if (skippedMatchParentChildren.contains(child)) {

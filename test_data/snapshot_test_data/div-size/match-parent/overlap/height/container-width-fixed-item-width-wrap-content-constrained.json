@@ -1,0 +1,209 @@
+{
+  "description": "Overlap container with fixed width and wrap_content height and items with wrap_content constrained width and match_parent height with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 360
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "orientation": "overlap",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "margins": {
+        "bottom": 16
+      }
+    },
+    "item": {
+      "type": "container",
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "items": [
+        {
+          "type": "text",
+          "height": {
+            "type": "fixed",
+            "$value": "content_size"
+          },
+          "paddings": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000FF",
+              "width": 5
+            }
+          },
+          "font_size": 16,
+          "$text": "title"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 80,\nno constraints",
+                  "content_size": 80
+                },
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 100,\nno constraints",
+                  "content_size": 100,
+                  "margins": {
+                    "left": 185
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 90
+                    }
+                  },
+                  "title": "content height 80,\nmin height = 90",
+                  "content_size": 80
+                },
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 100,\nno constraints",
+                  "content_size": 100,
+                  "margins": {
+                    "left": 185
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 80
+                    }
+                  },
+                  "title": "content height 100,\nmax height = 80",
+                  "content_size": 100
+                },
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 90,\nno constraints",
+                  "content_size": 90,
+                  "margins": {
+                    "left": 185
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 80,\nno constraints",
+                  "content_size": 80
+                },
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 90
+                    }
+                  },
+                  "title": "content height 70,\nmin height = 90",
+                  "content_size": 70,
+                  "margins": {
+                    "left": 185
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "title": "content height 80,\nno constraints",
+                  "content_size": 80
+                },
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 90
+                    }
+                  },
+                  "title": "content height 100,\nmax height = 90",
+                  "content_size": 100,
+                  "margins": {
+                    "left": 185
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

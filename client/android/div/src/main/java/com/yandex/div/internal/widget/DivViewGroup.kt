@@ -125,7 +125,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.MATCH_PARENT -> {
-                        resultSize = size
+                        resultSize = min(max(size, minSize), maxSize)
                         resultMode = MeasureSpec.EXACTLY
                     }
 
@@ -152,7 +152,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.MATCH_PARENT -> {
-                        resultSize = size
+                        resultSize = min(max(size, minSize), maxSize)
                         resultMode = MeasureSpec.AT_MOST
                     }
 
@@ -179,8 +179,8 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.MATCH_PARENT -> {
-                        resultSize = size
-                        resultMode = MeasureSpec.UNSPECIFIED
+                        resultSize = min(max(size, minSize), maxSize)
+                        resultMode = MeasureSpec.AT_MOST
                     }
 
                     LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {

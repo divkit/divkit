@@ -1,0 +1,223 @@
+{
+  "description": "Overlap container with wrap_content width and fixed height and items with match_parent height and match_parent width with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 85
+      },
+      "orientation": "overlap",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "margins": {
+        "bottom": 16
+      }
+    },
+    "item": {
+      "type": "container",
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "items": [
+        {
+          "type": "text",
+          "width": {
+            "type": "fixed",
+            "$value": "content_size"
+          },
+          "paddings": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000FF",
+              "width": 5
+            }
+          },
+          "font_size": 16,
+          "$text": "title"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 300, no constraints",
+                  "content_size": 300,
+                  "margins": {
+                    "bottom": 45
+                  }
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 360, no constraints",
+                  "content_size": 360,
+                  "margins": {
+                    "top": 45
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 320
+                    }
+                  },
+                  "title": "content width 300, min width = 320",
+                  "content_size": 300,
+                  "margins": {
+                    "bottom": 45
+                  }
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 360, no constraints",
+                  "content_size": 360,
+                  "margins": {
+                    "top": 45
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 300
+                    }
+                  },
+                  "title": "content width 360, max width = 300",
+                  "content_size": 360,
+                  "margins": {
+                    "bottom": 45
+                  }
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 320, no constraints",
+                  "content_size": 320,
+                  "margins": {
+                    "top": 45
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 300, no constraints",
+                  "content_size": 300,
+                  "margins": {
+                    "bottom": 45
+                  }
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 320
+                    }
+                  },
+                  "title": "content width 280, min width = 320",
+                  "content_size": 280,
+                  "margins": {
+                    "top": 45
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "title": "content width 300, no constraints",
+                  "content_size": 300,
+                  "margins": {
+                    "bottom": 45
+                  }
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 320
+                    }
+                  },
+                  "title": "content width 360, max width = 320",
+                  "content_size": 360,
+                  "margins": {
+                    "top": 45
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

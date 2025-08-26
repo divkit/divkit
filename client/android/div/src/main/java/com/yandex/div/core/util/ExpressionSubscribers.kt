@@ -36,6 +36,10 @@ internal fun ExpressionSubscriber.observeSize(
         is DivSize.MatchParent -> {
             val matchParentSize = size.value
             addSubscription(matchParentSize.weight?.observe(resolver, callback))
+            addSubscription(matchParentSize.minSize?.value?.observe(resolver, callback))
+            addSubscription(matchParentSize.minSize?.unit?.observe(resolver, callback))
+            addSubscription(matchParentSize.maxSize?.value?.observe(resolver, callback))
+            addSubscription(matchParentSize.maxSize?.unit?.observe(resolver, callback))
         }
 
         is DivSize.WrapContent -> {

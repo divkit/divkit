@@ -44,6 +44,10 @@ internal fun DivSize?.equalsToConstant(other: DivSize?): Boolean {
         is DivSize.MatchParent -> {
             other is DivSize.MatchParent
                 && value.weight.equalsToConstant(other.value.weight)
+                && value.minSize?.value.equalsToConstant(other.value.minSize?.value)
+                && value.minSize?.unit.equalsToConstant(other.value.minSize?.unit)
+                && value.maxSize?.value.equalsToConstant(other.value.maxSize?.value)
+                && value.maxSize?.unit.equalsToConstant(other.value.maxSize?.unit)
         }
 
         is DivSize.WrapContent -> {
@@ -63,7 +67,13 @@ internal fun DivSize?.isConstant(): Boolean {
 
         is DivSize.Fixed -> value.value.isConstant() && value.unit.isConstant()
 
-        is DivSize.MatchParent -> value.weight.isConstantOrNull()
+        is DivSize.MatchParent -> {
+            value.weight.isConstantOrNull()
+                && value.minSize?.value.isConstantOrNull()
+                && value.minSize?.unit.isConstantOrNull()
+                && value.maxSize?.value.isConstantOrNull()
+                && value.maxSize?.unit.isConstantOrNull()
+        }
 
         is DivSize.WrapContent -> {
             value.constrained.isConstantOrNull()

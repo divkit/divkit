@@ -729,7 +729,19 @@ internal class DivBaseBinder @Inject constructor(
         isFocusable = div.focus != null
     }
 
-    private val DivSize.minSize get() = (this as? DivSize.WrapContent)?.value?.minSize
+    private val DivSize.minSize: DivSizeUnitValue? get() {
+        return when (this) {
+            is DivSize.WrapContent -> value.minSize
+            is DivSize.MatchParent -> value.minSize
+            else -> null
+        }
+    }
 
-    private val DivSize.maxSize get() = (this as? DivSize.WrapContent)?.value?.maxSize
+    private val DivSize.maxSize: DivSizeUnitValue? get() {
+        return when (this) {
+            is DivSize.WrapContent -> value.maxSize
+            is DivSize.MatchParent -> value.maxSize
+            else -> null
+        }
+    }
 }
