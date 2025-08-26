@@ -53,7 +53,7 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
     import type { SwitchElements } from '../../types/switch-elements';
-    import type { ComponentContext, PagerRegisterData } from '../../types/componentContext';
+    import type { ComponentContext, ComponentKey, PagerRegisterData } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Variable } from '../../expressions/variable';
@@ -74,6 +74,7 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { componentFakePagerDuplicate } from '../../utils/componentContext';
+    import { isDeepEqual } from '../../utils/isDeepEqual';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
@@ -188,6 +189,7 @@
             div: MaybeMissing<DivBaseData>;
             id?: string | undefined;
             vars?: Map<string, Variable> | undefined;
+            key: ComponentKey;
         }[] = [];
         if (
             componentContext.json.item_builder &&
@@ -197,24 +199,53 @@
             const builder = componentContext.json.item_builder;
             newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
         } else {
-            newItems = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map(it => {
-                return {
-                    div: it
-                };
-            });
+            newItems = (Array.isArray(componentContext.json.items) && componentContext.json.items || [])
+                .map((it, index) => {
+                    return {
+                        div: it,
+                        key: it.id || { index, data: it }
+                    };
+                });
         }
 
         const unusedContexts = new Set(items);
-        const jsonToContextMap = new Map<unknown, ComponentContext>();
+        const keyToContextMap = new Map<unknown, ComponentContext>();
+        let hasDuplicateKeys = false;
 
         if (prevContext === componentContext) {
             items.forEach(context => {
-                jsonToContextMap.set(context.json, context);
+                if (context.key) {
+                    if (typeof context.key === 'string' && keyToContextMap.has(context.key)) {
+                        if (!hasDuplicateKeys) {
+                            hasDuplicateKeys = true;
+                            componentContext.logError(wrapError(new Error('Duplicate key for child elements inside item_builder'), {
+                                additional: {
+                                    key: context.key
+                                }
+                            }));
+                        }
+                    } else {
+                        keyToContextMap.set(
+                            typeof context.key === 'string' ? context.key : context.key.index,
+                            context
+                        );
+                    }
+                }
             });
         }
 
         items = newItems.map((item, index) => {
-            const found = jsonToContextMap.get(item.div);
+            let found = !hasDuplicateKeys && keyToContextMap.get(item.id);
+            let foundByData = keyToContextMap.get(index);
+            if (
+                !found &&
+                !item.id &&
+                typeof item.key === 'object' &&
+                typeof foundByData?.key === 'object' &&
+                isDeepEqual(foundByData.key.data, item.key.data)
+            ) {
+                found = foundByData;
+            }
             if (found) {
                 unusedContexts.delete(found);
                 return found;
@@ -223,7 +254,8 @@
             return componentContext.produceChildContext(item.div, {
                 path: index,
                 variables: item.vars,
-                id: item.id
+                id: item.id,
+                key: item.key
             });
         });
 
@@ -801,7 +833,9 @@
     }
 
     function resnap(): void {
-        scrollToPagerItem(currentItem, false);
+        tick().then(() => {
+            scrollToPagerItem(currentItem, false);
+        });
     }
 
     onMount(() => {

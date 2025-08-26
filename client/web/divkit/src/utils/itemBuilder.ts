@@ -2,7 +2,7 @@ import type { RootCtxValue } from '../context/root';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable } from '../expressions/variable';
 import type { DivBaseData } from '../types/base';
-import type { ComponentContext } from '../types/componentContext';
+import type { ComponentContext, ComponentKey } from '../types/componentContext';
 import type { CollectionItemBuilder } from '../types/itemBuilder';
 
 export function getItemsFromItemBuilder(
@@ -15,6 +15,7 @@ export function getItemsFromItemBuilder(
         div: MaybeMissing<DivBaseData>;
         id?: string | undefined;
         vars?: Map<string, Variable> | undefined;
+        key: ComponentKey;
     }[] = [];
     const prototypes = builder.prototypes;
 
@@ -50,7 +51,8 @@ export function getItemsFromItemBuilder(
                 items.push({
                     div,
                     id,
-                    vars: additionalVars
+                    vars: additionalVars,
+                    key: id || { index, data: it }
                 });
             }
         });

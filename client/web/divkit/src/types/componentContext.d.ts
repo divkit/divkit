@@ -26,6 +26,11 @@ export interface PagerRegisterData {
     destroy: () => void;
 }
 
+export type ComponentKey = string | {
+    index: number;
+    data: object;
+};
+
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
     parent?: ComponentContext;
@@ -45,6 +50,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     states?: Record<string, StateSetter[]>;
     pagers?: Map<string | undefined, PagerData | null>;
     pagerListeners?: Map<string | undefined, PagerListener[]>;
+    key?: ComponentKey;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -76,6 +82,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         fake?: number;
         variables?: Map<string, Variable>;
         id?: string;
+        key?: ComponentKey;
     }): ComponentContext;
     dup(fakeReason: number): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;

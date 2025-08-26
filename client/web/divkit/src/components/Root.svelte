@@ -1997,6 +1997,10 @@
                     set.add(componentContext);
                 }
 
+                if (opts.key) {
+                    componentContext.key = opts.key;
+                }
+
                 if (opts.path !== undefined/*  && !res.isRootState */) {
                     componentContext.path.push(String(opts.path));
                 }

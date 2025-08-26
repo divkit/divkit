@@ -37,7 +37,7 @@
     import type { DivBaseData } from '../../types/base';
     import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
     import type { Variable } from '../../expressions/variable';
-    import type { ComponentContext } from '../../types/componentContext';
+    import type { ComponentContext, ComponentKey } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import { prepareMargins } from '../../utils/container';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
@@ -53,6 +53,8 @@
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { constStore } from '../../utils/constStore';
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
+    import { isDeepEqual } from '../../utils/isDeepEqual';
+    import { wrapError } from '../../utils/wrapError';
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
@@ -121,6 +123,7 @@
             div: MaybeMissing<DivBaseData>;
             id?: string | undefined;
             vars?: Map<string, Variable> | undefined;
+            key: ComponentKey;
         }[] = [];
         if (
             componentContext.json.item_builder &&
@@ -130,24 +133,52 @@
             const builder = componentContext.json.item_builder;
             newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
         } else {
-            newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
+            newItems = (Array.isArray(jsonItems) && jsonItems || []).map((it, index) => {
                 return {
-                    div: it
+                    div: it,
+                    key: it.id || { index, data: it }
                 };
             });
         }
 
         const unusedContexts = new Set(items);
-        const jsonToContextMap = new Map<unknown, ComponentContext>();
+        const keyToContextMap = new Map<unknown, ComponentContext>();
+        let hasDuplicateKeys = false;
 
         if (prevContext === componentContext) {
             items.forEach(context => {
-                jsonToContextMap.set(context.json, context);
+                if (context.key) {
+                    if (typeof context.key === 'string' && keyToContextMap.has(context.key)) {
+                        if (!hasDuplicateKeys) {
+                            hasDuplicateKeys = true;
+                            componentContext.logError(wrapError(new Error('Duplicate key for child elements inside item_builder'), {
+                                additional: {
+                                    key: context.key
+                                }
+                            }));
+                        }
+                    } else {
+                        keyToContextMap.set(
+                            typeof context.key === 'string' ? context.key : context.key.index,
+                            context
+                        );
+                    }
+                }
             });
         }
 
         items = newItems.map((item, index) => {
-            const found = jsonToContextMap.get(item.div);
+            let found = !hasDuplicateKeys && keyToContextMap.get(item.id);
+            let foundByData = keyToContextMap.get(index);
+            if (
+                !found &&
+                !item.id &&
+                typeof item.key === 'object' &&
+                typeof foundByData?.key === 'object' &&
+                isDeepEqual(foundByData.key.data, item.key.data)
+            ) {
+                found = foundByData;
+            }
             if (found) {
                 unusedContexts.delete(found);
                 return found;
@@ -156,7 +187,8 @@
             return componentContext.produceChildContext(item.div, {
                 path: index,
                 variables: item.vars,
-                id: item.id
+                id: item.id,
+                key: item.key
             });
         });
 

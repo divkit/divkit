@@ -1,7 +1,8 @@
 {
   "description": "Check local variable in item without id restores initial value when item builder data changes, index is the same and item data differs.",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "card": {
