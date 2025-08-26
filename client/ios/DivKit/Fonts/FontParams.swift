@@ -50,24 +50,37 @@ extension DivBlockModelingContext {
         if let cached = fontCache[params] {
           return cached
         }
-        let font = makeFont(provider: self.fontProvider, params: params)
+        let font = makeFont(
+          provider: self.fontProvider,
+          params: params,
+          variationFontWeightOverrideEnabled: flagsInfo.variationFontWeightOverrideEnabled
+        )
         fontCache[params] = font
         return font
       }
     } else {
-      makeFont(provider: self.fontProvider, params: params)
+      makeFont(
+        provider: self.fontProvider,
+        params: params,
+        variationFontWeightOverrideEnabled: flagsInfo.variationFontWeightOverrideEnabled
+      )
     }
   }
 }
 
-private func makeFont(provider: DivFontProvider, params: FontParams) -> Font {
+private func makeFont(
+  provider: DivFontProvider,
+  params: FontParams,
+  variationFontWeightOverrideEnabled: Bool = true
+) -> Font {
   var font = provider.font(
     family: params.family,
     weight: params.weight ?? DivFontWeight.regular.toInt(),
     size: params.unit.makeScaledValue(params.size)
   )
   var variationSettings = params.variationSettings ?? [:]
-  if let weight = params.weight, variationSettings["wght"] == nil {
+  if let weight = params.weight, variationSettings["wght"] == nil,
+     variationFontWeightOverrideEnabled {
     variationSettings["wght"] = weight as NSNumber
   }
   font = font.withVariationSettings(axisTagToValue: variationSettings)

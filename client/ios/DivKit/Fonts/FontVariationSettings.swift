@@ -15,6 +15,10 @@ extension Font {
       value: { $0 }
     )
 
+    let currentFontAttributes = fontDescriptor.fontAttributes[
+      kCTFontVariationAttribute as FontDescriptor.AttributeName
+    ] as? [UInt32: NSNumber]
+
     let axisIdKey = "NSCTVariationAxisIdentifier"
     let axisDefaultValueKey = "NSCTVariationAxisDefaultValue"
 
@@ -30,14 +34,13 @@ extension Font {
         axis.0
       },
       valueMapper: { (axis: (UInt32, NSNumber)) -> NSNumber in
-        axisIdToValue[axis.0] ?? axis.1
+        axisIdToValue[axis.0] ?? currentFontAttributes?[axis.0] ?? axis.1
       }
     )
 
     let descriptor = fontDescriptor.addingAttributes([
       kCTFontVariationAttribute as FontDescriptor.AttributeName: axisIdToValueFull,
     ])
-
     return makeFont(descriptor: descriptor, size: pointSize)
   }
 }

@@ -49,6 +49,10 @@ public struct DivFlagsInfo {
   /// Use cache for fonts adjusted by `font_feature_settings` property
   public let fontCacheEnabled: Bool
 
+  /// Defines the `wght` value in font variation settings when either `font_weight` or
+  /// `font_weight_value` is specified.
+  public let variationFontWeightOverrideEnabled: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     useUrlHandlerForVisibilityActions: Bool = false,
@@ -57,7 +61,8 @@ public struct DivFlagsInfo {
     useTooltipLegacyWidth: Bool = false,
     initializeTriggerOnSet: Bool = true,
     defaultTextAutoEllipsize: Bool = true,
-    fontCacheEnabled: Bool = true
+    fontCacheEnabled: Bool = true,
+    variationFontWeightOverrideEnabled: Bool = true
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
     self.imageBlurPreferMetal = imageBlurPreferMetal
@@ -66,6 +71,6 @@ public struct DivFlagsInfo {
     self.initializeTriggerOnSet = initializeTriggerOnSet
     self.defaultTextAutoEllipsize = defaultTextAutoEllipsize
     self.fontCacheEnabled = fontCacheEnabled
+    self.variationFontWeightOverrideEnabled = variationFontWeightOverrideEnabled
   }
-
 }
