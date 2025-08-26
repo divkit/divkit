@@ -1,7 +1,7 @@
 package divkit.convension
 
-import com.yandex.div.gradle.PublicationType
-import com.yandex.div.gradle.optProperty
+import com.yandex.divkit.gradle.PublicationType
+import com.yandex.divkit.gradle.optProperty
 import java.net.URI
 
 plugins {

@@ -1,8 +1,8 @@
 package divkit.convension
 
-import com.yandex.div.gradle.PublicationType
-import com.yandex.div.gradle.Version
-import com.yandex.div.gradle.optProperty
+import com.yandex.divkit.gradle.PublicationType
+import com.yandex.divkit.gradle.Version
+import com.yandex.divkit.gradle.optProperty
 
 val versionFile = rootProject.layout.projectDirectory.file("../../version")
 val version = providers.fileContents(versionFile).asText.get()

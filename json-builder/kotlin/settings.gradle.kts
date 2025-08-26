@@ -14,3 +14,4 @@ plugins {
 
 include(":divan-json-builder")
 include(":legacy-json-builder")
+include(":lint-rules")

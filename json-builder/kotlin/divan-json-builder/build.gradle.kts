@@ -30,7 +30,6 @@ dependencies {
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
 
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.engine)
+    testImplementation(kotlin("test"))
     testImplementation(libs.jsonAssert)
 }

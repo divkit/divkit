@@ -1,21 +1,25 @@
 [versions]
 kotlin = "2.2.10"
 
+detekt = "1.23.8"
+
 jackson = "2.16.0"
 jsonAssert = "1.5.1"
-junit5 = "5.10.1"
 
 [libraries]
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
+assertj-core = { module = "org.assertj:assertj-core", version = "3.27.3" }
+
+detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
+
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 
-junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 jsonAssert = { module = "org.skyscreamer:jsonassert", version.ref = "jsonAssert" }
 
 nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
