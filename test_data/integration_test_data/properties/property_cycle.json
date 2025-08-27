@@ -45,7 +45,9 @@
           "value": "Variable 'title' is missing. Expression: @{title}"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

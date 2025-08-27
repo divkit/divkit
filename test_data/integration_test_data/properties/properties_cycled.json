@@ -53,7 +53,9 @@
           "value": "Variable 'second' is missing. Expression: @{second}"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

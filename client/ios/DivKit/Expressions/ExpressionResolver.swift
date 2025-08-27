@@ -9,10 +9,22 @@ public final class ExpressionResolver {
   private let functionsProvider: FunctionsProvider
   private let variableValueProvider: (String) -> Any?
   private let errorTracker: ExpressionErrorTracker
+  private var resolutionStack: Set<String> = []
 
   private lazy var context = ExpressionContext(
     evaluators: functionsProvider.evaluators,
-    variableValueProvider: variableValueProvider,
+    variableValueProvider: { [weak self] variableName in
+      guard let self else { return nil }
+
+      if self.resolutionStack.contains(variableName) {
+        return nil
+      }
+
+      self.resolutionStack.insert(variableName)
+      defer { self.resolutionStack.remove(variableName) }
+
+      return self.variableValueProvider(variableName)
+    },
     customFunctionsStorageProvider: customFunctionsStorageProvider,
     dynamicVariablesEvaluator: functionsProvider.dynamicVariablesEvaluator,
     errorTracker: errorTracker

@@ -91,6 +91,13 @@ final class DivPropertiesStorage {
       DivKitLogger.error("Action Handler is not set in propertiesStorage")
       return false
     }
+    guard !property.actions.isEmpty else {
+      DivKitLogger
+        .error(
+          "Cannot set property. No setters provided. Name: '\(name.rawValue)'"
+        )
+      return true
+    }
 
     for action in property.actions {
       actionHandler.handle(
@@ -108,14 +115,14 @@ final class DivPropertiesStorage {
 extension DivVariableValue {
   fileprivate var hashableValue: AnyHashable {
     switch self {
-    case let .string(value): return value
-    case let .number(value): return value
-    case let .integer(value): return value
-    case let .bool(value): return value
-    case let .color(value): return value
-    case let .url(value): return value
-    case let .dict(value): return value
-    case let .array(value): return value
+    case let .string(value): value
+    case let .number(value): value
+    case let .integer(value): value
+    case let .bool(value): value
+    case let .color(value): value
+    case let .url(value): value
+    case let .dict(value): value
+    case let .array(value): value
     }
   }
 }

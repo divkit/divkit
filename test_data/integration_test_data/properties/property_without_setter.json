@@ -38,10 +38,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Cannot set property. No setters provided. (name=prop, path=0/container/0/text)"
+          "value": "Cannot set property. No setters provided. Name: 'prop'"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
