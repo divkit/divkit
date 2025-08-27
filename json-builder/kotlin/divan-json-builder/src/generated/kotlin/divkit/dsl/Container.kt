@@ -64,10 +64,12 @@ data class Container internal constructor(
             hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
+            itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             lineSeparator = additive.lineSeparator ?: properties.lineSeparator,
+            lineSpacing = additive.lineSpacing ?: properties.lineSpacing,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
@@ -212,6 +214,11 @@ data class Container internal constructor(
          */
         val itemBuilder: Property<CollectionItemBuilder>?,
         /**
+         * Spacing between items along the main axis. Ignored if `separator` is set.
+         * Default value: `0`.
+         */
+        val itemSpacing: Property<Int>?,
+        /**
          * Nested elements.
          */
         val items: Property<List<Div>>?,
@@ -228,6 +235,11 @@ data class Container internal constructor(
          * Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
          */
         val lineSeparator: Property<Separator>?,
+        /**
+         * Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+         * Default value: `0`.
+         */
+        val lineSpacing: Property<Int>?,
         /**
          * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
          */
@@ -345,10 +357,12 @@ data class Container internal constructor(
             result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("item_builder", itemBuilder)
+            result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("line_separator", lineSeparator)
+            result.tryPutProperty("line_spacing", lineSpacing)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
@@ -483,10 +497,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -539,9 +555,11 @@ fun DivScope.row(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -591,10 +609,12 @@ fun DivScope.row(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items.toList(),
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -646,10 +666,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -702,9 +724,11 @@ fun DivScope.row(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -754,10 +778,12 @@ fun DivScope.row(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -809,10 +835,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -865,9 +893,11 @@ fun DivScope.column(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -917,10 +947,12 @@ fun DivScope.column(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items.toList(),
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -972,10 +1004,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1028,9 +1062,11 @@ fun DivScope.column(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1080,10 +1116,12 @@ fun DivScope.column(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -1135,10 +1173,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1191,9 +1231,11 @@ fun DivScope.stack(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1243,10 +1285,12 @@ fun DivScope.stack(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items.toList(),
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -1298,10 +1342,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1354,9 +1400,11 @@ fun DivScope.stack(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1406,10 +1454,12 @@ fun DivScope.stack(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -1462,10 +1512,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1518,10 +1570,12 @@ fun DivScope.container(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1572,10 +1626,12 @@ fun DivScope.container(
         hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         itemBuilder = valueOrNull(itemBuilder),
+        itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
+        lineSpacing = valueOrNull(lineSpacing),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -1629,10 +1685,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1685,10 +1743,12 @@ fun DivScope.containerProps(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1738,10 +1798,12 @@ fun DivScope.containerProps(
     hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     itemBuilder = valueOrNull(itemBuilder),
+    itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
     layoutProvider = valueOrNull(layoutProvider),
     lineSeparator = valueOrNull(lineSeparator),
+    lineSpacing = valueOrNull(lineSpacing),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
@@ -1794,10 +1856,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1850,10 +1914,12 @@ fun TemplateScope.containerRefs(
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
+    lineSpacing: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1903,10 +1969,12 @@ fun TemplateScope.containerRefs(
     hoverStartActions = hoverStartActions,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
+    lineSpacing = lineSpacing,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -1959,10 +2027,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2015,10 +2085,12 @@ fun Container.override(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -2069,10 +2141,12 @@ fun Container.override(
         hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
+        itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
+        lineSpacing = valueOrNull(lineSpacing) ?: properties.lineSpacing,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -2126,10 +2200,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2182,10 +2258,12 @@ fun Container.defer(
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
+    lineSpacing: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -2236,10 +2314,12 @@ fun Container.defer(
         hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         lineSeparator = lineSeparator ?: properties.lineSeparator,
+        lineSpacing = lineSpacing ?: properties.lineSpacing,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -2293,10 +2373,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2349,10 +2431,12 @@ fun Container.modify(
     hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemSpacing: Property<Int>? = null,
     items: Property<List<Div>>? = null,
     layoutMode: Property<Container.LayoutMode>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     lineSeparator: Property<Container.Separator>? = null,
+    lineSpacing: Property<Int>? = null,
     longtapActions: Property<List<Action>>? = null,
     margins: Property<EdgeInsets>? = null,
     paddings: Property<EdgeInsets>? = null,
@@ -2403,10 +2487,12 @@ fun Container.modify(
         hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         lineSeparator = lineSeparator ?: properties.lineSeparator,
+        lineSpacing = lineSpacing ?: properties.lineSpacing,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -2441,7 +2527,9 @@ fun Container.modify(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -2458,7 +2546,9 @@ fun Container.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
+    itemSpacing: ExpressionProperty<Int>? = null,
     layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
+    lineSpacing: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -2491,10 +2581,12 @@ fun Container.evaluate(
         hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         itemBuilder = properties.itemBuilder,
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         layoutProvider = properties.layoutProvider,
         lineSeparator = properties.lineSeparator,
+        lineSpacing = lineSpacing ?: properties.lineSpacing,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
@@ -2548,10 +2640,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2604,10 +2698,12 @@ fun Component<Container>.override(
     hoverStartActions: List<Action>? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemSpacing: Int? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
+    lineSpacing: Int? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -2659,10 +2755,12 @@ fun Component<Container>.override(
         hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         itemBuilder = valueOrNull(itemBuilder),
+        itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
+        lineSpacing = valueOrNull(lineSpacing),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -2716,10 +2814,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2772,10 +2872,12 @@ fun Component<Container>.defer(
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
+    lineSpacing: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -2827,10 +2929,12 @@ fun Component<Container>.defer(
         hoverStartActions = hoverStartActions,
         id = id,
         itemBuilder = itemBuilder,
+        itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
         layoutProvider = layoutProvider,
         lineSeparator = lineSeparator,
+        lineSpacing = lineSpacing,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
@@ -2865,7 +2969,9 @@ fun Component<Container>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -2882,7 +2988,9 @@ fun Component<Container>.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
+    itemSpacing: ExpressionProperty<Int>? = null,
     layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
+    lineSpacing: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -2916,10 +3024,12 @@ fun Component<Container>.evaluate(
         hoverStartActions = null,
         id = null,
         itemBuilder = null,
+        itemSpacing = itemSpacing,
         items = null,
         layoutMode = layoutMode,
         layoutProvider = null,
         lineSeparator = null,
+        lineSpacing = lineSpacing,
         longtapActions = null,
         margins = null,
         paddings = null,
@@ -2973,10 +3083,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -3029,10 +3141,12 @@ fun Component<Container>.modify(
     hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemSpacing: Property<Int>? = null,
     items: Property<List<Div>>? = null,
     layoutMode: Property<Container.LayoutMode>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     lineSeparator: Property<Container.Separator>? = null,
+    lineSpacing: Property<Int>? = null,
     longtapActions: Property<List<Action>>? = null,
     margins: Property<EdgeInsets>? = null,
     paddings: Property<EdgeInsets>? = null,
@@ -3084,10 +3198,12 @@ fun Component<Container>.modify(
         hoverStartActions = hoverStartActions,
         id = id,
         itemBuilder = itemBuilder,
+        itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
         layoutProvider = layoutProvider,
         lineSeparator = lineSeparator,
+        lineSpacing = lineSpacing,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
