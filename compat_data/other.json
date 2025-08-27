@@ -126,5 +126,13 @@
                 "version_added": "32.6.0"
             }
         }
+    }, {
+        "id": "property_variable",
+        "name": "<code>property</code> variable type",
+        "compat": {
+            "ios": {
+                "version_added": "32.14.0"
+            }
+        }
     }]
 }
