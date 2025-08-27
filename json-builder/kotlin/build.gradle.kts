@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm")
-    id("divkit.convension.publishing-project")
-    id("divkit.convension.publishing-module")
+    alias(libs.plugins.kotlin.jvm)
+    id("divkit.convention.publishing-project")
+    id("divkit.convention.publishing-module")
 }
 
 kotlin {

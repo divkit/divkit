@@ -5,13 +5,13 @@ import java.util.Date
 
 private val VERSION_DATE_FORMAT = SimpleDateFormat("yyyyMMdd.HHmmss")
 
-enum class PublicationType {
+enum class PublicationType(val isRelease: Boolean) {
 
-    dev {
-        override fun getVersionSuffix() = "-dev.${VERSION_DATE_FORMAT.format(Date())}"
+    snapshot(isRelease = false) {
+        override fun getVersionSuffix() = "-${VERSION_DATE_FORMAT.format(Date())}-SNAPSHOT"
     },
 
-    release {
+    release(isRelease = true) {
         override fun getVersionSuffix() = ""
     };
 
@@ -24,9 +24,9 @@ enum class PublicationType {
             return try {
                 valueOf(string!!)
             } catch (ignored: IllegalArgumentException) {
-                return PublicationType.dev
+                return snapshot
             } catch (ignored: NullPointerException) {
-                return PublicationType.dev
+                return snapshot
             }
         }
     }

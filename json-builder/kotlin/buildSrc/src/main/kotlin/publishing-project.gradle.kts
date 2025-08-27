@@ -1,4 +1,4 @@
-package divkit.convension
+package divkit.convention
 
 import com.yandex.divkit.gradle.applyProperties
 import com.yandex.divkit.gradle.optProperty
@@ -6,7 +6,7 @@ import java.net.URI
 
 plugins {
     id("io.github.gradle-nexus.publish-plugin")
-    id("divkit.convension.version")
+    id("divkit.convention.version")
 }
 
 applyProperties(from = "$rootDir/bucket.properties")

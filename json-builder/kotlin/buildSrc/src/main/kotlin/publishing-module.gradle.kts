@@ -1,11 +1,11 @@
-package divkit.convension
+package divkit.convention
 
 import com.yandex.divkit.gradle.PublicationType
 import com.yandex.divkit.gradle.optProperty
+import com.yandex.divkit.gradle.sourceSets
 import java.net.URI
 
 plugins {
-    kotlin("jvm") apply false
     signing
     id("maven-publish")
 }
@@ -25,8 +25,8 @@ extra.apply {
     set("signing.secretKeyRingFile", rootProject.optProperty<String>("signing.secretKeyRingFile") ?: System.getenv("SIGNING_SECRET_KEY_RING_FILE"))
 }
 
-
 group = "com.yandex.div"
+version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {
     signing {
@@ -46,7 +46,7 @@ publishing {
                     username = bucketUsername
                     password = bucketPassword
                 }
-                url = if (publicationType == PublicationType.release) {
+                url = if (publicationType.isRelease) {
                     bucketReleasesUrl
                 } else {
                     bucketSnapshotsUrl

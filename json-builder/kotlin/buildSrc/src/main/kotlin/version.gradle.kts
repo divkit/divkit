@@ -1,4 +1,4 @@
-package divkit.convension
+package divkit.convention
 
 import com.yandex.divkit.gradle.PublicationType
 import com.yandex.divkit.gradle.Version
