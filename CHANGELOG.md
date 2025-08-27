@@ -1,3 +1,24 @@
+## 32.15.0
+
+# Android Client:
+* Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `overlap` orientation.
+
+# iOS Client:
+* Added `decimalFormat` functions and methods for formatting numbers.
+* Fixed switching pages in the pager with infinite scroll.
+* Fixed the cause of the application crash when entering Cyrillic characters in the input field with a mask.
+* Supported `div-text-range` `mask` property.
+
+# Web Client:
+* Fixed a bug that could cause duplicates to appear in `item_builder` after updating data.
+* Fixed access to local variables inside successful/unsuccessful callbacks of `submit` and `download` actions.
+* Fixed the logic of re-alignment in the `pager` when updating data.
+* Updated the logic of saving child element variables in `item_builder`s when updating data.
+
+# Kotlin JSON Builder:
+* Added deprecation lint rule.
+
+
 ## 32.14.0
 
 # Android Client:

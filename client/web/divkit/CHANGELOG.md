@@ -1,3 +1,11 @@
+## 32.15.0 (September 1, 2025)
+
+* Fixed a bug that could cause duplicates to appear in `item_builder` after updating data.
+* Fixed access to local variables inside successful/unsuccessful callbacks of `submit` and `download` actions.
+* Fixed the logic of re-alignment in the `pager` when updating data.
+* Updated the logic of saving child element variables in `item_builder`s when updating data.
+
+
 ## 32.14.0 (August 25, 2025)
 
 * Fixed the expectation of global variables in certain fields (`state_id_variable`, `text_variable`, `thumb_value_variable` and the like).
