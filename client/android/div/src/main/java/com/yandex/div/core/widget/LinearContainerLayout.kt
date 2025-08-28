@@ -407,7 +407,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         // If container's width is defined by children with exact sizes (fixed or wrap_content)
         // we should consider margins of children with match_parent size.
         if (maxCrossSize != 0) {
-            crossMatchParentChildren.forEach { maxCrossSize = max(maxCrossSize, it.lp.horizontalMargins) }
+            crossMatchParentChildren.forEach { maxCrossSize = max(maxCrossSize, it.minimumWidth + it.lp.horizontalMargins) }
             return
         }
 
@@ -528,7 +528,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     remeasureChildVertical(child, widthMeasureSpec, oldMaxWidth, share)
                 }
                 skippedMatchParentChildren.contains(child) -> {
-                    remeasureChildVertical(child, widthMeasureSpec, oldMaxWidth, 0)
+                    remeasureChildVertical(child, widthMeasureSpec, oldMaxWidth, max(child.minimumHeight, 0))
                 }
             }
 
@@ -737,7 +737,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     spaceToExpand -= share
                     remeasureChildHorizontal(child, heightMeasureSpec, share)
                 }
-                else -> remeasureChildHorizontal(child, heightMeasureSpec, 0)
+                else -> remeasureChildHorizontal(child, heightMeasureSpec, max(child.minimumWidth, 0))
             }
 
             updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
@@ -753,7 +753,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         // If container's height is defined by children with exact sizes (fixed or wrap_content)
         // we should consider margins of children with match_parent size.
         if (measureChild) {
-            maxCrossSize = max(maxCrossSize, lp.verticalMargins)
+            maxCrossSize = max(maxCrossSize, child.minimumHeight + lp.verticalMargins)
             return
         }
 
