@@ -11,6 +11,7 @@ plugins {
 
 applyProperties(from = "$rootDir/bucket.properties")
 
+val divkitVersionSuffixed: String by extra
 val sonatypeUsername: String? by extra(optProperty<String>("sonatypeUsername") ?: System.getenv("SONATYPE_USERNAME"))
 val sonatypePassword: String? by extra(optProperty<String>("sonatypePassword") ?: System.getenv("SONATYPE_PASSWORD"))
 val publishToMavenCentral: Boolean by extra(sonatypeUsername != null && sonatypePassword != null)
@@ -19,6 +20,9 @@ val bucketSnapshotsUrl: URI by extra(URI.create(optProperty<String>("bucketSnaps
 val bucketUsername: String? by extra(optProperty<String>("bucketUsername") ?: System.getenv("BUCKET_USERNAME"))
 val bucketPassword: String? by extra(optProperty<String>("bucketPassword") ?: System.getenv("BUCKET_PASSWORD"))
 val publishToBucket: Boolean by extra(bucketUsername != null && bucketPassword != null)
+
+group = "com.yandex.div"
+version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {
     nexusPublishing {
