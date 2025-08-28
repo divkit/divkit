@@ -71,5 +71,6 @@ dependencies {
     testImplementation project(path: ':expression-test-common')
 
     testImplementation libs.androidx.test.coreKtx
+    testImplementation libs.icu4j
     testImplementation libs.json
 }

@@ -8,6 +8,7 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.rule.ULocaleRule
 import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
@@ -16,6 +17,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -24,6 +26,10 @@ import org.mockito.kotlin.whenever
 
 @RunWith(Parameterized::class)
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
+
+    @Rule
+    @JvmField
+    val localeRule = ULocaleRule()
 
     private val variableProvider = mock<VariableProvider>()
     private val evaluationContext = EvaluationContext(

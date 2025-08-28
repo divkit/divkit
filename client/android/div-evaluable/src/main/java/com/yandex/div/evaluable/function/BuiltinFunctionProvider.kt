@@ -154,6 +154,14 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(PadStartInteger)
         registry.register(PadEndString)
         registry.register(PadEndInteger)
+        registry.register(IntegerDecimalFormat)
+        registry.register(LocalizedIntegerDecimalFormat)
+        registry.register(NumberDecimalFormat)
+        registry.register(LocalizedNumberDecimalFormat)
+        registry.registerMethod(IntegerDecimalFormat)
+        registry.registerMethod(LocalizedIntegerDecimalFormat)
+        registry.registerMethod(NumberDecimalFormat)
+        registry.registerMethod(LocalizedNumberDecimalFormat)
 
         // Type cast functions
         registry.register(NumberToInteger)

@@ -7,6 +7,7 @@
         "value": "Failed to evaluate [decimalFormat('')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -18,6 +19,7 @@
         "value": "Failed to evaluate [decimalFormat('..')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -29,6 +31,7 @@
         "value": "Failed to evaluate [decimalFormat('.,')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -40,6 +43,7 @@
         "value": "Failed to evaluate [decimalFormat('#%')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -51,6 +55,7 @@
         "value": "Failed to evaluate [decimalFormat('abc')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -62,6 +67,7 @@
         "value": "Failed to evaluate [decimalFormat('#,.')]. Incorrect format pattern."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -73,6 +79,7 @@
         "value": "0"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -84,6 +91,7 @@
         "value": "123"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -95,6 +103,7 @@
         "value": "1234568"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -106,6 +115,7 @@
         "value": "1234567.9"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -117,6 +127,7 @@
         "value": "1 234 567,9"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -128,6 +139,7 @@
         "value": "1,234,567.9"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -139,6 +151,7 @@
         "value": "-1,234,567.9"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -150,6 +163,7 @@
         "value": "١٬٢٣٤٬٥٦٧٫٩"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -162,6 +176,7 @@
         "value": "1,234,567.9"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -173,6 +188,7 @@
         "value": "一,二三四,五六七.九"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -184,6 +200,7 @@
         "value": "123."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -195,6 +212,7 @@
         "value": "123."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -206,6 +224,7 @@
         "value": "124."
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -217,6 +236,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -228,6 +248,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -239,6 +260,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -250,6 +272,7 @@
         "value": "123.0"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -261,6 +284,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -272,6 +296,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -283,6 +308,7 @@
         "value": "123.0"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -294,6 +320,7 @@
         "value": "123.4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -305,6 +332,7 @@
         "value": "123.45"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -316,6 +344,7 @@
         "value": "123.46"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -327,6 +356,7 @@
         "value": "123.00"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -338,6 +368,7 @@
         "value": "123.40"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -349,6 +380,7 @@
         "value": "123.45"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -360,6 +392,7 @@
         "value": "123.46"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -371,6 +404,7 @@
         "value": "0"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -382,6 +416,7 @@
         "value": "2"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -393,6 +428,7 @@
         "value": "2"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -404,6 +440,7 @@
         "value": "4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -415,6 +452,7 @@
         "value": "1"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -426,6 +464,7 @@
         "value": "1234"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -437,6 +476,7 @@
         "value": "1,2,3,4"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -448,6 +488,7 @@
         "value": "12,34"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -459,6 +500,7 @@
         "value": "1,234"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -470,6 +512,7 @@
         "value": "1,234"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -481,6 +524,7 @@
         "value": "001"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -492,6 +536,7 @@
         "value": "1234"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -503,6 +548,7 @@
         "value": "001"
       },
       "platforms": [
+        "android",
         "web",
         "ios"
       ]

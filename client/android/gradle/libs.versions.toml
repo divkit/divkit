@@ -13,6 +13,7 @@ googleTestingPlatform = "0.0.9-alpha02"
 gson = "2.11.0"
 hamcrestJUnit = "2.0.0.0"
 hamcrestLibrary = "2.2"
+icu4j = "77.1"
 jacoco = "0.8.7"
 javax = "1"
 json = "20211205"
@@ -139,6 +140,8 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 hamcrest-junit = { module = "org.hamcrest:hamcrest-junit", version.ref = "hamcrestJUnit" }
 hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "hamcrestLibrary" }
+
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
 
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
 junit = { module = "junit:junit", version.ref = "junit" }

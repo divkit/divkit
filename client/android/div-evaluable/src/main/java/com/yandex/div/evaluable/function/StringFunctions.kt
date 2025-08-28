@@ -1,5 +1,8 @@
 package com.yandex.div.evaluable.function
 
+import com.ibm.icu.util.ULocale
+import com.yandex.div.evaluable.Evaluable
+import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
@@ -8,10 +11,13 @@ import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_INDEXES_ORDER
 import com.yandex.div.evaluable.REASON_OUT_OF_BOUNDS
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
+import com.yandex.div.evaluable.toMessageFormat
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
+import com.ibm.icu.text.DecimalFormat as IcuDecimalFormat
+import com.ibm.icu.text.DecimalFormatSymbols as IcuDecimalFormatSymbols
 
 internal object StringLength : Function() {
 
@@ -461,6 +467,113 @@ internal object EncodeRegex : Function() {
         val str = args[0] as String
         val regex = Regex("[.*+?^\${}()|\\[\\]\\\\]")
         return str.replace(regex) { "\\${it.value}" }
+    }
+}
+
+internal object IntegerDecimalFormat : AbsDecimalFormat() {
+
+    override val name = "decimalFormat"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.INTEGER), // integer
+        FunctionArgument(type = EvaluableType.STRING), // pattern
+    )
+
+    override fun getLocale(args: List<Any>): ULocale = ULocale.getDefault()
+}
+
+internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat() {
+
+    override val name = "decimalFormat"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.INTEGER), // integer
+        FunctionArgument(type = EvaluableType.STRING), // pattern
+        FunctionArgument(type = EvaluableType.STRING), // locale
+    )
+
+    override fun getLocale(args: List<Any>): ULocale = ULocale.forLanguageTag(args[2] as String)
+}
+
+internal object NumberDecimalFormat : AbsDecimalFormat() {
+
+    override val name = "decimalFormat"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.NUMBER), // number
+        FunctionArgument(type = EvaluableType.STRING), // pattern
+    )
+
+    override fun getLocale(args: List<Any>): ULocale = ULocale.getDefault()
+}
+
+internal object LocalizedNumberDecimalFormat : AbsDecimalFormat() {
+
+    override val name = "decimalFormat"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.NUMBER), // number
+        FunctionArgument(type = EvaluableType.STRING), // pattern
+        FunctionArgument(type = EvaluableType.STRING), // locale
+    )
+
+    override fun getLocale(args: List<Any>): ULocale = ULocale.forLanguageTag(args[2] as String)
+}
+
+internal abstract class AbsDecimalFormat : Function() {
+
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val value = (args[0] as Number).toDouble()
+        val pattern = args[1] as String
+        val locale = getLocale(args)
+
+        if (pattern.isEmpty()) {
+            throwIllegalFormatException(expressionContext, args)
+        }
+
+        if (pattern.any { char -> char !in SUPPORTED_FORMAT_SYMBOLS }) {
+            throwIllegalFormatException(expressionContext, args)
+        }
+
+        val symbols = IcuDecimalFormatSymbols.getInstance(locale)
+        val formatter = try {
+            IcuDecimalFormat(pattern, symbols)
+        } catch (e: Exception) {
+            throwIllegalFormatException(expressionContext, args, cause = e)
+        }
+        return formatter.format(value)
+    }
+
+    protected abstract fun getLocale(args: List<Any>): ULocale
+
+    private fun throwIllegalFormatException(
+        expressionContext: ExpressionContext,
+        args: List<Any>,
+        cause: Exception? = null
+    ): Nothing {
+        val isMethodCall = expressionContext.evaluable is Evaluable.MethodCall
+        val callReference = formatCallReference(args, isMethodCall)
+        throw EvaluableException(message = "Failed to evaluate [$callReference]. Incorrect format pattern.", cause)
+    }
+
+    private fun formatCallReference(args: List<Any>, isMethodCall: Boolean): String {
+        val offset = if (isMethodCall) 1 else 0
+        val callReference = args.drop(offset)
+            .joinToString(prefix = "$name(", postfix = ")") { arg ->
+                arg.toMessageFormat()
+            }
+        return callReference
+    }
+
+    private companion object {
+        private val SUPPORTED_FORMAT_SYMBOLS = setOf('#', '0', ',', '.')
     }
 }
 
