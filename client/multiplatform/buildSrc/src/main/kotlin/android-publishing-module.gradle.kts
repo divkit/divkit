@@ -111,9 +111,3 @@ tasks.withType<PublishToMavenLocal> {
 rootProject.tasks.named("publishInternalRelease") {
     dependsOn(tasks.withType<PublishToMavenRepository>())
 }
-
-if (publishToMavenCentral) {
-    rootProject.tasks.named("publishPublicRelease") {
-        dependsOn(tasks.named("publishToSonatype"))
-    }
-}
