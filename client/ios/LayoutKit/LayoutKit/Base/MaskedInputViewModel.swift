@@ -5,9 +5,9 @@ import VGSL
 
 public class MaskedInputViewModel {
   public enum Action: Equatable {
-    case insert(string: String, range: Range<Int>)
-    case clear(pos: Int)
-    case clearRange(range: Range<Int>)
+    case insert(string: String, range: Range<String.Index>)
+    case clear(pos: String.Index)
+    case clearRange(range: Range<String.Index>)
   }
 
   @ObservableVariable var text: String
@@ -63,21 +63,16 @@ public class MaskedInputViewModel {
       let newCursorPosition: CursorData?
       switch action {
       case let .clear(pos: pos):
-        let index = self.rawText.index(self.rawText.startIndex, offsetBy: pos)
-        let pos = self.rawText.index(before: index)
         (newString, newCursorPosition) = self.maskValidator.removeSymbols(
           at: pos,
           data: self.maskValidator.formatted(rawText: self.rawText)
         )
       case let .clearRange(range: range):
-        let range = self.rawText.rangeOfCharsIn(range)
         (newString, newCursorPosition) = self.maskValidator.removeSymbols(
           at: range,
           data: self.maskValidator.formatted(rawText: self.rawText)
         )
       case let .insert(string: string, range: range):
-        let range = self.rawText.rangeOfCharsIn(range)
-
         (newString, newCursorPosition) = self.maskValidator.addSymbols(
           at: range,
           data: self.maskValidator.formatted(rawText: self.rawText),

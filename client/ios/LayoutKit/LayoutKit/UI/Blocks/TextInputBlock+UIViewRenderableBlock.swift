@@ -636,20 +636,17 @@ extension TextInputBlockView {
     text: String
   ) -> Bool {
     if maskedViewModel != nil {
-      let lowerBound = range.lowerBound.utf16Offset(in: self.currentText)
-      let upperBound = range.upperBound.utf16Offset(in: self.currentText)
-      let offsetRange = lowerBound..<upperBound
       if text == "" {
         if range.isEmpty {
           if range.lowerBound > currentText.startIndex {
-            userInputPipe.send(.clear(pos: lowerBound))
+            userInputPipe.send(.clear(pos: currentText.index(before: range.lowerBound)))
           }
         } else {
           userInputPipe
-            .send(.clearRange(range: offsetRange))
+            .send(.clearRange(range: range))
         }
       } else {
-        userInputPipe.send(.insert(string: text, range: offsetRange))
+        userInputPipe.send(.insert(string: text, range: range))
       }
       return false
     }
