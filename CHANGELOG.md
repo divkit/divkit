@@ -1,6 +1,7 @@
 ## 32.15.0
 
 # Android Client:
+* Fixed local variables observing.
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `overlap` orientation.
 
 # iOS Client:
