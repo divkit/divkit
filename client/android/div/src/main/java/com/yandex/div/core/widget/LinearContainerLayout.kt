@@ -20,6 +20,7 @@ import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_MAX_SIZE
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
@@ -369,7 +370,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val lp = child.lp
         val oldMaxHeight = lp.maxHeight
         lp.height = WRAP_CONTENT
-        lp.maxHeight = Int.MAX_VALUE
+        lp.maxHeight = DEFAULT_MAX_SIZE
         measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         lp.height = WRAP_CONTENT_CONSTRAINED
         lp.maxHeight = oldMaxHeight
@@ -432,7 +433,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         initialMaxWidth: Int
     ) {
         val delta = heightSize - totalLength
-        if (constrainedChildren.any { it.maxHeight != Int.MAX_VALUE } || needRemeasureChildren(delta, heightSpec)) {
+        if (constrainedChildren.any { it.maxHeight != DEFAULT_MAX_SIZE } || needRemeasureChildren(delta, heightSpec)) {
             totalLength = 0
             remeasureConstrainedHeightChildren(widthMeasureSpec, heightSpec, delta)
             remeasureMatchParentHeightChildren(widthMeasureSpec, heightSpec, initialMaxWidth, delta)
@@ -456,7 +457,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val freeSpace = getFreeSpace(delta, heightMeasureSpec)
         if (freeSpace >= 0) {
             constrainedChildren.forEach { child ->
-                if (child.maxHeight == Int.MAX_VALUE) return@forEach
+                if (child.maxHeight == DEFAULT_MAX_SIZE) return@forEach
                 remeasureChildVertical(child, widthMeasureSpec, maxCrossSize,
                     min(child.measuredHeight, child.maxHeight))
             }
@@ -645,7 +646,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val lp = child.lp
         val oldMaxWidth = lp.maxWidth
         lp.width = WRAP_CONTENT
-        lp.maxWidth = Int.MAX_VALUE
+        lp.maxWidth = DEFAULT_MAX_SIZE
         measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         lp.width = WRAP_CONTENT_CONSTRAINED
         lp.maxWidth = oldMaxWidth
@@ -678,7 +679,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         heightMeasureSpec: Int
     ) {
         val delta = widthSize - totalLength
-        if (constrainedChildren.any { it.maxWidth != Int.MAX_VALUE }
+        if (constrainedChildren.any { it.maxWidth != DEFAULT_MAX_SIZE }
             || needRemeasureChildren(delta, widthMeasureSpec)) {
             totalLength = 0
             remeasureConstrainedWidthChildren(widthMeasureSpec, heightMeasureSpec, delta)
@@ -691,7 +692,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val freeSpace = getFreeSpace(delta, widthMeasureSpec)
         if (freeSpace >= 0) {
             constrainedChildren.forEach { child ->
-                if (child.maxWidth == Int.MAX_VALUE) return@forEach
+                if (child.maxWidth == DEFAULT_MAX_SIZE) return@forEach
                 remeasureChildHorizontal(child, heightMeasureSpec, min(child.measuredWidth, child.maxWidth))
             }
             return

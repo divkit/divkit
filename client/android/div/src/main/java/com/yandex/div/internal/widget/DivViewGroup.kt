@@ -130,7 +130,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.WRAP_CONTENT -> {
-                        if (maxSize == Int.MAX_VALUE) {
+                        if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) {
                             resultSize = size
                             resultMode = MeasureSpec.UNSPECIFIED
                         } else {
@@ -157,7 +157,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.WRAP_CONTENT -> {
-                        if (maxSize == Int.MAX_VALUE) {
+                        if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) {
                             resultSize = size
                             resultMode = MeasureSpec.UNSPECIFIED
                         } else {
@@ -184,7 +184,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
 
                     LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
-                        if (maxSize == Int.MAX_VALUE) {
+                        if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) {
                             resultSize = size
                             resultMode = MeasureSpec.UNSPECIFIED
                         } else {

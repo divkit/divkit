@@ -17,8 +17,8 @@ class DivLayoutParams: MarginLayoutParams {
 
     var columnSpan by PositiveNumberDelegate(DEFAULT_SPAN)
     var rowSpan by PositiveNumberDelegate(DEFAULT_SPAN)
-    var maxHeight = Integer.MAX_VALUE
-    var maxWidth = Integer.MAX_VALUE
+    var maxHeight = DEFAULT_MAX_SIZE
+    var maxWidth = DEFAULT_MAX_SIZE
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
@@ -73,8 +73,8 @@ class DivLayoutParams: MarginLayoutParams {
         result = 31 * result + rowSpan
         result = 31 * result + verticalWeight.toBits()
         result = 31 * result + horizontalWeight.toBits()
-        result = 31 * result + if (maxHeight != Int.MAX_VALUE) maxHeight else 0
-        result = 31 * result + if (maxWidth != Int.MAX_VALUE) maxWidth else 0
+        result = 31 * result + if (maxHeight != DEFAULT_MAX_SIZE) maxHeight else 0
+        result = 31 * result + if (maxWidth != DEFAULT_MAX_SIZE) maxWidth else 0
         return result
     }
 
@@ -83,5 +83,7 @@ class DivLayoutParams: MarginLayoutParams {
         const val DEFAULT_WEIGHT = 0f
         const val DEFAULT_SPAN = 1
         const val WRAP_CONTENT_CONSTRAINED = -3
+        const val DEFAULT_MIN_SIZE = 0
+        const val DEFAULT_MAX_SIZE = Int.MAX_VALUE
     }
 }

@@ -11,7 +11,7 @@ class IntegrationTestLogger : ParsingErrorLogger {
         e.cause?.message?.let { _messages.add(it) }
     }
 
-    fun logErrorDirectly(e: Exception) {
+    fun logErrorDirectly(e: Throwable) {
         e.message?.let { _messages.add(it) }
     }
 

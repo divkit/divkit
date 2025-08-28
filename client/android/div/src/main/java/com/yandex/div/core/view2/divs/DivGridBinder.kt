@@ -8,7 +8,6 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.evaluateGravity
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
@@ -33,7 +32,7 @@ import javax.inject.Provider
 
 @DivScope
 internal class DivGridBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
     private val divViewCreator: Provider<DivViewCreator>,
@@ -127,7 +126,6 @@ internal class DivGridBinder @Inject constructor(
             val childDiv = item.value()
             val childPath = path.appendDiv(ids[index])
 
-            childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             divBinder.get().bind(bindingContext, childView, item, childPath)
             bindLayoutParams(childView, childDiv, resolver)
             if (childDiv.hasSightActions) {
@@ -159,8 +157,6 @@ internal class DivGridBinder @Inject constructor(
     }
 
     private fun bindLayoutParams(childView: View, childDiv: DivBase, resolver: ExpressionResolver) {
-        baseBinder.bindLayoutParams(childView, childDiv, null, resolver, childView.expressionSubscriber)
-
         childView.applyGridLayoutParams(resolver, childDiv)
 
         if (childView !is ExpressionSubscriber) return

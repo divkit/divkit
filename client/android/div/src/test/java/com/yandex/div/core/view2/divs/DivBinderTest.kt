@@ -94,7 +94,7 @@ open class DivBinderTest {
     }
 
     internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
-    internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock())
+    internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
 
     companion object {
         internal const val CARD_ID = "id"

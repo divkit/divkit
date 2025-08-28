@@ -320,11 +320,17 @@ internal interface DivGalleryItemHelper {
                 }
             }
             RecyclerView.LayoutParams.WRAP_CONTENT -> {
-                if (maxSize == Int.MAX_VALUE) makeUnspecifiedSpec() else makeAtMostSpec(maxSize)
+                if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) makeUnspecifiedSpec() else makeAtMostSpec(maxSize)
             }
             DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> when (parentMode) {
                 MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> makeAtMostSpec(min(size, maxSize))
-                else -> if (maxSize == Int.MAX_VALUE) makeUnspecifiedSpec() else makeAtMostSpec(maxSize)
+                else -> {
+                    if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) {
+                        makeUnspecifiedSpec()
+                    } else {
+                        makeAtMostSpec(maxSize)
+                    }
+                }
             }
             else -> makeUnspecifiedSpec()
         }

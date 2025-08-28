@@ -43,7 +43,9 @@ open class SuperLineHeightTextView @JvmOverloads constructor(
         }
 
         val lp = layoutParams as? DivLayoutParams ?: return
-        if (!isTightenWidth || lp.width != DivLayoutParams.WRAP_CONTENT_CONSTRAINED || lp.maxWidth == Int.MAX_VALUE) {
+        if (!isTightenWidth ||
+            lp.width != DivLayoutParams.WRAP_CONTENT_CONSTRAINED ||
+            lp.maxWidth == DivLayoutParams.DEFAULT_MAX_SIZE) {
             return
         }
 

@@ -51,6 +51,7 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivAspect
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
@@ -58,7 +59,6 @@ import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
 import com.yandex.div2.DivSizeUnit
-import com.yandex.div2.DivTransform
 import kotlin.math.max
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -128,15 +128,16 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
 }
 
 internal fun View.applyTransform(
-    transform: DivTransform?,
+    div: DivBase,
     resolver: ExpressionResolver,
 ) {
-    val rotation = transform?.rotation?.evaluate(resolver)?.toFloat()
-    if (rotation == null) {
-        this.rotation = 0.0f
+    val transform = div.transform
+    transform?.rotation?.evaluate(resolver)?.toFloat()?.let {
+        rotation = it
+    } ?: run {
+        rotation = 0.0f
         return
     }
-    this.rotation = rotation
 
     if (width == 0 && height == 0) {
         doOnPreDraw {

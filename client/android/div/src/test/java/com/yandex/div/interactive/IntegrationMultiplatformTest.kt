@@ -47,9 +47,7 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
         divView.setData(case.divData, DivDataTag(UUID.randomUUID().toString()))
         divView.observeErrors { errors, _ ->
             errors.forEach { error ->
-                if (error is Exception) {
-                    logger.logErrorDirectly(error)
-                }
+                logger.logErrorDirectly(error)
             }
         }
 

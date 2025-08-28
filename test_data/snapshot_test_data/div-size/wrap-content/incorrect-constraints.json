@@ -1,0 +1,208 @@
+{
+  "description": "Container with elements with incorrect size constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 360
+      },
+      "orientation": "overlap",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "margins": {
+        "bottom": 10
+      }
+    },
+    "item": {
+      "type": "container",
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "items": [
+        {
+          "type": "text",
+          "width": {
+            "type": "fixed",
+            "$value": "content_width"
+          },
+          "height": {
+            "type": "fixed",
+            "$value": "content_height"
+          },
+          "paddings": {
+            "start": 8,
+            "top": 8,
+            "end": 8,
+            "bottom": 8
+          },
+          "font_size": 16,
+          "$text": "title"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 400
+                    },
+                    "max_size": {
+                      "value": 200
+                    }
+                  },
+                  "content_width": 300,
+                  "content_height": 100,
+                  "title": "container width = 360\nitem width = wrap_content\nitem content width = 300\nmin width = 400, max width = 200"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 400
+                    },
+                    "max_size": {
+                      "value": 200
+                    }
+                  },
+                  "content_width": 300,
+                  "content_height": 100,
+                  "title": "container width = 360\nitem width = wrap_content constrained\nitem content width = 300\nmin width = 400, max width = 200"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 400
+                    },
+                    "max_size": {
+                      "value": 200
+                    }
+                  },
+                  "content_width": 360,
+                  "content_height": 100,
+                  "title": "container width = 300\nitem width = wrap_content constrained\nitem content width = 360\nmin width = 400, max width = 200"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 110
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 120
+                    },
+                    "max_size": {
+                      "value": 90
+                    }
+                  },
+                  "content_width": 300,
+                  "content_height": 100,
+                  "title": "container height = 110\nitem height = wrap_content\nitem content height = 100\nmin height = 120, max height = 90"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 110
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 120
+                    },
+                    "max_size": {
+                      "value": 90
+                    }
+                  },
+                  "content_width": 300,
+                  "content_height": 100,
+                  "title": "container height = 110\nitem height = wrap_content constrained\nitem content height = 100\nmin width = 120, max width = 90"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true,
+                    "min_size": {
+                      "value": 120
+                    },
+                    "max_size": {
+                      "value": 90
+                    }
+                  },
+                  "content_width": 360,
+                  "content_height": 110,
+                  "title": "container height = 100\nitem height = wrap_content constrained\nitem content height = 110\nmin height = 120, max height = 90"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
