@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
 
 internal class RuntimeTree {
@@ -36,14 +35,6 @@ internal class RuntimeTree {
 
         node.children.forEach {
             if (it.path.startsWith(path)) it.invokeRecursively(callback)
-        }
-    }
-
-    fun removeRuntimeAndCleanup(divView: DivViewFacade?, runtime: ExpressionsRuntime, path: String) {
-        invokeRecursively(runtime, path) {
-            runtimesToNodes.remove(it.runtime)
-            pathToNodes.remove(it.path)
-            it.runtime.cleanup(divView)
         }
     }
 

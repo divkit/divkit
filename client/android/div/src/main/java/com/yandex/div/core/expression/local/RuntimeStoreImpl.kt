@@ -91,12 +91,7 @@ internal class RuntimeStoreImpl(
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
         val pathString = path.fullPath
-        val runtimeForPath = pathToRuntime[pathString]
-        if (runtimeForPath?.let { resolver == it.expressionResolver || div.needLocalRuntime } == true) {
-            return runtimeForPath
-        }
-
-        runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, pathString) }
+        pathToRuntime[pathString]?.let { return it }
 
         if (resolver !is ExpressionResolverImpl) return null
 
