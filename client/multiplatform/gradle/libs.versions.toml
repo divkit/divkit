@@ -1,0 +1,29 @@
+[versions]
+agp = "8.12.1"
+compose = "1.8.2"
+divkit = "32.12.0"
+kotlin = "2.2.10"
+
+
+[libraries]
+androidx-activityCompose = { module = "androidx.activity:activity-compose", version = "1.10.1" }
+
+div = { module = "com.yandex.div:div", version.ref = "divkit" }
+div-core = { module = "com.yandex.div:div-core", version.ref = "divkit" }
+div-glide = { module = "com.yandex.div:glide", version.ref = "divkit" }
+div-picasso = { module = "com.yandex.div:picasso", version.ref = "divkit" }
+div-shimmer = { module = "com.yandex.div:div-shimmer", version.ref = "divkit" }
+
+nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

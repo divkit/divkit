@@ -1,0 +1,5 @@
+target 'iosApp' do
+  use_frameworks!
+
+  pod 'DivKitKMP', :path => '../../divkit-multiplatform/DivKitKMP'
+end
