@@ -21,6 +21,28 @@
       ]
     },
     {
+      "expression": "@{1 > 0 ? source.getDict(0).getString('text') : 'empty'}",
+      "expected": {
+        "type": "string",
+        "value": "success"
+      },
+      "variables": [
+        {
+            "name": "source",
+            "type": "array",
+            "value": [{
+                "text": "success"
+            }]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
       "expression": "@{3 > a + 1 ? 1 : 'some string'}",
       "expected": {
         "type": "integer",

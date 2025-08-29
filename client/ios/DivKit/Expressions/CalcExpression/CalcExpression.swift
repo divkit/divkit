@@ -183,7 +183,6 @@ fileprivate struct UnicodeScalarView {
     startIndex = characters.index(after: startIndex)
     return char
   }
-
 }
 
 extension String {
@@ -278,6 +277,7 @@ extension UnicodeScalarView {
   }
 
   private mutating func parseDelimiter(_ delimiters: [String]) -> Bool {
+    _ = skipWhitespace()
     outer: for delimiter in delimiters {
       let start = self
       for char in delimiter.unicodeScalars {
