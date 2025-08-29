@@ -582,6 +582,9 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * A default implementation, [DefaultDivDownloader], is available.
+         */
         @NonNull
         public Builder divDownloader(@NonNull DivDownloader divDownloader) {
             mDivDownloader = divDownloader;

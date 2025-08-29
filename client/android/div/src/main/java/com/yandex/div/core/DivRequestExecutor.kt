@@ -3,6 +3,9 @@ package com.yandex.div.core
 import android.net.Uri
 import com.yandex.div.core.images.LoadReference
 
+/**
+ * A default implementation, [DefaultDivRequestExecutor], is available.
+ */
 interface DivRequestExecutor {
 
     class Header(val name: String, val value: String)

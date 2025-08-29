@@ -26,6 +26,7 @@ import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
+import com.yandex.div.network.DefaultDivDownloader
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
@@ -79,7 +80,7 @@ fun divConfiguration(
             flagPreferenceProvider.getExperimentFlag(Experiment.RENDER_EFFECT_ENABLED)
         )
         .tooltipRestrictor { _, _, _, _ -> true }
-        .divDownloader(DemoDivDownloader())
+        .divDownloader(DefaultDivDownloader(Container.httpClient))
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
         .additionalTypefaceProviders(
             mapOf(

@@ -7,6 +7,7 @@ import com.yandex.div.core.view2.Div2View;
 
 /**
  * Downloads patches for Divs
+ * A default implementation, [DefaultDivDownloader], is provided.
  */
 @PublicApi
 public interface DivDownloader {

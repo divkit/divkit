@@ -8,9 +8,9 @@ import com.yandex.android.beacon.SendBeaconPerWorkerLogger
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivKitConfiguration
 import com.yandex.div.internal.Assert
+import com.yandex.div.network.DefaultDivRequestExecutor
 import com.yandex.divkit.demo.beacon.SendBeaconRequestExecutorImpl
 import com.yandex.divkit.demo.beacon.SendBeaconWorkerSchedulerImpl
-import com.yandex.divkit.demo.div.DemoDivRequestExecutor
 import com.yandex.divkit.demo.utils.VisualAssertionErrorHandler
 import com.yandex.divkit.regression.di.HasRegressionTesting
 import com.yandex.divkit.regression.di.RegressionComponent
@@ -67,7 +67,7 @@ class DivkitApplication : Application(), HasRegressionTesting {
             DivKitConfiguration.Builder()
                 .sendBeaconConfiguration(configureSendBeacon(okHttpClient))
                 .histogramConfiguration(Container::histogramConfiguration)
-                .divRequestExecutor { DemoDivRequestExecutor(okHttpClient) }
+                .divRequestExecutor { DefaultDivRequestExecutor(Container.httpClient)}
                 .build()
         )
 
