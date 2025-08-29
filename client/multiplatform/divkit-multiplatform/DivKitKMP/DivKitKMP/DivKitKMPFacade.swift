@@ -1,3 +1,4 @@
+#if os(iOS)
 import UIKit
 
 internal import VGSLUI
@@ -81,3 +82,4 @@ extension [String: Any] {
     }.map(key: { DivVariableName(rawValue: $0) }, value: { $0 })
   }
 }
+#endif
