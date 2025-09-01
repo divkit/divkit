@@ -282,6 +282,7 @@
 		9860E7E72D9C326E00F93B48 /* TextInputBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */; };
 		986F579A2CD68E8400990A2A /* TooltipsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F57992CD68E8400990A2A /* TooltipsUITests.swift */; };
 		986F579C2CD68E8400990A2A /* AppLaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */; };
+		988C89112E60677400D3A925 /* GalleryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */; };
 		98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
 		9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */; };
@@ -658,6 +659,7 @@
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		986F57992CD68E8400990A2A /* TooltipsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipsUITests.swift; sourceTree = "<group>"; };
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
+		988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewModelTests.swift; sourceTree = "<group>"; };
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
 		9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		9D0868BA2DD10F7E00C5B2CC /* integration_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = integration_test_data; path = ../../../test_data/integration_test_data; sourceTree = "<group>"; };
@@ -1371,6 +1373,7 @@
 				899568B62AF399C9002E1503 /* InfiniteScrollTests.swift */,
 				8CF329362875D5C8003F799A /* GalleryViewLayoutTests.swift */,
 				982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */,
+				988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */,
 				8CF3293B2875D5C8003F799A /* GalleryViewMetricsTests.swift */,
 				437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */,
 				65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */,
@@ -2163,6 +2166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CF329522875D5C8003F799A /* ResizableBlockMeasureTests.swift in Sources */,
+				988C89112E60677400D3A925 /* GalleryViewModelTests.swift in Sources */,
 				98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */,
 				437B19D429C8A73300A4C467 /* MaskValidatorTests.swift in Sources */,
 				8CF3295D2875D5C8003F799A /* LayeredBlockLayoutTests.swift in Sources */,

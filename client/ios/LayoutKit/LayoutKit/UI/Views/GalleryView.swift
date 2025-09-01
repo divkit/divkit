@@ -165,45 +165,70 @@ public final class GalleryView: BlockView {
     updateLayout(to: model)
 
     if oldModel != model {
-      let blocks = model.items.map(\.content)
-      cellRegistrator.register(blocks: blocks, in: collectionView)
-      dataSource.blocks = blocks
-      if oldModel?.layoutDirection != model.layoutDirection {
-        collectionView.semanticContentAttribute = model
-          .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
-      }
-      collectionView.decelerationRate = model.scrollMode.decelerationRate
-      collectionView.alwaysBounceVertical = model.alwaysBounceVertical
-      collectionView.bounces = model.bounces
-      collectionView.showsHorizontalScrollIndicator = model.scrollbar.show
-      collectionView.showsVerticalScrollIndicator = model.scrollbar.show
-      if oldModel?.items.count == model.items.count {
-        configureVisibleCells(blocks)
-      } else {
-        collectionView.reloadData()
-      }
+      configureByNewModel(oldModel)
+    }
+
+    let newContentPosition: GalleryViewState.Position? = if oldModel?.path == model.path {
+      shiftedInfiniteScrollContentPosition(oldState: oldState)
+        ?? self.state.contentPosition
+    } else {
+      nil
     }
 
     if oldState != self.state {
-      switch deferredStateSetting {
-      case .idle where frame.size == .zero,
-           .pending where frame.size == .zero:
-        deferredStateSetting = .pending(self.state)
-      case .idle, .pending, .firstLayoutPerformed:
-        if oldModel?.path == model.path {
-          let contentPosition = shiftedInfiniteScrollContentPosition(oldState: oldState)
-            ?? self.state.contentPosition
+      configureByNewState(newContentPosition)
+    }
+  }
 
-          let animated = self.state.animated
-          updateContentOffset(to: contentPosition, animated: animated)
-          if !animated {
-            onDidEndScroll(collectionView)
-          }
-        } else {
-          collectionView.performWithDetachedDelegate {
-            updateContentOffset(to: self.state.contentPosition, animated: false)
-          }
+  private func configureByNewModel(_ oldModel: GalleryViewModel?) {
+    let blocks = model.items.map(\.content)
+    handleElementsDisappearing(cellIndices: model.removedItemsIndices)
+
+    cellRegistrator.register(blocks: blocks, in: collectionView)
+    dataSource.blocks = blocks
+    if oldModel?.layoutDirection != model.layoutDirection {
+      collectionView.semanticContentAttribute = model
+        .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
+    }
+    collectionView.decelerationRate = model.scrollMode.decelerationRate
+    collectionView.alwaysBounceVertical = model.alwaysBounceVertical
+    collectionView.bounces = model.bounces
+    collectionView.showsHorizontalScrollIndicator = model.scrollbar.show
+    collectionView.showsVerticalScrollIndicator = model.scrollbar.show
+    if oldModel?.items.count == model.items.count {
+      configureVisibleCells(blocks)
+    } else {
+      collectionView.reloadData()
+    }
+  }
+
+  private func configureByNewState(
+    _ newContentPosition: GalleryViewState.Position?
+  ) {
+    switch deferredStateSetting {
+    case .idle where frame.size == .zero,
+         .pending where frame.size == .zero:
+      deferredStateSetting = .pending(self.state)
+    case .idle, .pending, .firstLayoutPerformed:
+      if let newContentPosition {
+        let animated = self.state.animated
+        updateContentOffset(to: newContentPosition, animated: animated)
+        if !animated {
+          onDidEndScroll(collectionView)
         }
+      } else {
+        collectionView.performWithDetachedDelegate {
+          updateContentOffset(to: self.state.contentPosition, animated: false)
+        }
+      }
+    }
+  }
+
+  private func handleElementsDisappearing(cellIndices: Set<Int>) {
+    let cells = collectionView.visibleCells.map { $0 as! CellType }
+    for (cell, indexPath) in zip(cells, collectionView.indexPathsForVisibleItems) {
+      if cellIndices.contains(indexPath.row) {
+        cell.onVisibleBoundsChanged(from: cell.frame, to: .zero)
       }
     }
   }
@@ -488,6 +513,7 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
       withReuseIdentifier: block.reuseId,
       for: indexPath
     ) as! CellType
+
     cell.configure(
       model: block,
       observer: observer,

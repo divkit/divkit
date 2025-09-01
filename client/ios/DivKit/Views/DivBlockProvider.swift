@@ -140,8 +140,9 @@ final class DivBlockProvider {
 
     if reasons.filter(\.isVariable).isEmpty {
       context.layoutProviderHandler?.resetUpdatedVariables()
-      shouldRecalculateVisibility = true
     }
+
+    shouldRecalculateVisibility = true
     dataErrors.forEach { context.errorsStorage.add($0) }
     do {
       block = try measurements.renderTime.updateMeasure {

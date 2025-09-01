@@ -59,6 +59,8 @@ public struct GalleryViewModel: Equatable {
   public let scrollbar: Scrollbar
   public let transformation: ElementsTransformation?
 
+  let removedItemsIndices: Set<Int>
+
   var itemsCountWithoutInfinite: Int {
     items.count - infiniteCorrection * 2
   }
@@ -125,7 +127,17 @@ public struct GalleryViewModel: Equatable {
 
     precondition(columnCount > 0)
 
-    self.items = items.filter(\.existingItem)
+    (self.items, self.removedItemsIndices) = items.enumerated().reduce(into: (
+      items: [],
+      indices: []
+    )) {
+      if $1.element.existingItem {
+        $0.items.append($1.element)
+      } else {
+        $0.indices.insert($1.offset)
+      }
+    }
+
     self.layoutDirection = layoutDirection
     self.metrics = metrics
     self.scrollMode = scrollMode
