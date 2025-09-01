@@ -1,3 +1,5 @@
+import { divkitColorToCss, divkitColorToCssWithoutAlpha } from '../utils/colors';
+
 export interface JsonPalette {
     name: string;
     light: string;
@@ -36,4 +38,19 @@ export function palettePreview(list: PaletteItem[], value: string): string {
     const paletteItem = list.find(it => it.id === paletteId);
 
     return `Palette: ${paletteItem?.name || paletteId}`;
+}
+
+export function colorToCss(color: string, withAlpha: boolean, palette: PaletteItem[], previewTheme: 'light' | 'dark'): string {
+    const func = withAlpha ? divkitColorToCss : divkitColorToCssWithoutAlpha;
+
+    if (isPaletteColor(color)) {
+        const paletteId = valueToPaletteId(color);
+        const paletteItem = palette.find(it => it.id === paletteId);
+        if (paletteItem) {
+            return func(paletteItem[previewTheme]);
+        }
+        return '';
+    }
+
+    return func(color);
 }

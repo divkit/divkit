@@ -1,9 +1,12 @@
+<script lang="ts" context="module">
+    const MAX_GRADIENT_COLORS = 10;
+</script>
+
 <script lang="ts">
     import { getContext } from 'svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Select from '../Select.svelte';
     import ColorSelect2 from '../ColorSelect2.svelte';
-    import { divkitColorToCss, divkitColorToCssWithoutAlpha } from '../../utils/colors';
     import Text from '../controls/Text.svelte';
     import RadioSelector from '../controls/RadioSelector.svelte';
     import gradientStopImage from '../../../assets/gradientStop.svg?raw';
@@ -17,11 +20,12 @@
     import stretchIconDark from '../../../assets/stretchDark.svg?url';
     import Alignment from '../controls/Alignment.svelte';
     import ContextDialog from './ContextDialog.svelte';
-    import { isPaletteColor, paletteIdToValue, valueToPaletteId } from '../../data/palette';
+    import { colorToCss, isPaletteColor, paletteIdToValue, valueToPaletteId } from '../../data/palette';
     import PaletteSelector from '../PaletteSelector.svelte';
     import ColorPreview from '../ColorPreview.svelte';
     import { APP_CTX, type AppContext, type Background2DialogShowProps } from '../../ctx/appContext';
-    import type { Background, GradientBackground, SolidBackground } from '../../data/background';
+    import { gradientToList, isEqualDistribution, sortColorMap, type Background, type GradientBackground, type SolidBackground } from '../../data/background';
+    import { deleteComponent } from '../../utils/keybinder/shortcuts';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
@@ -34,8 +38,20 @@
     } = state;
 
     $: if (isShown && !readOnly && callback) {
+        if (value.type === 'gradient') {
+            if (isEqualDistribution(gradientColors)) {
+                delete value.color_map;
+                value.colors = gradientColors.map(it => it.color);
+            } else {
+                delete value.colors;
+                value.color_map = gradientColors;
+            }
+        }
+
         callback(value);
     }
+
+    // todo init gradientColors on open
 
     $: if (value && subtype) {
         if (subtype !== value.type) {
@@ -111,9 +127,18 @@
     let togglePalette = false;
     let paletteId = '';
     let colorValue = '';
+    let gradientColors: {
+        color: string;
+        position: number;
+    }[] = [];
+    let cancel: (() => void) | undefined;
+    let gradientRangeElem: HTMLElement;
 
     function onClose(): void {
         isShown = false;
+
+        cancel?.();
+        cancel = undefined;
     }
 
     function onAngleFocus(): void {
@@ -153,14 +178,22 @@
         }
 
         // todo return removed colors
-        if (newCount > value.colors.length) {
-            value.colors = value.colors.slice();
-            while (newCount > value.colors.length) {
-                value.colors.push('#fff');
+        if (newCount > gradientColors.length) {
+            gradientColors = gradientColors.slice();
+            while (newCount > gradientColors.length) {
+                gradientColors.push({
+                    color: '#fff',
+                    position: 0
+                });
             }
-        } else if (newCount < value.colors.length) {
-            value.colors = value.colors.slice(0, newCount);
+        } else if (newCount < gradientColors.length) {
+            gradientColors = gradientColors.slice(0, newCount);
         }
+        gradientColors.forEach((it, index) => {
+            it.position = index / (gradientColors.length - 1);
+        });
+
+        // todo remove single color
     }
 
     function onPaletteToggle(): void {
@@ -174,44 +207,87 @@
 
     function onGradientColorChange(): void {
         paletteId = '';
-        (value as GradientBackground).colors[selectedColorIndex] = colorValue;
+        gradientColors[selectedColorIndex].color = colorValue;
+    }
+
+    function onGradientKeyDown(event: KeyboardEvent): void {
+        if (deleteComponent.isPressed(event) && gradientColors.length > 2) {
+            deleteGradientColorStop(selectedColorIndex);
+        }
     }
 
     function onPaletteChange(event: CustomEvent<string>): void {
         if (subtype === 'solid') {
             (value as SolidBackground).color = paletteIdToValue(event.detail);
         } else if (subtype === 'gradient') {
-            (value as GradientBackground).colors[selectedColorIndex] = paletteIdToValue(event.detail);
+            gradientColors[selectedColorIndex].color = paletteIdToValue(event.detail);
         }
     }
 
     function selectGradientIndex(index: number): void {
         selectedColorIndex = index;
 
-        const val = (value as GradientBackground);
-
-        if (isPaletteColor(val.colors[selectedColorIndex])) {
+        if (isPaletteColor(gradientColors[selectedColorIndex].color)) {
             togglePalette = true;
-            paletteId = valueToPaletteId(val.colors[selectedColorIndex]);
+            paletteId = valueToPaletteId(gradientColors[selectedColorIndex].color);
         } else {
-            colorValue = val.colors[selectedColorIndex];
+            colorValue = gradientColors[selectedColorIndex].color;
             paletteId = '';
         }
     }
 
-    function colorToCss(color: string, withAlpha: boolean, previewTheme: 'light' | 'dark'): string {
-        const func = withAlpha ? divkitColorToCss : divkitColorToCssWithoutAlpha;
+    function deleteGradientColorStop(index: number): void {
+        gradientColors = gradientColors.slice();
+        gradientColors.splice(index, 1);
+        selectGradientIndex(0);
+    }
 
-        if (isPaletteColor(color)) {
-            const paletteId = valueToPaletteId(color);
-            const paletteItem = $palette.find(it => it.id === paletteId);
-            if (paletteItem) {
-                return func(paletteItem[previewTheme]);
-            }
-            return '';
+    function createGradientColorStop(event: MouseEvent): void {
+        if (gradientColors.length >= MAX_GRADIENT_COLORS) {
+            return;
         }
 
-        return func(color);
+        const bbox = gradientRangeElem.getBoundingClientRect();
+        const position = Math.max(0, Math.min(1, (event.pageX - bbox.left) / gradientRangeElem.offsetWidth));
+
+        gradientColors = [
+            ...gradientColors,
+            { color: '#fff', position }
+        ];
+        selectGradientIndex(gradientColors.length - 1);
+    }
+
+    function onGradientColorPointerDown(event: PointerEvent, index: number): void {
+        selectGradientIndex(index);
+
+        const startX = event.pageX;
+        const startPosition = gradientColors[index].position;
+
+        event.preventDefault();
+
+        const onPointerMove = (event: PointerEvent) => {
+            const diff = event.pageX - startX;
+            const pos = Math.max(0, Math.min(1, startPosition + diff / gradientRangeElem.offsetWidth));
+
+            gradientColors[index].position = pos;
+
+            event.preventDefault();
+        };
+        const onPointerUp = () => {
+            cancel?.();
+            cancel = undefined;
+        };
+
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+
+        cancel?.();
+        cancel = () => {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        };
     }
 
     function onSubtypeChange(): void {
@@ -229,12 +305,14 @@
             const val = (value as GradientBackground);
 
             selectedColorIndex = 0;
-            togglePalette = val.colors.some(isPaletteColor);
+            gradientColors = gradientToList(val);
 
-            if (isPaletteColor(val.colors[0])) {
-                paletteId = valueToPaletteId(val.colors[0]);
+            togglePalette = gradientColors.some(it => isPaletteColor(it.color));
+
+            if (isPaletteColor(gradientColors[0].color)) {
+                paletteId = valueToPaletteId(gradientColors[0].color);
             } else {
-                colorValue = val.colors[0];
+                colorValue = gradientColors[0].color;
                 paletteId = '';
             }
         } else if (subtype === 'image') {
@@ -301,22 +379,41 @@
                             on:change={onSolidColorChange}
                         />
                     {:else if value.type === 'gradient'}
-                        {#if Array.isArray(value.colors)}
+                        {#if Array.isArray(gradientColors)}
                             <div class="background2-dialog__gradient-preview">
-                                <div class="background2-dialog__gradient-points">
+                                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                                <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                                <div
+                                    class="background2-dialog__gradient-points"
+                                    tabindex="0"
+                                    bind:this={gradientRangeElem}
+                                    on:dblclick={createGradientColorStop}
+                                    on:keydown={onGradientKeyDown}
+                                >
                                     <!-- todo keyboard support -->
-                                    {#each value.colors as color, index}
+                                    {#each gradientColors as item, index}
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <!-- svelte-ignore a11y-no-static-element-interactions -->
                                         <div
                                             class="background2-dialog__gradient-point"
                                             class:background2-dialog__gradient-point_selected={index === selectedColorIndex}
-                                            on:click={() => selectGradientIndex(index)}
+                                            style:left="{item.position * 100}%"
+                                            title="{Math.round(item.position * 100)}%"
+                                            on:pointerdown={event => onGradientColorPointerDown(event, index)}
                                         >
                                             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                                             {@html gradientStopImage}
 
-                                            <ColorPreview {color} mix="background2-dialog__gradient-point-preview" />
+                                            <ColorPreview color={item.color} mix="background2-dialog__gradient-point-preview" />
+
+                                            {#if gradientColors.length > 2}
+                                                <div
+                                                    class="background2-dialog__gradient-point-delete"
+                                                    title={$l10nString('delete')}
+                                                    on:pointerdown|stopPropagation
+                                                    on:click={() => deleteGradientColorStop(index)}
+                                                />
+                                            {/if}
                                         </div>
                                     {/each}
                                 </div>
@@ -325,7 +422,7 @@
                                     <div class="background2-dialog__gradient-range-bg"></div>
                                     <div
                                         class="background2-dialog__gradient-range-inner"
-                                        style:background-image="linear-gradient(to right, {value.colors.map(color => colorToCss(color, true, $previewThemeStore)).join(', ')})"
+                                        style:background-image="linear-gradient(to right, {sortColorMap(gradientColors).map(item => `${colorToCss(item.color, true, $palette, $previewThemeStore)} ${item.position * 100}%`).join(', ')})"
                                     ></div>
                                 </div>
                             </div>
@@ -360,10 +457,10 @@
                                     <label>
                                         <div class="background2-dialog__label">{$l10nString('props.background_gradient_count')}</div>
                                         <Text
-                                            value={value.colors?.length || 0}
+                                            value={gradientColors.length}
                                             subtype="integer"
                                             min={2}
-                                            max={10}
+                                            max={MAX_GRADIENT_COLORS}
                                             disabled={readOnly}
                                             required
                                             on:change={onStopsCountChange}
@@ -552,18 +649,20 @@
     }
 
     .background2-dialog__gradient-points {
-        display: flex;
-        justify-content: space-between;
-        margin: 0 12px 2px;
+        position: relative;
+        height: 27px;
+        margin: 0 24px 2px;
+        outline: none;
     }
 
     .background2-dialog__gradient-point {
-        position: relative;
+        position: absolute;
         width: 24px;
         height: 27px;
+        margin-left: -12px;
         color: var(--fill-transparent-4);
         transition: color .15s ease-in-out;
-        cursor: pointer;
+        cursor: move;
     }
 
     .background2-dialog__gradient-point:hover {
@@ -573,7 +672,6 @@
     .background2-dialog__gradient-point_selected,
     .background2-dialog__gradient-point_selected:hover {
         color: var(--accent-purple);
-        cursor: default;
     }
 
     :global(.background2-dialog__gradient-point-preview.background2-dialog__gradient-point-preview) {
@@ -584,6 +682,28 @@
         width: 20px;
         height: 20px;
         border-radius: 4px;
+    }
+
+    .background2-dialog__gradient-point-delete {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        background: no-repeat 50% 50% url(../../../assets/close.svg);
+        background-size: contain;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity .15s ease-in-out;
+        filter: var(--icon-filter);
+    }
+
+    .background2-dialog__gradient-points:hover .background2-dialog__gradient-point-delete {
+        opacity: .4;
+    }
+
+    .background2-dialog__gradient-point-delete.background2-dialog__gradient-point-delete:hover {
+        opacity: 1;
     }
 
     .background2-dialog__separator {

@@ -1,9 +1,9 @@
 <script lang="ts">
     import { afterUpdate, createEventDispatcher, getContext, onDestroy } from 'svelte';
-    import type { Background } from '../../data/background';
-    import { parseColor, stringifyColorToCss, stringifyColorToDivKit } from '../../utils/colors';
+    import { gradientToList, sortColorMap, type Background } from '../../data/background';
+    import { parseColor, stringifyColorToDivKit } from '../../utils/colors';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
-    import { isPaletteColor, valueToPaletteId, type PaletteItem } from '../../data/palette';
+    import { colorToCss, isPaletteColor, valueToPaletteId, type PaletteItem } from '../../data/palette';
     import ColorPreview from '../ColorPreview.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
 
@@ -32,7 +32,7 @@
     let error = '';
     let colorInputElem: HTMLInputElement;
 
-    function updateVal(value: Background): void {
+    function updateVal(value: Background, $previewThemeStore: 'light' | 'dark'): void {
         if (isSelfUpdate || colorInputElem === document.activeElement) {
             return;
         }
@@ -64,13 +64,10 @@
         } else if (value.type === 'gradient') {
             firstVal = '';
             secondVal = String(value.angle || 0);
-            if (Array.isArray(value.colors)) {
-                preview = `linear-gradient(${90 - (value.angle || 0)}deg, ${value.colors.map(color => {
-                    const parsed = parseColor(color);
-                    if (!parsed) {
-                        return 'transparent';
-                    }
-                    return stringifyColorToCss(parsed);
+            const list = gradientToList(value);
+            if (Array.isArray(list)) {
+                preview = `linear-gradient(${90 - (value.angle || 0)}deg, ${sortColorMap(list).map(item => {
+                    return `${colorToCss(item.color, true, $palette, $previewThemeStore)} ${item.position * 100}%`;
                 }).join(', ')})`;
             } else {
                 preview = '';
@@ -84,7 +81,7 @@
         }
     }
 
-    $: updateVal(value);
+    $: updateVal(value, $previewThemeStore);
 
     $: if (value.type === 'solid' && paletteItem && $previewThemeStore) {
         preview = `linear-gradient(to bottom, ${paletteItem[$previewThemeStore]}, ${paletteItem[$previewThemeStore]})`;

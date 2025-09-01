@@ -8,7 +8,11 @@ export type AlignmentVertical = 'top' | 'center' | 'bottom';
 
 export interface GradientBackground {
     type: 'gradient';
-    colors: string[];
+    colors?: string[];
+    color_map?: {
+        color: string;
+        position: number;
+    }[];
     angle?: number;
 }
 
@@ -104,4 +108,35 @@ export function backgroundPreviewSingle(background: Background, lang: {
     }
 
     return lang.unknownBackgrounds;
+}
+
+export function isEqualDistribution(colors: {
+    position: number;
+}[]): boolean {
+    return colors.every((it, index) => Math.abs(it.position - (index / (colors.length - 1))) < 1e-6);
+}
+
+export function sortColorMap<T extends {
+    position: number;
+}>(colors: T[]): T[] {
+    return colors.slice().sort((a, b) => {
+        if (Math.abs(a.position - b.position) < 1e-6) {
+            return 0;
+        }
+        return a.position - b.position;
+    });
+}
+
+export function gradientToList(gradient: GradientBackground): {
+    color: string;
+    position: number;
+}[] {
+    const colorsList = gradient.colors;
+
+    return colorsList ?
+        colorsList.map((it, index) => ({
+            color: it,
+            position: index / (colorsList.length - 1)
+        })) :
+        Array.isArray(gradient.color_map) && gradient.color_map || [];
 }
