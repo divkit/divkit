@@ -474,7 +474,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       self.rawTextValue.value = input
     }.dispose(in: disposePool)
 
-    maskedViewModel?.$text.currentAndNewValues
+    maskedViewModel?.$formattedText.currentAndNewValues
       .addObserver { [weak self] input in
         guard let self else { return }
         DispatchQueue.main.async {
