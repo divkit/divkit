@@ -17,5 +17,5 @@ dependencyResolutionManagement {
     }
 }
 
-include(":sample:composeApp")
 include(":divkit-multiplatform")
+include(":sample:app")

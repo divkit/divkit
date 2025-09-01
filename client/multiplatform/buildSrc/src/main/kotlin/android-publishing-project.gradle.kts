@@ -44,7 +44,6 @@ tasks.register("publishPublicRelease")
 
 if (publishToMavenCentral) {
     tasks.named("publishPublicRelease") {
-        dependsOn(tasks.named("publishAllPublicationsToSonatypeRepository"))
         dependsOn(tasks.named("closeAndReleaseSonatypeStagingRepository"))
     }
 }

@@ -1,4 +1,4 @@
-package com.yandex.divkit.compose
+package com.yandex.divkit.multiplaform.sample
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

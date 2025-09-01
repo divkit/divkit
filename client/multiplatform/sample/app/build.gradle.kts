@@ -1,9 +1,15 @@
+import com.yandex.divkit.gradle.Version
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.multiplatform)
+
+    id("divkit.convention.version")
 }
+
+val divkitVersion: Version by rootProject.extra
 
 kotlin {
     androidTarget {}
@@ -14,7 +20,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "SampleApp"
             isStatic = true
         }
     }
@@ -39,15 +45,15 @@ kotlin {
 }
 
 android {
-    namespace = "com.yandex.divkit.compose"
+    namespace = "com.yandex.divkit.multiplaform.sample"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 21
         targetSdk = 35
 
-        applicationId = "com.yandex.divkit.compose.androidApp"
-        versionCode = 1
-        versionName = "1.0.0"
+        applicationId = "com.yandex.divkit.multiplaform.sample"
+        versionCode = divkitVersion.versionCode
+        versionName = divkitVersion.versionName
     }
 }
