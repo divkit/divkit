@@ -172,25 +172,20 @@ abstract class DivViewGroup @JvmOverloads constructor(
                     }
                 }
 
-                MeasureSpec.UNSPECIFIED -> when (childDimension) {
-                    in 0 .. Int.MAX_VALUE -> {
+                MeasureSpec.UNSPECIFIED -> when {
+                    childDimension >= 0 -> {
                         resultSize = childDimension
                         resultMode = MeasureSpec.EXACTLY
                     }
 
-                    LayoutParams.MATCH_PARENT -> {
-                        resultSize = min(max(size, minSize), maxSize)
-                        resultMode = MeasureSpec.AT_MOST
+                    maxSize == Int.MAX_VALUE -> {
+                        resultSize = size
+                        resultMode = MeasureSpec.UNSPECIFIED
                     }
 
-                    LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
-                        if (maxSize == Int.MAX_VALUE) {
-                            resultSize = size
-                            resultMode = MeasureSpec.UNSPECIFIED
-                        } else {
-                            resultSize = maxSize
-                            resultMode = MeasureSpec.AT_MOST
-                        }
+                    else -> {
+                        resultSize = maxSize
+                        resultMode = MeasureSpec.AT_MOST
                     }
                 }
             }
