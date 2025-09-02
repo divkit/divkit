@@ -1,0 +1,117 @@
+{
+  "description": "Vertical pager with wrap_content layout mode and children with match_parent height with constraints.",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "text_alignment_vertical": "center"
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 360
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "items": [
+        {
+          "type": "text_page",
+          "height": {
+            "type": "match_parent"
+          },
+          "text": "First page\nPage height = match_parent\nNo constraints"
+        },
+        {
+          "type": "text_page",
+          "height": {
+            "type": "match_parent",
+            "min_size": {
+              "value": 120
+            }
+          },
+          "text": "Middle page\nPage height = match_parent\nMin height > pager height"
+        },
+        {
+          "type": "text_page",
+          "height": {
+            "type": "match_parent",
+            "max_size": {
+              "value": 80
+            }
+          },
+          "text": "Last page\nPage height = match_parent\nMax height < pager height"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "test_pager",
+              "default_item": 0,
+              "margins": {
+                "bottom": 20
+              }
+            },
+            {
+              "type": "test_pager",
+              "default_item": 1,
+              "margins": {
+                "bottom": 20
+              }
+            },
+            {
+              "type": "test_pager",
+              "default_item": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
