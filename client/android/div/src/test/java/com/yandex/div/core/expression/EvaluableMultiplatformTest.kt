@@ -131,8 +131,8 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         @Parameterized.Parameters(name = "{0}")
         fun cases(): List<TestCaseOrError<ExpressionTestCase>> {
             val cases = mutableListOf<TestCaseOrError<ExpressionTestCase>>()
-            val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, json ->
-                val newCases = ExpressionTestCaseUtils.parseTestCases(json, file.name)
+            val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, jsonString ->
+                val newCases = ExpressionTestCaseUtils.parseTestCases(JSONObject(jsonString), file.name)
                 cases.addAll(newCases)
             }.map { TestCaseOrError<ExpressionTestCase>(it) }
 

@@ -1,26 +1,19 @@
 package com.yandex.div.core.expression
 
 import android.net.Uri
-import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.interactive.IntegrationTestCase
-import com.yandex.div.interactive.IntegrationTestLogger
 import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
 import com.yandex.div.internal.util.map
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
-import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
 import com.yandex.div.test.expression.TestCaseParsingError
 import com.yandex.div.test.expression.parseAsUTC
-import com.yandex.div2.DivAction
-import com.yandex.div2.DivData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -147,25 +140,12 @@ object ExpressionTestCaseUtils {
         }
     }
 
-    fun parseIntegrationTestCase(
-        fileName: String,
-        json: JSONObject,
-        logger: IntegrationTestLogger,
-    ): List<TestCaseOrError<IntegrationTestCase>> {
-        val env = DivParsingEnvironment(logger)
-        val data = try {
-            val divDataObj = json.getJSONObject("div_data")
-            divDataObj.optJSONObject("templates")?.let {
-                env.parseTemplates(it)
-            }
-            DivData(env, divDataObj.getJSONObject("card"))
-        } catch (e: JSONException) {
-            return listOf(TestCaseOrError(TestCaseParsingError(fileName, json, e)))
-        }
-
+    fun parseIntegrationTestCase(fileName: String, jsonString: String): List<TestCaseOrError<IntegrationTestCase>> {
+        val json = JSONObject(jsonString)
         return json.getJSONArray(CASES_FIELD).toListOfJSONObject().mapIndexedNotNull { index, jsonObject ->
             try {
-                jsonObject.parseStep(fileName, data, env, logger, index)?.let { TestCaseOrError(it) }
+                val data = JSONObject(jsonString).getJSONObject("div_data")
+                jsonObject.parseStep(fileName, data, index)?.let { TestCaseOrError(it) }
             } catch (e: JSONException) {
                 TestCaseOrError(TestCaseParsingError(fileName, json, e))
             }
@@ -174,20 +154,16 @@ object ExpressionTestCaseUtils {
 
     private fun JSONObject.parseStep(
         fileName: String,
-        data: DivData,
-        divEnv: DivParsingEnvironment,
-        logger: IntegrationTestLogger,
+        data: JSONObject,
         index: Int,
     ): IntegrationTestCase? {
         if (!isForAndroidPlatform(parsePlatform(this))) return null
 
-        val actions = optJSONArray("div_actions")
-            ?.toListOfJSONObject()
-            ?.map { DivAction.Companion.invoke(divEnv, it) }
+        val actions = optJSONArray("div_actions")?.toListOfJSONObject()
 
         var name = "$fileName Case $index"
         actions?.forEach {
-            name += ", ${it.logId.evaluate(ExpressionResolver.EMPTY)}"
+            name += ", ${it.getString("log_id")}"
         }
 
         val expected = getJSONArray(CASE_EXPECTED_VALUE_FIELD).toListOfJSONObject().map {
@@ -203,6 +179,6 @@ object ExpressionTestCaseUtils {
             }
         }
 
-        return IntegrationTestCase(name, data, actions, expected, logger)
+        return IntegrationTestCase(name, data, actions, expected)
     }
 }

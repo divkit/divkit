@@ -63,8 +63,8 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         @Parameterized.Parameters(name = "{0}")
         fun signatures(): List<TestCaseOrError<SignatureTestCase>> {
             val cases = mutableListOf<TestCaseOrError<SignatureTestCase>>()
-            val errors = MultiplatformTestUtils.walkJSONs(SIGNATURES_FILE_PATH) { file, json ->
-                val newCases = json.optJSONArray(SIGNATURE_FIELD).toListOfJSONObject()
+            val errors = MultiplatformTestUtils.walkJSONs(SIGNATURES_FILE_PATH) { file, jsonString ->
+                val newCases = JSONObject(jsonString).optJSONArray(SIGNATURE_FIELD).toListOfJSONObject()
                     .filter { isForAndroidPlatform(parsePlatform(it)) }
                     .map { parseSignature(file, it) }
                     .filter { it.error == null }
