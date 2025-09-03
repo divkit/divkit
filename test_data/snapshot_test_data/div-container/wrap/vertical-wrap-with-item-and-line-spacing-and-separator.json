@@ -1,0 +1,128 @@
+{
+  "description": "Vertical wrap container with item_spacing and line_spacing set, but with separator defined (separator overrides item_spacing, line_spacing still applied)",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "card_item": {
+      "type": "text",
+      "$text": "title",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E3E9FF"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#4158D0"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "layout_mode": "wrap",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "border": {
+            "stroke": {
+              "color": "#CCCCCC"
+            }
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "item_spacing": 34,
+          "line_spacing": 20,
+          "separator": {
+            "show_at_start": false,
+            "show_at_end": false,
+            "show_between": true,
+            "style": {
+              "type": "shape_drawable",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 4
+                }
+              },
+              "color": "#FF0000"
+            },
+            "margins": {
+              "left": 4,
+              "right": 4
+            }
+          },
+          "items": [
+            {
+              "type": "card_item",
+              "title": "Item 1"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 2"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 3"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 4"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 5"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 6"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

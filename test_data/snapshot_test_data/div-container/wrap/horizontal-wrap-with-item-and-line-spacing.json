@@ -1,0 +1,100 @@
+{
+  "description": "Horizontal wrap container with item_spacing (between items in a row) and line_spacing (between rows) across multiple rows",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "card_item": {
+      "type": "text",
+      "$text": "title",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E3E9FF"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#4158D0"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "width": {
+            "type": "fixed",
+            "value": 228
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#CCCCCC"
+            }
+          },
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "item_spacing": 12,
+          "line_spacing": 20,
+          "items": [
+            {
+              "type": "card_item",
+              "title": "Item 1"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 2"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 3"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 4"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 5"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 6"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

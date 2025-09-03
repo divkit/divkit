@@ -63,6 +63,10 @@ import javax.inject.Provider
 
 private const val INCORRECT_CHILD_SIZE_MESSAGE = "Incorrect child size. " +
     "Container with %s contains child%s with match_parent size along the %s axis."
+private const val ITEM_SPACING_IGNORED_MESSAGE =
+    "item_spacing will be ignored due to the 'separator' property."
+private const val LINE_SPACING_IGNORED_MESSAGE =
+    "line_spacing will be ignored due to the 'line_separator' property."
 private const val WRAP_CONTENT_SIZE = "wrap_content size"
 private const val WRAP_LAYOUT_MODE = "wrap layout mode"
 private const val AXIS_MAIN = "main"
@@ -120,12 +124,13 @@ internal class DivContainerBinder @Inject constructor(
         )
 
         val resolver = bindingContext.expressionResolver
+        val errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
         bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
 
         when (this) {
-            is DivLinearLayout -> bindProperties(div, oldDiv, resolver)
-            is DivWrapLayout -> bindProperties(div, oldDiv, resolver)
+            is DivLinearLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
+            is DivWrapLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
         }
     }
 
@@ -352,7 +357,8 @@ internal class DivContainerBinder @Inject constructor(
     private fun DivLinearLayout.bindProperties(
         newDiv: DivContainer,
         oldDiv: DivContainer?,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
     ) {
         bindOrientation(newDiv, oldDiv, resolver) { orientation ->
             this.orientation = orientation.toOrientationMode()
@@ -361,6 +367,10 @@ internal class DivContainerBinder @Inject constructor(
             gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
         }
         bindSeparator(newDiv, oldDiv, resolver)
+        bindItemSpacing(newDiv, oldDiv, resolver) { itemSpacing ->
+            setItemSpacing(itemSpacing.dpToPx(resources.displayMetrics))
+        }
+        checkItemSpacingIgnored(newDiv, resolver, errorCollector)
     }
 
     private fun DivLinearLayout.bindSeparator(
@@ -380,10 +390,51 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
+    private inline fun <T> T.bindItemSpacing(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver,
+        crossinline applyItemSpacing: (Long) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
+        if (newDiv.itemSpacing.equalsToConstant(oldDiv?.itemSpacing)) {
+            return
+        }
+
+        applyItemSpacing(newDiv.itemSpacing.evaluate(resolver))
+
+        if (newDiv.itemSpacing.isConstant()) {
+            return
+        }
+
+        addSubscription(newDiv.itemSpacing.observe(resolver) { itemSpacing ->
+            applyItemSpacing(itemSpacing)
+        })
+    }
+
+    private fun DivWrapLayout.bindLineSpacing(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.lineSpacing.equalsToConstant(oldDiv?.lineSpacing)) return
+
+        val displayMetrics = resources.displayMetrics
+        setLineSpacing(newDiv.lineSpacing.evaluate(resolver).dpToPx(displayMetrics))
+
+        if (newDiv.lineSpacing.isConstant()) return
+
+        addSubscription(
+            newDiv.lineSpacing.observe(resolver) { lineSpacing ->
+                setLineSpacing(lineSpacing.dpToPx(displayMetrics))
+            }
+        )
+    }
+
     private fun DivWrapLayout.bindProperties(
         newDiv: DivContainer,
         oldDiv: DivContainer?,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
     ) {
         bindOrientation(newDiv, oldDiv, resolver) { orientation ->
             wrapDirection = orientation.toWrapDirection()
@@ -393,6 +444,13 @@ internal class DivContainerBinder @Inject constructor(
         }
         bindSeparator(newDiv, oldDiv, resolver)
         bindLineSeparator(newDiv, oldDiv, resolver)
+        bindItemSpacing(newDiv, oldDiv, resolver) { itemSpacing ->
+            setItemSpacing(itemSpacing.dpToPx(resources.displayMetrics))
+        }
+        bindLineSpacing(newDiv, oldDiv, resolver)
+
+        checkItemSpacingIgnored(newDiv, resolver, errorCollector)
+        checkLineSpacingIgnored(newDiv, resolver, errorCollector)
     }
 
     private inline fun <T> T.bindOrientation(
@@ -725,5 +783,30 @@ internal class DivContainerBinder @Inject constructor(
             separatorMode = separatorMode or ShowSeparatorsMode.SHOW_AT_END
         }
         return separatorMode
+    }
+
+    private fun showSeparatorBetween(@ShowSeparatorsMode mode: Int): Boolean =
+        (mode and ShowSeparatorsMode.SHOW_BETWEEN) != 0
+
+    private fun checkItemSpacingIgnored(
+        div: DivContainer,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
+    ) {
+        val itemSpacingValue = div.itemSpacing.evaluate(resolver)
+        if (showSeparatorBetween(div.separator.toSeparatorMode(resolver)) && itemSpacingValue != 0L) {
+            errorCollector.logWarning(Throwable(ITEM_SPACING_IGNORED_MESSAGE))
+        }
+    }
+
+    private fun checkLineSpacingIgnored(
+        div: DivContainer,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
+    ) {
+        val lineSpacingValue = div.lineSpacing.evaluate(resolver)
+        if (showSeparatorBetween(div.lineSeparator.toSeparatorMode(resolver)) && lineSpacingValue != 0L) {
+            errorCollector.logWarning(Throwable(LINE_SPACING_IGNORED_MESSAGE))
+        }
     }
 }

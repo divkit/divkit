@@ -58,6 +58,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var dividerMarginBottom = 0
     private var dividerMarginLeft = 0
     private var dividerMarginRight = 0
+    private var itemSpacingPx: Int = 0
 
     private val offsetsHolder = OffsetsHolder()
 
@@ -83,8 +84,24 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         requestLayout()
     }
 
+    fun setItemSpacing(px: Int) {
+        if (itemSpacingPx != px) {
+            itemSpacingPx = px
+            requestLayout()
+        }
+    }
+
     @ShowSeparatorsMode
     var showDividers by dimensionAffecting(0)
+
+    private fun gapBeforeChild(i: Int): Int {
+        val dividerWithMargins = if (isVertical) dividerHeightWithMargins else dividerWidthWithMargins
+        return when {
+            hasDividerBeforeChildAt(i) -> dividerWithMargins
+            i == firstVisibleChildIndex -> 0
+            else -> itemSpacingPx
+        }
+    }
 
     private val constrainedChildren = mutableListOf<View>()
     private val skippedMatchParentChildren = mutableSetOf<View>()
@@ -267,9 +284,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             .coerceAtLeast(0)
 
         forEachSignificantIndexed { child, i ->
-            if (hasDividerBeforeChildAt(i)) {
-                totalLength += dividerHeightWithMargins
-            }
+            totalLength += gapBeforeChild(i)
             totalWeight += child.lp.fixedVerticalWeight
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
         }
@@ -573,9 +588,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             .coerceAtLeast(0)
 
         forEachSignificantIndexed { child, i ->
-            if (hasDividerBeforeChildAt(i)) {
-                totalLength += dividerWidthWithMargins
-            }
+            totalLength += gapBeforeChild(i)
             totalWeight += child.lp.fixedHorizontalWeight
             measureChildWithSignificantSizeHorizontal(child, widthMeasureSpec, heightSpec)
         }
@@ -837,9 +850,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 Gravity.RIGHT -> childSpace - childWidth - lp.rightMargin
                 else -> lp.leftMargin
             }
-            if (hasDividerBeforeChildAt(i)) {
-                childTop += dividerHeightWithMargins
-            }
+            childTop += gapBeforeChild(i)
             childTop += lp.topMargin
             setChildFrame(child, childLeft, childTop.roundToInt(), childWidth, childHeight)
             childTop += childHeight + lp.bottomMargin + offsetsHolder.spaceBetweenChildren
@@ -876,9 +887,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 Gravity.BOTTOM -> childSpace - childHeight - lp.bottomMargin
                 else -> 0
             }
-            if (hasDividerBeforeChildAt(if (isLayoutRtl()) childIndex + 1 else childIndex)) {
-                childLeft += dividerWidthWithMargins
-            }
+            val index = if (isLayoutRtl()) childIndex + 1 else childIndex
+            childLeft += gapBeforeChild(index)
             childLeft += lp.leftMargin
             setChildFrame(child, childLeft.roundToInt(), childTop, childWidth, childHeight)
             childLeft += childWidth + lp.rightMargin + offsetsHolder.spaceBetweenChildren

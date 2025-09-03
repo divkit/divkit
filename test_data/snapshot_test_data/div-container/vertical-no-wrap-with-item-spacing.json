@@ -1,0 +1,85 @@
+{
+  "description": "Vertical no-wrap container with item_spacing applied between items",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "card_item": {
+      "type": "text",
+      "$text": "title",
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 56
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E3E9FF"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#4158D0"
+        }
+      },
+      "paddings": {
+        "left": 12,
+        "top": 8,
+        "right": 12,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#CCCCCC"
+            }
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "item_spacing": 16,
+          "items": [
+            {
+              "type": "card_item",
+              "title": "Item 1"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 2"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 3"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

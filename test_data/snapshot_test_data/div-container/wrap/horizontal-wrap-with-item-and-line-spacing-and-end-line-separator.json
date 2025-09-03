@@ -1,0 +1,138 @@
+{
+  "description": "Horizontal wrap container with item_spacing and line_spacing set, and end line_separator defined (line_separator doesn't overrides line_spacing)",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "card_item": {
+      "type": "text",
+      "$text": "title",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E3E9FF"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#4158D0"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 250
+          },
+          "border": {
+            "stroke": {
+              "color": "#CCCCCC"
+            }
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "item_spacing": 16,
+          "line_spacing": 20,
+          "line_separator": {
+            "show_at_start": false,
+            "show_between": false,
+            "show_at_end": true,
+            "style": {
+              "type": "shape_drawable",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 260
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 2
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 1
+                }
+              },
+              "color": "#FF0000"
+            },
+            "margins": {
+              "left": 4,
+              "top": 4,
+              "right": 4,
+              "bottom": 4
+            }
+          },
+          "items": [
+            {
+              "type": "card_item",
+              "title": "Item 1"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 2"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 3"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 4"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 5"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 6"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 7"
+            },
+            {
+              "type": "card_item",
+              "title": "Item 8"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

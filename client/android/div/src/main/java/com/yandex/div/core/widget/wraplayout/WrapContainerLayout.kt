@@ -89,6 +89,11 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     @Px
     private var separatorMarginRight = 0
 
+    @Px
+    private var itemSpacingPx: Int = 0
+    @Px
+    private var lineSpacingPx: Int = 0
+
     private val lineSeparatorLength get() = if (isRowDirection) {
         (lineSeparatorDrawable?.intrinsicHeight ?: 0) + lineSeparatorMarginTop + lineSeparatorMarginBottom
     } else {
@@ -111,6 +116,27 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private var tempSumCrossSize = 0
 
     override var aspectRatio by aspectRatioProperty()
+
+    fun setItemSpacing(px: Int) {
+        if (itemSpacingPx != px) {
+            itemSpacingPx = px
+            requestLayout()
+        }
+    }
+
+    fun setLineSpacing(px: Int) {
+        if (lineSpacingPx != px) {
+            lineSpacingPx = px
+            requestLayout()
+        }
+    }
+
+    private val betweenItemsSpacing: Int
+        get() = if (showSeparatorBetween(showSeparators)) separatorLength else itemSpacingPx
+
+    private val betweenLinesSpacing: Int
+        get() = if (showSeparatorBetween(showLineSeparators)) lineSeparatorLength else lineSpacingPx
+
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()
@@ -228,7 +254,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
                 largestSizeInCross = Int.MIN_VALUE
             } else {
                 if (line.itemCount > 0) {
-                    line.mainSize += middleSeparatorLength
+                    line.mainSize += betweenItemsSpacing
                 }
                 line.itemCount++
             }
@@ -310,8 +336,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
         childLength: Int,
         lineItemsCount: Int
     ): Boolean {
-        val length = currentLength + childLength +
-            if (lineItemsCount != 0) middleSeparatorLength else 0
+        val betweenSpace = if (lineItemsCount != 0) betweenItemsSpacing else 0
+        val length = currentLength + childLength + betweenSpace
         return mode != MeasureSpec.UNSPECIFIED && maxSize < length
     }
 
@@ -422,7 +448,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private val largestMainSize get() = lines.maxOfOrNull { it.mainSize } ?: 0
 
     private val sumOfCrossSize get() = lines.sumOf { it.crossSize } + edgeLineSeparatorsLength +
-        middleLineSeparatorLength * (visibleLinesCount - 1)
+            betweenLinesSpacing * (visibleLinesCount - 1)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         if (isRowDirection) {
@@ -450,7 +476,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
 
             if (line.itemCountNotGone > 0) {
                 if (needLineSeparator) {
-                    childTop += middleLineSeparatorLength
+                    childTop += betweenLinesSpacing
                 }
                 needLineSeparator = true
             }
@@ -467,7 +493,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
                 val lp = child.lp
                 childLeft += lp.leftMargin
                 if (needSeparator) {
-                    childLeft += middleSeparatorLength
+                    childLeft += betweenItemsSpacing
                 }
                 val currentTop = childTop + getTopOffsetForHorizontalLayout(child, line)
                 child.layout(childLeft.roundToInt(), currentTop,
@@ -507,7 +533,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
 
             if (line.itemCountNotGone > 0) {
                 if (needLineSeparator) {
-                    childLeft += middleLineSeparatorLength
+                    childLeft += betweenLinesSpacing
                 }
                 needLineSeparator = true
             }
@@ -525,7 +551,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
                 val lp = child.lp
                 childTop += lp.topMargin
                 if (needSeparator) {
-                    childTop += middleSeparatorLength
+                    childTop += betweenItemsSpacing
                 }
                 val currentLeft = childLeft + getLeftOffsetForVerticalLayout(child, line.crossSize)
                 child.layout(currentLeft, childTop.roundToInt(),
