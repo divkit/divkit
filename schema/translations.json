@@ -772,8 +772,8 @@
     "ru": "Вертикальное выравнивание элементов. Значение `baseline` означает выравнивание элементов по базовой линии (для текста и других элементов, у которых есть базовая линия). Остальные элементы в этом случае будут выровнены по верхнему краю. Для дочерних элементов может быть переопределено через свойство `alignment_vertical`."
   },
   "div_container_item_spacing": {
-    "en": "Spacing between items along the main axis. Ignored if `separator` is set.",
-    "ru": "Расстояние между элементами вдоль основной оси. Игнорируется, если задан `separator`."
+    "en": "Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.",
+    "ru": "Расстояние между элементами вдоль основной оси. Игнорируется, если задан `separator` с типом `show_between`."
   },
   "div_container_items": {
     "en": "Nested elements.",
@@ -788,8 +788,8 @@
     "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
   },
   "div_container_line_spacing": {
-    "en": "Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.",
-    "ru": "Расстояние между линиями элементов при `layout_mode` = `wrap`. Игнорируется, если задан `line_separator`."
+    "en": "Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.",
+    "ru": "Расстояние между линиями элементов при `layout_mode` = `wrap`. Игнорируется, если задан `line_separator` с типом `show_between`."
   },
   "div_container_orientation": {
     "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
