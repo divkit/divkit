@@ -4,12 +4,7 @@ import SwiftUI
 /// ``DivHostingView`` is a `UIViewRepresentable` adapter for using `DivKit` in `SwiftUI`.
 /// You should use it by passing in the initializer `DivViewSource` you want to render in this view.
 public struct DivHostingView: UIViewRepresentable {
-  private let divkitComponents: DivKitComponents
-  private let divViewPreloader: DivViewPreloader?
-
-  private let source: DivViewSource
-  private let debugParams: DebugParams
-  private let shouldResetPreviousCardData: Bool
+  private let divView: DivView
 
   public init(
     divkitComponents: DivKitComponents = DivKitComponents(),
@@ -18,31 +13,34 @@ public struct DivHostingView: UIViewRepresentable {
     debugParams: DebugParams = DebugParams(),
     shouldResetPreviousCardData: Bool = false
   ) {
-    self.divkitComponents = divkitComponents
-    self.divViewPreloader = divViewPreloader
-    self.source = source
-    self.debugParams = debugParams
-    self.shouldResetPreviousCardData = shouldResetPreviousCardData
-  }
-
-  public func makeUIView(context _: Context) -> UIView {
-    let divView = DivView(
+    self.divView = DivView(
       divKitComponents: divkitComponents,
       divViewPreloader: divViewPreloader
     )
-    let view = VisibilityTrackingView(divView: divView)
-    return view
+    divView.setSource(
+      source,
+      debugParams: debugParams,
+      shouldResetPreviousCardData: shouldResetPreviousCardData
+    )
+  }
+
+  @available(iOS 16.0, *)
+  public func sizeThatFits(
+    _ proposal: ProposedViewSize,
+    uiView _: UIView,
+    context _: Context
+  ) -> CGSize? {
+    guard let width = proposal.width, let height = proposal.height else { return nil }
+    return divView.cardSize?.sizeFor(parentViewSize: CGSize(width: width, height: height))
+  }
+
+  public func makeUIView(context _: Context) -> UIView {
+    VisibilityTrackingView(divView: divView)
   }
 
   public func updateUIView(_ uiView: UIView, context _: Context) {
     Task {
-      guard let view = uiView as? VisibilityTrackingView else { return }
-      await view.divView.setSource(
-        source,
-        debugParams: debugParams,
-        shouldResetPreviousCardData: shouldResetPreviousCardData
-      )
-      view.invalidateIntrinsicContentSize()
+      uiView.invalidateIntrinsicContentSize()
     }
   }
 }
@@ -52,7 +50,7 @@ private class VisibilityTrackingView: UIView {
     divView.intrinsicContentSize
   }
 
-  let divView: DivView
+  private let divView: DivView
 
   init(divView: DivView) {
     self.divView = divView
