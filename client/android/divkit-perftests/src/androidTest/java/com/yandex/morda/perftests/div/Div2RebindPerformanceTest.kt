@@ -31,7 +31,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Data.Cold",
             "Div.Parsing.Data.Warm",
             "Div.Parsing.JSON.Cold",
-            "Div.Parsing.JSON.Warm",
+            //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
             "Div.Render.Total.Cold",

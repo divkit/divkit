@@ -69,7 +69,7 @@ class Div2MultiplatformPerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
             "Div.Parsing.JSON.Cold",
-            "Div.Parsing.JSON.Warm",
+            //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
             "Div.Parsing.Data.Cold",
