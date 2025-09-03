@@ -4,16 +4,18 @@ import org.gradle.api.Project
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
-private val VERSION_DATE_FORMAT = SimpleDateFormat("yyyyMMdd.HHmmss")
+private val VERSION_DATE_FORMAT = SimpleDateFormat("yyyyMMdd.HHmmss", Locale.US)
 
+@Suppress("EnumEntryName")
 enum class PublicationType {
 
-    dev {
-        override fun getVersionSuffix() = "-dev.${VERSION_DATE_FORMAT.format(Date())}"
+    snapshot {
+        override fun getVersionSuffix() = "-${VERSION_DATE_FORMAT.format(Date())}-SNAPSHOT"
         override fun configureForProject(project: Project) {
             project.tasks.withType(AbstractPublishToMaven::class.java).configureEach { task ->
-                task.notCompatibleWithConfigurationCache("publicationType dev is not compatible " +
+                task.notCompatibleWithConfigurationCache("Snapshot publication type is not compatible " +
                         "with configuration cache as it uses build start timestamp")
             }
         }
@@ -35,9 +37,9 @@ enum class PublicationType {
             return try {
                 valueOf(string!!)
             } catch (ignored: IllegalArgumentException) {
-                return PublicationType.dev
+                return snapshot
             } catch (ignored: NullPointerException) {
-                return PublicationType.dev
+                return snapshot
             }
         }
     }

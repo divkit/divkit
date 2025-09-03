@@ -19,7 +19,7 @@ class Version private constructor(
 
     fun getVersionNameForBuildType(buildType: String): String {
         return if (buildType == "debug") {
-            // releaseLibraryVersion can contains build start time (see PublicationType.dev)
+            // releaseLibraryVersion can contains build start time (see PublicationType.snapshot)
             // which will be different for each build. This will cause recompilation on each build.
             baseVersionName
         } else {
