@@ -1,3 +1,14 @@
+## 32.16.0
+
+# Android Client:
+* Added `decimalFormat` function support.
+* Provide default DivDownloader and DivRequestExecutor.
+
+# iOS Client:
+* Added properties cycle and empty setter errors handling.
+* Fixed triggering of visibility actions in collections when changing the visibility of items.
+
+
 ## 32.15.0
 
 # Android Client:
