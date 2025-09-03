@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * A property that is handeled with get and set methods.
+ * A property that is handeled with `get` and `set` methods.
  * 
  * Can be created using the method [propertyVariable].
  * 
