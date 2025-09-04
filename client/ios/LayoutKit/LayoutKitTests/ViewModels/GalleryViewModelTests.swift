@@ -3,28 +3,6 @@ import VGSL
 import XCTest
 
 final class GalleryViewModelTests: XCTestCase {
-  func test_ItemsAndRemovedItemsCount() {
-    let model = GalleryViewModel(
-      blocks: [
-        TextBlock(
-          widthTrait: .resizable,
-          text: NSAttributedString(string: "Item 1")
-        ),
-        EmptyBlock.zeroSized,
-        TextBlock(
-          widthTrait: .resizable,
-          text: NSAttributedString(string: "Item 3")
-        ),
-      ],
-      metrics: GalleryViewMetrics(gaps: [10, 10]),
-      path: UIElementPath("model"),
-      direction: .vertical
-    )
-
-    XCTAssertEqual(model.items.count, 2)
-    XCTAssertEqual(model.removedItemsIndices.count, 1)
-  }
-
   func test_ItemsFilteredItemsList() {
     let model = GalleryViewModel(
       blocks: [

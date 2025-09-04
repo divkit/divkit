@@ -165,7 +165,10 @@ public final class GalleryView: BlockView {
     updateLayout(to: model)
 
     if oldModel != model {
-      configureByNewModel(oldModel)
+      configureByNewModel(
+        isLayoutDirectionChanged: oldModel?.layoutDirection != model.layoutDirection,
+        isItemsNumberChanged: oldModel?.items.count != model.items.count
+      )
     }
 
     let newContentPosition: GalleryViewState.Position? = if oldModel?.path == model.path {
@@ -180,13 +183,16 @@ public final class GalleryView: BlockView {
     }
   }
 
-  private func configureByNewModel(_ oldModel: GalleryViewModel?) {
+  private func configureByNewModel(
+    isLayoutDirectionChanged: Bool,
+    isItemsNumberChanged: Bool
+  ) {
     let blocks = model.items.map(\.content)
     handleElementsDisappearing(cellIndices: model.removedItemsIndices)
 
     cellRegistrator.register(blocks: blocks, in: collectionView)
     dataSource.blocks = blocks
-    if oldModel?.layoutDirection != model.layoutDirection {
+    if isLayoutDirectionChanged {
       collectionView.semanticContentAttribute = model
         .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
     }
@@ -195,10 +201,10 @@ public final class GalleryView: BlockView {
     collectionView.bounces = model.bounces
     collectionView.showsHorizontalScrollIndicator = model.scrollbar.show
     collectionView.showsVerticalScrollIndicator = model.scrollbar.show
-    if oldModel?.items.count == model.items.count {
-      configureVisibleCells(blocks)
-    } else {
+    if isItemsNumberChanged {
       collectionView.reloadData()
+    } else {
+      configureVisibleCells(blocks)
     }
   }
 
