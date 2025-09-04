@@ -21,7 +21,7 @@ import org.junit.Test
 class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
-            "Div.Binding.Cold",
+            //"Div.Binding.Cold", // Generates unstable results at some perf-tests.
             "Div.Parsing.Data.Cold",
             "Div.Parsing.JSON.Cold",
             "Div.Parsing.Templates.Cold",
