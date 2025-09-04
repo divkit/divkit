@@ -9,12 +9,7 @@ final class TabContentsView: BlockView {
 
   var delegate: TabContentsViewDelegate?
   weak var updatesDelegate: TabbedPagesViewModelDelegate?
-  private(set) var selectedPageIndex: CGFloat = 0 {
-    didSet {
-      updateContentOffset()
-    }
-  }
-
+  private(set) var selectedPageIndex: CGFloat = 0
   private(set) var model: TabContentsViewModel!
 
   private var collectionView: VisibleBoundsTrackingCollectionView!
@@ -123,7 +118,7 @@ final class TabContentsView: BlockView {
 
     if collectionView.frame != bounds {
       collectionView.frame = bounds
-      updateContentOffset(animated: false)
+      collectionView.contentOffset = selectedPageContentOffset
     }
 
     let newLayout = TabContentsViewLayout(
@@ -221,6 +216,7 @@ final class TabContentsView: BlockView {
     }
 
     selectedPageIndex = idx
+    updateContentOffset()
   }
 
   private func configureVisibleCells(_ blocks: [Block]) {
@@ -236,8 +232,8 @@ final class TabContentsView: BlockView {
     }
   }
 
-  private func updateContentOffset(animated: Bool = true) {
-    collectionView.setContentOffset(selectedPageContentOffset, animated: animated)
+  private func updateContentOffset() {
+    collectionView.setContentOffset(selectedPageContentOffset, animated: true)
   }
 
   private func updateSelectedPageIndexFromRelativeContentOffset(
@@ -252,7 +248,7 @@ final class TabContentsView: BlockView {
     }
     let index = isIntermediate ? selectedPageIndex : roundedIndex
 
-    updateSelectedPageIndexIfNeeded(index)
+    self.selectedPageIndex = index
     updatesDelegate?.onSelectedPageIndexChanged(index, inModel: model)
     let state = TabViewState(selectedPageIndex: index, countOfPages: countOfPages)
     observer?.elementStateChanged(state, forPath: model.path)

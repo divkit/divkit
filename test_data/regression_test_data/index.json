@@ -177,6 +177,28 @@
       "file": "tabs_max_height.json"
     },
     {
+      "title": "Tabs with dynamic height swipe",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivTabs",
+        "swipe"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Tab changes depending on the swipe direction",
+        "Each page has a different height",
+        "The height of the pages changes smoothly when switching"
+      ],
+      "file": "tabs_with_dynamic_height.json"
+    },
+    {
       "title": "Tab swipe restricted",
       "case_id": 17,
       "automated": [
