@@ -1,6 +1,5 @@
 package com.yandex.div.evaluable.function
 
-import com.ibm.icu.util.ULocale
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
@@ -14,10 +13,11 @@ import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import java.net.URLDecoder
 import java.net.URLEncoder
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
-import com.ibm.icu.text.DecimalFormat as IcuDecimalFormat
-import com.ibm.icu.text.DecimalFormatSymbols as IcuDecimalFormatSymbols
 
 internal object StringLength : Function() {
 
@@ -470,7 +470,7 @@ internal object EncodeRegex : Function() {
     }
 }
 
-internal object IntegerDecimalFormat : AbsDecimalFormat() {
+internal object IntegerDecimalFormat : AbsDecimalFormat<Long>() {
 
     override val name = "decimalFormat"
 
@@ -479,10 +479,14 @@ internal object IntegerDecimalFormat : AbsDecimalFormat() {
         FunctionArgument(type = EvaluableType.STRING), // pattern
     )
 
-    override fun getLocale(args: List<Any>): ULocale = ULocale.getDefault()
+    override fun getValue(valueArgument: Any): Long  = valueArgument as Long
+
+    override fun getLocale(args: List<Any>): Locale = Locale.getDefault()
+
+    override fun format(formatter: DecimalFormat, value: Long): String = formatter.format(value)
 }
 
-internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat() {
+internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat<Long>() {
 
     override val name = "decimalFormat"
 
@@ -492,10 +496,14 @@ internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat() {
         FunctionArgument(type = EvaluableType.STRING), // locale
     )
 
-    override fun getLocale(args: List<Any>): ULocale = ULocale.forLanguageTag(args[2] as String)
+    override fun getValue(valueArgument: Any): Long  = valueArgument as Long
+
+    override fun getLocale(args: List<Any>): Locale = Locale.forLanguageTag(args[2] as String)
+
+    override fun format(formatter: DecimalFormat, value: Long): String = formatter.format(value)
 }
 
-internal object NumberDecimalFormat : AbsDecimalFormat() {
+internal object NumberDecimalFormat : AbsDecimalFormat<Double>() {
 
     override val name = "decimalFormat"
 
@@ -504,10 +512,17 @@ internal object NumberDecimalFormat : AbsDecimalFormat() {
         FunctionArgument(type = EvaluableType.STRING), // pattern
     )
 
-    override fun getLocale(args: List<Any>): ULocale = ULocale.getDefault()
+    override fun getValue(valueArgument: Any): Double  = valueArgument as Double
+
+    override fun getLocale(args: List<Any>): Locale = Locale.getDefault()
+
+    override fun format(formatter: DecimalFormat, value: Double): String {
+        // toFloat() ensures correct rounding, as binary to ASCII conversion of the value becomes exact.
+        return formatter.format(value.toFloat())
+    }
 }
 
-internal object LocalizedNumberDecimalFormat : AbsDecimalFormat() {
+internal object LocalizedNumberDecimalFormat : AbsDecimalFormat<Double>() {
 
     override val name = "decimalFormat"
 
@@ -517,10 +532,17 @@ internal object LocalizedNumberDecimalFormat : AbsDecimalFormat() {
         FunctionArgument(type = EvaluableType.STRING), // locale
     )
 
-    override fun getLocale(args: List<Any>): ULocale = ULocale.forLanguageTag(args[2] as String)
+    override fun getValue(valueArgument: Any): Double  = valueArgument as Double
+
+    override fun getLocale(args: List<Any>): Locale = Locale.forLanguageTag(args[2] as String)
+
+    override fun format(formatter: DecimalFormat, value: Double): String  {
+        // toFloat() ensures correct rounding, as binary to ASCII conversion of the value becomes exact.
+        return formatter.format(value.toFloat())
+    }
 }
 
-internal abstract class AbsDecimalFormat : Function() {
+internal abstract class AbsDecimalFormat<T : Number> : Function() {
 
     override val resultType = EvaluableType.STRING
     override val isPure = true
@@ -530,7 +552,7 @@ internal abstract class AbsDecimalFormat : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val value = (args[0] as Number).toDouble()
+        val value = getValue(args[0])
         val pattern = args[1] as String
         val locale = getLocale(args)
 
@@ -542,16 +564,20 @@ internal abstract class AbsDecimalFormat : Function() {
             throwIllegalFormatException(expressionContext, args)
         }
 
-        val symbols = IcuDecimalFormatSymbols.getInstance(locale)
+        val symbols = DecimalFormatSymbols.getInstance(locale)
         val formatter = try {
-            IcuDecimalFormat(pattern, symbols)
+            DecimalFormat(pattern, symbols)
         } catch (e: Exception) {
             throwIllegalFormatException(expressionContext, args, cause = e)
         }
-        return formatter.format(value)
+        return format(formatter, value)
     }
 
-    protected abstract fun getLocale(args: List<Any>): ULocale
+    protected abstract fun getValue(valueArgument: Any): T
+
+    protected abstract fun getLocale(args: List<Any>): Locale
+
+    protected abstract fun format(formatter: DecimalFormat, value: T): String
 
     private fun throwIllegalFormatException(
         expressionContext: ExpressionContext,
