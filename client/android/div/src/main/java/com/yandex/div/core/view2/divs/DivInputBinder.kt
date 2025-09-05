@@ -12,6 +12,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -341,13 +342,14 @@ internal class DivInputBinder @Inject constructor(
             primaryVariable = div.textVariable
         }
 
-        val callbacks = createCallbacks(inputMask, inputFilters, divView, secondaryVariable)
+        val callbacks = createCallbacks(bindingContext, inputMask, inputFilters, divView, secondaryVariable)
         addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
 
         observeValidators(div, bindingContext.expressionResolver, divView)
     }
 
     private fun DivInputView.createCallbacks(
+        bindingContext: BindingContext,
         inputMask: BaseInputMask?,
         filters: InputFiltersHolder?,
         divView: Div2View,
@@ -410,8 +412,13 @@ internal class DivInputBinder @Inject constructor(
             valueUpdater(fieldValue)
         }
 
-        private fun setSecondVariable(value: String) =
-            secondaryVariable?.let { divView.setVariable(secondaryVariable, value) }
+        private fun setSecondVariable(value: String) {
+            val variableController = bindingContext.expressionResolver.variableController
+            secondaryVariable?.let { variableName ->
+                val variable = variableController?.getMutableVariable(variableName)
+                variable?.set(value)
+            }
+        }
     }
 
     private fun DivInputView.observeValidators(
