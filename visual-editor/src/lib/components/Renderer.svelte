@@ -75,7 +75,9 @@
         readOnly,
         tree,
         sources,
-        direction
+        direction,
+        safeAreaEmulation,
+        safeAreaEmulationEnabled
     } = state;
 
     setRendererApi({
@@ -1118,7 +1120,26 @@
         instance = undefined;
     }
 
-    function rerender(divjson: DivJson, tanker: TankerMeta, locale: string, theme: string, direction: 'ltr' | 'rtl'): void {
+    $: if ($safeAreaEmulationEnabled !== undefined && instance) {
+        instance.$destroy();
+        instance = undefined;
+    }
+
+    function rerender({
+        divjson,
+        tanker,
+        locale,
+        theme,
+        direction,
+        safeAreaEmulationEnabled
+    }: {
+        divjson: DivJson;
+        tanker: TankerMeta;
+        locale: string;
+        theme: string;
+        direction: 'ltr' | 'rtl';
+        safeAreaEmulationEnabled: boolean;
+    }): void {
         const updateTanker = () => {
             if (!globalVariablesController) {
                 return;
@@ -1154,6 +1175,16 @@
             }
             if (themeVariable) {
                 themeVariable.set(theme);
+            }
+
+            if (safeAreaEmulation) {
+                for (const side in safeAreaEmulation) {
+                    const key = side as keyof typeof safeAreaEmulation;
+                    const instance = vars.get(safeAreaEmulation[key].name);
+                    if (instance) {
+                        instance.setValue(safeAreaEmulationEnabled ? safeAreaEmulation[key].value : 0);
+                    }
+                }
             }
 
             instance.setData(divjson);
@@ -1197,6 +1228,18 @@
                 const card = divjson.card;
                 if (card.variables) {
                     card.variables = card.variables.filter(it => !createdTankerVars.has(it.name));
+                }
+            }
+
+            if (safeAreaEmulation) {
+                for (const side in safeAreaEmulation) {
+                    const key = side as keyof typeof safeAreaEmulation;
+                    const instance = createVariable(
+                        safeAreaEmulation[key].name,
+                        'number',
+                        safeAreaEmulationEnabled ? safeAreaEmulation[key].value : 0
+                    );
+                    globalVariablesController.setVariable(instance);
                 }
             }
 
@@ -1286,7 +1329,14 @@
     }
 
     $: if ($divjsonStore.object.card?.states?.[0]?.div && rootPreview && $locale !== undefined) {
-        rerender($divjsonStore.object, $tanker, $locale, theme, $direction);
+        rerender({
+            divjson: $divjsonStore.object,
+            tanker: $tanker,
+            locale: $locale,
+            theme,
+            direction: $direction,
+            safeAreaEmulationEnabled: $safeAreaEmulationEnabled
+        });
     }
 
     let cancelCurrent = () => {};

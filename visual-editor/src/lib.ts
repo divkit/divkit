@@ -119,6 +119,11 @@ export interface FileLimits {
     upload?: FileLimit;
 }
 
+export type SafeAreaEmulation = Record<'top' | 'right' | 'bottom' | 'left', {
+    name: string;
+    value: number;
+}>;
+
 export interface DivProEditorOptions {
     renderTo: HTMLElement;
     shadowRoot?: ShadowRoot;
@@ -148,6 +153,7 @@ export interface DivProEditorOptions {
     directionSelector?: boolean;
     direction?: 'ltr' | 'rtl';
     perThemeProps?: boolean;
+    safeAreaEmulation?: SafeAreaEmulation;
 }
 
 export interface EditorError {
@@ -185,6 +191,8 @@ export const DivProEditor = {
         state.themeStore.set(opts.theme || 'light');
         state.locale.set(opts.cardLocales?.[0]?.id || '');
         state.direction.set(opts.direction || 'ltr');
+        state.safeAreaEmulation = opts.safeAreaEmulation;
+        state.safeAreaEmulationEnabled.set(Boolean(opts.safeAreaEmulation));
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');

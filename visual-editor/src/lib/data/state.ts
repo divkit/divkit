@@ -6,7 +6,7 @@ import { parseExpression, walkExpression } from '@divkitframework/divkit/client-
 import type { PaletteItem } from './palette';
 import { parseVariableValue, type JsonVariable, type Variable } from './customVariables';
 import { type JsonTimer, type Timer } from './timers';
-import type { ActionDesc, EditorError, FileLimits, GetTranslationKey, Locale, Source, TankerMeta } from '../../lib';
+import type { ActionDesc, EditorError, FileLimits, GetTranslationKey, Locale, SafeAreaEmulation, Source, TankerMeta } from '../../lib';
 import type { TreeLeaf } from '../ctx/tree';
 import type { BaseCommand } from './commands/base';
 import { namedTemplates } from './templates';
@@ -148,6 +148,9 @@ export class State {
     });
 
     direction = writable<'ltr' | 'rtl'>('ltr');
+
+    safeAreaEmulation?: SafeAreaEmulation;
+    safeAreaEmulationEnabled = writable(false);
 
     private getTranslationKey: GetTranslationKey | undefined;
 

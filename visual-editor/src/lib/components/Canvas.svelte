@@ -11,6 +11,8 @@
     import warningsIcon from '../../assets/warnings.svg?url';
     import undoIcon from '../../assets/undo.svg?url';
     import redoIcon from '../../assets/redo.svg?url';
+    import safeAreaOffIcon from '../../assets/safeAreaOff.svg?url';
+    import safeAreaOnIcon from '../../assets/safeAreaOn.svg?url';
     import { shortcuts, type ShortcutList } from '../utils/keybinder/use';
     import { undo as undoShortcut, redo as redoShortcut } from '../utils/keybinder/shortcuts';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
@@ -29,7 +31,9 @@
         locale,
         previewThemeStore,
         themeStore,
-        direction
+        direction,
+        safeAreaEmulation,
+        safeAreaEmulationEnabled
     } = state;
 
     const VIEWPORT_LIST = [
@@ -167,6 +171,18 @@
                 title={$l10nString('props.height')}
                 on:change={onViewportHeightChange}
             />
+        {/if}
+
+        {#if safeAreaEmulation}
+            <CanvasButton
+                title={$l10n($safeAreaEmulationEnabled ? 'safeAreaOff' : 'safeAreaOn')}
+                on:click={() => $safeAreaEmulationEnabled = !$safeAreaEmulationEnabled}
+            >
+                <div
+                    class="canvas__button-icon canvas__button-icon_inversed"
+                    style:background-image="url({encodeBackground($safeAreaEmulationEnabled ? safeAreaOnIcon : safeAreaOffIcon)})"
+                ></div>
+            </CanvasButton>
         {/if}
 
         {#if $paletteEnabled}

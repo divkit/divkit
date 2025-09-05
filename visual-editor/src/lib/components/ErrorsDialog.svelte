@@ -223,6 +223,7 @@
         margin: 6px 0 0 36px;
         font-size: 14px;
         line-height: 1.35;
+        word-break: break-word;
     }
 
     .errors-dialog__selected-block {

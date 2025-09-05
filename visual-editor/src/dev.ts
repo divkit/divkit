@@ -72,6 +72,24 @@ const editor = window.editor = DivProEditor.init({
         cssValue: 'monospace'
     }],
     directionSelector: true,
+    safeAreaEmulation: {
+        top: {
+            name: 'safe_area_top',
+            value: 40
+        },
+        right: {
+            name: 'safe_area_right',
+            value: 0
+        },
+        bottom: {
+            name: 'safe_area_bottom',
+            value: 20
+        },
+        left: {
+            name: 'safe_area_left',
+            value: 0
+        }
+    },
     card: {
         json: JSON.stringify({
             card: {
@@ -270,7 +288,11 @@ const editor = window.editor = DivProEditor.init({
                                 type: 'match_parent'
                             },
                             orientation: 'overlap',
-                            type: 'container'
+                            type: 'container',
+                            margins: {
+                                top: '@{safe_area_top}',
+                                bottom: '@{safe_area_bottom}'
+                            }
                         }
                     }
                 ],
