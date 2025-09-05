@@ -2,6 +2,7 @@
 
 # Android Client:
 * Added `decimalFormat` function support.
+* Fixed text variable lookup in the `div-input` component when a mask is defined.
 * Provide default DivDownloader and DivRequestExecutor.
 
 # iOS Client:
