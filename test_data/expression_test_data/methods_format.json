@@ -188,7 +188,6 @@
         "value": "一,二三四,五六七.九"
       },
       "platforms": [
-        "android",
         "web",
         "ios"
       ]

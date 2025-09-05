@@ -8,7 +8,7 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
-import com.yandex.div.rule.ULocaleRule
+import com.yandex.div.rule.LocaleRule
 import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
@@ -29,7 +29,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     @Rule
     @JvmField
-    val localeRule = ULocaleRule()
+    val localeRule = LocaleRule()
 
     private val variableProvider = mock<VariableProvider>()
     private val evaluationContext = EvaluationContext(

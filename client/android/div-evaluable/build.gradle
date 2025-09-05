@@ -68,12 +68,10 @@ allOpen {
 
 dependencies {
     implementation libs.javax
-    implementation libs.icu4j
     compileOnly libs.json
 
     generatorImplementation libs.kotlin.stdlib
     generatorImplementation libs.javax
-    generatorImplementation libs.icu4j
     generatorCompileOnly libs.json
     generatorImplementation libs.kotlinpoet
 
