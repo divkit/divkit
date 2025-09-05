@@ -1,0 +1,65 @@
+{
+  "description": "Overlap container with match_parent height in NestedScrollView",
+  "platforms": [
+    "android"
+  ],
+  "unsupported_platforms": {
+    "ios": "Android-specific test",
+    "web": "Android-specific test",
+    "flutter": "Android-specific test"
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "custom",
+          "custom_type": "nested_scroll_view",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "border": {
+            "stroke": {
+              "color": "#000000"
+            }
+          },
+          "items": [
+            {
+              "type": "container",
+              "height": {
+                "type": "match_parent"
+              },
+              "orientation": "overlap",
+              "border": {
+                "stroke": {
+                  "color": "#0000FF",
+                  "width": 3
+                }
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text": "Div2View-like container with match_parent height in NestedScrollView",
+                  "paddings": {
+                    "top": 8,
+                    "right": 8,
+                    "bottom": 8,
+                    "left": 8
+                  },
+                  "font_size": 16,
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

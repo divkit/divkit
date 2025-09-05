@@ -10,12 +10,16 @@ import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomContainerViewAdapter.Companion.getDivChildFactory
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
+
+private const val NEW_CUSTOM_CONTAINER_1 = "new_custom_container_1"
+private const val NESTED_SCROLL_VIEW = "nested_scroll_view"
 
 class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
 
@@ -24,7 +28,8 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
         "old_custom_card_2" to { context: Context -> context.createCustomText("and i'm old as well!") },
         "new_custom_card_1" to { context: Context -> context.createCustomCard() },
         "new_custom_card_2" to { context: Context -> context.createCustomCard() },
-        "new_custom_container_1" to { context: Context -> context.createCustomContainer() },
+        NEW_CUSTOM_CONTAINER_1 to { context: Context -> context.createCustomContainer() },
+        NESTED_SCROLL_VIEW to { context: Context -> context.createNestedScrollView() }
     )
 
     override fun isCustomTypeSupported(type: String): Boolean = type in factories.keys
@@ -38,7 +43,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     ): View {
         val customView = factories[div.customType]?.invoke(divView.context)
             ?: throw IllegalStateException("Can not create view for unsupported custom type ${div.customType}")
-        if (div.customType == "new_custom_container_1" && div.items != null) {
+        if (div.customType == NEW_CUSTOM_CONTAINER_1 || div.customType == NESTED_SCROLL_VIEW && div.items != null) {
             div.items!!.forEach {
                 val childDivView = getDivChildFactory(divView).createChildView(
                     it,
@@ -59,7 +64,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
         path: DivStatePath
     ) {
         when(div.customType) {
-            "new_custom_container_1" -> {
+            NEW_CUSTOM_CONTAINER_1, NESTED_SCROLL_VIEW -> {
                 if (div.items != null && customView is ViewGroup) {
                     if (div.items!!.size != customView.childCount) {
                         throw IllegalStateException("Custom view childCount not equal to div child count! Div type is ${div.customType}")
@@ -98,6 +103,8 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     private fun Context.createCustomText(message: String): View = TextView(this).apply {
         text = message
     }
+
+    private fun Context.createNestedScrollView(): View = NestedScrollView(this)
 
     private fun Chronometer.bind() {
         setPadding(30, 30, 30, 30)
