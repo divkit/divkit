@@ -36,7 +36,7 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Data.Warm",
             "Div.Parsing.Templates.Cold",
             "Div.Render.Total.Cold",
-            "Div.Render.Total.Warm",
+            //"Div.Render.Total.Warm", // Generates unstable results at some perf-tests.
         ]
     )
     @Test
