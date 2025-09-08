@@ -1,7 +1,8 @@
 {
   "description": "Vertical no-wrap container with item_spacing applied between items and a separator at the start (separator doesn't overrides item_spacing)",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "card_item": {

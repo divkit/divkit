@@ -140,7 +140,8 @@
           "default_value": "0",
           "$description": "translations.json#/div_container_item_spacing",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "line_spacing": {
@@ -148,7 +149,8 @@
           "default_value": "0",
           "$description": "translations.json#/div_container_line_spacing",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "line_separator": {

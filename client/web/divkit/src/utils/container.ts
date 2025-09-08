@@ -68,11 +68,19 @@ export function calcAdditionalPaddings(
     return res;
 }
 
-export function calcItemsGap(
-    orientation: ContainerOrientation,
-    separator: SeparatorStyle | null,
-    lineSeparator: SeparatorStyle | null
-): string {
+export function calcItemsGap({
+    orientation,
+    separator,
+    lineSeparator,
+    itemSpacing,
+    lineSpacing
+}: {
+    orientation: ContainerOrientation;
+    separator: SeparatorStyle | null;
+    lineSeparator: SeparatorStyle | null;
+    itemSpacing: number;
+    lineSpacing: number;
+}): string {
     let vals: number[];
     const separatorHMargins = (separator?.margins.left || 0) + (separator?.margins.right || 0);
     const separatorVMargins = (separator?.margins.top || 0) + (separator?.margins.bottom || 0);
@@ -81,13 +89,13 @@ export function calcItemsGap(
 
     if (orientation === 'horizontal') {
         vals = [
-            lineSeparator?.show_between ? (lineSeparator.style.height + lineSeparatorVMargins) : 0,
-            separator?.show_between ? (separator.style.width + separatorHMargins) : 0
+            lineSeparator?.show_between ? (lineSeparator.style.height + lineSeparatorVMargins) : lineSpacing,
+            separator?.show_between ? (separator.style.width + separatorHMargins) : itemSpacing
         ];
     } else {
         vals = [
-            separator?.show_between ? (separator.style.height + separatorVMargins) : 0,
-            lineSeparator?.show_between ? (lineSeparator.style.width + lineSeparatorHMargins) : 0
+            separator?.show_between ? (separator.style.height + separatorVMargins) : itemSpacing,
+            lineSeparator?.show_between ? (lineSeparator.style.width + lineSeparatorHMargins) : lineSpacing
         ];
     }
 

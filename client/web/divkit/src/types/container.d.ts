@@ -32,6 +32,8 @@ export interface DivContainerData extends DivBaseData, DivActionableData {
     layout_mode?: ContainerLayoutMode;
     separator?: ContainerSeparator;
     line_separator?: ContainerSeparator;
+    item_spacing?: number;
+    line_spacing?: number;
     item_builder?: CollectionItemBuilder;
     aspect?: DivAspect;
     clip_to_bounds?: BooleanInt;

@@ -55,6 +55,7 @@
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import { isDeepEqual } from '../../utils/isDeepEqual';
     import { wrapError } from '../../utils/wrapError';
+    import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
@@ -74,6 +75,8 @@
     let lineSeparator: SeparatorStyle | null = null;
     let aspect: number | undefined = undefined;
     let childLayoutParams: LayoutParams = {};
+    let itemSpacing = 0;
+    let lineSpacing = 0;
 
     $: origJson = componentContext.origJson;
 
@@ -82,6 +85,8 @@
         contentVAlign = 'start';
         contentHAlign = 'start';
         aspect = undefined;
+        itemSpacing = 0;
+        lineSpacing = 0;
     }
 
     $: if (origJson) {
@@ -100,6 +105,8 @@
     $: jsonContentHAlign = componentContext.getDerivedFromVars(componentContext.json.content_alignment_horizontal);
     $: jsonSeparator = componentContext.getDerivedFromVars(componentContext.json.separator);
     $: jsonLineSeparator = componentContext.getDerivedFromVars(componentContext.json.line_separator);
+    $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
+    $: jsonLineSpacing = componentContext.getDerivedFromVars(componentContext.json.line_spacing);
     $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
     $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
     $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
@@ -235,6 +242,14 @@
     }
 
     $: {
+        itemSpacing = correctNonNegativeNumber($jsonItemSpacing, itemSpacing);
+    }
+
+    $: {
+        lineSpacing = correctNonNegativeNumber($jsonLineSpacing, lineSpacing);
+    }
+
+    $: {
         if ($jsonSeparator?.style && orientation !== 'overlap' && hasGapSupport()) {
             const style = correctDrawableStyle<DrawableStyle | null>(
                 $jsonSeparator.style,
@@ -250,6 +265,12 @@
                     style,
                     margins: prepareMargins($jsonSeparator.margins)
                 };
+
+                if (separator.show_between && itemSpacing) {
+                    componentContext.logError(wrapError(new Error('item_spacing will be ignored due to the \'separator\' property.'), {
+                        level: 'warn'
+                    }));
+                }
             } else {
                 separator = null;
             }
@@ -274,6 +295,12 @@
                     style,
                     margins: prepareMargins($jsonLineSeparator.margins)
                 };
+
+                if (lineSeparator.show_between && lineSpacing) {
+                    componentContext.logError(wrapError(new Error('line_spacing will be ignored due to the \'line_separator\' property.'), {
+                        level: 'warn'
+                    }));
+                }
             } else {
                 lineSeparator = null;
             }
@@ -294,7 +321,6 @@
             aspect = undefined;
         }
     }
-
 
     $: {
         let newChildLayoutParams: LayoutParams = {};
@@ -347,8 +373,14 @@
     };
 
     $: style = {
-        gap: (separator || lineSeparator) ?
-            calcItemsGap(orientation, separator, lineSeparator) :
+        gap: (separator || lineSeparator || itemSpacing || lineSpacing) ?
+            calcItemsGap({
+                orientation,
+                separator,
+                lineSeparator,
+                itemSpacing,
+                lineSpacing
+            }) :
             undefined,
         'aspect-ratio': aspect
     };

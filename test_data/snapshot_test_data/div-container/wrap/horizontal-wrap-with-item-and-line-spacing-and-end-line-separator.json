@@ -1,7 +1,8 @@
 {
   "description": "Horizontal wrap container with item_spacing and line_spacing set, and end line_separator defined (line_separator doesn't overrides line_spacing)",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "card_item": {

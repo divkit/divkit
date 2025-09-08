@@ -124,103 +124,213 @@ describe('container', () => {
     });
 
     test('calcItemsGap', () => {
-        expect(calcItemsGap('horizontal', null, null)).toBe('0 0');
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('0 0');
 
-        expect(calcItemsGap('horizontal', {
-            style: separatorStyle,
-            margins: emptyMargins
-        }, null)).toBe('0 0');
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: null,
+            itemSpacing: 10,
+            lineSpacing: 0
+        })).toBe('0 1em');
 
-        expect(calcItemsGap('horizontal', {
-            style: separatorStyle,
-            show_between: true,
-            margins: emptyMargins
-        }, null)).toBe('0 1em');
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 10
+        })).toBe('1em 0');
 
-        expect(calcItemsGap('vertical', {
-            style: {
-                width: 10,
-                height: 20,
-                borderRadius: 0,
-                background: '#000'
+        expect(calcItemsGap({
+            orientation: 'vertical',
+            separator: null,
+            lineSeparator: null,
+            itemSpacing: 10,
+            lineSpacing: 0
+        })).toBe('1em 0');
+
+        expect(calcItemsGap({
+            orientation: 'vertical',
+            separator: null,
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 10
+        })).toBe('0 1em');
+
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                margins: emptyMargins
             },
-            show_between: true,
-            margins: emptyMargins
-        }, null)).toBe('2em 0');
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('0 0');
 
-        expect(calcItemsGap('horizontal', {
-            style: separatorStyle,
-            show_between: true,
-            margins: emptyMargins
-        }, {
-            style: separatorStyle20,
-            show_between: true,
-            margins: emptyMargins
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                show_between: true,
+                margins: emptyMargins
+            },
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('0 1em');
+
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                show_between: true,
+                margins: emptyMargins
+            },
+            lineSeparator: null,
+            itemSpacing: 20,
+            lineSpacing: 0
+        })).toBe('0 1em');
+
+        expect(calcItemsGap({
+            orientation: 'vertical',
+            separator: {
+                style: {
+                    width: 10,
+                    height: 20,
+                    borderRadius: 0,
+                    background: '#000'
+                },
+                show_between: true,
+                margins: emptyMargins
+            },
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('2em 0');
+
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                show_between: true,
+                margins: emptyMargins
+            },
+            lineSeparator: {
+                style: separatorStyle20,
+                show_between: true,
+                margins: emptyMargins
+            },
+            itemSpacing: 0,
+            lineSpacing: 0
         })).toBe('2em 1em');
 
-        expect(calcItemsGap('horizontal', null, {
-            style: separatorStyle20,
-            show_between: true,
-            margins: emptyMargins
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: {
+                style: separatorStyle20,
+                show_between: true,
+                margins: emptyMargins
+            },
+            itemSpacing: 0,
+            lineSpacing: 0
         })).toBe('2em 0');
     });
 
     test('calcItemsGap with margins', () => {
-        expect(calcItemsGap('horizontal', {
-            style: separatorStyle,
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                left: 10
-            }
-        }, null)).toBe('0 2em');
-
-        expect(calcItemsGap('vertical', {
-            style: {
-                width: 10,
-                height: 20,
-                borderRadius: 0,
-                background: '#000'
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    left: 10
+                }
             },
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                top: 10
-            }
-        }, null)).toBe('3em 0');
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('0 2em');
 
-        expect(calcItemsGap('horizontal', {
-            style: separatorStyle,
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                left: 20
-            }
-        }, {
-            style: separatorStyle20,
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                top: 10
-            }
+        expect(calcItemsGap({
+            orientation: 'vertical',
+            separator: {
+                style: {
+                    width: 10,
+                    height: 20,
+                    borderRadius: 0,
+                    background: '#000'
+                },
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    top: 10
+                }
+            },
+            lineSeparator: null,
+            itemSpacing: 0,
+            lineSpacing: 0
+        })).toBe('3em 0');
+
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: {
+                style: separatorStyle,
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    left: 20
+                }
+            },
+            lineSeparator: {
+                style: separatorStyle20,
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    top: 10
+                }
+            },
+            itemSpacing: 0,
+            lineSpacing: 0
         })).toBe('3em 3em');
 
-        expect(calcItemsGap('horizontal', null, {
-            style: separatorStyle20,
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                left: 10
-            }
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: {
+                style: separatorStyle20,
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    left: 10
+                }
+            },
+            itemSpacing: 0,
+            lineSpacing: 0
         })).toBe('2em 0');
 
-        expect(calcItemsGap('horizontal', null, {
-            style: separatorStyle20,
-            show_between: true,
-            margins: {
-                ...emptyMargins,
-                top: 10
-            }
+        expect(calcItemsGap({
+            orientation: 'horizontal',
+            separator: null,
+            lineSeparator: {
+                style: separatorStyle20,
+                show_between: true,
+                margins: {
+                    ...emptyMargins,
+                    top: 10
+                }
+            },
+            itemSpacing: 0,
+            lineSpacing: 0
         })).toBe('3em 0');
     });
 });

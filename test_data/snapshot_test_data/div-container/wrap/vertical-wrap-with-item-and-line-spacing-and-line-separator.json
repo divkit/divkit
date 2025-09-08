@@ -1,7 +1,8 @@
 {
   "description": "Vertical wrap container with line_separator (between columns) and item_spacing applied; no item-level separator",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "card_item": {

@@ -1,7 +1,8 @@
 {
   "description": "Vertical wrap container with item_spacing (between items in a column) and line_spacing (between columns) across multiple columns",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "card_item": {

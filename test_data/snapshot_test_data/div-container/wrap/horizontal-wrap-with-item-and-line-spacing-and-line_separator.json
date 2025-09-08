@@ -1,7 +1,8 @@
 {
   "description": "Horizontal wrap container with item_spacing and line_spacing set, and line_separator defined (overrides line_spacing between lines, item_spacing still applied). Line separator is a thin gray vertical line with margins.",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "card_item": {
