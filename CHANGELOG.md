@@ -2,6 +2,7 @@
 
 # Android Client:
 * Added `decimalFormat` function support.
+* Fixed crash in empty `pager` with `indicator`.
 * Fixed text variable lookup in the `div-input` component when a mask is defined.
 * Provide default DivDownloader and DivRequestExecutor.
 
