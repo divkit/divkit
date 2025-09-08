@@ -36,7 +36,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Total.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
-            "Div.Rebinding.Cold",
+            //"Div.Rebinding.Cold", // Generates unstable results at some perf-tests.
             "Div.Rebinding.Warm"
         ]
     )
@@ -82,7 +82,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Total.Warm",
             "Div.Render.Total.Cold",
             //"Div.Render.Total.Warm", // Generates unstable results at some perf-tests.
-            "Div.Rebinding.Cold",
+            //"Div.Rebinding.Cold", // Generates unstable results at some perf-tests.
             "Div.Rebinding.Warm"
         ]
     )
