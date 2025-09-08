@@ -48,6 +48,7 @@ public final class GalleryView: BlockView {
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
   private var scrollStartOffset: CGFloat = 0
+  private var configurationInProgress = false
   private weak var overscrollDelegate: ScrollDelegate? {
     didSet {
       if let previousDelegate = oldValue {
@@ -151,6 +152,13 @@ public final class GalleryView: BlockView {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
+    guard !configurationInProgress else { return }
+
+    configurationInProgress = true
+    defer {
+      configurationInProgress = false
+    }
+
     self.layoutFactory = layoutFactory
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
