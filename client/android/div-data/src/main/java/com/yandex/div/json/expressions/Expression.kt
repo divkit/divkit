@@ -276,9 +276,9 @@ abstract class Expression<T : Any> {
 
         @JvmStatic
         @Suppress("UNCHECKED_CAST")
-        fun <T : Any> constant(value: T): Expression<T> {
+        fun <T : Any> constant(value: T, logger: ParsingErrorLogger = ParsingErrorLogger.LOG): Expression<T> {
             return if (value is String) {
-                StringConstantExpression(value) as Expression<T>
+                StringConstantExpression(value, logger = logger) as Expression<T>
             } else {
                 ConstantExpression(value)
             }

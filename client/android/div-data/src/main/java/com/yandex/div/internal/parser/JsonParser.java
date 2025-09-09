@@ -210,7 +210,7 @@ public class JsonParser {
                 logger.logError(typeMismatch(jsonObject, key, intermediate));
                 return null;
             }
-            return Expression.constant(value);
+            return Expression.constant(value, logger);
         }
     }
 
@@ -256,7 +256,7 @@ public class JsonParser {
                 throw typeMismatch(jsonObject, key, intermediate);
             }
 
-            return Expression.constant(value);
+            return Expression.constant(value, logger);
         }
     }
 
@@ -1086,7 +1086,7 @@ public class JsonParser {
                     continue;
                 }
 
-                untypedList.set(i, Expression.constant(item));
+                untypedList.set(i, Expression.constant(item, logger));
             }
 
             List<Expression<T>> list = (List<Expression<T>>) untypedList;

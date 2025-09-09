@@ -118,7 +118,7 @@ public class JsonExpressionParser {
                 throw typeMismatch(jsonObject, key, intermediate);
             }
 
-            return Expression.constant(value);
+            return Expression.constant(value, context.getLogger());
         }
     }
 
@@ -252,7 +252,7 @@ public class JsonExpressionParser {
                 context.getLogger().logError(typeMismatch(jsonObject, key, intermediate));
                 return null;
             }
-            return Expression.constant(value);
+            return Expression.constant(value, context.getLogger());
         }
     }
 
@@ -412,7 +412,7 @@ public class JsonExpressionParser {
                 if (item instanceof Expression) {
                     continue;
                 }
-                untypedList.set(i, Expression.constant(item));
+                untypedList.set(i, Expression.constant(item, context.getLogger()));
             }
 
             List<Expression<V>> list = (List<Expression<V>>) untypedList;
@@ -579,7 +579,7 @@ public class JsonExpressionParser {
                     continue;
                 }
 
-                untypedList.set(i, Expression.constant(item));
+                untypedList.set(i, Expression.constant(item, context.getLogger()));
             }
 
             List<Expression<V>> list = (List<Expression<V>>) untypedList;

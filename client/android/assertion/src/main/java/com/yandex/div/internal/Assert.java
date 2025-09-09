@@ -262,10 +262,12 @@ public class Assert {
     }
 
     public static void assertMainThread() {
+        if (!isEnabled()) return;
         assertSame("Code run not in main thread!", Looper.getMainLooper(), Looper.myLooper());
     }
 
     public static void assertNotMainThread() {
+        if (!isEnabled()) return;
         assertNotSame("Code run in main thread!", Looper.getMainLooper(), Looper.myLooper());
     }
 

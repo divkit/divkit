@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.json.expressions.Expression
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -13,9 +12,6 @@ data class ExpressionTestCase(
     val expectedValue: Any,
     val expectedWarnings: List<String>,
 ) {
-    val isExpressionConstant: Boolean
-        get() = !Expression.mayBeExpression(expression) && !expression.contains("\\")
-
     val description: String
         get() {
             val formattedExpression = if (expression.startsWith("@{")

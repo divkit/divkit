@@ -46,7 +46,7 @@ object LiteralsEscaper {
 
     private fun escapeLiteral(string: String, index: Int, possibleLiterals: Array<String>): String {
         if (index == string.length || string[index] == ' ') {
-            throw TokenizingException("Alone backslash at ${index - 1}")
+            throw EvaluableException("Error tokenizing '$string'.", TokenizingException("Alone backslash at ${index - 1}"))
         }
         for (literal in possibleLiterals) {
             if (isPossibleEscapeLiteral(literal, string, index)) {

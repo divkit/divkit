@@ -1,28 +1,36 @@
 package com.yandex.div.core.expression
 
+import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_UNORDERED_ARRAY
-import com.yandex.div.core.expression.ExpressionTestCaseUtils.toVariable
-import com.yandex.div.core.expression.variables.wrapVariableValue
-import com.yandex.div.evaluable.Evaluable
-import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.evaluable.EvaluationContext
-import com.yandex.div.evaluable.VariableProvider
-import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.createDivDataFromTestVars
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.readExpression
+import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.storedvalues.StoredValuesController
+import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.core.view2.divs.DivActionBinder
+import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.rule.LocaleRule
 import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
 import com.yandex.div.test.expression.TestCaseOrError
-import com.yandex.div.test.expression.withEvaluator
 import org.json.JSONArray
 import org.json.JSONObject
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.MockedStatic
+import org.mockito.Mockito
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
+import com.yandex.div.internal.Assert as DivAssert
 
 @RunWith(Parameterized::class)
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
@@ -31,37 +39,64 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     @JvmField
     val localeRule = LocaleRule()
 
-    private val variableProvider = mock<VariableProvider>()
-    private val evaluationContext = EvaluationContext(
-        variableProvider = variableProvider,
-        storedValueProvider = mock(),
-        functionProvider = GeneratedBuiltinFunctionProvider,
-        warningSender = { _, _ ->  }
-    )
     private lateinit var testCase: ExpressionTestCase
+
+    private val mockDivVariableController = mock<DivVariableController> {
+        on { variableSource } doReturn mock()
+    }
+
+    private val warnings = mutableListOf<String>()
+    private val errors = mutableListOf<String>()
+    private val warningCaptor = argumentCaptor<Throwable>()
+    private val errorCollector = mock<ErrorCollector> {
+        on { logWarning(warningCaptor.capture()) } doAnswer {
+            warningCaptor.lastValue.cause?.message?.let { warnings += it }
+        }
+    }
+    private val testParsingLogger = ParsingErrorLogger { e ->
+        var t: Throwable? = e
+        while (t != null) {
+            t.message?.let { errors += it }
+            t = t.cause
+        }
+    }
+
+    private lateinit var runtimeProvider: ExpressionsRuntimeProvider
+    private lateinit var resolver: ExpressionResolverImpl
 
     @Before
     fun setUp() {
+        warnings.clear()
+        errors.clear()
         testCase = caseOrError.getCaseOrThrow()
-        val variables = testCase.variables.map { it.toVariable() }
-        for (variable in variables) {
-            whenever(variableProvider.get(variable.name)).thenReturn(variable.getValue().wrapVariableValue())
-        }
+        val testDivData = createDivDataFromTestVars(testCase.variables, testParsingLogger)
+
+        runtimeProvider = ExpressionsRuntimeProvider(
+            mockDivVariableController,
+            mock<DivActionBinder>(),
+            mock<Div2Logger>(),
+            mock<StoredValuesController>(),
+        )
+
+        val rootRuntime = runtimeProvider.createRootRuntime(
+            data = testDivData,
+            errorCollector = errorCollector,
+            runtimeStore = mock()
+        )
+        resolver = rootRuntime.expressionResolver
     }
 
     @Test
     fun runExpressionTestCase() {
-        if (testCase.isExpressionConstant) {
-            Assert.assertEquals("expression: '${testCase.expression}'", testCase.expectedValue, testCase.expression)
-            return
-        }
         when (val expectedValue = testCase.expectedValue) {
             is Exception -> {
-                val actualValue = evalExpression(testCase.expectedWarnings)
-                Assert.assertTrue(actualValue is Exception)
+                evalExpression()
                 val expectedMessage =
                     expectedValue.message.takeIf { it?.isNotEmpty() == true } ?: return
-                Assert.assertEquals(expectedMessage, (actualValue as Throwable).message)
+                Assert.assertTrue(
+                    "Expected error <$expectedMessage>, but got $errors",
+                    errors.contains(expectedMessage)
+                )
             }
 
             is JSONArray, is JSONObject -> {
@@ -93,7 +128,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     private fun checkEquality(testCase: ExpressionTestCase, validate: (String, Any, Any) -> Unit) {
-        val evalExpression = evalExpression(testCase.expectedWarnings)
+        val evalExpression = evalExpression()
         if (evalExpression is Throwable) {
             throw AssertionError(
                 "Expecting '${testCase.expectedValue}' at expression '${testCase.expression}' " +
@@ -102,29 +137,39 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         validate("expression: '${testCase.expression}'", testCase.expectedValue, evalExpression)
     }
 
-    private fun evalExpression(expectedWarnings: List<String>): Any {
-        return try {
-            withEvaluator(
-                evaluationContext,
-                warningsValidator = { actualWarnings ->
-                    val expectedSorted = expectedWarnings.sorted()
-                    val actualSorted = actualWarnings.sorted()
+    private fun evalExpression(): Any {
+        val value = readExpression(
+            raw = testCase.expression,
+            expectedType = testCase.expectedType,
+            logger = testParsingLogger,
+        ).evaluate(resolver)
 
-                    Assert.assertEquals(
-                        "Expected warnings: $expectedWarnings, got: $actualWarnings",
-                        expectedSorted,
-                        actualSorted
-                    )
-                }
-            ) {
-                eval<Any>(Evaluable.prepare(testCase.expression))
-            }
-        } catch (e: EvaluableException) {
-            e
-        }
+        val expectedSorted = testCase.expectedWarnings.sorted()
+        val actualSorted = warnings.sorted()
+        Assert.assertEquals(
+            "Expected warnings: $expectedSorted, got: $actualSorted",
+            expectedSorted,
+            actualSorted
+        )
+        return value
     }
 
     companion object {
+
+        private lateinit var assertStatic: MockedStatic<com.yandex.div.internal.Assert>
+
+        @JvmStatic
+        @BeforeClass
+        fun disableDivThreadAsserts() {
+            assertStatic = Mockito.mockStatic(DivAssert::class.java)
+        }
+
+        @JvmStatic
+        @AfterClass
+        fun restoreDivThreadAsserts() {
+            assertStatic.close()
+        }
+
         private const val TEST_CASES_FILE_PATH = "expression_test_data"
 
         @JvmStatic

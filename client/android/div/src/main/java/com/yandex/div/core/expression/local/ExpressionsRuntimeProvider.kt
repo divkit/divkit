@@ -53,8 +53,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
         val warningSender = WarningSender { expressionContext, message ->
             val rawExpr = expressionContext.evaluable.rawExpr
-            val warning = "Warning occurred while evaluating '$rawExpr': $message"
-            errorCollector.logWarning(Throwable(warning))
+            val warning = "Warning occurred while evaluating '$rawExpr':"
+            errorCollector.logWarning(Throwable(warning, Throwable(message)))
         }
         val evaluationContext =
             EvaluationContext(variableController, storedValueProvider, functionProvider, warningSender)
