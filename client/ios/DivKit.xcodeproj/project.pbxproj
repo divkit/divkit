@@ -1749,10 +1749,10 @@
 					};
 				};
 				textSettings = {
-            indentWidth = 2;
-            tabWidth = 2;
-            usesTabs = 0;
-        };
+					indentWidth = 2;
+					tabWidth = 2;
+					usesTabs = 0;
+				};
 			};
 			buildConfigurationList = 8C9844F62864C2CC001ED5F3 /* Build configuration list for PBXProject "DivKit" */;
 			compatibilityVersion = "Xcode 13.0";
@@ -1776,12 +1776,12 @@
 				8C4409EC2864C4D200EF4175 /* DivKitPlayground */,
 				8C9284C4288ACCBA00BEA1FA /* DivKitSnapshotTests */,
 				8C7B1B192865BFF10036EF4C /* DivKitTests */,
+				9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */,
+				986F57962CD68E8400990A2A /* DivKitUITests */,
+				7E2DFA8E2C7C7ED40095775C /* LayoutKitPlayground */,
 				8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329232875D534003F799A /* LayoutKitTests */,
 				8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
-				7E2DFA8E2C7C7ED40095775C /* LayoutKitPlayground */,
-				986F57962CD68E8400990A2A /* DivKitUITests */,
-				9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */,
 			);
 		};
 /* End PBXProject section */

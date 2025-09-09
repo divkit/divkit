@@ -6,15 +6,13 @@ import VGSL
 
 let testCardId = DivCardID(rawValue: "test_card_id")
 
+private let mode = ProcessInfo.processInfo.arguments.contains("UPDATE_SNAPSHOTS")
+  ? TestMode.update
+  : TestMode.verify
+
 @MainActor
 final class SnapshotTestRunner {
   private typealias CheckAction = (_ view: UIView?) async throws -> Void
-
-  #if UPDATE_SNAPSHOTS
-  let mode = TestMode.update
-  #else
-  let mode = TestMode.verify
-  #endif
 
   private let file: JsonFile
 
@@ -155,10 +153,8 @@ final class SnapshotTestRunner {
       nonEmptyView = testView
     }
 
-    let image = try #require(nonEmptyView.makeSnapshot())
-
     try SnapshotTestKit.compareSnapshot(
-      image,
+      #require(nonEmptyView.makeSnapshot()),
       referenceFileUrl: referenceFileUrl(screen: screen, caseName: caseName, stepName: stepName),
       resultFolderUrl: resultsFolderUrl(screen: screen, caseName: caseName, stepName: stepName),
       mode: mode
