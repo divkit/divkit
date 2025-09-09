@@ -30,6 +30,7 @@ import com.yandex.div.core.view2.divs.getFontVariations
 import com.yandex.div.core.view2.divs.supportFontVariations
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.unitToPx
+import com.yandex.div.core.view2.divs.unitToPxF
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
 import com.yandex.div.core.view2.getTypeface
@@ -48,6 +49,7 @@ import com.yandex.div2.DivText
 import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextRangeBackground
 import com.yandex.div2.DivTextRangeBorder
+import com.yandex.div2.DivTextRangeMask
 import javax.inject.Inject
 
 private typealias TextConsumer = (Spanned) -> Unit
@@ -425,6 +427,17 @@ internal class SpannedTextBuilder @Inject constructor(
         span.textShadow?.let { textShadow ->
             spannedText.setSpan(ShadowSpan(textShadow), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+
+        span.mask?.let { mask ->
+            when (mask) {
+                is MaskData.Particles -> {
+                    if (mask.isEnabled) spannedText.setSpan(MaskSpan(mask, textView as? DivLineHeightTextView), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                is MaskData.Solid -> {
+                    if (mask.isEnabled) spannedText.setSpan(MaskSpan(mask, textView as? DivLineHeightTextView), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+        }
     }
 
     private fun addActionSpan(
@@ -577,6 +590,7 @@ internal class SpannedTextBuilder @Inject constructor(
             fontVariationSettings = range.fontVariationSettings?.evaluate(resolver),
             letterSpacing = range.letterSpacing?.evaluate(resolver)?.div(fontSizeValue ?: textFontSizeValue),
             lineHeight = range.lineHeight?.evaluate(resolver)?.unitToPx(displayMetrics, fontSizeUnit),
+            mask = createMaskData(context, bindingContext, range.mask),
             strike = range.strike?.evaluate(resolver),
             textColor = range.textColor?.evaluate(resolver),
             textShadow = createShadowData(context, bindingContext, range.textShadow, textData.textColor),
@@ -608,6 +622,38 @@ internal class SpannedTextBuilder @Inject constructor(
         }.color
 
         return ShadowData(offsetX, offsetY, radius, color)
+    }
+
+    private fun createMaskData(
+        context: Context,
+        bindingContext: BindingContext,
+        mask: DivTextRangeMask?
+    ): MaskData? {
+        if (mask == null) return null
+
+        val resolver = bindingContext.expressionResolver
+        val displayMetrics = context.resources.displayMetrics
+        return when (mask) {
+            is DivTextRangeMask.Particles -> {
+                val value = mask.value
+                val particleSizeValue = value.particleSize.value.evaluate(resolver)
+                val particleSizeUnit  = value.particleSize.unit.evaluate(resolver)
+                MaskData.Particles(
+                    color = value.color.evaluate(resolver),
+                    density = value.density.evaluate(resolver).toFloat(),
+                    isAnimated = value.isAnimated.evaluate(resolver),
+                    isEnabled = value.isEnabled.evaluate(resolver),
+                    particleSize = particleSizeValue.unitToPxF(displayMetrics, particleSizeUnit)
+                )
+            }
+            is DivTextRangeMask.Solid -> {
+                val value = mask.value
+                MaskData.Solid(
+                    color = value.color.evaluate(resolver),
+                    isEnabled = value.isEnabled.evaluate(resolver)
+                )
+            }
+        }
     }
 
     private fun DivTextAlignmentVertical.toTextVerticalAlignment(): TextVerticalAlignment {

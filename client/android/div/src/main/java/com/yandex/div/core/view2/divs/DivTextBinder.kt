@@ -52,6 +52,8 @@ import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
+import com.yandex.div2.DivTextRangeMaskParticles
+import com.yandex.div2.DivTextRangeMaskSolid
 import javax.inject.Inject
 
 private const val SOFT_HYPHEN = '\u00AD'
@@ -658,6 +660,20 @@ internal class DivTextBinder @Inject constructor(
             when (val background = range.background?.value()) {
                 is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
             }
+            when (val mask = range.mask?.value()) {
+                is DivTextRangeMaskSolid -> {
+                    addSubscription(mask.isEnabled.observe(resolver, callback))
+                    addSubscription(mask.color.observe(resolver, callback))
+                }
+                is DivTextRangeMaskParticles -> {
+                    addSubscription(mask.isEnabled.observe(resolver, callback))
+                    addSubscription(mask.color.observe(resolver, callback))
+                    addSubscription(mask.density.observe(resolver, callback))
+                    addSubscription(mask.isAnimated.observe(resolver, callback))
+                    addSubscription(mask.particleSize.value.observe(resolver, callback))
+                    addSubscription(mask.particleSize.unit.observe(resolver, callback))
+                }
+            }
             addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
             addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
             if (supportFontVariations) {
@@ -818,6 +834,20 @@ internal class DivTextBinder @Inject constructor(
             addSubscription(range.underline?.observe(resolver, callback))
             when (val background = range.background?.value()) {
                 is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
+            }
+            when (val mask = range.mask?.value()) {
+                is DivTextRangeMaskSolid -> {
+                    addSubscription(mask.isEnabled.observe(resolver, callback))
+                    addSubscription(mask.color.observe(resolver, callback))
+                }
+                is DivTextRangeMaskParticles -> {
+                    addSubscription(mask.isEnabled.observe(resolver, callback))
+                    addSubscription(mask.color.observe(resolver, callback))
+                    addSubscription(mask.density.observe(resolver, callback))
+                    addSubscription(mask.isAnimated.observe(resolver, callback))
+                    addSubscription(mask.particleSize.value.observe(resolver, callback))
+                    addSubscription(mask.particleSize.unit.observe(resolver, callback))
+                }
             }
             addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
             addSubscription(range.border?.stroke?.width?.observe(resolver, callback))

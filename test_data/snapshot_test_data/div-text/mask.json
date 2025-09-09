@@ -1,7 +1,8 @@
 {
   "description": "Text with different masks",
   "platforms": [
-    "web"
+    "web",
+    "android"
   ],
   "templates": {
     "text_template": {

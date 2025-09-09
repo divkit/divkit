@@ -22,6 +22,7 @@ internal data class SpanData(
     val fontVariationSettings: JSONObject?,
     val letterSpacing: Double?,
     @Px val lineHeight: Int?,
+    val mask: MaskData?,
     val strike: DivLineStyle?,
     @ColorInt val textColor: Int?,
     val textShadow: ShadowData?,
@@ -46,6 +47,7 @@ internal data class SpanData(
             fontVariationSettings = span.fontVariationSettings ?: fontVariationSettings,
             letterSpacing = span.letterSpacing ?: letterSpacing,
             lineHeight = span.lineHeight ?: lineHeight,
+            mask = span.mask ?: mask,
             strike = span.strike ?: strike,
             textColor = span.textColor ?: textColor,
             textShadow = span.textShadow ?: textShadow,
@@ -67,6 +69,7 @@ internal data class SpanData(
             && fontWeightValue == null
             && letterSpacing == null
             && lineHeight == null
+            && mask == null
             && strike == null
             && textColor == null
             && textShadow == null
@@ -100,6 +103,7 @@ internal data class SpanData(
                 fontVariationSettings = null,
                 letterSpacing = null,
                 lineHeight = null,
+                mask = null,
                 strike = null,
                 textColor = null,
                 textShadow = null,
@@ -125,6 +129,7 @@ internal data class SpanData(
                 fontVariationSettings = null,
                 letterSpacing = null,
                 lineHeight = lineHeight,
+                mask = null,
                 strike = null,
                 textColor = null,
                 textShadow = null,

@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.text.Spanned
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
+import com.yandex.div.core.view2.spannable.ParticlesTicker
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.widget.TextViewWithAccessibleSpans
@@ -29,7 +31,11 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
 
     internal var animationStartDelay = 0L
     private var animationStarted = false
+    private var particlesTicker: ParticlesTicker? = null
 
+    internal fun getParticlesTicker(): ParticlesTicker {
+        return particlesTicker ?: ParticlesTicker(this).also { particlesTicker = it }
+    }
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         onBoundsChanged(w, h)
@@ -59,6 +65,21 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
             }
         }
         super.onDraw(canvas)
+    }
+
+    override fun onWindowVisibilityChanged(visibility: Int) {
+        super.onWindowVisibilityChanged(visibility)
+        if (visibility == View.VISIBLE) {
+            particlesTicker?.resumeIfNeeded()
+        } else {
+            particlesTicker?.stop()
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        particlesTicker?.stop()
+        particlesTicker = null
+        super.onDetachedFromWindow()
     }
 }
 

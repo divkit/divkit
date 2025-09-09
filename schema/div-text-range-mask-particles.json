@@ -34,8 +34,9 @@
         }
       },
       "platforms": [
-        "web",
-        "ios"
+        "android",
+        "ios",
+        "web"
       ],
       "required": [
         "type",

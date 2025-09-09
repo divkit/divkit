@@ -1907,7 +1907,8 @@
       "title": "Text mask",
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ],
       "tags": [
         "DivText"
