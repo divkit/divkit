@@ -54,6 +54,9 @@ abstract class DivViewGroup @JvmOverloads constructor(
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
 
+    protected fun baseMeasureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int) =
+        super.measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec)
+
     override fun measureChildWithMargins(
         child: View,
         parentWidthMeasureSpec: Int,
@@ -78,6 +81,14 @@ abstract class DivViewGroup @JvmOverloads constructor(
         )
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
+
+    protected fun baseMeasureChildWithMargins(
+        child: View,
+        parentWidthMeasureSpec: Int,
+        widthUsed: Int,
+        parentHeightMeasureSpec: Int,
+        heightUsed: Int
+    ) = super.measureChildWithMargins(child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed)
 
     internal val horizontalGravity get() = gravity.toHorizontalGravity()
 

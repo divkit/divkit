@@ -42,4 +42,15 @@ internal class DivCustomWrapper @JvmOverloads constructor(
             child.baseline + child.marginTop + paddingTop
         } ?: super.getBaseline()
     }
+
+    override fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int) =
+        baseMeasureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec)
+
+    override fun measureChildWithMargins(
+        child: View,
+        parentWidthMeasureSpec: Int,
+        widthUsed: Int,
+        parentHeightMeasureSpec: Int,
+        heightUsed: Int
+    ) = baseMeasureChildWithMargins(child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed)
 }

@@ -15,6 +15,7 @@ import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomContainerViewAdapter.Companion.getDivChildFactory
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
@@ -29,7 +30,9 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
         "new_custom_card_1" to { context: Context -> context.createCustomCard() },
         "new_custom_card_2" to { context: Context -> context.createCustomCard() },
         NEW_CUSTOM_CONTAINER_1 to { context: Context -> context.createCustomContainer() },
-        NESTED_SCROLL_VIEW to { context: Context -> context.createNestedScrollView() }
+        NESTED_SCROLL_VIEW to { context: Context -> context.createNestedScrollView() },
+        "custom_card_with_min_size" to
+            { context: Context -> context.createCustomText("Text is placed in frame", minWidthDp = 100)},
     )
 
     override fun isCustomTypeSupported(type: String): Boolean = type in factories.keys
@@ -100,8 +103,9 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     private fun Context.createCustomContainer(): View = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
     }
-    private fun Context.createCustomText(message: String): View = TextView(this).apply {
+    private fun Context.createCustomText(message: String, minWidthDp: Int = 0): View = TextView(this).apply {
         text = message
+        minimumWidth = minWidthDp.dpToPx(resources.displayMetrics)
     }
 
     private fun Context.createNestedScrollView(): View = NestedScrollView(this)

@@ -1,0 +1,36 @@
+{
+  "description": "Custom with fixed size",
+  "platforms": [
+    "android"
+  ],
+  "unsupported_platforms": {
+    "ios": "Android-specific test",
+    "web": "Android-specific test",
+    "flutter": "Android-specific test"
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "custom",
+          "custom_type": "custom_card_with_min_size",
+          "width": {
+            "type": "fixed",
+            "value": 60
+          },
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "border": {
+            "stroke": {
+              "color": "#000000"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
