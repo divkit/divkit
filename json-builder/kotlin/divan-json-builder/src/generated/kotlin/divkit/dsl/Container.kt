@@ -214,7 +214,7 @@ data class Container internal constructor(
          */
         val itemBuilder: Property<CollectionItemBuilder>?,
         /**
-         * Spacing between items along the main axis. Ignored if `separator` is set.
+         * Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
          * Default value: `0`.
          */
         val itemSpacing: Property<Int>?,
@@ -236,7 +236,7 @@ data class Container internal constructor(
          */
         val lineSeparator: Property<Separator>?,
         /**
-         * Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+         * Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
          * Default value: `0`.
          */
         val lineSpacing: Property<Int>?,
@@ -497,12 +497,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -666,12 +666,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -835,12 +835,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1004,12 +1004,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1173,12 +1173,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1342,12 +1342,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1512,12 +1512,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1685,12 +1685,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1856,12 +1856,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2027,12 +2027,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2200,12 +2200,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2373,12 +2373,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2527,9 +2527,9 @@ fun Container.modify(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -2640,12 +2640,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2814,12 +2814,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -2969,9 +2969,9 @@ fun Component<Container>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -3083,12 +3083,12 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
- * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` is set.
+ * @param itemSpacing Spacing between items along the main axis. Ignored if `separator` with type `show_between` is set.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` is set.
+ * @param lineSpacing Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
