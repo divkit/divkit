@@ -61,8 +61,9 @@ internal class DivTabsAdapter(
         }
 
     fun setData(data: Input<DivSimpleTab>, selectedTab: Int) {
-        super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
+        // Need to update childIds before set data to use right ids while setting.
         childIds = data.tabs.getIds({ item.div })
+        super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
         tabModels.clear()
         mPager.setCurrentItem(selectedTab, true)
     }
