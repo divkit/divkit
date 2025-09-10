@@ -98,12 +98,8 @@ extension DivState: DivBlockModeling {
     let stateAlignment = activeStateDiv?
       .resolveAlignment(context, defaultAlignment: defaultStateAlignment)
       ?? defaultStateAlignment
-    let child = if animationOut == nil, animationIn == nil {
-      LayeredBlock.Child(
-        content: activeBlock,
-        alignment: stateAlignment
-      )
-    } else {
+    let hasAnimation = animationOut != nil || animationIn != nil || activeState.animationOut != nil
+    let child = if hasAnimation {
       LayeredBlock.Child(
         content: TransitioningBlock(
           from: previousBlock,
@@ -111,6 +107,11 @@ extension DivState: DivBlockModeling {
           animationOut: animationOut,
           animationIn: animationIn
         ),
+        alignment: stateAlignment
+      )
+    } else {
+      LayeredBlock.Child(
+        content: activeBlock,
         alignment: stateAlignment
       )
     }
