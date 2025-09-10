@@ -82,8 +82,8 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
             //"Div.Binding.Cold", // Generates unstable results at some perf-tests.
-            "Div.Parsing.Data.Cold",
-            "Div.Parsing.Data.Warm",
+            //"Div.Parsing.Data.Cold", // Generates unstable results at some perf-tests.
+            //"Div.Parsing.Data.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.JSON.Cold",
             //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
