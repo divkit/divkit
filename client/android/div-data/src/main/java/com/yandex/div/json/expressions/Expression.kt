@@ -274,6 +274,7 @@ abstract class Expression<T : Any> {
 
     companion object {
 
+        @JvmOverloads
         @JvmStatic
         @Suppress("UNCHECKED_CAST")
         fun <T : Any> constant(value: T, logger: ParsingErrorLogger = ParsingErrorLogger.LOG): Expression<T> {
