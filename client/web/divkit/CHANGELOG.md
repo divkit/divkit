@@ -1,3 +1,8 @@
+## 32.17.0 (September 15, 2025)
+
+* Added support for the `item_spacing` and `line_spacing` properties in `container`.
+
+
 ## 32.15.0 (September 1, 2025)
 
 * Fixed a bug that could cause duplicates to appear in `item_builder` after updating data.

@@ -1,3 +1,17 @@
+## 32.17.0
+
+# Android Client:
+* Support `div-text-range` `mask` property.
+* Support item_spacing and line_spacing for container.
+
+# iOS Client:
+* Fixed a crash in the gallery when deleting items.
+* Fixed bug with switching tabs with dynamic height.
+
+# Web Client:
+* Added support for the `item_spacing` and `line_spacing` properties in `container`.
+
+
 ## 32.16.0
 
 # Android Client:
