@@ -269,6 +269,8 @@ class PythonPropertyType(PropertyType):
             return True
         if isinstance(self, (Color, String, Url)):
             return True
+        if isinstance(self, (PythonRawArray,)):
+            return True
         if isinstance(self, Object):
             if isinstance(self.object, StringEnumeration):
                 return True

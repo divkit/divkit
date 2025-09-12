@@ -187,6 +187,7 @@ BUILTIN_TYPES_TO_SCHEMA: Mapping[type, Mapping[str, Any]] = MappingProxyType(
         str: MappingProxyType({"type": "string"}),
         bytes: MappingProxyType({"type": "string"}),
         Expr: MappingProxyType({"type": "string", "pattern": "^@{.*}$"}),
+        Any: MappingProxyType({}),
     },
 )
 
@@ -271,7 +272,7 @@ def _field_to_schema(
     elif issubclass(type_, enum.Enum):
         schema = _enum_to_schema(type_)
 
-    if not schema:
+    if schema is None:
         raise TypeError(f"Schema building error for unknown type {type_}")
 
     if field:

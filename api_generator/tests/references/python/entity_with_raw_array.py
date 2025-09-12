@@ -11,7 +11,7 @@ class EntityWithRawArray(BaseDiv):
     def __init__(
         self, *,
         type: str = 'entity_with_raw_array',
-        array: typing.Optional[typing.Sequence[typing.Any]] = None,
+        array: typing.Optional[typing.Union[Expr, typing.Sequence[typing.Any]]] = None,
         **kwargs: typing.Any,
     ):
         super().__init__(
@@ -21,7 +21,7 @@ class EntityWithRawArray(BaseDiv):
         )
 
     type: str = Field(default='entity_with_raw_array')
-    array: typing.Sequence[typing.Any] = Field(
+    array: typing.Union[Expr, typing.Sequence[typing.Any]] = Field(
     )
 
 
