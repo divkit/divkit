@@ -176,9 +176,10 @@
                     class:alignment__val_selected={
                         (
                             horizontal === horizontalItem ||
-                            horizontal && horizontalItem === HORIZONTAL_ALIGN_NORMALIZE[$direction][horizontal]
+                            horizontal && horizontalItem === HORIZONTAL_ALIGN_NORMALIZE[$direction][horizontal] ||
+                            isHorizontalDisabled
                         ) &&
-                        vertical === verticalItem &&
+                        (vertical === verticalItem || isVerticalDisabled) &&
                         !(isHorizontalDisabled && isVerticalDisabled)
                     }
                     on:click|preventDefault={() => selectAlignment(horizontalItem, verticalItem)}
@@ -236,7 +237,7 @@
                     Y:
                 </div>
                 {#if isVerticalDisabled}
-                <div class="alignment__select-fill">
+                    <div class="alignment__select-fill">
                         {$l10n('props.size_match_parent')}
                     </div>
                 {:else}
