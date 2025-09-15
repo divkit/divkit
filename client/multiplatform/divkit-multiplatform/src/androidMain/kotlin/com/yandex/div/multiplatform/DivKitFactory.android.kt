@@ -43,7 +43,7 @@ class DivKitFactoryImpl(
                 val divJson = JSONObject(jsonData)
 
                 val divConfiguration = DivConfiguration.Builder(environment.imageLoaderFactory(ctx))
-                    .actionHandler(ComposeActionHandler(dependencies.actionHandler))
+                    .actionHandler(DivKitActionHandler(dependencies.actionHandler))
                     .extension(DivShimmerExtensionHandler())
                     .divVariableController(variableController)
                     .build()
@@ -86,7 +86,7 @@ class DivKitFactoryImpl(
     }
 }
 
-private class ComposeActionHandler(
+private class DivKitActionHandler(
     private val actionHandler: ActionHandler?
 ) : DivActionHandler() {
     override fun handleAction(
@@ -103,7 +103,7 @@ private class ComposeActionHandler(
     }
 }
 
-private class ComposeParsingLogger(
+private class ParsingLogger(
     private val cardId: String,
     private val errorReporter: ErrorReporter?
 ): ParsingErrorLogger {
@@ -120,7 +120,7 @@ private fun JSONObject.asDiv2DataWithTemplates(
 ): DivData {
     val templates = optJSONObject("templates") ?: JSONObject()
     val card = getJSONObject("card")
-    val environment = DivParsingEnvironment(ComposeParsingLogger(cardId, errorReporter))
+    val environment = DivParsingEnvironment(ParsingLogger(cardId, errorReporter))
     environment.parseTemplates(templates)
     return DivData(environment, card)
 }

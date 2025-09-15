@@ -15,6 +15,6 @@ interface DivKitFactory {
     fun setGlobalVariables(variables: Map<String, Any>)
 }
 
-expect fun makeComposeDivKitFactory(
+expect fun makeDivKitFactory(
     dependencies: DivKitDependencies = DivKitDependencies()
 ): DivKitFactory

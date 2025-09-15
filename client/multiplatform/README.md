@@ -71,12 +71,12 @@ Common code:
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.multiplatform.DivKitFactory
-import com.yandex.div.multiplatform.makeComposeDivKitFactory
+import com.yandex.div.multiplatform.makeDivKitFactory
 import com.yandex.div.multiplatform.dependencies.ActionHandler
 import com.yandex.div.multiplatform.dependencies.DivKitDependencies
 import com.yandex.div.multiplatform.dependencies.ErrorReporter
 
-val factory: DivKitFactory = makeComposeDivKitFactory(
+val factory: DivKitFactory = makeDivKitFactory(
     dependencies = DivKitDependencies(
         actionHandler = object : ActionHandler {
             override fun handle(url: String) {

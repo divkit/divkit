@@ -18,7 +18,7 @@ import com.yandex.div.multiplatform.DivKitFactory
 import com.yandex.div.multiplatform.dependencies.ActionHandler
 import com.yandex.div.multiplatform.dependencies.DivKitDependencies
 import com.yandex.div.multiplatform.dependencies.ErrorReporter
-import com.yandex.div.multiplatform.makeComposeDivKitFactory
+import com.yandex.div.multiplatform.makeDivKitFactory
 
 @Composable
 internal fun MainScreen() {
@@ -79,7 +79,7 @@ private val dependencies = DivKitDependencies(
 )
 
 private fun initializeDivKitFactory() {
-    divKitFactory = makeComposeDivKitFactory(dependencies)
+    divKitFactory = makeDivKitFactory(dependencies)
     divKitFactory.setGlobalVariables(
         variables = mapOf(
             Pair(
