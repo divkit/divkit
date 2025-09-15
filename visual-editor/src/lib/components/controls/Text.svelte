@@ -16,6 +16,8 @@
     import { formatFileSize } from '../../utils/formatFileSize';
     import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
     import type { VideoSource } from '../../utils/video';
+    import type { StringValueFilter } from '../../../lib';
+    import { checkStringValue } from '../../utils/checkValue';
 
     export let id: string = '';
     export let value: string | number | undefined;
@@ -34,6 +36,7 @@
     export let size: 'medium' | 'small' = 'medium';
     export let width: 'auto' | 'small' = 'auto';
     export let pattern: string | null = null;
+    export let filter: StringValueFilter | undefined = undefined;
     export let error = '';
     export let title = '';
     export let generateFromVideo: VideoSource[] | undefined = undefined;
@@ -54,10 +57,17 @@
     let elem: HTMLElement;
     let subtypeError = false;
     let requiredError = false;
+    let filterError = false;
     let isFocused = false;
     let currentSize: number | undefined = undefined;
     let sizeLabelWidth = 0;
     let customButtonsWidth = 0;
+
+    function validateValue(value: string | number | undefined): void {
+        requiredError = !value && required;
+
+        filterError = !checkStringValue(value, filter);
+    }
 
     function updateInternalValue(
         subtype: string,
@@ -80,7 +90,7 @@
 
         loadFileSize();
 
-        requiredError = !internalValue && required;
+        validateValue(internalValue);
     }
 
     $: updateInternalValue(subtype, value, defaultValue);
@@ -135,7 +145,7 @@
 
         loadFileSize();
 
-        requiredError = !value && required;
+        validateValue(value);
 
         dispatch('change', {
             value
@@ -194,7 +204,7 @@
     class:text_inline-label={Boolean(inlineLabel)}
     class:text_button={hasButton}
     class:text_disabled={disabled}
-    class:text_error={Boolean(error || subtypeError || requiredError)}
+    class:text_error={Boolean(error || subtypeError || requiredError || filterError)}
     title={error}
     aria-label={title}
     data-custom-tooltip={title}

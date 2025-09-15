@@ -36,7 +36,7 @@
 
     const { l10n, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
-    const { customActions } = state;
+    const { customActions, valueFilters } = state;
 
     $: if (isShown && !readOnly && callback) {
         if (!value.log_url) {
@@ -224,6 +224,7 @@
                         <Text
                             bind:value={value.url}
                             disabled={readOnly}
+                            filter={valueFilters?.actionUrl}
                         />
                     </label>
                 </div>

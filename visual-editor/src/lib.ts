@@ -62,6 +62,12 @@ export interface CardLocale {
     text: Record<string, string>;
 }
 
+export type StringValueFilter = RegExp | ((value: string) => boolean);
+
+export interface ValueFilters {
+    actionUrl?: StringValueFilter;
+}
+
 export interface EditorOptions {
     node: HTMLElement;
     shadowRoot?: ShadowRoot;
@@ -148,6 +154,7 @@ export interface DivProEditorOptions {
     /* @deprecated */
     errorFileLimit?: number;
     fileLimits?: FileLimits;
+    valueFilters?: ValueFilters;
     rootConfigurable?: boolean;
     customFontFaces?: FontFaceDesc[];
     directionSelector?: boolean;
@@ -193,6 +200,7 @@ export const DivProEditor = {
         state.direction.set(opts.direction || 'ltr');
         state.safeAreaEmulation = opts.safeAreaEmulation;
         state.safeAreaEmulationEnabled.set(Boolean(opts.safeAreaEmulation));
+        state.valueFilters = opts.valueFilters;
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');

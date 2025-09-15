@@ -22,27 +22,31 @@
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
+    import { checkStringValue } from '../../utils/checkValue';
 
     export let value: Action;
 
     const { l10n, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, actions2Dialog } = getContext<AppContext>(APP_CTX);
-    const { customActions, readOnly } = state;
+    const { customActions, readOnly, valueFilters } = state;
 
     const dispatch = createEventDispatcher();
 
     let elem: HTMLElement;
     let type = '';
     let text = '';
+    let hasError = false;
 
     function updateVal(value: Action): void {
         const parsed = parseAction(value, $customActions);
 
         type = '';
+        hasError = false;
 
         if (parsed.type === 'url') {
             type = $l10n('actions-url');
             text = parsed.url || '';
+            hasError = !checkStringValue(parsed.url, valueFilters?.actionUrl);
         } else if (parsed.type.startsWith('typed:')) {
             if (parsed.type === 'typed:focus_element') {
                 type = $l10n('actions.focus_element');
@@ -133,6 +137,7 @@
 <button
     class="actions2-item"
     class:actions2-item_readonly={$readOnly}
+    class:actions2-item_error={hasError}
     bind:this={elem}
     on:click={onClick}
 >
@@ -164,11 +169,15 @@
         background: var(--fill-transparent-1);
     }
 
-    .actions2-item:not(.actions2-item_readonly):hover {
+    .actions2-item_error {
+        border-color: var(--accent-red);
+    }
+
+    .actions2-item:not(.actions2-item_readonly):not(.actions2-item_error):hover {
         border-color: var(--fill-transparent-4);
     }
 
-    .actions2-item:not(.actions2-item_readonly):focus-visible {
+    .actions2-item:not(.actions2-item_readonly):not(.actions2-item_error):focus-visible {
         outline: none;
         border-color: var(--accent-purple);
     }
