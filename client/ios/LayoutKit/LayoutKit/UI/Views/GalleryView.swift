@@ -47,7 +47,7 @@ public final class GalleryView: BlockView {
   private var layout: GalleryViewLayouting!
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
-  private var scrollStartOffset: CGFloat = 0
+  private var scrollStartOffset: CGFloat?
   private var configurationInProgress = false
   private weak var overscrollDelegate: ScrollDelegate? {
     didSet {
@@ -180,8 +180,7 @@ public final class GalleryView: BlockView {
     }
 
     let newContentPosition: GalleryViewState.Position? = if oldModel?.path == model.path {
-      shiftedInfiniteScrollContentPosition(oldState: oldState)
-        ?? self.state.contentPosition
+      performActionInitiatedScrollLoop(oldState: oldState)
     } else {
       nil
     }
@@ -321,21 +320,64 @@ public final class GalleryView: BlockView {
       collectionView.setContentOffset(contentOffset, animated: animated)
     }
   }
+}
 
-  private func shiftedInfiniteScrollContentPosition(
+extension GalleryView {
+  var isActionInitiatedScroll: Bool {
+    scrollStartOffset == nil
+  }
+
+  private func performActionInitiatedScrollLoop(
     oldState: GalleryViewState?
-  ) -> GalleryViewState.Position? {
-    guard model.infiniteScroll else { return nil }
-    let firstRealPageIndex = CGFloat(model.bufferSize)
-    let bufferedFirstItemPageIndex = CGFloat(model.items.count - model.bufferSize)
-    let lastRealPageIndex = bufferedFirstItemPageIndex - 1
-
-    guard oldState?.contentPosition.pageIndex == lastRealPageIndex,
-          state.contentPosition.pageIndex == firstRealPageIndex else {
-      return nil
+  ) -> GalleryViewState.Position {
+    guard model.infiniteScroll,
+          isActionInitiatedScroll,
+          let oldStatePageIndex = oldState?.contentPosition.pageIndex,
+          let newStatePageIndex = state.contentPosition.pageIndex else {
+      return state.contentPosition
     }
 
-    return .paging(index: bufferedFirstItemPageIndex)
+    let firstRealPageIndex = CGFloat(model.bufferSize)
+    let lastRealPageIndex = CGFloat(model.items.count - model.bufferSize) - 1
+    let bufferedCopyOfFirstRealPageIndex = lastRealPageIndex + 1
+    let bufferedCopyOfLastRealPageIndex = firstRealPageIndex - 1
+
+    switch (oldStatePageIndex.rounded(), newStatePageIndex.rounded()) {
+    case (lastRealPageIndex, bufferedCopyOfFirstRealPageIndex):
+      collectionView.withDetachedDelegate {
+        updateContentOffset(to: .paging(index: bufferedCopyOfLastRealPageIndex), animated: false)
+      }
+      return .paging(index: firstRealPageIndex)
+    case (firstRealPageIndex, bufferedCopyOfLastRealPageIndex):
+      collectionView.withDetachedDelegate {
+        updateContentOffset(to: .paging(index: bufferedCopyOfFirstRealPageIndex), animated: false)
+      }
+      return .paging(index: lastRealPageIndex)
+    default:
+      return state.contentPosition
+    }
+  }
+
+  private func performUserInitiatedScrollLoop(
+    oldOffset: CGFloat,
+    newPosition: InfiniteScroll.Position,
+    scrollStartOffset: CGFloat
+  ) {
+    let diff = oldOffset - newPosition.offset
+    let newOffset = newPosition.offset
+    self.scrollStartOffset = scrollStartOffset - diff
+
+    collectionView.withDetachedDelegate {
+      updateContentOffset(to: .offset(newOffset), animated: false)
+    }
+
+    let currentTarget = contentPager.map {
+      $0.lastTargetOffset - diff
+    } ?? newOffset
+
+    let targetPage = layout.pageIndex(forContentOffset: currentTarget).rounded()
+
+    updateContentOffset(to: .paging(index: targetPage), animated: true)
   }
 }
 
@@ -350,17 +392,22 @@ extension GalleryView: ScrollDelegate {
     withVelocity _: CGPoint,
     targetContentOffset: UnsafeMutablePointer<CGPoint>
   ) {
+    guard let scrollStartOffset else { return }
+
     switch model.scrollMode {
     case .default, .fixedPaging:
       return
     case let .autoPaging(inertionEnabled):
       guard !inertionEnabled else { return }
 
-      let target = if model.direction.isHorizontal { targetContentOffset.pointee.x
+      let currentTarget = if model.direction.isHorizontal { targetContentOffset.pointee.x
       } else {
         targetContentOffset.pointee.y
       }
-      targetContentOffset.pointee = calculateFinalTarget(target)
+      targetContentOffset.pointee = calculateFinalTarget(
+        currentTarget,
+        scrollStartOffset
+      )
     }
 
     disableLooping = false
@@ -370,22 +417,16 @@ extension GalleryView: ScrollDelegate {
     var offset = getOffset(scrollView)
 
     if let newPosition = calculateNewInfiniteScrollPosition(collectionView, offset: offset),
-       !disableLooping {
-      let diff = offset - newPosition.offset
-      offset = newPosition.offset
-      scrollStartOffset -= diff
-
-      collectionView.withDetachedDelegate {
-        updateContentOffset(to: .offset(newPosition.offset), animated: false)
+       !disableLooping, !isActionInitiatedScroll {
+      if let scrollStartOffset {
+        performUserInitiatedScrollLoop(
+          oldOffset: offset,
+          newPosition: newPosition,
+          scrollStartOffset: scrollStartOffset
+        )
       }
 
-      let currentTarget = contentPager.map {
-        $0.lastTargetOffset - diff
-      } ?? offset
-
-      let targetPage = layout.pageIndex(forContentOffset: currentTarget).rounded()
-
-      updateContentOffset(to: .paging(index: targetPage), animated: true)
+      offset = getOffset(scrollView)
     }
 
     let contentPosition: GalleryViewState.Position = switch model.scrollMode {
@@ -456,16 +497,21 @@ extension GalleryView: ScrollDelegate {
     GalleryScrollEvent(
       path: model.path,
       direction: GalleryScrollEvent.Direction(
-        from: scrollStartOffset,
+        from: scrollStartOffset ?? 0,
         to: firstVisibleItemOffset
       ),
       firstVisibleItemIndex: firstVisibleItemIndex,
       lastVisibleItemIndex: lastVisibleItemIndex,
       itemsCount: model.items.count
     ).sendFrom(self)
+
+    scrollStartOffset = nil
   }
 
-  private func calculateFinalTarget(_ currentTarget: CGFloat) -> CGPoint {
+  private func calculateFinalTarget(
+    _ currentTarget: CGFloat,
+    _ scrollStartOffset: CGFloat
+  ) -> CGPoint {
     let isHorizontal = model.direction.isHorizontal
     let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
 
