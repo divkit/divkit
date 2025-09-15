@@ -19,7 +19,7 @@
 
     onMount(() => {
         if (devtool && !componentContext.fakeElement) {
-            dev = devtool(null, rootCtx, componentContext);
+            dev = devtool(null, rootCtx, componentContext,);
         }
     });
 

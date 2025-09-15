@@ -40,6 +40,7 @@ export function structuredCopyLeaf(leaf: TreeLeaf, parent?: TreeLeaf): TreeLeaf 
     const res: TreeLeaf = {
         ...leaf,
         props: {
+            info: leaf.props.info,
             json: {
                 ...leaf.props.json,
                 items: undefined

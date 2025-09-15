@@ -41,6 +41,7 @@
     $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
+    let childContexts: (ComponentContext | undefined)[] | undefined;
 
     $: jsonDefaultStateId = componentContext.getJsonWithVars(componentContext.json.default_state_id);
     $: jsonClipToBounds = componentContext.getDerivedFromVars(componentContext.json.clip_to_bounds);
@@ -50,6 +51,17 @@
         componentContext.getVariable(stateVariableName, 'string') || rootCtx.awaitGlobalVariable(stateVariableName, 'string', '') :
         null;
     let inited = false;
+
+    let devapi = process.env.DEVTOOL ? {
+        devapi: {
+            getState() {
+                return selectedId;
+            },
+            setState(id: string) {
+                return setState(id);
+            }
+        }
+    } : undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -90,12 +102,16 @@
     }
 
     function selectState(selectedState: MaybeMissing<State> | null): void {
-        if (selectedComponentContext) {
-            selectedComponentContext.destroy();
+        if (childContexts) {
+            selectedComponentContext = childContexts[items.findIndex(it => it.state_id === selectedState?.state_id)];
+        } else {
+            if (selectedComponentContext) {
+                selectedComponentContext.destroy();
+            }
+            selectedComponentContext = selectedState?.div ? componentContext.produceChildContext(selectedState.div, {
+                path: selectedState.state_id || '<unknown>'
+            }) : undefined;
         }
-        selectedComponentContext = selectedState?.div ? componentContext.produceChildContext(selectedState.div, {
-            path: selectedState.state_id || '<unknown>'
-        }) : undefined;
     }
 
     function replaceItems(newItems: (MaybeMissing<DivBaseData> | undefined)[]): void {
@@ -488,6 +504,12 @@
         inited = true;
 
         if (items.length) {
+            if (process.env.DEVTOOL && rootCtx.devtoolCreateHierarchy === 'eager') {
+                childContexts = items.map(it => it?.div ? componentContext.produceChildContext(it.div, {
+                    path: it.state_id || '<unknown>'
+                }) : undefined);
+            }
+
             const defaultVal = stateVariable?.getValue() || jsonDefaultStateId;
             if (defaultVal) {
                 selectedId = defaultVal;
@@ -529,7 +551,11 @@
     };
 
     onDestroy(() => {
-        if (selectedComponentContext) {
+        if (childContexts) {
+            childContexts.forEach(context => {
+                context?.destroy();
+            });
+        } else if (selectedComponentContext) {
             selectedComponentContext.destroy();
         }
 
@@ -548,7 +574,20 @@
         parentOf={parentOfItems}
         parentOfSimpleMode={true}
         {replaceItems}
+        {...devapi}
     >
+        {#if process.env.DEVTOOL && childContexts}
+            {#each childContexts as context}
+                {#if context && context !== selectedComponentContext}
+                    <div hidden data-hidden="true">
+                        <Unknown
+                            componentContext={context}
+                        />
+                    </div>
+                {/if}
+            {/each}
+        {/if}
+
         {#if selectedComponentContext}
             {#key selectedId}
                 <Unknown

@@ -50,6 +50,7 @@ export function render(opts: {
     pagerChildrenClipEnabled?: boolean;
     pagerMouseDragEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderClient;
+    devtoolCreateHierarchy?: 'lazy' | 'eager';
 }): DivkitDebugInstance {
     const { target, hydrate, ...rest } = opts;
 

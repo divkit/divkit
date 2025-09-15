@@ -24,6 +24,7 @@
     import VideoSourcesDialog from './lib/components/prop-dialog/VideoSourcesDialog.svelte';
     import type { State } from './lib/data/state';
     import SelectOptionsDialog from './lib/components/prop-dialog/SelectOptionsDialog.svelte';
+  import ItemsListDialog from './lib/components/prop-dialog/ItemsListDialog.svelte';
 
     export let state: State;
 
@@ -115,6 +116,7 @@
     let textAlign2Dialog: TextAlign2Dialog;
     let videoSourcesDialog: VideoSourcesDialog;
     let selectOptionsDialog: SelectOptionsDialog;
+    let itemsListDialog: ItemsListDialog;
 
     setContext<LanguageContext>(LANGUAGE_CTX, {
         lang,
@@ -297,6 +299,17 @@
                 }
             };
         },
+
+        itemsListDialog() {
+            return {
+                show(props) {
+                    itemsListDialog.show(props);
+                },
+                hide() {
+                    itemsListDialog.hide();
+                }
+            };
+        },
     });
 
     $: components = layout.map(column => {
@@ -362,6 +375,7 @@
     <InplaceEditorDialog bind:this={inplaceEditor} />
     <VideoSourcesDialog bind:this={videoSourcesDialog} />
     <SelectOptionsDialog bind:this={selectOptionsDialog} />
+    <ItemsListDialog bind:this={itemsListDialog} />
 
     <CustomTooltip owner={currentTooltipOwner} />
 </div>

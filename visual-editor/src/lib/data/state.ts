@@ -251,15 +251,20 @@ export class State {
 
             // todo support tabs and others
             const baseType = this.getBaseType(leaf.props.json?.type);
-            const fieldName = leaf.props.fromDataField || 'items';
+            let fieldName = leaf.props.fromDataField;
             if (baseType === 'state') {
+                fieldName ||= 'states';
                 json[fieldName] = leaf.childs?.map((it, index) => {
                     return {
                         state_id: it.props.info?.state_id || index,
-                        div: nodeToDivjson(it)
+                        div: nodeToDivjson(it),
+                        ...(it.props.info?.__key !== undefined ? {
+                            __key: it.props.info.__key
+                        } : undefined)
                     };
                 });
             } else if (baseType === 'tabs') {
+                fieldName ||= 'items';
                 json[fieldName] = leaf.childs?.map(it => {
                     return {
                         title: it.props.info?.title || 'title',
@@ -268,6 +273,7 @@ export class State {
                     };
                 });
             } else if (leaf.childs?.length) {
+                fieldName ||= 'items';
                 json[fieldName] = leaf.childs.map(nodeToDivjson);
             } else {
                 delete json.items;
@@ -778,6 +784,9 @@ export class State {
                 parent: leaf,
                 childs: [],
                 props: {
+                    info: type === 'state' ? {
+                        state_id: 'default'
+                    } : undefined,
                     json: {
                         type: 'text',
                         text: 'text'

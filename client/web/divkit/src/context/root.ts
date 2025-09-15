@@ -81,7 +81,8 @@ export interface RootCtxValue {
         json,
         origJson,
         templateContext,
-        componentContext
+        componentContext,
+        devapi
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
@@ -89,5 +90,7 @@ export interface RootCtxValue {
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
         componentContext: ComponentContext;
+        devapi?: object;
     }): void;
+    devtoolCreateHierarchy?: 'lazy' | 'eager';
 }

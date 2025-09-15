@@ -174,12 +174,20 @@ export interface SelectFontFamily extends BaseProperty {
     type: 'select-font-family';
 }
 
+export interface ItemsProperty extends BaseProperty {
+    type: 'items-list';
+}
+
+export interface StateDefaultIdProperty extends BaseProperty {
+    type: 'state-default-id';
+}
+
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
     PercentProperty | RotationProperty | StringProperty |
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
     Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty |
-    SelectOptionsProperty | SelectFontFamily;
+    SelectOptionsProperty | SelectFontFamily | ItemsProperty | StateDefaultIdProperty;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -876,6 +884,28 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.on_color',
             prop: 'on_color',
             type: 'color',
+            enableSources: true
+        }]
+    }],
+    state: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'stateProps.title',
+        list: [{
+            name: 'props.id',
+            prop: 'id',
+            type: 'string'
+        }, {
+            name: 'props.items',
+            prop: 'states',
+            type: 'items-list'
+        }, {
+            name: 'props.text_variable',
+            prop: 'state_id_variable',
+            type: 'variable-name'
+        }, {
+            name: 'props.default_state_id',
+            prop: 'default_state_id',
+            type: 'state-default-id',
             enableSources: true
         }]
     }]

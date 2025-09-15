@@ -100,6 +100,7 @@
     export let replaceItems: ((items: (MaybeMissing<DivBaseData> | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
     export let alwaysCustomFocus = false;
+    export let devapi: object | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
@@ -1083,7 +1084,7 @@
         );
 
         if (devtool && !componentContext.fakeElement) {
-            dev = devtool(node, rootCtx, componentContext);
+            dev = devtool(node, rootCtx, componentContext, devapi);
         }
 
         registred = {

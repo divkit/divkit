@@ -19,6 +19,7 @@
     export let value: string;
     export let theme: 'normal' | 'canvas' | 'transparent';
     export let size: 'small' | 'medium' = 'small';
+    export let iconTheme: 'normal' | 'transparent' = 'normal';
     export let disabled = false;
     export let mix = '';
     export let title = '';
@@ -26,8 +27,8 @@
 
     const id = 'select' + Math.random();
 
-    $: text = items.find(item => item.value === value)?.text || value || '';
-    $: icon = items.find(item => item.value === value)?.icon;
+    $: text = items.find(item => item.value === value || !item.value && !value)?.text || value || '';
+    $: icon = items.find(item => item.value === value || !item.value && !value)?.icon;
     $: requiredError = required && Boolean(!items.find(item => item.value === value)?.value);
 
     const dispatch = createEventDispatcher();
@@ -39,7 +40,7 @@
     let popup: HTMLElement;
 
     function move(by: number): void {
-        let index = items.findIndex(item => item.value === value);
+        let index = items.findIndex(item => item.value === value || !item.value && !value);
         if (index === -1) {
             return;
         }
@@ -147,7 +148,7 @@
 
 <div
     bind:this={node}
-    class="select select_theme_{theme} select_size_{size} {mix}"
+    class="select select_theme_{theme} select_size_{size} select_icon-theme_{iconTheme} {mix}"
     class:select_disabled={disabled}
     class:select_error={requiredError}
 >
@@ -277,6 +278,10 @@
         padding-left: 5px;
     }
 
+    .select_theme_normal.select_icon-theme_transparent .select__select_icon {
+        padding-left: 12px;
+    }
+
     .select_theme_normal.select_size_medium .select__select {
         min-height: 40px;
     }
@@ -386,6 +391,10 @@
         background-color: var(--fill-transparent-3);
     }
 
+    .select_icon-theme_transparent  .select__item_icon {
+        padding-left: 12px;
+    }
+
     .select__icon-wrapper {
         flex: 0 0 auto;
         width: 28px;
@@ -394,6 +403,12 @@
         border-radius: 6px;
         background: var(--fill-accent-2);
         overflow: hidden;
+    }
+
+    .select_icon-theme_transparent .select__icon-wrapper {
+        width: 20px;
+        height: 20px;
+        background: none;
     }
 
     .select__icon {

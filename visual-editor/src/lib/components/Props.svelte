@@ -69,7 +69,11 @@
     {:else}
         <div class="props__empty">
             <div class="props__empty-gap props__empty-gap_start"></div>
-            {$l10n('chooseComponent')}
+            {#if $selectedLeaf}
+                {$l10n('unavailableComponent')}
+            {:else}
+                {$l10n('chooseComponent')}
+            {/if}
             <div class="props__empty-gap props__empty-gap_end"></div>
         </div>
     {/if}

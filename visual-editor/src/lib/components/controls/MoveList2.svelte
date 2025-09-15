@@ -55,7 +55,9 @@
         if (!list.length) {
             values = list = undefined;
         }
-        dispatch('change');
+        dispatch('change', {
+            values: list
+        });
         dispatch('delete', {
             item
         });
@@ -125,6 +127,9 @@
 
             prevPosition = bestIndex;
 
+            dispatch('change', {
+                values: list
+            });
             dispatch('reorder', {
                 values: list
             });
@@ -144,6 +149,12 @@
         document.body.addEventListener('pointermove', pointermove);
         document.body.addEventListener('pointerup', pointerup);
         document.body.addEventListener('pointercancel', pointerup);
+    }
+
+    function onItemChange(): void {
+        dispatch('change', {
+            values: list
+        });
     }
 </script>
 
@@ -165,7 +176,7 @@
                 isMoving={isMoving && !moveEnded}
                 isReoderInProgress={movedItem && !moveEnded}
                 canBeMoved={list && list.length >= 2}
-                on:change
+                on:change={onItemChange}
                 on:delete={() => deleteAction(item.__key)}
                 on:movestart={event => moveStart(item.__key, event)}
             />

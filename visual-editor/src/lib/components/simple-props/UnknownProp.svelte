@@ -18,6 +18,8 @@
     import VariableNameProp from './VariableNameProp.svelte';
     import SelectOptionsProp from './SelectOptionsProp.svelte';
     import SelectFontFamilyProp from './SelectFontFamilyProp.svelte';
+    import ItemsProp from './ItemsProp.svelte';
+    import StateDefaultIdProp from './StateDefaultIdProp.svelte';
 
     export let item: ComponentProperty;
     export let value;
@@ -175,6 +177,19 @@
     />
 {:else if item.type === 'select-font-family'}
     <SelectFontFamilyProp
+        {item}
+        {value}
+        on:change
+    />
+{:else if item.type === 'state-default-id'}
+    <StateDefaultIdProp
+        {item}
+        {value}
+        {processedJson}
+        on:change
+    />
+{:else if item.type === 'items-list'}
+    <ItemsProp
         {item}
         {value}
         on:change

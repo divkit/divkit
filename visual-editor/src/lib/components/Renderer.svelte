@@ -191,6 +191,10 @@
         },
         rotation: number;
         emptyFileType: string;
+        state?: {
+            selected: string;
+            total: number;
+        };
         insets?: string;
         gradientAngle?: string;
         visibleText?: string;
@@ -330,6 +334,7 @@
                 };
 
                 let emptyFileType = '';
+                let state;
                 if (elem === selectedElem && processedJson) {
                     const json = $selectedLeaf?.props.json;
                     if (json) {
@@ -343,6 +348,18 @@
                             emptyFileType = 'image';
                         } else if (processedJson.type === 'gif'/*  && processedJson.gif_url === EMPTY_IMAGE */) {
                             emptyFileType = 'gif';
+                        }
+
+                        if (
+                            processedJson.type === 'state' &&
+                            $selectedLeaf?.props.devapi &&
+                            Array.isArray(processedJson.states) &&
+                            processedJson.states.length
+                        ) {
+                            state = {
+                                selected: $selectedLeaf?.props.devapi.getState(),
+                                total: processedJson.states.length
+                            };
                         }
                     }
                 }
@@ -420,6 +437,7 @@
                     },
                     rotation: clone === elem ? componentCloneRotation : calcRotationRad(elem) / Math.PI * 180,
                     emptyFileType,
+                    state,
                     insets,
                     gradientAngle,
                     visibleText: elem === clone ? componentCloneText : '',
@@ -430,7 +448,7 @@
                 };
             });
 
-        if (distanceToElement && selectedElem) {
+        if (distanceToElement?.offsetHeight && selectedElem?.offsetHeight) {
             const fromBbox = selectedElem.getBoundingClientRect();
             const toBbox = distanceToElement.getBoundingClientRect();
             const info: DistanceInfo[] = [];
@@ -717,7 +735,8 @@
         type,
         node,
         json,
-        origJson
+        origJson,
+        devapi
     }: {
         type: 'mount' | 'update' | 'destroy',
         node: HTMLElement | null;
@@ -725,6 +744,7 @@
         json?: any;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         origJson?: any;
+        devapi?: object;
     }) {
         let shouldUpdate = type === 'mount' || type === 'destroy';
         if ((type === 'update' || type === 'mount') && origJson.__leafId) {
@@ -758,6 +778,9 @@
 
                 if (node) {
                     leaf.props.node = node;
+                    if (devapi) {
+                        leaf.props.devapi = devapi;
+                    }
                     components.set(node, {
                         json: origJson,
                         processedJson: json,
@@ -1120,11 +1143,6 @@
         instance = undefined;
     }
 
-    $: if ($safeAreaEmulationEnabled !== undefined && instance) {
-        instance.$destroy();
-        instance = undefined;
-    }
-
     function rerender({
         divjson,
         tanker,
@@ -1255,6 +1273,7 @@
                     ['lottie', Lottie],
                 ]),
                 direction,
+                devtoolCreateHierarchy: 'eager',
                 typefaceProvider(fontFamily) {
                     return customFontFaces.find(it => it.value === fontFamily)?.value || '';
                 },
@@ -3152,6 +3171,40 @@
         });
     }
 
+    function selectOffsetState(offset: number): void {
+        const devapi = $selectedLeaf?.props?.devapi;
+        const processedJson = $selectedLeaf?.props?.processedJson;
+        if (!devapi || !processedJson || !Array.isArray(processedJson.states)) {
+            return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let index = processedJson.states.findIndex((it: any) => it.state_id === devapi.getState());
+        if (index < 0) {
+            index = 0;
+        } else {
+            index += offset;
+            if (index >= processedJson.states.length) {
+                index = 0;
+            } else if (index < 0) {
+                index = processedJson.states.length - 1;
+            }
+        }
+
+        const newState = processedJson.states[index]?.state_id;
+        if (newState) {
+            devapi.setState(newState);
+        }
+    }
+
+    function selectPrevState(): void {
+        selectOffsetState(-1);
+    }
+
+    function selectNextState(): void {
+        selectOffsetState(1);
+    }
+
     function onWindowResize(): void {
         if (!showInplaceEditor) {
             return;
@@ -3448,8 +3501,36 @@
                             style:left="{highlight.left + highlight.margins.left + highlight.widthNum / 2 - scrollX}px"
                             style:top="{highlight.top + highlight.margins.top + highlight.heightNum - scrollY}px"
                         >
-                            {highlight.width}x{highlight.height}
+                            <div class="renderer__highlight-info-inner">
+                                {highlight.width}x{highlight.height}
+                            </div>
                         </div>
+
+                        {#if highlight.state}
+                            <div
+                                class="renderer__state-info"
+                                style:left="{highlight.left + highlight.margins.left - scrollX}px"
+                                style:top="{highlight.top + highlight.margins.top - scrollY}px"
+                            >
+                                <div class="renderer__state-info-buttons">
+                                    <button
+                                        class="renderer__highlight-info-inner renderer__highlight-info-inner_button"
+                                        on:click={selectPrevState}
+                                    >
+                                        &lt;
+                                    </button>
+                                    <button
+                                        class="renderer__highlight-info-inner renderer__highlight-info-inner_button"
+                                        on:click={selectNextState}
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
+                                <div class="renderer__highlight-info-inner">
+                                    {highlight.state.selected}
+                                </div>
+                            </div>
+                        {/if}
                     {/if}
                 {/each}
             {/if}
@@ -3758,12 +3839,46 @@
         position: absolute;
         transform: translateX(-50%);
         margin-top: 10px;
+    }
+
+    .renderer__highlight-info-inner {
         padding: 4px 8px;
         background: var(--accent-purple);
         font-size: 12px;
         border-radius: 4px;
         color: #fff;
         font-family: var(--monospace-font);
+    }
+
+    .renderer__highlight-info-inner_button {
+        margin: 0;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: background-color .15s ease-in-out;
+        border: none;
+        font-family: inherit;
+        appearance: none;
+    }
+
+    .renderer__highlight-info-inner_button:hover {
+        background-color: var(--accent-purple-hover);
+    }
+
+    .renderer__highlight-info-inner_button:active {
+        background-color: var(--accent-purple-active);
+    }
+
+    .renderer__state-info {
+        position: absolute;
+        transform: translateY(-100%);
+        display: flex;
+        gap: 6px;
+        margin-top: -10px;
+    }
+
+    .renderer__state-info-buttons {
+        display: flex;
+        gap: 2px;
     }
 
     .renderer__highlight-insets {

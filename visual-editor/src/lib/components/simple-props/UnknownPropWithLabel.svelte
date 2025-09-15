@@ -58,7 +58,8 @@
         item.type === 'video_sources' ||
         item.type === 'alignment' ||
         item.type === 'margins-paddings' ||
-        item.type === 'select-options'
+        item.type === 'select-options' ||
+        item.type === 'items-list'
     );
 
     $: hasLabel = 'name' in item && item.name || 'rawName' in item && item.rawName;

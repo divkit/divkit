@@ -119,6 +119,7 @@
     export let pagerMouseDragEnabled = true;
     export let weekStartDay = 0;
     export let videoPlayerProvider: VideoPlayerProvider | undefined = undefined;
+    export let devtoolCreateHierarchy: 'lazy' | 'eager' = 'lazy';
 
     let isMounted = true;
 
@@ -470,7 +471,8 @@
         json,
         origJson,
         templateContext,
-        componentContext
+        componentContext,
+        devapi
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
@@ -478,6 +480,7 @@
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
         componentContext: ComponentContext;
+        devapi?: object;
     }): void {
         if (onComponent) {
             onComponent({
@@ -486,7 +489,8 @@
                 json: json as DivBase,
                 origJson: origJson as DivBase | undefined,
                 templateContext,
-                componentContext
+                componentContext,
+                devapi
             });
         }
     }
@@ -2273,7 +2277,8 @@
         direction: directionStore,
         videoPlayerProvider,
         awaitGlobalVariable,
-        componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
+        componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined,
+        devtoolCreateHierarchy: process.env.DEVTOOL ? devtoolCreateHierarchy : 'lazy'
     });
 
     setContext<ActionCtxValue>(ACTION_CTX, {

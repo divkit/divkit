@@ -51,6 +51,7 @@ export function render(opts: {
     pagerChildrenClipEnabled?: boolean;
     pagerMouseDragEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderClient;
+    devtoolCreateHierarchy?: 'lazy' | 'eager';
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

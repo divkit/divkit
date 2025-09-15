@@ -426,6 +426,7 @@ export type ComponentCallback = (details: {
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
     componentContext: unknown;
+    devapi?: object;
 }) => void;
 
 export interface WrappedError extends Error {

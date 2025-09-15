@@ -9,7 +9,8 @@ export interface DevtoolResult {
 function devtoolReal(
     node: HTMLElement | null,
     rootCtx: RootCtxValue,
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    devapi?: object
 ): DevtoolResult {
     rootCtx.componentDevtool?.({
         type: 'mount',
@@ -18,6 +19,7 @@ function devtoolReal(
         origJson: componentContext.origJson,
         templateContext: componentContext.templateContext,
         componentContext,
+        devapi
     });
 
     return {

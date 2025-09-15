@@ -138,6 +138,7 @@
     class="actions2-item"
     class:actions2-item_readonly={$readOnly}
     class:actions2-item_error={hasError}
+    title={text}
     bind:this={elem}
     on:click={onClick}
 >
