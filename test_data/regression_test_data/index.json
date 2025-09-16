@@ -196,7 +196,8 @@
         "Each page has a different height",
         "The height of the pages changes smoothly when switching"
       ],
-      "file": "tabs_with_dynamic_height.json"
+      "file": "tabs_with_dynamic_height.json",
+      "case_id": 476
     },
     {
       "title": "Tab swipe restricted",
@@ -3905,7 +3906,8 @@
         "After entering a character, the focus remains in the input field",
         "After deleting the symbol, the additional gallery element is hidden"
       ],
-      "file": "input_in_gallery.json"
+      "file": "input_in_gallery.json",
+      "case_id": 477
     }
   ]
 }
