@@ -1,12 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import type { ComponentProperty } from '../../data/componentProps';
     import MoveList2 from '../controls/MoveList2.svelte';
     import VideoSourcesItem from './VideoSourcesItem.svelte';
     import AddButton from '../controls/AddButton.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
-    import type { VideoSource } from '../../utils/video';
 
     export let value: VideoSource[];
     export let item: ComponentProperty;

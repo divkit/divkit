@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, getContext, onDestroy } from 'svelte';
-    import type { VideoSource } from '../../utils/video';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';

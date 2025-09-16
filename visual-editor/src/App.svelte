@@ -5,7 +5,7 @@
     import type { LanguageContext } from './lib/ctx/languageContext';
     import { LANGUAGE_CTX } from './lib/ctx/languageContext';
     import ContextMenu from './lib/components/ContextMenu.svelte';
-    import type { CardLocale, EditorInstance, EditorOptions, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout } from './lib';
+    import type { CardLocale, EditorInstance, EditorOptions, FileDialogApi, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout } from './lib';
     import LayoutColumn from './lib/components/LayoutColumn.svelte';
     import { APP_CTX, type AppContext, type ContextMenuApi, type RendererApi, type ShowErrors } from './lib/ctx/appContext';
     import { editorFabric as editorFabricInternal } from './lib/data/editorWrapper';
@@ -70,6 +70,8 @@
 
     export let getTranslationKey: GetTranslationKey | undefined = undefined;
 
+    export let fileDialogApi: FileDialogApi | undefined = undefined;
+
     export function setLayout(newLayout: Layout): void {
         layout = newLayout;
     }
@@ -117,6 +119,8 @@
     let videoSourcesDialog: VideoSourcesDialog;
     let selectOptionsDialog: SelectOptionsDialog;
     let itemsListDialog: ItemsListDialog;
+
+    let isCustomFileDialogShown = false;
 
     setContext<LanguageContext>(LANGUAGE_CTX, {
         lang,
@@ -237,10 +241,20 @@
         file2Dialog() {
             return {
                 show(props) {
-                    file2Dialog.show(props);
+                    if (fileDialogApi?.canShow(props)) {
+                        fileDialogApi.show(props);
+                        isCustomFileDialogShown = true;
+                    } else {
+                        file2Dialog.show(props);
+                        isCustomFileDialogShown = false;
+                    }
                 },
                 hide() {
-                    file2Dialog.hide();
+                    if (isCustomFileDialogShown) {
+                        fileDialogApi?.hide();
+                    } else {
+                        file2Dialog.hide();
+                    }
                 }
             };
         },

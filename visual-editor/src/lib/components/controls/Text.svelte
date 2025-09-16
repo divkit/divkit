@@ -11,11 +11,11 @@
 
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { formatFileSize } from '../../utils/formatFileSize';
     import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
-    import type { VideoSource } from '../../utils/video';
     import type { StringValueFilter } from '../../../lib';
     import { checkStringValue } from '../../utils/checkValue';
 

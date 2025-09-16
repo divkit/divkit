@@ -13,12 +13,13 @@
     import { getContext, onDestroy } from 'svelte';
 
     import type { AnimationItem } from 'lottie-web';
-    import type { VideoSource } from '../../utils/video';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
+    import type { FileDialogCallback, FileDialogShowProps, FileDialogValue } from '../../../lib';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Button2 from '../controls/Button2.svelte';
-    import { APP_CTX, type AppContext, type File2DialogCallback, type File2DialogShowProps, type File2DialogValue } from '../../ctx/appContext';
+    import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import loaderImage from '../../../assets/loader.svg?raw';
     import trashIcon from '../../../assets/trash.svg?raw';
     import generateIcon from '../../../assets/generate.svg?raw';
@@ -110,7 +111,7 @@
         } */
     }
 
-    export function show(props: File2DialogShowProps): void {
+    export function show(props: FileDialogShowProps): void {
         callback = props.callback;
         target = props.target;
         value = props.value;
@@ -143,12 +144,12 @@
     let isShown = false;
     let hasSize: boolean | undefined = false;
     let hasDelete: boolean | undefined = false;
-    let value: File2DialogValue = {
+    let value: FileDialogValue = {
         url: '',
         width: 0,
         height: 0
     };
-    let callback: File2DialogCallback;
+    let callback: FileDialogCallback;
     let title = '';
     let subtype: '' | 'image' | 'gif' | 'lottie' | 'video' | 'image_preview' = '';
     let commonSubtype = '';

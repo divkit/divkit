@@ -1,11 +1,11 @@
 <script lang="ts">
     import { getContext } from 'svelte';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
     import type { ComponentProperty, SiblingComponentProperty } from '../../data/componentProps';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
     import { APP_CTX, type AppContext, type VideoSourceShowProps } from '../../ctx/appContext';
-    import type { VideoSource } from '../../utils/video';
     import UnknownPropWithLabel from '../simple-props/UnknownPropWithLabel.svelte';
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);

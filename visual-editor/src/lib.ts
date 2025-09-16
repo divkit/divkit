@@ -1,4 +1,5 @@
 import { get, type Unsubscriber } from 'svelte/store';
+import type { VideoSource } from '@divkitframework/divkit/typings/common';
 import App from './App.svelte';
 import type { Loc } from './lib/utils/stringifyWithLoc';
 import type { TypedRange } from './lib/data/editor';
@@ -98,12 +99,42 @@ export type GetTranslationSuggest = (query: string, locale: string) => Promise<T
 
 export type GetTranslationKey = (key: string) => Promise<Record<string, string> | undefined>;
 
+export interface FileDialogValue {
+    url: string;
+    width?: number;
+    height?: number;
+}
+
+export type FileDialogCallback = (opts: FileDialogValue) => void;
+
+export interface FileDialogShowProps {
+    value: FileDialogValue;
+    title: string;
+    subtype: 'image' | 'gif' | 'lottie' | 'video' | 'image_preview';
+    direction?: 'left' | 'right';
+    hasSize?: boolean;
+    hasDelete?: boolean;
+    target: HTMLElement;
+    disabled?: boolean;
+    generateFromVideo?: VideoSource[];
+    generateFromLottie?: string;
+    callback: FileDialogCallback;
+    onHide?(): void;
+}
+
+export interface FileDialogApi {
+    canShow(props: FileDialogShowProps): boolean;
+    show(props: FileDialogShowProps): void;
+    hide(): void;
+}
+
 export interface DivProEditorApi {
     uploadFile?(file: File): Promise<string>;
     editorFabric?(opts: EditorOptions): EditorInstance;
     onChange?(): void;
     getTranslationSuggest?: GetTranslationSuggest;
     getTranslationKey?: GetTranslationKey;
+    fileDialog?: FileDialogApi;
 }
 
 export interface Source {
@@ -257,7 +288,8 @@ export const DivProEditor = {
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,
-                getTranslationSuggest: opts.api?.getTranslationSuggest
+                getTranslationSuggest: opts.api?.getTranslationSuggest,
+                fileDialogApi: opts.api?.fileDialog
             }
         });
 

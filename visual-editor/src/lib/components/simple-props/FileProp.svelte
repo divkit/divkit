@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common';
     import type { FileProperty } from '../../data/componentProps';
-    import type { VideoSource } from '../../utils/video';
     import Text from '../controls/Text.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { getObjectProperty } from '../../utils/objectProperty';
