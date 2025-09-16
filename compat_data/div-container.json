@@ -17,5 +17,16 @@
                 "version_added": "29.4.0"
             }
         }
+    }, {
+        "id": "container_item_spacing",
+        "name": "Container properties <code>item_spacing</code> and <code>line_spacing</code>",
+        "compat": {
+            "android": {
+                "version_added": "32.17.0"
+            },
+            "web": {
+                "version_added": "32.17.0"
+            }
+        }
     }]
 }
