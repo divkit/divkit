@@ -64,7 +64,9 @@ extension ImageBlock {
   }
 }
 
-extension RemoteImageViewContainer: LayoutKit.BlockViewProtocol {
+extension RemoteImageViewContainer: @retroactive VisibleBoundsTracking {}
+
+extension RemoteImageViewContainer: BlockViewProtocol {
   public var effectiveBackgroundColor: UIColor? { nil }
 }
 

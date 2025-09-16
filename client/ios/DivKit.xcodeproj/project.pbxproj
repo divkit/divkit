@@ -236,6 +236,7 @@
 		8C97EA3C2A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */; };
 		8C97EA3D2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA3C2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift */; };
 		8C9898422A4C59DF00FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */; };
+		8C9D63672E79BE0900403E3C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9D63662E79BE0900403E3C /* XCTest.framework */; platformFilter = ios; };
 		8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
 		8CAB089A2B39AC15009330F3 /* heavy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8CAB08992B39AC15009330F3 /* heavy.json */; };
@@ -610,6 +611,7 @@
 		8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
 		8C97EA3C2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTitleDelimiterImageLoaderTests.swift; sourceTree = "<group>"; };
 		8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8C9D63662E79BE0900403E3C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionTests.swift; sourceTree = "<group>"; };
 		8CA22DD02B519C7300CCB48E /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		8CAB08992B39AC15009330F3 /* heavy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heavy.json; sourceTree = "<group>"; };
@@ -768,6 +770,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FE7D3322CF7647000BAF071 /* DivKit in Frameworks */,
+				8C9D63672E79BE0900403E3C /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1470,6 +1473,7 @@
 		E99F917C2DEF01A3003A8AF3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C9D63662E79BE0900403E3C /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
