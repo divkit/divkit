@@ -3884,6 +3884,28 @@
         "Return key: The return key is only enabled when text is not empty, if the option is on"
       ],
       "file": "input_properties_extension.json"
+    },
+    {
+      "title": "Input field in gallery that triggers action",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivGallery",
+        "DivInput"
+      ],
+      "steps": [
+        "Enter a character in the input field",
+        "Erase the entered character"
+      ],
+      "expected_results": [
+        "After entering a symbol in the gallery, an additional element appears at the bottom",
+        "After entering a character, the focus remains in the input field",
+        "After deleting the symbol, the additional gallery element is hidden"
+      ],
+      "file": "input_in_gallery.json"
     }
   ]
 }

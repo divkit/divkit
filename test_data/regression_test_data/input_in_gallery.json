@@ -1,0 +1,138 @@
+{
+  "card": {
+    "log_id": "gallery_toggle_demo",
+    "variables": [
+      {
+        "name": "text_var",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "top": 16,
+            "left": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "gallery",
+              "id": "vertical_gallery",
+              "orientation": "vertical",
+              "item_spacing": 16,
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#DDD"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 12
+                  },
+                  "items": [
+                    {
+                      "type": "input",
+                      "text_alignment_horizontal": "left",
+                      "text_alignment_vertical": "center",
+                      "height": {
+                        "type": "fixed",
+                        "value": 40
+                      },
+                      "hint_text": "Enter text here",
+                      "margins": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "font_size": 18,
+                      "font_weight": "medium",
+                      "text_variable": "text_var"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "Item 1",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "height": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "text_color": "#2E3A59",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#F0E6FF"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 12
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Item 2",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "height": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "text_color": "#2E3A59",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFF2E6"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 12
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Secret item",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "height": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "text_color": "#2E3A59",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFE6E6"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 12
+                  },
+                  "visibility": "@{text_var != '' ? 'visible' : 'gone'}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
