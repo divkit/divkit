@@ -325,11 +325,11 @@ internal open class GridContainer @JvmOverloads constructor(
     }
 
     private class Cell(
-        val viewIndex: Int,
-        val columnIndex: Int,
-        val rowIndex: Int,
-        var columnSpan: Int,
-        var rowSpan: Int
+        @JvmField val viewIndex: Int,
+        @JvmField val columnIndex: Int,
+        @JvmField val rowIndex: Int,
+        @JvmField var columnSpan: Int,
+        @JvmField var rowSpan: Int
     )
 
     private inline fun Cell.left(columns: List<Line>): Int {
@@ -357,12 +357,12 @@ internal open class GridContainer @JvmOverloads constructor(
     private inline fun Cell.height(rows: List<Line>): Int = bottom(rows) - top(rows)
 
     private class CellProjection(
-        val index: Int,
-        val contentSize: Int,
-        val marginStart: Int,
-        val marginEnd: Int,
-        val span: Int,
-        val weight: Float
+        @JvmField val index: Int,
+        @JvmField val contentSize: Int,
+        @JvmField val marginStart: Int,
+        @JvmField val marginEnd: Int,
+        @JvmField val span: Int,
+        @JvmField val weight: Float
     ) {
         val size
             get() = contentSize + marginStart + marginEnd
@@ -402,8 +402,8 @@ internal open class GridContainer @JvmOverloads constructor(
     }
 
     private class SizeConstraint(
-        var min: Int = 0,
-        var max: Int = MAX_SIZE
+        @JvmField var min: Int = 0,
+        @JvmField var max: Int = MAX_SIZE
     ) {
         fun set(measureSpec: Int) {
             val mode = MeasureSpec.getMode(measureSpec)
@@ -520,8 +520,8 @@ internal open class GridContainer @JvmOverloads constructor(
                 }
             }
 
-            val lastSpan = cellHeights.minByOrNull { max(1, it) } ?: 1
-            val rowCount = cells.last().rowIndex + lastSpan
+            val lastRowSpan = cellHeights.minOfOrNull { it.coerceAtLeast(1) } ?: 1
+            val rowCount = cells.last().rowIndex + lastRowSpan
             cells.iterate { cell ->
                 if (cell.rowIndex + cell.rowSpan > rowCount) {
                     cell.rowSpan = rowCount - cell.rowIndex
