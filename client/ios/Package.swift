@@ -12,11 +12,10 @@ let vgsl = {
 }()
 
 let markdown = {
-  let version = Version("0.4.0")
+  let version = Version("0.6.0")
   return (
     package: Package.Dependency.package(
-      url: "https://github.com/apple/swift-markdown.git",
-      from: version
+      url: "https://github.com/apple/swift-markdown.git", exact: version
     ),
     packageName: "swift-markdown"
   )
