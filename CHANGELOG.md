@@ -1,3 +1,10 @@
+## 32.18.0
+
+# iOS Client:
+* Fixed a bug that caused animation to flicker when moving from state to state.
+* Fixed infinite pager scrolling when initiated by an action.
+
+
 ## 32.17.0
 
 # Android Client:
