@@ -1,5 +1,8 @@
 ## 32.18.0
 
+# Android Client:
+* Fixed `IndexOutOfBoundsException` in grid when the last row contains cells with different spans.
+
 # iOS Client:
 * Fixed a bug that caused animation to flicker when moving from state to state.
 * Fixed infinite pager scrolling when initiated by an action.
