@@ -1,4 +1,5 @@
 import groovy.json.JsonOutput
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     id("com.android.library")
@@ -10,10 +11,10 @@ apply(from = "${projectDir}/../div-library.gradle")
 apply(from = "${projectDir}/../div-tests.gradle")
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
+    compilerOptions {
         freeCompilerArgs = listOf("-Xjvm-default=all")
-        languageVersion = "1.6"
-        apiVersion = "1.6"
+        languageVersion = KotlinVersion.fromVersion("1.8")
+        apiVersion = KotlinVersion.fromVersion("1.8")
     }
 }
 

@@ -10,6 +10,8 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 /**
@@ -41,10 +43,22 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         div: Div,
         divStatePath: DivStatePath,
         divView: Div2View,
-        expressionResolver: ExpressionResolver = divView.expressionResolver
+        expressionResolver: ExpressionResolver
     ): View {
         return divView.div2Component.div2Builder
             .createView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
+    }
+
+    @AnyThread
+    @JvmOverloads
+    fun createUnboundChildView(
+        div: Div,
+        divStatePath: DivStatePath,
+        divView: Div2View
+    ): View {
+        return runBlocking(Dispatchers.Main) {
+            createUnboundChildView(div, divStatePath, divView, divView.expressionResolver)
+        }
     }
 
     /**
