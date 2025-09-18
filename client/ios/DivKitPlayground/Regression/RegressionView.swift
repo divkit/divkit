@@ -48,7 +48,6 @@ struct RegressionView: View {
       }
     }
   }
-
 }
 
 private struct NavigationButton<Destination>: View where Destination: View {

@@ -109,7 +109,6 @@ final class MarksLayer: CALayer {
       inactiveOrigin.x += spaceWidth
     }
   }
-
 }
 
 extension MarksConfigurationModel.RoundedRectangle {

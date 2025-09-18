@@ -54,7 +54,6 @@ public struct BlockAnimation: Equatable {
     self.duration = duration
     self.timingFunction = timingFunction
   }
-
 }
 
 extension BlockAnimation {

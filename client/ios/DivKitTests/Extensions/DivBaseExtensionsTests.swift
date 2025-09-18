@@ -666,7 +666,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timer), 1)
 
     // expect to drop lastVisibleBounds
-    let _ = try makeBlock(fromFile: invisibleBlockFile, context: context)
+    _ = try makeBlock(fromFile: invisibleBlockFile, context: context)
     let view2 = blockVisibleFirst.makeBlockView()
 
     XCTAssertEqual(getViewVisibilityCallCount(view: view2, rect: rect, timerScheduler: timer), 1)

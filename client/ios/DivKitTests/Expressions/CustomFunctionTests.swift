@@ -315,7 +315,6 @@ final class CustomFunctionTests: XCTestCase {
       reporter: mockReporter
     )
   }
-
 }
 
 private let variables: DivVariables = [

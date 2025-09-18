@@ -9,7 +9,7 @@ struct PlaygroundDivCustomBlockFactory: DivCustomBlockFactory {
     self.requester = requester
   }
 
-  public func makeBlock(
+  func makeBlock(
     data: DivCustomData,
     context: DivBlockModelingContext
   ) -> Block {

@@ -59,7 +59,6 @@ public final class SwipeContainerBlock: WrapperBlock {
 
     return self == other
   }
-
 }
 
 extension SwipeContainerBlock: LayoutCaching {

@@ -29,7 +29,6 @@ public final class DivVariablesStorage {
     init(_ kind: Kind) {
       self.kind = kind
     }
-
   }
 
   public let changeEvents: Signal<ChangeEvent>
@@ -58,7 +57,10 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     name: DivVariableName
   ) -> T? {
-    getNearestPropertiesStorage(cardId.path)?.getValue(name) ?? getVariableValue(path: cardId.path, name: name)
+    getNearestPropertiesStorage(cardId.path)?.getValue(name) ?? getVariableValue(
+      path: cardId.path,
+      name: name
+    )
   }
 
   public func getVariableValue(
@@ -66,7 +68,8 @@ public final class DivVariablesStorage {
     name: DivVariableName
   ) -> DivVariableValue? {
     lock.withLock {
-      getNearestPropertiesStorage(cardId.path)?.getVariableValue(name) ?? getNearestStorage(cardId.path).getVariableValue(name)
+      getNearestPropertiesStorage(cardId.path)?
+        .getVariableValue(name) ?? getNearestStorage(cardId.path).getVariableValue(name)
     }
   }
 
@@ -193,8 +196,8 @@ public final class DivVariablesStorage {
       propertiesStorages[cardId.path]?.values ?? [:]
     }
     let resultProperties = replaceExisting ?
-    oldProperties + newProperties :
-    newProperties + oldProperties
+      oldProperties + newProperties :
+      newProperties + oldProperties
     set(cardId: cardId, properties: resultProperties)
   }
 
@@ -218,8 +221,9 @@ public final class DivVariablesStorage {
       }
 
       if let propertiesValues = getOnlyElementProperties(cardId: cardId, elementId: elementId) {
-        let propertiesWithVariableValues = propertiesValues.compactMapValues{ $0.toVariableValue() }
-        return storage.values.merging(propertiesWithVariableValues) { (_, new) in new }
+        let propertiesWithVariableValues = propertiesValues
+          .compactMapValues { $0.toVariableValue() }
+        return storage.values.merging(propertiesWithVariableValues) { _, new in new }
       }
 
       return storage.values

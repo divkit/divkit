@@ -87,7 +87,6 @@ public final class TextFieldBlock: Block {
         self.fontWeight = fontWeight
       }
     }
-
   }
 
   public enum TextAutocapitalizationType {
@@ -287,7 +286,6 @@ public final class TextFieldBlock: Block {
       0
     }
   }
-
 }
 
 extension TextFieldBlock {

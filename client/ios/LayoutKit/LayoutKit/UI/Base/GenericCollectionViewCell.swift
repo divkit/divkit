@@ -49,6 +49,5 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
 
     applyAccessibilityFromScratch(accessibilityElement)
   }
-
 }
 #endif

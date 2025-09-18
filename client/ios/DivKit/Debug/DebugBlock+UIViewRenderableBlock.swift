@@ -117,7 +117,6 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
     errorsButton.isHidden = isHidden
     errorsButton.setTitle("\(min(maxCount, errorsCount))", for: .normal)
   }
-
 }
 
 private let showOverlayURL = URL(string: "debugInfo://show")!

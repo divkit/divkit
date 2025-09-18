@@ -85,7 +85,6 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public func isEqual(to model: GalleryViewModel, boundsSize: CGSize) -> Bool {
     self.model == model && self.boundsSize == boundsSize
   }
-
 }
 
 extension GalleryViewModel {

@@ -605,7 +605,7 @@ final class DivContainerExtensionsTests: XCTestCase {
   func test_HorizontalWrapContainer_HasVerticallyResizableItem_withoutFallbackHeight(
   ) throws {
     do {
-      let _ = try makeBlock(
+      _ = try makeBlock(
         fromFile: "horizontal_wrap_container_match_parent_height_item"
       ) as? WrapperBlock
     } catch {
@@ -616,7 +616,7 @@ final class DivContainerExtensionsTests: XCTestCase {
   func test_VerticalWrapContainer_HasHorizontallyResizableItem_withoutFallbackWidth(
   ) throws {
     do {
-      let _ = try makeBlock(
+      _ = try makeBlock(
         fromFile: "vertical_wrap_container_match_parent_width_item"
       ) as? WrapperBlock
     } catch {

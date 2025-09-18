@@ -86,7 +86,6 @@ private class LabelImagePreviewProvider: ViewProvider {
     label.backgroundColor = .yellow
     return label
   }
-
 }
 
 private let defaultPagerViewState = [

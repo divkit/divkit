@@ -57,5 +57,4 @@ public enum DivVariableValue: Hashable {
       return value as? T
     }
   }
-
 }

@@ -29,7 +29,6 @@ public struct MarksConfigurationModel: Equatable {
     self.inactiveMark = inactiveMark
     self.layoutDirection = layoutDirection
   }
-
 }
 
 extension MarksConfigurationModel {
@@ -61,6 +60,5 @@ extension MarksConfigurationModel {
       self.borderWidth = borderWidth
       self.borderColor = borderColor
     }
-
   }
 }

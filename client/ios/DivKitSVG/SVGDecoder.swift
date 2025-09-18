@@ -63,6 +63,7 @@ public final class SVGDecoder {
 #else
 public final class SVGDecoder {
   public init() {}
+
   public func decode(data _: Data) -> Image? { nil }
 }
 #endif

@@ -72,7 +72,6 @@ final class AnimationBlockView: BlockView {
     super.layoutSubviews()
     animatableView?.frame = bounds
   }
-
 }
 
 extension AnimationBlockView: VisibleBoundsTrackingLeaf {}

@@ -4,9 +4,10 @@
 --exclude **/shared_data_generated_sources
 
 --enable blankLinesBetweenImports
+--enable organizeDeclarations
 
---disable redundantSelf
 --disable redundantFileprivate
+--disable redundantSelf
 --disable wrapMultilineStatementBraces
 
 --extensionacl on-declarations
@@ -21,7 +22,5 @@
 --wraparguments before-first
 --wrapcollections before-first
 --wrapparameters before-first
-
---enable organizeDeclarations
 --organization-mode type
 --mark-categories false

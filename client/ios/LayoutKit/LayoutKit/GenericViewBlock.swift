@@ -111,7 +111,6 @@ public final class GenericViewBlock: BlockWithTraits {
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }
-
 }
 
 extension GenericViewBlock: LayoutCachingDefaultImpl {}

@@ -158,5 +158,4 @@ final class TextSelectionTests: XCTestCase {
     let text = text.string as NSString
     return text.range(of: word)
   }
-
 }

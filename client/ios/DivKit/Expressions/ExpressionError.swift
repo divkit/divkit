@@ -51,5 +51,4 @@ public struct ExpressionError: LocalizedError, CustomStringConvertible {
       "\(message) Operator '\(op)' cannot be applied to different types: \(lhsType) and \(rhsType)."
     )
   }
-
 }

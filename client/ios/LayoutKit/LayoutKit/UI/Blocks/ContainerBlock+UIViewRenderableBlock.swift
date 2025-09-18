@@ -187,6 +187,5 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       layer.add(animation, forKey: animationKey)
     }
   }
-
 }
 #endif

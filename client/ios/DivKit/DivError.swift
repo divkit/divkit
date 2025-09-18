@@ -79,11 +79,11 @@ extension DeserializationError: DivError {
 }
 
 struct DivBlockModelingError: Error, DivError {
-  public let kind: DivErrorKind = .blockModeling
-  public let message: String
-  public let path: UIElementPath
-  public let causes: [DivError]
-  public let level: DivErrorLevel = .error
+  let kind: DivErrorKind = .blockModeling
+  let message: String
+  let path: UIElementPath
+  let causes: [DivError]
+  let level: DivErrorLevel = .error
 
   init(_ message: String, path: UIElementPath, causes: [DivError] = []) {
     self.message = message
@@ -94,10 +94,10 @@ struct DivBlockModelingError: Error, DivError {
 }
 
 struct DivBlockModelingWarning: DivError {
-  public let kind = DivErrorKind.blockModeling
-  public let message: String
-  public let path: UIElementPath
-  public let level: DivErrorLevel = .warning
+  let kind = DivErrorKind.blockModeling
+  let message: String
+  let path: UIElementPath
+  let level: DivErrorLevel = .warning
 
   init(_ message: String, path: UIElementPath) {
     self.message = message
@@ -107,10 +107,10 @@ struct DivBlockModelingWarning: DivError {
 }
 
 struct DivLayoutError: DivError {
-  public let kind = DivErrorKind.layout
-  public let level = DivErrorLevel.error
-  public let message: String
-  public let path: UIElementPath
+  let kind = DivErrorKind.layout
+  let level = DivErrorLevel.error
+  let message: String
+  let path: UIElementPath
 
   init(_ message: String, path: UIElementPath) {
     self.message = message
@@ -120,10 +120,10 @@ struct DivLayoutError: DivError {
 }
 
 struct DivLayoutWarning: DivError {
-  public let kind = DivErrorKind.layout
-  public let level = DivErrorLevel.warning
-  public let message: String
-  public let path: UIElementPath
+  let kind = DivErrorKind.layout
+  let level = DivErrorLevel.warning
+  let message: String
+  let path: UIElementPath
 
   init(_ message: String, path: UIElementPath) {
     self.message = message
@@ -133,10 +133,10 @@ struct DivLayoutWarning: DivError {
 }
 
 struct DivExpressionError: Error, DivError {
-  public let kind = DivErrorKind.expression
-  public let message: String
-  public let path: UIElementPath
-  public let level: DivErrorLevel = .error
+  let kind = DivErrorKind.expression
+  let message: String
+  let path: UIElementPath
+  let level: DivErrorLevel = .error
 
   init(_ error: ExpressionError, path: UIElementPath) {
     self.message = error.description
@@ -146,10 +146,10 @@ struct DivExpressionError: Error, DivError {
 }
 
 struct DivUnknownError: Error, DivError {
-  public let kind = DivErrorKind.unknown
-  public let message: String
-  public let path: UIElementPath
-  public let level: DivErrorLevel = .error
+  let kind = DivErrorKind.unknown
+  let message: String
+  let path: UIElementPath
+  let level: DivErrorLevel = .error
 
   init(_ error: Error, path: UIElementPath) {
     self.message = (error as CustomStringConvertible).description

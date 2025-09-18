@@ -25,7 +25,7 @@ extension CachedURLResourceRequester: PlayerItemsProvider {
     if let localURL = self.getLocalResourceURL(with: url) {
       completion(AVPlayerItem(url: localURL))
     } else {
-      let _ = self.getDataWithSource(from: url) { [weak self] _ in
+      _ = self.getDataWithSource(from: url) { [weak self] _ in
         if let localURL = self?.getLocalResourceURL(with: url) {
           completion(AVPlayerItem(url: localURL))
         } else {

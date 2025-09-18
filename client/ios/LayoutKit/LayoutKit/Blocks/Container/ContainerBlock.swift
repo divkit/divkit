@@ -451,7 +451,6 @@ public final class ContainerBlock: BlockWithLayout {
       }
     }
   }
-
 }
 
 private func makeGapsWithSeparators(

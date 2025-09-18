@@ -39,6 +39,5 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
       )
     }
   }
-
 }
 #endif

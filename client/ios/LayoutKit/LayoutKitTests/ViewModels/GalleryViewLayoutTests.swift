@@ -411,7 +411,6 @@ private enum Blocks {
       crossAlignment: crossAlignment
     )
   }
-
 }
 
 private let boundsSize = CGSize(width: 64, height: 64)

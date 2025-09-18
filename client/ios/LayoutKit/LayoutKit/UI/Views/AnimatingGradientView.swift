@@ -74,7 +74,6 @@ public final class AnimatingGradientView: UIView {
       startAnimating()
     }
   }
-
 }
 
 private let animationKey = "AnimatingGradientViewAnimation"

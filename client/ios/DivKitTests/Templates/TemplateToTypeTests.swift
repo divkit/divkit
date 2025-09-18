@@ -101,5 +101,4 @@ final class TemplateToTypeTests: XCTestCase {
     ) as! [String: Any]
     XCTAssertEqual(calculateTemplateToType(in: dict), templateToType)
   }
-
 }

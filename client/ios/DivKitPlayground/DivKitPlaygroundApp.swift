@@ -12,5 +12,4 @@ struct DivKitPlaygroundApp: App {
   init() {
     DivKitLogger.isEnabled = true
   }
-
 }

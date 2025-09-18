@@ -9,5 +9,4 @@ public struct MarksConfiguration: Equatable {
 
   let modelConfiguration: MarksConfigurationModel
   let horizontalInset: CGFloat
-
 }

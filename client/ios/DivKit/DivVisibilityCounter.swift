@@ -21,5 +21,4 @@ public final class DivVisibilityCounter {
   func incrementCount(for path: UIElementPath) {
     storage[path] = visibilityCount(for: path) + 1
   }
-
 }

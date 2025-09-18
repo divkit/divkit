@@ -28,5 +28,4 @@ private struct PlistContents: Decodable {
 
   let referenceSnapshotsPath: String
   let resultSnapshotsPath: String
-
 }

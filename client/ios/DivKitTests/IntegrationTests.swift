@@ -141,7 +141,6 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
       from: try JSONSerialization.data(withJSONObject: casesJson)
     )
   }
-
 }
 
 private struct IntegrationTestCase: Decodable {
@@ -152,7 +151,6 @@ private struct IntegrationTestCase: Decodable {
   let divActions: [DivAction]?
   let expected: [Expected]
   let platforms: [Platform]
-
 }
 
 private enum Expected: Decodable {
@@ -184,7 +182,6 @@ private enum Expected: Decodable {
       )
     }
   }
-
 }
 
 extension DivAction: Swift.Decodable {

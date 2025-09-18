@@ -159,7 +159,6 @@ final class GridBlockTests: XCTestCase {
       equals
     )
   }
-
 }
 
 private final class AlwaysRecreatedTestBlock: BlockWithTraits {
@@ -173,7 +172,6 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     var effectiveBackgroundColor: UIColor?
 
     func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
   }
 
   var widthTrait: LayoutTrait
@@ -245,7 +243,6 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
       state: state
     )
   }
-
 }
 
 extension AlwaysRecreatedTestBlock: LayoutCachingDefaultImpl {}

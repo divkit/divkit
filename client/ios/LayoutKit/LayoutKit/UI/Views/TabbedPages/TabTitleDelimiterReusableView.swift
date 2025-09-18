@@ -29,6 +29,5 @@ final class TabTitleDelimiterReusableView: UICollectionReusableView {
     addSubview(delimiterImageView)
     delimiterImageView.contentMode = .scaleAspectFit
   }
-
 }
 #endif

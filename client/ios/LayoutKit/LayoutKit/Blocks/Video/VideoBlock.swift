@@ -55,7 +55,6 @@ public final class VideoBlock: BlockWithTraits {
 
     return self.model == other.model && self.state == other.state
   }
-
 }
 
 extension VideoBlock: LayoutCachingDefaultImpl {}

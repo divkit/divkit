@@ -9,7 +9,7 @@ final class AxialAlignmentManager {
   private let layoutDirection: ContainerBlock.LayoutDirection
   private let axialAlignment: ContainerBlock.AxialAlignment
 
-  public init(
+  init(
     layoutDirection: ContainerBlock.LayoutDirection,
     axialAlignment: ContainerBlock.AxialAlignment
   ) {
@@ -17,7 +17,7 @@ final class AxialAlignmentManager {
     self.axialAlignment = axialAlignment
   }
 
-  public func applyOffset(
+  func applyOffset(
     to frames: [CGRect],
     forAvailableSpace availableSpace: CGFloat,
     contentSize: CGFloat = 0

@@ -67,7 +67,6 @@ struct UIStatePayload: Encodable {
     let div_render_total: Time
     let div_parsing_data: Time
     let div_parsing_templates: Time
-
   }
 
   let type: String = "ui_state"

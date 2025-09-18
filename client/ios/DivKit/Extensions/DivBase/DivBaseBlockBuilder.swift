@@ -91,7 +91,7 @@ final class DivBaseBlockBuilder {
     applyPaddings: Bool
   ) -> Self {
     block = block.addingEdgeInsets(
-      applyPaddings ? div.paddings.resolve(context): .zero,
+      applyPaddings ? div.paddings.resolve(context) : .zero,
       clipsToBounds: clipToBounds
     )
 
@@ -371,5 +371,4 @@ final class DivBaseBlockBuilder {
       )
     }
   }
-
 }

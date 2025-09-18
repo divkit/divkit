@@ -431,7 +431,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
     if let child = childView as? DelayedVisibilityActionView {
       child.visibilityAction = { [weak self] in
-
         guard let self else { return }
         onVisibleBoundsChangedInternal(from: from, to: to)
       }
@@ -620,7 +619,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       break
     }
   }
-
 }
 
 extension DecoratingView {

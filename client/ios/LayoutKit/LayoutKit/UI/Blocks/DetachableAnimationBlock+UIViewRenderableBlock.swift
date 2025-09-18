@@ -72,7 +72,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   private var child: Block?
   private var isFirstChildLayout: Bool = true
 
-  public var hasAnimationIn: Bool {
+  var hasAnimationIn: Bool {
     animationIn != nil
   }
 
@@ -90,11 +90,11 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     }
   }
 
-  public func convertFrame(to container: UIView) -> CGRect {
+  func convertFrame(to container: UIView) -> CGRect {
     convert(bounds, to: container)
   }
 
-  public func changeBoundsWithAnimation(
+  func changeBoundsWithAnimation(
     in container: UIView,
     startFrame: CGRect
   ) {
@@ -137,7 +137,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     )
   }
 
-  public func removeWithAnimation(in container: UIView) {
+  func removeWithAnimation(in container: UIView) {
     guard let childView else {
       return
     }
@@ -158,7 +158,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     )
   }
 
-  public func addWithAnimation() {
+  func addWithAnimation() {
     guard let childView,
           let animationIn else {
       return

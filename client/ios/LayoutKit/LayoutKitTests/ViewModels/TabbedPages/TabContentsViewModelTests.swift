@@ -10,5 +10,4 @@ final class TabContentsViewModelTests: XCTestCase {
   private func makeMe(pages: [TabPageViewModel]) throws -> TabContentsViewModel {
     try TabContentsViewModel(pages: pages, pagesHeight: .default)
   }
-
 }

@@ -57,7 +57,6 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
     }
     return false
   }
-
 }
 
 extension UIElementPath: Hashable {
@@ -140,7 +139,6 @@ private final class ListNode: Codable {
     self.value = value
     self.next = next
   }
-
 }
 
 extension ListNode: Hashable {

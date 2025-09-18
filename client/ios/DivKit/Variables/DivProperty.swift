@@ -11,9 +11,9 @@ struct DivProperty {
 
   func typedValue<T>() -> T? {
     if let resolvedValue = toVariableValue() {
-      return resolvedValue.typedValue()
+      resolvedValue.typedValue()
     } else {
-      return nil
+      nil
     }
   }
 
@@ -77,8 +77,8 @@ struct DivProperty {
 extension DivProperty: Equatable {
   static func ==(lhs: DivProperty, rhs: DivProperty) -> Bool {
     lhs.getValue == rhs.getValue &&
-    lhs.valueType == rhs.valueType &&
-    lhs.actions == rhs.actions
+      lhs.valueType == rhs.valueType &&
+      lhs.actions == rhs.actions
   }
 }
 #endif

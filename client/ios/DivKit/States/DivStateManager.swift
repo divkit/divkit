@@ -208,7 +208,6 @@ public class DivStateManager {
       previousState: previousState
     )
   }
-
 }
 
 extension DivStateManager: Equatable {

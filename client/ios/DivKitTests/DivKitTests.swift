@@ -19,7 +19,7 @@ final class DivKitTests: XCTestCase {
       let result = try! components.parseDivDataWithTemplates(data, cardId: cardId)
       onBackgroundThread {
         let context = components.makeContext(cardId: cardId, cachedImageHolders: [])
-        let _ = try! result.value!.makeBlock(context: context)
+        _ = try! result.value!.makeBlock(context: context)
 
         counter.accessWrite { counter in
           counter += 1

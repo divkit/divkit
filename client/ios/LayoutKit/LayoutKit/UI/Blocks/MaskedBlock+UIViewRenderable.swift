@@ -84,6 +84,5 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     setNeedsLayout()
   }
-
 }
 #endif

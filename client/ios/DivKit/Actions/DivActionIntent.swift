@@ -15,9 +15,9 @@ enum DivActionIntent {
   case video(id: String, action: DivVideoAction)
   case setStoredValue(DivStoredValue)
 
-  public static let scheme = "div-action"
+  static let scheme = "div-action"
 
-  public init?(url: URL) {
+  init?(url: URL) {
     guard url.scheme == Self.scheme else {
       return nil
     }

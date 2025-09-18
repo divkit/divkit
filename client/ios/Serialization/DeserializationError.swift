@@ -128,7 +128,6 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
       "description": errorMessage,
     ]
   }
-
 }
 
 fileprivate func dbgStrLimited(_ val: (some Any)?, limit: UInt = 100) -> String {

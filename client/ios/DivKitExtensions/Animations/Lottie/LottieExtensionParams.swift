@@ -10,9 +10,9 @@ struct LottieExtensionParams {
   }
 
   enum Defaults {
-    public static let defaultRepeatCount: Float = 0
-    public static let defaultRepeatMode: AnimationRepeatMode = .restart
-    public static let defaultIsPlaying: Bool = true
+    static let defaultRepeatCount: Float = 0
+    static let defaultRepeatMode: AnimationRepeatMode = .restart
+    static let defaultIsPlaying: Bool = true
   }
 
   var source: Source

@@ -21,6 +21,5 @@ public final class DefaultPlayerFactory: PlayerFactory {
   public func makePlayerView() -> PlayerView {
     DefaultPlayerView()
   }
-
 }
 #endif

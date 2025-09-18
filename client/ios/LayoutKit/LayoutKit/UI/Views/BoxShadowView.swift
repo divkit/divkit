@@ -39,6 +39,5 @@ public final class BoxShadowView: UIView {
     layer.shadowRadius = 30
     return layer
   }
-
 }
 #endif

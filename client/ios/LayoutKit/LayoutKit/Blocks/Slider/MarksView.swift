@@ -60,6 +60,5 @@ final class MarksView: UIView {
   private func commonInit() {
     backgroundColor = .clear
   }
-
 }
 #endif

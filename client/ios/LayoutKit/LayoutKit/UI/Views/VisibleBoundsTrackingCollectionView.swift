@@ -24,7 +24,6 @@ public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysColl
   public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     subviews.compactMap { $0 as? VisibleBoundsTrackingView }
   }
-
 }
 
 extension VisibleBoundsTrackingCollectionView: VisibleBoundsTracking {

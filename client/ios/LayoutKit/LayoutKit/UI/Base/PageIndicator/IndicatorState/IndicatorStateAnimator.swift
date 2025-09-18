@@ -87,6 +87,5 @@ struct IndicatorStateAnimator {
       )
     }
   }
-
 }
 #endif

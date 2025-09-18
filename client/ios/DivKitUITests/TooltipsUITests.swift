@@ -92,5 +92,4 @@ final class TooltipsUITests: XCTestCase {
       app.scrollViews.otherElements.staticTexts["Tooltip on different positions"].tap()
     }
   }
-
 }

@@ -235,7 +235,6 @@ private final class StateBlockView: BlockView {
       }
     }
   }
-
 }
 
 extension StateBlockView: VisibleBoundsTrackingContainer {

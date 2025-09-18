@@ -89,7 +89,6 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     attributes.transform = CGAffineTransform(scale: scale)
     return attributes
   }
-
 }
 
 extension UICollectionViewLayoutAttributes {

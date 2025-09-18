@@ -6,7 +6,7 @@ final class MockDivExtensionHandler: DivExtensionHandler {
   var id: String = "mock_extension"
   var preloadURL = URL(string: "https://example.com/mock.json")!
 
-  public func getPreloadURLs(div _: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
+  func getPreloadURLs(div _: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
     [preloadURL]
   }
 

@@ -67,7 +67,6 @@ final class DivViewSizeTests: XCTestCase {
     var effectiveBackgroundColor: UIColor? { backgroundColor }
 
     func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
   }
 
   func test_sizeForParentViewSizeForWeightedBlock() {
@@ -125,5 +124,4 @@ final class DivViewSizeTests: XCTestCase {
     let size = divViewSize.sizeFor(parentViewSize: CGSize(width: 600.0, height: 100.0))
     XCTAssertTrue(size == CGSize(width: 500.0, height: 0.0))
   }
-
 }

@@ -19,8 +19,8 @@ struct IdAndCardId: Hashable {
 
 public final class DivBlockStateStorage {
   struct ChangeEvent {
-    public let id: IdAndCardId
-    public let state: ElementState
+    let id: IdAndCardId
+    let state: ElementState
   }
 
   private enum FocusedElement: Equatable {
@@ -229,7 +229,6 @@ public final class DivBlockStateStorage {
   private func removeFocus(from element: IdAndCardId) -> FocusedElement {
     isFocusedInternal(checkedElement: FocusedElement.idFocused(element)) ? .none : focusedElement
   }
-
 }
 
 extension DivBlockStateStorage: ElementStateObserver {

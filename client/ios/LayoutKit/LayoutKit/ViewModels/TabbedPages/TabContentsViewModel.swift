@@ -58,7 +58,6 @@ public struct TabContentsViewModel: Equatable {
       throw BlockError("Tab error: vertically resizable footer is unsupported")
     }
   }
-
 }
 
 extension TabContentsViewModel: CustomDebugStringConvertible {

@@ -121,7 +121,6 @@ private final class BackgroundBlockView: BlockView, VisibleBoundsTrackingContain
 
     setNeedsLayout()
   }
-
 }
 
 extension UIViewRenderable {

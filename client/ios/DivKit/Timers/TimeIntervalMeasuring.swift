@@ -12,25 +12,25 @@ final class TimeIntervalMeasuring: TimeMeasuring {
   private var passedTimeInterval: TimeInterval = 0
   private var paused = false
 
-  public func start() {
+  func start() {
     startDate = Date()
     passedTimeInterval = 0
     paused = false
   }
 
-  public func pause() {
+  func pause() {
     paused = true
     if let startDate {
       passedTimeInterval += Date().timeIntervalSince(startDate)
     }
   }
 
-  public func resume() {
+  func resume() {
     paused = false
     startDate = Date()
   }
 
-  public func passedInterval() -> TimeInterval {
+  func passedInterval() -> TimeInterval {
     if paused {
       return passedTimeInterval
     }

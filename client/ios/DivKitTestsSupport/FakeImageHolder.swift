@@ -36,5 +36,4 @@ public final class FakeImageHolder: ImageHolder {
   public func equals(_: ImageHolder) -> Bool {
     true
   }
-
 }

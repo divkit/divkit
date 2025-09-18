@@ -32,7 +32,6 @@ public struct VisibilityState: Equatable {
     visibilityState.formIntersection(with: visibleBounds)
     return visibilityState
   }
-
 }
 
 extension CGSize {

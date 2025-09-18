@@ -59,7 +59,6 @@ enum AppComponents {
       variablesStorage: variablesStorage
     )
   }
-
 }
 
 private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> PlayerFactory {

@@ -258,7 +258,6 @@ private class TestBlock: BlockWithTraits {
   ) {
     (view as! TestView).block = self
   }
-
 }
 
 private final class TestView: BlockView, VisibleBoundsTrackingLeaf {
@@ -282,7 +281,6 @@ private final class OtherTestBlock: UIViewRenderable {
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {}
-
 }
 
 private final class OtherTestView: BlockView, VisibleBoundsTrackingLeaf {

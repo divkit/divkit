@@ -101,6 +101,5 @@ final class TabListItemCell: UICollectionViewCell {
     label.textAlignment = .center
     return label
   }
-
 }
 #endif

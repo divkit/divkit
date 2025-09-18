@@ -41,5 +41,4 @@ struct SwitchableContainerBlockLayout {
     self.titleGaps = titleGaps
     self.selectorSideGaps = selectorSideGaps
   }
-
 }

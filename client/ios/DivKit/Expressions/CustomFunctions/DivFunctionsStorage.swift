@@ -40,7 +40,7 @@ public final class DivFunctionsStorage {
         let storage = DivFunctionsStorage(outerStorage: nearestStorage)
         let cardId = path.cardId
         let expressionErrorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
-        functions.forEach { function in
+        for function in functions {
           functionNamesByCard[cardId, default: []].insert(function.name)
           storage.addFunction(
             function,

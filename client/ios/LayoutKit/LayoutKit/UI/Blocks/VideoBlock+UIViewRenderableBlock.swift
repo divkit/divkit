@@ -196,7 +196,6 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       )
     }
   }
-
 }
 
 extension VideoBlockViewModel {

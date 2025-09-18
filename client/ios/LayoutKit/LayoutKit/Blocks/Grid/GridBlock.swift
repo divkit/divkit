@@ -222,7 +222,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment
     )
   }
-
 }
 
 extension GridBlock {

@@ -101,7 +101,6 @@ public final class PhoneMaskFormatter: MaskFormatter {
 
     return resultMask + extraSymbols
   }
-
 }
 
 extension Character {

@@ -3,7 +3,7 @@ import Foundation
 import Lottie
 
 final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
-  public func createAsyncSourceAnimatableView(
+  func createAsyncSourceAnimatableView(
     withMode mode: AnimationRepeatMode,
     repeatCount count: Float
   ) -> AsyncSourceAnimatableView {

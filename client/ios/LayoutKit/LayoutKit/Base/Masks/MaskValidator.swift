@@ -83,7 +83,6 @@ public final class MaskValidator: Equatable {
       )
     )
   }
-
 }
 
 public enum CursorPositionTag {}

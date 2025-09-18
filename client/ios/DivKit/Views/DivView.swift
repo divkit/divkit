@@ -290,7 +290,6 @@ public final class DivView: VisibleBoundsTrackingView {
   @objc private func handleTap() {
     clearFocus()
   }
-
 }
 
 extension DivView: ElementStateObserver {

@@ -186,5 +186,4 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       trailing: trailing
     )
   }
-
 }

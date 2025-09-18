@@ -68,7 +68,6 @@ public final class SliderBlock: BlockWithTraits {
   public func getImageHolders() -> [ImageHolder] {
     []
   }
-
 }
 
 extension SliderBlock: LayoutCachingDefaultImpl {}

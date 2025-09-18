@@ -111,6 +111,5 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
 
     setNeedsLayout()
   }
-
 }
 #endif

@@ -188,7 +188,6 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
       }
     }
   }
-
 }
 
 #if os(iOS)

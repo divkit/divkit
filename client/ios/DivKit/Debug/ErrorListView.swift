@@ -23,7 +23,7 @@ final class ErrorListView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  public override func layoutSubviews() {
+  override func layoutSubviews() {
     self.errorView.frame = self.bounds.inset(by: safeAreaInsets)
   }
 

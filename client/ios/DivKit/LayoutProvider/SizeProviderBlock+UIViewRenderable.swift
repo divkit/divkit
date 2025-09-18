@@ -70,7 +70,6 @@ private final class SizeProviderBlockView: BlockView {
     )
     setNeedsLayout()
   }
-
 }
 
 extension SizeProviderBlockView: VisibleBoundsTrackingContainer {

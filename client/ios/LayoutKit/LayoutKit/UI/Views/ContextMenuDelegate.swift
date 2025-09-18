@@ -6,7 +6,7 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
   private let contextMenu: ContextMenu
   private weak var view: UIView?
 
-  public init(
+  init(
     contextMenu: ContextMenu,
     view: UIView?
   ) {
@@ -14,7 +14,7 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     self.view = view
   }
 
-  public func contextMenuInteraction(
+  func contextMenuInteraction(
     _: UIContextMenuInteraction,
     configurationForMenuAtLocation _: CGPoint
   ) -> UIContextMenuConfiguration? {
@@ -26,7 +26,7 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     }
   }
 
-  public func contextMenuInteraction(
+  func contextMenuInteraction(
     _: UIContextMenuInteraction,
     previewForHighlightingMenuWithConfiguration _: UIContextMenuConfiguration
   ) -> UITargetedPreview? {
@@ -52,7 +52,6 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     viewController.preferredContentSize = contextMenu.preview.intrinsicSize
     return viewController
   }
-
 }
 
 extension ContextMenu {

@@ -26,7 +26,6 @@ struct RegressionTestsModel: Decodable {
       .decode([SafeDecodable<RegressionTestModel>].self, forKey: .tests)
       .compactMap(\.value)
   }
-
 }
 
 struct RegressionTestModel: Decodable, Hashable {
@@ -58,7 +57,6 @@ struct RegressionTestModel: Decodable, Hashable {
       description =
         "Failed to read \(key.rawValue) in test '\(title)': \(error.localizedDescription)"
     }
-
   }
 
   let expectedResults: [String]
@@ -126,7 +124,6 @@ struct RegressionTestModel: Decodable, Hashable {
     platforms = (try? container.decodeIfPresent([Platform].self, forKey: .platforms)) ?? [.ios]
     tags = (try? container.decodeIfPresent([String].self, forKey: .tags)) ?? []
   }
-
 }
 
 enum Platform: String, Decodable {

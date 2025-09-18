@@ -61,6 +61,5 @@ final class PageIndicatorView: UIView {
   private func commonInit() {
     backgroundColor = .clear
   }
-
 }
 #endif

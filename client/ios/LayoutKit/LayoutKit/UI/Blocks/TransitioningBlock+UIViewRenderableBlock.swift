@@ -175,6 +175,5 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
 
     view.setInitialParamsAndAnimate(animations: animations, completion: completion)
   }
-
 }
 #endif

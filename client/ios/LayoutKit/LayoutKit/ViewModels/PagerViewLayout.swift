@@ -87,7 +87,6 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
   public func isEqual(to model: GalleryViewModel, boundsSize: CGSize) -> Bool {
     self.model == model && self.boundsSize == boundsSize
   }
-
 }
 
 extension GalleryViewModel {
@@ -208,7 +207,6 @@ extension GalleryViewModel {
     case let .pageSize(relative):
       return relative.absoluteValue(in: availableSize)
     case let .neighbourPageSize(neighbourPageSize):
-
       let gaps = gaps(forSize: nil, elementMainAxisSize: nil)
       let leadingMargin = gaps.first ?? 0.0
       let trailingMargin = gaps.last ?? 0.0

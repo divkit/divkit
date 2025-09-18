@@ -357,13 +357,13 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_TracksVariable_InSimpleExpression() {
-    let _ = expressionResolver.resolveString(expression("@{string_var}"))
+    _ = expressionResolver.resolveString(expression("@{string_var}"))
 
     XCTAssertEqual(usedVariables, ["string_var"])
   }
 
   func test_TracksVariable_InNestedExpression() {
-    let _ = expressionResolver.resolveString(expression("@{'@{string_var}'}"))
+    _ = expressionResolver.resolveString(expression("@{'@{string_var}'}"))
 
     XCTAssertEqual(usedVariables, ["string_var"])
   }
@@ -371,13 +371,13 @@ final class ExpressionResolverTests: XCTestCase {
   func test_TracksUnknownVariable() {
     isErrorExpected = true
 
-    let _ = expressionResolver.resolveString(expression("@{unknown_var}"))
+    _ = expressionResolver.resolveString(expression("@{unknown_var}"))
 
     XCTAssertEqual(usedVariables, ["unknown_var"])
   }
 
   func test_TracksVariable_InGetValueFunction() {
-    let _ = expressionResolver.resolveString(
+    _ = expressionResolver.resolveString(
       expression("@{getStringValue('string_var', 'fallback value')}")
     )
 

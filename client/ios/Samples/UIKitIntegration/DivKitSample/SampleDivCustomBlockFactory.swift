@@ -5,7 +5,7 @@ import UIKit
 import VGSL
 
 struct SampleDivCustomBlockFactory: DivCustomBlockFactory {
-  public func makeBlock(
+  func makeBlock(
     data: DivCustomData,
     context _: DivBlockModelingContext
   ) -> Block {
@@ -60,5 +60,4 @@ private final class SampleView: UIView {
     self.layer.insertSublayer(gradientLayer, at: 0)
     self.addSubview(label)
   }
-
 }

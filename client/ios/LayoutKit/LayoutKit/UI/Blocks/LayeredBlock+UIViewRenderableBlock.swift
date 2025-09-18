@@ -108,6 +108,5 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
 
     setNeedsLayout()
   }
-
 }
 #endif

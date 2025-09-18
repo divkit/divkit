@@ -18,7 +18,6 @@ public enum InsetMode: Equatable {
       self.maxViewportSize = maxViewportSize
     }
   }
-
 }
 
 extension InsetMode {

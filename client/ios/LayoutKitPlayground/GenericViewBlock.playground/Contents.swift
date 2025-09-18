@@ -41,7 +41,6 @@ private final class SampleView: UIView {
     self.layer.insertSublayer(gradientLayer, at: 0)
     self.addSubview(label)
   }
-
 }
 
 private func createBlock() -> Block {

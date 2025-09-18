@@ -78,7 +78,6 @@ public final class LottieExtensionHandler: DivExtensionHandler {
   public func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL] {
     [Self.getPreloadURL(div: div, expressionResolver: expressionResolver)].compactMap { $0 }
   }
-
 }
 
 private class JSONAnimationHolder: AnimationHolder {
@@ -111,5 +110,4 @@ private class JSONAnimationHolder: AnimationHolder {
     }
     return false
   }
-
 }

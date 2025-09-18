@@ -117,6 +117,5 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
 
     setNeedsLayout()
   }
-
 }
 #endif

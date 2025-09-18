@@ -8,7 +8,7 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     let pillOriginX: CGFloat
   }
 
-  public var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
+  var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
 
   var tabs: [TabTitleViewModel] = [] {
     didSet {

@@ -38,7 +38,6 @@ public final class DefaultPlayerView: UIView, PlayerView {
       playerLayer.videoGravity = videoGravity
     }
   }
-
 }
 
 extension AVPlayer {

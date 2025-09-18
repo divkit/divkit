@@ -63,7 +63,6 @@ struct Grid {
       }
     }
   }
-
 }
 
 private struct GridIterator {

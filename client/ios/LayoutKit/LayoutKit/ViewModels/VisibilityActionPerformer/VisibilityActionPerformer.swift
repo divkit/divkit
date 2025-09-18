@@ -81,5 +81,4 @@ final class VisibilityActionPerformer {
     visibilityTimer?.invalidate()
     visibilityTimer = nil
   }
-
 }

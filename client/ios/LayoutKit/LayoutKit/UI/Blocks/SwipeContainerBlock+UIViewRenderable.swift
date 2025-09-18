@@ -99,7 +99,6 @@ private final class SwipeContainerBlockView: BlockView, VisibleBoundsTrackingCon
 
     setNeedsLayout()
   }
-
 }
 
 private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
@@ -179,7 +178,6 @@ private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
       updateContentOffset()
     }
   }
-
 }
 
 private let closeDuration: TimeInterval = 0.2

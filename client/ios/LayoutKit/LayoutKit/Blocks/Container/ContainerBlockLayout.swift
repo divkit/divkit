@@ -24,12 +24,11 @@ struct ContainerBlockLayout {
         self = .fits
       }
     }
-
   }
 
-  public private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
-  public private(set) var blockFrames: [CGRect] = []
-  public private(set) var ascent: CGFloat?
+  private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
+  private(set) var blockFrames: [CGRect] = []
+  private(set) var ascent: CGFloat?
 
   let gaps: [CGFloat]
   let blockLayoutDirection: UserInterfaceLayoutDirection
@@ -40,7 +39,7 @@ struct ContainerBlockLayout {
   let needCompressConstrainedBlocks: Bool
   let axialAlignmentManager: AxialAlignmentManager
 
-  public var leftInset: CGFloat {
+  var leftInset: CGFloat {
     let leftMargin = layoutDirection == .horizontal ? gaps.first! : 0
     return ContentFitting(
       offsets: blockFrames.map(\.minX),
@@ -48,7 +47,7 @@ struct ContainerBlockLayout {
     ).insetValue
   }
 
-  public var topInset: CGFloat {
+  var topInset: CGFloat {
     let topMargin = layoutDirection == .vertical ? gaps.first! : 0
     return ContentFitting(
       offsets: blockFrames.map(\.minY),
@@ -56,10 +55,10 @@ struct ContainerBlockLayout {
     ).insetValue
   }
 
-  public var bottomInset: CGFloat { layoutDirection == .vertical ? gaps.last! : 0 }
-  public var rightInset: CGFloat { layoutDirection == .horizontal ? gaps.last! : 0 }
+  var bottomInset: CGFloat { layoutDirection == .vertical ? gaps.last! : 0 }
+  var rightInset: CGFloat { layoutDirection == .horizontal ? gaps.last! : 0 }
 
-  public var contentSize: CGSize {
+  var contentSize: CGSize {
     CGSize(
       width: blockFrames.map(\.maxX).max() ?? 0,
       height: blockFrames.map(\.maxY).max() ?? 0
@@ -75,7 +74,7 @@ struct ContainerBlockLayout {
     }
   }
 
-  public init(
+  init(
     children: [ContainerBlock.Child],
     separator: ContainerBlock.Separator? = nil,
     lineSeparator: ContainerBlock.Separator? = nil,

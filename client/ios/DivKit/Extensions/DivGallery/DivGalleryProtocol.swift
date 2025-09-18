@@ -54,10 +54,10 @@ extension DivGalleryProtocol {
         mappedBy: blockMapper
       )
     }
-    
+
     let itemsCount = children.count
     let bufferSize = layoutMode.map { min($0.bufferSize(itemsCount: itemsCount), itemsCount) } ?? 1
-    
+
     if infiniteScroll {
       let leadingBuffer = children[..<bufferSize]
       let trailingBuffer = children[(children.count - bufferSize)...]

@@ -456,7 +456,6 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
       break
     }
   }
-
 }
 
 extension TextFieldBlockView: UITextFieldDelegate {
