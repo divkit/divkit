@@ -250,6 +250,15 @@
         "web"
       ]
     },
+    "transformations": {
+      "type": "array",
+      "items": {
+        "$ref": "div-transformation.json"
+      },
+      "$description": "translations.json#/div_base_transformations",
+      "platforms": [
+      ]
+    },
     "layout_provider": {
       "$ref": "div-layout-provider.json",
       "$description": "translations.json#/div_layout_provider",

@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_transformation_rotation",
+  "platforms": [
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "rotation"
+      ]
+    },
+    "angle": {
+      "type": "number",
+      "$description": "translations.json#/div_transformation_rotation_angle"
+    },
+    "pivot_x": {
+      "$ref": "div-pivot.json",
+      "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+      "$description": "translations.json#/div_transformation_rotation_pivot_x"
+    },
+    "pivot_y": {
+      "$ref": "div-pivot.json",
+      "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+      "$description": "translations.json#/div_transformation_rotation_pivot_y"
+    }
+  },
+  "required": [
+    "type",
+    "angle"
+  ]
+}

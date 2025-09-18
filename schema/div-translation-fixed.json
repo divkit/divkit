@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_translation_fixed_short",
+  "properties": {
+    "value": {
+      "type": "integer",
+      "$description": "translations.json#/div_translation_fixed_value"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "$description": "translations.json#/div_translation_fixed_unit",
+      "default_value": "dp"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "translation-fixed"
+      ]
+    }
+  },
+  "platforms": [
+  ],
+  "required": [
+    "type",
+    "value"
+  ]
+}

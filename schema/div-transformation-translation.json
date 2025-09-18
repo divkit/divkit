@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_transformation_translation",
+  "platforms": [
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "translation"
+      ]
+    },
+    "x": {
+      "$ref": "div-translation.json",
+      "$description": "translations.json#/div_transformation_translation_x"
+    },
+    "y": {
+      "$ref": "div-translation.json",
+      "$description": "translations.json#/div_transformation_translation_y"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

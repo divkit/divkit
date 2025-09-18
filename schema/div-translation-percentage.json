@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_translation_percentage_short",
+  "properties": {
+    "value": {
+      "type": "number",
+      "$description": "translations.json#/div_translation_percentage_value"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "translation-percentage"
+      ]
+    }
+  },
+  "platforms": [
+  ],
+  "required": [
+    "type",
+    "value"
+  ]
+}
