@@ -1,0 +1,37 @@
+{
+  "card": {
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "is_microphone_permission_granted",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "font_size": 20,
+              "text": "switch with a11y"
+            },
+            {
+              "type": "switch",
+              "is_on_variable": "is_microphone_permission_granted",
+              "width": {
+                "type": "match_parent"
+              },
+              "alignment_horizontal": "start",
+              "alignment_vertical": "center"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

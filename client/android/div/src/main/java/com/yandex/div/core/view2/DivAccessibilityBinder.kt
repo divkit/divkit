@@ -26,6 +26,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSlider
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import javax.inject.Inject
@@ -106,6 +107,7 @@ internal class DivAccessibilityBinder @Inject constructor(
                 div is DivGifImage -> AccessibilityType.IMAGE
                 div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
                 div is DivContainer -> AccessibilityType.CONTAINER
+                div is DivSwitch -> AccessibilityType.SWITCH
                 else -> AccessibilityType.NONE
             }
             DivAccessibility.Type.NONE -> AccessibilityType.NONE
@@ -138,6 +140,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             AccessibilityType.CHECK_BOX -> "android.widget.CheckBox"
             AccessibilityType.RADIO_BUTTON -> "android.widget.RadioButton"
             AccessibilityType.CONTAINER -> "android.view.ViewGroup"
+            AccessibilityType.SWITCH -> "android.widget.Switch"
         }
     }
 
@@ -281,6 +284,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         RADIO_BUTTON,
         CHECK_BOX,
         CONTAINER,
+        SWITCH,
     }
 }
 

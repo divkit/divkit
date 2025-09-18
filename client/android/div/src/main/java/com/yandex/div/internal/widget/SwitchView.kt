@@ -6,12 +6,16 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.view2.drawable.NoOpDrawable
 
 internal open class SwitchView(context: Context) : FrameLayout(context) {
@@ -36,6 +40,9 @@ internal open class SwitchView(context: Context) : FrameLayout(context) {
         switch.apply {
             showText = false
             background = NoOpDrawable
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            isFocusable = false
+            isFocusableInTouchMode = false
         }
         this.addView(switch, LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER))
         this.setOnClickListener { forwardClicksToSwitch() }
@@ -43,6 +50,26 @@ internal open class SwitchView(context: Context) : FrameLayout(context) {
         fillDefaultColors()
         updateTints()
     }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (ViewCompat.getAccessibilityDelegate(this) == null) {
+            val defaultDelegate = object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(
+                    host: View,
+                    info: AccessibilityNodeInfoCompat
+                ) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.className = "android.widget.Switch"
+                    info.isCheckable = true
+                    info.isChecked = (host as? SwitchView)?.isChecked == true
+                }
+            }
+            ViewCompat.setAccessibilityDelegate(this, defaultDelegate)
+        }
+    }
+
+    override fun getAccessibilityClassName(): CharSequence = "android.widget.Switch"
 
     override fun isEnabled(): Boolean = switch.isEnabled
     override fun setEnabled(enabled: Boolean) {

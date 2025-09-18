@@ -815,6 +815,26 @@
       "file": "accessibility/checkbox.json"
     },
     {
+      "title": "Switch with accessibility",
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Focus on switch",
+        "Toggle switch"
+      ],
+      "expected_results": [
+        "Switch can be focused. When focused, the screen reader announces it's state, 'Access to the microphone' and 'switch'.",
+        "On activation, the screen reader announces the new state."
+      ],
+      "file": "accessibility/switch_with_accessibility.json"
+    },
+    {
       "title": "Actions on tap",
       "case_id": 36,
       "automated": [
