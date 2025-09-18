@@ -428,11 +428,29 @@
 
             if (type === 'wrap_content') {
                 const width = $jsonWidth as WrapContentSize;
+                let min;
+                let max;
                 if (width.min_size && isNonNegativeNumber(width.min_size.value)) {
-                    newWidthMin = pxToEm(width.min_size.value);
+                    min = width.min_size.value;
                 }
                 if (width.max_size && isNonNegativeNumber(width.max_size.value)) {
-                    newWidthMax = pxToEm(width.max_size.value);
+                    max = width.max_size.value;
+                }
+                if (min !== undefined && max !== undefined && min > max) {
+                    componentContext.logError(wrapError(new Error('Element has incorrect width constraints (min size is bigger than max size).'), {
+                        additional: {
+                            id: componentContext.json.id,
+                            minSize: min + 'dp',
+                            maxSize: max + 'dp'
+                        }
+                    }));
+                    min = max = undefined;
+                }
+                if (min !== undefined) {
+                    newWidthMin = pxToEm(min);
+                }
+                if (max !== undefined) {
+                    newWidthMax = pxToEm(max);
                 }
             }
 
@@ -561,11 +579,29 @@
 
             if (type === 'wrap_content') {
                 const height = $jsonHeight as WrapContentSize;
-                if (height?.min_size && isNonNegativeNumber(height.min_size.value)) {
-                    newHeightMin = pxToEm(height.min_size.value);
+                let min;
+                let max;
+                if (height.min_size && isNonNegativeNumber(height.min_size.value)) {
+                    min = height.min_size.value;
                 }
-                if (height?.max_size && isNonNegativeNumber(height.max_size.value)) {
-                    newHeightMax = pxToEm(height.max_size.value);
+                if (height.max_size && isNonNegativeNumber(height.max_size.value)) {
+                    max = height.max_size.value;
+                }
+                if (min !== undefined && max !== undefined && min > max) {
+                    componentContext.logError(wrapError(new Error('Element has incorrect height constraints (min size is bigger than max size).'), {
+                        additional: {
+                            id: componentContext.json.id,
+                            minSize: min + 'dp',
+                            maxSize: max + 'dp'
+                        }
+                    }));
+                    min = max = undefined;
+                }
+                if (min !== undefined) {
+                    newHeightMin = pxToEm(min);
+                }
+                if (max !== undefined) {
+                    newHeightMax = pxToEm(max);
                 }
             }
 

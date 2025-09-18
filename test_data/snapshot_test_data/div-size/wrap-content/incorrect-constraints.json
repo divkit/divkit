@@ -1,7 +1,8 @@
 {
   "description": "Container with elements with incorrect size constraints",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "test_container": {

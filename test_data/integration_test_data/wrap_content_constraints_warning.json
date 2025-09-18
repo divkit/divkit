@@ -124,7 +124,29 @@
       ],
       "platforms": [
         "android"
-      ]
+      ],
+      "unsupported_platforms": {
+        "web": "Web error contains an object with the error properties"
+      }
+    },
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element has incorrect width constraints (min size is bigger than max size)."
+        },
+        {
+          "type": "error",
+          "value": "Element has incorrect height constraints (min size is bigger than max size)."
+        }
+      ],
+      "platforms": [
+        "web"
+      ],
+      "unsupported_platforms": {
+        "android": "Web error contains an object with the error properties",
+        "ios": "Web error contains an object with the error properties"
+      }
     }
   ]
 }
