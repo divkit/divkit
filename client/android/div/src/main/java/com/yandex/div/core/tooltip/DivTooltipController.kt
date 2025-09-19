@@ -194,28 +194,36 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
         val tooltipContainer = divTooltipViewBuilder.buildTooltipView(context, div, width, height)
         val tooltipView = tooltipContainer.tooltipView ?: return
-
+        val isModal: Boolean = divTooltip.isModal()
         val popup = createPopup(
             tooltipContainer,
             width,
             height,
-        ).apply {
+        )
+        val touchTranslationCoordinator = TouchTranslationCoordinator(
+            touchTranslator = TouchTranslator(anchor),
+            popup = popup,
+        )
+        popup
+            .apply {
             isTouchable = true
             isOutsideTouchable = divTooltip.shouldDismissByOutsideTouch(resolver)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 isFocusable = true
-                isTouchModal = divTooltip.isModal()
+                isTouchModal = isModal
             } else {
-                isFocusable = divTooltip.isModal()
+                isFocusable = isModal
             }
+
             setTouchInterceptor(
                 PopupWindowTouchListener(
                     this,
                     tooltipView,
-                    divTooltip.isModal(),
+                    isModal,
                     isOutsideTouchable,
                     divTooltip.tapOutsideActions,
-                    context
+                    context,
+                    touchTranslationCoordinator,
                 )
             )
             setupAnimation(divTooltip, resolver)
@@ -230,6 +238,11 @@ internal class DivTooltipController @VisibleForTesting constructor(
             onBackPressedCallback = onBackPressedCallback
         )
 
+        if (!isModal) {
+            tooltipContainer.dismissAction = {
+                touchTranslationCoordinator.onTouchDownDiscardedAtRoot(event = it)
+            }
+        }
         popup.setOnDismissListener {
             tooltips.remove(divTooltip.id)
             stopVisibilityTracking(context, divTooltip.div)
@@ -325,12 +338,14 @@ private class PopupWindowTouchListener(
     private val isModal: Boolean,
     private val shouldDismissByOutsideTouch: Boolean,
     private val tapOutsideActions: List<DivAction>?,
-    private val bindingContext: BindingContext
+    private val bindingContext: BindingContext,
+    private val touchTranslationCoordinator: TouchTranslationCoordinator,
 ) : View.OnTouchListener {
 
     private val hitRect = Rect()
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
+        touchTranslationCoordinator.onTooltipMotionEvent(event)
         tooltipView.getHitRect(hitRect)
         return when {
             hitRect.contains(event.x.toInt(), event.y.toInt()) -> false

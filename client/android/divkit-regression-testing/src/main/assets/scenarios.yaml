@@ -972,3 +972,11 @@ paths:
 title: 'Custom card'
 paths:
   - 'regression_test_data/custom-card.json'
+---
+title: Non-modal tooltips transparency
+expect:
+  - Click on tooltip's colored container should click button that it covers.
+  - Swipe on tooltip's colored container should swipe gallery below and close tooltip in the end.
+paths:
+  - 'regression_test_data/tooltips/tooltip-touch-transparency.json'
+---

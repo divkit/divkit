@@ -1,0 +1,249 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "left": 12,
+        "right": 12
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "visibility",
+    "variables": [
+      {
+        "type": "string",
+        "name": "visibility_called",
+        "value": "false"
+      },
+      {
+        "type": "string",
+        "name": "disappear_called",
+        "value": "false"
+      },
+      {
+        "type": "integer",
+        "name": "tooltip_counter",
+        "value": 0
+      },
+      {
+        "type": "integer",
+        "name": "counter",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "button",
+              "text": "tooltip",
+              "tooltips": [
+                {
+                  "id": "tooltip",
+                  "position": "bottom",
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "mode": {
+                    "type": "non_modal"
+                  },
+                  "div": {
+                    "type": "container",
+                    "orientation": "overlap",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "paddings": {
+                      "left": 48,
+                      "top": 48,
+                      "right": 48,
+                      "bottom": 48
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#8f40"
+                      }
+                    ],
+                    "items": [
+                      {
+                        "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 20,
+                          "top": 20,
+                          "right": 20,
+                          "bottom": 20
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "tooltip: @{tooltip_counter}",
+                            "actions": [
+                              {
+                                "log_id": "show_tooltip",
+                                "url": "div-action://set_variable?name=tooltip_counter&value=@{tooltip_counter+1}"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "visibility_actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip&multiple=true"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip&multiple=true"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "counter: @{counter}",
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                }
+              ]
+            },
+            {
+              "type": "gallery",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "counter: @{counter}",
+                  "width": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "actions": [
+                    {
+                      "log_id": "show_tooltip",
+                      "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "counter: @{counter}",
+                  "width": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "actions": [
+                    {
+                      "log_id": "show_tooltip",
+                      "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "counter: @{counter}",
+                  "width": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "actions": [
+                    {
+                      "log_id": "show_tooltip",
+                      "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "counter: @{counter}",
+                  "width": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "actions": [
+                    {
+                      "log_id": "show_tooltip",
+                      "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "counter: @{counter}",
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://set_variable?name=counter&value=@{counter+1}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

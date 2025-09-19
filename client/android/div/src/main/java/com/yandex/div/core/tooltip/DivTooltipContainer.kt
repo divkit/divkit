@@ -3,6 +3,7 @@ package com.yandex.div.core.tooltip
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.isVisible
 import com.yandex.div.core.annotations.Mockable
@@ -21,6 +22,8 @@ internal class DivTooltipContainer @JvmOverloads constructor(
         clipChildren = false
         clipToPadding = false
     }
+
+    var dismissAction: (event: MotionEvent) -> Unit = {}
 
     val tooltipView: View?
         get() = if (childCount == 0) null else getChildAt(0)
@@ -50,5 +53,13 @@ internal class DivTooltipContainer @JvmOverloads constructor(
             return
         }
         super.addView(child, index, params)
+    }
+
+    override fun onTouchEvent(ev: MotionEvent): Boolean {
+        val result = super.onTouchEvent(ev)
+        if (!result && ev.action == MotionEvent.ACTION_DOWN) {
+            dismissAction(ev)
+        }
+        return result
     }
 }
