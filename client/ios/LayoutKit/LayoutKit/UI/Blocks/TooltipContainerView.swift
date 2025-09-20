@@ -70,7 +70,15 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       }
       return nil
     } else {
-      return super.hitTest(point, with: event)
+      let result = super.hitTest(point, with: event)
+      if result === tooltip.view {
+        DispatchQueue.main.async {
+          self.close(animated: true)
+        }
+        return nil
+      }
+
+      return result
     }
   }
 
