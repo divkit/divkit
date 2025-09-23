@@ -46,7 +46,7 @@ kotlin {
 }
 ```
 
-Latest snapshot version - `32.15.0-20250830.000814-SNAPSHOT`
+Latest snapshot version - `32.18.0-20250922.175208-SNAPSHOT`
 
 ### 2) iOS: add the `DivKitKMP` CocoaPod
 
