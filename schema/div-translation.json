@@ -1,11 +1,11 @@
 {
   "anyOf": [
     {
-      "$ref": "div-translation-fixed.json",
+      "$ref": "div-fixed-translation.json",
       "$description": "translations.json#/div_translation_fixed"
     },
     {
-      "$ref": "div-translation-percentage.json",
+      "$ref": "div-percentage-translation.json",
       "$description": "translations.json#/div_translation_percentage"
     }
   ]

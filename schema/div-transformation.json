@@ -1,11 +1,11 @@
 {
   "anyOf": [
     {
-      "$ref": "div-transformation-rotation.json",
+      "$ref": "div-rotation-transformation.json",
       "$description": "translations.json#/div_transformation_rotation"
     },
     {
-      "$ref": "div-transformation-translation.json",
+      "$ref": "div-translation-transformation.json",
       "$description": "translations.json#/div_transformation_translation"
     }
   ]
