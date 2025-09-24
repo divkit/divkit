@@ -635,62 +635,6 @@
     "en": "Element width.",
     "ru": "Ширина элемента."
   },
-  "div_transformation_rotation": {
-    "en": "Rotation transformation.",
-    "ru": "Преобразование поворота."
-  },
-  "div_transformation_rotation_angle": {
-    "en": "Rotation angle in degrees.",
-    "ru": "Угол поворота в градусах."
-  },
-  "div_transformation_rotation_pivot_x": {
-    "en": "X coordinate of the rotation pivot point.",
-    "ru": "X-координата точки поворота."
-  },
-  "div_transformation_rotation_pivot_y": {
-    "en": "Y coordinate of the rotation pivot point.",
-    "ru": "Y-координата точки поворота."
-  },
-  "div_transformation_translation": {
-    "en": "Translation transformation.",
-    "ru": "Преобразование сдвига."
-  },
-  "div_transformation_translation_x": {
-    "en": "X coordinate of the translation.",
-    "ru": "X-координата сдвига."
-  },
-  "div_transformation_translation_y": {
-    "en": "Y coordinate of the translation.",
-    "ru": "Y-координата сдвига."
-  },
-  "div_translation_fixed": {
-    "en": "Fixed value of the translation: the absolute coordinate of the translation point relative to the element's top-left corner.",
-    "ru": "Фиксированное значение сдвига — абсолютная координата точки сдвига относительно левого верхнего угла элемента."
-  },
-  "div_translation_fixed_short": {
-    "en": "Fixed coordinates of the translation.",
-    "ru": "Фиксированные координаты сдвига."
-  },
-  "div_translation_fixed_unit": {
-    "en": "Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
-    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
-  },
-  "div_translation_fixed_value": {
-    "en": "Coordinate value.",
-    "ru": "Значение координаты."
-  },
-  "div_translation_percentage": {
-    "en": "Position of the translation point as a percentage relative to the element. The point with coordinates (0%, 0%) corresponds to the top-left corner, and (100%, 100%) corresponds to the bottom-right corner.",
-    "ru": "Положение точки сдвига в процентах относительно элемента. Точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) правому нижнему углу."
-  },
-  "div_translation_percentage_short": {
-    "en": "Location of the translation coordinates as a percentage relative to the element size.",
-    "ru": "Расположение координат сдвига в процентах относительно размеров элемента."
-  },
-  "div_translation_percentage_value": {
-    "en": "Coordinate value as a percentage.",
-    "ru": "Значение координаты в процентах."
-  },
   "div_blend_mode": {
     "en": "Blend mode.",
     "ru": "Метод наложения."
@@ -2779,6 +2723,34 @@
     "en": "Degrees of the element rotation. Positive values used for clockwise rotation.",
     "ru": "Угол в градусах, на который необходимо повернуть элемент. Положительное значение описывает поворот по часовой стрелке."
   },
+  "div_transformation_rotation": {
+    "en": "Rotation transformation.",
+    "ru": "Преобразование поворота."
+  },
+  "div_transformation_rotation_angle": {
+    "en": "Rotation angle in degrees.",
+    "ru": "Угол поворота в градусах."
+  },
+  "div_transformation_rotation_pivot_x": {
+    "en": "X coordinate of the rotation pivot point.",
+    "ru": "X-координата точки поворота."
+  },
+  "div_transformation_rotation_pivot_y": {
+    "en": "Y coordinate of the rotation pivot point.",
+    "ru": "Y-координата точки поворота."
+  },
+  "div_transformation_translation": {
+    "en": "Translation transformation.",
+    "ru": "Преобразование сдвига."
+  },
+  "div_transformation_translation_x": {
+    "en": "X coordinate of the translation.",
+    "ru": "X-координата сдвига."
+  },
+  "div_transformation_translation_y": {
+    "en": "Y coordinate of the translation.",
+    "ru": "Y-координата сдвига."
+  },
   "div_transition_base_duration": {
     "en": "Animation duration in milliseconds.",
     "ru": "Продолжительность анимации в миллисекундах."
@@ -2798,6 +2770,34 @@
   "div_transition_trigger": {
     "en": "Event type that triggers animation.",
     "ru": "Тип события, при котором запускается анимация."
+  },
+  "div_translation_fixed": {
+    "en": "Fixed value of the translation: the absolute coordinate of the translation point relative to the element's top-left corner.",
+    "ru": "Фиксированное значение сдвига — абсолютная координата точки сдвига относительно левого верхнего угла элемента."
+  },
+  "div_translation_fixed_short": {
+    "en": "Fixed coordinates of the translation.",
+    "ru": "Фиксированные координаты сдвига."
+  },
+  "div_translation_fixed_unit": {
+    "en": "Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
+    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
+  },
+  "div_translation_fixed_value": {
+    "en": "Coordinate value.",
+    "ru": "Значение координаты."
+  },
+  "div_translation_percentage": {
+    "en": "Position of the translation point as a percentage relative to the element. The point with coordinates (0%, 0%) corresponds to the top-left corner, and (100%, 100%) corresponds to the bottom-right corner.",
+    "ru": "Положение точки сдвига в процентах относительно элемента. Точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) правому нижнему углу."
+  },
+  "div_translation_percentage_short": {
+    "en": "Location of the translation coordinates as a percentage relative to the element size.",
+    "ru": "Расположение координат сдвига в процентах относительно размеров элемента."
+  },
+  "div_translation_percentage_value": {
+    "en": "Coordinate value as a percentage.",
+    "ru": "Значение координаты в процентах."
   },
   "div_trigger": {
     "en": "A trigger that causes an action when activated.",
