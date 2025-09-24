@@ -1,3 +1,17 @@
+## 32.19.0
+
+# Android Client:
+* Fixed cell layout of grid with vertical spans.
+* Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
+* Support accessibility for `switch`.
+
+# iOS Client:
+* Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
+
+# Web Client:
+* Fixed the handling of the situation when the `min_size` is greater than the `max_size` in the `wrap_content` size.
+
+
 ## 32.18.0
 
 # Android Client:
