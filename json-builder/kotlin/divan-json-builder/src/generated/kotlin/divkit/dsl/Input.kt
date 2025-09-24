@@ -85,6 +85,7 @@ data class Input internal constructor(
             textVariable = additive.textVariable ?: properties.textVariable,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
@@ -308,6 +309,10 @@ data class Input internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
          */
         val transitionChange: Property<ChangeTransition>?,
@@ -405,6 +410,7 @@ data class Input internal constructor(
             result.tryPutProperty("text_variable", textVariable)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
@@ -533,6 +539,7 @@ data class Input internal constructor(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -596,6 +603,7 @@ fun DivScope.input(
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -657,6 +665,7 @@ fun DivScope.input(
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -720,6 +729,7 @@ fun DivScope.input(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -783,6 +793,7 @@ fun DivScope.inputProps(
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -843,6 +854,7 @@ fun DivScope.inputProps(
     textVariable = valueOrNull(textVariable),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
@@ -905,6 +917,7 @@ fun DivScope.inputProps(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -968,6 +981,7 @@ fun TemplateScope.inputRefs(
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1028,6 +1042,7 @@ fun TemplateScope.inputRefs(
     textVariable = textVariable,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1090,6 +1105,7 @@ fun TemplateScope.inputRefs(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1153,6 +1169,7 @@ fun Input.override(
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1214,6 +1231,7 @@ fun Input.override(
         textVariable = valueOrNull(textVariable) ?: properties.textVariable,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
@@ -1277,6 +1295,7 @@ fun Input.override(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1340,6 +1359,7 @@ fun Input.defer(
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1401,6 +1421,7 @@ fun Input.defer(
         textVariable = textVariable ?: properties.textVariable,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1464,6 +1485,7 @@ fun Input.defer(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1527,6 +1549,7 @@ fun Input.modify(
     textVariable: Property<String>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1588,6 +1611,7 @@ fun Input.modify(
         textVariable = textVariable ?: properties.textVariable,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1711,6 +1735,7 @@ fun Input.evaluate(
         textVariable = properties.textVariable,
         tooltips = properties.tooltips,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
@@ -1774,6 +1799,7 @@ fun Input.evaluate(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1837,6 +1863,7 @@ fun Component<Input>.override(
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1899,6 +1926,7 @@ fun Component<Input>.override(
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -1962,6 +1990,7 @@ fun Component<Input>.override(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2025,6 +2054,7 @@ fun Component<Input>.defer(
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -2087,6 +2117,7 @@ fun Component<Input>.defer(
         textVariable = textVariable,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -2211,6 +2242,7 @@ fun Component<Input>.evaluate(
         textVariable = null,
         tooltips = null,
         transform = null,
+        transformations = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -2274,6 +2306,7 @@ fun Component<Input>.evaluate(
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2337,6 +2370,7 @@ fun Component<Input>.modify(
     textVariable: Property<String>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -2399,6 +2433,7 @@ fun Component<Input>.modify(
         textVariable = textVariable,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,

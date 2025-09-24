@@ -74,6 +74,7 @@ data class Slider internal constructor(
             trackActiveStyle = additive.trackActiveStyle ?: properties.trackActiveStyle,
             trackInactiveStyle = additive.trackInactiveStyle ?: properties.trackInactiveStyle,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
@@ -243,6 +244,10 @@ data class Slider internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
          */
         val transitionChange: Property<ChangeTransition>?,
@@ -325,6 +330,7 @@ data class Slider internal constructor(
             result.tryPutProperty("track_active_style", trackActiveStyle)
             result.tryPutProperty("track_inactive_style", trackInactiveStyle)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
@@ -526,6 +532,7 @@ data class Slider internal constructor(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -577,6 +584,7 @@ fun DivScope.slider(
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -626,6 +634,7 @@ fun DivScope.slider(
         trackActiveStyle = valueOrNull(trackActiveStyle),
         trackInactiveStyle = valueOrNull(trackInactiveStyle),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -677,6 +686,7 @@ fun DivScope.slider(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -728,6 +738,7 @@ fun DivScope.sliderProps(
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -776,6 +787,7 @@ fun DivScope.sliderProps(
     trackActiveStyle = valueOrNull(trackActiveStyle),
     trackInactiveStyle = valueOrNull(trackInactiveStyle),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
@@ -826,6 +838,7 @@ fun DivScope.sliderProps(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -877,6 +890,7 @@ fun TemplateScope.sliderRefs(
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -925,6 +939,7 @@ fun TemplateScope.sliderRefs(
     trackActiveStyle = trackActiveStyle,
     trackInactiveStyle = trackInactiveStyle,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -975,6 +990,7 @@ fun TemplateScope.sliderRefs(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1026,6 +1042,7 @@ fun Slider.override(
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1075,6 +1092,7 @@ fun Slider.override(
         trackActiveStyle = valueOrNull(trackActiveStyle) ?: properties.trackActiveStyle,
         trackInactiveStyle = valueOrNull(trackInactiveStyle) ?: properties.trackInactiveStyle,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
@@ -1126,6 +1144,7 @@ fun Slider.override(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1177,6 +1196,7 @@ fun Slider.defer(
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1226,6 +1246,7 @@ fun Slider.defer(
         trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1277,6 +1298,7 @@ fun Slider.defer(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1328,6 +1350,7 @@ fun Slider.modify(
     trackActiveStyle: Property<Drawable>? = null,
     trackInactiveStyle: Property<Drawable>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1377,6 +1400,7 @@ fun Slider.modify(
         trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1454,6 +1478,7 @@ fun Slider.evaluate(
         trackActiveStyle = properties.trackActiveStyle,
         trackInactiveStyle = properties.trackInactiveStyle,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
@@ -1505,6 +1530,7 @@ fun Slider.evaluate(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1556,6 +1582,7 @@ fun Component<Slider>.override(
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1606,6 +1633,7 @@ fun Component<Slider>.override(
         trackActiveStyle = valueOrNull(trackActiveStyle),
         trackInactiveStyle = valueOrNull(trackInactiveStyle),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -1657,6 +1685,7 @@ fun Component<Slider>.override(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1708,6 +1737,7 @@ fun Component<Slider>.defer(
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1758,6 +1788,7 @@ fun Component<Slider>.defer(
         trackActiveStyle = trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -1836,6 +1867,7 @@ fun Component<Slider>.evaluate(
         trackActiveStyle = null,
         trackInactiveStyle = null,
         transform = null,
+        transformations = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -1887,6 +1919,7 @@ fun Component<Slider>.evaluate(
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1938,6 +1971,7 @@ fun Component<Slider>.modify(
     trackActiveStyle: Property<Drawable>? = null,
     trackInactiveStyle: Property<Drawable>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1988,6 +2022,7 @@ fun Component<Slider>.modify(
         trackActiveStyle = trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,

@@ -94,6 +94,7 @@ data class Text internal constructor(
             tightenWidth = additive.tightenWidth ?: properties.tightenWidth,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
@@ -353,6 +354,10 @@ data class Text internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
          */
         val transitionChange: Property<ChangeTransition>?,
@@ -465,6 +470,7 @@ data class Text internal constructor(
             result.tryPutProperty("tighten_width", tightenWidth)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
@@ -929,6 +935,7 @@ data class Text internal constructor(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1002,6 +1009,7 @@ fun DivScope.text(
     tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1073,6 +1081,7 @@ fun DivScope.text(
         tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -1146,6 +1155,7 @@ fun DivScope.text(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1219,6 +1229,7 @@ fun DivScope.textProps(
     tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1289,6 +1300,7 @@ fun DivScope.textProps(
     tightenWidth = valueOrNull(tightenWidth),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
@@ -1361,6 +1373,7 @@ fun DivScope.textProps(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1434,6 +1447,7 @@ fun TemplateScope.textRefs(
     tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1504,6 +1518,7 @@ fun TemplateScope.textRefs(
     tightenWidth = tightenWidth,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1576,6 +1591,7 @@ fun TemplateScope.textRefs(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1649,6 +1665,7 @@ fun Text.override(
     tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1720,6 +1737,7 @@ fun Text.override(
         tightenWidth = valueOrNull(tightenWidth) ?: properties.tightenWidth,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
@@ -1793,6 +1811,7 @@ fun Text.override(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1866,6 +1885,7 @@ fun Text.defer(
     tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1937,6 +1957,7 @@ fun Text.defer(
         tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -2010,6 +2031,7 @@ fun Text.defer(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2083,6 +2105,7 @@ fun Text.modify(
     tightenWidth: Property<Boolean>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -2154,6 +2177,7 @@ fun Text.modify(
         tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -2291,6 +2315,7 @@ fun Text.evaluate(
         tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = properties.tooltips,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
@@ -2364,6 +2389,7 @@ fun Text.evaluate(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2437,6 +2463,7 @@ fun Component<Text>.override(
     tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -2509,6 +2536,7 @@ fun Component<Text>.override(
         tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -2582,6 +2610,7 @@ fun Component<Text>.override(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2655,6 +2684,7 @@ fun Component<Text>.defer(
     tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -2727,6 +2757,7 @@ fun Component<Text>.defer(
         tightenWidth = tightenWidth,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -2865,6 +2896,7 @@ fun Component<Text>.evaluate(
         tightenWidth = tightenWidth,
         tooltips = null,
         transform = null,
+        transformations = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -2938,6 +2970,7 @@ fun Component<Text>.evaluate(
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -3011,6 +3044,7 @@ fun Component<Text>.modify(
     tightenWidth: Property<Boolean>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -3083,6 +3117,7 @@ fun Component<Text>.modify(
         tightenWidth = tightenWidth,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,

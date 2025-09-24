@@ -81,6 +81,7 @@ data class Container internal constructor(
             separator = additive.separator ?: properties.separator,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
@@ -285,6 +286,10 @@ data class Container internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
          */
         val transitionChange: Property<ChangeTransition>?,
@@ -374,6 +379,7 @@ data class Container internal constructor(
             result.tryPutProperty("separator", separator)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
@@ -514,6 +520,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -571,6 +578,7 @@ fun DivScope.row(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -626,6 +634,7 @@ fun DivScope.row(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -683,6 +692,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -740,6 +750,7 @@ fun DivScope.row(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -795,6 +806,7 @@ fun DivScope.row(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -852,6 +864,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -909,6 +922,7 @@ fun DivScope.column(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -964,6 +978,7 @@ fun DivScope.column(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1021,6 +1036,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1078,6 +1094,7 @@ fun DivScope.column(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1133,6 +1150,7 @@ fun DivScope.column(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1190,6 +1208,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1247,6 +1266,7 @@ fun DivScope.stack(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1302,6 +1322,7 @@ fun DivScope.stack(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1359,6 +1380,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1416,6 +1438,7 @@ fun DivScope.stack(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1471,6 +1494,7 @@ fun DivScope.stack(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -1529,6 +1553,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1587,6 +1612,7 @@ fun DivScope.container(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1643,6 +1669,7 @@ fun DivScope.container(
         separator = valueOrNull(separator),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -1702,6 +1729,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1760,6 +1788,7 @@ fun DivScope.containerProps(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1815,6 +1844,7 @@ fun DivScope.containerProps(
     separator = valueOrNull(separator),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
@@ -1873,6 +1903,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1931,6 +1962,7 @@ fun TemplateScope.containerRefs(
     separator: ReferenceProperty<Container.Separator>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1986,6 +2018,7 @@ fun TemplateScope.containerRefs(
     separator = separator,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -2044,6 +2077,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2102,6 +2136,7 @@ fun Container.override(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -2158,6 +2193,7 @@ fun Container.override(
         separator = valueOrNull(separator) ?: properties.separator,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
@@ -2217,6 +2253,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2275,6 +2312,7 @@ fun Container.defer(
     separator: ReferenceProperty<Container.Separator>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -2331,6 +2369,7 @@ fun Container.defer(
         separator = separator ?: properties.separator,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -2390,6 +2429,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2448,6 +2488,7 @@ fun Container.modify(
     separator: Property<Container.Separator>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -2504,6 +2545,7 @@ fun Container.modify(
         separator = separator ?: properties.separator,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -2598,6 +2640,7 @@ fun Container.evaluate(
         separator = properties.separator,
         tooltips = properties.tooltips,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
@@ -2657,6 +2700,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2715,6 +2759,7 @@ fun Component<Container>.override(
     separator: Container.Separator? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -2772,6 +2817,7 @@ fun Component<Container>.override(
         separator = valueOrNull(separator),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -2831,6 +2877,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -2889,6 +2936,7 @@ fun Component<Container>.defer(
     separator: ReferenceProperty<Container.Separator>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -2946,6 +2994,7 @@ fun Component<Container>.defer(
         separator = separator,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -3041,6 +3090,7 @@ fun Component<Container>.evaluate(
         separator = null,
         tooltips = null,
         transform = null,
+        transformations = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -3100,6 +3150,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -3158,6 +3209,7 @@ fun Component<Container>.modify(
     separator: Property<Container.Separator>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -3215,6 +3267,7 @@ fun Component<Container>.modify(
         separator = separator,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,

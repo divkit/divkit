@@ -70,6 +70,7 @@ data class Separator internal constructor(
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
@@ -222,6 +223,10 @@ data class Separator internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
          */
         val transitionChange: Property<ChangeTransition>?,
@@ -300,6 +305,7 @@ data class Separator internal constructor(
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
@@ -402,6 +408,7 @@ data class Separator internal constructor(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -449,6 +456,7 @@ fun DivScope.separator(
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -494,6 +502,7 @@ fun DivScope.separator(
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -541,6 +550,7 @@ fun DivScope.separator(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -588,6 +598,7 @@ fun DivScope.separatorProps(
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -632,6 +643,7 @@ fun DivScope.separatorProps(
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
@@ -678,6 +690,7 @@ fun DivScope.separatorProps(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -725,6 +738,7 @@ fun TemplateScope.separatorRefs(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -769,6 +783,7 @@ fun TemplateScope.separatorRefs(
     selectedActions = selectedActions,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
@@ -815,6 +830,7 @@ fun TemplateScope.separatorRefs(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -862,6 +878,7 @@ fun Separator.override(
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -907,6 +924,7 @@ fun Separator.override(
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
@@ -954,6 +972,7 @@ fun Separator.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1001,6 +1020,7 @@ fun Separator.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1046,6 +1066,7 @@ fun Separator.defer(
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1093,6 +1114,7 @@ fun Separator.defer(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1140,6 +1162,7 @@ fun Separator.modify(
     selectedActions: Property<List<Action>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1185,6 +1208,7 @@ fun Separator.modify(
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
@@ -1254,6 +1278,7 @@ fun Separator.evaluate(
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
@@ -1301,6 +1326,7 @@ fun Separator.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1348,6 +1374,7 @@ fun Component<Separator>.override(
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1394,6 +1421,7 @@ fun Component<Separator>.override(
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
@@ -1441,6 +1469,7 @@ fun Component<Separator>.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1488,6 +1517,7 @@ fun Component<Separator>.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1534,6 +1564,7 @@ fun Component<Separator>.defer(
         selectedActions = selectedActions,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -1604,6 +1635,7 @@ fun Component<Separator>.evaluate(
         selectedActions = null,
         tooltips = null,
         transform = null,
+        transformations = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -1651,6 +1683,7 @@ fun Component<Separator>.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
@@ -1698,6 +1731,7 @@ fun Component<Separator>.modify(
     selectedActions: Property<List<Action>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1744,6 +1778,7 @@ fun Component<Separator>.modify(
         selectedActions = selectedActions,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,

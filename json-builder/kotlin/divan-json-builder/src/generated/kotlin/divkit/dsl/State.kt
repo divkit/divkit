@@ -74,6 +74,7 @@ data class State internal constructor(
             states = additive.states ?: properties.states,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
+            transformations = additive.transformations ?: properties.transformations,
             transitionAnimationSelector = additive.transitionAnimationSelector ?: properties.transitionAnimationSelector,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
@@ -245,6 +246,10 @@ data class State internal constructor(
          */
         val transform: Property<Transform>?,
         /**
+         * Array of transformations to be applied to the element in sequence.
+         */
+        val transformations: Property<List<Transformation>>?,
+        /**
          * It determines which events trigger transition animations.
          * Default value: `state_change`.
          */
@@ -333,6 +338,7 @@ data class State internal constructor(
             result.tryPutProperty("states", states)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
+            result.tryPutProperty("transformations", transformations)
             result.tryPutProperty("transition_animation_selector", transitionAnimationSelector)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
@@ -451,6 +457,7 @@ data class State internal constructor(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -503,6 +510,7 @@ fun DivScope.state(
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
@@ -553,6 +561,7 @@ fun DivScope.state(
         states = valueOrNull(states),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionAnimationSelector = valueOrNull(transitionAnimationSelector),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
@@ -605,6 +614,7 @@ fun DivScope.state(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -657,6 +667,7 @@ fun DivScope.stateProps(
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
@@ -706,6 +717,7 @@ fun DivScope.stateProps(
     states = valueOrNull(states),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
+    transformations = valueOrNull(transformations),
     transitionAnimationSelector = valueOrNull(transitionAnimationSelector),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
@@ -757,6 +769,7 @@ fun DivScope.stateProps(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -809,6 +822,7 @@ fun TemplateScope.stateRefs(
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
@@ -858,6 +872,7 @@ fun TemplateScope.stateRefs(
     states = states,
     tooltips = tooltips,
     transform = transform,
+    transformations = transformations,
     transitionAnimationSelector = transitionAnimationSelector,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
@@ -909,6 +924,7 @@ fun TemplateScope.stateRefs(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -961,6 +977,7 @@ fun State.override(
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
@@ -1011,6 +1028,7 @@ fun State.override(
         states = valueOrNull(states) ?: properties.states,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
+        transformations = valueOrNull(transformations) ?: properties.transformations,
         transitionAnimationSelector = valueOrNull(transitionAnimationSelector) ?: properties.transitionAnimationSelector,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
@@ -1063,6 +1081,7 @@ fun State.override(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -1115,6 +1134,7 @@ fun State.defer(
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
@@ -1165,6 +1185,7 @@ fun State.defer(
         states = states ?: properties.states,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
@@ -1217,6 +1238,7 @@ fun State.defer(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -1269,6 +1291,7 @@ fun State.modify(
     states: Property<List<State.Item>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionAnimationSelector: Property<TransitionSelector>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
@@ -1319,6 +1342,7 @@ fun State.modify(
         states = states ?: properties.states,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
+        transformations = transformations ?: properties.transformations,
         transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
@@ -1399,6 +1423,7 @@ fun State.evaluate(
         states = properties.states,
         tooltips = properties.tooltips,
         transform = properties.transform,
+        transformations = properties.transformations,
         transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
@@ -1451,6 +1476,7 @@ fun State.evaluate(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -1503,6 +1529,7 @@ fun Component<State>.override(
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
+    transformations: List<Transformation>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
@@ -1554,6 +1581,7 @@ fun Component<State>.override(
         states = valueOrNull(states),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
+        transformations = valueOrNull(transformations),
         transitionAnimationSelector = valueOrNull(transitionAnimationSelector),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
@@ -1606,6 +1634,7 @@ fun Component<State>.override(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -1658,6 +1687,7 @@ fun Component<State>.defer(
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
+    transformations: ReferenceProperty<List<Transformation>>? = null,
     transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
@@ -1709,6 +1739,7 @@ fun Component<State>.defer(
         states = states,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionAnimationSelector = transitionAnimationSelector,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
@@ -1790,6 +1821,7 @@ fun Component<State>.evaluate(
         states = null,
         tooltips = null,
         transform = null,
+        transformations = null,
         transitionAnimationSelector = transitionAnimationSelector,
         transitionChange = null,
         transitionIn = null,
@@ -1842,6 +1874,7 @@ fun Component<State>.evaluate(
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
@@ -1894,6 +1927,7 @@ fun Component<State>.modify(
     states: Property<List<State.Item>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
+    transformations: Property<List<Transformation>>? = null,
     transitionAnimationSelector: Property<TransitionSelector>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
@@ -1945,6 +1979,7 @@ fun Component<State>.modify(
         states = states,
         tooltips = tooltips,
         transform = transform,
+        transformations = transformations,
         transitionAnimationSelector = transitionAnimationSelector,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
