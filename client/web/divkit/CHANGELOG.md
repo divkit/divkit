@@ -1,3 +1,8 @@
+## 32.19.0 (September 29, 2025)
+
+* Fixed the handling of the situation when the `min_size` is greater than the `max_size` in the `wrap_content` size.
+
+
 ## 32.17.0 (September 15, 2025)
 
 * Added support for the `item_spacing` and `line_spacing` properties in `container`.
