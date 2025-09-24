@@ -832,7 +832,8 @@
         "Switch can be focused. When focused, the screen reader announces it's state, 'Access to the microphone' and 'switch'.",
         "On activation, the screen reader announces the new state."
       ],
-      "file": "accessibility/switch_with_accessibility.json"
+      "file": "accessibility/switch_with_accessibility.json",
+      "case_id": 478
     },
     {
       "title": "Actions on tap",
