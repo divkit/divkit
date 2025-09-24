@@ -23,6 +23,7 @@ import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPoint
+import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivShadow
@@ -425,19 +426,17 @@ internal fun DivBackground?.equalsToConstant(other: DivBackground?): Boolean {
         }
 
         is DivBackground.LinearGradient -> {
-            val colormap = value.colorMap ?: emptyList()
             other is DivBackground.LinearGradient
-                && value.angle.equalsToConstant(other.value.angle)
-                && value.colors.equalsToConstant(other.value.colors)
-                && colormap.compareWith(other.value.colorMap ?: emptyList()) { left, right -> left.equalsToConstant(right) }
+                    && value.angle.equalsToConstant(other.value.angle)
+                    && value.colorsEqualToConstant(other.value)
         }
 
         is DivBackground.RadialGradient -> {
             other is DivBackground.RadialGradient
                 && value.centerX.equalsToConstant(other.value.centerX)
                 && value.centerY.equalsToConstant(other.value.centerY)
-                && value.colors.equalsToConstant(other.value.colors)
                 && value.radius.equalsToConstant(other.value.radius)
+                && value.colorsEqualToConstant(other.value)
         }
 
         is DivBackground.NinePatch -> {
@@ -467,15 +466,27 @@ internal fun DivBackground?.isConstant(): Boolean {
         }
 
         is DivBackground.LinearGradient -> {
-            value.angle.isConstant()
-                && value.colors.isConstantOrNull()
+            val isColorMapConst = value.colorMap.isConstantOrNull()
+            val isColorsConst = if (value.colorMap.isNullOrEmpty()) {
+                value.colors.isConstantOrNull()
+            } else {
+                true
+            }
+            value.angle.isConstant() && isColorsConst && isColorMapConst
         }
 
         is DivBackground.RadialGradient -> {
-            value.centerX.isConstant()
-                && value.centerY.isConstant()
-                && value.colors.isConstantOrNull()
-                && value.radius.isConstant()
+            val isColorMapConst = value.colorMap.isConstantOrNull()
+            val isColorsConst = if (value.colorMap.isNullOrEmpty()) {
+                value.colors.isConstantOrNull()
+            } else {
+                true
+            }
+            value.centerX.isConstant() &&
+                    value.centerY.isConstant() &&
+                    value.radius.isConstant() &&
+                    isColorsConst &&
+                    isColorMapConst
         }
 
         is DivBackground.NinePatch -> {
@@ -484,6 +495,14 @@ internal fun DivBackground?.isConstant(): Boolean {
         }
     }
 }
+
+@JvmName("isLinearColorMapConstantOrNull")
+internal fun List<DivLinearGradient.ColorPoint>?.isConstantOrNull(): Boolean =
+    this?.all { it.isConstant() } ?: true
+
+@JvmName("isRadialColorMapConstantOrNull")
+internal fun List<DivRadialGradient.ColorPoint>?.isConstantOrNull(): Boolean =
+    this?.all { it.isConstant() } ?: true
 
 internal fun DivLinearGradient.ColorPoint?.equalsToConstant(other: DivLinearGradient.ColorPoint?): Boolean {
     if (this == null && other == null) {
@@ -503,24 +522,68 @@ internal fun DivLinearGradient.ColorPoint?.isConstant(): Boolean {
         && position.isConstant()
 }
 
+internal fun DivLinearGradient.colorsEqualToConstant(other: DivLinearGradient): Boolean {
+    val lm = this.colorMap
+    val rm = other.colorMap
+    return if (!lm.isNullOrEmpty() || !rm.isNullOrEmpty()) {
+        (lm ?: emptyList()).compareWith(rm ?: emptyList()) { l, r -> l.equalsToConstant(r) }
+    } else {
+        this.colors.equalsToConstant(other.colors)
+    }
+}
+
+internal fun DivRadialGradient.colorsEqualToConstant(other: DivRadialGradient): Boolean {
+    val lm = this.colorMap
+    val rm = other.colorMap
+    return if (!lm.isNullOrEmpty() || !rm.isNullOrEmpty()) {
+        (lm ?: emptyList()).compareWith(rm ?: emptyList()) { l, r -> l.equalsToConstant(r) }
+    } else {
+        this.colors.equalsToConstant(other.colors)
+    }
+}
+
+internal fun DivRadialGradient.ColorPoint?.equalsToConstant(other: DivRadialGradient.ColorPoint?): Boolean {
+    if (this == null && other == null) {
+        return true
+    }
+    return this?.color.equalsToConstant(other?.color)
+            && this?.position.equalsToConstant(other?.position)
+}
+
+internal fun DivRadialGradient.ColorPoint?.isConstant(): Boolean {
+    if (this == null) {
+        return true
+    }
+    return color.isConstant() &&
+            position.isConstant()
+}
+
+private fun buildColormap(
+    points: List<Pair<Int, Float>>?,
+    colors: List<Int>?,
+): Colormap = when {
+    points != null -> {
+        val sorted = points.sortedBy { it.second }
+        val c = IntArray(sorted.size) { i -> sorted[i].first }
+        val p = FloatArray(sorted.size) { i -> sorted[i].second }
+        Colormap(c, p)
+    }
+    colors != null -> Colormap(colors.toIntArray())
+    else -> Colormap.EMPTY
+}
 
 internal fun DivLinearGradient.toColormap(resolver: ExpressionResolver): Colormap {
-    val mappedColors = this.colorMap?.sortedBy { colorPoint -> colorPoint.position.evaluate(resolver) }
-    val uniformColors = this.colors
+    val points = colorMap
+        ?.map { it.color.evaluate(resolver) to it.position.evaluate(resolver).toFloat() }
+    val flat = colors?.evaluate(resolver)
+    return buildColormap(points, flat)
+}
 
-    if (mappedColors != null) {
-        val colors = IntArray(mappedColors.size)
-        val positions = FloatArray(mappedColors.size)
-        for (i in mappedColors.indices) {
-            colors[i] = mappedColors[i].color.evaluate(resolver)
-            positions[i] = mappedColors[i].position.evaluate(resolver).toFloat()
-        }
-        return Colormap(colors, positions)
-    } else if (uniformColors != null) {
-        return Colormap(uniformColors.evaluate(resolver).toIntArray())
-    } else {
-        return Colormap.EMPTY
-    }
+internal fun DivRadialGradient.toColormap(resolver: ExpressionResolver): Colormap {
+    val points = colorMap
+        ?.map { it.color.evaluate(resolver) to it.position.evaluate(resolver).toFloat() }
+    val flat = colors?.evaluate(resolver)
+    return buildColormap(points, flat)
 }
 
 internal fun DivRadialGradientCenter?.equalsToConstant(other: DivRadialGradientCenter?): Boolean {

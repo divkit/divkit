@@ -19,7 +19,8 @@ internal class RadialGradientDrawable(
         var radius: Radius,
         var centerX: Center,
         var centerY: Center,
-        var colors: IntArray
+        var colors: IntArray,
+        var positions: FloatArray? = null,
 ) : Drawable() {
 
     private val paint = Paint()
@@ -33,6 +34,7 @@ internal class RadialGradientDrawable(
                 centerX = centerX,
                 centerY = centerY,
                 colors = colors,
+                positions = positions,
                 width = bounds.width(),
                 height = bounds.height()
             )
@@ -62,6 +64,7 @@ internal class RadialGradientDrawable(
                 centerX: Center,
                 centerY: Center,
                 colors: IntArray,
+                positions: FloatArray?,
                 width: Int,
                 height: Int
         ): RadialGradient {
@@ -118,7 +121,7 @@ internal class RadialGradientDrawable(
                 absoluteCenterY,
                 if (radiusPx > 0.0f) radiusPx else MIN_GRADIENT_RADIUS,
                 colors,
-                null,
+                positions,
                 Shader.TileMode.CLAMP
             )
         }

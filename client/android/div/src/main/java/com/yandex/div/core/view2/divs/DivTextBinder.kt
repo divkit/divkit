@@ -11,10 +11,10 @@ import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
+import com.yandex.div.core.util.colorsEqualToConstant
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
-import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.isConstantOrNull
 import com.yandex.div.core.util.observeColorPoint
 import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
@@ -443,7 +443,7 @@ internal class DivTextBinder @Inject constructor(
         when (val textGradient = newDiv.textGradient) {
             null -> paint.shader = null
             is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
-            is DivTextGradient.Radial -> bindRadialTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
+            is DivTextGradient.Radial -> bindRadialTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
         }
     }
 
@@ -455,8 +455,7 @@ internal class DivTextBinder @Inject constructor(
     ) {
         if (oldTextGradient is DivTextGradient.Linear
             && newTextGradient.angle.equalsToConstant(oldTextGradient.value.angle)
-            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)
-            && newTextGradient.colorMap.compareNullableWith(oldTextGradient.value.colorMap) { left, right -> left.equalsToConstant(right)}) {
+            && newTextGradient.colorsEqualToConstant(oldTextGradient.value)) {
             return
         }
 
@@ -467,7 +466,7 @@ internal class DivTextBinder @Inject constructor(
 
         if (newTextGradient.angle.isConstant()
             && newTextGradient.colors.isConstantOrNull()
-            && newTextGradient.colorMap?.all { it.isConstant() } != false) {
+            && newTextGradient.colorMap.isConstantOrNull()) {
             return
         }
 
@@ -499,6 +498,7 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun DivLineHeightTextView.bindRadialTextGradient(
+        divView: Div2View,
         newTextGradient: DivRadialGradient,
         oldTextGradient: DivTextGradient?,
         resolver: ExpressionResolver,
@@ -508,7 +508,7 @@ internal class DivTextBinder @Inject constructor(
             && newTextGradient.radius == oldTextGradient.value.radius
             && newTextGradient.centerX == oldTextGradient.value.centerX
             && newTextGradient.centerY == oldTextGradient.value.centerY
-            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)) {
+            && newTextGradient.colorsEqualToConstant(oldTextGradient.value)) {
             return
         }
 
@@ -517,35 +517,39 @@ internal class DivTextBinder @Inject constructor(
             newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
             newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
             newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
-            newTextGradient.colors?.evaluate(resolver) ?: emptyList()
+            newTextGradient.toColormap(resolver).checkIsNotEmpty(divView),
         )
 
-        if (newTextGradient.colors.isConstantOrNull()) {
+        val colorMapConst = newTextGradient.colorMap.isConstantOrNull()
+        if (newTextGradient.colors.isConstantOrNull() && colorMapConst) {
             return
         }
 
-        addSubscription(newTextGradient.colors?.observe(resolver) { colors ->
+        val callback = { _: Any ->
             applyRadialTextGradientColor(
-                newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
-                newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
-                newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
-                colors
+                radius = newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
+                centerX = newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
+                centerY = newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
+                colormap = newTextGradient.toColormap(resolver).checkIsNotEmpty(divView),
             )
-        })
+        }
+        addSubscription(newTextGradient.colors?.observe(resolver, callback))
+        newTextGradient.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
     }
 
     private fun TextView.applyRadialTextGradientColor(
         radius: RadialGradientDrawable.Radius,
         centerX: RadialGradientDrawable.Center,
         centerY: RadialGradientDrawable.Center,
-        colors: List<Int>
+        colormap: Colormap,
     ) {
         doOnActualLayout {
             this.paint.shader = RadialGradientDrawable.createRadialGradient(
                 radius = radius,
                 centerX = centerX,
                 centerY = centerY,
-                colors = colors.toIntArray(),
+                colors = colormap.colors,
+                positions = colormap.positions,
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )

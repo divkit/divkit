@@ -302,7 +302,7 @@ internal class DivBackgroundBinder @Inject constructor(
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
             centerX = value.centerX.toBackgroundState(metrics, resolver),
             centerY = value.centerY.toBackgroundState(metrics, resolver),
-            colors = value.colors?.evaluate(resolver) ?: emptyList(),
+            colormap = value.toColormap(resolver).checkIsNotEmpty(divView),
             radius = value.radius.toBackgroundState(metrics, resolver)
         )
         is DivBackground.Image -> DivBackgroundState.Image(
@@ -396,7 +396,7 @@ internal class DivBackgroundBinder @Inject constructor(
         data class RadialGradient(
             val centerX: Center,
             val centerY: Center,
-            val colors: List<Int>,
+            val colormap: Colormap,
             val radius: Radius
         ) : DivBackgroundState() {
             sealed class Center {
@@ -571,7 +571,8 @@ internal class DivBackgroundBinder @Inject constructor(
                 radius = radius.toRadialGradientDrawableRadius(),
                 centerX = centerX.toRadialGradientDrawableCenter(),
                 centerY = centerY.toRadialGradientDrawableCenter(),
-                colors = colors.toIntArray()
+                colors = colormap.colors,
+                positions = colormap.positions,
             )
         }
     }

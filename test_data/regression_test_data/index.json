@@ -1340,6 +1340,20 @@
       "file": "animations/animators/repeating_variable_animator.json"
     },
     {
+      "title": "Gradients with animators",
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "expected_results": [
+        "Gradients's positions should changes dynamically."
+      ],
+      "file": "animations/animators/gradients_animator.json"
+    },
+    {
       "title": "Infinite variable animator",
       "case_id": 174,
       "platforms": [

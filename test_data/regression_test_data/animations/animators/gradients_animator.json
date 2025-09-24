@@ -1,0 +1,132 @@
+{
+  "card": {
+    "log_id": "gradients_animators",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "id": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "variables": [
+            {
+              "name": "progress_count",
+              "type": "number",
+              "value": 0
+            }
+          ],
+          "animators": [
+            {
+              "id": "progress_animator",
+              "type": "number_animator",
+              "variable_name": "progress_count",
+              "repeat_count": {
+                "type": "infinity"
+              },
+              "duration": 4000,
+              "start_value": 2.0,
+              "end_value": 0,
+              "start_delay": 0,
+              "direction": "normal",
+              "interpolator": "ease_in_out"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "animator_start",
+              "scope_id": "container",
+              "typed": {
+                "type": "animator_start",
+                "animator_id": "progress_animator"
+              }
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 16
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16
+              },
+              "background": [
+                {
+                  "type": "gradient",
+                  "angle": 0,
+                  "color_map": [
+                    {
+                      "color": "#1CFAFAFF",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ED0000",
+                      "position": "@{progress_count >= 1.0 ? (2.0 - progress_count) : progress_count}"
+                    },
+                    {
+                      "color": "#1CFAFAFF",
+                      "position": 1.0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16
+              },
+              "background": [
+                {
+                  "type": "radial_gradient",
+                  "center_x": {
+                    "type": "relative",
+                    "value": 0.5
+                  },
+                  "center_y": {
+                    "type": "relative",
+                    "value": 0.5
+                  },
+                  "radius": {
+                    "type": "relative",
+                    "value": "farthest_corner"
+                  },
+                  "color_map": [
+                    {
+                      "color": "#1CFAFAFF",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ED0000",
+                      "position": "@{progress_count >= 1.0 ? (2.0 - progress_count) : progress_count}"
+                    },
+                    {
+                      "color": "#1CFAFAFF",
+                      "position": 1.0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -11,6 +11,7 @@ import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivPivot
+import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRoundedRectangleShape
@@ -257,6 +258,7 @@ internal fun ExpressionSubscriber.observeBackground (
             observeRadialGradientCenter(radialGradientBackground.centerX, resolver, callback)
             observeRadialGradientCenter(radialGradientBackground.centerY, resolver, callback)
             observeRadialGradientRadius(radialGradientBackground.radius, resolver, callback)
+            background.value.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
         }
 
         is DivBackground.NinePatch -> {
@@ -269,6 +271,19 @@ internal fun ExpressionSubscriber.observeBackground (
 
 internal fun ExpressionSubscriber.observeColorPoint(
     colorPoint: DivLinearGradient.ColorPoint?,
+    resolver: ExpressionResolver,
+    callback: (Any) -> Unit
+) {
+    if (colorPoint == null) {
+        return
+    }
+
+    addSubscription(colorPoint.color.observe(resolver, callback))
+    addSubscription(colorPoint.position.observe(resolver, callback))
+}
+
+internal fun ExpressionSubscriber.observeColorPoint(
+    colorPoint: DivRadialGradient.ColorPoint?,
     resolver: ExpressionResolver,
     callback: (Any) -> Unit
 ) {

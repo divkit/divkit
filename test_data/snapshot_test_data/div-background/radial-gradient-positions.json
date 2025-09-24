@@ -2,7 +2,8 @@
   "description": "Radial gradient with different positions.",
   "platforms": [
     "ios",
-    "web"
+    "web",
+    "android"
   ],
   "templates": {
     "color_block": {
