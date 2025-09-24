@@ -332,32 +332,49 @@ internal open class GridContainer @JvmOverloads constructor(
         @JvmField var rowSpan: Int
     )
 
-    private inline fun Cell.left(columns: List<Line>): Int {
+    private fun Cell.left(columns: List<Line>): Int {
         val firstColumn = columns[columnIndex]
         return firstColumn.offset
     }
 
-    private inline fun Cell.right(columns: List<Line>): Int {
+    private fun Cell.right(columns: List<Line>): Int {
         val lastColumn = columns[columnIndex + columnSpan - 1]
         return lastColumn.offset + lastColumn.size
     }
 
-    private inline fun Cell.top(rows: List<Line>): Int {
+    private fun Cell.top(rows: List<Line>): Int {
         val firstRow = rows[rowIndex]
         return firstRow.offset
     }
 
-    private inline fun Cell.bottom(rows: List<Line>): Int {
+    private fun Cell.bottom(rows: List<Line>): Int {
         val lastRow = rows[rowIndex + rowSpan - 1]
         return lastRow.offset + lastRow.size
     }
 
-    private inline fun Cell.width(columns: List<Line>): Int = right(columns) - left(columns)
+    private fun Cell.width(columns: List<Line>): Int = right(columns) - left(columns)
 
-    private inline fun Cell.height(rows: List<Line>): Int = bottom(rows) - top(rows)
+    private fun Cell.height(rows: List<Line>): Int = bottom(rows) - top(rows)
+
+    private class CellList(
+        val cells: List<Cell>,
+        val rowCount: Int
+    ): List<Cell> by cells {
+
+        init {
+            require(rowCount >= 0) { "Row count can not be negative: $rowCount." }
+        }
+
+        companion object {
+
+            fun empty(): CellList {
+                return CellList(emptyList(), 0)
+            }
+        }
+    }
 
     private class CellProjection(
-        @JvmField val index: Int,
+        @JvmField val lineIndex: Int,
         @JvmField val contentSize: Int,
         @JvmField val marginStart: Int,
         @JvmField val marginEnd: Int,
@@ -427,7 +444,7 @@ internal open class GridContainer @JvmOverloads constructor(
             }
 
         val rowCount: Int
-            get() = cells.rowCount()
+            get() = _cells.get().rowCount
 
         val cells: List<Cell>
             get() = _cells.get()
@@ -457,10 +474,6 @@ internal open class GridContainer @JvmOverloads constructor(
         private val height: Int
             get() = calculateSize(rows)
 
-        private fun List<Cell>.rowCount(): Int {
-            return if (isEmpty()) 0 else last().run { rowIndex + rowSpan }
-        }
-
         fun invalidateStructure() {
             _cells.reset()
             invalidateMeasurement()
@@ -487,8 +500,8 @@ internal open class GridContainer @JvmOverloads constructor(
             return lastLine.offset + lastLine.size
         }
 
-        private fun distributeCells(): List<Cell> {
-            if (childCount == 0) return emptyList()
+        private fun distributeCells(): CellList {
+            if (childCount == 0) return CellList.empty()
 
             val columnCount = columnCount
             val cells = ArrayList<Cell>(childCount)
@@ -520,21 +533,16 @@ internal open class GridContainer @JvmOverloads constructor(
                 }
             }
 
-            val lastRowSpan = cellHeights.minOfOrNull { it.coerceAtLeast(1) } ?: 1
+            val lastRowSpan = cellHeights.maxOfOrNull { it.coerceAtLeast(1) } ?: 1
             val rowCount = cells.last().rowIndex + lastRowSpan
-            cells.iterate { cell ->
-                if (cell.rowIndex + cell.rowSpan > rowCount) {
-                    cell.rowSpan = rowCount - cell.rowIndex
-                }
-            }
-            return cells
+            return CellList(cells, rowCount)
         }
 
         private fun measureColumns(): List<Line> {
             return measureAxis(columnCount, widthConstraint) { cell, view ->
                 val params = view.lp
                 CellProjection(
-                    index = cell.columnIndex,
+                    lineIndex = cell.columnIndex,
                     contentSize = view.measuredWidth,
                     marginStart = params.leftMargin,
                     marginEnd = params.rightMargin,
@@ -548,7 +556,7 @@ internal open class GridContainer @JvmOverloads constructor(
             return measureAxis(rowCount, heightConstraint) { cell, view ->
                 val params = view.lp
                 CellProjection(
-                    index = cell.rowIndex,
+                    lineIndex = cell.rowIndex,
                     contentSize = view.measuredHeight,
                     marginStart = params.topMargin,
                     marginEnd = params.bottomMargin,
@@ -558,7 +566,7 @@ internal open class GridContainer @JvmOverloads constructor(
             }
         }
 
-        private inline fun measureAxis(
+        private fun measureAxis(
             count: Int,
             constraint: SizeConstraint,
             projection: (Cell, View) -> CellProjection
@@ -574,7 +582,7 @@ internal open class GridContainer @JvmOverloads constructor(
             return result
         }
 
-        private inline fun applyFixedParamsToLines(
+        private fun applyFixedParamsToLines(
             cells: List<Cell>,
             lines: List<Line>,
             projection: (Cell, View) -> CellProjection
@@ -583,7 +591,7 @@ internal open class GridContainer @JvmOverloads constructor(
                 val child = getChildAt(cell.viewIndex)
                 val projected = projection(cell, child)
                 if (projected.span == 1) {
-                    val measurement = lines[projected.index]
+                    val measurement = lines[projected.lineIndex]
                     measurement.include(
                         contentSize = projected.contentSize,
                         size = projected.size,
@@ -594,14 +602,14 @@ internal open class GridContainer @JvmOverloads constructor(
                     val last = projected.span - 1
                     val weight = projected.weight / projected.span
                     for (i in first .. last) {
-                        val measurement = lines[projected.index + i]
+                        val measurement = lines[projected.lineIndex + i]
                         measurement.include(weight = weight)
                     }
                 }
             }
         }
 
-        private inline fun applySpansToLines(
+        private fun applySpansToLines(
             cells: List<Cell>,
             lines: List<Line>,
             projection: (Cell, View) -> CellProjection
@@ -617,8 +625,8 @@ internal open class GridContainer @JvmOverloads constructor(
             spannedCells.sortWith(SpannedCellComparator)
 
             spannedCells.iterate { projected ->
-                val first = projected.index
-                val last = projected.index + projected.span - 1
+                val first = projected.lineIndex
+                val last = projected.lineIndex + projected.span - 1
 
                 var undistributedSize = projected.size
                 var flexibleSize = undistributedSize

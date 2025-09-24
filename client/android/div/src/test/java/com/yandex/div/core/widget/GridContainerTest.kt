@@ -325,7 +325,7 @@ class GridContainerTest {
     }
 
     @Test
-    fun `spanned cell width inferred from column widthes`() {
+    fun `spanned cell width inferred from column widths`() {
         val grid = with(context) {
             gridContainer {
                 columnCount = 2
@@ -396,7 +396,7 @@ class GridContainerTest {
     }
 
     @Test
-    fun `grid row count inferred from minimal row span at bottom line`() {
+    fun `grid row count inferred from maximum row span at bottom line`() {
         val grid = with(context) {
             gridContainer {
                 columnCount = 2
@@ -420,7 +420,7 @@ class GridContainerTest {
             }
         }
 
-        assertEquals(3, grid.rowCount)
+        assertEquals(4, grid.rowCount)
     }
 
     @Test
@@ -452,37 +452,6 @@ class GridContainerTest {
         grid.measure(measureSpec(MeasureSpec.AT_MOST, 240), measureSpec(MeasureSpec.AT_MOST, 80))
 
         assertEquals(160, cells[1, 1].measuredWidth)
-    }
-
-    @Test
-    fun `cell row span cropped by row count`() {
-        val grid = with(context) {
-            gridContainer {
-                columnCount = 2
-
-                cells[0, 0] = view {
-                    layoutParams(width = 80, height = 40)
-                }
-                cells[0, 1] = view {
-                    layoutParams(width = 80, height = 40)
-                }
-                cells[1, 0] = view {
-                    layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowSpan = 8
-                    }
-                }
-                cells[1, 1] = view {
-                    layoutParams(width = 80, height = 40)
-                }
-                cells[2, 1] = view {
-                    layoutParams(width = 80, height = 40)
-                }
-            }
-        }
-
-        grid.measure(measureSpec(MeasureSpec.AT_MOST, 240), measureSpec(MeasureSpec.AT_MOST, 120))
-
-        assertEquals(80, cells[1, 0].measuredHeight)
     }
 
     @Test
