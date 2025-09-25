@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs.gallery
 
-import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -22,10 +21,6 @@ internal class DivGalleryViewHolder(
         super.bind(bindingContext, div, position, path)
         rootView.setTag(R.id.div_gallery_item_index, position)
         divBinder.attachIndicators()
-    }
-
-    override fun updateWrapperLayoutParams(childView: View) {
-        rootView.layoutParams = childView.layoutParams
     }
 
     override fun logReuseError() = KLog.d(TAG) { "Gallery holder reuse failed" }

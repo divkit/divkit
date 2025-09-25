@@ -50,11 +50,8 @@ internal abstract class DivCollectionViewHolder(
         )
 
         divBinder.bind(bindingContext, childView, div, path)
-        updateWrapperLayoutParams(childView)
         divView.runtimeStore.showWarningIfNeeded(div.value())
     }
-
-    protected open fun updateWrapperLayoutParams(childView: View) = Unit
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {
         oldDiv?.let { logReuseError() }

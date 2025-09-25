@@ -53,6 +53,15 @@ internal class DivRecyclerView @JvmOverloads constructor(
     private var needFling = false
     private var beforeScrollFocusPosition = NO_POSITION
 
+    var widthMeasureSpec = 0
+    var heightMeasureSpec = 0
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        widthMeasureSpec = widthSpec
+        heightMeasureSpec = heightSpec
+        super.onMeasure(widthSpec, heightSpec)
+    }
+
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
         val flingPerformed = super.fling(velocityX, velocityY)
 

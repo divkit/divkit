@@ -19,6 +19,7 @@ import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
 import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.build
@@ -28,6 +29,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.math.roundToInt
 
 @DivScope
 internal class DivGalleryBinder @Inject constructor(
@@ -40,7 +42,7 @@ internal class DivGalleryBinder @Inject constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun bindView(context: BindingContext, view: DivRecyclerView, div: Div.Gallery, path: DivStatePath) {
-        val oldDiv = (view as? DivRecyclerView)?.div
+        val oldDiv = view.div
         if (div === oldDiv) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
             adapter.applyPatch(view, divPatchCache, context)
@@ -54,7 +56,9 @@ internal class DivGalleryBinder @Inject constructor(
 
     private fun DivRecyclerView.bind(bindingContext: BindingContext, div: DivGallery, path: DivStatePath) {
         val resolver = bindingContext.expressionResolver
-        val reusableObserver = { _: Any -> updateDecorations(bindingContext, div) }
+        val galleryAdapter =
+            DivGalleryAdapter(div.buildItems(resolver), bindingContext, divBinder.get(), viewCreator, path)
+        val reusableObserver = { _: Any -> updateDecorations(bindingContext, div, galleryAdapter) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         addSubscription(div.scrollMode.observe(resolver, reusableObserver))
@@ -66,13 +70,17 @@ internal class DivGalleryBinder @Inject constructor(
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        adapter = DivGalleryAdapter(div.buildItems(resolver), bindingContext, divBinder.get(), viewCreator, path)
+        adapter = galleryAdapter
         bindItemBuilder(bindingContext, div)
         resetAnimatorAndRestoreOnLayout()
-        updateDecorations(bindingContext, div)
+        updateDecorations(bindingContext, div, galleryAdapter)
     }
 
-    private fun DivRecyclerView.updateDecorations(context: BindingContext, div: DivGallery) {
+    private fun DivRecyclerView.updateDecorations(
+        context: BindingContext,
+        div: DivGallery,
+        adapter: DivGalleryAdapter
+    ) {
         val metrics = resources.displayMetrics
         val resolver = context.expressionResolver
         val divOrientation = div.orientation.evaluate(resolver)
@@ -82,16 +90,20 @@ internal class DivGalleryBinder @Inject constructor(
             RecyclerView.VERTICAL
         }
 
+        adapter.orientation = orientation
         val scrollbarEnabled = div.scrollbar.evaluate(resolver) == DivGallery.Scrollbar.AUTO
         isVerticalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.VERTICAL
         isHorizontalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.HORIZONTAL
         isScrollbarFadingEnabled = false
 
-        val columnCount = div.columnCount?.evaluate(resolver) ?: 1
+        val columnCount = div.columnCount?.evaluate(resolver)?.toIntSafely() ?: 1
 
+        adapter.columnCount = columnCount
+        val crossSpacing = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver).dpToPxF(metrics)
+        adapter.crossSpacing = crossSpacing
         clipChildren = false
         setItemDecoration(
-            if (columnCount == 1L)
+            if (columnCount == 1)
                 PaddingItemDecoration(
                     midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
                     orientation = orientation
@@ -99,7 +111,7 @@ internal class DivGalleryBinder @Inject constructor(
             else
                 PaddingItemDecoration(
                     midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
-                    crossItemPadding = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver).dpToPx(metrics),
+                    crossItemPadding = crossSpacing.roundToInt(),
                     orientation = orientation
                 )
         )
@@ -120,7 +132,7 @@ internal class DivGalleryBinder @Inject constructor(
         // Added as a workaround for a bug in R8 that leads to replacing the
         // DivGalleryItemHelper type with DivGridLayoutManager, resulting in
         // casting DivLinearLayoutManager to DivGridLayoutManager exception.
-        val itemHelper: DivGalleryItemHelper = if (columnCount == 1L) {
+        val itemHelper: DivGalleryItemHelper = if (columnCount == 1) {
             DivLinearLayoutManager(context, this, div, orientation)
         } else {
             DivGridLayoutManager(context, this, div, orientation)

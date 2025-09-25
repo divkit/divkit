@@ -1,0 +1,105 @@
+{
+  "description": "Horizontal gallery with paddings and elements with match_parent width with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      }
+    },
+    "test_gallery": {
+      "type": "gallery",
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 2
+        }
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "items": [
+        {
+          "type": "item",
+          "width": {
+            "type": "match_parent"
+          },
+          "text": "no constraints"
+        },
+        {
+          "type": "item",
+          "width": {
+            "type": "match_parent",
+            "min_size": {
+              "value": 400
+            }
+          },
+          "text": "min width > gallery width"
+        },
+        {
+          "type": "item",
+          "width": {
+            "type": "match_parent",
+            "max_size": {
+              "value": 200
+            }
+          },
+          "text": "max width < gallery width"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "test_gallery"
+            },
+            {
+              "type": "test_gallery",
+              "default_item": 1
+            },
+            {
+              "type": "test_gallery",
+              "default_item": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

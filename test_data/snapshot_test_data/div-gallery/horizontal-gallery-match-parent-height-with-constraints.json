@@ -1,0 +1,87 @@
+{
+  "description": "Horizontal gallery with paddings and elements with match_parent height with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 90
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            }
+          },
+          "items": [
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent"
+              },
+              "text": "no constraints"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 110
+                }
+              },
+              "text": "min height > gallery height"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 60
+                }
+              },
+              "text": "max height < gallery height"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

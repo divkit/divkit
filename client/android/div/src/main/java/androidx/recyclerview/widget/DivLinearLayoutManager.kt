@@ -1,15 +1,10 @@
 package androidx.recyclerview.widget
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.gallery.ScrollPosition
-import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.DivGallery
 
 internal class DivLinearLayoutManager(
@@ -24,54 +19,6 @@ internal class DivLinearLayoutManager(
     override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems.getOrNull(position)
 
     override fun toLayoutManager() = this
-
-    override fun measureChild(child: View, widthUsed: Int, heightUsed: Int) {
-        val lp = child.layoutParams as DivRecyclerViewLayoutParams
-        val insets = view.getItemDecorInsetsForChild(child)
-        val widthSpec = getChildMeasureSpec(
-            width,
-            widthMode,
-            paddingLeft + paddingRight + widthUsed + insets.left + insets.right,
-            lp.width,
-            lp.maxWidth,
-            canScrollHorizontally()
-        )
-        val heightSpec = getChildMeasureSpec(
-            height,
-            heightMode,
-            paddingTop + paddingBottom + heightUsed + insets.top + insets.bottom,
-            lp.height,
-            lp.maxHeight,
-            canScrollVertically()
-        )
-        if (shouldMeasureChild(child, widthSpec, heightSpec, lp)) {
-            child.measure(widthSpec, heightSpec)
-        }
-    }
-
-    override fun measureChildWithMargins(child: View, widthUsed: Int, heightUsed: Int) {
-        val lp = child.layoutParams as DivRecyclerViewLayoutParams
-        val insets = view.getItemDecorInsetsForChild(child)
-        val widthSpec = getChildMeasureSpec(
-            width,
-            widthMode,
-            paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed + insets.left + insets.right,
-            lp.width,
-            lp.maxWidth,
-            canScrollHorizontally()
-        )
-        val heightSpec = getChildMeasureSpec(
-            height,
-            heightMode,
-            paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed + insets.top + insets.bottom,
-            lp.height,
-            lp.maxHeight,
-            canScrollVertically()
-        )
-        if (shouldMeasureChild(child, widthSpec, heightSpec, lp)) {
-            child.measure(widthSpec, heightSpec)
-        }
-    }
 
     override fun layoutDecorated(child: View, left: Int, top: Int, right: Int, bottom: Int) {
         super.layoutDecorated(child, left, top, right, bottom)
@@ -161,47 +108,5 @@ internal class DivLinearLayoutManager(
         scrollPosition: ScrollPosition
     ) {
         instantScroll(position, scrollPosition, offset)
-    }
-
-    override fun checkLayoutParams(lp: RecyclerView.LayoutParams?) = lp is DivRecyclerViewLayoutParams
-
-    override fun generateLayoutParams(c: Context?, attrs: AttributeSet?): RecyclerView.LayoutParams =
-        DivRecyclerViewLayoutParams(c, attrs)
-
-    override fun generateLayoutParams(lp: ViewGroup.LayoutParams?): RecyclerView.LayoutParams = when (lp) {
-        is DivRecyclerViewLayoutParams -> DivRecyclerViewLayoutParams(lp)
-        is RecyclerView.LayoutParams -> DivRecyclerViewLayoutParams(lp)
-        is DivLayoutParams -> DivRecyclerViewLayoutParams(lp)
-        is MarginLayoutParams -> DivRecyclerViewLayoutParams(lp)
-        else -> DivRecyclerViewLayoutParams(lp)
-    }
-
-    override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams =
-        DivRecyclerViewLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-    class DivRecyclerViewLayoutParams: RecyclerView.LayoutParams {
-
-        var maxHeight = Integer.MAX_VALUE
-        var maxWidth = Integer.MAX_VALUE
-
-        constructor(c: Context?, attrs: AttributeSet?) : super(c, attrs)
-
-        constructor(width: Int, height: Int) : super(width, height)
-
-        constructor(source: MarginLayoutParams?) : super(source)
-
-        constructor(source: ViewGroup.LayoutParams?) : super(source)
-
-        constructor(source: RecyclerView.LayoutParams?) : super(source)
-
-        constructor(source: DivRecyclerViewLayoutParams) : super(source) {
-            maxHeight = source.maxHeight
-            maxWidth = source.maxWidth
-        }
-
-        constructor(source: DivLayoutParams) : super(source) {
-            maxHeight = source.maxHeight
-            maxWidth = source.maxWidth
-        }
     }
 }
