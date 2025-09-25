@@ -1,13 +1,19 @@
 package com.yandex.div.core.view2.errors
 
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div2.DivData
 
 typealias ErrorObserver = (errors: List<Throwable>, warnings: List<Throwable>) -> Unit
 
 @Mockable
-internal class ErrorCollector {
+internal class ErrorCollector(
+    internal val divData: DivData?,
+    private val divDataTag: DivDataTag,
+    private val divErrorsReporter: DivErrorsReporter,
+) {
     private val observers = mutableSetOf<ErrorObserver>()
     private val runtimeErrors = mutableListOf<Throwable>()
     private var parsingErrors = emptyList<Throwable>()
@@ -18,11 +24,13 @@ internal class ErrorCollector {
 
     fun logError(e: Throwable) {
         runtimeErrors.add(e)
+        divErrorsReporter.onRuntimeError(divData, divDataTag, e)
         notifyObservers()
     }
 
     fun logWarning(warning: Throwable) {
         warnings.add(warning)
+        divErrorsReporter.onWarning(divData, divDataTag, warning)
         notifyObservers()
     }
 
@@ -56,7 +64,7 @@ internal class ErrorCollector {
         return Disposable { observers.remove(observer) }
     }
 
-    fun attachParsingErrors(divData: DivData?) {
+    fun attachParsingErrors() {
         parsingErrors = divData?.parsingErrors ?: emptyList()
         notifyObservers()
     }

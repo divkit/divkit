@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.SafeAlertDialogBuilder
@@ -62,6 +63,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.UUID
+import com.yandex.div.internal.KLog
 
 class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.MetadataHost {
 
@@ -118,6 +120,16 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .extension(CheckBoundsExtensionHandler())
             .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)
+            .divErrorsReporter(object : DivErrorsReporter {
+                override fun onRuntimeError(divData: DivData?, divDataTag: DivDataTag, error: Throwable) {
+                    KLog.e(TAG, error) { "Received runtime error for divData = $divData, divDataTag = $divDataTag" }
+                }
+
+                override fun onWarning(divData: DivData?, divDataTag: DivDataTag, warning: Throwable) {
+                    KLog.e(TAG, warning) { "Received warning for divData = $divData, divDataTag = $divDataTag" }
+                }
+
+            })
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .additionalTypefaceProviders(
@@ -454,6 +466,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         private const val KEY_DIV2_VARIABLES_URL = "variables_url"
         private const val KEY_DIV2_ACTION_URL = "action_url"
         private const val KEY_DIV2_DIV_JSON = "div_json"
+        private const val TAG = "Div2ScenarioActivity"
     }
 
     override val renderingTimeMessages: HashMap<String, LoggingHistogramBridge.TimeHistogram> = HashMap()

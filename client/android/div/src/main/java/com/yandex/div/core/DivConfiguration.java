@@ -47,6 +47,8 @@ public class DivConfiguration {
     @NonNull
     private final Div2Logger mDiv2Logger;
     @NonNull
+    private final DivErrorsReporter mDivErrorsReporter;
+    @NonNull
     private final DivDataChangeListener mDivDataChangeListener;
     @NonNull
     private final DivStateChangeListener mDivStateChangeListener;
@@ -104,6 +106,7 @@ public class DivConfiguration {
             @NonNull DivImageLoader imageLoader,
             @NonNull DivActionHandler actionHandler,
             @NonNull Div2Logger div2Logger,
+            @NonNull DivErrorsReporter divErrorsReporter,
             @NonNull DivDataChangeListener divDataChangeListener,
             @NonNull DivStateChangeListener divStateChangeListener,
             @NonNull DivStateCache divStateCache,
@@ -143,6 +146,7 @@ public class DivConfiguration {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
         mDiv2Logger = div2Logger;
+        mDivErrorsReporter = divErrorsReporter;
         mDivDataChangeListener = divDataChangeListener;
         mDivStateChangeListener = divStateChangeListener;
         mDivStateCache = divStateCache;
@@ -197,6 +201,12 @@ public class DivConfiguration {
     @NonNull
     public Div2Logger getDiv2Logger() {
         return mDiv2Logger;
+    }
+
+    @Provides
+    @NonNull
+    public DivErrorsReporter getDivErrorsReporter() {
+        return mDivErrorsReporter;
     }
 
     @Provides
@@ -426,6 +436,8 @@ public class DivConfiguration {
         @Nullable
         private Div2Logger mDiv2Logger;
         @Nullable
+        private DivErrorsReporter mDivErrorsReporter;
+        @Nullable
         private DivDataChangeListener mDivDataChangeListener;
         @Nullable
         private DivStateChangeListener mDivStateChangeListener;
@@ -490,6 +502,12 @@ public class DivConfiguration {
         @NonNull
         public Builder div2Logger(@NonNull Div2Logger logger) {
             mDiv2Logger = logger;
+            return this;
+        }
+
+        @NonNull
+        public Builder divErrorsReporter(@NonNull DivErrorsReporter reporter) {
+            mDivErrorsReporter = reporter;
             return this;
         }
 
@@ -737,6 +755,7 @@ public class DivConfiguration {
                     mImageLoader,
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
                     mDiv2Logger == null ? Div2Logger.STUB : mDiv2Logger,
+                    mDivErrorsReporter == null ? DivErrorsReporter.STUB : mDivErrorsReporter,
                     mDivDataChangeListener == null ? DivDataChangeListener.STUB : mDivDataChangeListener,
                     mDivStateChangeListener == null ? DivStateChangeListener.STUB : mDivStateChangeListener,
                     mDivStateCache == null ? new InMemoryDivStateCache() : mDivStateCache,

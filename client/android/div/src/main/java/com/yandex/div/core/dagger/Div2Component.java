@@ -13,6 +13,7 @@ import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivDataChangeListener;
+import com.yandex.div.core.DivErrorsReporter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
 import com.yandex.div.core.actions.DivActionTypedHandlerCombiner;
@@ -77,6 +78,9 @@ public interface Div2Component {
 
     @NonNull
     Div2Logger getDiv2Logger();
+
+    @NonNull
+    DivErrorsReporter getDivErrorsReporter();
 
     @NonNull
     DivVisibilityActionTracker getVisibilityActionTracker();
