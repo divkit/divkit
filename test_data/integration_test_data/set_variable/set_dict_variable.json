@@ -1,0 +1,98 @@
+{
+  "description": "Set dict variable.",
+  "div_data": {
+    "card": {
+      "log_id": "set_dict_variable",
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "boolean": true,
+            "integer": 1,
+            "number": 1.0,
+            "string": "value"
+          }
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set from dict variable by url action",
+          "url": "div-action://set_variable?name=result&value=@{dict_var}"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "dict",
+            "value": {
+              "boolean": true,
+              "integer": 1,
+              "number": 1.0,
+              "string": "value"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from dict by typed action",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "dict",
+              "value": {
+                "boolean": true,
+                "integer": 1,
+                "number": 1.0,
+                "string": "value"
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "dict",
+            "value": {
+              "boolean": true,
+              "integer": 1,
+              "number": 1.0,
+              "string": "value"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

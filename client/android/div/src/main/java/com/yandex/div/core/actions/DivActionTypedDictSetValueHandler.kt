@@ -34,7 +34,7 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val key = action.key.evaluate(resolver)
-        val newValue = action.value?.evaluate(resolver)
+        val newValue = action.value?.evaluateToPrimitive(resolver)
         VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
             if (variable !is Variable.DictVariable) {
                 view.logError(

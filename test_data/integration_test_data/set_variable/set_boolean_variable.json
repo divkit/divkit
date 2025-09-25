@@ -1,0 +1,101 @@
+{
+  "description": "Set boolean variable.",
+  "div_data": {
+    "card": {
+      "log_id": "set_boolean_variable",
+      "variables": [
+        {
+          "name": "boolean_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set from boolean by url action",
+          "url": "div-action://set_variable?name=result&value=true"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from boolean variable by url action",
+          "url": "div-action://set_variable?name=result&value=@{boolean_var}"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from boolean by typed action",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

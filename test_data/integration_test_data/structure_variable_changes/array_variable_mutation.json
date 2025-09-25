@@ -1,0 +1,764 @@
+{
+  "description": "Array variable mutation",
+  "div_data": {
+    "card": {
+      "log_id": "array_variable_mutation_test",
+      "variables": [
+        {
+          "type": "url",
+          "name": "url_var",
+          "value": "https://ya.ru"
+        },
+        {
+          "type": "color",
+          "name": "color_var",
+          "value": "#FF0000"
+        },
+        {
+          "type": "array",
+          "name": "array_var",
+          "value": [
+            "text",
+            123
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "content"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "string",
+              "value": "new_string"
+            }
+          },
+          "log_id": "insert_string_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              "new_string",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "integer",
+              "value": 12345
+            }
+          },
+          "log_id": "insert_integer_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              12345,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "number",
+              "value": 123.45
+            }
+          },
+          "log_id": "insert_number_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              123.45,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          "log_id": "insert_boolean_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              true,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            }
+          },
+          "log_id": "insert_dict_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              {
+                "key": "value"
+              },
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "array",
+              "value": [
+                1
+              ]
+            }
+          },
+          "log_id": "insert_array_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              [
+                1
+              ],
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            }
+          },
+          "log_id": "insert_url_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              "https://ya.ru",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "color",
+              "value": "#FF0000"
+            }
+          },
+          "log_id": "insert_color_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              "#FFFF0000",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "url",
+              "value": "@{url_var}"
+            }
+          },
+          "log_id": "insert_url_variable_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              "https://ya.ru",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_var",
+            "index": 1,
+            "value": {
+              "type": "color",
+              "value": "@{color_var}"
+            }
+          },
+          "log_id": "insert_color_variable_at_index_1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "text",
+              "#FFFF0000",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "string",
+              "value": "new_string"
+            }
+          },
+          "log_id": "set_string_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "new_string",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "integer",
+              "value": 12345
+            }
+          },
+          "log_id": "set_integer_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              12345,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "number",
+              "value": 123.45
+            }
+          },
+          "log_id": "set_number_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              123.45,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          "log_id": "set_boolean_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              true,
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            }
+          },
+          "log_id": "set_dict_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              {
+                "key": "value"
+              },
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "array",
+              "value": [
+                1
+              ]
+            }
+          },
+          "log_id": "set_array_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                1
+              ],
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            }
+          },
+          "log_id": "set_url_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "https://ya.ru",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "color",
+              "value": "#FF0000"
+            }
+          },
+          "log_id": "set_color_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "#FFFF0000",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "url",
+              "value": "@{url_var}"
+            }
+          },
+          "log_id": "set_url_variable_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "https://ya.ru",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_set_value",
+            "variable_name": "array_var",
+            "index": 0,
+            "value": {
+              "type": "color",
+              "value": "@{color_var}"
+            }
+          },
+          "log_id": "set_color_variable_at_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              "#FFFF0000",
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_remove_value",
+            "variable_name": "array_var",
+            "index": 0
+          },
+          "log_id": "remove_element_from_index_0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              123
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

@@ -167,7 +167,7 @@ abstract class Evaluable(val rawExpr: String) {
         override val variables: List<String> = arguments.map { it.variables }.reduce { acc, vars -> acc + vars }
         override val dynamicVariables: List<Evaluable> =
             arguments.map { it.dynamicVariables }.reduce { acc, vars -> acc + vars }
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalStringTemplate(this)
+        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalStringTemplate(this, rawExpression)
         override fun toString(): String = arguments.joinToString(separator = "")
     }
 

@@ -1,0 +1,99 @@
+{
+  "description": "Set color variable.",
+  "div_data": {
+    "card": {
+      "log_id": "set_color_variable",
+      "variables": [
+        {
+          "name": "color_var",
+          "type": "color",
+          "value": "#FF0000"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set from color by url action",
+          "url": "div-action://set_variable?name=result&value=%23FF0000"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "color",
+            "value": "#FFFF0000"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from color variable by url action",
+          "url": "div-action://set_variable?name=result&value=@{color_var}"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "color",
+            "value": "#FFFF0000"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from color by typed action",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "color",
+              "value": "#FF0000"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "color",
+            "value": "#FFFF0000"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ]
+}

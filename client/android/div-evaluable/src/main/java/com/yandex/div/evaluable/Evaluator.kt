@@ -2,6 +2,7 @@ package com.yandex.div.evaluable
 
 import com.yandex.div.evaluable.internal.Mockable
 import com.yandex.div.evaluable.internal.Token
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import kotlin.math.abs
 
@@ -219,15 +220,18 @@ class Evaluator(val evaluationContext: EvaluationContext) {
         val castedArguments = castEvalArgumentsIfNeeded(function, arguments)
         try {
             return function.invoke(evaluationContext, expressionContext, castedArguments)
-        } catch (e: IntegerOverflow) {
+        } catch (_: IntegerOverflow) {
             throw IntegerOverflow(functionToMessageFormat(function.name, arguments))
         }
     }
 
-    internal fun evalStringTemplate(stringTemplate: Evaluable.StringTemplate): String {
+    internal fun evalStringTemplate(stringTemplate: Evaluable.StringTemplate, rawExpression: String): String {
         val stringParts = mutableListOf<String>()
+        val needEncode = rawExpression.contains("://")
         for (arg in stringTemplate.arguments) {
-            val value: String = eval<Any>(arg).toString()
+            val value: String = eval<Any>(arg).let {
+                if (needEncode && it is Color) it.toEncodedString() else it.toString()
+            }
             stringParts.add(value)
             stringTemplate.updateIsCacheable(arg.checkIsCacheable())
         }
@@ -323,13 +327,13 @@ class Evaluator(val evaluationContext: EvaluationContext) {
                     when (operator) {
                         is Token.Operator.Binary.Factor.Multiplication -> left * right
                         is Token.Operator.Binary.Factor.Division -> {
-                            if (right == 0f) {
+                            if (right == 0.0) {
                                 throwExceptionOnEvaluationFailed("$left / $right", REASON_DIVISION_BY_ZERO)
                             }
                             left / right
                         }
                         is Token.Operator.Binary.Factor.Modulo -> {
-                            if (right == 0f) {
+                            if (right == 0.0) {
                                 throwExceptionOnEvaluationFailed("$left % $right", REASON_DIVISION_BY_ZERO)
                             }
                             left % right

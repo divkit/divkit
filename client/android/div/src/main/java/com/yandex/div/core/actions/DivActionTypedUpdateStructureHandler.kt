@@ -32,7 +32,7 @@ internal class DivActionTypedUpdateStructureHandler @Inject constructor() : DivA
         val variableName = action.variableName.evaluate(resolver)
         val path = action.path.evaluate(resolver)
         val pathSegments = path.split("/").filter { it.isNotEmpty() }
-        val newValue = action.value.evaluate(resolver)
+        val newValue = action.value.evaluateToPrimitive(resolver)
 
         if (path.isNotEmpty() && pathSegments.isEmpty()) {
             divView.logError(RuntimeException("Malformed path '$path': all path segments are empty"))

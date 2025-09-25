@@ -1,0 +1,98 @@
+{
+  "description": "Set array variable.",
+  "div_data": {
+    "card": {
+      "log_id": "set_array_variable",
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            true,
+            1,
+            1.0,
+            "value"
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set from array variable by url action",
+          "url": "div-action://set_variable?name=result&value=@{array_var}"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "array",
+            "value": [
+              true,
+              1,
+              1.0,
+              "value"
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from array by typed action",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "array",
+              "value": [
+                true,
+                1,
+                1.0,
+                "value"
+              ]
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "array",
+            "value": [
+              true,
+              1,
+              1.0,
+              "value"
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

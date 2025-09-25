@@ -1,7 +1,5 @@
 package com.yandex.div.evaluable.types
 
-import kotlin.jvm.Throws
-
 @JvmInline
 value class Color(val value: Int) {
 
@@ -33,11 +31,11 @@ value class Color(val value: Int) {
      */
     fun blue() = value and 0xFF
 
+    override fun toString() = "#$stringValue"
 
+    fun toEncodedString() = "%23$stringValue"
 
-    override fun toString(): String {
-        return "#" + Integer.toHexString(value).padStart(8, '0').uppercase()
-    }
+    private val stringValue get() = Integer.toHexString(value).padStart(8, '0').uppercase()
 
     companion object {
         /**

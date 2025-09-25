@@ -1,0 +1,101 @@
+{
+  "description": "Set url variable.",
+  "div_data": {
+    "card": {
+      "log_id": "set_url_variable",
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://ya.ru"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "separator"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set from url by url action",
+          "url": "div-action://set_variable?name=result&value=https%3A%2F%2Fya.ru"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "url",
+            "value": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from url variable by url action",
+          "url": "div-action://set_variable?name=result&value=@{url_var}"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "url",
+            "value": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from url by typed action",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "url",
+            "value": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

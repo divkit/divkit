@@ -30,6 +30,19 @@ internal fun Div2View.observeErrors(observer: ErrorObserver) {
         .observeAndGet(observer)
 }
 
+internal fun DivTypedValue.evaluateToPrimitive(resolver: ExpressionResolver): Any {
+    return when (this) {
+        is DivTypedValue.Integer -> value.value.evaluate(resolver)
+        is DivTypedValue.Str -> value.value.evaluate(resolver)
+        is DivTypedValue.Bool -> value.value.evaluate(resolver)
+        is DivTypedValue.Color -> com.yandex.div.evaluable.types.Color(value.value.evaluate(resolver)).toString()
+        is DivTypedValue.Number -> value.value.evaluate(resolver)
+        is DivTypedValue.Url -> value.value.evaluate(resolver).toString()
+        is DivTypedValue.Array -> value.value.evaluate(resolver)
+        is DivTypedValue.Dict -> value.value.evaluate(resolver)
+    }
+}
+
 internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any {
     val newValue: Any = when (this) {
         is DivTypedValue.Integer -> value.value.evaluate(expressionResolver)

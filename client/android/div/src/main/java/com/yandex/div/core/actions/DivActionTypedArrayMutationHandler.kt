@@ -45,7 +45,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index?.evaluate(resolver)?.toInt()
-        val newValue = action.value.evaluate(resolver)
+        val newValue = action.value.evaluateToPrimitive(resolver)
         view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {
@@ -89,7 +89,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
-        val newValue = action.value.evaluate(resolver)
+        val newValue = action.value.evaluateToPrimitive(resolver)
         view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {

@@ -1,0 +1,735 @@
+{
+  "description": "Dict set value",
+  "div_data": {
+    "card": {
+      "log_id": "dict_set_value_test",
+      "variables": [
+        {
+          "type": "url",
+          "name": "url_var",
+          "value": "https://ya.ru"
+        },
+        {
+          "type": "color",
+          "name": "color_var",
+          "value": "#FF0000"
+        },
+        {
+          "type": "dict",
+          "name": "dict_var",
+          "value": {
+            "first": "first_value",
+            "second": 2
+          }
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "content"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "string",
+              "value": "new_string"
+            }
+          },
+          "log_id": "insert_string"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": "new_string"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          "log_id": "insert_integer"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": 3
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "number",
+              "value": 123.45
+            }
+          },
+          "log_id": "insert_number"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": 123.45
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          "log_id": "insert_boolean"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": true
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            }
+          },
+          "log_id": "insert_dict"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": {
+                "key": "value"
+              }
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "array",
+              "value": [
+                1
+              ]
+            }
+          },
+          "log_id": "insert_array"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            }
+          },
+          "log_id": "insert_url"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": "https://ya.ru"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "color",
+              "value": "#FF0000"
+            }
+          },
+          "log_id": "insert_color"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": "#FFFF0000"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "url",
+              "value": "@{url_var}"
+            }
+          },
+          "log_id": "insert_url_variable"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": "https://ya.ru"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "third",
+            "value": {
+              "type": "color",
+              "value": "@{color_var}"
+            }
+          },
+          "log_id": "insert_color_variable"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "first_value",
+              "second": 2,
+              "third": "#FFFF0000"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "string",
+              "value": "new_string"
+            }
+          },
+          "log_id": "set_string"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "new_string",
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          "log_id": "set_integer"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": 3,
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "number",
+              "value": 123.45
+            }
+          },
+          "log_id": "set_number"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": 123.45,
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          "log_id": "set_boolean"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": true,
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            }
+          },
+          "log_id": "set_dict"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": {
+                "key": "value"
+              },
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "array",
+              "value": [
+                1
+              ]
+            }
+          },
+          "log_id": "set_array"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": [
+                1
+              ],
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            }
+          },
+          "log_id": "set_url"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "https://ya.ru",
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "color",
+              "value": "#FF0000"
+            }
+          },
+          "log_id": "set_color"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "#FFFF0000",
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "url",
+              "value": "@{url_var}"
+            }
+          },
+          "log_id": "set_url_variable"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "https://ya.ru",
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "dict_set_value",
+            "variable_name": "dict_var",
+            "key": "first",
+            "value": {
+              "type": "color",
+              "value": "@{color_var}"
+            }
+          },
+          "log_id": "set_color_variable"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "first": "#FFFF0000",
+              "second": 2
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}
