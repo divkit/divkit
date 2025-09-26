@@ -77,7 +77,8 @@ export const namedTemplates: Record<string, TemplateDescription> = {
             height: {
                 type: 'fixed',
                 value: 100
-            }
+            },
+            preload_required: true
         },
         template: {
             type: 'gif',

@@ -730,6 +730,11 @@ export class State {
                 },
                 preload_required: true
             };
+        } else if (type === 'video') {
+            json = {
+                type,
+                preload_required: true
+            };
         } else if (type === 'separator') {
             json = {
                 type,
