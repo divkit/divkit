@@ -1,3 +1,16 @@
+## 0.4.10
+
+* Added timeline when previewing videos and lottie
+* Added `color_map` support in gradients, as well as the ability to visually edit gradient points.
+* Fixed the display of gradient backgrounds with color from the palette in the properties
+* Added support for safe-area and the ability to switch it in previews
+* Updated DivKit 31.13.0 -> 32.16.0
+* Added support for states
+* Added the `preload_required` = true property when creating videos and lottie
+* Added the possibility of validation for action urls
+* Added the ability to replace the file selection dialog
+* Fixed the display of the selected alignment in the properties
+
 ## 0.4.9
 
 * Fixed a bug where images were drawn with a cell background, even when they had a preview set.
