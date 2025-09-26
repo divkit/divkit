@@ -41,6 +41,8 @@
     let rowsWeight: number[] = [];
     let columnsMinWidth: number[] = [];
     let rowsMinHeight: number[] = [];
+    let columnsWidth: number[] = [];
+    let rowsHeight: number[] = [];
     let rowCount = 0;
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
@@ -147,6 +149,9 @@
         rowsWeight = [];
         columnsMinWidth = [];
         rowsMinHeight = [];
+        columnsWidth = [];
+        rowsHeight = [];
+        let maxY = 0;
 
         resultItems = items.map((item, index) => {
             const childInfo = $childStore[index];
@@ -162,11 +167,11 @@
                     Number(childInfo.height.weight || 1) / rowSpan :
                     0;
             const widthMin =
-                colSpan === 1 && childInfo.width?.type === 'fixed' && childInfo.width.value ?
+                childInfo.width?.type === 'fixed' && childInfo.width.value ?
                     Number(childInfo.width.value) / colSpan :
                     0;
             const heightMin =
-                rowSpan === 1 && childInfo.height?.type === 'fixed' && childInfo.height.value ?
+                childInfo.height?.type === 'fixed' && childInfo.height.value ?
                     Number(childInfo.height.value) / rowSpan :
                     0;
 
@@ -213,15 +218,24 @@
                         rowsWeight[j] = heightWeight;
                     }
 
-                    if (!columnsMinWidth[i] || columnsMinWidth[i] < widthMin) {
+                    if (colSpan === 1 && (!columnsMinWidth[i] || columnsMinWidth[i] < widthMin)) {
                         columnsMinWidth[i] = widthMin;
                     }
 
-                    if (!rowsMinHeight[j] || rowsMinHeight[j] < heightMin) {
+                    if (rowSpan === 1 && (!rowsMinHeight[j] || rowsMinHeight[j] < heightMin)) {
                         rowsMinHeight[j] = heightMin;
+                    }
+
+                    if (colSpan === 1 && widthMin) {
+                        columnsWidth[i] = widthMin;
+                    }
+                    if (rowSpan === 1 && heightMin) {
+                        rowsHeight[i] = heightMin;
                     }
                 }
             }
+
+            maxY = Math.max(maxY, y + rowSpan);
 
             return {
                 componentContext: item,
@@ -231,7 +245,7 @@
             };
         });
 
-        rowCount = y + 1;
+        rowCount = Math.max(y + 1, maxY);
     }
 
     $: {
@@ -248,8 +262,8 @@
     };
 
     $: style = {
-        'grid-template-columns': gridCalcTemplates(columnsWeight, columnsMinWidth, columnCount),
-        'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowCount)
+        'grid-template-columns': gridCalcTemplates(columnsWeight, columnsMinWidth, columnsWidth, columnCount),
+        'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowsHeight, rowCount)
     };
 
     onDestroy(() => {

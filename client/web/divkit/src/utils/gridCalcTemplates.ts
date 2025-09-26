@@ -12,7 +12,7 @@ function formatWeight(weight: number): string {
     return String(Math.ceil(weight * 1000) / 1000);
 }
 
-export function gridCalcTemplates(weights: number[], minSizes: number[], length: number): string {
+export function gridCalcTemplates(weights: number[], minSizes: number[], sizes: number[], length: number): string {
     // If result weight is lesser than 1, multiply all weights so all of them would exceed 1
     if (weights.some(isSpannedWeight)) {
         const multiply = Math.max(...weights.filter(isSpannedWeight).map(weight => 1 / weight));
@@ -43,10 +43,10 @@ export function gridCalcTemplates(weights: number[], minSizes: number[], length:
     }
 
     for (let i = 0; i < length; ++i) {
-        if (minSize) {
+        if (minSize && !sizes[i]) {
             template[i] =
                 `minmax(${pxToEm((minSize * weights[i]) / totalWeight)},${formatWeight(weights[i])}fr)`;
-        } else if (weights[i]) {
+        } else if (allTracksHasWeight || !sizes[i] && weights[i]) {
             template[i] = `${formatWeight(weights[i])}fr`;
         } else {
             template[i] = 'auto';
