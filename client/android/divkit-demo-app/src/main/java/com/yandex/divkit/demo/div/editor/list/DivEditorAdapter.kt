@@ -30,6 +30,10 @@ class DivEditorAdapter(val context: Div2Context) :
         holder.setData(getItem(position))
     }
 
+    override fun onViewDetachedFromWindow(holder: DivEditorViewHolder) {
+        holder.div2View.releaseMedia()
+    }
+
     fun setList(divDataList: List<DivData>) {
         submitList(divDataList.map { DivEditorItem(it, it.logId) })
     }

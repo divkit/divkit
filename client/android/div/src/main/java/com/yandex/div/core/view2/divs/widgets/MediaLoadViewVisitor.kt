@@ -20,7 +20,7 @@ internal class MediaLoadViewVisitor @Inject constructor(
 ) : DivViewVisitor() {
 
     fun loadMedia(divView: Div2View) {
-        divView.children.forEach { visit(it) }
+        divView.children.forEach { visitViewTree(it) }
     }
 
     override fun visit(view: DivImageView) {
