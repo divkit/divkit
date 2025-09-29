@@ -33,7 +33,7 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
         importantMetrics = [
             //"Div.Binding.Cold", // Generates unstable results at some perf-tests.
             "Div.Parsing.Data.Cold",
-            "Div.Parsing.Data.Warm",
+            //"Div.Parsing.Data.Warm",// Generates unstable results at some perf-tests.
             "Div.Parsing.Templates.Cold",
             "Div.Render.Total.Cold",
             //"Div.Render.Total.Warm", // Generates unstable results at some perf-tests.
