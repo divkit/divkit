@@ -2855,6 +2855,26 @@
       "case_id": 469
     },
     {
+      "title": "Non-modal tooltips transparency",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Click on tooltip's red container",
+        "Swipe on tooltip's red container"
+      ],
+      "expected_results": [
+        "Click on tooltip's red container should click button that it covers and close tooltip",
+        "Swipe on tooltip's red container should swipe gallery below and close tooltip"
+      ],
+      "file": "tooltips/tooltip-touch-transparency.json",
+      "case_id": 472
+    },
+    {
       "title": "Tooltips with animations",
       "platforms": [
         "android",
