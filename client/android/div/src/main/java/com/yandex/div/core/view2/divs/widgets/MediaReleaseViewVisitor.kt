@@ -8,14 +8,14 @@ import javax.inject.Inject
 @Mockable
 internal class MediaReleaseViewVisitor @Inject constructor() : DivViewVisitor() {
     override fun visit(view: DivVideoView) {
-        view.release()
+        view.releaseMedia()
     }
 
     override fun visit(view: DivImageView) {
-        view.release()
+        view.releaseMedia()
     }
 
     override fun visit(view: DivGifImageView) {
-        view.release()
+        view.releaseMedia()
     }
 }

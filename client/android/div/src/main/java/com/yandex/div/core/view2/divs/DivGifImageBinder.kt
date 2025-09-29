@@ -175,6 +175,13 @@ internal class DivGifImageBinder @Inject constructor(
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
+    fun loadGifImage(
+        view: DivGifImageView,
+        bindingContext: BindingContext,
+        div: DivGifImage,
+        errorCollector: ErrorCollector,
+    ) = view.applyGifImage(bindingContext.divView, bindingContext.expressionResolver, div, errorCollector)
+
     @RequiresApi(Build.VERSION_CODES.P)
     class LoadDrawableOnPostPTask(
         val view: WeakReference<DivGifImageView>,

@@ -49,6 +49,19 @@ internal class DivVideoBinder @Inject constructor(
         oldDiv: DivVideo?,
         path: DivStatePath
     ) {
+        this.path = path
+        applyVideo(bindingContext, div, path)
+        bindAspectRatio(div.aspect, oldDiv?.aspect, bindingContext.expressionResolver)
+    }
+
+    fun loadVideo(view: DivVideoView, bindingContext: BindingContext, div: DivVideo, path: DivStatePath) =
+        view.applyVideo(bindingContext, div, path)
+
+    private fun DivVideoView.applyVideo(
+        bindingContext: BindingContext,
+        div: DivVideo,
+        path: DivStatePath,
+    ) {
         val resolver = bindingContext.expressionResolver
         val source = div.createSource(resolver)
         val config = DivPlayerPlaybackConfig(
@@ -106,7 +119,6 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         videoViewMapper.addView(this, div)
-        bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
     }
 
     private fun createObserver(
@@ -168,7 +180,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(bindingContext, elapsedTimeVariable, callbacks, path))
+        addVideoSubscription(variableBinder.bindVariable(bindingContext, elapsedTimeVariable, callbacks, path))
     }
 
     private fun DivVideoView.observeMuted(
@@ -176,7 +188,7 @@ internal class DivVideoBinder @Inject constructor(
         resolver: ExpressionResolver,
         player: DivPlayer
     ) {
-        addSubscription(
+        addVideoSubscription(
             div.muted.observeAndGet(resolver) {
                 player.setMuted(it)
             }
@@ -189,7 +201,7 @@ internal class DivVideoBinder @Inject constructor(
         playerView: DivPlayerView,
         previewView: PreviewImageView,
     ) {
-        addSubscription(
+        addVideoSubscription(
             div.scale.observeAndGet(resolver) {
                 playerView.setScale(it)
                 previewView.setScale(it)
@@ -199,7 +211,7 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideo.applyPreview(
         resolver: ExpressionResolver,
-        onPreviewDecoded:(ImageRepresentation?) -> Unit,
+        onPreviewDecoded: (ImageRepresentation?) -> Unit,
     ) {
         val base64String = preview?.evaluate(resolver)
 
@@ -234,7 +246,7 @@ private class PreviewImageView(context: Context) : AppCompatImageView(context) {
     init {
         layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setBackgroundColor(Color.TRANSPARENT)
-        visibility = View.INVISIBLE
+        visibility = INVISIBLE
     }
 
     override fun setImageDrawable(drawable: Drawable?) {

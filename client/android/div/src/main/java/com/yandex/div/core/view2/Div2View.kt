@@ -59,6 +59,7 @@ import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
+import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
@@ -135,6 +136,8 @@ class Div2View private constructor(
         get() = viewComponent.releaseViewVisitor
     internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
         get() = viewComponent.mediaReleaseViewVisitor
+    private val mediaLoadViewVisitor: MediaLoadViewVisitor
+        get() = viewComponent.mediaLoadViewVisitor
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
@@ -302,6 +305,7 @@ class Div2View private constructor(
             return false
         } else if (divData === data) {
             reporter.onBindingFatalSameData()
+            loadMedia()
             return false
         }
 
@@ -674,6 +678,8 @@ class Div2View private constructor(
 
         return canBeReplaced
     }
+
+    fun loadMedia() = mediaLoadViewVisitor.loadMedia(this)
 
     fun releaseMedia() {
         cancelImageLoads()

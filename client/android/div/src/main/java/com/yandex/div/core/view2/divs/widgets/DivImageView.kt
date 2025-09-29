@@ -13,9 +13,10 @@ internal open class DivImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divImageStyle
-): LoadableImageView(context, attrs, defStyleAttr),
+) : LoadableImageView(context, attrs, defStyleAttr),
     DivHolderView<Div.Image> by DivHolderViewMixin(),
-    DivExtensionView {
+    DivExtensionView,
+    MediaReleasable {
 
     internal var imageUrl: Uri? = null
 
@@ -40,8 +41,12 @@ internal open class DivImageView @JvmOverloads constructor(
     }
 
     override fun release() {
-        super<LoadableImageView>.release()
         super<DivHolderView>.release()
+        releaseMedia()
+    }
+
+    override fun releaseMedia() {
+        super<LoadableImageView>.release()
         imageUrl = null
     }
 }

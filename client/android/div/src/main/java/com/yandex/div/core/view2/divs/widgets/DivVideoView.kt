@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.yandex.div.R
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.player.DivPlayerView
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -18,7 +20,11 @@ internal class DivVideoView @JvmOverloads constructor(
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
     DivHolderView<Div.Video> by DivHolderViewMixin(),
     DivExtensionView,
-    Releasable {
+    Releasable,
+    MediaReleasable {
+
+    var path: DivStatePath? = null
+    private val videoSubscriptions = mutableListOf<Disposable>()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -31,11 +37,17 @@ internal class DivVideoView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
+        releaseMedia()
+    }
+
+    override fun releaseMedia() {
         getPlayerView()?.let { playerView ->
             val lastPlayer = playerView.getAttachedPlayer()
             playerView.detach()
             lastPlayer?.release()
         }
+        videoSubscriptions.forEach { it.close() }
+        videoSubscriptions.clear()
     }
 
     fun getPlayerView(): DivPlayerView? {
@@ -53,4 +65,10 @@ internal class DivVideoView @JvmOverloads constructor(
     }
 
     override fun getBaseline() = measuredHeight - paddingBottom
+
+    fun addVideoSubscription(subscription: Disposable?) {
+        if (subscription != null && subscription !== Disposable.NULL) {
+            videoSubscriptions += subscription
+        }
+    }
 }

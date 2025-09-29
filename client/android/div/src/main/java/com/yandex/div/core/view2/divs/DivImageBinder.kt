@@ -431,4 +431,11 @@ internal class DivImageBinder @Inject constructor(
     }
 
     //endregion
+
+    fun loadImage(
+        view: DivImageView,
+        bindingContext: BindingContext,
+        div: DivImage,
+        errorCollector: ErrorCollector,
+    ) = view.applyImage(bindingContext, div, errorCollector)
 }

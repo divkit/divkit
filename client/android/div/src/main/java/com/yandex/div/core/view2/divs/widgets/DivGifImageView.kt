@@ -14,7 +14,8 @@ internal open class DivGifImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LoadableImageView(context, attrs, defStyleAttr),
     DivHolderView<Div.GifImage> by DivHolderViewMixin(),
-    DivExtendableView {
+    DivExtendableView,
+    MediaReleasable {
 
     internal var gifUrl: Uri? = null
 
@@ -37,8 +38,12 @@ internal open class DivGifImageView @JvmOverloads constructor(
     }
 
     override fun release() {
-        super<LoadableImageView>.release()
         super<DivHolderView>.release()
+        releaseMedia()
+    }
+
+    override fun releaseMedia() {
+        super<LoadableImageView>.release()
         gifUrl = null
     }
 }
