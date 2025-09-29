@@ -1351,7 +1351,8 @@
       "expected_results": [
         "Gradients's positions should changes dynamically."
       ],
-      "file": "animations/animators/gradients_animator.json"
+      "file": "animations/animators/gradients_animator.json",
+      "case_id": 479
     },
     {
       "title": "Infinite variable animator",
