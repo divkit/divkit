@@ -12,8 +12,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-def buildDir = layout.buildDirectory.get().asFile
-def generatorOutputDir = "build/generated/sources/java"
+def buildDir = layout.buildDirectory
+def generatorOutputDir = buildDir.dir("generated/sources/java")
 
 sourceSets {
     main {
@@ -50,8 +50,8 @@ tasks.register("test${testVariant.capitalize()}UnitTest") {
 
 tasks.register('replJar', Jar) {
     dependsOn "testClasses"
-    from "$buildDir/classes/kotlin/test"
-    from "$buildDir/classes/kotlin/main"
+    from buildDir.dir("classes/kotlin/test")
+    from buildDir.dir("classes/kotlin/main")
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }

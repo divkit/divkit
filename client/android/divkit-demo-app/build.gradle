@@ -26,21 +26,21 @@ android {
     defaultConfig {
         versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
-        buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(project.findProperty("metricaApiKey") ?: "")
-        buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
-        buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(project.findProperty("httpHeaders") ?: "{}")
+        buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(providers.gradleProperty("metricaApiKey").getOrElse(""))
+        buildConfigField "boolean", "THROW_ASSERTS", "${!providers.gradleProperty("screenshot-tests").isPresent()}"
+        buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments useTestStorageService: 'true'
 
-        if (!project.hasProperty("include-regression-tests")) {
+        if (!providers.gradleProperty("include-regression-tests").isPresent()) {
             testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
         }
-        if (project.hasProperty("shardIndex")) {
-            testInstrumentationRunnerArguments.shardIndex = project.property("shardIndex")
+        providers.gradleProperty("shardIndex").orNull?.with { index ->
+            testInstrumentationRunnerArguments.shardIndex = index
         }
-        if (project.hasProperty("numShards")) {
-            testInstrumentationRunnerArguments.numShards = project.property("numShards")
+        providers.gradleProperty("numShards").orNull?.with { shards ->
+            testInstrumentationRunnerArguments.numShards = shards
         }
     }
 
@@ -141,14 +141,14 @@ dependencies {
 }
 
 screenshotTests {
-    var isInIde = System.getProperty("idea.active") == "true"
-    enabled = project.hasProperty("screenshot-tests") || isInIde
-    enableComparison = !project.hasProperty("disable-screenshot-comparison")
-    strictComparison = project.hasProperty("screenshot-strict-comparison")
+    def isInIde = providers.systemProperty("idea.active").map(Boolean::parseBoolean).getOrElse(false)
+    enabled = providers.gradleProperty("screenshot-tests").isPresent() || isInIde
+    enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
+    strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
     referencesDir = "src/screenshotTest/screenshots"
-    if (project.hasProperty("screenshot-dir")) {
-        screenshotDir = project.property("screenshot-dir")
+    providers.gradleProperty("screenshot-dir").orNull?.with { dir ->
+        screenshotDir = dir
     }
 }
 

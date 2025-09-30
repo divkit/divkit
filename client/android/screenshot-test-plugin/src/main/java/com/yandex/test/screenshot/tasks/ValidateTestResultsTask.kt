@@ -20,12 +20,17 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.work.DisableCachingByDefault
 
+@DisableCachingByDefault
 abstract class ValidateTestResultsTask : DefaultTask() {
 
     @get:InputFiles
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val testResultsDir: ConfigurableFileCollection
 
     @get:Internal

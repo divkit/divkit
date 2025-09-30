@@ -23,7 +23,7 @@ class ScreenshotTestPlugin : Plugin<Project> {
 
         project.afterEvaluate {
             val validateTestResultsTask = ValidateTestResultsTask.register(project)
-            if (extension.enabled) {
+            if (extension.enabled.get()) {
                 project.tasks.matching {
                     it.name.startsWith("connected") && it.name.endsWith("AndroidTest")
                 }.configureEach { task ->
@@ -42,7 +42,7 @@ class ScreenshotTestPlugin : Plugin<Project> {
 
                     compareScreenshotsTask.screenshotDir.set(additionalOutputs)
 
-                    if (extension.enableComparison) {
+                    if (extension.enableComparison.get()) {
                         task.finalizedBy(compareScreenshotsTask)
                     }
                     task.finalizedBy(validateTestResultsTask)
@@ -51,9 +51,9 @@ class ScreenshotTestPlugin : Plugin<Project> {
         }
 
         project.androidComponents.finalizeDsl {
-            val screenshotTestAnnotations = extension.testAnnotations
+            val screenshotTestAnnotations = extension.testAnnotations.get()
             if (screenshotTestAnnotations.isNotEmpty()) {
-                if (extension.enabled) {
+                if (extension.enabled.get()) {
                     includeByAnnotations(project, screenshotTestAnnotations)
                 } else {
                     excludeByAnnotations(project, screenshotTestAnnotations)

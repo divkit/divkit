@@ -7,11 +7,11 @@ apply plugin: 'signing'
 group = 'com.yandex.div'
 
 ext {
-    publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
+    publicationType = PublicationType.fromString(providers.gradleProperty("publicationType").orNull)
 
-    signingKeyId = rootProject.findProperty("signingKeyId")
-    signingPassword = rootProject.findProperty("signingPassword")
-    signingSecretKeyRingFile = rootProject.findProperty("signingSecretKeyRingFile")
+    signingKeyId = providers.gradleProperty("signingKeyId").orNull
+    signingPassword = providers.gradleProperty("signingPassword").orNull
+    signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile").orNull
 }
 
 publicationType.configureForProject(project)

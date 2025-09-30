@@ -15,8 +15,11 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import java.io.IOException
 import java.util.Properties
@@ -25,12 +28,15 @@ import kotlin.io.path.name
 private typealias ActualPath = String
 private typealias ReferencePath = String
 
+@DisableCachingByDefault
 abstract class CompareScreenshotsTask : DefaultTask() {
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val referencesDir: DirectoryProperty
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val screenshotDir: DirectoryProperty
 
     @get:Input
@@ -308,8 +314,10 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 it.strictComparison.set(extension.strictComparison)
                 it.screenshotDir.set(project.layout.buildDirectory.dir(extension.screenshotDir))
                 it.reportDir.set(project.reportDir)
-                it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir) })
-                it.collectedDir.set(project.reportDir.map { it.dir(extension.collectedDir) })
+                it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir.get()) })
+                it.collectedDir.set(project.reportDir.map { it.dir(extension.collectedDir.get()) })
+
+                it.onlyIf { extension.enableComparison.get() }
             }
     }
 }
