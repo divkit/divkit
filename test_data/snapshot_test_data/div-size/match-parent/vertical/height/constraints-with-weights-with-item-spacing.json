@@ -1,0 +1,92 @@
+{
+  "description": "Vertical container with items with match_parent height with constraints and different weights and item spacing",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      },
+      "orientation": "vertical",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "item_spacing": 4
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "test_container",
+          "items": [
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent"
+              },
+              "text": "no constraints, weight = 1.0"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "weight": 2.0
+              },
+              "text": "no constraints, weight = 2.0"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 100
+                }
+              },
+              "text": "min height = 100, weight = 1.0"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 40
+                }
+              },
+              "text": "max height = 40, weight = 1.0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

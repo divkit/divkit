@@ -1,0 +1,187 @@
+{
+  "description": "Horizontal container with fixed height and items with match_parent height and match_parent width with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 360
+      },
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "orientation": "horizontal",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      },
+      "margins": {
+        "bottom": 16
+      }
+    },
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "text": "no constraints"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 320
+                    }
+                  },
+                  "text": "min width < container width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 400
+                    }
+                  },
+                  "text": "max width > container width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 400
+                    }
+                  },
+                  "text": "min width > container width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "max_size": {
+                      "value": 320
+                    }
+                  },
+                  "text": "max width < container width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 400
+                    },
+                    "max_size": {
+                      "value": 500
+                    }
+                  },
+                  "text": "container width < min width < max width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 300
+                    },
+                    "max_size": {
+                      "value": 400
+                    }
+                  },
+                  "text": "min width < container width < max width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 300
+                    },
+                    "max_size": {
+                      "value": 320
+                    }
+                  },
+                  "text": "min width < max width < container width"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

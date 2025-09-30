@@ -1,0 +1,86 @@
+{
+  "description": "Horizontal container with items with match_parent width in order: no, min, max",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 360
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "orientation": "horizontal",
+      "border": {
+        "stroke": {
+          "color": "#000000"
+        }
+      }
+    },
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000",
+          "width": 3
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "test_container",
+          "items": [
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent"
+              },
+              "text": "no constraints"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 180
+                }
+              },
+              "text": "min width = 180"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 60
+                }
+              },
+              "text": "max width = 60"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
