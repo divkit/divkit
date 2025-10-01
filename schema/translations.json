@@ -2789,7 +2789,7 @@
   },
   "div_translation_percentage": {
     "en": "Position of the translation point as a percentage relative to the element. The point with coordinates (0%, 0%) corresponds to the top-left corner, and (100%, 100%) corresponds to the bottom-right corner.",
-    "ru": "Положение точки сдвига в процентах относительно элемента. Точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) правому нижнему углу."
+    "ru": "Положение точки сдвига в процентах относительно элемента. Точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) — правому нижнему углу."
   },
   "div_translation_percentage_short": {
     "en": "Location of the translation coordinates as a percentage relative to the element size.",
