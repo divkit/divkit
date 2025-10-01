@@ -1,3 +1,8 @@
+## 32.20.0 (October 6, 2025)
+
+* Fixed the layout of the `grid' in various rare cases.
+
+
 ## 32.19.0 (September 29, 2025)
 
 * Fixed the handling of the situation when the `min_size` is greater than the `max_size` in the `wrap_content` size.

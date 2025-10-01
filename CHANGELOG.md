@@ -1,3 +1,18 @@
+## 32.20.0
+
+# Android Client:
+* Add `DivErrorsReporter` for external error handling.
+* Fix gradient positions not updating with animator and support colorMap for radial gradients.
+* Fixed `url` and `color` values setting into `dict` and `array`.
+* Fixed element size calculating in `gallery` with multiple columns.
+* Reload media on `setData` after `releaseMedia`.
+* Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `horizontal` and `vertical` orientation.
+* Supported `min_size` and `max_size` constraints for children with `match_parent` size in `gallery`.
+
+# Web Client:
+* Fixed the layout of the `grid' in various rare cases.
+
+
 ## 32.19.0
 
 # Android Client:
