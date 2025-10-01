@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt } from './bigint';
-import { checkUrl } from './utils';
+import { checkUrl, transformColorValue } from './utils';
 import { BOOLEAN } from './const';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
@@ -161,8 +161,7 @@ export class ColorVariable extends Variable<string, 'color'> {
             throw new Error('Incorrect variable value');
         }
 
-        // save input value, some expression tests rely on that
-        return value;
+        return transformColorValue(value);
     }
 
     protected fromString(val: string) {

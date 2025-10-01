@@ -6,6 +6,8 @@ import { parseColor, type ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
 import { MAX_INT, MIN_INT, toBigInt } from './bigint';
 import { BOOLEAN, NUMBER } from './const';
+import type { TypedValue } from '../../typings/common';
+import type { MaybeMissing } from './json';
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -179,7 +181,11 @@ const EVAL_TYPE_TO_JS_TYPE = {
     array: 'array',
     dict: 'object'
 };
-export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType: EvalTypesWithoutDatetime): EvalValue {
+export function convertJsValueToDivKit(
+    ctx: EvalContext | undefined,
+    val: unknown,
+    evalType: EvalTypesWithoutDatetime
+): EvalValue {
     const jsType = EVAL_TYPE_TO_JS_TYPE[evalType];
 
     let type: string = typeof val;
@@ -200,7 +206,9 @@ export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType:
         throw new Error(`Incorrect value type: expected ${typeToString(evalType)}, got ${typeToString(type)}.`);
     }
     if (jsType === 'number' && evalType === 'integer') {
-        checkIntegerOverflow(ctx, val as number);
+        if (ctx) {
+            checkIntegerOverflow(ctx, val as number);
+        }
         try {
             val = toBigInt(val as number);
         } catch (_err) {
@@ -221,4 +229,20 @@ export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType:
         type: evalType,
         value: val
     } as EvalValue;
+}
+
+export function convertDivKitValueToJson(value: EvalValue) {
+    if (value.type === 'number' || value.type === 'integer') {
+        return Number(value.value);
+    } else if (value.type === 'boolean') {
+        return Boolean(value.value);
+    }
+
+    return value.value;
+}
+
+export function convertTypedValue(value: MaybeMissing<TypedValue>) {
+    return convertDivKitValueToJson(
+        convertJsValueToDivKit(undefined, value.value, value.type as EvalTypesWithoutDatetime)
+    );
 }

@@ -1,6 +1,7 @@
 import type { ActionDictSetValue, WrappedError } from '../../typings/common';
 import type { Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
+import { convertTypedValue } from '../expressions/utils';
 import type { ComponentContext } from '../types/componentContext';
 import { wrapError } from '../utils/wrapError';
 
@@ -30,6 +31,14 @@ export function dictSetValue(
         return;
     }
 
+    if (value && !value.type) {
+        logError(wrapError(new Error('Incorrect value type'), {
+            additional: {
+                name
+            }
+        }));
+    }
+
     const variableInstance = componentContext?.getVariable(name) || variables.get(name);
 
     if (!variableInstance) {
@@ -46,7 +55,7 @@ export function dictSetValue(
         const dict = variableInstance.getValue() as Record<string, unknown>;
         const newDict = { ...dict };
         if (value) {
-            newDict[key] = value.value;
+            newDict[key] = convertTypedValue(value);
         } else {
             delete newDict[key];
         }

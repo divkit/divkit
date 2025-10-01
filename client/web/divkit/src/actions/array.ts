@@ -1,6 +1,7 @@
 import type { ActionArrayInsertValue, ActionArrayRemoveValue, ActionArraySetValue, WrappedError } from '../../typings/common';
 import type { ArrayVariable, Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
+import { convertTypedValue } from '../expressions/utils';
 import type { ComponentContext } from '../types/componentContext';
 import { wrapError } from '../utils/wrapError';
 
@@ -31,12 +32,19 @@ export function arrayInsert(
                     length: list.length
                 }
             }));
+        } else if (!value.type) {
+            logError(wrapError(new Error('Incorrect value type'), {
+                additional: {
+                    name
+                }
+            }));
         } else {
             const newList = list.slice();
+            const val = convertTypedValue(value);
             if (typeof index === 'number') {
-                newList.splice(index, 0, value.value);
+                newList.splice(index, 0, val);
             } else {
-                newList.push(value.value);
+                newList.push(val);
             }
             variableInstance.setValue(newList);
         }
@@ -105,9 +113,15 @@ export function arraySet(
                     length: list.length
                 }
             }));
+        } else if (!value.type) {
+            logError(wrapError(new Error('Incorrect value type'), {
+                additional: {
+                    name
+                }
+            }));
         } else {
             const newList = list.slice();
-            newList[index] = value.value;
+            newList[index] = convertTypedValue(value);
             variableInstance.setValue(newList);
         }
     });

@@ -1,6 +1,7 @@
 import type { ActionUpdateStructure, WrappedError } from '../../typings/common';
 import type { Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
+import { convertTypedValue } from '../expressions/utils';
 import type { ComponentContext } from '../types/componentContext';
 import { wrapError } from '../utils/wrapError';
 
@@ -120,7 +121,7 @@ export function updateStructure(
             }
         }
 
-        temp[parts[parts.length - 1]] = value.value;
+        temp[parts[parts.length - 1]] = convertTypedValue(value);
         variableInstance.setValue(newObj);
     } else {
         logError(wrapError(new Error('Action requires array or dictionary variable'), {

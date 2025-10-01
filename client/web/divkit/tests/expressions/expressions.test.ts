@@ -6,7 +6,7 @@ import {
 } from 'vitest';
 
 import { evalExpression, type EvalResult } from '../../src/expressions/eval';
-import { valToString } from '../../src/expressions/utils';
+import { transformColorValue, valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';
 
@@ -33,6 +33,11 @@ function convertVals(val: EvalResult) {
         return {
             type: 'datetime',
             value: valToString(val, false)
+        };
+    } else if (val.type === 'color') {
+        return {
+            type: 'color',
+            value: transformColorValue(val.value)
         };
     }
 
