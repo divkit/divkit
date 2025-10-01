@@ -33,6 +33,16 @@ public interface DivImageLoader {
     }
 
     /**
+     * Property indicating if the image loader can handle animated webP.
+     * False if not overridden.
+     *
+     * @return true if image loader supports webP.
+     */
+    default Boolean hasWebPSupport() {
+        return false;
+    }
+
+    /**
      * Starts image loading by given <code>imageUrl</code>. Download raw bytes in result.
      * <p>
      * Contract : <code>callback</code> MUST BE stored in {@link java.lang.ref.WeakReference} in order to prevent leakage.

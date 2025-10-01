@@ -6,6 +6,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -15,13 +16,18 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 @InternalApi
-public class SvgDivImageLoader(private val context: Context) : DivImageLoader {
+public class SvgDivImageLoader @JvmOverloads constructor(
+    private val context: Context,
+    lifecycleOwnerScope: CoroutineScope? = null,
+) : DivImageLoader {
     private val httpClient = OkHttpClient.Builder().build()
-    private val coroutineScope = MainScope()
+    private val coroutineScope = lifecycleOwnerScope ?: MainScope()
     private val svgDecoder = SvgDecoder()
     private val svgCacheManager = SvgCacheManager()
 
     override fun hasSvgSupport(): Boolean = true
+
+    override fun hasWebPSupport(): Boolean = false
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val call = createCallOrNull(imageUrl)

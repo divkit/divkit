@@ -50,6 +50,8 @@ class PicassoDivImageLoader(
 
     override fun hasSvgSupport() = false
 
+    override fun hasWebPSupport() = true
+
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         val target = DownloadCallbackAdapter(imageUri, callback)

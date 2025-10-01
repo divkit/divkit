@@ -48,6 +48,7 @@ dependencies {
     api project(path: ':div-states')
     api project(path: ':div-storage')
     api project(path: ':div-svg')
+    api project(path: ':div-webp')
 
     implementation libs.yatagan.api.compiled
     ksp libs.yatagan.processor.ksp
