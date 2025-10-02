@@ -118,7 +118,15 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
     addAnimationsToView(
       fromView,
       animations: animationOut,
-      completion: { self.fromView = nil }
+      prestart: {
+        if !animationOut.isEmpty {
+          self.toView?.isHidden = true
+        }
+      },
+      completion: {
+        self.fromView = nil
+        self.toView?.isHidden = false
+      }
     )
 
     let item =
@@ -137,15 +145,24 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
           superview: self
         )
 
-        self.addAnimationsToView(self.toView, animations: animationIn) {
-          if UIAccessibility.isVoiceOverRunning {
-            self.forRecursiveSubviews {
-              if $0.accessibilityElementIsFocused() {
-                UIAccessibility.post(notification: .layoutChanged, argument: $0)
+        self.addAnimationsToView(
+          self.toView,
+          animations: animationIn,
+          prestart: {
+            if !animationIn.isEmpty {
+              self.toView?.isHidden = false
+            }
+          },
+          completion: {
+            if UIAccessibility.isVoiceOverRunning {
+              self.forRecursiveSubviews {
+                if $0.accessibilityElementIsFocused() {
+                  UIAccessibility.post(notification: .layoutChanged, argument: $0)
+                }
               }
             }
           }
-        }
+        )
       }
 
     toViewAnimationWorkItem?.cancel()
@@ -164,6 +181,7 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
   private func addAnimationsToView(
     _ view: BlockView?,
     animations: [TransitioningAnimation],
+    prestart: Action? = nil,
     completion: Action? = nil
   ) {
     guard let view else {
@@ -171,6 +189,7 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
       return
     }
 
+    prestart?()
     forceLayout()
 
     view.setInitialParamsAndAnimate(animations: animations, completion: completion)
