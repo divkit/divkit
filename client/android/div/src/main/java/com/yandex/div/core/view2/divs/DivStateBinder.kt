@@ -22,6 +22,7 @@ import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
 import com.yandex.div.core.util.hasSightActions
@@ -468,7 +469,7 @@ internal class DivStateBinder @Inject constructor(
                 }
             }
 
-            outgoing?.clearAnimation()
+            outgoing?.clearTreeAnimations()
             return transition
         }
         return null

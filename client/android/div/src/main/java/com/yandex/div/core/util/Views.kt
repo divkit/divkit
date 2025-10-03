@@ -2,6 +2,7 @@ package com.yandex.div.core.util
 
 import android.view.View
 import android.view.View.OnAttachStateChangeListener
+import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnNextLayout
 import com.yandex.div.core.Disposable
@@ -26,6 +27,15 @@ internal inline fun View.doOnEveryDetach(crossinline action: (view: View) -> Uni
     }
     addOnAttachStateChangeListener(listener)
     return Disposable { removeOnAttachStateChangeListener(listener) }
+}
+
+internal fun View.clearTreeAnimations() {
+    clearAnimation()
+    if (this is ViewGroup) {
+        for (i in 0 until childCount) {
+            getChildAt(i).clearTreeAnimations()
+        }
+    }
 }
 
 inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {

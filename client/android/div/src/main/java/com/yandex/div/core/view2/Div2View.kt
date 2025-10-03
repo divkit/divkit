@@ -48,6 +48,7 @@ import com.yandex.div.core.state.StateConflictException
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
+import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
@@ -868,6 +869,8 @@ class Div2View private constructor(
 
         currentState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
+        getChildAt(0)?.clearTreeAnimations()
+
         val isReplaceable = DivComparator.areDivsReplaceable(
                 currentState?.div,
                 newState.div,
