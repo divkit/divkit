@@ -66,26 +66,46 @@ extension DivTemplates {
   }
 
   public func resolve(
-    newTemplates: [String: Any]
+    newTemplates: [String: Any],
+    shouldKeepExistingOnConflict: Bool = true
   ) -> DivTemplates {
-    let alreadyResolvedTemplateTypes = Set(templates.keys)
+    var newTemplates = newTemplates
+    let alreadyResolvedTemplateTypes = if shouldKeepExistingOnConflict {
+      Set(templates.keys)
+    } else {
+      Set(templates.keys).subtracting(Set(newTemplates.keys))
+    }
+
+    for alreadyResolvedTemplateType in alreadyResolvedTemplateTypes {
+      newTemplates[alreadyResolvedTemplateType] = [
+        "type": self.templateToType[alreadyResolvedTemplateType] ?? "",
+      ]
+    }
+
+    let newTemplateToType = calculateTemplateToType(in: newTemplates)
 
     let templatesByType = mapTemplatesByType(
       templatesDictionary: newTemplates.filter { key, _ in
         !alreadyResolvedTemplateTypes.contains(key)
       },
-      templateToType: templateToType
+      templateToType: newTemplateToType
     )
 
     let untypedTemplatesByType = templatesByType.mapValues { $0.value }
-      .merging(templates, uniquingKeysWith: { $1 })
+      .merging(
+        templates,
+        uniquingKeysWith: { shouldKeepExistingOnConflict ? $1 : $0 }
+      )
 
     return DivTemplates(
       templates: resolveTemplates(
         templatesByType: templatesByType,
         untypedTemplatesByType: untypedTemplatesByType
-      ).merging(templates, uniquingKeysWith: { $1 }),
-      templatesToType: templateToType
+      ).merging(
+        templates,
+        uniquingKeysWith: { shouldKeepExistingOnConflict ? $1 : $0 }
+      ),
+      templatesToType: newTemplateToType
     )
   }
 }
