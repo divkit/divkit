@@ -24,6 +24,7 @@ final class MarksLayer: CALayer {
 
   override init() {
     super.init()
+    setProperties()
   }
 
   override init(layer: Any) {
@@ -33,6 +34,7 @@ final class MarksLayer: CALayer {
       return
     }
     configuration = markLayer.configuration
+    setProperties()
   }
 
   @available(*, unavailable)
@@ -48,6 +50,10 @@ final class MarksLayer: CALayer {
     } else {
       self.transform = CATransform3DMakeScale(1, 1, 1)
     }
+  }
+
+  private func setProperties() {
+    needsDisplayOnBoundsChange = true
   }
 
   private func configureMarks(in ctx: CGContext) {
@@ -88,8 +94,9 @@ final class MarksLayer: CALayer {
     style: MarkStyle,
     in ctx: CGContext
   ) {
-    guard startIndex <= endIndex else { return }
     let spaceWidth = (bounds.width - configuration.horizontalInset) / (maxValue - minValue)
+    guard startIndex <= endIndex, spaceWidth >= 0 else { return }
+
     let markHeight = style == .active ? activeMark.size.height : inactiveMark.size.height
     let xActiveOrigin = spaceWidth * startIndex
       .floored() + (configuration.horizontalInset - activeMark.size.width) / 2
