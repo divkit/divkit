@@ -26,6 +26,8 @@ import javax.inject.Inject
 
 private const val STORED_VALUE_ID_PREFIX = "stored_value_"
 private const val KEY_EXPIRATION_TIME = "expiration_time"
+private const val KEY_TIMESTAMP = "timestamp"
+private const val KEY_LIFETIME = "lifetime"
 private const val KEY_TYPE = "type"
 private const val KEY_VALUE = "value"
 
@@ -49,12 +51,9 @@ internal class StoredValuesController @Inject constructor(
         errorCollector?.logRepositoryErrors(repositoryResult.errors)
         val jsonStoredValue = repositoryResult.resultData.firstOrNull()?.data ?: return null
 
-        if (jsonStoredValue.has(KEY_EXPIRATION_TIME)) {
-            val expirationTime = jsonStoredValue.getLong(KEY_EXPIRATION_TIME)
-            if (currentTime >= expirationTime) {
-                rawJsonRepository.remove { it.id == storedValueId }
-                return null
-            }
+        if (isStoredValueExpiredV2(jsonStoredValue) || isStoredValueExpiredV1(jsonStoredValue)) {
+            rawJsonRepository.remove { it.id == storedValueId }
+            return null
         }
 
         try {
@@ -69,6 +68,24 @@ internal class StoredValuesController @Inject constructor(
             errorCollector.logDeclarationFailed(name, e)
             return null
         }
+    }
+
+    private fun isStoredValueExpiredV1(storedValue: JSONObject): Boolean {
+        if (storedValue.has(KEY_EXPIRATION_TIME)) {
+            val expirationTime = storedValue.getLong(KEY_EXPIRATION_TIME)
+            return currentTime >= expirationTime
+        }
+        return false
+    }
+
+    private fun isStoredValueExpiredV2(storedValue: JSONObject): Boolean {
+        if (storedValue.has(KEY_TIMESTAMP) && storedValue.has(KEY_LIFETIME)) {
+            val savedTimestamp = storedValue.getLong(KEY_TIMESTAMP)
+            val lifetime = storedValue.getLong(KEY_LIFETIME)
+            val currentTimestamp = currentTime / 1000L
+            return currentTimestamp - savedTimestamp >= lifetime
+        }
+        return false
     }
 
     fun setStoredValue(
@@ -133,8 +150,9 @@ internal class StoredValuesController @Inject constructor(
             is ColorStoredValue -> getValue().toString()
         }
         val json = JSONObject().apply {
-            put(KEY_EXPIRATION_TIME, currentTime + lifetime * 1000)
             put(KEY_TYPE, Converter.toString(getType()))
+            put(KEY_TIMESTAMP, currentTime / 1000L)
+            put(KEY_LIFETIME, lifetime)
             put(KEY_VALUE, value)
         }
         return json
