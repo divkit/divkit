@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_custom",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "custom"
+      ]
+    }
+  },
+  "platforms": [],
+  "required": [
+    "type"
+  ]
+}

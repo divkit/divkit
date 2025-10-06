@@ -111,6 +111,10 @@
     "en": "Copies data to the clipboard.",
     "ru": "Копирует данные в буфер обмена."
   },
+  "div_action_custom": {
+    "en": "Custom action. A handler is required on the host. The parameters can be passed via the action payload.",
+    "ru": "Пользовательское действие. Требуется обработчик на хосте. Параметры можно передать через payload действия."
+  },
   "div_action_dict_set_value": {
     "en": "Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.",
     "ru": "Устанавливает значение в словаре по заданному ключу. Удаляет ключ, если значение на задано."
