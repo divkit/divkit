@@ -9,6 +9,9 @@
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `horizontal` and `vertical` orientation.
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `gallery`.
 
+# iOS Client:
+* Fixed handling of transitive dependencies in templates when using the `DivTemplates.resolve` function.
+
 # Web Client:
 * Fixed the layout of the `grid' in various rare cases.
 
