@@ -427,6 +427,7 @@ extension GalleryView: ScrollDelegate {
       }
 
       offset = getOffset(scrollView)
+      disableLooping = true
     }
 
     let contentPosition: GalleryViewState.Position = switch model.scrollMode {
