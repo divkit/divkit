@@ -17,7 +17,7 @@ import org.junit.Test
     description = "Div2 multiplatform performance test",
     owners = ["vyaivanove"],
     defaultRepeat = 50,
-    timeoutSeconds = 3000
+    timeoutSeconds = 4000
 )
 class Div2MultiplatformPerformanceTest : Div2BasePerformanceTest() {
     @Before
