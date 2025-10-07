@@ -21,6 +21,9 @@
 
 .tooltip_visible {
     visibility: visible;
+}
+
+.tooltip_visible.tooltip_modal {
     pointer-events: auto;
 }
 

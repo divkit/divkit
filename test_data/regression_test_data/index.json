@@ -2859,7 +2859,8 @@
       "title": "Non-modal tooltips transparency",
       "platforms": [
         "ios",
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "Tooltips"

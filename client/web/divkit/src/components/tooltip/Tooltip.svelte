@@ -72,7 +72,8 @@
     }
 
     $: mods = {
-        visible
+        visible,
+        modal
     };
 
     function reposition(): void {
