@@ -29,9 +29,11 @@ public final class TextFieldBlock: Block {
 
   public struct Toolbar: Equatable {
     public let doneButtonAction: UserInterfaceAction
+    public let bottomPadding: CGFloat?
 
-    public init(doneButtonAction: UserInterfaceAction) {
+    public init(doneButtonAction: UserInterfaceAction, bottomPadding: CGFloat? = nil) {
       self.doneButtonAction = doneButtonAction
+      self.bottomPadding = bottomPadding
     }
   }
 

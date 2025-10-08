@@ -112,9 +112,10 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
       }
 
       switch toolbar {
-      case .default:
+      case let .default(toolbarParams):
         let keyboardToolbar = UIToolbar()
         keyboardToolbar.sizeToFit()
+        keyboardToolbar.autoresizingMask = [.flexibleWidth]
         let cancelButton = UIBarButtonItem(
           barButtonSystemItem: .cancel,
           target: self,
@@ -131,7 +132,17 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
           action: #selector(onToolbarDoneButtonPressed)
         )
         keyboardToolbar.items = [cancelButton, flexibleSpaceButton, doneButton]
-        textField.inputAccessoryView = keyboardToolbar
+        let containerView = modified(UIView()) {
+          $0.frame = modified(keyboardToolbar.frame) {
+            let defaultBottomPadding: CGFloat = if #available(iOS 26.0, *) { 12 } else { 0 }
+            let bottomPadding = toolbarParams.bottomPadding ?? defaultBottomPadding
+            $0.size.height += bottomPadding
+          }
+          $0.addSubview(keyboardToolbar)
+        }
+        containerView.addSubview(keyboardToolbar)
+
+        textField.inputAccessoryView = containerView
       case let .custom(block):
         let toolbarView = block.makeBlockView()
         toolbarView.frame = CGRect(origin: .zero, size: block.intrinsicSize)
