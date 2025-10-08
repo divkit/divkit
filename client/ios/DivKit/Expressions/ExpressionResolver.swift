@@ -40,6 +40,7 @@ public final class ExpressionResolver {
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: persistentValuesStorage
       ),
+      customFunctionsStorageProvider: { _ in nil },
       variableValueProvider: variableValueProvider,
       errorTracker: { errorTracker?($0) }
     )
@@ -47,7 +48,7 @@ public final class ExpressionResolver {
 
   init(
     functionsProvider: FunctionsProvider,
-    customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
+    customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage?,
     variableValueProvider: @escaping (String) -> Any?,
     errorTracker: @escaping ExpressionErrorTracker
   ) {

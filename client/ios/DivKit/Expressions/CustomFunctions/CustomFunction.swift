@@ -42,6 +42,7 @@ final class CustomFunction: SimpleFunction {
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: DivPersistentValuesStorage()
       ),
+      customFunctionsStorageProvider: context.customFunctionsStorageProvider,
       variableValueProvider: { [weak self] name in
         if let argument = matchedArguments[name] {
           return argument

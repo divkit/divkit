@@ -13,6 +13,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     functionsProvider: FunctionsProvider(
       persistentValuesStorage: DivPersistentValuesStorage()
     ),
+    customFunctionsStorageProvider: { _ in nil },
     variableValueProvider: { [unowned self] in
       self.variables[DivVariableName(rawValue: $0)]?.typedValue()
     },

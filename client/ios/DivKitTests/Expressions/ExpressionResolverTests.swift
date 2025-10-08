@@ -25,6 +25,7 @@ final class ExpressionResolverTests: XCTestCase {
     functionsProvider: FunctionsProvider(
       persistentValuesStorage: DivPersistentValuesStorage()
     ),
+    customFunctionsStorageProvider: { _ in nil },
     variableValueProvider: { [unowned self] in
       let varibleName = DivVariableName(rawValue: $0)
       self.usedVariables.insert(varibleName)
