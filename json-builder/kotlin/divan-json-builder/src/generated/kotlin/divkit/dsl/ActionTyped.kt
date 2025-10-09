@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [ActionAnimatorStart], [ActionAnimatorStop], [ActionArrayInsertValue], [ActionArrayRemoveValue], [ActionArraySetValue], [ActionClearFocus], [ActionCopyToClipboard], [ActionDictSetValue], [ActionDownload], [ActionFocusElement], [ActionHideTooltip], [ActionScrollBy], [ActionScrollTo], [ActionSetState], [ActionSetStoredValue], [ActionSetVariable], [ActionShowTooltip], [ActionSubmit], [ActionTimer], [ActionUpdateStructure], [ActionVideo].
+ * Possible values: [ActionAnimatorStart], [ActionAnimatorStop], [ActionArrayInsertValue], [ActionArrayRemoveValue], [ActionArraySetValue], [ActionClearFocus], [ActionCopyToClipboard], [ActionDictSetValue], [ActionDownload], [ActionFocusElement], [ActionHideTooltip], [ActionScrollBy], [ActionScrollTo], [ActionSetState], [ActionSetStoredValue], [ActionSetVariable], [ActionShowTooltip], [ActionSubmit], [ActionTimer], [ActionUpdateStructure], [ActionVideo], [ActionCustom].
  */
 @Generated
 sealed interface ActionTyped
