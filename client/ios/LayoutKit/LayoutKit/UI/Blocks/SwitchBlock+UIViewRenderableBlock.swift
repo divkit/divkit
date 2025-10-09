@@ -37,9 +37,15 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   var model: Model! {
     didSet {
-      aSwitch.isOn = model.on.value
-      aSwitch.isEnabled = model.enabled
-      aSwitch.onTintColor = model.onTintColor?.systemColor
+      if aSwitch.isOn != model.on.value {
+        aSwitch.isOn = model.on.value
+      }
+      if aSwitch.isEnabled != model.enabled {
+        aSwitch.isEnabled = model.enabled
+      }
+      if aSwitch.onTintColor != model.onTintColor?.systemColor {
+        aSwitch.onTintColor = model.onTintColor?.systemColor
+      }
       applyAccessibilityFromScratch(model.accessibility)
     }
   }
