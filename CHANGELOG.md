@@ -1,3 +1,22 @@
+## 32.21.0
+
+# Android Client:
+* Fix state change and animation conflict.
+* Fixed possible overflow of stored value lifetime.
+* Support animated WebP format.
+
+# iOS Client:
+* Fixed a bug that could cause the slider to render incorrectly when scrolling.
+* Fixed a bug with infinite pager scrolling.
+* Fixed a bug with resolving custom functions.
+* Fixed handling of transitive dependencies in templates when using the `DivTemplates.resolve` function.
+* Fixed possible duplication of interface elements during animation execution.
+
+# Web Client:
+* Fixed a bug with converting different types of values in actions.
+* Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
+
+
 ## 32.20.0
 
 # Android Client:

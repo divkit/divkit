@@ -1,3 +1,9 @@
+## 32.21.0 (October 13, 2025)
+
+* Fixed a bug with converting different types of values in actions.
+* Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
+
+
 ## 32.20.0 (October 6, 2025)
 
 * Fixed the layout of the `grid' in various rare cases.
