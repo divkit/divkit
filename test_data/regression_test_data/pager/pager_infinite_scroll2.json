@@ -1,0 +1,111 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f1f1f1"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "scroll_axis_alignment": "start",
+                  "cross_axis_alignment": "center",
+                  "type": "pager",
+                  "id": "pager_with_indicator",
+                  "item_spacing": {
+                    "type": "fixed",
+                    "value": 4
+                  },
+                  "infinite_scroll": true,
+                  "height": {
+                    "type": "fixed",
+                    "value": 300
+                  },
+                  "items": [
+                    {
+                      "type": "text_block",
+                      "text": "Item 1",
+                      "width": {
+                        "type": "fixed",
+                        "value": 150
+                      }
+                    },
+                    {
+                      "type": "text_block",
+                      "text": "Item 2",
+                      "width": {
+                        "type": "fixed",
+                        "value": 150
+                      }
+                    },
+                    {
+                      "type": "text_block",
+                      "text": "Item 3",
+                      "width": {
+                        "type": "fixed",
+                        "value": 150
+                      }
+                    },
+                    {
+                      "type": "text_block",
+                      "text": "Item 4",
+                      "width": {
+                        "type": "fixed",
+                        "value": 150
+                      }
+                    }
+                  ],
+                  "layout_mode": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "right": 4,
+                    "left": 4
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

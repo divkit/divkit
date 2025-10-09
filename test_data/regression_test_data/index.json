@@ -472,6 +472,24 @@
       "file": "pager/pager_infinite_scroll.json"
     },
     {
+      "title": "Pager with infinite scroll, slow reverse swipe",
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivPager"
+      ],
+      "steps": [
+        "Very slowly and smoothly make a not very long swipe back, from the first element (item 1) to the last (item 4) approximately"
+      ],
+      "expected_results": [
+        "The pager correctly moves to the last element or returns to the current one, depending on the length of the swipe"
+      ],
+      "file": "pager/pager_infinite_scroll2.json"
+    },
+    {
       "title": "Pager with infinite scroll, start scroll alignment and paddings",
       "case_id": 161,
       "platforms": [
