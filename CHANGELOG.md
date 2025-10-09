@@ -6,6 +6,7 @@
 * Support animated WebP format.
 
 # iOS Client:
+* Fixed SwitchBlock UISwitch parametrs update from model.
 * Fixed a bug that could cause the slider to render incorrectly when scrolling.
 * Fixed a bug with infinite pager scrolling.
 * Fixed a bug with resolving custom functions.
