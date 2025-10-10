@@ -1,5 +1,6 @@
 package com.yandex.test.screenshot.tasks
 
+import com.android.build.api.variant.Variant
 import com.yandex.test.screenshot.ScreenshotTestPluginExtension
 import com.yandex.test.util.FileOutput
 import com.yandex.test.util.Logger
@@ -303,12 +304,16 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
         private const val TAG = "CompareScreenshotsTask"
 
+        @Suppress("UnstableApiUsage")
         fun register(
             project: Project,
+            variant: Variant,
             extension: ScreenshotTestPluginExtension,
-            variant: String,
-            ): TaskProvider<CompareScreenshotsTask> =
-            project.tasks.register("compare${variant}Screenshots", CompareScreenshotsTask::class.java) {
+        ): TaskProvider<CompareScreenshotsTask> =
+            project.tasks.register(
+                variant.computeTaskName(action = "compare", subject = "screenshots"),
+                CompareScreenshotsTask::class.java,
+            ) {
                 it.referencesDir.set(project.file(extension.referencesDir))
                 it.comparableCategories.set(extension.comparableCategories)
                 it.strictComparison.set(extension.strictComparison)

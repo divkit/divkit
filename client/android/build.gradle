@@ -78,6 +78,7 @@ subprojects {
         // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
         maxParallelForks = 1
         maxHeapSize = "4g"
+        failOnNoDiscoveredTests = false
     }
 
     configurations.configureEach {
@@ -115,7 +116,7 @@ buildTimeTracker {
 }
 
 wrapper {
-    gradleVersion "8.13"
+    gradleVersion "9.1.0"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }

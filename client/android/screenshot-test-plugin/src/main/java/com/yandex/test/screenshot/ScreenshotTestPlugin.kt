@@ -1,5 +1,6 @@
 package com.yandex.test.screenshot
 
+import com.android.build.api.variant.Variant
 import com.yandex.test.screenshot.tasks.CompareScreenshotsTask
 import com.yandex.test.screenshot.tasks.ValidateTestResultsTask
 import com.yandex.test.util.android
@@ -10,42 +11,33 @@ import kotlin.io.path.Path
 
 class ScreenshotTestPlugin : Plugin<Project> {
 
+    @Suppress("UnstableApiUsage")
     override fun apply(project: Project) {
         val extension = project.extensions.create(
             ScreenshotTestPluginExtension.NAME,
             ScreenshotTestPluginExtension::class.java
         )
 
-        project.androidComponents.onVariants { variant ->
-            val variantName = variant.name.replaceFirstChar { it.uppercase() }
-            CompareScreenshotsTask.register(project, extension, variantName)
-        }
+        val validateTestResultsTask = ValidateTestResultsTask.register(project)
 
-        project.afterEvaluate {
-            val validateTestResultsTask = ValidateTestResultsTask.register(project)
-            if (extension.enabled.get()) {
+        project.androidComponents.onVariants { variant: Variant ->
+            val compareTask = CompareScreenshotsTask.register(project, variant, extension)
+
+            project.androidComponents.finalizeDsl {
                 project.tasks.matching {
-                    it.name.startsWith("connected") && it.name.endsWith("AndroidTest")
+                    it.name == variant.computeTaskName("connected", "androidTest")
                 }.configureEach { task ->
                     val additionalOutputs = task.outputs.files.single {
                         val path = it.toPath()
                         path.contains(Path("connected_android_test_additional_output"))
                     }
-
-                    val variant = task.name.removePrefix("connected")
-                        .removeSuffix("AndroidTest")
-
-                    val compareScreenshotsTask =
-                        project.tasks.withType(CompareScreenshotsTask::class.java)
-                            .named("compare${variant}Screenshots")
-                            .get()
-
-                    compareScreenshotsTask.screenshotDir.set(additionalOutputs)
-
-                    if (extension.enableComparison.get()) {
-                        task.finalizedBy(compareScreenshotsTask)
+                    compareTask.configure {
+                        it.screenshotDir.set(additionalOutputs)
                     }
-                    task.finalizedBy(validateTestResultsTask)
+                    task.finalizedBy(
+                        compareTask,
+                        validateTestResultsTask,
+                    )
                 }
             }
         }

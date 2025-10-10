@@ -4,14 +4,6 @@ apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
     namespace 'com.yandex.div.states'
-
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/room/schemas".toString()]
-            }
-        }
-    }
 }
 
 dependencies {

@@ -1,6 +1,6 @@
 [versions]
-agp = "8.8.2"
-android-lint = "31.8.2"  # agp + "23.0.0"
+agp = "8.12.3"
+android-lint = "31.12.3"  # agp + "23.0.0"
 androidsvg = "1.4"
 buildTimeTracker = "5.0.1"
 coil = "3.0.4"

@@ -159,8 +159,8 @@ android.applicationVariants.configureEach { variant ->
 
         if (!isPerf) {
             outputFileName = divkitVersion.buildNumber != 0 ?
-                    "${project.archivesBaseName}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
-                    "${project.archivesBaseName}-v${versionName}-${variant.baseName}.apk"
+                    "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
+                    "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
         }
     }
 }

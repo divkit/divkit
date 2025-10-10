@@ -3,12 +3,10 @@ apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
-    google()
 }
 
 dependencies {
     implementation gradleApi()
-    implementation("com.android.tools:r8:8.10.24")
     implementation libs.kotlin.reflect
 }
 
