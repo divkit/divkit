@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'DivKitKMP'
-  s.version          = '32.12.0'
+  s.version          = '32.20.0'
   s.summary          = 'DivKit obj-C interface for Kotlin Multiplatform applications'
   s.description      = 'DivKit obj-C interface for Kotlin Multiplatform applications'
   s.homepage         = 'https://divkit.tech'
