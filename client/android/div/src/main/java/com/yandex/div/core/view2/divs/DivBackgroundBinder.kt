@@ -1,50 +1,33 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import android.graphics.drawable.PictureDrawable
 import android.graphics.drawable.StateListDrawable
-import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.StateSet
 import android.view.View
-import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import com.yandex.div.R
-import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
-import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.observeBackground
-import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toRadialGradientDrawableCenter
+import com.yandex.div.core.util.toRadialGradientDrawableRadius
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.drawable.LinearGradientDrawable
-import com.yandex.div.internal.drawable.NinePatchDrawable
-import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.internal.graphics.Colormap
 import com.yandex.div.internal.graphics.checkIsNotEmpty
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImageBackground
-import com.yandex.div2.DivImageScale
-import com.yandex.div2.DivRadialGradientCenter
-import com.yandex.div2.DivRadialGradientRadius
-import com.yandex.div2.DivRadialGradientRelativeRadius
 import javax.inject.Inject
 
 @DivScope
@@ -300,10 +283,10 @@ internal class DivBackgroundBinder @Inject constructor(
             colormap = value.toColormap(resolver).checkIsNotEmpty(divView)
         )
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
-            centerX = value.centerX.toBackgroundState(metrics, resolver),
-            centerY = value.centerY.toBackgroundState(metrics, resolver),
+            centerX = value.centerX.toRadialGradientDrawableCenter(metrics, resolver),
+            centerY = value.centerY.toRadialGradientDrawableCenter(metrics, resolver),
             colormap = value.toColormap(resolver).checkIsNotEmpty(divView),
-            radius = value.radius.toBackgroundState(metrics, resolver)
+            radius = value.radius.toRadialGradientDrawableRadius(metrics, resolver)
         )
         is DivBackground.Image -> DivBackgroundState.Image(
             alpha = value.alpha.evaluate(resolver),
@@ -337,30 +320,6 @@ internal class DivBackgroundBinder @Inject constructor(
         return alpha.evaluate(resolver) == 1.0 && filters.isNullOrEmpty()
     }
 
-    private fun DivRadialGradientCenter.toBackgroundState(
-        metrics: DisplayMetrics,
-        resolver: ExpressionResolver
-    ) = when (this) {
-        is DivRadialGradientCenter.Fixed -> DivBackgroundState.RadialGradient.Center.Fixed(
-            value.value.evaluate(resolver).toPxF(value.unit.evaluate(resolver), metrics)
-        )
-        is DivRadialGradientCenter.Relative -> DivBackgroundState.RadialGradient.Center.Relative(
-            value.value.evaluate(resolver).toFloat()
-        )
-    }
-
-    private fun DivRadialGradientRadius.toBackgroundState(
-        metrics: DisplayMetrics,
-        resolver: ExpressionResolver
-    ) = when (this) {
-        is DivRadialGradientRadius.FixedSize -> DivBackgroundState.RadialGradient.Radius.Fixed(
-            value.toPxF(metrics, resolver)
-        )
-        is DivRadialGradientRadius.Relative -> DivBackgroundState.RadialGradient.Radius.Relative(
-            value.value.evaluate(resolver)
-        )
-    }
-
     private fun DivFilter.toBackgroundState(resolver: ExpressionResolver) = when (this) {
         is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver).toIntSafely(), this)
         is DivFilter.RtlMirror -> DivBackgroundState.Image.Filter.RtlMirror(this)
@@ -385,195 +344,4 @@ internal class DivBackgroundBinder @Inject constructor(
         set(value) {
             setTag(R.id.div_additional_background_layer_tag, value)
         }
-
-    private sealed class DivBackgroundState {
-
-        data class LinearGradient(
-            val angle: Int,
-            val colormap: Colormap
-        ): DivBackgroundState()
-
-        data class RadialGradient(
-            val centerX: Center,
-            val centerY: Center,
-            val colormap: Colormap,
-            val radius: Radius
-        ) : DivBackgroundState() {
-            sealed class Center {
-                data class Relative(val value: Float) : Center()
-                data class Fixed(val valuePx: Float) : Center()
-
-                fun toRadialGradientDrawableCenter() = when (this) {
-                    is Fixed -> RadialGradientDrawable.Center.Fixed(valuePx)
-                    is Relative -> RadialGradientDrawable.Center.Relative(value)
-                }
-            }
-
-            sealed class Radius {
-                data class Relative(val value: DivRadialGradientRelativeRadius.Value) : Radius()
-                data class Fixed(val valuePx: Float) : Radius()
-
-                fun toRadialGradientDrawableRadius() = when (this) {
-                    is Fixed -> RadialGradientDrawable.Radius.Fixed(valuePx)
-                    is Relative -> RadialGradientDrawable.Radius.Relative(
-                        when (value) {
-                            DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER ->
-                                RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
-                            DivRadialGradientRelativeRadius.Value.NEAREST_CORNER ->
-                                RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
-                            DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE ->
-                                RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
-                            DivRadialGradientRelativeRadius.Value.NEAREST_SIDE ->
-                                RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
-                        }
-                    )
-                }
-            }
-        }
-
-        data class Image(
-            val alpha: Double,
-            val contentAlignmentHorizontal: DivAlignmentHorizontal,
-            val contentAlignmentVertical: DivAlignmentVertical,
-            val imageUrl: Uri,
-            val preloadRequired: Boolean,
-            val scale: DivImageScale,
-            val filters: List<Filter>?,
-            val isVectorCompatible: Boolean,
-        ): DivBackgroundState() {
-            sealed class Filter {
-                data class Blur(val radius: Int, val div: DivFilter.Blur) : Filter()
-                data class RtlMirror(val div: DivFilter.RtlMirror) : Filter()
-
-                fun toDiv(): DivFilter = when (this) {
-                    is Blur -> div
-                    is RtlMirror -> div
-                }
-            }
-
-            fun getDivImageBackground(
-                context: BindingContext,
-                target: View,
-                imageLoader: DivImageLoader,
-            ): Drawable {
-                val scaleDrawable = ScalingDrawable()
-                scaleDrawable.alpha = (alpha * 255).toInt()
-                scaleDrawable.customScaleType = scale.toScaleType()
-                scaleDrawable.alignmentHorizontal =
-                    contentAlignmentHorizontal.toHorizontalAlignment(target.isLayoutRtl())
-                scaleDrawable.alignmentVertical = contentAlignmentVertical.toVerticalAlignment()
-
-                val url = imageUrl.toString()
-                val loadReference = imageLoader.loadImage(
-                    url,
-                    object : DivIdLoggingImageDownloadCallback(context.divView) {
-                        @UiThread
-                        override fun onSuccess(cachedBitmap: CachedBitmap) {
-                            target.applyBitmapFilters(
-                                context,
-                                cachedBitmap.bitmap,
-                                filters?.map { it.toDiv() },
-                            ) { scaleDrawable.setBitmap(it) }
-                        }
-
-                        @UiThread
-                        override fun onSuccess(pictureDrawable: PictureDrawable) {
-                            if (!isVectorCompatible) {
-                                onSuccess(pictureDrawable.toCachedBitmap(imageUrl))
-                                return
-                            }
-                            scaleDrawable.setPicture(pictureDrawable.picture)
-                        }
-                    }
-                )
-                context.divView.addLoadReference(loadReference, target)
-
-                return scaleDrawable
-            }
-
-            private fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
-                return when(this) {
-                    DivImageScale.FILL -> ScalingDrawable.ScaleType.FILL
-                    DivImageScale.FIT -> ScalingDrawable.ScaleType.FIT
-                    DivImageScale.STRETCH -> ScalingDrawable.ScaleType.STRETCH
-                    else -> ScalingDrawable.ScaleType.NO_SCALE
-                }
-            }
-
-            private fun DivAlignmentHorizontal.toHorizontalAlignment(isRtl: Boolean): ScalingDrawable.AlignmentHorizontal {
-                return when(this) {
-                    DivAlignmentHorizontal.LEFT -> ScalingDrawable.AlignmentHorizontal.LEFT
-                    DivAlignmentHorizontal.CENTER -> ScalingDrawable.AlignmentHorizontal.CENTER
-                    DivAlignmentHorizontal.RIGHT -> ScalingDrawable.AlignmentHorizontal.RIGHT
-                    DivAlignmentHorizontal.START ->
-                        if (isRtl) ScalingDrawable.AlignmentHorizontal.RIGHT else ScalingDrawable.AlignmentHorizontal.LEFT
-                    DivAlignmentHorizontal.END ->
-                        if (isRtl) ScalingDrawable.AlignmentHorizontal.LEFT else ScalingDrawable.AlignmentHorizontal.RIGHT
-                }
-            }
-
-            private fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertical {
-                return when(this) {
-                    DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
-                    DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
-                    else -> ScalingDrawable.AlignmentVertical.TOP
-                }
-            }
-        }
-
-        data class Solid(
-            val color: Int
-        ): DivBackgroundState()
-
-        data class NinePatch(
-            val imageUrl: Uri,
-            val insets: Rect
-        ): DivBackgroundState() {
-            fun getNinePatchDrawable(
-                divView: Div2View,
-                target: View,
-                imageLoader: DivImageLoader
-            ): Drawable {
-                val ninePatchDrawable = NinePatchDrawable()
-
-                val url = imageUrl.toString()
-                val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
-                    @UiThread
-                    override fun onSuccess(cachedBitmap: CachedBitmap) {
-                        ninePatchDrawable.apply {
-                            bottom = insets.bottom
-                            left = insets.left
-                            right = insets.right
-                            top = insets.top
-                            bitmap = cachedBitmap.bitmap
-                        }
-                    }
-                })
-                divView.addLoadReference(loadReference, target)
-
-                return ninePatchDrawable
-            }
-        }
-
-        fun toDrawable(
-            context: BindingContext,
-            target: View,
-            imageLoader: DivImageLoader,
-        ): Drawable = when (this) {
-            is Image -> getDivImageBackground(context, target, imageLoader)
-            is NinePatch -> getNinePatchDrawable(context.divView, target, imageLoader)
-            is Solid -> ColorDrawable(color)
-            is LinearGradient -> LinearGradientDrawable(
-                angle = angle.toFloat(),
-                colormap = colormap
-            )
-            is RadialGradient -> RadialGradientDrawable(
-                radius = radius.toRadialGradientDrawableRadius(),
-                centerX = centerX.toRadialGradientDrawableCenter(),
-                centerY = centerY.toRadialGradientDrawableCenter(),
-                colors = colormap.colors,
-                positions = colormap.positions,
-            )
-        }
-    }
 }

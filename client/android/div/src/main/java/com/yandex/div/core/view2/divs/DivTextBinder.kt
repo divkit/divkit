@@ -18,6 +18,8 @@ import com.yandex.div.core.util.isConstantOrNull
 import com.yandex.div.core.util.observeColorPoint
 import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toRadialGradientDrawableCenter
+import com.yandex.div.core.util.toRadialGradientDrawableRadius
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
@@ -45,9 +47,6 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
-import com.yandex.div2.DivRadialGradientCenter
-import com.yandex.div2.DivRadialGradientRadius
-import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
@@ -562,49 +561,6 @@ internal class DivTextBinder @Inject constructor(
             width - paddingRight - paddingLeft,
             paint.measureText(text.toString()).toInt()
         )
-
-    private fun DivRadialGradientRadius.toRadialGradientDrawableRadius(
-        metrics: DisplayMetrics,
-        resolver: ExpressionResolver
-    ): RadialGradientDrawable.Radius {
-        return when (this) {
-            is DivRadialGradientRadius.FixedSize -> {
-                RadialGradientDrawable.Radius.Fixed(
-                    value.value.evaluate(resolver).dpToPxF(metrics)
-                )
-            }
-
-            is DivRadialGradientRadius.Relative -> {
-                RadialGradientDrawable.Radius.Relative(
-                    when (value.value.evaluate(resolver)) {
-                        DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
-                        DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
-                        DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
-                        DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
-                    }
-                )
-            }
-        }
-    }
-
-    private fun DivRadialGradientCenter.toRadialGradientDrawableCenter(
-        metrics: DisplayMetrics,
-        resolver: ExpressionResolver
-    ): RadialGradientDrawable.Center {
-        return when (this) {
-            is DivRadialGradientCenter.Fixed -> {
-                RadialGradientDrawable.Center.Fixed(
-                    value.value.evaluate(resolver).dpToPxF(metrics)
-                )
-            }
-
-            is DivRadialGradientCenter.Relative -> {
-                RadialGradientDrawable.Center.Relative(
-                    value.value.evaluate(resolver).toFloat()
-                )
-            }
-        }
-    }
 
     //endregion
 
