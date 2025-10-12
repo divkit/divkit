@@ -57,7 +57,6 @@
 </script>
 
 {#if isShown}
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <dialog
         class="inplace-editor-dialog"
         style:left={currentProps.style.left}

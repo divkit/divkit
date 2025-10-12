@@ -216,7 +216,6 @@
 
             {#if subtype === 'url'}
                 <div>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>
                         <div class="actions2-dialog__label">
                             {$l10n('actions-url')}
@@ -237,7 +236,6 @@
             {:else if actionArgs.length}
                 {#each actionArgs as arg}
                     <div>
-                        <!-- svelte-ignore a11y-label-has-associated-control -->
                         <label>
                             <div class="actions2-dialog__label">
                                 {arg.desc.text[$lang] || arg.desc.name}
@@ -253,7 +251,6 @@
             {/if}
 
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="actions2-dialog__label">
                         {$l10n('actions-log-id')}
@@ -266,7 +263,6 @@
             </div>
 
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="actions2-dialog__label">
                         {$l10n('actions-log-url')}

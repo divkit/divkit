@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, type ComponentType } from 'svelte';
+    import { getContext, type Component } from 'svelte';
     import type { LayoutItem } from '../../lib';
     import Canvas from './Canvas.svelte';
     import Components from './Components.svelte';
@@ -40,7 +40,7 @@
             return;
         }
         return {
-            component: componentMap[item] as ComponentType,
+            component: componentMap[item] as Component,
             weight: 1,
             minSize: 200
         };

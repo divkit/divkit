@@ -188,10 +188,7 @@
             </div>
 
             {#if perThemeProps && item.enablePerTheme}
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label
-                    class="unknown-prop__tanker"
-                >
+                <label class="unknown-prop__tanker">
                     {$l10n('perThemeProps')}
 
                     <Switcher

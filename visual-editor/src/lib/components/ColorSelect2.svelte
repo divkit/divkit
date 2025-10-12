@@ -176,8 +176,8 @@
     class="color-select"
     class:color-select_disabled={disabled}
 >
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
         class="color-select__spectrum"
         style:background={cssColorHue}

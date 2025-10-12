@@ -93,7 +93,7 @@
     });
 </script>
 
-<div class="text-editor" bind:this={node} />
+<div class="text-editor" bind:this={node}></div>
 
 <style>
     .text-editor {

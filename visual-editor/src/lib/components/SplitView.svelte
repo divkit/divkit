@@ -1,8 +1,9 @@
 <script lang="ts">
-    import type { ComponentType } from 'svelte';
+    import type { Component } from 'svelte';
 
     export let components: {
-        component: ComponentType;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        component: Component<any>;
         weight: number;
         minSize?: number;
         key?: string;
@@ -74,7 +75,7 @@
 <div class="split-view" class:split-view_vertical={orientation === 'vertical'}>
     {#each components as item, index (item.key || index)}
         {#if index > 0}
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
                 class="split-view__splitter"
                 on:pointerdown|preventDefault={event => onPointerdown(event, index - 1)}

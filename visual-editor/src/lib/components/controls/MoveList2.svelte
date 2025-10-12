@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher, type ComponentType, tick } from 'svelte';
+    import { createEventDispatcher, type Component, tick } from 'svelte';
     import { flip } from 'svelte/animate';
     import { slide } from 'svelte/transition';
     import MoveItem2 from './MoveItem2.svelte';
@@ -9,7 +9,8 @@
     }
 
     export let values: object[] | undefined;
-    export let itemView: ComponentType;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    export let itemView: Component<any>;
     export let readOnly = false;
 
     $: list = values as Item[] | undefined;
@@ -18,7 +19,7 @@
 
     let listElem: HTMLElement;
     let movedItem: Item | undefined;
-    let moveEnded = false;
+    let moveEnded = true;
 
     $: if (list) {
         const known = new Set<number>();
@@ -159,7 +160,8 @@
 </script>
 
 <ul class="move-list__list" bind:this={listElem}>
-    {#each (list || []) as item (item.__key)}
+    <!-- _index is required for the animation to work -->
+    {#each (list || []) as item, _index (item.__key)}
         {@const isMoving = movedItem && item.__key === movedItem.__key}
 
         <li

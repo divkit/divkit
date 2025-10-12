@@ -143,8 +143,8 @@
 
 {#if type === 'text'}
     {#if $readOnly || item.enabled === false || tankerToggled}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
             class="text-prop text-prop_disabled"
             class:text-prop_disabled-clickable={isTankerEditable}
@@ -168,9 +168,11 @@
         </div>
     {:else}
         <div
-            {...{ autocomplete: 'off' }}
+            {...{
+                autocomplete: 'off',
+                autocorrect: 'off'
+            }}
             class="text-prop"
-            autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
             contenteditable={supportsPlainTextOnly ? 'plaintext-only' : 'true'}

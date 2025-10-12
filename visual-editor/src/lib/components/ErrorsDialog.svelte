@@ -156,7 +156,7 @@
                                     title={$l10nString('errors.select')}
                                     on:click={() => selectLeaf(item.args?.leafId)}
                                 >
-                                    <div class="errors-dialog__select" />
+                                    <div class="errors-dialog__select"></div>
                                 </Button2>
                             {/if}
                         </li>

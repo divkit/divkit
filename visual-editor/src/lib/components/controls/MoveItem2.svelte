@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { createEventDispatcher, type ComponentType, getContext } from 'svelte';
+    import { createEventDispatcher, type Component, getContext } from 'svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
 
     export let value: object;
-    export let itemView: ComponentType;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    export let itemView: Component<any>;
     export let isMoving = false;
     export let isReoderInProgress = false;
     export let canBeMoved = true;

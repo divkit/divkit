@@ -17,7 +17,7 @@
     <div
         class="add-button__icon"
         class:add-button__icon_disabled={disabled}
-    />
+    ></div>
     <slot />
 </Button2>
 

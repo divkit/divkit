@@ -446,8 +446,8 @@
     });
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
     class="tree"
     tabindex="0"

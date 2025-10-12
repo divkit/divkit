@@ -172,7 +172,7 @@
                 <div
                     class="select__icon"
                     style:background-image="url({encodeBackground(icon)})"
-                />
+                ></div>
             </div>
         {/if}
         {text}
@@ -191,8 +191,8 @@
         >
             <ul class="select__list">
                 {#each items as item}
-                    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                     <li
                         class="select__item"
                         class:select__item_selected={item.value === value}
@@ -204,7 +204,7 @@
                                 <div
                                     class="select__icon"
                                     style:background-image="url({encodeBackground(item.icon)})"
-                                />
+                                ></div>
                             </div>
                         {/if}
                         {item.text ?? item.value}

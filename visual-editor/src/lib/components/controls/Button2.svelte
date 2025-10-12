@@ -7,7 +7,7 @@
     export let theme: 'border' | 'normal' = 'border';
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={tag}
     class="button2 button2_theme_{theme} {cls}"

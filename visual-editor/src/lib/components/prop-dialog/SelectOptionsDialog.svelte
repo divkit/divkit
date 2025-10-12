@@ -39,7 +39,6 @@
     <ContextDialog {target} on:close={onClose} canMove={true}>
         <div class="select-options-dialog__content">
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="select-options-dialog__label">
                         {$l10n('select.text')}
@@ -52,7 +51,6 @@
             </div>
 
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="select-options-dialog__label">
                         {$l10n('select.value')}

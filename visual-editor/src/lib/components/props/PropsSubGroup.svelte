@@ -126,10 +126,12 @@
                                     title="{key}"
                                 >
                                     <div
-                                        {...{ autocomplete: 'off' }}
+                                        {...{
+                                            autocomplete: 'off',
+                                            autocorrect: 'off'
+                                        }}
                                         class="props-group__name"
                                         contenteditable="true"
-                                        autocorrect="off"
                                         autocapitalize="off"
                                         spellcheck="false"
                                         on:input={event => onCustomNameChange(event, item.prop, key)}

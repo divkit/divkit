@@ -148,7 +148,7 @@
         {$l10n('props.paddings')}
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_margins-top"
         on:mouseenter={() => $highlightMode = 'margins'}
@@ -171,7 +171,7 @@
         />
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_paddings-top"
         on:mouseenter={() => $highlightMode = 'paddings'}
@@ -194,7 +194,7 @@
         />
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_margins-left"
         on:mouseenter={() => $highlightMode = 'margins'}
@@ -216,7 +216,7 @@
             on:input={() => onChange('margins')}
         />
     </div>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_paddings-left"
         on:mouseenter={() => $highlightMode = 'paddings'}
@@ -238,7 +238,7 @@
             on:input={() => onChange('paddings')}
         />
     </div>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_paddings-right"
         on:mouseenter={() => $highlightMode = 'paddings'}
@@ -260,7 +260,7 @@
             on:input={() => onChange('paddings')}
         />
     </div>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_margins-right"
         on:mouseenter={() => $highlightMode = 'margins'}
@@ -283,7 +283,7 @@
         />
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_paddings-bottom"
         on:mouseenter={() => $highlightMode = 'paddings'}
@@ -306,7 +306,7 @@
         />
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_margins-bottom"
         on:mouseenter={() => $highlightMode = 'margins'}
@@ -329,7 +329,7 @@
         />
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_border-box"
         on:mouseenter={() => $highlightMode = 'margins'}
@@ -337,7 +337,7 @@
     >
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="margins-paddings-prop__cell margins-paddings-prop__cell_input margins-paddings-prop__cell_content-box"
         on:mouseenter={() => $highlightMode = 'paddings'}

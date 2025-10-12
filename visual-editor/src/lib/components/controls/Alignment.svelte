@@ -159,8 +159,8 @@
     class:alignment_match_horizontal={isHorizontalDisabled}
     class:alignment_match_vertical={isVerticalDisabled}
 >
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="alignment__item alignment__grid"
         class:alignment__grid_disabled={disabled || isHorizontalDisabled && isVerticalDisabled}
@@ -170,7 +170,7 @@
     >
         {#each verticalList as verticalItem}
             {#each horizontalList as horizontalItem}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div
                     class="alignment__val alignment__val_horizontal_{horizontalItem} alignment__val_vertical_{verticalItem}"
                     class:alignment__val_selected={

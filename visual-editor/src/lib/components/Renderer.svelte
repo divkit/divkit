@@ -1128,19 +1128,21 @@
         });
     }
 
-    $: if ($customVariables && instance) {
-        instance.$destroy();
+    function cleanInstance(): void {
+        instance?.$destroy();
         instance = undefined;
     }
 
-    $: if ($timers && instance) {
-        instance.$destroy();
-        instance = undefined;
+    $: if ($customVariables) {
+        cleanInstance();
     }
 
-    $: if ($direction && instance) {
-        instance.$destroy();
-        instance = undefined;
+    $: if ($timers) {
+        cleanInstance();
+    }
+
+    $: if ($direction) {
+        cleanInstance();
     }
 
     function rerender({
@@ -3235,8 +3237,8 @@
 
 <svelte:window on:resize={onWindowResize} />
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
     bind:this={root}
     class="renderer"
@@ -3255,7 +3257,7 @@
         style:--width="{size[0]}px"
         style:--height="{size[1]}px"
     >
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <!-- svelte-ignore a11y_mouse_events_have_key_events -->
         <div
             bind:this={previewWrapper}
             class="renderer__content"
@@ -3469,7 +3471,7 @@
                                             stroke-width="3"
                                             stroke-linecap="round"
                                             fill="none"
-                                        >
+                                        ></path>
                                     </svg>
                                 {/if}
 

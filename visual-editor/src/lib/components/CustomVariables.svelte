@@ -162,7 +162,6 @@
                     </span>
                 </div>
                 <div class="custom-variables__form">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="custom-variables__form-row">
                         <div class="custom-variables__label">
                             {$l10nString('customVariablesName')}
@@ -175,7 +174,6 @@
                             on:change={event => onNameChange(index, event)}
                         />
                     </label>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="custom-variables__form-row">
                         <div class="custom-variables__label">
                             {$l10nString('customVariablesType')}
@@ -213,7 +211,6 @@
                             }]}
                         />
                     </label>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="custom-variables__form-row">
                         <div class="custom-variables__label">
                             {$l10nString('customVariablesValue')}

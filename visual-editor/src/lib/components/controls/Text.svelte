@@ -281,6 +281,7 @@
             </div>
         {/if}
 
+        <!-- svelte-ignore a11y_consider_explicit_label -->
         <button class="text__more" on:click={onMore}>
             <div class="text__more-icon"></div>
         </button>

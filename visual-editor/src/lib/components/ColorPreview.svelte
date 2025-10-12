@@ -36,12 +36,12 @@
     <div
         class="color-preview__no-alpha"
         style:background-color={colorToCss(color, false, $previewThemeStore)}
-    />
+    ></div>
     <div
         class="color-preview__alpha"
         style:background-color={colorToCss(color, true, $previewThemeStore)}
-    />
-    <div class="color-preview__inset" />
+    ></div>
+    <div class="color-preview__inset"></div>
 </div>
 
 <style>

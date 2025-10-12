@@ -204,7 +204,6 @@
     on:resize={update}
 />
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
     class="context-dialog context-dialog_direction_{direction}"
     class:context-dialog_hidden={isHidden}
@@ -230,6 +229,7 @@
         <slot />
 
         {#if hasClose}
+            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="context-dialog__close"
                 on:click={onCloseClick}

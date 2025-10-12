@@ -87,7 +87,6 @@
     >
         <div class="items-list-dialog__content">
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="items-list-dialog__label">
                         {$l10n('state.id')}
@@ -101,7 +100,6 @@
             </div>
 
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="items-list-dialog__label">
                         {$l10n('state.div')}

@@ -360,6 +360,7 @@
                     />
 
                     {#if $paletteEnabled && (subtype === 'solid' || subtype === 'gradient')}
+                        <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button
                             class="background2-dialog__palette-toggle"
                             class:background2-dialog__palette-toggle_toggled={togglePalette}
@@ -381,8 +382,8 @@
                     {:else if value.type === 'gradient'}
                         {#if Array.isArray(gradientColors)}
                             <div class="background2-dialog__gradient-preview">
-                                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                                <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                                <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
                                 <div
                                     class="background2-dialog__gradient-points"
                                     tabindex="0"
@@ -392,8 +393,6 @@
                                 >
                                     <!-- todo keyboard support -->
                                     {#each gradientColors as item, index}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                        <!-- svelte-ignore a11y-no-static-element-interactions -->
                                         <div
                                             class="background2-dialog__gradient-point"
                                             class:background2-dialog__gradient-point_selected={index === selectedColorIndex}
@@ -407,12 +406,13 @@
                                             <ColorPreview color={item.color} mix="background2-dialog__gradient-point-preview" />
 
                                             {#if gradientColors.length > 2}
+                                                <!-- svelte-ignore a11y_click_events_have_key_events -->
                                                 <div
                                                     class="background2-dialog__gradient-point-delete"
                                                     title={$l10nString('delete')}
                                                     on:pointerdown|stopPropagation
                                                     on:click={() => deleteGradientColorStop(index)}
-                                                />
+                                                ></div>
                                             {/if}
                                         </div>
                                     {/each}
@@ -437,7 +437,6 @@
 
                             <div class="background2-dialog__split">
                                 <div class="background2-dialog__split-part">
-                                    <!-- svelte-ignore a11y-label-has-associated-control -->
                                     <label>
                                         <div class="background2-dialog__label">{$l10nString('props.background_gradient_angle')}</div>
                                         <Text
@@ -453,7 +452,6 @@
                                     </label>
                                 </div>
                                 <div class="background2-dialog__split-part">
-                                    <!-- svelte-ignore a11y-label-has-associated-control -->
                                     <label>
                                         <div class="background2-dialog__label">{$l10nString('props.background_gradient_count')}</div>
                                         <Text
@@ -470,7 +468,6 @@
                             </div>
                         {/if}
                     {:else if value.type === 'image'}
-                        <!-- svelte-ignore a11y-label-has-associated-control -->
                         <label>
                             <div class="background2-dialog__label">{$l10nString('props.image_url')}</div>
                             <Text

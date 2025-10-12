@@ -40,7 +40,7 @@
     }
 
     .switcher_disabled .switcher__input {
-        cursor: default;;
+        cursor: default;
     }
 
     .switcher__input:focus-visible {

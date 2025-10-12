@@ -80,7 +80,6 @@
             </div>
 
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label>
                     <div class="video-sources-dialog__label">
                         {$l10n('video-mime-type')}

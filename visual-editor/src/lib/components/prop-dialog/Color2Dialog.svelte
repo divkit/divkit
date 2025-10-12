@@ -81,6 +81,7 @@
                             {$l10nString('color')}
                         </div>
 
+                        <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button
                             class="color2-dialog__palette-toggle"
                             class:color2-dialog__palette-toggle_toggled={togglePalette}

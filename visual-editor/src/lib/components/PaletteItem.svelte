@@ -214,6 +214,7 @@
     .palette-item__name:not(:focus) {
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         overflow: hidden;
         -webkit-box-orient: vertical;
     }

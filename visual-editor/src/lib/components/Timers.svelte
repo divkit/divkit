@@ -133,7 +133,6 @@
                     </span>
                 </div>
                 <div class="timers__form">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="timers__form-row">
                         <div class="timers__label">
                             {$l10nString('timersId')}
@@ -146,7 +145,6 @@
                             on:change={event => onIdChange(index, event)}
                         />
                     </label>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="timers__form-row">
                         <div class="timers__label">
                             {$l10nString('timersValueVariable')}
@@ -159,7 +157,6 @@
                             on:change={event => onValueVariableChange(index, event)}
                         />
                     </label>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="timers__form-row">
                         <div class="timers__label">
                             {$l10nString('timersDuration')}
@@ -170,7 +167,6 @@
                             on:change={event => onDurationChange(index, event)}
                         />
                     </label>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="timers__form-row">
                         <div class="timers__label">
                             {$l10nString('timersTickInterval')}

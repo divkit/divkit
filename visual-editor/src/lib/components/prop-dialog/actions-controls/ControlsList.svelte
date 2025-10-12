@@ -39,7 +39,6 @@
 <div class="controls-list">
     {#each controls as control}
         <div>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label class="controls-list__row">
                 <div class="controls-list__label">
                     {control.name}

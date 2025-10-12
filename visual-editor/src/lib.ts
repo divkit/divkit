@@ -1,3 +1,4 @@
+import { mount, unmount } from 'svelte';
 import { get, type Unsubscriber } from 'svelte/store';
 import type { VideoSource } from '@divkitframework/divkit/typings/common';
 import App from './App.svelte';
@@ -268,7 +269,7 @@ export const DivProEditor = {
 
         state.setDivJson(json);
 
-        const app = new App({
+        const app = mount(App, {
             target: opts.renderTo,
             props: {
                 state,
@@ -339,7 +340,7 @@ export const DivProEditor = {
                 return state.getEditorErrors();
             },
             destroy() {
-                app.$destroy();
+                unmount(app);
                 unsubscribeStore?.();
             }
         };

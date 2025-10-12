@@ -572,7 +572,7 @@
                             <div
                                 class="file2-dialog__playback-toggle-icon"
                                 class:file2-dialog__playback-toggle-icon_toggle={playbackToggle}
-                            />
+                            ></div>
                         </Button2>
                     </div>
                 {/if}
@@ -610,7 +610,7 @@
                 </Text>
             </div>
 
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
                 class="file2-dialog__drop-target"
                 class:file2-dialog__drop-target_over={dragOver}
@@ -630,7 +630,6 @@
 
         {#if hasSize}
             <div class="file2-dialog__size">
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="file2-dialog__size-part">
                     <div class="file2-dialog__label">{$l10nString('props.width')}</div>
                     <Text
@@ -642,7 +641,6 @@
                         {disabled}
                     />
                 </label>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="file2-dialog__size-part">
                     <div class="file2-dialog__label">{$l10nString('props.height')}</div>
                     <Text
