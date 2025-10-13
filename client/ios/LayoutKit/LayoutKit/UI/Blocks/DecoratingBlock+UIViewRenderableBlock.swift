@@ -641,6 +641,18 @@ extension DecoratingView {
   }
 }
 
+extension DecoratingView {
+  override func setOpacity(_ alpha: CGFloat) {
+    guard let child = childView as? Self,
+          model.childAlpha != 1 else {
+      super.setOpacity(alpha)
+      return
+    }
+
+    child.setOpacity(alpha)
+  }
+}
+
 extension DecoratingView: TooltipAnchorView {
   var tooltips: [BlockTooltip] { model.tooltips }
 }

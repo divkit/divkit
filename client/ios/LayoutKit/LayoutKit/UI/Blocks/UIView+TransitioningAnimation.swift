@@ -60,7 +60,7 @@ extension UIView {
   ) {
     switch animationKind {
     case .fade:
-      alpha = value
+      setOpacity(value)
     case .scaleXY:
       // https://medium.com/@sartha.tayade/problem-when-animating-a-uiview-to-scale-to-zero-using-cgaffinetransform-on-ios-2f50717add18
       let nonZeroValue = value.isZero ? .ulpOfOne : value
@@ -100,6 +100,10 @@ extension UIView {
         ]
       )
     }
+  }
+
+  @objc func setOpacity(_ value: CGFloat) {
+    self.alpha = value
   }
 }
 

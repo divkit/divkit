@@ -13,7 +13,7 @@
       "background": [
         {
           "type": "solid",
-          "color": "#e1bae3"
+          "color": "#c984cd"
         }
       ],
       "border": {
@@ -62,6 +62,18 @@
     }
   },
   "card": {
+    "variables": [
+      {
+        "name": "period",
+        "type": "integer",
+        "value": 250
+      },
+      {
+        "name": "gap",
+        "type": "integer",
+        "value": 20
+      }
+    ],
     "log_id": "blink_animation",
     "states": [
       {
@@ -101,16 +113,17 @@
                       {
                         "name": "fade",
                         "start_value": 1.0,
+                        "end_value": 0.33,
                         "interpolator": "ease_in_out",
-                        "start_delay": 250,
-                        "duration": 250
+                        "start_delay": "@{period-gap}",
+                        "duration": "@{period}"
                       },
                       {
                         "name": "scale",
                         "start_value": 0.8,
                         "interpolator": "ease_in_out",
-                        "start_delay": 250,
-                        "duration": 250
+                        "start_delay": "@{period-gap}",
+                        "duration": "@{period}"
                       }
                     ]
                   },
@@ -119,15 +132,16 @@
                     "items": [
                       {
                         "name": "fade",
+                        "start_value": 0.33,
                         "end_value": 1.0,
                         "interpolator": "ease_in_out",
-                        "duration": 250
+                        "duration": "@{period}"
                       },
                       {
                         "name": "scale",
                         "end_value": 0.8,
                         "interpolator": "ease_in_out",
-                        "duration": 250
+                        "duration": "@{period}"
                       }
                     ]
                   },
@@ -144,16 +158,17 @@
                       {
                         "name": "fade",
                         "start_value": 1.0,
+                        "end_value": 0.33,
                         "interpolator": "ease_in_out",
-                        "start_delay": 250,
-                        "duration": 250
+                        "start_delay": "@{period-gap}",
+                        "duration": "@{period}"
                       },
                       {
                         "name": "scale",
                         "start_value": 0.8,
                         "interpolator": "ease_in_out",
-                        "start_delay": 250,
-                        "duration": 250
+                        "start_delay": "@{period-gap}",
+                        "duration": "@{period}"
                       }
                     ]
                   },
@@ -162,15 +177,16 @@
                     "items": [
                       {
                         "name": "fade",
+                        "start_value": 0.33,
                         "end_value": 1.0,
                         "interpolator": "ease_in_out",
-                        "duration": 250
+                        "duration": "@{period}"
                       },
                       {
                         "name": "scale",
                         "end_value": 0.8,
                         "interpolator": "ease_in_out",
-                        "duration": 250
+                        "duration": "@{period}"
                       }
                     ]
                   },
