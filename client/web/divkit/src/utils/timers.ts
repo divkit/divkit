@@ -190,6 +190,22 @@ export class TimersController {
         }
     }
 
+    private applyVarsInt(val: string | number | undefined): number | undefined {
+        let res = this.applyVars(val);
+
+        if (typeof res === 'string') {
+            if (res === val) {
+                // non-expression, simple string - incorrect value
+                return undefined;
+            }
+            res = Number(res);
+        }
+        if (res === undefined || Number.isNaN(res) || Math.round(res) !== res) {
+            return undefined;
+        }
+        return res;
+    }
+
     private start(timer: TimerState): void {
         if (timer.state === 'running') {
             this.logError(wrapError(new Error('The timer is already running')));
@@ -213,24 +229,29 @@ export class TimersController {
             this.setVariableValue(variableName, 0);
         }
 
-        if (timer.definition.duration) {
-            timer.duration = this.applyVars(timer.definition.duration);
-        }
-        if (timer.definition.tick_interval) {
-            timer.tick = this.applyVars(timer.definition.tick_interval);
-        }
         // duration < 0 is incorrect
         // tick_interval <= is incorrect
-        if (
-            timer.duration !== undefined && timer.duration < 0 ||
-            timer.tick !== undefined && timer.tick <= 0
-        ) {
-            this.logError(wrapError(new Error('Incorrect timer properties'), {
-                additional: {
-                    id: timer.definition.id
-                }
-            }));
-            return;
+        if (timer.definition.duration !== undefined) {
+            timer.duration = this.applyVarsInt(timer.definition.duration);
+            if (timer.duration === undefined || timer.duration < 0) {
+                this.logError(wrapError(new Error('Incorrect timer properties'), {
+                    additional: {
+                        id: timer.definition.id
+                    }
+                }));
+                return;
+            }
+        }
+        if (timer.definition.tick_interval !== undefined) {
+            timer.tick = this.applyVarsInt(timer.definition.tick_interval);
+            if (timer.tick === undefined || timer.tick <= 0) {
+                this.logError(wrapError(new Error('Incorrect timer properties'), {
+                    additional: {
+                        id: timer.definition.id
+                    }
+                }));
+                return;
+            }
         }
 
         if (timer.duration !== undefined && timer.tick !== undefined) {
