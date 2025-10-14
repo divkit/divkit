@@ -5,7 +5,7 @@
 /// performance issues, crashes, or other problems. By default, only features that have testing are
 /// included in the framework.
 /// You can access the default `DivFlagsInfo` instance using the static property `default`.
-public struct DivFlagsInfo {
+public struct DivFlagsInfo: Encodable, Equatable {
   /// The default instance of `DivFlagsInfo`.
   public static let `default` = DivFlagsInfo()
 
@@ -72,5 +72,62 @@ public struct DivFlagsInfo {
     self.defaultTextAutoEllipsize = defaultTextAutoEllipsize
     self.fontCacheEnabled = fontCacheEnabled
     self.variationFontWeightOverrideEnabled = variationFontWeightOverrideEnabled
+  }
+}
+
+extension DivFlagsInfo: Decodable {
+  fileprivate enum CodingKeys: String, CodingKey {
+    case useUrlHandlerForVisibilityActions
+    case imageBlurPreferMetal
+    case imageTintPreferMetal
+    case useTooltipLegacyWidth
+    case initializeTriggerOnSet
+    case defaultTextAutoEllipsize
+    case fontCacheEnabled
+    case variationFontWeightOverrideEnabled
+  }
+
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+
+    self.useUrlHandlerForVisibilityActions = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .useUrlHandlerForVisibilityActions
+    ) ?? Self.default.useUrlHandlerForVisibilityActions
+
+    self.imageBlurPreferMetal = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .imageBlurPreferMetal
+    ) ?? Self.default.imageBlurPreferMetal
+
+    self.imageTintPreferMetal = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .imageTintPreferMetal
+    ) ?? Self.default.imageTintPreferMetal
+
+    self.useTooltipLegacyWidth = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .useTooltipLegacyWidth
+    ) ?? Self.default.useTooltipLegacyWidth
+
+    self.initializeTriggerOnSet = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .initializeTriggerOnSet
+    ) ?? Self.default.initializeTriggerOnSet
+
+    self.defaultTextAutoEllipsize = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .defaultTextAutoEllipsize
+    ) ?? Self.default.defaultTextAutoEllipsize
+
+    self.fontCacheEnabled = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .fontCacheEnabled
+    ) ?? Self.default.fontCacheEnabled
+
+    self.variationFontWeightOverrideEnabled = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .variationFontWeightOverrideEnabled
+    ) ?? Self.default.variationFontWeightOverrideEnabled
   }
 }
