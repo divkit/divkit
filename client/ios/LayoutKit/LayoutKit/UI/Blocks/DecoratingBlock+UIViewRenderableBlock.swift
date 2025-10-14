@@ -446,7 +446,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let tooltipView = tooltipModel.block.makeBlockView()
     tooltipView.frame = tooltipModel.calculateFrame(
       targeting: convert(bounds, to: nil),
-      constrainedBy: window.bounds
+      constrainedBy: window.bounds,
+      useLegacyWidth: tooltipModel.useLegacyWidth
     )
     return TooltipEvent(
       info: info,
