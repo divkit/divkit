@@ -11,4 +11,4 @@ import kotlin.annotation.AnnotationTarget.VALUE_PARAMETER
  */
 @Target(CLASS, CONSTRUCTOR, FUNCTION, PROPERTY, VALUE_PARAMETER)
 @Retention(AnnotationRetention.SOURCE)
-annotation class DeprecatedApi
+annotation class DeprecatedApi(val message: String = "Deprecated")

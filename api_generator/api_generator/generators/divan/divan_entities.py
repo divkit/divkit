@@ -36,7 +36,8 @@ def preset_factory_method_declaration(
         inlines: Dict[str, str],
         vararg_prop: DivanProperty,
         vararg_items: bool,
-        remove_prefix: str
+        remove_prefix: str,
+        translations: Dict[str, str]
 ) -> Text:
     type_name = full_name(entity, remove_prefix)
     basic_method_name = entity.factory_method_name_with_parent
@@ -60,6 +61,7 @@ def preset_factory_method_declaration(
     declaration += utils.indented(items_prop_decl, level=1, indent_width=4)
 
     declaration += entity.literal_properties_signature(
+        translations=translations,
         force_named_arguments=False,
         force_default_nulls=False,
         exclude=[vararg_prop.name, *inlines.keys()]
@@ -189,8 +191,7 @@ class DivanEntity(Entity):
             lines.append(translations['div_generator_required_properties'].format(', '.join(required_prop_names)))
         return comment(*lines)
 
-    @property
-    def alternative_factories_declarations(self) -> List[(Text, Text)]:
+    def alternative_factories_declarations(self, translations: Dict[str, str]) -> List[(Text, Text)]:
         result = []
         if self.generator_properties is None:
             return result
@@ -206,7 +207,8 @@ class DivanEntity(Entity):
                 inlines=factory.inlines,
                 vararg_prop=vararg_prop,
                 vararg_items=True,
-                remove_prefix=self.remove_prefix
+                remove_prefix=self.remove_prefix,
+                translations=translations,
             )))
             result.append((params_declaration, preset_factory_method_declaration(
                 self,
@@ -214,7 +216,8 @@ class DivanEntity(Entity):
                 inlines=factory.inlines,
                 vararg_prop=vararg_prop,
                 vararg_items=False,
-                remove_prefix=self.remove_prefix
+                remove_prefix=self.remove_prefix,
+                translations=translations,
             )))
         return result
 
@@ -254,6 +257,7 @@ class DivanEntity(Entity):
 
     def literal_properties_signature(
             self,
+            translations: Dict[str, str],
             force_named_arguments: bool,
             force_default_nulls: bool,
             exclude: List[str] = None,
@@ -284,19 +288,21 @@ class DivanEntity(Entity):
             if not required or default != 'null':
                 property_declaration += f' = {default}'
             property_declaration += ','
-            signature_declaration += property_declaration
+            prefix = f'@DeprecatedApi("{translations["div_generator_deprecated_message"]}") ' if property.is_deprecated else ''
+            signature_declaration += prefix + property_declaration
         return signature_declaration
 
-    def reference_properties_signature(self) -> Text:
+    def reference_properties_signature(self, translations: Dict[str, str]) -> Text:
         signature_declaration = Text(GUARD_INSTANCE_PARAM)
         for property in cast(List[DivanProperty], self.instance_properties):
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
             property_declaration = f'{property.name_declaration}: ReferenceProperty<{type_name_declaration}>? = null,'
-            signature_declaration += property_declaration
+            prefix = f'@DeprecatedApi("{translations["div_generator_deprecated_message"]}") ' if property.is_deprecated else ''
+            signature_declaration += prefix + property_declaration
         return signature_declaration
 
-    def expression_properties_signature(self) -> (Text, bool):
+    def expression_properties_signature(self, translations: Dict[str, str]) -> (Text, bool):
         signature_declaration = Text(GUARD_INSTANCE_PARAM)
         has_params_except_guard = False
         for property in cast(List[DivanProperty], self.instance_properties):
@@ -306,16 +312,18 @@ class DivanEntity(Entity):
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
             property_declaration = f'{property.name_declaration}: ExpressionProperty<{type_name_declaration}>? = null,'
-            signature_declaration += property_declaration
+            prefix = f'@DeprecatedApi("{translations["div_generator_deprecated_message"]}") ' if property.is_deprecated else ''
+            signature_declaration += prefix + property_declaration
         return signature_declaration, has_params_except_guard
 
-    def modify_properties_signature(self) -> Text:
+    def modify_properties_signature(self, translations: Dict[str, str]) -> Text:
         signature_declaration = Text(GUARD_INSTANCE_PARAM)
         for property in cast(List[DivanProperty], self.instance_properties):
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
             property_declaration = f'{property.name_declaration}: Property<{type_name_declaration}>? = null,'
-            signature_declaration += property_declaration
+            prefix = f'@DeprecatedApi("{translations["div_generator_deprecated_message"]}") ' if property.is_deprecated else ''
+            signature_declaration += prefix + property_declaration
         return signature_declaration
 
     def properties_class_declaration(self, translations: Dict[str, str]) -> Text:
@@ -336,8 +344,7 @@ class DivanEntity(Entity):
         declaration += '}'
         return declaration
 
-    @property
-    def factory_method_declaration(self) -> Text:
+    def factory_method_declaration(self, translations: Dict[str, str]) -> Text:
         type_name = full_name(self, self.remove_prefix)
         method_name = self.factory_method_name_with_parent
 
@@ -347,6 +354,7 @@ class DivanEntity(Entity):
 
         declaration = Text(f'fun DivScope.{method_name}(')
         declaration += self.literal_properties_signature(
+            translations=translations,
             force_named_arguments=False,
             force_default_nulls=False,
         ).indented(level=1, indent_width=4)
@@ -359,12 +367,12 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def properties_factory_method_declaration(self) -> Text:
+    def properties_factory_method_declaration(self, translations: Dict[str, str]) -> Text:
         type_name = full_name(self, self.remove_prefix) + '.Properties'
         method_name = self.factory_method_name_with_parent + 'Props'
         declaration = Text(f'fun DivScope.{method_name}(')
         declaration += self.literal_properties_signature(
+            translations=translations,
             force_named_arguments=True,
             force_default_nulls=True,
         ).indented(level=1, indent_width=4)
@@ -375,12 +383,13 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def references_factory_method_declaration(self) -> Text:
+    def references_factory_method_declaration(self, translations: Dict[str, str]) -> Text:
         type_name = full_name(self, self.remove_prefix) + '.Properties'
         method_name = self.factory_method_name_with_parent + 'Refs'
         declaration = Text(f'fun TemplateScope.{method_name}(')
-        declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
+        declaration += self.reference_properties_signature(
+            translations=translations,
+        ).indented(level=1, indent_width=4)
         declaration += f') = {type_name}('
         for property in cast(List[DivanProperty], self.instance_properties):
             property_name = property.name_declaration
@@ -420,11 +429,11 @@ class DivanEntity(Entity):
         name = full_name(self, self.remove_prefix)
         return Text(f'fun {name}.asList() = listOf(this)')
 
-    @property
-    def override_method_declaration(self) -> Text:
+    def override_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun {name}.override(')
         declaration += self.literal_properties_signature(
+            translations=translations,
             force_named_arguments=True,
             force_default_nulls=True,
         ).indented(level=1, indent_width=4)
@@ -441,11 +450,11 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def override_component_method_declaration(self) -> Text:
+    def override_component_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun Component<{name}>.override(')
         declaration += self.literal_properties_signature(
+            translations=translations,
             force_named_arguments=True,
             force_default_nulls=True,
         ).indented(level=1, indent_width=4)
@@ -459,11 +468,12 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def defer_method_declaration(self) -> Text:
+    def defer_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun {name}.defer(')
-        declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
+        declaration += self.reference_properties_signature(
+            translations=translations,
+        ).indented(level=1, indent_width=4)
         declaration += f'): {name} = {name}('
         declaration += utils.indented(f'{name}.Properties(', level=1, indent_width=4)
         for property in cast(List[DivanProperty], self.instance_properties):
@@ -477,11 +487,12 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def defer_component_method_declaration(self) -> Text:
+    def defer_component_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun Component<{name}>.defer(')
-        declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
+        declaration += self.reference_properties_signature(
+            translations=translations,
+        ).indented(level=1, indent_width=4)
         declaration += f'): Component<{name}> = Component('
         declaration += utils.indented('template = template,', level=1, indent_width=4)
         declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
@@ -492,11 +503,10 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def evaluate_method_declaration(self) -> Text:
+    def evaluate_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun {name}.evaluate(')
-        expression_properties_signature, has_params_except_guard = self.expression_properties_signature()
+        expression_properties_signature, has_params_except_guard = self.expression_properties_signature(translations)
         if not has_params_except_guard:
             return Text()
         declaration += expression_properties_signature.indented(level=1, indent_width=4)
@@ -511,11 +521,10 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def evaluate_component_method_declaration(self) -> Text:
+    def evaluate_component_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun Component<{name}>.evaluate(')
-        expression_properties_signature, has_params_except_guard = self.expression_properties_signature()
+        expression_properties_signature, has_params_except_guard = self.expression_properties_signature(translations)
         if not has_params_except_guard:
             return Text()
         declaration += expression_properties_signature.indented(level=1, indent_width=4)
@@ -530,11 +539,12 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def modify_method_declaration(self) -> Text:
+    def modify_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun {name}.modify(')
-        declaration += self.modify_properties_signature().indented(level=1, indent_width=4)
+        declaration += self.modify_properties_signature(
+            translations=translations,
+        ).indented(level=1, indent_width=4)
         declaration += f'): {name} = {name}('
         declaration += utils.indented(f'{name}.Properties(', level=1, indent_width=4)
         for property in cast(List[DivanProperty], self.instance_properties):
@@ -548,11 +558,12 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
-    @property
-    def modify_component_method_declaration(self) -> Text:
+    def modify_component_method_declaration(self, translations: Dict[str, str]) -> Text:
         name = full_name(self, self.remove_prefix)
         declaration = Text(f'fun Component<{name}>.modify(')
-        declaration += self.modify_properties_signature().indented(level=1, indent_width=4)
+        declaration += self.modify_properties_signature(
+            translations=translations,
+        ).indented(level=1, indent_width=4)
         declaration += f'): Component<{name}> = Component('
         declaration += utils.indented('template = template,', level=1, indent_width=4)
         declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
@@ -644,7 +655,7 @@ class DivanProperty(Property):
         if comment_lines:
             declaration += comment(*comment_lines)
         if self.is_deprecated:
-            declaration += f'@Deprecated("{translations["div_generator_deprecated_message"]}")'
+            declaration += f'@DeprecatedApi("{translations["div_generator_deprecated_message"]}")'
         declaration += f'val {self.name_declaration}: {type_declaration}?'
         return declaration
 

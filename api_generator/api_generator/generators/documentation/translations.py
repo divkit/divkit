@@ -11,8 +11,8 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Значение по умолчанию: `{}`."
     },
     "div_generator_deprecated_message": {
-        "en": "Marked as deprecated in the JSON schema ",
-        "ru": "Помечен как устаревший в JSON-схеме "
+        "en": "Marked as deprecated in the JSON schema",
+        "ru": "Помечен как устаревший в JSON-схеме"
     },
     "div_generator_description": {
         "en": "Description",

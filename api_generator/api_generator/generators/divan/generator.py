@@ -51,7 +51,7 @@ class DivanGenerator(Generator):
             result_declaration += annotation
 
         if entity.is_deprecated:
-            result_declaration += f'@Deprecated("{self.translations["div_generator_deprecated_message"]}")'
+            result_declaration += f'@DeprecatedApi("{self.translations["div_generator_deprecated_message"]}")'
 
         entity_name = utils.capitalize_camel_case(entity.name, self.remove_prefix)
 
@@ -102,24 +102,24 @@ class DivanGenerator(Generator):
                     result_declaration += method_declaration
                     result_declaration += EMPTY
 
-                for comment_block, declaration in ent.alternative_factories_declarations:
+                for comment_block, declaration in ent.alternative_factories_declarations(self.translations):
                     add_declaration(comment_block, declaration)
 
-                add_declaration(ent.params_comment_block(), ent.factory_method_declaration)
+                add_declaration(ent.params_comment_block(), ent.factory_method_declaration(self.translations))
 
                 if has_properties:
-                    add_declaration(ent.params_comment_block(), ent.properties_factory_method_declaration)
-                    add_declaration(ent.params_comment_block(), ent.references_factory_method_declaration)
-                    add_declaration(ent.params_comment_block(), ent.override_method_declaration)
-                    add_declaration(ent.params_comment_block(), ent.defer_method_declaration)
-                    add_declaration(ent.params_comment_block(), ent.modify_method_declaration)
-                    add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
+                    add_declaration(ent.params_comment_block(), ent.properties_factory_method_declaration(self.translations))
+                    add_declaration(ent.params_comment_block(), ent.references_factory_method_declaration(self.translations))
+                    add_declaration(ent.params_comment_block(), ent.override_method_declaration(self.translations))
+                    add_declaration(ent.params_comment_block(), ent.defer_method_declaration(self.translations))
+                    add_declaration(ent.params_comment_block(), ent.modify_method_declaration(self.translations))
+                    add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration(self.translations))
 
                     if self.supertype_entities.intersection(ent.supertypes_list):
-                        add_declaration(ent.params_comment_block(), ent.override_component_method_declaration)
-                        add_declaration(ent.params_comment_block(), ent.defer_component_method_declaration)
-                        add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
-                        add_declaration(ent.params_comment_block(), ent.modify_component_method_declaration)
+                        add_declaration(ent.params_comment_block(), ent.override_component_method_declaration(self.translations))
+                        add_declaration(ent.params_comment_block(), ent.defer_component_method_declaration(self.translations))
+                        add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration(self.translations))
+                        add_declaration(ent.params_comment_block(), ent.modify_component_method_declaration(self.translations))
                         add_declaration(Text(), ent.operator_plus_component_declaration)
 
                 add_declaration(Text(), ent.as_list_method_declaration)

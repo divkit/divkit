@@ -62,7 +62,7 @@ data class WithSimpleProperties internal constructor(
         /**
          * Boolean value in numeric format.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val booleanInt: Property<Boolean>?,
         /**
          * Color.
@@ -123,7 +123,7 @@ data class WithSimpleProperties internal constructor(
 fun DivScope.withSimpleProperties(
     `use named arguments`: Guard = Guard.instance,
     boolean: Boolean? = null,
-    booleanInt: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Boolean? = null,
     color: Color? = null,
     double: Double? = null,
     id: Int? = null,
@@ -159,7 +159,7 @@ fun DivScope.withSimpleProperties(
 fun DivScope.withSimplePropertiesProps(
     `use named arguments`: Guard = Guard.instance,
     boolean: Boolean? = null,
-    booleanInt: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Boolean? = null,
     color: Color? = null,
     double: Double? = null,
     id: Int? = null,
@@ -193,7 +193,7 @@ fun DivScope.withSimplePropertiesProps(
 fun TemplateScope.withSimplePropertiesRefs(
     `use named arguments`: Guard = Guard.instance,
     boolean: ReferenceProperty<Boolean>? = null,
-    booleanInt: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: ReferenceProperty<Boolean>? = null,
     color: ReferenceProperty<Color>? = null,
     double: ReferenceProperty<Double>? = null,
     id: ReferenceProperty<Int>? = null,
@@ -227,7 +227,7 @@ fun TemplateScope.withSimplePropertiesRefs(
 fun WithSimpleProperties.override(
     `use named arguments`: Guard = Guard.instance,
     boolean: Boolean? = null,
-    booleanInt: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Boolean? = null,
     color: Color? = null,
     double: Double? = null,
     id: Int? = null,
@@ -263,7 +263,7 @@ fun WithSimpleProperties.override(
 fun WithSimpleProperties.defer(
     `use named arguments`: Guard = Guard.instance,
     boolean: ReferenceProperty<Boolean>? = null,
-    booleanInt: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: ReferenceProperty<Boolean>? = null,
     color: ReferenceProperty<Color>? = null,
     double: ReferenceProperty<Double>? = null,
     id: ReferenceProperty<Int>? = null,
@@ -299,7 +299,7 @@ fun WithSimpleProperties.defer(
 fun WithSimpleProperties.modify(
     `use named arguments`: Guard = Guard.instance,
     boolean: Property<Boolean>? = null,
-    booleanInt: Property<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Property<Boolean>? = null,
     color: Property<Color>? = null,
     double: Property<Double>? = null,
     id: Property<Int>? = null,
@@ -334,7 +334,7 @@ fun WithSimpleProperties.modify(
 fun WithSimpleProperties.evaluate(
     `use named arguments`: Guard = Guard.instance,
     boolean: ExpressionProperty<Boolean>? = null,
-    booleanInt: ExpressionProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: ExpressionProperty<Boolean>? = null,
     color: ExpressionProperty<Color>? = null,
     double: ExpressionProperty<Double>? = null,
     integer: ExpressionProperty<Long>? = null,
@@ -369,7 +369,7 @@ fun WithSimpleProperties.evaluate(
 fun Component<WithSimpleProperties>.override(
     `use named arguments`: Guard = Guard.instance,
     boolean: Boolean? = null,
-    booleanInt: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Boolean? = null,
     color: Color? = null,
     double: Double? = null,
     id: Int? = null,
@@ -406,7 +406,7 @@ fun Component<WithSimpleProperties>.override(
 fun Component<WithSimpleProperties>.defer(
     `use named arguments`: Guard = Guard.instance,
     boolean: ReferenceProperty<Boolean>? = null,
-    booleanInt: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: ReferenceProperty<Boolean>? = null,
     color: ReferenceProperty<Color>? = null,
     double: ReferenceProperty<Double>? = null,
     id: ReferenceProperty<Int>? = null,
@@ -442,7 +442,7 @@ fun Component<WithSimpleProperties>.defer(
 fun Component<WithSimpleProperties>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     boolean: ExpressionProperty<Boolean>? = null,
-    booleanInt: ExpressionProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: ExpressionProperty<Boolean>? = null,
     color: ExpressionProperty<Color>? = null,
     double: ExpressionProperty<Double>? = null,
     integer: ExpressionProperty<Long>? = null,
@@ -478,7 +478,7 @@ fun Component<WithSimpleProperties>.evaluate(
 fun Component<WithSimpleProperties>.modify(
     `use named arguments`: Guard = Guard.instance,
     boolean: Property<Boolean>? = null,
-    booleanInt: Property<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") booleanInt: Property<Boolean>? = null,
     color: Property<Color>? = null,
     double: Property<Double>? = null,
     id: Property<Int>? = null,
