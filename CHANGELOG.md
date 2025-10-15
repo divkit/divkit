@@ -1,3 +1,12 @@
+## 32.22.0
+
+# iOS Client:
+* Fixed the application of fade animation on views with opacity.
+
+# Web Client:
+* Fixed an issue with the timer properties validation.
+
+
 ## 32.21.0
 
 # Android Client:

@@ -1,3 +1,8 @@
+## 32.22.0 (October 20, 2025)
+
+* Fixed an issue with the timer properties validation.
+
+
 ## 32.21.0 (October 13, 2025)
 
 * Fixed a bug with converting different types of values in actions.
