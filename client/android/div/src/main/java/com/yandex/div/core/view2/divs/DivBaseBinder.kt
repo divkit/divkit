@@ -92,7 +92,7 @@ internal class DivBaseBinder @Inject constructor(
     //region Id
 
     internal fun bindId(divView: Div2View, target: View, id: String?) {
-        val viewId = if (id == null) View.NO_ID else divView.viewComponent.viewIdProvider.getViewId(id)
+        val viewId = divView.viewComponent.viewIdProvider.getViewId(id)
         target.applyId(id, viewId)
     }
 
