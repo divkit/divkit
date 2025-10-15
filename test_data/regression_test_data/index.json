@@ -487,7 +487,8 @@
       "expected_results": [
         "The pager correctly moves to the last element or returns to the current one, depending on the length of the swipe"
       ],
-      "file": "pager/pager_infinite_scroll2.json"
+      "file": "pager/pager_infinite_scroll2.json",
+      "case_id": 482
     },
     {
       "title": "Pager with infinite scroll, start scroll alignment and paddings",
