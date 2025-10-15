@@ -158,7 +158,7 @@ data class State internal constructor(
         /**
          * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val divId: Property<String>?,
         /**
          * Action when double-clicking on an element.
@@ -253,7 +253,7 @@ data class State internal constructor(
          * It determines which events trigger transition animations.
          * Default value: `state_change`.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
@@ -383,12 +383,12 @@ data class State internal constructor(
             /**
              * State appearance animation. Use `transition_in` instead.
              */
-            @Deprecated("Marked as deprecated in the JSON schema ")
+            @DeprecatedApi("Marked as deprecated in the JSON schema")
             val animationIn: Property<Animation>?,
             /**
              * State disappearance animation. Use `transition_out` instead.
              */
-            @Deprecated("Marked as deprecated in the JSON schema ")
+            @DeprecatedApi("Marked as deprecated in the JSON schema")
             val animationOut: Property<Animation>?,
             /**
              * Contents. If the parameter is missing, the state won't be displayed.
@@ -401,7 +401,7 @@ data class State internal constructor(
             /**
              * Actions when swiping the state horizontally.
              */
-            @Deprecated("Marked as deprecated in the JSON schema ")
+            @DeprecatedApi("Marked as deprecated in the JSON schema")
             val swipeOutActions: Property<List<Action>>?,
         ) {
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -488,7 +488,7 @@ fun DivScope.state(
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
-    divId: String? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: String? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -511,7 +511,7 @@ fun DivScope.state(
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -645,7 +645,7 @@ fun DivScope.stateProps(
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
-    divId: String? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: String? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -668,7 +668,7 @@ fun DivScope.stateProps(
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -800,7 +800,7 @@ fun TemplateScope.stateRefs(
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
-    divId: ReferenceProperty<String>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: ReferenceProperty<String>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -823,7 +823,7 @@ fun TemplateScope.stateRefs(
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
-    transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -955,7 +955,7 @@ fun State.override(
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
-    divId: String? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: String? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -978,7 +978,7 @@ fun State.override(
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1112,7 +1112,7 @@ fun State.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
-    divId: ReferenceProperty<String>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: ReferenceProperty<String>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1135,7 +1135,7 @@ fun State.defer(
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
-    transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1269,7 +1269,7 @@ fun State.modify(
     columnSpan: Property<Int>? = null,
     defaultStateId: Property<String>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
-    divId: Property<String>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: Property<String>? = null,
     doubletapActions: Property<List<Action>>? = null,
     extensions: Property<List<Extension>>? = null,
     focus: Property<Focus>? = null,
@@ -1292,7 +1292,7 @@ fun State.modify(
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
-    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: Property<TransitionSelector>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -1382,7 +1382,7 @@ fun State.evaluate(
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
-    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): State = State(
     State.Properties(
@@ -1507,7 +1507,7 @@ fun Component<State>.override(
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
-    divId: String? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: String? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1530,7 +1530,7 @@ fun Component<State>.override(
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
@@ -1665,7 +1665,7 @@ fun Component<State>.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
-    divId: ReferenceProperty<String>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: ReferenceProperty<String>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1688,7 +1688,7 @@ fun Component<State>.defer(
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
-    transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
@@ -1779,7 +1779,7 @@ fun Component<State>.evaluate(
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
-    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<State> = Component(
     template = template,
@@ -1905,7 +1905,7 @@ fun Component<State>.modify(
     columnSpan: Property<Int>? = null,
     defaultStateId: Property<String>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
-    divId: Property<String>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") divId: Property<String>? = null,
     doubletapActions: Property<List<Action>>? = null,
     extensions: Property<List<Extension>>? = null,
     focus: Property<Focus>? = null,
@@ -1928,7 +1928,7 @@ fun Component<State>.modify(
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
-    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: Property<TransitionSelector>? = null,
     transitionChange: Property<ChangeTransition>? = null,
     transitionIn: Property<AppearanceTransition>? = null,
     transitionOut: Property<AppearanceTransition>? = null,
@@ -2013,11 +2013,11 @@ fun State.asList() = listOf(this)
 @Generated
 fun DivScope.stateItem(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: Animation? = null,
-    animationOut: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: Animation? = null,
     div: Div? = null,
     stateId: String? = null,
-    swipeOutActions: List<Action>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: List<Action>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(
         animationIn = valueOrNull(animationIn),
@@ -2038,11 +2038,11 @@ fun DivScope.stateItem(
 @Generated
 fun DivScope.stateItemProps(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: Animation? = null,
-    animationOut: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: Animation? = null,
     div: Div? = null,
     stateId: String? = null,
-    swipeOutActions: List<Action>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: List<Action>? = null,
 ) = State.Item.Properties(
     animationIn = valueOrNull(animationIn),
     animationOut = valueOrNull(animationOut),
@@ -2061,11 +2061,11 @@ fun DivScope.stateItemProps(
 @Generated
 fun TemplateScope.stateItemRefs(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: ReferenceProperty<Animation>? = null,
-    animationOut: ReferenceProperty<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: ReferenceProperty<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: ReferenceProperty<Animation>? = null,
     div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<String>? = null,
-    swipeOutActions: ReferenceProperty<List<Action>>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: ReferenceProperty<List<Action>>? = null,
 ) = State.Item.Properties(
     animationIn = animationIn,
     animationOut = animationOut,
@@ -2084,11 +2084,11 @@ fun TemplateScope.stateItemRefs(
 @Generated
 fun State.Item.override(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: Animation? = null,
-    animationOut: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: Animation? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: Animation? = null,
     div: Div? = null,
     stateId: String? = null,
-    swipeOutActions: List<Action>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: List<Action>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(
         animationIn = valueOrNull(animationIn) ?: properties.animationIn,
@@ -2109,11 +2109,11 @@ fun State.Item.override(
 @Generated
 fun State.Item.defer(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: ReferenceProperty<Animation>? = null,
-    animationOut: ReferenceProperty<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: ReferenceProperty<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: ReferenceProperty<Animation>? = null,
     div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<String>? = null,
-    swipeOutActions: ReferenceProperty<List<Action>>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: ReferenceProperty<List<Action>>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(
         animationIn = animationIn ?: properties.animationIn,
@@ -2134,11 +2134,11 @@ fun State.Item.defer(
 @Generated
 fun State.Item.modify(
     `use named arguments`: Guard = Guard.instance,
-    animationIn: Property<Animation>? = null,
-    animationOut: Property<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationIn: Property<Animation>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") animationOut: Property<Animation>? = null,
     div: Property<Div>? = null,
     stateId: Property<String>? = null,
-    swipeOutActions: Property<List<Action>>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") swipeOutActions: Property<List<Action>>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(
         animationIn = animationIn ?: properties.animationIn,

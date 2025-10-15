@@ -48,7 +48,7 @@ data class ShapeDrawable internal constructor(
         /**
          * Fill color.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val color: Property<Color>?,
         /**
          * Shape.
@@ -57,7 +57,7 @@ data class ShapeDrawable internal constructor(
         /**
          * Stroke style.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val stroke: Property<Stroke>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -79,9 +79,9 @@ data class ShapeDrawable internal constructor(
 @Generated
 fun DivScope.shapeDrawable(
     `use named arguments`: Guard = Guard.instance,
-    color: Color? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: Color? = null,
     shape: Shape? = null,
-    stroke: Stroke? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: Stroke? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(
         color = valueOrNull(color),
@@ -98,9 +98,9 @@ fun DivScope.shapeDrawable(
 @Generated
 fun DivScope.shapeDrawableProps(
     `use named arguments`: Guard = Guard.instance,
-    color: Color? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: Color? = null,
     shape: Shape? = null,
-    stroke: Stroke? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: Stroke? = null,
 ) = ShapeDrawable.Properties(
     color = valueOrNull(color),
     shape = valueOrNull(shape),
@@ -115,9 +115,9 @@ fun DivScope.shapeDrawableProps(
 @Generated
 fun TemplateScope.shapeDrawableRefs(
     `use named arguments`: Guard = Guard.instance,
-    color: ReferenceProperty<Color>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: ReferenceProperty<Color>? = null,
     shape: ReferenceProperty<Shape>? = null,
-    stroke: ReferenceProperty<Stroke>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: ReferenceProperty<Stroke>? = null,
 ) = ShapeDrawable.Properties(
     color = color,
     shape = shape,
@@ -132,9 +132,9 @@ fun TemplateScope.shapeDrawableRefs(
 @Generated
 fun ShapeDrawable.override(
     `use named arguments`: Guard = Guard.instance,
-    color: Color? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: Color? = null,
     shape: Shape? = null,
-    stroke: Stroke? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: Stroke? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(
         color = valueOrNull(color) ?: properties.color,
@@ -151,9 +151,9 @@ fun ShapeDrawable.override(
 @Generated
 fun ShapeDrawable.defer(
     `use named arguments`: Guard = Guard.instance,
-    color: ReferenceProperty<Color>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: ReferenceProperty<Color>? = null,
     shape: ReferenceProperty<Shape>? = null,
-    stroke: ReferenceProperty<Stroke>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: ReferenceProperty<Stroke>? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(
         color = color ?: properties.color,
@@ -170,9 +170,9 @@ fun ShapeDrawable.defer(
 @Generated
 fun ShapeDrawable.modify(
     `use named arguments`: Guard = Guard.instance,
-    color: Property<Color>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: Property<Color>? = null,
     shape: Property<Shape>? = null,
-    stroke: Property<Stroke>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") stroke: Property<Stroke>? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(
         color = color ?: properties.color,
@@ -187,7 +187,7 @@ fun ShapeDrawable.modify(
 @Generated
 fun ShapeDrawable.evaluate(
     `use named arguments`: Guard = Guard.instance,
-    color: ExpressionProperty<Color>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") color: ExpressionProperty<Color>? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(
         color = color ?: properties.color,

@@ -525,7 +525,7 @@ data class Tabs internal constructor(
              * Style. Use `active_font_weight` and `inactive_font_weight` instead.
              * Default value: `regular`.
              */
-            @Deprecated("Marked as deprecated in the JSON schema ")
+            @DeprecatedApi("Marked as deprecated in the JSON schema")
             val fontWeight: Property<FontWeight>?,
             /**
              * Background color of the inactive tab title.
@@ -2341,7 +2341,7 @@ fun DivScope.tabsTabTitleStyle(
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
-    fontWeight: FontWeight? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: FontWeight? = null,
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
@@ -2411,7 +2411,7 @@ fun DivScope.tabsTabTitleStyleProps(
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
-    fontWeight: FontWeight? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: FontWeight? = null,
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
@@ -2479,7 +2479,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
-    fontWeight: ReferenceProperty<FontWeight>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: ReferenceProperty<FontWeight>? = null,
     inactiveBackgroundColor: ReferenceProperty<Color>? = null,
     inactiveFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     inactiveFontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2547,7 +2547,7 @@ fun Tabs.TabTitleStyle.override(
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
-    fontWeight: FontWeight? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: FontWeight? = null,
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
@@ -2617,7 +2617,7 @@ fun Tabs.TabTitleStyle.defer(
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
-    fontWeight: ReferenceProperty<FontWeight>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: ReferenceProperty<FontWeight>? = null,
     inactiveBackgroundColor: ReferenceProperty<Color>? = null,
     inactiveFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     inactiveFontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2687,7 +2687,7 @@ fun Tabs.TabTitleStyle.modify(
     fontFamily: Property<String>? = null,
     fontSize: Property<Int>? = null,
     fontSizeUnit: Property<SizeUnit>? = null,
-    fontWeight: Property<FontWeight>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: Property<FontWeight>? = null,
     inactiveBackgroundColor: Property<Color>? = null,
     inactiveFontVariationSettings: Property<Map<String, Any>>? = null,
     inactiveFontWeight: Property<FontWeight>? = null,
@@ -2751,7 +2751,7 @@ fun Tabs.TabTitleStyle.evaluate(
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
-    fontWeight: ExpressionProperty<FontWeight>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") fontWeight: ExpressionProperty<FontWeight>? = null,
     inactiveBackgroundColor: ExpressionProperty<Color>? = null,
     inactiveFontWeight: ExpressionProperty<FontWeight>? = null,
     inactiveTextColor: ExpressionProperty<Color>? = null,

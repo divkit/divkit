@@ -55,7 +55,7 @@ data class Data internal constructor(
          * Events that trigger transition animations.
          * Default value: `none`.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Triggers for changing variables.
@@ -140,7 +140,7 @@ fun DivScope.data(
     `use named arguments`: Guard = Guard.instance,
     functions: List<Function>? = null,
     timers: List<Timer>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
 ): Data = Data(
@@ -171,7 +171,7 @@ fun DivScope.dataProps(
     states: List<Data.State>? = null,
     functions: List<Function>? = null,
     timers: List<Timer>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
 ) = Data.Properties(
@@ -200,7 +200,7 @@ fun TemplateScope.dataRefs(
     states: ReferenceProperty<List<Data.State>>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     timers: ReferenceProperty<List<Timer>>? = null,
-    transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
 ) = Data.Properties(
@@ -229,7 +229,7 @@ fun Data.override(
     states: List<Data.State>? = null,
     functions: List<Function>? = null,
     timers: List<Timer>? = null,
-    transitionAnimationSelector: TransitionSelector? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
 ): Data = Data(
@@ -260,7 +260,7 @@ fun Data.defer(
     states: ReferenceProperty<List<Data.State>>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     timers: ReferenceProperty<List<Timer>>? = null,
-    transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
 ): Data = Data(
@@ -291,7 +291,7 @@ fun Data.modify(
     states: Property<List<Data.State>>? = null,
     functions: Property<List<Function>>? = null,
     timers: Property<List<Timer>>? = null,
-    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: Property<TransitionSelector>? = null,
     variableTriggers: Property<List<Trigger>>? = null,
     variables: Property<List<Variable>>? = null,
 ): Data = Data(
@@ -312,7 +312,7 @@ fun Data.modify(
 @Generated
 fun Data.evaluate(
     `use named arguments`: Guard = Guard.instance,
-    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
 ): Data = Data(
     Data.Properties(
         logId = properties.logId,
