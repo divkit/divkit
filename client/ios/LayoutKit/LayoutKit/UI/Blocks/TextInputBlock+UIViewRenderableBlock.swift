@@ -325,9 +325,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   ) {
     self.typo = typo.with(alignment: textAlignment)
     self.textValue = textValue
-    if let mask, let rawTextValue {
-      setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
-    } else {
+
+    setupMaskedViewModel(mask: mask, rawTextValue: rawTextValue)
+
+    if maskedViewModel == nil {
       let text: String = if let selectionItems = self.selectionItems {
         selectionItems.first { $0.value == textValue.value }?.text ?? ""
       } else {
@@ -335,6 +336,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       }
       setTextData(text)
     }
+
     updateHintVisibility()
     updateMultiLineOffset()
     updateSingleLineOffset()
@@ -440,9 +442,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.defaultTextAttributes = typo.attributes
   }
 
-  private func setupMaskedViewModelIfNeeded(mask: MaskValidator, rawTextValue: Binding<String>) {
+  private func setupMaskedViewModel(
+    mask: MaskValidator?,
+    rawTextValue: Binding<String>?
+  ) {
+    guard let mask, let rawTextValue else {
+      maskedViewModel = nil
+      return
+    }
+
     self.rawTextValue = rawTextValue
-    guard self.maskedViewModel == nil else {
+    guard maskedViewModel == nil else {
       maskedViewModel?.rawText = rawTextValue.value
       maskedViewModel?.maskValidator = mask
       maskedViewModel?.typo = typo
