@@ -11,7 +11,7 @@
 
 ## 32.20.0 (October 6, 2025)
 
-* Fixed the layout of the `grid' in various rare cases.
+* Fixed the layout of the `grid` in various rare cases.
 
 
 ## 32.19.0 (September 29, 2025)

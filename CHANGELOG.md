@@ -39,7 +39,7 @@
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `gallery`.
 
 # Web Client:
-* Fixed the layout of the `grid' in various rare cases.
+* Fixed the layout of the `grid` in various rare cases.
 
 
 ## 32.19.0

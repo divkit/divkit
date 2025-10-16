@@ -1,0 +1,17 @@
+{
+    "features": [{
+        "id": "match_parent_min_max_size",
+        "name": "<code>min_size</code> and <code>max_size</code> properties in the <code>match_parent</code> size",
+        "compat": {
+            "android": [{
+                "version_added": "32.15.0",
+                "partial_implementation": true,
+                "notes": "Supported only in <code>container</code> with <code>orientation</code>=<code>overlap</code> and in <code>pager</code>"
+            }, {
+                "version_added": "32.20.0",
+                "partial_implementation": true,
+                "notes": "Supported only in <code>container</code> without wrap, in <code>pager</code> and <code>gallery</code>"
+            }]
+        }
+    }]
+}
