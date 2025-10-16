@@ -17,9 +17,16 @@ export function getFileSize(value: string, fileType: string): Promise<number> {
     }
 
     const res = fetch(value)
-        .then(res => res.blob())
-        .then(blob => {
-            return blob.size;
+        .then(res => {
+            if (!res.ok) {
+                return {
+                    size: 0
+                };
+            }
+            return res.blob();
+        })
+        .then(blobLike => {
+            return blobLike.size;
         });
 
     cache.set(value, res);

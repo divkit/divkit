@@ -347,7 +347,7 @@ const editor = window.editor = DivProEditor.init({
                             $params: 'lottie_params'
                         }
                     ],
-                    gif_url: 'https://yastatic.net/s3/home/divkit/empty2.png'
+                    gif_url: 'empty://'
                 },
                 _template_button: {
                     type: 'text',

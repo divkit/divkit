@@ -24,18 +24,18 @@ export class Lottie implements DivExtension {
     private animItem: AnimationItem | undefined;
     private wrapper: HTMLElement | undefined;
     private alive: boolean;
+    private unsubscribe: (() => void) | undefined;
 
     constructor(params: Params) {
         this.params = params;
         this.alive = false;
     }
 
-    private loadData(): Promise<object> {
+    private loadData(url: string | undefined): Promise<object> {
         if (this.params.lottie_json) {
             return Promise.resolve(this.params.lottie_json);
         }
 
-        const url = this.params.lottie_url;
         if (url) {
             return fetch(url)
                 .then(res => {
@@ -204,7 +204,8 @@ export class Lottie implements DivExtension {
         this.setWrapperScale(scale);
         node.appendChild(this.wrapper);
 
-        const repeatCount = Number(this.params.repeat_count || -1);
+        const repeatCount = Number(context.processExpressions(this.params.repeat_count) ?? -1);
+        const repeatMode = context.processExpressions(this.params.repeat_mode);
         const onError = () => {
             this.animItem?.destroy();
             // reveal back gif contents
@@ -224,43 +225,46 @@ export class Lottie implements DivExtension {
             context.logError(err);
         };
 
-        Promise.all([
-            import('./lottieApi'),
-            this.loadData()
-        ]).then(([{ loadAnimation }, json]) => {
-            if (!this.alive) {
-                return;
-            }
-
-            const animItem = this.animItem = loadAnimation({
-                container: wrapper,
-                animationData: json,
-                renderer: 'svg',
-                loop: true,
-                rendererSettings: {
-                    preserveAspectRatio: scale.attribute
+        this.unsubscribe = context.derviedExpression(this.params.lottie_url).subscribe(url => {
+            Promise.all([
+                import('./lottieApi'),
+                this.loadData(url)
+            ]).then(([{ loadAnimation }, json]) => {
+                if (!this.alive) {
+                    return;
                 }
-            });
-            this.setSvgScale(scale);
-            this.animItem.addEventListener('data_failed', onError);
-            if (this.params.repeat_mode === 'reverse' || repeatCount !== -1) {
-                let direction: AnimationDirection = 1;
-                let count = 0;
-                animItem.addEventListener('loopComplete', () => {
-                    ++count;
-                    if (repeatCount !== -1 && count === repeatCount) {
-                        animItem.stop();
-                        animItem.goToAndStop(animItem.totalFrames, true);
-                    } else {
-                        if (this.params.repeat_mode === 'reverse') {
-                            direction = direction === -1 ? 1 : -1;
-                            animItem.setDirection(direction);
-                        }
-                        animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
+                this.animItem?.destroy();
+
+                const animItem = this.animItem = loadAnimation({
+                    container: wrapper,
+                    animationData: json,
+                    renderer: 'svg',
+                    loop: true,
+                    rendererSettings: {
+                        preserveAspectRatio: scale.attribute
                     }
                 });
-            }
-        }).catch(onError);
+                this.setSvgScale(scale);
+                this.animItem.addEventListener('data_failed', onError);
+                if (repeatMode === 'reverse' || repeatCount !== -1) {
+                    let direction: AnimationDirection = 1;
+                    let count = 0;
+                    animItem.addEventListener('loopComplete', () => {
+                        ++count;
+                        if (repeatCount !== -1 && count === repeatCount) {
+                            animItem.stop();
+                            animItem.goToAndStop(animItem.totalFrames, true);
+                        } else {
+                            if (repeatMode === 'reverse') {
+                                direction = direction === -1 ? 1 : -1;
+                                animItem.setDirection(direction);
+                            }
+                            animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
+                        }
+                    });
+                }
+            }).catch(onError);
+        });
     }
 
     updateView(_node: HTMLElement, context: DivExtensionContext): void {
@@ -289,5 +293,6 @@ export class Lottie implements DivExtension {
             this.wrapper = undefined;
         }
         node.removeAttribute('data-lottie');
+        this.unsubscribe?.();
     }
 }
