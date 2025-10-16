@@ -1,12 +1,11 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import androidx.core.view.ViewCompat
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.internal.util.arrayMap
 import javax.inject.Inject
 
-@DivScope
+@DivViewScope
 internal class DivViewIdProvider @Inject constructor() {
 
     private val cache = arrayMap<String, Int>()
@@ -15,7 +14,7 @@ internal class DivViewIdProvider @Inject constructor() {
         if (id == null) return View.NO_ID
 
         return cache.getOrPut(id) {
-            ViewCompat.generateViewId()
+            View.generateViewId()
         }
     }
 
