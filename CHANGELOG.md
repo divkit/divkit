@@ -1,5 +1,8 @@
 ## 32.22.0
 
+# Android Client:
+* Fixed view ids generating for different `Div2View`s.
+
 # iOS Client:
 * Fixed the application of fade animation on views with opacity.
 
