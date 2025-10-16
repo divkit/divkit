@@ -1,0 +1,90 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#002B36"
+    }
+  },
+  "card": {
+    "log_id": "tooltip_modes",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 24,
+            "top": 24,
+            "right": 24,
+            "bottom": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#EEE8D5"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#002B36",
+              "text": "@{getStoredStringValue('stored_value', '<undefined>')}"
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#802AA198",
+              "text": "Set stored value for 10 seconds",
+              "actions": [
+                {
+                  "log_id": "set_stored_value_10_sec",
+                  "url": "div-action://set_stored_value?name=stored_value&type=string&value=short-term%20value&lifetime=10"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "margins": {
+                "top": 24
+              },
+              "background_color": "#80268BD2",
+              "text": "Set stored value forever",
+              "actions": [
+                {
+                  "log_id": "set_stored_value_inf",
+                  "url": "div-action://set_stored_value?name=stored_value&type=string&value=long-term%20value&lifetime=9223372036854775807"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

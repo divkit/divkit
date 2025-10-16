@@ -4,7 +4,7 @@ steps:
   - Tap on text "Click on me"
 expect:
   - Text "Click on me" changed to "You clicked on me"
-  - Second click chande text to "Click on me"
+  - Second click change text to "Click on me"
 paths:
   - 'regression_test_data/simple_tap.json'
 ---
@@ -13,7 +13,7 @@ tags: [ 'DivAction' ]
 steps:
   - Long tap on button "Long tap menu"
 expect:
-  - Menu with butons "show" and "hide" is appearing
+  - Menu with buttons "show" and "hide" is appearing
   - longtap_actions logged
 paths:
   - 'regression_test_data/long_tap.json'
@@ -85,7 +85,7 @@ title: Gallery default item states
 tags: [ 'DivGallery']
 steps:
   - Click on button "Expand" in gallery item
-  - Click on button "Collpse" in expanded items
+  - Click on button "Collapse" in expanded items
 expect:
   - Only clicked gallery item change state
 paths:
@@ -95,7 +95,7 @@ title: Gallery paging default item states
 tags: [ 'DivGallery']
 steps:
   - Click on button "Expand" in gallery item
-  - Click on button "Collpse" in expanded items
+  - Click on button "Collapse" in expanded items
   - Scroll gallery
 expect:
   - Only clicked gallery item change state
@@ -184,7 +184,7 @@ paths:
   - 'regression_test_data/action_animation/interpolator_spring/set.json'
   - 'regression_test_data/action_animation/no_animation.json'
 ---
-title: Recomendation slider
+title: Recommendation slider
 tags: [ 'Slider' ]
 priority: blocker
 steps:
@@ -209,7 +209,7 @@ tags: [ 'Slider' ]
 steps:
   - Interact with slider
 expect:
-  - Slider poiner shange it's position
+  - Slider pointer change it's position
 paths:
   - 'regression_test_data/slider_presets.json'
 ---
@@ -240,7 +240,7 @@ steps:
   - Switch focus to handler
   - Switch focus to idle
 expect:
-  - Start state of the right evement is "init"
+  - Start state of the right element is "init"
   - When handler gets focus, state of the right element is "focus"
   - When handler lost focus, state of the right element is "blur"
 paths:
@@ -271,7 +271,7 @@ steps:
   - Set russian language on device
   - Turn on TalkBack and set order of elements description to "Состояние,название,тип"
   - Focus on top button
-  - Move focuse rom one button to another
+  - Move focus rom one button to another
 expect:
   - On each elements will be text "Тип - X", you should hear "Тип - X; X"; For example "Тип - кнопка; кнопка"
   - For "Тип - текст" and "Без типа" you will hear "Тип - текст" and "Без типа".
@@ -309,7 +309,7 @@ steps:
   - Turn on TalkBack
   - Focus on items from top to bottom
 expect:
-  - Focuse on 5-th item
+  - Focus on 5-th item
   - Услышим "Это Элемент 5"
   - При выключенном TalkBack на каждой кнопке при тапе должно появляться меню с названием этой кнопки
 paths:
@@ -330,7 +330,7 @@ expect:
   - Menu with text "Double tap" appears
   - Menu with text "Long tap" appears
   - Menu with text "Single tap" appears without delay
-  - Menu with text "Single tap" appears and than desappears
+  - Menu with text "Single tap" appears and than disappears
   - Menu with text "Long tap on container" appears for container
   - Menu with text "Single tap on child" appears
   - Menu with text "Long tap on container" appears for container
@@ -358,7 +358,7 @@ steps:
  - Press button with text "GO"
  - After image appears press "GO BACK"
 expect:
- - Image should appears and desapears changing the transparency
+ - Image should appears and disappears changing the transparency
 paths:
   - 'regression_test_data/animations/transition/fade_full_src.json'
 ---
@@ -368,7 +368,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears changing the transparency starting or ending with transparency = 0.5
+  - Image should appears and disappears changing the transparency starting or ending with transparency = 0.5
 paths:
   - 'regression_test_data/animations/transition/fade_part_src.json'
 ---
@@ -378,7 +378,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears changing the scale
+  - Image should appears and disappears changing the scale
 paths:
   - 'regression_test_data/animations/transition/scale_full_src.json'
 ---
@@ -388,7 +388,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears changing the scale starting or ending with scale = 0.75
+  - Image should appears and disappears changing the scale starting or ending with scale = 0.75
 paths:
   - 'regression_test_data/animations/transition/scale_part_src.json'
 ---
@@ -398,7 +398,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears sliding from under the top edge of the card
+  - Image should appears and disappears sliding from under the top edge of the card
 paths:
   - 'regression_test_data/animations/transition/slide_full_src.json'
 ---
@@ -408,7 +408,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears sliding from under the top edge of the card, but not reaching it
+  - Image should appears and disappears sliding from under the top edge of the card, but not reaching it
 paths:
   - 'regression_test_data/animations/transition/slide_part_src.json'
 ---
@@ -418,7 +418,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears and desapears changing trancparency and sliding from center to edge
+  - Image should appears and disappears changing transparency and sliding from center to edge
 paths:
   - 'regression_test_data/animations/transition/set_src.json'
 ---
@@ -428,7 +428,7 @@ steps:
   - Press button with text "GO"
   - After image appears press "GO BACK"
 expect:
-  - Image should appears from diffrent edges of card
+  - Image should appears from different edges of card
 paths:
   - 'regression_test_data/animations/transition/change_bounds_diff_ids_src.json'
 ---
@@ -469,7 +469,7 @@ steps:
  - Click on "SHOW COMMENTS"
  - After expanding of elements click on "COLLAPSE"
 expect:
- - Expanding end collapsing the elements shoud be with animation
+ - Expanding end collapsing the elements should be with animation
 paths:
   - 'regression_test_data/animations/article.json'
 ---
@@ -480,7 +480,7 @@ steps:
  - Click on "SHOW COMMENTS"
  - After expanding of elements click on "COLLAPSE"
 expect:
- - Expanding end collapsing the elements shoud be with animation
+ - Expanding end collapsing the elements should be with animation
 paths:
   - 'regression_test_data/animations/article_with_transitions.json'
 ---
@@ -489,7 +489,7 @@ tags: [ 'Animations' ]
 steps:
  - Click on "BLINK"
 expect:
- - Red sircle should appear and disappear
+ - Red circle should appear and disappear
 paths:
   - 'regression_test_data/animations/blink.json'
 ---
@@ -498,7 +498,7 @@ tags: [ 'Animations' ]
 steps:
  - A few seconds after the card is shown, a tooltip should appear
 expect:
- - Toolip hides a few seconds later
+ - Tooltip hides a few seconds later
 paths:
   - 'regression_test_data/animations/mute_notification.json'
 ---
@@ -514,7 +514,7 @@ paths:
 title: Change bounds transitions ignore start_delay
 tags: [ 'Animations' ]
 steps:
- - Click on notificattion
+ - Click on notification
 expect:
  - The text should disappear first, and the background after a short delay
 paths:
@@ -544,7 +544,7 @@ title: Inner state transition data change
 paths:
   - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
 ---
-title: Lottie animation restart repeate_mode. Repeate count = 5
+title: Lottie animation restart repeat_mode. Repeat count = 5
 tags: [ 'Animations', 'lottie' ]
 steps:
  - Spinner animation will continue 5 times and then stop
@@ -554,17 +554,17 @@ expect:
 paths:
  - 'regression_test_data/animations/lottie/spinner_restart_repeat_mode.json'
 ---
-title: Lottie animation revese repeate_mode. Repeate count = 3
+title: Lottie animation reverse repeat_mode. Repeat count = 3
 tags: [ 'Animations', 'lottie' ]
 steps:
- - Spinner change spin dirrection 3 times and then stops
+ - Spinner change spin direction 3 times and then stops
  - Нажать RESET
 expect:
- - Spinner change spin dirrection 3 times and then stops
+ - Spinner change spin direction 3 times and then stops
 paths:
  - 'regression_test_data/animations/lottie/spinner_reverse_repeat_mode.json'
 ---
-title: Lottie animation restart repeate_mode. Repeate count = -1
+title: Lottie animation restart repeat_mode. Repeat count = -1
 tags: [ 'Animations', 'lottie' ]
 expect:
   - Infinite spinner animation.
@@ -622,7 +622,7 @@ expect:
 paths:
   - 'regression_test_data/visibility_actions/swipe_div_pager.json'
 ---
-title: Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
+title: Send visibility_actions for first page in Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Check logs
@@ -643,7 +643,7 @@ expect:
   - First element logged, example
     Ya:PagerSelectedActionsTracker onPageSelected(0)
     Ya:PagerSelectedActionsTracker dispatch selected actions for page 0
-  - Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1)
+  - Second element logged, example logViewShown(cardId = ..., currentPageIndex = 1)
     Logcat
     Ya:PagerSelectedActionsTracker onPageSelected(1)
     DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
@@ -658,7 +658,7 @@ steps:
   - Check logs
 expect:
   - Tabs changes on swipe
-  - Logged item's visibility, exaple
+  - Logged item's visibility, example
     logViewShown(cardId = ..., id = content_item_show)
     logViewShown(cardId = ..., id = container)
 paths:
@@ -744,7 +744,7 @@ paths:
 title: Showing animation on image loaded
 tags: [ 'Animations' ]
 expect:
-  - Image appeares with described animation
+  - Image appears with described animation
 paths:
   - 'regression_test_data/action_animation/image_loading_animation.json'
 ---
@@ -756,7 +756,7 @@ steps:
   - Click on last button to reset
   - Scroll pager to the end, click on buttons, check the indicator
 expect:
-  - Indicator appearence changes and it changes according to the clicked buttin description
+  - Indicator appearance changes and it changes according to the clicked button description
 paths:
   - 'regression_test_data/variables/div_indicator.json'
 ---
@@ -850,8 +850,8 @@ steps:
   - Click "PRESS HERE"
   - Click "PRESS AGAIN"
 expect:
-  - After first click image appers with animation, the container extendes with animation.
-  - After second click extendes buton, text changes, container extendes again.
+  - After first click image appears with animation, the container extends with animation.
+  - After second click extends button, text changes, container extends again.
 paths:
   - 'regression_test_data/action_animation/nested_change_bounds.json'
 ---
@@ -885,7 +885,7 @@ expect:
   - On tap on 'pause' video pause
   - On tap on 'reset' video starts from the beginning
   - If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused
-  - If video wasn't paused, on tap on 'reset' the video starts playing from beginnging
+  - If video wasn't paused, on tap on 'reset' the video starts playing from beginning
 paths:
   - 'regression_test_data/video/video_controls.json'
 ---

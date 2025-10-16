@@ -2959,6 +2959,30 @@
       "file": "stored_value.json"
     },
     {
+      "title": "Persistent values lifetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Press 'Set stored value for 10 seconds'",
+        "Reopen this case in less than 10 seconds",
+        "Reopen this case after 10 seconds",
+        "Press 'Set stored value forever'",
+        "Reopen this case in less than 10 seconds",
+        "Reopen this case after 30 seconds"
+      ],
+      "expected_results": [
+        "When the case is opened for the first time, there should be the text '<undefined>'.",
+        "When the case is opened for the second time, there should be the text 'short-term value'.",
+        "When the case is opened for the third time, there should be the text '<undefined>'.",
+        "When the case is opened for the fourth time, there should be the text 'long-term value'.",
+        "When the case is opened for any subsequent time, there should be the text 'long-term value'."
+      ],
+      "file": "stored_value_lifetime.json"
+    },
+    {
       "title": "Persistent values storage with typed actions",
       "case_id": 206,
       "tags": [
