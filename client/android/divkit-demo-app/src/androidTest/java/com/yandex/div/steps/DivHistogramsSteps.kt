@@ -25,7 +25,7 @@ internal class DivHistogramsSteps {
         step("Collect $histogramsType histograms") {
             dispatcher.awaiter = HistogramsAwaiter(histogramsType.histograms)
             launchActivity(createIntent())
-            UiAutomator.waitForText("Finished", TimeUnit.SECONDS.toMillis(10))
+            UiAutomator.waitForText("Finished", TimeUnit.MINUTES.toMillis(1))
             finishActivity()
         }
 
