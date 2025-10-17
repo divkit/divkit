@@ -70,8 +70,6 @@ class CoilDivImageLoader private constructor(
 
     override fun hasSvgSupport() = true
 
-    override fun hasWebPSupport() = true
-
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
 
