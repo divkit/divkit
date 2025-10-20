@@ -1055,10 +1055,10 @@
                     on:change={onWeightChange}
                 >
                     <option value=""></option>
-                    <option value="light">Light</option>
-                    <option value="normal">Normal</option>
-                    <option value="medium">Medium</option>
-                    <option value="bold">Bold</option>
+                    <option value="light">{$l10nString('props.font_weight_light')}</option>
+                    <option value="regular">{$l10nString('props.font_weight_normal')}</option>
+                    <option value="medium">{$l10nString('props.font_weight_medium')}</option>
+                    <option value="bold">{$l10nString('props.font_weight_bold')}</option>
                 </select>
             </div>
             <!-- svelte-ignore a11y_consider_explicit_label -->

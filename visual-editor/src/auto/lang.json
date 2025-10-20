@@ -384,7 +384,7 @@
         "props.font_size_large": "Large",
         "props.font_weight": "Weight",
         "props.font_weight_light": "300 — Light",
-        "props.font_weight_normal": "400 — Normal",
+        "props.font_weight_normal": "400 — Regular",
         "props.font_weight_medium": "500 — Medium",
         "props.font_weight_bold": "700 — Bold",
         "props.font_family": "Font family",
