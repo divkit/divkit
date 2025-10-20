@@ -253,7 +253,6 @@ internal class DivTooltipController @VisibleForTesting constructor(
             popup.removeBackPressedCallback(tooltipData, accessibilityStateProvider)
         }
 
-        tooltips[divTooltip.id] = tooltipData
         val ticket = divPreloader.preload(div, resolver) { hasFailures ->
             if (!hasFailures && !tooltipData.dismissed && anchor.isAttachedToWindow
                     && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple)) {
@@ -286,7 +285,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 }
             }
         }
-        tooltips[divTooltip.id]?.ticket = ticket
+        tooltipData.ticket = ticket
+        tooltips[divTooltip.id] = tooltipData
     }
 
     private fun createOnBackPressCallback(divTooltip: DivTooltip, divView: Div2View) =
@@ -320,9 +320,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
     private fun stopVisibilityTracking(context: BindingContext, div: Div) {
         divVisibilityActionTracker.trackVisibilityActionsOf(context.divView, context.expressionResolver, null, div)
     }
+
+    fun captureCurrentTooltips(): Collection<TooltipData> {
+        return tooltips.values
+    }
 }
 
-private class TooltipData(
+internal class TooltipData(
     val id: String,
     val bindingContext: BindingContext,
     val div: Div,

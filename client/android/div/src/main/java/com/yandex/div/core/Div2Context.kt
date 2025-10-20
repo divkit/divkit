@@ -19,6 +19,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
+import com.yandex.div.core.tooltip.DivContextTooltipManager
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
@@ -67,6 +68,9 @@ class Div2Context @MainThread private constructor(
         set(value) {
             div2Component.divViewCreator.viewPreCreationProfile = value
         }
+
+    val tooltipManager: DivContextTooltipManager
+        get() = div2Component.tooltipManager
 
     private var inflater: LayoutInflater? = null
 
@@ -150,6 +154,7 @@ class Div2Context @MainThread private constructor(
     /**
      * @return `true` if at least one tooltip was cancelled, `false` otherwise.
      */
+    @Deprecated("Consider using div2context.tooltipManager.cancelAllTooltips()")
     fun cancelTooltips(): Boolean {
         return div2Component.tooltipController.cancelAllTooltips()
     }

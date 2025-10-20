@@ -256,6 +256,31 @@ class DivTooltipControllerTest {
         assertEquals(0 to 300, location(DivTooltip.Position.BOTTOM_LEFT))
     }
 
+    @Test
+    fun `tooltip not present at shown tooltips before restriction-check`() {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any())).doAnswer {
+            return@doAnswer underTest.captureCurrentTooltips().isEmpty()
+        }
+        prepareDiv()
+
+        underTest.showTooltip("tooltip_id", bindingContext)
+
+        verify(popupWindow).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
+        verify(tooltipShownCallback).onDivTooltipShown(div2View, anchor, tooltips[0])
+    }
+
+    @Test
+    fun `tooltip show restriction works`() {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any())).doReturn(false)
+        prepareDiv()
+
+        underTest.showTooltip("tooltip_id", bindingContext)
+
+        verify(popupWindow, never()).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
+        verify(tooltipShownCallback, never()).onDivTooltipShown(div2View, anchor, tooltips[0])
+        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
     private fun prepareDiv(duration: Long = 5000, offset: DivPoint? = null) {
         tooltips.add(
             DivTooltip(
