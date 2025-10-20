@@ -22,7 +22,7 @@ import org.junit.Test
     timeoutSeconds = 3000
 )
 class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
-    private var assets = arrayOf("div2-perf/benchmark-with-templates.json")
+    private var assets = arrayOf("perf_test_data/with_templates.json")
 
     @Before
     fun setUp() {

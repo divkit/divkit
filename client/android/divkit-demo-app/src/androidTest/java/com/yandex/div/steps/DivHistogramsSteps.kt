@@ -94,8 +94,8 @@ internal class HistogramsAwaiter(private val expectedHistograms: Set<String>) {
 
 private fun createIntent(): Intent {
     return Intent()
-        .putExtra(EXTRA_ASSET_NAME, "div2-perf/benchmark-with-templates.json")
-        .putExtra(EXTRA_REBIND_ASSET_NAME, "div2-perf/benchmark-with-templates.json")
+        .putExtra(EXTRA_ASSET_NAME, "perf_test_data/with_templates.json")
+        .putExtra(EXTRA_REBIND_ASSET_NAME, "perf_test_data/with_templates.json")
 }
 
 private val COLD_WARM_HISTOGRAMS = setOf(

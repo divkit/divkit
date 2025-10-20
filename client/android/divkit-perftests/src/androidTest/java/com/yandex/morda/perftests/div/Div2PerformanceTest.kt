@@ -28,6 +28,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
             "Div.Binding.Cold",
+            "Div.Binding.Warm",
             "Div.Parsing.Data.Cold",
             "Div.Parsing.Data.Warm",
             "Div.Parsing.JSON.Cold",
@@ -47,7 +48,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "div2-perf/benchmark-with-templates.json"
+                        assetName = "perf_test_data/with_templates.json"
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -81,8 +82,9 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
 
     @PerfTestParameter(
         importantMetrics = [
-            //"Div.Binding.Cold", // Generates unstable results at some perf-tests.
-            //"Div.Parsing.Data.Cold", // Generates unstable results at some perf-tests.
+            "Div.Binding.Cold",
+            "Div.Binding.Warm",
+            "Div.Parsing.Data.Cold",
             //"Div.Parsing.Data.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.JSON.Cold",
             //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
@@ -100,7 +102,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "div2-perf/benchmark-without-templates.json"
+                        assetName = "perf_test_data/without_templates.json"
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
