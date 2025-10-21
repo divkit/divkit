@@ -1,0 +1,167 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "block": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "text",
+          "font_size": 16,
+          "width": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "left": 12,
+            "right": 12,
+            "top": 12,
+            "bottom": 12
+          }
+        }
+      ],
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "layout_provider_sample",
+    "variables": [
+      {
+        "name": "block1_height",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "block1_width",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "block2_width",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Layout Provider"
+            },
+            {
+              "type": "subtitle",
+              "text": "Layout provider allows you to get the actual size of an element and store it in variables. This is useful for creating responsive layouts where one element's size depends on another.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "block",
+                  "background_color": "#00B341",
+                  "text": "This block has wrap_content height.\nIts actual size is stored in variables.",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{block1_height * 4}"
+                  },
+                  "layout_provider": {
+                    "height_variable_name": "block1_height",
+                    "width_variable_name": "block1_width"
+                  },
+                  "margins": {
+                    "bottom": 16
+                  }
+                },
+                {
+                  "type": "block",
+                  "background_color": "#0077FF",
+                  "text": "Height = first block's height\nWidth = wrap_content",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{block1_height}"
+                  },
+                  "layout_provider": {
+                    "width_variable_name": "block2_width"
+                  },
+                  "margins": {
+                    "bottom": 16
+                  }
+                },
+                {
+                  "type": "block",
+                  "background_color": "#FFCC00",
+                  "text": "Width = second block's width\nHeight = first block's width",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{block2_width}"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{block1_width}"
+                  },
+                  "margins": {
+                    "bottom": 16
+                  }
+                },
+                {
+                  "type": "subtitle",
+                  "text": "Variables:\n• block1_height = @{block1_height}\n• block1_width = @{block1_width}\n• block2_width = @{block2_width}",
+                  "paddings": {
+                    "left": 0,
+                    "right": 0,
+                    "top": 8
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
