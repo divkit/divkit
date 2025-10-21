@@ -18,6 +18,9 @@
 		0CE1B3552E04197A00677706 /* LottieExtensionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */; };
 		0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */; };
 		0CE65E942E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */; };
+		0CECADB32EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */; };
+		0CECADB72EA102A900B3E60A /* ImageBaseBlockStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */; };
+		0CECADB82EA10D7B00B3E60A /* libDivKitTestsSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */; };
 		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
@@ -312,6 +315,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0CECADB92EA10D7B00B3E60A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FE7D3032CF7526C00BAF071;
+			remoteInfo = DivKitTestsSupport;
+		};
 		8C81DF9828AE4B80009B17D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
@@ -389,6 +399,8 @@
 		0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieExtensionHandlerTests.swift; sourceTree = "<group>"; };
 		0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericViewBlockTests.swift; sourceTree = "<group>"; };
 		0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLResourceRequester.swift; sourceTree = "<group>"; };
+		0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioConstrainedSizeTests.swift; sourceTree = "<group>"; };
+		0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockStateTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = "xcode.lang.module-map"; };
 		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
@@ -756,6 +768,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CECADB82EA10D7B00B3E60A /* libDivKitTestsSupport.a in Frameworks */,
 				8CF329702875D64B003F799A /* LayoutKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1409,6 +1422,8 @@
 		8CF3293C2875D5C8003F799A /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
+				0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */,
+				0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */,
 				0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */,
 				0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */,
 				8CF329432875D5C8003F799A /* BlockTests+Layout.swift */,
@@ -1660,6 +1675,7 @@
 			);
 			dependencies = (
 				8CF3296E2875D645003F799A /* PBXTargetDependency */,
+				0CECADBA2EA10D7B00B3E60A /* PBXTargetDependency */,
 			);
 			name = LayoutKitTests;
 			packageProductDependencies = (
@@ -2179,6 +2195,7 @@
 				437B19D429C8A73300A4C467 /* MaskValidatorTests.swift in Sources */,
 				8CF3295D2875D5C8003F799A /* LayeredBlockLayoutTests.swift in Sources */,
 				8CF3294D2875D5C8003F799A /* GalleryViewLayoutTests.swift in Sources */,
+				0CECADB72EA102A900B3E60A /* ImageBaseBlockStateTests.swift in Sources */,
 				8C97EA2F2A5C167900EC0C3E /* TabInterimItemExtensionsTests.swift in Sources */,
 				8C97EA3A2A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift in Sources */,
 				8C97EA3D2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift in Sources */,
@@ -2189,6 +2206,7 @@
 				8CF329542875D5C8003F799A /* GalleryBlockTests.swift in Sources */,
 				65509D292A98EA9200F75699 /* PhoneMaskFormatterTests.swift in Sources */,
 				0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */,
+				0CECADB32EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift in Sources */,
 				8CF3294E2875D5C8003F799A /* TabContentsViewModelTests.swift in Sources */,
 				8CF32B7E2875E12F003F799A /* Utils.swift in Sources */,
 				8CF329582875D5C8003F799A /* GridBlockTests.swift in Sources */,
@@ -2239,6 +2257,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0CECADBA2EA10D7B00B3E60A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */;
+			targetProxy = 0CECADB92EA10D7B00B3E60A /* PBXContainerItemProxy */;
+		};
 		7E2DFAB12C7C7FD50095775C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 7E2DFAB02C7C7FD50095775C /* LayoutKit */;
@@ -2756,6 +2779,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -2771,6 +2795,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -2979,7 +3004,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -3044,7 +3069,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

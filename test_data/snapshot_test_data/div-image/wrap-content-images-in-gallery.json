@@ -1,0 +1,122 @@
+{
+  "description": "Tests div-image with wrap_content sizing and max constraints while preserving aspect ratio. Images with different aspect ratios (tall and wide) are displayed in both horizontal and vertical galleries. Each image has wrap_content for both width and height with max_size=200 for height and max_size=200 for width, ensuring the image scales down proportionally when exceeding constraints while maintaining its original aspect ratio.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "product_gallery_image": {
+      "type": "image",
+      "$image_url": "productImageRef",
+      "$actions": "productImagesActionsRef",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#00f"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      },
+      "height": {
+        "type": "wrap_content",
+        "max_size": {
+          "value": 200
+        },
+        "min_size": {
+          "value": 10
+        }
+      },
+      "id": "gallery_item",
+      "placeholder_color": "#00F",
+      "scale": "fit",
+      "width": {
+        "type": "wrap_content",
+        "max_size": {
+          "value": 200
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "gallery",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#F00"
+                }
+              ],
+              "height": {
+                "type": "wrap_content"
+              },
+              "id": "product_gallery_horizontal",
+              "item_spacing": 4,
+              "items": [
+                {
+                  "type": "product_gallery_image",
+                  "productImageRef": "https://yastatic.net/s3/home/divkit/chess_tall.png"
+                },
+                {
+                  "type": "product_gallery_image",
+                  "productImageRef": "https://yastatic.net/s3/home/divkit/chess_wide.png"
+                }
+              ],
+              "margins": {
+                "bottom": 16
+              },
+              "orientation": "horizontal",
+              "scroll_mode": "paging",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "gallery",
+              "orientation": "vertical",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#F00"
+                }
+              ],
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "id": "product_gallery_vertical",
+              "item_spacing": 4,
+              "items": [
+                {
+                  "type": "product_gallery_image",
+                  "productImageRef": "https://yastatic.net/s3/home/divkit/chess_tall.png"
+                },
+                {
+                  "type": "product_gallery_image",
+                  "productImageRef": "https://yastatic.net/s3/home/divkit/chess_wide.png"
+                }
+              ],
+              "margins": {
+                "bottom": 16
+              },
+              "scroll_mode": "paging"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

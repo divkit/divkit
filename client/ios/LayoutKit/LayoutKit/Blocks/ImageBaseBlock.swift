@@ -21,7 +21,13 @@ public struct ImageBaseBlockState: ElementState, Equatable {
   public let intrinsicContentSize: CGSize?
 
   public init(widthTrait: LayoutTrait, height: ImageBlockHeight, imageHolder: ImageHolder) {
-    let hasIntrinsicSize = widthTrait == .intrinsic || height == .trait(.intrinsic)
+    let hasIntrinsicSize = if case .intrinsic = widthTrait {
+      true
+    } else if case .trait(.intrinsic) = height {
+      true
+    } else {
+      false
+    }
     self.intrinsicContentSize = hasIntrinsicSize ? imageHolder.currentImageSize : nil
   }
 }
@@ -37,7 +43,14 @@ extension ImageBaseBlock {
       case let .trait(.fixed(height)):
         let aspectRatio = imageHolder.currentImageSize.aspectRatio ?? 0
         intrinsicWidth = aspectRatio * height
-      case .trait(.intrinsic), .trait(.weighted), .ratio:
+      case .trait(let .intrinsic(_, minHeight, maxHeight)):
+        let size = AspectRatioConstrainedSize.calculate(
+          imageSize: imageHolder.currentImageSize,
+          widthConstraints: (minWidth, maxWidth),
+          heightConstraints: (minHeight, maxHeight)
+        )
+        intrinsicWidth = size.width
+      case .trait(.weighted), .ratio:
         intrinsicWidth = imageHolder.currentImageSize.width
       }
 
@@ -52,15 +65,23 @@ extension ImageBaseBlock {
     case let .trait(.fixed(value)):
       return value
     case .trait(let .intrinsic(_, minHeight, maxHeight)):
-      let intrinsicHeight: CGFloat = switch widthTrait {
+      let intrinsicHeight: CGFloat
+      switch widthTrait {
       case let .fixed(width):
         if let aspectRatio = imageHolder.currentImageSize.aspectRatio {
-          width / aspectRatio
+          intrinsicHeight = width / aspectRatio
         } else {
-          0
+          intrinsicHeight = 0
         }
-      case .intrinsic, .weighted:
-        imageHolder.currentImageSize.height
+      case let .intrinsic(_, minWidth, maxWidth):
+        let size = AspectRatioConstrainedSize.calculate(
+          imageSize: imageHolder.currentImageSize,
+          widthConstraints: (minWidth, maxWidth),
+          heightConstraints: (minHeight, maxHeight)
+        )
+        intrinsicHeight = size.height
+      case .weighted:
+        intrinsicHeight = imageHolder.currentImageSize.height
       }
 
       return clamp(intrinsicHeight, min: minHeight, max: maxHeight)
