@@ -5,6 +5,7 @@ plugins {
 
 kotlin {
     jvmToolchain(17)
+
     compilerOptions {
         freeCompilerArgs.add("-Xjvm-default=all")
     }
@@ -23,6 +24,9 @@ tasks.test {
 }
 
 dependencies {
+    api(project(":core"))
+    api(project(":expression-dsl"))
+
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.reflect)
 

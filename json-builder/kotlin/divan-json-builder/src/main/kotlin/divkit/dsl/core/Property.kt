@@ -27,8 +27,10 @@ fun <T : Any> valueOrNull(value: T?): LiteralProperty<T>? = if (value != null)
 fun <T : Any> expression(expression: String): ExpressionProperty<T> =
     ExpressionProperty(expression)
 
-internal fun MutableMap<String, Any>.tryPutProperty(name: String, property: Property<out Any>?):
-        Unit {
+internal fun MutableMap<String, Any>.tryPutProperty(
+    name: String,
+    property: Property<out Any>?
+): Unit {
     if (property != null) {
         val exhaustive = when (property) {
             is LiteralProperty -> if (property.value is Boolean) {

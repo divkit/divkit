@@ -1,10 +1,9 @@
 [versions]
 kotlin = "2.2.10"
-
 detekt = "1.23.8"
-
 jackson = "2.16.0"
 jsonAssert = "1.5.1"
+junit5 = "5.11.4"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -20,6 +19,10 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 
 jsonAssert = { module = "org.skyscreamer:jsonassert", version.ref = "jsonAssert" }
+
+junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
 
 nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 

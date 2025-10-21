@@ -1,6 +1,7 @@
 package divkit.dsl.core
 
 import divkit.dsl.Color
+import divkit.dsl.color
 
 /**
  * Denotes an element of an arbitrary DivKit array.
@@ -44,4 +45,4 @@ internal fun ArrayElement<out Any>.serialize(): Any {
  * Creates [ArrayElement] around [Color] hex.
  */
 fun colorArrayElement(argb: String): ArrayElement<Color> =
-    LiteralArrayElement(Color(argb))
+    LiteralArrayElement(color(argb))
