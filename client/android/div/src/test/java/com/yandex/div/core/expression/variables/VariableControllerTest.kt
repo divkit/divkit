@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.json.expressions.ExpressionResolver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -102,6 +103,22 @@ class VariableControllerTest {
     @Test
     fun `resolving numeric variable`() {
         Assert.assertEquals(0, variableController.getMutableVariable("zero")!!.getValue())
+    }
+
+    @Test
+    fun `no duplicate setOnAnyVariableChangeCallbacks`() {
+        variableController.restoreSubscriptions()
+
+        var callCount = 0
+
+        variableController.setOnAnyVariableChangeCallback(ExpressionResolver.EMPTY) {
+            callCount++
+        }
+
+        val variable = Variable.StringVariable("test_var", "zero")
+        declareVariable(variable)
+
+        Assert.assertEquals(1, callCount)
     }
 
     private fun subscribe(

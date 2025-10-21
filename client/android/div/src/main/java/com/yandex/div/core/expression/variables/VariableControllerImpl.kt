@@ -15,7 +15,8 @@ internal class VariableControllerImpl(
     private val delegate: VariableController? = null,
 ): VariableController {
     private val variables = mutableMapOf<String, Variable>()
-    private val extraVariablesSources = mutableListOf<VariableSource>()
+    private val variableSources = mutableSetOf<VariableSource>()
+    private val activeVariableSources = mutableSetOf<VariableSource>()
     private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
     private val onRemoveObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
 
@@ -135,9 +136,11 @@ internal class VariableControllerImpl(
      * aka "adding references to global variables"
      */
     override fun addSource(source: VariableSource) {
-        source.observeVariables(notifyVariableChangedCallback)
-        source.observeDeclaration(declarationObserver)
-        extraVariablesSources.add(source)
+        if (activeVariableSources.add(source)) {
+            source.observeVariables(notifyVariableChangedCallback)
+            source.observeDeclaration(declarationObserver)
+            variableSources.add(source)
+        }
     }
 
     private fun onVariableDeclared(variable: Variable) {
@@ -165,7 +168,7 @@ internal class VariableControllerImpl(
             return it
         }
 
-        extraVariablesSources.forEach { source: VariableSource ->
+        variableSources.forEach { source: VariableSource ->
             source.getMutableVariable(name)?.let {
                 return it
             }
@@ -175,18 +178,22 @@ internal class VariableControllerImpl(
     }
 
     override fun cleanupSubscriptions() {
-        extraVariablesSources.forEach { variableSource ->
+        variableSources.forEach { variableSource ->
             variableSource.removeVariablesObserver(notifyVariableChangedCallback)
             variableSource.removeDeclarationObserver(declarationObserver)
+            activeVariableSources.remove(variableSource)
         }
         onAnyVariableChangeObservers.clear()
     }
 
     override fun restoreSubscriptions() {
-        extraVariablesSources.forEach { variableSource ->
-            variableSource.observeVariables(notifyVariableChangedCallback)
+        variableSources.forEach { variableSource ->
             variableSource.receiveVariablesUpdates(notifyVariableChangedCallback)
-            variableSource.observeDeclaration(declarationObserver)
+
+            if (activeVariableSources.add(variableSource)) {
+                variableSource.observeVariables(notifyVariableChangedCallback)
+                variableSource.observeDeclaration(declarationObserver)
+            }
         }
     }
 
