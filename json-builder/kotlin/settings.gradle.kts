@@ -13,7 +13,7 @@ plugins {
 }
 
 include(":core")
-include(":divan-json-builder")
+include(":divan-dsl")
 include(":expression-dsl")
 include(":expression-dsl-compat")
 include(":legacy-json-builder")

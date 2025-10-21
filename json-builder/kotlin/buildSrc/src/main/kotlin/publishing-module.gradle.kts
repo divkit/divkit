@@ -25,7 +25,7 @@ extra.apply {
     set("signing.secretKeyRingFile", rootProject.optProperty<String>("signing.secretKeyRingFile") ?: System.getenv("SIGNING_SECRET_KEY_RING_FILE"))
 }
 
-group = "com.yandex.div"
+group = "com.yandex.divkit.json-builder"
 version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {

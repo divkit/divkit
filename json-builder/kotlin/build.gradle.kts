@@ -4,11 +4,13 @@ plugins {
     id("divkit.convention.publishing-module")
 }
 
+group = "com.yandex.div"
+
 kotlin {
     jvmToolchain(17)
 }
 
 dependencies {
-    api(project(":divan-json-builder"))
+    api(project(":divan-dsl"))
     api(project(":legacy-json-builder"))
 }

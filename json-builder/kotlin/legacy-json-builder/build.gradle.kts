@@ -3,6 +3,8 @@ plugins {
     id("divkit.convention.publishing-module")
 }
 
+group = "com.yandex.div"
+
 kotlin {
     jvmToolchain(17)
 
