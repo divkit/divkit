@@ -2980,7 +2980,8 @@
         "When the case is opened for the fourth time, there should be the text 'long-term value'.",
         "When the case is opened for any subsequent time, there should be the text 'long-term value'."
       ],
-      "file": "stored_value_lifetime.json"
+      "file": "stored_value_lifetime.json",
+      "case_id": 483
     },
     {
       "title": "Persistent values storage with typed actions",
