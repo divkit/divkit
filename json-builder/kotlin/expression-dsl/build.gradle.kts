@@ -20,7 +20,6 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    testImplementation(libs.junit5.api)
-    testImplementation(libs.junit5.params)
-    testRuntimeOnly(libs.junit5.engine)
+    testRuntimeOnly(libs.bundles.junit.runtime)
+    testImplementation(libs.bundles.junit.jupiter)
 }

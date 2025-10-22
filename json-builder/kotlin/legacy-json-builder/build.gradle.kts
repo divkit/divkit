@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
 
-    testImplementation(kotlin("test"))
+    testRuntimeOnly(libs.bundles.junit.runtime)
+    testImplementation(libs.bundles.junit.jupiter)
     testImplementation(libs.jsonAssert)
 }

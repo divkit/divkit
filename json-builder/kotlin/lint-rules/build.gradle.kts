@@ -18,7 +18,8 @@ tasks.test {
 dependencies {
     compileOnly(libs.detekt.api)
 
-    testImplementation(kotlin("test"))
+    testRuntimeOnly(libs.bundles.junit.runtime)
+    testImplementation(libs.bundles.junit.jupiter)
     testImplementation(libs.assertj.core)
     testImplementation(libs.detekt.test)
 }

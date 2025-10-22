@@ -7,6 +7,7 @@ import divkit.dsl.scope.DivScope
  * Uses factory to create instance
  * if supplement is missing in [DivScope].
  */
+@Suppress("UNCHECKED_CAST")
 fun <T : Supplement> DivScope.supplement(
     key: SupplementKey<T>,
     factory: () -> T
