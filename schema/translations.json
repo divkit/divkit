@@ -1584,8 +1584,8 @@
     "ru": "Ввод данных с клавиатуры."
   },
   "div_layout_provider": {
-    "en": "Provides data on the actual size of the element. Allows you to capture the rendered dimensions and store them in variables for use in responsive layouts. See the [Layout Provider](../../layout.md#layout-provider) section for detailed information.",
-    "ru": "Предоставляет данные о реальном размере элемента. Позволяет получить отрисованные размеры и сохранить их в переменные для использования в адаптивных макетах. См. раздел [Layout Provider](../../layout.md#layout-provider) для подробной информации."
+    "en": "Provides data on the actual size of the element.",
+    "ru": "Предоставляет данные о реальном размере элемента."
   },
   "div_layout_provider_height_variable_name": {
     "en": "Name of the variable that stores the element’s height.",
