@@ -13,10 +13,23 @@ internal class DivTextRangesBackgroundHelper(
     val resolver: ExpressionResolver,
 ) {
 
-    private var spans = ArrayList<DivBackgroundSpan>()
-    internal fun invalidateSpansCache() = spans.clear()
-    internal fun addBackgroundSpan(span: DivBackgroundSpan) = spans.add(span)
-    internal fun hasBackgroundSpan(): Boolean = spans.isNotEmpty()
+    private val spans = ArrayList<DivBackgroundSpan>()
+    private val ellipsisSpans = ArrayList<DivBackgroundSpan>()
+    internal fun invalidateSpansCache(inEllipsis: Boolean) {
+        if (inEllipsis) {
+            ellipsisSpans.clear()
+        } else {
+            spans.clear()
+        }
+    }
+    internal fun addBackgroundSpan(span: DivBackgroundSpan, inEllipsis: Boolean) {
+        if (inEllipsis) {
+            ellipsisSpans.add(span)
+        } else {
+            spans.add(span)
+        }
+    }
+    internal fun hasBackgroundSpan(): Boolean = spans.isNotEmpty() || ellipsisSpans.isNotEmpty()
     internal fun hasSameSpan(text: CharSequence, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
         val spannedText = text as? Spannable ?: return false
         return spans.any { span ->
@@ -47,26 +60,29 @@ internal class DivTextRangesBackgroundHelper(
     }
 
     fun draw(canvas: Canvas, text: Spanned, layout: Layout) {
-        spans.forEach { span ->
-            val spanStart = text.getSpanStart(span)
-            val spanEnd = text.getSpanEnd(span)
-            val startLine = layout.getLineForOffset(spanStart)
-            val endLine = layout.getLineForOffset(spanEnd)
+        spans.forEach { applySpan(it, canvas, text, layout) }
+        ellipsisSpans.forEach { applySpan(it, canvas, text, layout) }
+    }
 
-            val startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
-            val endOffset = layout.getPrimaryHorizontal(spanEnd).toInt()
+    private fun applySpan(span: DivBackgroundSpan, canvas: Canvas, text: Spanned, layout: Layout) {
+        val spanStart = text.getSpanStart(span)
+        val spanEnd = text.getSpanEnd(span)
+        val startLine = layout.getLineForOffset(spanStart)
+        val endLine = layout.getLineForOffset(spanEnd)
 
-            when (span.background) {
-                is DivTextRangeBackground.Cloud -> {
-                    cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
-                        span.border, span.background)
-                }
+        val startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
+        val endOffset = layout.getPrimaryHorizontal(spanEnd).toInt()
 
-                else -> {
-                    val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
-                    renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
-                        span.border, span.background)
-                }
+        when (span.background) {
+            is DivTextRangeBackground.Cloud -> {
+                cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
+                    span.border, span.background)
+            }
+
+            else -> {
+                val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
+                renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
+                    span.border, span.background)
             }
         }
     }

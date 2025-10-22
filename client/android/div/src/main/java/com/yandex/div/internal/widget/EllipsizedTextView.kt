@@ -110,7 +110,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
     }
 
     override fun getText(): CharSequence {
-        return originalText ?: ""
+        return ellipsizedText ?: originalText ?: ""
     }
 
     private fun setTextInternal(text: CharSequence?) {

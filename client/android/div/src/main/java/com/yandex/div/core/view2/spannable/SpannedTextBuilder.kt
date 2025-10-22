@@ -112,7 +112,9 @@ internal class SpannedTextBuilder @Inject constructor(
             ellipsis.ranges,
             ellipsis.images,
             ellipsis.actions,
-            textConsumer)
+            textConsumer,
+            inEllipsis = true
+        )
     }
 
     private fun buildText(
@@ -123,7 +125,8 @@ internal class SpannedTextBuilder @Inject constructor(
         ranges: List<DivText.Range>?,
         images: List<DivText.Image>?,
         actions: List<DivAction>?,
-        textConsumer: TextConsumer? = null
+        textConsumer: TextConsumer? = null,
+        inEllipsis: Boolean = false,
     ): Spanned {
         val context = textView.context
         val divView = bindingContext.divView
@@ -142,7 +145,7 @@ internal class SpannedTextBuilder @Inject constructor(
 
         (textView as? DivLineHeightTextView)?.apply {
             clearImageSpans()
-            textRoundedBgHelper?.invalidateSpansCache()
+            textRoundedBgHelper?.invalidateSpansCache(inEllipsis)
         }
 
         spans.forEach { span ->
@@ -160,7 +163,16 @@ internal class SpannedTextBuilder @Inject constructor(
                 val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
                 val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
                 addActionSpan(bindingContext, textView, spannedText, start, end, range.actions)
-                addDecorationSpan(bindingContext, textView, spannedText, start, end, range.border, range.background)
+                addDecorationSpan(
+                    bindingContext,
+                    textView,
+                    spannedText,
+                    start,
+                    end,
+                    range.border,
+                    range.background,
+                    inEllipsis
+                )
             }
         }
 
@@ -467,7 +479,8 @@ internal class SpannedTextBuilder @Inject constructor(
         start: Int,
         end: Int,
         border: DivTextRangeBorder?,
-        background: DivTextRangeBackground?
+        background: DivTextRangeBackground?,
+        inEllipsis: Boolean,
     ) {
         if (border == null && background == null) return
 
@@ -476,7 +489,7 @@ internal class SpannedTextBuilder @Inject constructor(
         if (textView is DivLineHeightTextView &&
             !textView.hasBackgroundSpan(spannedText, backgroundSpan, start, end, resolver)) {
             spannedText.setSpan(backgroundSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            textView.textRoundedBgHelper?.addBackgroundSpan(backgroundSpan)
+            textView.textRoundedBgHelper?.addBackgroundSpan(backgroundSpan, inEllipsis)
         }
     }
 
