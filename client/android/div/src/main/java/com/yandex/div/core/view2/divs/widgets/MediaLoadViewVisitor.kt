@@ -1,8 +1,10 @@
 package com.yandex.div.core.view2.divs.widgets
 
+import android.view.View
 import androidx.core.view.children
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
+import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivGifImageBinder
 import com.yandex.div.core.view2.divs.DivImageBinder
@@ -17,6 +19,7 @@ internal class MediaLoadViewVisitor @Inject constructor(
     private val gifImageBinder: DivGifImageBinder,
     private val videoBinder: DivVideoBinder,
     private val errorCollectors: ErrorCollectors,
+    private val extensionController: DivExtensionController,
 ) : DivViewVisitor() {
 
     fun loadMedia(divView: Div2View) {
@@ -25,22 +28,38 @@ internal class MediaLoadViewVisitor @Inject constructor(
 
     override fun visit(view: DivImageView) {
         val bindingContext = view.bindingContext ?: return
-        val div = view.div ?: return
-        val errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
-        imageBinder.loadImage(view, bindingContext, div.value, errorCollector)
+        val div = view.div?.value ?: return
+        val divView = bindingContext.divView
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        imageBinder.loadImage(view, bindingContext, div, errorCollector)
+        extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
     }
 
     override fun visit(view: DivGifImageView) {
         val bindingContext = view.bindingContext ?: return
-        val div = view.div ?: return
-        val errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
-        gifImageBinder.loadGifImage(view, bindingContext, div.value, errorCollector)
+        val div = view.div?.value ?: return
+        val divView = bindingContext.divView
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        gifImageBinder.loadGifImage(view, bindingContext, div, errorCollector)
+        extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
     }
 
     override fun visit(view: DivVideoView) {
         val bindingContext = view.bindingContext ?: return
-        val div = view.div ?: return
+        val div = view.div?.value ?: return
         val path = view.path ?: return
-        videoBinder.loadVideo(view, bindingContext, div.value, path)
+        videoBinder.loadVideo(view, bindingContext, div, path)
+        extensionController.loadMedia(bindingContext.divView, bindingContext.expressionResolver, view, div)
+    }
+
+    override fun defaultVisit(view: DivHolderView<*>) {
+        val bindingContext = view.bindingContext ?: return
+        val div = view.div ?: return
+        extensionController.loadMedia(
+            bindingContext.divView,
+            bindingContext.expressionResolver,
+            view as View,
+            div.value()
+        )
     }
 }

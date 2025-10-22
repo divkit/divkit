@@ -16,4 +16,8 @@ interface DivExtensionHandler {
     fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase)
 
     fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase)
+
+    fun loadMedia(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) = Unit
+
+    fun releaseMedia(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) = Unit
 }

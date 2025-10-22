@@ -58,6 +58,24 @@ internal class DivExtensionController @Inject constructor(
         }
     }
 
+    fun loadMedia(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
+        if (!hasExtensions(div)) return
+        extensionHandlers.forEach { handler ->
+            if (handler.matches(div)) {
+                handler.loadMedia(divView, resolver, view, div)
+            }
+        }
+    }
+
+    fun releaseMedia(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
+        if (!hasExtensions(div)) return
+        extensionHandlers.forEach { handler ->
+            if (handler.matches(div)) {
+                handler.releaseMedia(divView, resolver, view, div)
+            }
+        }
+    }
+
     private fun hasExtensions(div: DivBase): Boolean {
         return !div.extensions.isNullOrEmpty() && extensionHandlers.isNotEmpty()
     }

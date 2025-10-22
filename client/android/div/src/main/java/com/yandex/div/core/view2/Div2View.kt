@@ -275,6 +275,7 @@ class Div2View private constructor(
     private val viewCreateCallType: String = div2Component.divCreationTracker.viewCreateCallType
 
     private var drawWasSkipped = true
+    private var mediaWasReleased = false
 
     internal val divTransitionHandler = DivTransitionHandler(this)
 
@@ -369,6 +370,7 @@ class Div2View private constructor(
             return false
         } else if (divData === data) {
             reporter.onBindingFatalSameData()
+            loadMedia()
             return false
         }
         notifyBindStarted()
@@ -680,9 +682,15 @@ class Div2View private constructor(
         return canBeReplaced
     }
 
-    fun loadMedia() = mediaLoadViewVisitor.loadMedia(this)
+    fun loadMedia() {
+        if (mediaWasReleased) {
+            mediaWasReleased = false
+            mediaLoadViewVisitor.loadMedia(this)
+        }
+    }
 
     fun releaseMedia() {
+        mediaWasReleased = true
         cancelImageLoads()
         releaseMedia(this)
     }
