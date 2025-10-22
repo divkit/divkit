@@ -1,6 +1,6 @@
-package com.yandex.div.multiplatform
+package com.yandex.divkit.multiplatform
 
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
 
 actual fun makeDivKitFactory(
     dependencies: DivKitDependencies

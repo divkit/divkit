@@ -18,7 +18,7 @@ val bucketUsername: String? by rootProject.extra
 val bucketPassword: String? by rootProject.extra
 val publishToBucket: Boolean by rootProject.extra
 
-group = "com.yandex.div"
+group = "com.yandex.divkit.multiplatform"
 version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {

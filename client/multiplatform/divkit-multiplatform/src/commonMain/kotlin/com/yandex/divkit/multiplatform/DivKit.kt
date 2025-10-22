@@ -1,8 +1,8 @@
-package com.yandex.div.multiplatform
+package com.yandex.divkit.multiplatform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
 
 interface DivKitFactory {
     @Composable

@@ -1,4 +1,4 @@
-package com.yandex.div.multiplatform
+package com.yandex.divkit.multiplatform
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner

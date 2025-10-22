@@ -1,4 +1,4 @@
-package com.yandex.div.multiplatform
+package com.yandex.divkit.multiplatform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,9 +7,9 @@ import androidx.compose.ui.viewinterop.UIKitView
 import cocoapods.DivKitKMP.DivKitKMPFacade
 import cocoapods.DivKitKMP.DivKitKMPActionHandlerProtocol
 import cocoapods.DivKitKMP.DivKitKMPErrorReporterProtocol
-import com.yandex.div.multiplatform.dependencies.ActionHandler
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
-import com.yandex.div.multiplatform.dependencies.ErrorReporter
+import com.yandex.divkit.multiplatform.dependencies.ActionHandler
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.darwin.NSObject
 

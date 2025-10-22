@@ -1,4 +1,4 @@
-package com.yandex.div.multiplatform
+package com.yandex.divkit.multiplatform
 
 import android.net.Uri
 import android.view.ContextThemeWrapper
@@ -19,9 +19,9 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import com.yandex.div.multiplatform.dependencies.ActionHandler
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
-import com.yandex.div.multiplatform.dependencies.ErrorReporter
+import com.yandex.divkit.multiplatform.dependencies.ActionHandler
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception

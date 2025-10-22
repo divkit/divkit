@@ -21,7 +21,7 @@ val bucketUsername: String? by extra(optProperty<String>("bucketUsername") ?: Sy
 val bucketPassword: String? by extra(optProperty<String>("bucketPassword") ?: System.getenv("BUCKET_PASSWORD"))
 val publishToBucket: Boolean by extra(bucketUsername != null && bucketPassword != null)
 
-group = "com.yandex.div"
+group = "com.yandex.divkit.multiplatform"
 version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {

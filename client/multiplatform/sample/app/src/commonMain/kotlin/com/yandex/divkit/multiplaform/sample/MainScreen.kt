@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
-import com.yandex.div.multiplatform.DivKitFactory
-import com.yandex.div.multiplatform.dependencies.ActionHandler
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
-import com.yandex.div.multiplatform.dependencies.ErrorReporter
-import com.yandex.div.multiplatform.makeDivKitFactory
+import com.yandex.divkit.multiplatform.DivKitFactory
+import com.yandex.divkit.multiplatform.dependencies.ActionHandler
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
+import com.yandex.divkit.multiplatform.makeDivKitFactory
 
 @Composable
 internal fun MainScreen() {

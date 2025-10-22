@@ -1,4 +1,4 @@
-package com.yandex.div.multiplatform.dependencies
+package com.yandex.divkit.multiplatform.dependencies
 
 data class DivKitDependencies(
     val actionHandler: ActionHandler? = null,

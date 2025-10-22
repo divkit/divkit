@@ -70,11 +70,11 @@ Common code:
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.multiplatform.DivKitFactory
-import com.yandex.div.multiplatform.makeDivKitFactory
-import com.yandex.div.multiplatform.dependencies.ActionHandler
-import com.yandex.div.multiplatform.dependencies.DivKitDependencies
-import com.yandex.div.multiplatform.dependencies.ErrorReporter
+import com.yandex.divkit.multiplatform.DivKitFactory
+import com.yandex.divkit.multiplatform.makeDivKitFactory
+import com.yandex.divkit.multiplatform.dependencies.ActionHandler
+import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
+import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
 
 val factory: DivKitFactory = makeDivKitFactory(
     dependencies = DivKitDependencies(
