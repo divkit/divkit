@@ -19,7 +19,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
-import com.yandex.div.core.tooltip.DivContextTooltipManager
+import com.yandex.div.core.tooltip.DivTooltipManager
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
@@ -69,7 +69,7 @@ class Div2Context @MainThread private constructor(
             div2Component.divViewCreator.viewPreCreationProfile = value
         }
 
-    val tooltipManager: DivContextTooltipManager
+    val tooltipManager: DivTooltipManager
         get() = div2Component.tooltipManager
 
     private var inflater: LayoutInflater? = null
