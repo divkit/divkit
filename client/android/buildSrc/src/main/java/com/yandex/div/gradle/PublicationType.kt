@@ -21,6 +21,16 @@ enum class PublicationType {
         }
     },
 
+    nightly {
+        override fun getVersionSuffix() = "-${VERSION_DATE_FORMAT.format(Date())}-NIGHTLY"
+        override fun configureForProject(project: Project) {
+            project.tasks.withType(AbstractPublishToMaven::class.java).configureEach { task ->
+                task.notCompatibleWithConfigurationCache("Snapshot publication type is not compatible " +
+                    "with configuration cache as it uses build start timestamp")
+            }
+        }
+    },
+
     release {
         override fun getVersionSuffix() = ""
         override fun configureForProject(project: Project) = Unit
