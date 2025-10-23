@@ -154,7 +154,13 @@ class DivVariableController(
                     pendingDeclaration.remove(variable.name)
                     newDeclaredVariables.add(variable)
                 }
-                this.variables[variable.name]?.let { existing ->
+
+                val existingVariable = this.variables[variable.name]
+                if (existingVariable == variable) {
+                    return@forEach
+                }
+
+                existingVariable?.let { existing ->
                     existing.setValue(from = variable)
                     variable.addObserver { existing.setValue(from = it) }
                     return@forEach

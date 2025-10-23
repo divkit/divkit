@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -284,6 +285,28 @@ class DivVariableControllerTest {
             underTest.putOrUpdate(doubleVariable)
             Assert.fail()
         } catch (e: VariableMutationException) { }
+    }
+
+    @Test
+    fun `declaring a variable and putting the same variable`() {
+        var count = 0
+        val strVariable = mock<Variable.StringVariable> {
+            on { name } doReturn "str_original"
+            on { addObserver(any()) } doAnswer {
+                count++
+                Unit
+            }
+        }
+
+        strVariable.addObserver {  }
+
+        underTest.declare(strVariable)
+        underTest.putOrUpdate(strVariable)
+        underTest.putOrUpdate(strVariable)
+
+        strVariable.set("new_val")
+
+        Assert.assertEquals(1, count)
     }
 
     private fun evaluateExpression(div2View: Div2View, expression: String): Any {
