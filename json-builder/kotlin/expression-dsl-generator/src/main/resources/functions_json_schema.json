@@ -1,0 +1,95 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": true,
+    "definitions": {
+        "Signatures": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Signature"
+            }
+        },
+        "Signature": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "function_name": {
+                    "type": "string"
+                },
+                "doc": {
+                    "type": "string"
+                },
+                "arguments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Argument"
+                    }
+                },
+                "result_type": {
+                    "$ref": "#/definitions/Type"
+                },
+                "platforms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Platform"
+                    }
+                }
+            },
+            "required": [
+                "function_name",
+                "result_type",
+                "platforms"
+            ]
+        },
+        "Argument": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/Type"
+                },
+                "doc": {
+                    "type": "string"
+                },
+                "vararg": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type"
+            ]
+        },
+        "Type": {
+            "enum": [
+                "integer",
+                "boolean",
+                "string",
+                "number",
+                "color",
+                "datetime",
+                "array",
+                "url",
+                "dict"
+            ]
+        },
+        "Platform": {
+            "enum": [
+                "android",
+                "ios",
+                "web",
+                "flutter"
+            ]
+        }
+    },
+    "properties": {
+        "signatures": {
+            "$ref": "#/definitions/Signatures"
+        }
+    },
+    "required": [
+        "signatures"
+    ]
+}

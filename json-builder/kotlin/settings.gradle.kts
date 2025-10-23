@@ -12,6 +12,8 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
 }
 
+includeBuild("expression-dsl-generator")
+
 include(":core")
 include(":divan-dsl")
 include(":expression-dsl")
