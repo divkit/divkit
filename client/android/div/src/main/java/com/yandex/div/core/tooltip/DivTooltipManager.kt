@@ -1,13 +1,15 @@
 package com.yandex.div.core.tooltip
 
 import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.dagger.DivScope
 import javax.inject.Inject
 
 /**
  * Used to help handling all tooltips inside [com.yandex.div.core.Div2Context].
  */
+@DivScope
 @PublicApi
-class DivContextTooltipManager @Inject internal constructor(
+class DivTooltipManager @Inject internal constructor(
     private val tooltipController: DivTooltipController,
 ) {
     /**

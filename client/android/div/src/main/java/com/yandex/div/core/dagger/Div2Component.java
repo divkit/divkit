@@ -33,7 +33,7 @@ import com.yandex.div.core.state.DivStateManager;
 import com.yandex.div.core.state.TabsStateCache;
 import com.yandex.div.core.state.TemporaryDivStateCache;
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
-import com.yandex.div.core.tooltip.DivContextTooltipManager;
+import com.yandex.div.core.tooltip.DivTooltipManager;
 import com.yandex.div.core.tooltip.DivTooltipController;
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper;
 import com.yandex.div.core.view2.Div2Builder;
@@ -200,7 +200,7 @@ public interface Div2Component {
     DivViewDataPreloader getDivViewDataPreloader();
 
     @NonNull
-    DivContextTooltipManager getTooltipManager();
+    DivTooltipManager getTooltipManager();
 
     /**
      * Builder for Div2Component
