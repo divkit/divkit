@@ -1,3 +1,15 @@
+## 32.23.0
+
+# Android Client:
+* Add Div2Context.tooltipManager service for aquiring state of current tooltips.
+* Fixed background and border drawing in text ranges when custom ellipsis is defined.
+* Fixed memory leak in DivVariableController by preventing duplicate declarationObserver subscriptions when variable sources are added or restored.
+
+# iOS Client:
+* Fixed an issue where some masked div-input views could display text from other div-input views.
+* Fixed intrinsic size calculation for images with `wrap_content` sizing and constraints.
+
+
 ## 32.22.0
 
 # Android Client:
