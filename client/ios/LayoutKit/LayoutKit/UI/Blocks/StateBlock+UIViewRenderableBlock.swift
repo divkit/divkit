@@ -213,7 +213,7 @@ private final class StateBlockView: BlockView {
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
     } else {
-      if viewsToRemove.isEmpty {
+      if viewsToRemove.isEmpty, !viewsToAdd.isEmpty {
         removeViewsWithUnfinishedAnimations()
       }
       forceLayout()
