@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
@@ -244,7 +246,13 @@ internal class DivBaseBinder @Inject constructor(
             true
         }
         divView.clearVariablesListener = clearVariablesListener
-        divView.viewTreeObserver.addOnPreDrawListener(clearVariablesListener)
+
+        divView.apply {
+            doOnAttach {
+                viewTreeObserver.addOnPreDrawListener(clearVariablesListener)
+                doOnDetach { viewTreeObserver.removeOnPreDrawListener(clearVariablesListener) }
+            }
+        }
     }
 
     private fun updateSizeVariable(
