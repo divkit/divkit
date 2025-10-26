@@ -41,7 +41,7 @@
     import Actionable from '../utilities/Actionable.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
     import EnabledContext from '../utilities/EnabledContext.svelte';
-  import type { WrapContentSize } from '../../types/sizes';
+    import type { WrapContentSize } from '../../types/sizes';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -104,6 +104,17 @@
     let selectedTabStyles: Record<string, string> | undefined;
     let prevContext: ComponentContext<DivTabsData> | undefined;
 
+    let devapi = process.env.DEVTOOL ? {
+        devapi: {
+            getState() {
+                return selected;
+            },
+            setState(id: number) {
+                return setSelected(id, false, true);
+            }
+        }
+    } : undefined;
+
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
@@ -126,6 +137,8 @@
         animationType = 'slide';
         animationDuration = 300;
         selectedTabStyles = undefined;
+
+        updateSlideAnimation();
     }
 
     $: if (origJson) {
@@ -491,16 +504,24 @@
             Math.min(items.length - 1, selected + 1) :
             Math.max(selected, previousSelected ?? selected);
 
-        showedPanels.forEach(componentContext => {
-            componentContext?.destroy();
-        });
+        if (!(rootCtx.devtoolCreateHierarchy === 'eager' && process.env.DEVTOOL)) {
+            showedPanels.forEach(componentContext => {
+                componentContext?.destroy();
+            });
+        }
 
         showedPanels = showedPanels.map((context, index) => {
             if (context) {
                 return context;
             }
             const div = items[index]?.div;
-            if (index >= start && index <= end && div) {
+            if (
+                (
+                    index >= start && index <= end ||
+                    rootCtx.devtoolCreateHierarchy === 'eager' && process.env.DEVTOOL
+                ) &&
+                div
+            ) {
                 return componentContext.produceChildContext(div, {
                     path: index
                 });
@@ -755,6 +776,10 @@
 
     onMount(() => {
         updateSlideAnimation();
+
+        if (rootCtx.devtoolCreateHierarchy === 'eager' && process.env.DEVTOOL) {
+            setSelected(selected, false, false);
+        }
     });
 
     onDestroy(() => {
@@ -782,6 +807,7 @@
         parentOf={parentOfItems}
         parentOfSimpleMode={true}
         {replaceItems}
+        {...devapi}
     >
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <div

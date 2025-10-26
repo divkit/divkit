@@ -24,7 +24,7 @@
     import VideoSourcesDialog from './lib/components/prop-dialog/VideoSourcesDialog.svelte';
     import type { State } from './lib/data/state';
     import SelectOptionsDialog from './lib/components/prop-dialog/SelectOptionsDialog.svelte';
-  import ItemsListDialog from './lib/components/prop-dialog/ItemsListDialog.svelte';
+    import ItemsListDialog from './lib/components/prop-dialog/ItemsListDialog.svelte';
 
     export let state: State;
 

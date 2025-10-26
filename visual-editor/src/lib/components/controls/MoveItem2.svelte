@@ -9,6 +9,7 @@
     export let isReoderInProgress = false;
     export let canBeMoved = true;
     export let readOnly = false;
+    export let additionalProps: Record<string, unknown> | undefined = undefined;
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -36,6 +37,7 @@
         <svelte:component
             this={itemView}
             bind:value={value}
+            {...additionalProps}
             on:change
         />
     </div>

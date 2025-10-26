@@ -1,9 +1,10 @@
 <script lang="ts">
     import { createEventDispatcher, getContext, onDestroy } from 'svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
-    import type { Item } from '../../utils/items';
+    import type { Item, ItemStates, ItemTabs } from '../../utils/items';
 
     export let value: Item;
+    export let subtype: 'state' | 'tabs';
 
     const { state, itemsListDialog } = getContext<AppContext>(APP_CTX);
     const { readOnly } = state;
@@ -11,10 +12,12 @@
     const dispatch = createEventDispatcher();
 
     let elem: HTMLElement;
-    let stateId = '';
+    let text = '';
 
     function updateVal(value: Item): void {
-        stateId = value.state_id || '';
+        text = (subtype === 'state' ?
+            (value as ItemStates).state_id :
+            (value as ItemTabs).title) || '';
     }
 
     $: updateVal(value);
@@ -24,6 +27,7 @@
             value,
             target: elem,
             readOnly: $readOnly,
+            subtype,
             callback(newValue) {
                 value = newValue;
                 dispatch('change');
@@ -45,7 +49,7 @@
     <div
         class="items-list-item__id"
     >
-        {stateId}
+        {text}
     </div>
 </button>
 

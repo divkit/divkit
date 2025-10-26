@@ -42,6 +42,7 @@
     import { getRotationFromMatrix } from '../utils/getRotationFromMatrix';
     import { rectAngleIntersection } from '../utils/rectAngleIntersection';
     import { CHESS_EMPTY_IMAGE, DIVKIT_EMPY_IMAGE, EMPTY_IMAGE } from '../data/doc';
+    import Select from './Select.svelte';
 
     export let viewport: string;
     export let theme: 'light' | 'dark';
@@ -193,7 +194,11 @@
         emptyFileType: string;
         state?: {
             selected: string;
-            total: number;
+            selectedValue: string;
+            list: {
+                text: string;
+                value: string;
+            }[];
         };
         insets?: string;
         gradientAngle?: string;
@@ -356,9 +361,29 @@
                             Array.isArray(processedJson.states) &&
                             processedJson.states.length
                         ) {
+                            const val = $selectedLeaf?.props.devapi.getState();
                             state = {
-                                selected: $selectedLeaf?.props.devapi.getState(),
-                                total: processedJson.states.length
+                                selected: val,
+                                selectedValue: val,
+                                list: processedJson.states.map(it => ({
+                                    text: it.state_id || '<untitled>',
+                                    value: it.state_id
+                                }))
+                            };
+                        } else if (
+                            processedJson.type === 'tabs' &&
+                            $selectedLeaf?.props.devapi &&
+                            Array.isArray(processedJson.items) &&
+                            processedJson.items.length
+                        ) {
+                            const val = $selectedLeaf?.props.devapi.getState();
+                            state = {
+                                selected: processedJson.items[val]?.title || '<untitled>',
+                                selectedValue: val,
+                                list: processedJson.items.map((it, index) => ({
+                                    text: it.title || '<untitled>',
+                                    value: index
+                                }))
                             };
                         }
                     }
@@ -1375,7 +1400,7 @@
             (
                 event.target.matches('.renderer__divkit-gallery > div:not(:first-child) *') ||
                 event.target.matches('.renderer__divkit-pager > div:not(:first-child) *') ||
-                event.target.matches('.renderer__divkit-tabs > div:first-child > span')
+                event.target.matches('.renderer__divkit-tabs > div:first-child > div:nth-child(3) > button')
             )
         ) {
             return;
@@ -3176,25 +3201,35 @@
     function selectOffsetState(offset: number): void {
         const devapi = $selectedLeaf?.props?.devapi;
         const processedJson = $selectedLeaf?.props?.processedJson;
-        if (!devapi || !processedJson || !Array.isArray(processedJson.states)) {
+        let items;
+        if (processedJson?.type === 'state') {
+            items = processedJson.states;
+        } else if (processedJson?.type === 'tabs') {
+            items = processedJson.items;
+        }
+        if (!devapi || !processedJson || !Array.isArray(items)) {
             return;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let index = processedJson.states.findIndex((it: any) => it.state_id === devapi.getState());
+        let index = processedJson.type === 'state' ?
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            items.findIndex((it: any) => it.state_id === devapi.getState()) :
+            devapi.getState();
         if (index < 0) {
             index = 0;
         } else {
             index += offset;
-            if (index >= processedJson.states.length) {
+            if (index >= items.length) {
                 index = 0;
             } else if (index < 0) {
-                index = processedJson.states.length - 1;
+                index = items.length - 1;
             }
         }
 
-        const newState = processedJson.states[index]?.state_id;
-        if (newState) {
+        const newState = processedJson.type === 'state' ?
+            items[index]?.state_id :
+            index;
+        if (newState !== undefined) {
             devapi.setState(newState);
         }
     }
@@ -3205,6 +3240,14 @@
 
     function selectNextState(): void {
         selectOffsetState(1);
+    }
+
+    function onSelectedStateChange(event: CustomEvent<string>): void {
+        const devapi = $selectedLeaf?.props?.devapi;
+
+        if (devapi) {
+            devapi.setState(event.detail);
+        }
     }
 
     function onWindowResize(): void {
@@ -3528,9 +3571,13 @@
                                         &gt;
                                     </button>
                                 </div>
-                                <div class="renderer__highlight-info-inner">
-                                    {highlight.state.selected}
-                                </div>
+                                <Select
+                                    mix="renderer__highlight-dropdown"
+                                    theme="preview"
+                                    value={highlight.state.selectedValue}
+                                    items={highlight.state.list}
+                                    on:change={onSelectedStateChange}
+                                />
                             </div>
                         {/if}
                     {/if}
@@ -3881,6 +3928,10 @@
     .renderer__state-info-buttons {
         display: flex;
         gap: 2px;
+    }
+
+    :global(.renderer__highlight-dropdown) {
+        pointer-events: auto;
     }
 
     .renderer__highlight-insets {

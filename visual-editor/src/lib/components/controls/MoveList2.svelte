@@ -12,6 +12,7 @@
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     export let itemView: Component<any>;
     export let readOnly = false;
+    export let additionalProps: Record<string, unknown> | undefined = undefined;
 
     $: list = values as Item[] | undefined;
 
@@ -178,6 +179,7 @@
                 isMoving={isMoving && !moveEnded}
                 isReoderInProgress={movedItem && !moveEnded}
                 canBeMoved={list && list.length >= 2}
+                {additionalProps}
                 on:change={onItemChange}
                 on:delete={() => deleteAction(item.__key)}
                 on:movestart={event => moveStart(item.__key, event)}

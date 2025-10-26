@@ -176,10 +176,15 @@ export interface SelectFontFamily extends BaseProperty {
 
 export interface ItemsProperty extends BaseProperty {
     type: 'items-list';
+    subtype: 'state' | 'tabs';
 }
 
 export interface StateDefaultIdProperty extends BaseProperty {
     type: 'state-default-id';
+}
+
+export interface TabsSelectedTabProperty extends BaseProperty {
+    type: 'tabs-selected-tab';
 }
 
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
@@ -187,7 +192,8 @@ export type ComponentProperty = RadioProperty | IntegerProperty | BooleanPropert
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
     Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty |
-    SelectOptionsProperty | SelectFontFamily | ItemsProperty | StateDefaultIdProperty;
+    SelectOptionsProperty | SelectFontFamily | ItemsProperty | StateDefaultIdProperty |
+    TabsSelectedTabProperty;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -897,7 +903,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         }, {
             name: 'props.items',
             prop: 'states',
-            type: 'items-list'
+            type: 'items-list',
+            subtype: 'state'
         }, {
             name: 'props.text_variable',
             prop: 'state_id_variable',
@@ -906,6 +913,72 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.default_state_id',
             prop: 'default_state_id',
             type: 'state-default-id',
+            enableSources: true
+        }]
+    }],
+    tabs: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'tabsProps.title',
+        list: [{
+            name: 'props.id',
+            prop: 'id',
+            type: 'string'
+        }, {
+            name: 'props.items',
+            prop: 'items',
+            type: 'items-list',
+            subtype: 'tabs'
+        }, {
+            name: 'props.selected_tab',
+            prop: 'selected_tab',
+            type: 'tabs-selected-tab',
+            enableSources: true
+        }, {
+            type: 'split',
+            list: [{
+                name: 'props.tab_font_size',
+                prop: 'tab_title_style.font_size',
+                type: 'integer',
+                min: 1,
+                max: 1000,
+                default: 12,
+                enableSources: true
+            }, {
+                name: 'props.tab_line_height',
+                prop: 'tab_title_style.line_height',
+                type: 'integer',
+                min: 0,
+                max: 1024,
+                default: 0,
+                enableSources: true
+            }]
+        }, {
+            name: 'props.tab_item_spacing',
+            prop: 'tab_title_style.item_spacing',
+            type: 'integer',
+            min: 0,
+            max: 1024,
+            default: 0,
+            enableSources: true
+        }, {
+            name: 'props.tab_active_bg',
+            prop: 'tab_title_style.active_background_color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.tab_active_text_color',
+            prop: 'tab_title_style.active_text_color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.tab_inactive_bg',
+            prop: 'tab_title_style.inactive_background_color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.tab_inactive_text_color',
+            prop: 'tab_title_style.inactive_text_color',
+            type: 'color',
             enableSources: true
         }]
     }]

@@ -4,7 +4,7 @@
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
     import { APP_CTX, type AppContext, type ItemsListShowProps } from '../../ctx/appContext';
-    import type { Item } from '../../utils/items';
+    import type { Item, ItemStates, ItemTabs } from '../../utils/items';
     import Select from '../Select.svelte';
     import { fullComponentsList } from '../../data/components';
 
@@ -29,6 +29,7 @@
         target = props.target;
         value = props.value;
         readOnly = props.readOnly;
+        subtype = props.subtype;
         isShown = true;
     }
 
@@ -42,6 +43,7 @@
     let callback: ((val: Item) => void) | undefined;
     let readOnly: boolean | undefined;
     let isInitial = false;
+    let subtype: 'state' | 'tabs';
 
     $: items = (fullComponentsList.concat($userDefinedTemplates.map(type => ({
         name: type,
@@ -68,9 +70,18 @@
         };
     }
 
+    function onTitleChange(event: CustomEvent<{
+        value: string;
+    }>): void {
+        value = {
+            title: event.detail.value,
+            div: value.div
+        };
+    }
+
     function onTypeChange(event: CustomEvent<string>): void {
         value = {
-            state_id: value.state_id,
+            state_id: (value as ItemStates).state_id,
             div: {
                 type: event.detail
             }
@@ -86,18 +97,37 @@
         overflow="visible"
     >
         <div class="items-list-dialog__content">
-            <div>
-                <label>
-                    <div class="items-list-dialog__label">
-                        {$l10n('state.id')}
-                    </div>
-                    <Text
-                        value={value.state_id}
-                        disabled={readOnly}
-                        on:change={onIdChange}
-                    />
-                </label>
-            </div>
+            {#if subtype === 'state'}
+                {@const val = value as ItemStates}
+
+                <div>
+                    <label>
+                        <div class="items-list-dialog__label">
+                            {$l10n('state.id')}
+                        </div>
+                        <Text
+                            value={val.state_id}
+                            disabled={readOnly}
+                            on:change={onIdChange}
+                        />
+                    </label>
+                </div>
+            {:else if subtype === 'tabs'}
+                {@const val = value as ItemTabs}
+
+                <div>
+                    <label>
+                        <div class="items-list-dialog__label">
+                            {$l10n('tabs.title')}
+                        </div>
+                        <Text
+                            value={val.title}
+                            disabled={readOnly}
+                            on:change={onTitleChange}
+                        />
+                    </label>
+                </div>
+            {/if}
 
             <div>
                 <label>

@@ -5,13 +5,14 @@
     import MoveList2 from '../controls/MoveList2.svelte';
     import AddButton from '../controls/AddButton.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
-    import type { Item } from '../../utils/items';
+    import type { Item, ItemStates, ItemTabs } from '../../utils/items';
     import ItemsListItem from './ItemsListItem.svelte';
     import { ReplaceLeafsCommand } from '../../data/commands/replaceLeafs';
     import type { TreeLeaf } from '../../ctx/tree';
 
     export let value: Item[];
     export let item: ComponentProperty;
+    export let subtype: 'state' | 'tabs';
 
     let list = value;
 
@@ -51,20 +52,25 @@
         const newLeafs = event.detail.values.map(it => {
             const foundLeaf = it.div?.__leafId !== undefined && valueMap.get(it.div.__leafId);
             if (foundLeaf) {
-                if (foundLeaf.props.info?.state_id !== it.state_id) {
+                if (subtype === 'state' && foundLeaf.props.info?.state_id !== (it as ItemStates).state_id) {
+                    const currentItem = (it as ItemStates);
                     const oldStateId = foundLeaf.props.info?.state_id;
                     foundLeaf.props.info = {
-                        state_id: it.state_id
+                        state_id: currentItem.state_id
                     };
                     if (oldStateId === defaultStateId) {
                         dispatch('change', {
                             values: [{
                                 prop: 'default_state_id',
-                                value: it.state_id
+                                value: currentItem.state_id
                             }],
                             item
                         });
                     }
+                } else if (subtype === 'tabs' && foundLeaf.props.info?.title !== (it as ItemTabs).title) {
+                    foundLeaf.props.info = {
+                        title: (it as ItemTabs).title
+                    };
                 }
                 foundLeaf.props.info.__key = it.__key;
                 return foundLeaf;
@@ -74,7 +80,8 @@
 
             if (leaf) {
                 leaf.props.info = {
-                    state_id: it.state_id,
+                    state_id: (it as ItemStates).state_id,
+                    title: (it as ItemTabs).title,
                     __key: it.__key
                 };
 
@@ -109,9 +116,15 @@
         if (!newLeaf) {
             return;
         }
-        newLeaf.props.info = {
-            state_id: stateId
-        };
+        if (subtype === 'state') {
+            newLeaf.props.info = {
+                state_id: stateId
+            };
+        } else if (subtype === 'tabs') {
+            newLeaf.props.info = {
+                title: 'New tab'
+            };
+        }
 
         const newLeafs = [
             ...leaf.childs,
@@ -132,6 +145,7 @@
             values={list.slice()}
             itemView={ItemsListItem}
             readOnly={$readOnly}
+            additionalProps={{ subtype }}
             on:change={onChange}
             on:reorder={onChange}
         />
@@ -142,7 +156,7 @@
         disabled={$readOnly}
         on:click={onAdd}
     >
-        {$l10n('add_state')}
+        {subtype === 'state' ? $l10n('add_state') : $l10n('add_tabs')}
     </AddButton>
 </div>
 

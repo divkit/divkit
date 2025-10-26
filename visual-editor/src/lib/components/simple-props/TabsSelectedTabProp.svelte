@@ -3,10 +3,10 @@
     import type { ComponentProperty } from '../../data/componentProps';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import Select from '../Select.svelte';
-    import type { ItemStates } from '../../utils/items';
+    import type { ItemTabs } from '../../utils/items';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
 
-    export let value: string;
+    export let value: number;
     export let item: ComponentProperty;
     export let processedJson: unknown | undefined;
 
@@ -16,11 +16,11 @@
 
     const dispatch = createEventDispatcher();
 
-    function onChange(): void {
+    function onChange(event: CustomEvent<string>): void {
         if (!$readOnly) {
             dispatch('change', {
                 item,
-                value
+                value: event.detail ? Number(event.detail) : undefined
             });
         }
     }
@@ -30,18 +30,18 @@
         value: '',
         isEmpty: true
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }, ...(processedJson as any)?.states.map((it: ItemStates) => {
+    }, ...(processedJson as any)?.items.map((it: ItemTabs, index: number) => {
         return {
-            text: it.state_id,
-            value: it.state_id
+            text: it.title,
+            value: String(index)
         };
     })];
 </script>
 
 <Select
-    mix="state-default-id-prop"
+    mix="tabs-selected-tab-prop"
     disabled={$readOnly}
-    bind:value={value}
+    value={typeof value === 'number' ? String(value) : ''}
     on:change={onChange}
     theme="normal"
     size="medium"

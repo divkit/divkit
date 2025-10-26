@@ -107,6 +107,7 @@ export interface ItemsListShowProps {
     value: Item;
     target: HTMLElement;
     readOnly?: boolean;
+    subtype: 'state' | 'tabs';
     callback(val: Item): void;
 }
 

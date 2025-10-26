@@ -13,11 +13,12 @@
         value: string;
         text: string;
         icon?: string;
+        isEmpty?: boolean;
     }
 
     export let items: Item[];
     export let value: string;
-    export let theme: 'normal' | 'canvas' | 'transparent';
+    export let theme: 'normal' | 'canvas' | 'transparent' | 'preview';
     export let size: 'small' | 'medium' = 'small';
     export let iconTheme: 'normal' | 'transparent' = 'normal';
     export let disabled = false;
@@ -29,6 +30,7 @@
 
     $: text = items.find(item => item.value === value || !item.value && !value)?.text || value || '';
     $: icon = items.find(item => item.value === value || !item.value && !value)?.icon;
+    $: isEmpty = items.find(item => item.value === value || !item.value && !value)?.isEmpty;
     $: requiredError = required && Boolean(!items.find(item => item.value === value)?.value);
 
     const dispatch = createEventDispatcher();
@@ -151,6 +153,7 @@
     class="select select_theme_{theme} select_size_{size} select_icon-theme_{iconTheme} {mix}"
     class:select_disabled={disabled}
     class:select_error={requiredError}
+    class:select_empty={isEmpty}
 >
     <div
         bind:this={control}
@@ -196,6 +199,7 @@
                     <li
                         class="select__item"
                         class:select__item_selected={item.value === value}
+                        class:select__item_empty={item.isEmpty}
                         class:select__item_icon={item.icon}
                         on:click|preventDefault={() => select(item.value)}
                     >
@@ -253,6 +257,10 @@
         background: var(--fill-transparent-minus-1);
         color: inherit;
         appearance: none;
+    }
+
+    .select_empty .select__select {
+        color: var(--fill-transparent-4);
     }
 
     .select__select_icon {
@@ -327,6 +335,27 @@
         display: none;
     }
 
+    .select_theme_preview .select__arrow {
+        right: 6px;
+    }
+
+    .select_theme_preview .select__select {
+        padding: 4px 32px 4px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+        background-color: var(--accent-purple);
+        color: #fff;
+        transition: background-color .15s ease-in-out;
+    }
+
+    .select_theme_preview .select__select:hover {
+        background-color: var(--accent-purple-hover);
+    }
+
+    .select_theme_preview .select__select:active {
+        background-color: var(--accent-purple-active);
+    }
+
     .select_theme_normal .select__select:focus-visible,
     .select_theme_normal .select__select:focus-visible:hover {
         outline: none;
@@ -357,6 +386,17 @@
         bottom: calc(100% + 4px);
     }
 
+    .select_theme_preview .select__popup {
+        top: 100%;
+        color: #fff;
+        background-color: var(--accent-purple);
+        border-radius: 4px;
+    }
+
+    .select_theme_preview .select__popup_direction_up {
+        bottom: 100%;
+    }
+
     .select__list {
         margin: 0;
         padding: 0;
@@ -383,12 +423,21 @@
         transition-duration: .15s;
     }
 
+    .select__item_empty {
+        color: var(--fill-transparent-4);
+    }
+
     .select__item:hover {
         background-color: var(--fill-transparent-2);
     }
 
     .select__item:active {
         background-color: var(--fill-transparent-3);
+    }
+
+    .select_theme_preview .select__item {
+        min-height: auto;
+        padding: 4px 8px;
     }
 
     .select_icon-theme_transparent  .select__item_icon {

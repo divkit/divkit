@@ -123,6 +123,14 @@
         "props.default_state_id": "Состояние по умолчанию",
         "props.items": "Список элементов",
         "props.id": "Идентификатор",
+        "props.selected_tab": "Выбранная вкладка по умолчанию",
+        "props.tab_font_size": "Размер текста вкладок",
+        "props.tab_line_height": "Междустрочный интервал",
+        "props.tab_item_spacing": "Отступ между вкладок",
+        "props.tab_active_bg": "Фон активной вкладки",
+        "props.tab_inactive_bg": "Фон неактивной вкладки",
+        "props.tab_active_text_color": "Цвет текста активной вкладки",
+        "props.tab_inactive_text_color": "Цвет текста неактивной вкладки",
         "actions_count": [
             "%s действие",
             "%s действия",
@@ -158,6 +166,7 @@
         "select.value": "Значение опции",
         "state.id":" ID состояния",
         "state.div":" Тип компонента",
+        "tabs.title":" Заголовок вкладки",
         "cancel": "Отмена",
         "save": "Сохранить",
         "close": "Закрыть",
@@ -171,6 +180,7 @@
         "add_video": "Добавить источник",
         "add_select_option": "Добавить опцию",
         "add_state": "Добавить состояние",
+        "add_tabs": "Добавить вкладку",
         "no_background": "Нет фона",
         "multiple_backgrounds": "Несколько слоёв",
         "unknown_background": "Неизвестный фон",
@@ -227,6 +237,7 @@
         "selectProps.title": "Свойства выпадающего списка",
         "switchProps.title": "Свойства переключателя",
         "stateProps.title": "Свойства набора состояний",
+        "tabsProps.title": "Свойства вкладок",
         "a11yProps.title": "Свойства доступности",
         "default": "По умолчанию",
         "background.image": "Картинка",
@@ -325,7 +336,8 @@
         "timersTickActions": "Периодические действия",
         "timersEndActions": "Действия при окончании",
         "rtl.switchToRtl": "Включить написание справа-налево",
-        "rtl.switchToLTR": "Включить написание слева-направо"
+        "rtl.switchToLTR": "Включить написание слева-направо",
+        "emptyValue": "<пусто>"
     },
     "en": {
         "collapse": "Collapse",
@@ -451,6 +463,14 @@
         "props.default_state_id": "Default state id",
         "props.items": "Items list",
         "props.id": "ID",
+        "props.selected_tab": "Selected tab by default",
+        "props.tab_font_size": "Tab font size",
+        "props.tab_line_height": "Tab line height",
+        "props.tab_item_spacing": "Tab spacing",
+        "props.tab_active_bg": "Active tab background",
+        "props.tab_inactive_bg": "Inctive tab background",
+        "props.tab_active_text_color": "Active tab text color",
+        "props.tab_inactive_text_color": "Inactive tab text color",
         "actions_count": [
             "%s action",
             "%s actions",
@@ -486,6 +506,7 @@
         "select.value": "Select value",
         "state.id":" State id",
         "state.div":" Component type",
+        "tabs.title":" Tab title",
         "cancel": "Cancel",
         "save": "Save",
         "close": "Close",
@@ -499,6 +520,7 @@
         "add_video": "Add source",
         "add_select_option": "Add option",
         "add_state": "Add state",
+        "add_tabs": "Add tab",
         "no_background": "No background",
         "multiple_backgrounds": "Multiple layers",
         "unknown_background": "Unknown background",
@@ -555,6 +577,7 @@
         "selectProps.title": "Select properties",
         "switchProps.title": "Switch properties",
         "stateProps.title": "State properties",
+        "tabsProps.title": "Tabs properties",
         "a11yProps.title": "Accessibility properties",
         "default": "Default",
         "background.image": "Image",
@@ -653,6 +676,7 @@
         "timersTickActions": "Tick actions",
         "timersEndActions": "End actions",
         "rtl.switchToRTL": "Turn on RTL layout",
-        "rtl.switchToLTR": "Turn on LTR layout"
+        "rtl.switchToLTR": "Turn on LTR layout",
+        "emptyValue": "<empty>"
     }
 }

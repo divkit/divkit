@@ -20,6 +20,7 @@
     import SelectFontFamilyProp from './SelectFontFamilyProp.svelte';
     import ItemsProp from './ItemsProp.svelte';
     import StateDefaultIdProp from './StateDefaultIdProp.svelte';
+    import TabsSelectedTabProp from './TabsSelectedTabProp.svelte';
 
     export let item: ComponentProperty;
     export let value;
@@ -188,10 +189,18 @@
         {processedJson}
         on:change
     />
+{:else if item.type === 'tabs-selected-tab'}
+    <TabsSelectedTabProp
+        {item}
+        {value}
+        {processedJson}
+        on:change
+    />
 {:else if item.type === 'items-list'}
     <ItemsProp
         {item}
         {value}
+        subtype={item.subtype}
         on:change
     />
 {/if}
