@@ -65,8 +65,9 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       animated = true
     }
 
+    let clampedIndex = index.clamp(0.0...CGFloat(max(itemsCount - 1, 0)))
     let newState = GalleryViewState(
-      contentPosition: .paging(index: index.clamp(0.0...CGFloat(itemsCount - 1))),
+      contentPosition: .paging(index: clampedIndex),
       itemsCount: itemsCount,
       isScrolling: false,
       scrollRange: scrollRange,

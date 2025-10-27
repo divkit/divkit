@@ -73,6 +73,30 @@ final class DivGalleryExtensionsTests: XCTestCase {
   ) throws {
     _ = try makeBlock(fromFile: "vertical_gallery_mixed_width_items")
   }
+
+  func test_EmptyGallery_WithPagingMode_DoesNotCrash() throws {
+    let blockStateStorage = DivBlockStateStorage()
+    blockStateStorage.setState(
+      path: .root + DivGallery.type,
+      state: GalleryViewState(
+        contentPosition: .paging(index: 1),
+        itemsCount: 1,
+        isScrolling: false,
+        animated: true
+      )
+    )
+    let context = DivBlockModelingContext(
+      blockStateStorage: blockStateStorage
+    )
+    let block = try makeBlock(
+      fromFile: "empty_gallery",
+      context: context
+    ) as? WrapperBlock
+
+    let gallery = block?.child as? GalleryBlock
+    XCTAssertEqual(gallery?.state.contentPosition, .paging(index: 0))
+    XCTAssertEqual(gallery?.model.items.count, 0)
+  }
 }
 
 private func makeBlock(
