@@ -188,11 +188,11 @@ private final class StateBlockView: BlockView {
     let viewsToRemove = subviewStorage.getViewsToRemove(newIds: ids)
     if !viewsToRemove.isEmpty {
       removeViewsWithUnfinishedAnimations()
+    }
 
-      for view in viewsToRemove {
-        view.cancelAnimations()
-        view.removeWithAnimation(in: self)
-      }
+    for view in viewsToRemove {
+      view.cancelAnimations()
+      view.removeWithAnimation(in: self)
     }
 
     subviewStorage = SubviewStorage(
@@ -213,10 +213,12 @@ private final class StateBlockView: BlockView {
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
     } else {
-      if viewsToRemove.isEmpty, !viewsToAdd.isEmpty {
+      forceLayout()
+
+      let transformedViews = subviewStorage.getViewsToTransition(newIds: ids, container: self)
+      if viewsToRemove.isEmpty, transformedViews != viewsToTransition || !viewsToAdd.isEmpty {
         removeViewsWithUnfinishedAnimations()
       }
-      forceLayout()
 
       changeBoundsWithAnimation(viewsToTransition)
       addWithAnimations(viewsToAdd)
@@ -233,6 +235,9 @@ private final class StateBlockView: BlockView {
     for (id, frame) in views {
       if let view = subviewStorage.getView(id) {
         view.changeBoundsWithAnimation(in: self, startFrame: frame)
+        if view.transitionChangeAnimationContainer != nil {
+          view.removeChildView()
+        }
       }
     }
   }

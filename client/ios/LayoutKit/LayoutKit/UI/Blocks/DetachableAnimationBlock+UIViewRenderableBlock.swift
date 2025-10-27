@@ -40,6 +40,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     }
   }
 
+  var transitionChangeAnimationContainer: UIView?
+
   private var childView: BlockView? {
     didSet {
       guard childView !== oldValue else { return }
@@ -62,8 +64,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       }
     }
   }
-
-  private var transitionChangeAnimationContainer: UIView?
 
   private var animatedView: BlockView?
 
@@ -109,7 +109,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     guard finishFrame != startFrame else { return }
 
-    self.childView = nil
+    removeChildView()
 
     transitionChangeAnimationContainer = UIView()
     guard let transitionChangeAnimationContainer else { return }
@@ -135,8 +135,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         if transitionChangeAnimationContainer.superview == container {
           transitionChangeAnimationContainer.removeFromSuperview()
           self?.childView = childView
+          self?.transitionChangeAnimationContainer = nil
         }
-        self?.transitionChangeAnimationContainer = nil
       }
     )
   }
@@ -202,8 +202,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    guard transitionChangeAnimationContainer == nil else { return }
-
     self.child = child
     childView = child.reuse(
       childView,
@@ -222,6 +220,10 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   func cancelAnimations() {
     queuedAnimation?.cancel()
     queuedAnimation = nil
+  }
+
+  func removeChildView() {
+    self.childView = nil
   }
 }
 
