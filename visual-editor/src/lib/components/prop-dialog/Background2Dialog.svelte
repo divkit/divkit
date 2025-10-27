@@ -24,7 +24,7 @@
     import PaletteSelector from '../PaletteSelector.svelte';
     import ColorPreview from '../ColorPreview.svelte';
     import { APP_CTX, type AppContext, type Background2DialogShowProps } from '../../ctx/appContext';
-    import { gradientToList, isEqualDistribution, sortColorMap, type Background, type GradientBackground, type SolidBackground } from '../../data/background';
+    import { gradientToList, isEqualDistribution, sortColorMap, type Background, type GradientBackground, type RadialBackground, type SolidBackground } from '../../data/background';
     import { deleteComponent } from '../../utils/keybinder/shortcuts';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
@@ -34,11 +34,12 @@
         paletteEnabled,
         previewThemeStore,
         highlightMode,
-        highlightGradientAngle
+        highlightGradientAngle,
+        selectedLeaf
     } = state;
 
     $: if (isShown && !readOnly && callback) {
-        if (value.type === 'gradient') {
+        if (value.type === 'gradient' || value.type === 'radial_gradient') {
             if (isEqualDistribution(gradientColors)) {
                 delete value.color_map;
                 value.colors = gradientColors.map(it => it.color);
@@ -75,11 +76,27 @@
                 } else {
                     val.color = '#000';
                 }
-            } else if (subtype === 'gradient') {
+            } else if (subtype === 'gradient' || subtype === 'radial_gradient') {
                 if (prevColor) {
                     val.colors = [prevColor, prevColor];
                 } else {
                     val.colors = ['#fff', '#000'];
+                }
+                gradientColors = gradientToList(val);
+
+                if (subtype === 'radial_gradient') {
+                    val.radius = {
+                        type: 'relative',
+                        value: 'farthest_corner'
+                    };
+                    val.center_x = {
+                        type: 'relative',
+                        value: 0.5
+                    };
+                    val.center_y = {
+                        type: 'relative',
+                        value: 0.5
+                    };
                 }
             } else if (subtype === 'image') {
                 val.image_url = '';
@@ -89,6 +106,8 @@
                 val.alpha = 1;
                 val.preload_required = true;
             }
+
+            value = val;
         }
     }
 
@@ -133,6 +152,8 @@
     }[] = [];
     let cancel: (() => void) | undefined;
     let gradientRangeElem: HTMLElement;
+    let isGradientColorsHovered = false;
+    let gradientColorPosition = 0;
 
     function onClose(): void {
         isShown = false;
@@ -196,6 +217,57 @@
         // todo remove single color
     }
 
+    function onRadialGradientRadiusTypeChange(event: CustomEvent<string>): void {
+        const val = value as RadialBackground;
+        const radius = val.radius;
+
+        if (radius) {
+            if (event.detail === 'relative') {
+                radius.value = 'farthest_corner';
+            } else if (event.detail === 'fixed') {
+                radius.value = 100;
+            }
+
+            value = val;
+        }
+    }
+
+    function onRadialGradientCenterXTypeChange(event: CustomEvent<string>): void {
+        const val = value as RadialBackground;
+        const center = val.center_x;
+
+        if (center) {
+            const node = $selectedLeaf?.props.node;
+            const bbox = node?.getBoundingClientRect();
+
+            if (event.detail === 'relative') {
+                center.value = Math.max(0, Math.min(1, center.value / bbox.width));
+            } else if (event.detail === 'fixed') {
+                center.value = Math.max(0, Math.floor(bbox.width * center.value));
+            }
+
+            value = val;
+        }
+    }
+
+    function onRadialGradientCenterYTypeChange(event: CustomEvent<string>): void {
+        const val = value as RadialBackground;
+        const center = val.center_y;
+
+        if (center) {
+            const node = $selectedLeaf?.props.node;
+            const bbox = node?.getBoundingClientRect();
+
+            if (event.detail === 'relative') {
+                center.value = Math.max(0, Math.min(1, center.value / bbox.height));
+            } else if (event.detail === 'fixed') {
+                center.value = Math.max(0, Math.floor(bbox.height * center.value));
+            }
+
+            value = val;
+        }
+    }
+
     function onPaletteToggle(): void {
         togglePalette = !togglePalette;
     }
@@ -242,8 +314,23 @@
         selectGradientIndex(0);
     }
 
-    function createGradientColorStop(event: MouseEvent): void {
+    function gradientColorsMouseMove(event: MouseEvent): void {
         if (gradientColors.length >= MAX_GRADIENT_COLORS) {
+            isGradientColorsHovered = false;
+            return;
+        }
+        isGradientColorsHovered = event.target === gradientRangeElem;
+
+        const bbox = gradientRangeElem.getBoundingClientRect();
+        gradientColorPosition = Math.max(0, Math.min(1, (event.pageX - bbox.left) / gradientRangeElem.offsetWidth));
+    }
+
+    function gradientColorsMouseLeave(): void {
+        isGradientColorsHovered = false;
+    }
+
+    function createGradientColorStop(event: MouseEvent): void {
+        if (gradientColors.length >= MAX_GRADIENT_COLORS || !isGradientColorsHovered) {
             return;
         }
 
@@ -301,8 +388,8 @@
                 colorValue = val.color;
                 paletteId = '';
             }
-        } else if (subtype === 'gradient') {
-            const val = (value as GradientBackground);
+        } else if (subtype === 'gradient' || subtype === 'radial_gradient') {
+            const val = (value as GradientBackground | RadialBackground);
 
             selectedColorIndex = 0;
             gradientColors = gradientToList(val);
@@ -350,6 +437,9 @@
                             value: 'gradient',
                             text: $l10nString('props.background_gradient')
                         }, {
+                            value: 'radial_gradient',
+                            text: $l10nString('props.background_radial_gradient')
+                        }, {
                             value: 'image',
                             text: $l10nString('props.background_image')
                         }]}
@@ -359,7 +449,7 @@
                         disabled={readOnly}
                     />
 
-                    {#if $paletteEnabled && (subtype === 'solid' || subtype === 'gradient')}
+                    {#if $paletteEnabled && (subtype === 'solid' || subtype === 'gradient' || subtype === 'radial_gradient')}
                         <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button
                             class="background2-dialog__palette-toggle"
@@ -379,7 +469,7 @@
                             disabled={readOnly}
                             on:change={onSolidColorChange}
                         />
-                    {:else if value.type === 'gradient'}
+                    {:else if value.type === 'gradient' || value.type === 'radial_gradient'}
                         {#if Array.isArray(gradientColors)}
                             <div class="background2-dialog__gradient-preview">
                                 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
@@ -388,9 +478,19 @@
                                     class="background2-dialog__gradient-points"
                                     tabindex="0"
                                     bind:this={gradientRangeElem}
-                                    on:dblclick={createGradientColorStop}
+                                    on:mousemove={gradientColorsMouseMove}
+                                    on:mouseleave={gradientColorsMouseLeave}
+                                    on:click={createGradientColorStop}
                                     on:keydown={onGradientKeyDown}
                                 >
+                                    {#if isGradientColorsHovered}
+                                        <div
+                                            class="background2-dialog__gradient-point background2-dialog__gradient-point_ghost"
+                                            style:left="{gradientColorPosition * 100}%"
+                                            title={$l10nString('add_color')}
+                                        ></div>
+                                    {/if}
+
                                     <!-- todo keyboard support -->
                                     {#each gradientColors as item, index}
                                         <div
@@ -435,37 +535,160 @@
 
                             <div class="background2-dialog__separator"></div>
 
-                            <div class="background2-dialog__split">
-                                <div class="background2-dialog__split-part">
-                                    <label>
-                                        <div class="background2-dialog__label">{$l10nString('props.background_gradient_angle')}</div>
-                                        <Text
-                                            value={value.angle || 0}
-                                            subtype="angle"
-                                            min={0}
-                                            max={360}
-                                            disabled={readOnly}
-                                            on:change={onAngleChange}
-                                            on:focus={onAngleFocus}
-                                            on:blur={onAngleBlur}
-                                        />
-                                    </label>
+                            {#if value.type === 'gradient'}
+                                <div class="background2-dialog__split">
+                                    <div class="background2-dialog__split-part">
+                                        <label>
+                                            <div class="background2-dialog__label">{$l10nString('props.background_gradient_angle')}</div>
+                                            <Text
+                                                value={value.angle || 0}
+                                                subtype="angle"
+                                                min={0}
+                                                max={360}
+                                                disabled={readOnly}
+                                                on:change={onAngleChange}
+                                                on:focus={onAngleFocus}
+                                                on:blur={onAngleBlur}
+                                            />
+                                        </label>
+                                    </div>
+                                    <div class="background2-dialog__split-part">
+                                        <label>
+                                            <div class="background2-dialog__label">{$l10nString('props.background_gradient_count')}</div>
+                                            <Text
+                                                value={gradientColors.length}
+                                                subtype="integer"
+                                                min={2}
+                                                max={MAX_GRADIENT_COLORS}
+                                                disabled={readOnly}
+                                                required
+                                                on:change={onStopsCountChange}
+                                            />
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="background2-dialog__split-part">
-                                    <label>
-                                        <div class="background2-dialog__label">{$l10nString('props.background_gradient_count')}</div>
-                                        <Text
-                                            value={gradientColors.length}
-                                            subtype="integer"
-                                            min={2}
-                                            max={MAX_GRADIENT_COLORS}
-                                            disabled={readOnly}
-                                            required
-                                            on:change={onStopsCountChange}
-                                        />
-                                    </label>
-                                </div>
-                            </div>
+                            {:else if value.type === 'radial_gradient'}
+                                {#if value.radius && value.center_x && value.center_y}
+                                    <div class="background2-dialog__row">
+                                        <div class="background2-dialog__subrow">
+                                            <label>
+                                                <div class="background2-dialog__label">{$l10nString('props.background_gradient_radius_type')}</div>
+                                                <Select
+                                                    mix="background2-dialog__subtype-select"
+                                                    items={[{
+                                                        value: 'fixed',
+                                                        text: $l10nString('props.size_fixed')
+                                                    }, {
+                                                        value: 'relative',
+                                                        text: $l10nString('props.size_relative')
+                                                    }]}
+                                                    bind:value={value.radius.type}
+                                                    theme="normal"
+                                                    size="medium"
+                                                    disabled={readOnly}
+                                                    on:change={onRadialGradientRadiusTypeChange}
+                                                />
+                                            </label>
+                                        </div>
+
+                                        <div class="background2-dialog__subrow">
+                                            {#if (value.radius?.type === 'fixed')}
+                                                <Text
+                                                    bind:value={value.radius.value}
+                                                    subtype="integer"
+                                                    min={0}
+                                                    disabled={readOnly}
+                                                    required
+                                                />
+                                            {:else if value.radius?.type === 'relative'}
+                                                <Select
+                                                    mix="background2-dialog__subtype-select"
+                                                    items={[{
+                                                        value: 'nearest_corner',
+                                                        text: $l10nString('props.background_gradient_nearest_corner')
+                                                    }, {
+                                                        value: 'farthest_corner',
+                                                        text: $l10nString('props.background_gradient_farthest_corner')
+                                                    }, {
+                                                        value: 'nearest_side',
+                                                        text: $l10nString('props.background_gradient_nearest_side')
+                                                    }, {
+                                                        value: 'farthest_side',
+                                                        text: $l10nString('props.background_gradient_farthest_side')
+                                                    }]}
+                                                    bind:value={value.radius.value}
+                                                    theme="normal"
+                                                    size="medium"
+                                                    disabled={readOnly}
+                                                />
+                                            {/if}
+                                        </div>
+                                    </div>
+
+                                    <div class="background2-dialog__split">
+                                        <div class="background2-dialog__split-part">
+                                            <div class="background2-dialog__subrow">
+                                                <label>
+                                                    <div class="background2-dialog__label">{$l10nString('props.background_gradient_center_x')}</div>
+                                                    <Select
+                                                        mix="background2-dialog__subtype-select"
+                                                        items={[{
+                                                            value: 'fixed',
+                                                            text: $l10nString('props.size_fixed')
+                                                        }, {
+                                                            value: 'relative',
+                                                            text: $l10nString('props.size_relative')
+                                                        }]}
+                                                        bind:value={value.center_x.type}
+                                                        theme="normal"
+                                                        size="medium"
+                                                        disabled={readOnly}
+                                                        on:change={onRadialGradientCenterXTypeChange}
+                                                    />
+                                                </label>
+                                            </div>
+
+                                            <div class="background2-dialog__subrow">
+                                                <Text
+                                                    bind:value={value.center_x.value}
+                                                    subtype={value.center_x.type === 'relative' ? 'percent' : 'integer'}
+                                                    disabled={readOnly}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="background2-dialog__split-part">
+                                            <div class="background2-dialog__subrow">
+                                                <label>
+                                                    <div class="background2-dialog__label">{$l10nString('props.background_gradient_center_y')}</div>
+                                                    <Select
+                                                        mix="background2-dialog__subtype-select"
+                                                        items={[{
+                                                            value: 'fixed',
+                                                            text: $l10nString('props.size_fixed')
+                                                        }, {
+                                                            value: 'relative',
+                                                            text: $l10nString('props.size_relative')
+                                                        }]}
+                                                        bind:value={value.center_y.type}
+                                                        theme="normal"
+                                                        size="medium"
+                                                        disabled={readOnly}
+                                                        on:change={onRadialGradientCenterYTypeChange}
+                                                    />
+                                                </label>
+                                            </div>
+
+                                            <div class="background2-dialog__subrow">
+                                                <Text
+                                                    bind:value={value.center_y.value}
+                                                    subtype={value.center_y.type === 'relative' ? 'percent' : 'integer'}
+                                                    disabled={readOnly}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/if}
                         {/if}
                     {:else if value.type === 'image'}
                         <label>
@@ -650,6 +873,7 @@
         height: 27px;
         margin: 0 24px 2px;
         outline: none;
+        cursor: pointer;
     }
 
     .background2-dialog__gradient-point {
@@ -669,6 +893,13 @@
     .background2-dialog__gradient-point_selected,
     .background2-dialog__gradient-point_selected:hover {
         color: var(--accent-purple);
+    }
+
+    .background2-dialog__gradient-point_ghost {
+        background-color: #fff;
+        border-radius: 6px;
+        opacity: .4;
+        pointer-events: none;
     }
 
     :global(.background2-dialog__gradient-point-preview.background2-dialog__gradient-point-preview) {
@@ -723,6 +954,14 @@
         margin-bottom: 6px;
         font-size: 14px;
         color: var(--text-secondary);
+    }
+
+    .background2-dialog__row {
+        margin: 0 16px 20px;
+    }
+
+    .background2-dialog__subrow + .background2-dialog__subrow {
+        margin-top: 6px;
     }
 
     .background2-dialog__alpha {

@@ -73,6 +73,16 @@
                 preview = '';
             }
             max = 360;
+        } else if (value.type === 'radial_gradient') {
+            firstVal = secondVal = '';
+            const list = gradientToList(value);
+            if (Array.isArray(list)) {
+                preview = `radial-gradient(${sortColorMap(list).map(item => {
+                    return `${colorToCss(item.color, true, $palette, $previewThemeStore)} ${item.position * 100}%`;
+                }).join(', ')})`;
+            } else {
+                preview = '';
+            }
         } else if (value.type === 'image') {
             firstVal = '';
             secondVal = String(Math.round((value.alpha ?? 1) * 100));
@@ -162,14 +172,26 @@
         {/if}
     </button>
 
-    {#if value.type === 'solid' && paletteId}
-        <div class="background2-item__palette-name">
-            {#if paletteItem}
-                {paletteItem.name}
-            {:else}
-                {paletteId}
-            {/if}
-        </div>
+    {#if value.type === 'solid' && paletteId || value.type === 'radial_gradient'}
+        {#if value.type === 'solid'}
+            <button
+                class="background2-item__text"
+                on:click={onPreviewClick}
+            >
+                {#if paletteItem}
+                    {paletteItem.name}
+                {:else}
+                    {paletteId}
+                {/if}
+            </button>
+        {:else}
+            <button
+                class="background2-item__text"
+                on:click={onPreviewClick}
+            >
+                {$l10nString('background.radial_gradient')}
+            </button>
+        {/if}
     {:else}
         {#if value.type === 'solid'}
             <input
@@ -193,7 +215,7 @@
             >
                 {#if value.type === 'gradient'}
                     {$l10nString('background.gradient')}
-                {:else}
+                {:else if (value.type === 'image')}
                     {$l10nString('background.image')}
                 {/if}
             </button>
@@ -389,13 +411,5 @@
         display: flex;
         align-items: center;
         color: var(--text-secondary);
-    }
-
-    .background2-item__palette-name {
-        flex: 1 1 auto;
-        align-self: center;
-        min-width: 0;
-        font-size: 14px;
-        text-overflow: ellipsis;
     }
 </style>

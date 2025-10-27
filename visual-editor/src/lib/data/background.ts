@@ -1,3 +1,4 @@
+import type { FixedSize } from '../utils/range';
 import { isPaletteColor, palettePreview, type PaletteItem } from './palette';
 
 export type ImageScale = 'fill' | 'no_scale' | 'fit' | 'stretch';
@@ -6,13 +7,15 @@ export type AlignmentHorizontal = 'left' | 'center' | 'right';
 
 export type AlignmentVertical = 'top' | 'center' | 'bottom';
 
+export type ColorMap = {
+    color: string;
+    position: number;
+}[];
+
 export interface GradientBackground {
     type: 'gradient';
     colors?: string[];
-    color_map?: {
-        color: string;
-        position: number;
-    }[];
+    color_map?: ColorMap;
     angle?: number;
 }
 
@@ -38,7 +41,7 @@ export interface SolidBackground {
     color: string;
 }
 
-/* export interface RadialBackgroundRelativeRadius {
+export interface RadialBackgroundRelativeRadius {
     type: 'relative';
     value: 'nearest_side' | 'nearest_corner' | 'farthest_side' | 'farthest_corner';
 }
@@ -60,14 +63,15 @@ export type RadialGradientCenter = RadialGradientFixedCenter | RadialGradientRel
 
 export interface RadialBackground {
     type: 'radial_gradient';
-    colors: string[];
+    colors?: string[];
+    color_map?: ColorMap;
     radius?: RadialBackgroundRadius;
     center_x?: RadialGradientCenter;
     center_y?: RadialGradientCenter;
-} */
+}
 
 export type Background = GradientBackground | ImageBackground |
-    SolidBackground/*  | RadialBackground | NinePatchImageBackground */;
+    SolidBackground | RadialBackground/* | NinePatchImageBackground */;
 
 export function backgroundPreview(background: Background[], lang: {
     noBackground: string;
@@ -127,7 +131,7 @@ export function sortColorMap<T extends {
     });
 }
 
-export function gradientToList(gradient: GradientBackground): {
+export function gradientToList(gradient: GradientBackground | RadialBackground): {
     color: string;
     position: number;
 }[] {
