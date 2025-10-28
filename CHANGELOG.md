@@ -1,3 +1,8 @@
+## 32.18.1
+
+# Android Client:
+* Kotlin runtime null checks are disabled in release builds.
+
 ## 32.18.0
 
 # Android Client:
