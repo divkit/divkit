@@ -59,13 +59,21 @@ allprojects {
 
     tasks.withType(KotlinCompile).configureEach {
         compilerOptions {
-            freeCompilerArgs = [
+            freeCompilerArgs.addAll(
                     "-Xjvm-default=all",
                     "-opt-in=com.yandex.div.data.DivModelInternalApi",
                     "-opt-in=com.yandex.yatagan.ConditionsApi",
                     "-opt-in=com.yandex.div.core.annotations.InternalApi",
-                    "-opt-in=com.yandex.div.core.annotations.ExperimentalApi"
-            ]
+                    "-opt-in=com.yandex.div.core.annotations.ExperimentalApi",
+            )
+            if (name.toLowerCase().contains("release")) {
+                freeCompilerArgs.addAll(
+                        "-Xno-param-assertions",
+                        "-Xno-call-assertions",
+                        "-Xno-receiver-assertions",
+                        "-Xno-source-debug-extension",
+                )
+            }
             languageVersion = KotlinVersion.KOTLIN_1_8
             apiVersion = KotlinVersion.KOTLIN_1_8
             jvmTarget = JvmTarget.JVM_1_8
