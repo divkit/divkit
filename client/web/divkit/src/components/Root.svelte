@@ -2407,6 +2407,12 @@
         }
     }
 
+    for (const [varName, variable] of globalVariables) {
+        if (!variables.has(varName)) {
+            variables.set(varName, variable);
+        }
+    }
+
     const startVariables = json?.card?.variables;
     if (Array.isArray(startVariables)) {
         startVariables.forEach(variable => {
@@ -2428,7 +2434,7 @@
 
     $: if (json?.card?.variables && Array.isArray(json.card.variables) && json.card.variables !== startVariables) {
         json.card.variables.forEach(variable => {
-            if (variable && variable.name && !localVariables.has(variable.name)) {
+            if (variable && variable.name && !localVariables.has(variable.name) && !variables.has(variable.name)) {
                 declVariable(variable);
             }
         });
@@ -2461,12 +2467,6 @@
                 }));
             }
         });
-    }
-
-    for (const [varName, variable] of globalVariables) {
-        if (!variables.has(varName)) {
-            variables.set(varName, variable);
-        }
     }
 
     globalVariablesStore.subscribe(newVarName => {
