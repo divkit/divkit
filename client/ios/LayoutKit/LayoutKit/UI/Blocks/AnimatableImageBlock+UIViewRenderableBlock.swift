@@ -13,6 +13,7 @@ extension AnimatableImageBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let animatableImageView = view as! AnimatableImageContainer
+    updateStateIfNeeded(observer: observer)
     animatableImageView.setImageHolder(imageHolder) { [weak self] in
       self?.updateStateIfNeeded(observer: observer)
     }

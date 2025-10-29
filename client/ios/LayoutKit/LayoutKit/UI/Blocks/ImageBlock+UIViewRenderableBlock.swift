@@ -28,6 +28,7 @@ extension ImageBlock {
     contentView.filter = filter
     contentView.isUserInteractionEnabled = false
     remoteImageViewContainer.contentView = contentView
+    updateStateIfNeeded(observer: observer)
     if compare(remoteImageViewContainer.imageHolder, imageHolder) == false {
       remoteImageViewContainer.setImageHolder(imageHolder) { [weak self, weak observer] in
         self?.updateStateIfNeeded(observer: observer)
