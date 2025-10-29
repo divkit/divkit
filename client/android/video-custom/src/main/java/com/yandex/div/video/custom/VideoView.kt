@@ -119,8 +119,8 @@ internal class VideoView(
             super.onPlaybackStateChanged(state)
             when (state)  {
                 STATE_READY -> if (playerView.parent == null) {
-                    stubImageView.isVisible = false
-                    addView(playerView)
+                    // Place player on top of preview to hide the player while it's not ready yet.
+                    addView(playerView, 0)
                 }
                 else -> return
             }
