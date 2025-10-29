@@ -1,8 +1,9 @@
 #if os(iOS)
 import UIKit
 
+@_spi(Legacy) import DivKit
+
 internal import VGSLUI
-internal import DivKit
 internal import DivKitExtensions
 
 @objc public final class DivKitKMPFacade: NSObject {
@@ -15,7 +16,7 @@ internal import DivKitExtensions
   ) {
     self.divkitComponents = DivKitComponents(
       extensionHandlers: [
-        ShimmerImagePreviewExtension()
+        ShimmerImagePreviewExtension(),
       ],
       reporter: errorReporter.flatMap { DivKitReporter(errorReporter: $0) },
       urlHandler: DivUrlHandlerDelegate { actionHandler?.handleAction(url: $0.absoluteString) },
@@ -27,19 +28,17 @@ internal import DivKitExtensions
     _ jsonString: String,
     cardId: String
   ) -> UIView {
-    let view = DivView(divKitComponents: divkitComponents)
-    Task {
-      await view.setSource(
-        DivViewSource(
-          kind: .data(Data(jsonString.utf8)),
-          cardId: DivCardID(rawValue: cardId)
-        )
+    let divView = DivView(divKitComponents: divkitComponents)
+    divView.setSource(
+      DivViewSource(
+        kind: .data(Data(jsonString.utf8)),
+        cardId: DivCardID(rawValue: cardId)
       )
-    }
-    return view
+    )
+    return divView
   }
 
-  @objc public func setGlobalVariables(_ variables: Dictionary<String, Any>) {
+  @objc public func setGlobalVariables(_ variables: [String: Any]) {
     globalVariablesStorage.put(variables.divVariables)
   }
 }
