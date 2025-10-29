@@ -1,3 +1,8 @@
+## 32.24.0 (November 3, 2025)
+
+* Fixed an error with missing global variables when calculating the values of local card-level variables.
+
+
 ## 32.22.0 (October 20, 2025)
 
 * Fixed an issue with the timer properties validation.
