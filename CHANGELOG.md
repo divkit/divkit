@@ -1,3 +1,19 @@
+## 32.24.0
+
+# Android Client:
+* Place custom video player view under preview in hierarchy.
+* Fixed memory leak in DivBaseBinder by properly removing the pre-draw listener from ViewTreeObserver on detach.
+* Fixed multiple observations of a single variable.
+* Kotlin runtime null checks are disabled in release builds.
+
+# iOS Client:
+* Fixed crash when using empty gallery with paging scroll mode.
+* Fixed hit test for DetachableAnimationBlockView.
+
+# Web Client:
+* Fixed an error with missing global variables when calculating the values of local card-level variables.
+
+
 ## 32.23.0
 
 # Android Client:
