@@ -37,8 +37,11 @@ public final class DivPersistentValuesStorage {
   func get<T>(name: String) -> T? {
     let items = storage.value.items
     let currentTimestamp = timestampProvider.value
-    guard let storedValue = items[name],
-          currentTimestamp - storedValue.timestamp < storedValue.lifetimeInSec * 1000 else {
+    guard let storedValue = items[name] else {
+      return nil
+    }
+    let elapsedTimeInSec = (currentTimestamp - storedValue.timestamp) / 1000
+    guard elapsedTimeInSec < storedValue.lifetimeInSec else {
       return nil
     }
     let divStoredValue = DivStoredValue(
