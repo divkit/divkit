@@ -1,5 +1,5 @@
 {
-  "description": "Decl properties linked with cicular expression.",
+  "description": "Decl properties linked with circular expression.",
   "div_data": {
     "card": {
       "log_id": "properties-cycled",
@@ -55,6 +55,28 @@
       ],
       "platforms": [
         "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Expected 3 errors"
+      }
+    },
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'second' is missing. Expression: @{second}"
+        },
+        {
+          "type": "error",
+          "value": "Variable 'first' is missing. Expression: @{first}"
+        },
+        {
+          "type": "error",
+          "value": "Variable 'first' is missing. Expression: @{first}"
+        }
+      ],
+      "platforms": [
+        "web"
       ]
     }
   ]

@@ -72,12 +72,13 @@
           "variable_name": "color_prop",
           "value": {
             "type": "color",
-            "value": "#AABBCC"
+            "value": "#FFAABBCC"
           }
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -103,12 +104,13 @@
           "variable_name": "color_prop",
           "value": {
             "type": "color",
-            "value": "#FF00FF"
+            "value": "#FFFF00FF"
           }
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

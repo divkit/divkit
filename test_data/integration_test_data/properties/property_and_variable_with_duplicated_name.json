@@ -37,10 +37,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Duplicate variable (name=first)"
+          "value": "Duplicate variable"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

@@ -374,3 +374,55 @@ export function variableToValue(variable: Variable): EvalValue {
         value
     };
 }
+
+export function variableValueFromString(val: string, type: VariableType): VariableValue {
+    if (type === 'string') {
+        return val;
+    } else if (type === 'integer') {
+        try {
+            return toBigInt(val);
+        } catch (_err) {
+            throw new Error('Incorrect variable value');
+        }
+    } else if (type === 'number') {
+        const converted = Number(val);
+        if (
+            Number.isNaN(converted) ||
+            !isFinite(converted)
+        ) {
+            throw new Error('Incorrect variable value');
+        }
+
+        return converted;
+    } else if (type === 'boolean') {
+        if (val === '1' || val === 'true') {
+            return true;
+        } else if (val === '0' || val === 'false') {
+            return false;
+        }
+
+        throw new Error('Incorrect variable value');
+    } else if (type === 'color') {
+        if (typeof val !== 'string' || !parseColor(val)) {
+            throw new Error('Incorrect variable value');
+        }
+
+        return transformColorValue(val);
+    } else if (type === 'url') {
+        if (typeof val !== 'string') {
+            throw new Error('Incorrect variable value');
+        }
+        checkUrl(val);
+
+        return val;
+    } else if (type === 'dict' || type === 'array') {
+        try {
+            return JSON.parse(val);
+        } catch (_err) {
+            throw new Error('Incorrect dict value');
+        }
+    }
+
+    // For purpose when new eval value types will be added
+    throw new Error(`Unexpected type ${type}`);
+}

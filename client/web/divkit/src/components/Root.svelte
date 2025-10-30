@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { type Readable, type Unsubscriber, type Writable, writable } from 'svelte/store';
+    import { get, type Readable, type Unsubscriber, type Writable, writable } from 'svelte/store';
 
     let isPointerFocus = writable(true);
     let rootInstancesCount = 0;
@@ -54,7 +54,8 @@
         ActionScrollBy,
         Overflow,
         VideoPlayerProvider,
-        DivFunction
+        DivFunction,
+        DivPropertyVariable
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -79,7 +80,7 @@
     } from '../expressions/json';
     import { evalExpression } from '../expressions/eval';
     import { Truthy } from '../utils/truthy';
-    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, type VariableType } from '../expressions/variable';
+    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, variableValueFromString, type VariableType } from '../expressions/variable';
     import { GlobalVariablesController } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
@@ -324,52 +325,47 @@
             return vars.get(name) || awaitVariableChanges(name);
         }).filter(Truthy);
 
-        const unitedStore = writable<MaybeMissing<T>>();
-        const usedVars = new Map<Variable, Unsubscriber>();
-        let unsubscribeDerived: (() => void) | undefined;
-        const unsubscribe = () => {
-            unsubscribeDerived?.();
-            for (const [_instance, unsubscribe] of usedVars) {
-                unsubscribe();
-            }
-        };
+        return writable<MaybeMissing<T>>(undefined, set => {
+            const usedVars = new Map<Variable, Unsubscriber>();
+            let unsubscribeDerived: (() => void) | undefined;
 
-        const evalExpr = () => {
-            const res = prepared.applyVars(vars, customFunctions, keepComplex);
+            const evalExpr = () => {
+                const res = prepared.applyVars(vars, customFunctions, keepComplex);
 
-            for (const [instance, unsubscribe] of usedVars) {
-                if (!res.usedVars?.has(instance)) {
-                    unsubscribe();
-                    usedVars.delete(instance);
-                }
-            }
-            if (res.usedVars) {
-                for (const instance of res.usedVars) {
-                    if (!usedVars.has(instance)) {
-                        let isFirst = true;
-                        usedVars.set(instance, instance.subscribe(() => {
-                            if (!isFirst) {
-                                unitedStore.set(evalExpr());
-                            }
-                            isFirst = false;
-                        }));
+                for (const [instance, unsubscribe] of usedVars) {
+                    if (!res.usedVars?.has(instance)) {
+                        unsubscribe();
+                        usedVars.delete(instance);
                     }
                 }
-            }
+                if (res.usedVars) {
+                    for (const instance of res.usedVars) {
+                        if (!usedVars.has(instance)) {
+                            let isFirst = true;
+                            usedVars.set(instance, instance.subscribe(() => {
+                                if (!isFirst) {
+                                    set(evalExpr());
+                                }
+                                isFirst = false;
+                            }));
+                        }
+                    }
+                }
 
-            return res.result;
-        };
+                return res.result;
+            };
 
-        unsubscribeDerived = derived(stores, evalExpr).subscribe(derivedResult => {
-            unitedStore.set(derivedResult);
+            unsubscribeDerived = derived(stores, evalExpr).subscribe(derivedResult => {
+                set(derivedResult);
+            });
+
+            return () => {
+                unsubscribeDerived?.();
+                for (const [_instance, unsubscribe] of usedVars) {
+                    unsubscribe();
+                }
+            };
         });
-
-        return {
-            subscribe(fn) {
-                unitedStore.subscribe(fn);
-                return unsubscribe;
-            }
-        };
     }
 
     function getJsonWithVars<T>(
@@ -1564,6 +1560,7 @@
             processUrls?: boolean;
             node?: HTMLElement;
             logType?: string;
+            additionalVars?: Map<string, Variable>;
         } = {}
     ): Promise<void> {
         if (!actions || !Array.isArray(actions)) {
@@ -1573,8 +1570,8 @@
         const log = opts.componentContext?.logError || logError;
         const getJson = (val: any) =>
             opts.componentContext ?
-                opts.componentContext.getJsonWithVars(val, undefined, true) :
-                getJsonWithVars(log, val, undefined, true);
+                opts.componentContext.getJsonWithVars(val, opts.additionalVars, true) :
+                getJsonWithVars(log, val, opts.additionalVars, true);
         const filtered = actions.filter(action => {
             const isEnabled = getJson(action.is_enabled);
 
@@ -1949,7 +1946,8 @@
                     componentContext: ctx,
                     processUrls: opts.processUrls,
                     node: opts.node,
-                    logType: opts.logType
+                    logType: opts.logType,
+                    additionalVars: opts.additionalVars
                 });
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
@@ -2355,21 +2353,113 @@
         }
     }
 
+    function constructProperty(
+        variable: MaybeMissing<DivPropertyVariable>,
+        componentContext?: ComponentContext,
+        additionalVars?: Map<string, Variable>
+    ) {
+        const log = componentContext?.logError || logError;
+        const name = variable.name;
+        const valueType = variable.value_type;
+
+        if (typeof variable.get !== 'string' || !variable.get) {
+            log(wrapError(new Error('Incorrect property getter'), {
+                additional: {
+                    name
+                }
+            }));
+            return;
+        }
+        if (!name) {
+            log(wrapError(new Error('Missing property name')));
+            return;
+        }
+        if (!valueType) {
+            log(wrapError(new Error('Missing property value_type')));
+            return;
+        }
+
+        const derivedExpression = componentContext ?
+            componentContext.getDerivedFromVars(variable.get, undefined, true) :
+            getDerivedFromVars(logError, variable.get, {
+                keepComplex: true
+            });
+
+        const val = get(derivedExpression);
+        if (val === undefined) {
+            return;
+        }
+
+        const setValue = (val: unknown) => {
+            const newValue = createConstVariable(
+                variable.new_value_variable_name || 'new_value',
+                variable.value_type as VariableType,
+                val
+            );
+            const additionalVarsClosure: Map<string, Variable> = new Map(additionalVars);
+            additionalVarsClosure.set(newValue.getName(), newValue);
+
+            if (Array.isArray(variable.set) && variable.set.length) {
+                if (componentContext) {
+                    componentContext.execAnyActions(variable.set, {
+                        additionalVars: additionalVarsClosure
+                    });
+                } else {
+                    execAnyActions(variable.set, {
+                        additionalVars: additionalVarsClosure
+                    });
+                }
+            } else {
+                log(wrapError(new Error('Cannot set property. No setters provided.'), {
+                    additional: {
+                        name
+                    }
+                }));
+            }
+        };
+
+        return {
+            getName() {
+                return name;
+            },
+            subscribe(cb) {
+                return derivedExpression.subscribe(cb);
+            },
+            set(val) {
+                const converted = variableValueFromString(val, valueType);
+                setValue(converted);
+            },
+            setValue,
+            getValue() {
+                return get(derivedExpression);
+            },
+            getType() {
+                return valueType;
+            },
+        } as Variable;
+    }
+
     function constructVariable(
         variable: MaybeMissing<DivVariable>,
         componentContext?: ComponentContext,
         additionalVars?: Map<string, Variable>
     ): Variable | undefined {
-        if (!variable.type || !variable.name || !(variable.type in TYPE_TO_CLASS)) {
+        if (variable.type === 'property') {
+            return constructProperty(variable, componentContext, additionalVars);
+        }
+
+        if (!variable.type || !variable.name || !(variable.type in TYPE_TO_CLASS) || !('value' in variable)) {
             // Skip unknown types (from the future versions maybe)
             return;
         }
 
-        let value = componentContext ?
-            componentContext.getJsonWithVars(variable.value, additionalVars, true) :
-            getJsonWithVars(logError, variable.value, additionalVars, true);
+        const valueSource = variable.value;
 
-        if (variable.value && typeof variable.value === 'string' && value === undefined) {
+        let value = componentContext ?
+            componentContext.getJsonWithVars(valueSource, additionalVars, true) :
+            getJsonWithVars(logError, valueSource, additionalVars, true);
+
+        if (valueSource && typeof valueSource === 'string' && value === undefined) {
             // Expression error - already logged inside getJsonWithVars
             return;
         }

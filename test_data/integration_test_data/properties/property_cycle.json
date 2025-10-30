@@ -1,5 +1,5 @@
 {
-  "description": "Decl property with cicular expression.",
+  "description": "Decl property with circular expression.",
   "div_data": {
     "card": {
       "log_id": "property-cycle",
@@ -43,10 +43,15 @@
         {
           "type": "error",
           "value": "Variable 'title' is missing. Expression: @{title}"
+        },
+        {
+          "type": "error",
+          "value": "Variable 'title' is missing. Expression: @{title}"
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

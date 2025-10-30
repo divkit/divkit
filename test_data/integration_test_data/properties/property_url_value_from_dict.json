@@ -41,11 +41,6 @@
               {
                 "type": "text",
                 "text": "URL: @{site_prop}"
-              },
-              {
-                "type": "input",
-                "text_variable": "site_prop",
-                "keyboard_type": "url"
               }
             ]
           }
@@ -76,7 +71,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -107,7 +103,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

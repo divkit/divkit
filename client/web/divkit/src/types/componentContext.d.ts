@@ -59,6 +59,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
             processUrls?: boolean;
             node?: HTMLElement;
             logType?: string;
+            additionalVars?: Map<string, Variable>;
         }
     ): Promise<void>;
     getDerivedFromVars<T>(

@@ -43,7 +43,31 @@
       ],
       "platforms": [
         "ios"
-      ]
+      ],
+      "unsupported_platforms": {
+        "web": "Error properties in a separate object"
+      }
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=prop&value=setter",
+          "log_id": "set_prop"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Cannot set property. No setters provided."
+        }
+      ],
+      "platforms": [
+        "web"
+      ],
+      "unsupported_platforms": {
+        "ios": "Error properties in a error message",
+        "android": "Error properties in a error message"
+      }
     }
   ]
 }

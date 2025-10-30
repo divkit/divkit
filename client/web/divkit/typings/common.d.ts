@@ -76,9 +76,18 @@ export interface DivArrayVariable {
     value: unknown[];
 }
 
+export interface DivPropertyVariable {
+    type: 'property';
+    name: string;
+    value_type: 'string' | 'integer' | 'number' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
+    new_value_variable_name?: string;
+    get: string;
+    set?: Action[];
+}
+
 export type DivVariable = DivStrVariable | DivIntVariable | DivNumberVariable |
     DivBooleanVariable | DivColorVariable | DivUrlVariable | DivDictVariable |
-    DivArrayVariable;
+    DivArrayVariable | DivPropertyVariable;
 
 export interface VariableTrigger {
     mode?: 'on_condition' | 'on_variable';

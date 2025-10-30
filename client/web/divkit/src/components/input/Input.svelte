@@ -68,7 +68,6 @@
     import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
-    import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { updatePhoneMask } from '../../utils/updatePhoneMask';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import Outer from '../utilities/Outer.svelte';

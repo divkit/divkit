@@ -1,5 +1,5 @@
 {
-  "description": "Property setting string value from dict",
+  "description": "Using custom new value name",
   "div_data": {
     "card": {
       "log_id": "property-string-value-from-dict",
@@ -82,7 +82,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
