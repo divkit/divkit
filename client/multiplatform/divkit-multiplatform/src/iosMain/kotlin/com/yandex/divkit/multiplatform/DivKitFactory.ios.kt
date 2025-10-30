@@ -1,16 +1,25 @@
 package com.yandex.divkit.multiplatform
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
 import androidx.compose.ui.viewinterop.UIKitView
-import cocoapods.DivKitKMP.DivKitKMPFacade
 import cocoapods.DivKitKMP.DivKitKMPActionHandlerProtocol
 import cocoapods.DivKitKMP.DivKitKMPErrorReporterProtocol
+import cocoapods.DivKitKMP.DivKitKMPFacade
 import com.yandex.divkit.multiplatform.dependencies.ActionHandler
 import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
 import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.useContents
+import platform.CoreGraphics.CGSizeMake
 import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
@@ -36,16 +45,22 @@ class DivKitFactoryImpl(
         jsonData: String,
         modifier: Modifier
     ) {
-        UIKitView(
-            factory = {
-                divKitFactory.makeDivKitView(jsonString = jsonData, cardId = cardId)
-            },
-            modifier = modifier,
-            properties = UIKitInteropProperties(
-                isInteractive = true,
-                isNativeAccessibilityEnabled = true
+        val view = remember(cardId, jsonData) {
+            divKitFactory.makeDivKitView(jsonString = jsonData, cardId = cardId)
+        }
+
+        Box(modifier = modifier) {
+            UIKitView(
+                factory = {
+                    view
+                },
+                modifier = Modifier.fillMaxSize(),
+                properties = UIKitInteropProperties(
+                    isInteractive = true,
+                    isNativeAccessibilityEnabled = true
+                )
             )
-        )
+        }
     }
 
     override fun setGlobalVariables(variables: Map<String, Any>) {

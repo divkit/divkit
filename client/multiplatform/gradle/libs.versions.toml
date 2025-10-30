@@ -1,8 +1,8 @@
 [versions]
-agp = "8.12.3"
-compose = "1.9.0"
-divkit = "32.20.0"
-kotlin = "2.2.20"
+agp = "8.13.0"
+compose = "1.9.1"
+divkit = "32.22.0"
+kotlin = "2.2.21"
 
 
 [libraries]

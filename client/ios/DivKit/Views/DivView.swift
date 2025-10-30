@@ -132,6 +132,11 @@ public final class DivView: VisibleBoundsTrackingView {
     )
   }
 
+  public override func sizeThatFits(_ size: CGSize) -> CGSize {
+    guard let cardSize else { return .zero }
+    return cardSize.sizeFor(parentViewSize: size)
+  }
+
   /// Sets the source of the ``DivView`` and updates the layout.
   /// - Parameters:
   /// - source: The source of the ``DivView``, specified using `JSON` data, a `Data` object, or
