@@ -1,7 +1,7 @@
 package divkit.convention
 
 import com.yandex.divkit.gradle.PublicationType
-import com.yandex.divkit.gradle.optProperty
+import com.yandex.divkit.gradle.optStringProperty
 import com.yandex.divkit.gradle.sourceSets
 import java.net.URI
 
@@ -20,12 +20,12 @@ val bucketPassword: String? by rootProject.extra
 val publishToBucket: Boolean by rootProject.extra
 
 extra.apply {
-    set("signing.keyId", rootProject.optProperty<String>("signing.keyId") ?: System.getenv("SIGNING_KEY_ID"))
-    set("signing.password", rootProject.optProperty<String>("signing.password") ?: System.getenv("SIGNING_PASSWORD"))
-    set("signing.secretKeyRingFile", rootProject.optProperty<String>("signing.secretKeyRingFile") ?: System.getenv("SIGNING_SECRET_KEY_RING_FILE"))
+    set("signing.keyId", rootProject.optStringProperty("signing.keyId") ?: System.getenv("SIGNING_KEY_ID"))
+    set("signing.password", rootProject.optStringProperty("signing.password") ?: System.getenv("SIGNING_PASSWORD"))
+    set("signing.secretKeyRingFile", rootProject.optStringProperty("signing.secretKeyRingFile") ?: System.getenv("SIGNING_SECRET_KEY_RING_FILE"))
 }
 
-group = "com.yandex.divkit.json-builder"
+group = "com.yandex.divkit.kotlin-json-builder"
 version = divkitVersionSuffixed
 
 if (publishToMavenCentral) {

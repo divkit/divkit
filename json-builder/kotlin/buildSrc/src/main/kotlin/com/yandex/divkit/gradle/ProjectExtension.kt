@@ -23,6 +23,10 @@ fun Project.applyProperties(from: String) {
     }
 }
 
-inline fun <reified T> Project.optProperty(name: String): T? {
-    return findProperty(name) as? T
+fun Project.optStringProperty(name: String): String? {
+    return findProperty(name) as? String
+}
+
+fun Project.optBooleanProperty(name: String): Boolean? {
+    return optStringProperty(name)?.toBoolean()
 }

@@ -1,10 +1,15 @@
+import com.yandex.divkit.gradle.optBooleanProperty
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     id("divkit.convention.publishing-project")
     id("divkit.convention.publishing-module")
 }
 
-group = "com.yandex.div"
+val useLegacyGroupId = optBooleanProperty("useLegacyGroupId") ?: false
+if (useLegacyGroupId) {
+    group = "com.yandex.div"
+}
 
 kotlin {
     jvmToolchain(17)
@@ -12,5 +17,4 @@ kotlin {
 
 dependencies {
     api(project(":divan-dsl"))
-    api(project(":legacy-json-builder"))
 }
