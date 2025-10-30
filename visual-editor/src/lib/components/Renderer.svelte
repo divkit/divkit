@@ -1371,6 +1371,8 @@
                 };
 
                 rendererErrors.set(resultErrors);
+
+                state.onRender();
             });
         });
     }

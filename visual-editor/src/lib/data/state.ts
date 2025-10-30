@@ -180,6 +180,8 @@ export class State {
 
     fileLimits: FileLimits | undefined;
 
+    isGlobalCheckRequired = false;
+
     constructor({
         locale,
         fileLimits,
@@ -439,7 +441,7 @@ export class State {
 
         this.tree.set(this.divToLeaf(json.card.states[0].div));
 
-        this.refreshGlobalChecks();
+        this.isGlobalCheckRequired = true;
 
         this.awaitMissingTankerKeys(json).then(res => {
             if (res) {
@@ -944,7 +946,7 @@ export class State {
         }
 
         this.tree.set(get(this.tree));
-        this.refreshGlobalChecks();
+        this.isGlobalCheckRequired = true;
     }
 
     undo(): void {
@@ -961,7 +963,7 @@ export class State {
         this.#historyIndex.set(historyIndex - 1);
 
         this.tree.set(get(this.tree));
-        this.refreshGlobalChecks();
+        this.isGlobalCheckRequired = true;
     }
 
     redo(): void {
@@ -978,7 +980,7 @@ export class State {
         this.#historyIndex.set(historyIndex + 1);
 
         this.tree.set(get(this.tree));
-        this.refreshGlobalChecks();
+        this.isGlobalCheckRequired = true;
     }
 
     pasteLeaf(source: TreeLeaf, into: TreeLeaf, insertIndex?: number): void {
@@ -1136,5 +1138,12 @@ export class State {
         }
 
         return res;
+    }
+
+    onRender(): void {
+        if (this.isGlobalCheckRequired) {
+            this.isGlobalCheckRequired = false;
+            this.refreshGlobalChecks();
+        }
     }
 }
