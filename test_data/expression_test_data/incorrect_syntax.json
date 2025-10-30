@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "expression": "@{@{1}}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}
