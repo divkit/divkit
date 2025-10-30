@@ -467,7 +467,11 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'vertical' || layoutParams.stretchWidth) {
+            if (
+                layoutParams.parentLayoutOrientation === 'vertical' ||
+                layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerKnownWidth ||
+                layoutParams.stretchWidth
+            ) {
                 const leftMargin = ($direction === 'ltr' ? $jsonMargins?.start : $jsonMargins?.end) ??
                     $jsonMargins?.left ??
                     0;
@@ -547,7 +551,11 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'horizontal' || layoutParams.stretchHeight) {
+            if (
+                layoutParams.parentLayoutOrientation === 'horizontal' ||
+                layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerKnownHeight ||
+                layoutParams.stretchHeight
+            ) {
                 const topMargin = $jsonMargins?.top ?? 0;
                 const bottomMargin = $jsonMargins?.bottom ?? 0;
                 const totalHeight = `calc(100% - ${pxToEmWithUnits(topMargin + bottomMargin)})`;

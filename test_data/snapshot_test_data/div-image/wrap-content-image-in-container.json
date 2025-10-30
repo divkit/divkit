@@ -1,0 +1,48 @@
+{
+  "description": "Tests image with wrap_content width and match_parent height, image should be square and the text should be visible.",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "wrap_content_width",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "width": {
+            "type": "fixed",
+            "value": 150
+          },
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "text",
+              "text": "50dp width",
+              "font_size": 16,
+              "background": [{
+                "type": "solid",
+                "color": "#9ed9ff"
+              }]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

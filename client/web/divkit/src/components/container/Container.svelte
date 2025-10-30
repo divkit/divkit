@@ -349,6 +349,12 @@
         if (!aspect && !supportHeightWrapContent && isHeightWrapContent) {
             newChildLayoutParams.parentVerticalWrapContent = true;
         }
+        if (!isWidthWrapContent) {
+            newChildLayoutParams.parentContainerKnownWidth = true;
+        }
+        if (!isHeightWrapContent) {
+            newChildLayoutParams.parentContainerKnownHeight = true;
+        }
         newChildLayoutParams.stretchWidth = stretchWidth;
         newChildLayoutParams.stretchHeight = stretchHeight;
         if (orientation === 'horizontal') {
