@@ -209,7 +209,9 @@ public final class GalleryView: BlockView {
     collectionView.showsHorizontalScrollIndicator = model.scrollbar.show
     collectionView.showsVerticalScrollIndicator = model.scrollbar.show
     if isItemsNumberChanged {
-      collectionView.reloadData()
+      withDetachedFocusObserver {
+        collectionView.reloadData()
+      }
     } else {
       configureVisibleCells(blocks)
     }
@@ -319,6 +321,12 @@ public final class GalleryView: BlockView {
     if collectionView.contentOffset != contentOffset {
       collectionView.setContentOffset(contentOffset, animated: animated)
     }
+  }
+
+  private func withDetachedFocusObserver(_ action: () -> Void) {
+    observer?.setFocusTrackingEnabled(false)
+    action()
+    observer?.setFocusTrackingEnabled(true)
   }
 }
 

@@ -48,6 +48,7 @@ public final class DivView: VisibleBoundsTrackingView {
   private var shouldRecalculateVisibilitySubscription: Disposable?
 
   private var shouldRecalculateVisibility = true
+  private var shouldTrackFocusChanges = true
 
   private var blockProvider: DivBlockProvider? {
     didSet {
@@ -304,6 +305,7 @@ extension DivView: ElementStateObserver {
   }
 
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
+    guard shouldTrackFocusChanges else { return }
     divKitComponents.blockStateStorage.focusedElementChanged(isFocused: isFocused, forPath: path)
     blockProvider?.update(path: path, isFocused: isFocused)
   }
@@ -321,6 +323,10 @@ extension DivView: ElementStateObserver {
       from: nil,
       for: nil
     )
+  }
+
+  public func setFocusTrackingEnabled(_ isEnabled: Bool) {
+    shouldTrackFocusChanges = isEnabled
   }
 }
 
