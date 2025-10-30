@@ -24,6 +24,7 @@ export interface InplaceEditorShowProps {
     disabled?: boolean;
     textDisabled?: boolean;
     style: Record<string, string>;
+    scale: number;
     callback(value: {
         text: string;
         ranges: object[];

@@ -26,6 +26,7 @@
         margin: 0;
         padding: 0;
         font: inherit;
+        color: inherit;
         border: none;
         border-radius: 8px;
         background-color: var(--fill-transparent-2);

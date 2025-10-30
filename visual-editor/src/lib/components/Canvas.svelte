@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
-    import Select from './Select.svelte';
+    import { getContext, onMount } from 'svelte';
     import Renderer from './Renderer.svelte';
     import CanvasButton from './CanvasButton.svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../ctx/languageContext';
@@ -11,39 +10,24 @@
     import warningsIcon from '../../assets/warnings.svg?url';
     import undoIcon from '../../assets/undo.svg?url';
     import redoIcon from '../../assets/redo.svg?url';
-    import safeAreaOffIcon from '../../assets/safeAreaOff.svg?url';
-    import safeAreaOnIcon from '../../assets/safeAreaOn.svg?url';
     import { shortcuts, type ShortcutList } from '../utils/keybinder/use';
     import { undo as undoShortcut, redo as redoShortcut } from '../utils/keybinder/shortcuts';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
-    import Text from './controls/Text.svelte';
     import ErrorsDialog from './ErrorsDialog.svelte';
     import { encodeBackground } from '../utils/encodeBackground';
+    import ViewportControl from './ViewportControl.svelte';
 
-    const { l10n, l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { cardLocales, state, directionSelector, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
+    const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
+    const { state, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
     const {
         paletteEnabled,
         currentUndoStore,
         currentRedoStore,
         rendererErrorsOnly,
         rendererWarningsOnly,
-        locale,
         previewThemeStore,
         themeStore,
-        direction,
-        safeAreaEmulation,
-        safeAreaEmulationEnabled
     } = state;
-
-    const VIEWPORT_LIST = [
-        '320x568',
-        '360x640',
-        '375x667',
-        '393x851',
-        '414x896',
-        '768x1024'
-    ];
 
     const DEFAULT_VIEWPORT = '360x640';
 
@@ -53,34 +37,15 @@
         });
     });
 
-    $: viewportList = [
-        ...VIEWPORT_LIST,
-        'custom'
-    ].map(it => ({
-        value: it,
-        text: it === 'custom' ? $l10n('canvasCustomSize') : it
-    }));
-
     let viewport = DEFAULT_VIEWPORT;
-    let selectViewport = viewport;
-    let viewportWidth = 100;
-    let viewportHeight = 100;
+    let scale = 1;
     let errorButtonNode: HTMLElement;
     let errorsDialog: ErrorsDialog;
-
-    $: if (VIEWPORT_LIST.includes(viewport)) {
-        selectViewport = viewport;
-    } else {
-        selectViewport = 'custom';
-    }
-
-    $: {
-        [viewportWidth, viewportHeight] = viewport.split('x').map(Number);
-    }
 
     let canvas: HTMLElement;
     let wrapper: HTMLElement;
     let topbar: HTMLElement;
+    let renderer: Renderer;
 
     let mousedownX = 0;
     let mousedownY = 0;
@@ -110,23 +75,50 @@
         showErrors();
     }
 
-    function onViewportSelectChange() {
-        if (selectViewport !== 'custom') {
-            viewport = selectViewport;
+    function fitToWindow(): void {
+        const TOP_MARGIN = 28 + 4;
+        const RIGHT_MARGIN = 16;
+        const BOTTOM_MARGIN = 16 + 24;
+
+        const topbarHeight = topbar.offsetHeight;
+
+        const availWidth = canvas.offsetWidth - RIGHT_MARGIN;
+        const availHeight = canvas.offsetHeight - TOP_MARGIN - BOTTOM_MARGIN - topbarHeight;
+        const availAspect = availWidth / availHeight;
+        const size = viewport.split('x').map(Number);
+        const viewportAspect = size[0] / size[1];
+
+        let newScale;
+        if (viewportAspect < availAspect) {
+            newScale = availHeight / size[1];
+        } else {
+            newScale = availWidth / size[0];
+        }
+        newScale = Math.max(.33, Math.min(5, newScale));
+        scale = newScale;
+    }
+
+    function onWheel(event: WheelEvent): void {
+        if (event.ctrlKey) {
+            event.preventDefault();
+
+            let newScale = scale;
+            if (event.deltaY > 0) {
+                newScale *= 1.1;
+            } else {
+                newScale /= 1.1;
+            }
+
+            newScale = Math.max(.33, Math.min(5, newScale));
+            scale = newScale;
         }
     }
 
-    function onViewportWidthChange(event: CustomEvent<{
-        value: string;
-    }>): void {
-        viewport = `${event.detail.value}x${viewportHeight}`;
-    }
-
-    function onViewportHeightChange(event: CustomEvent<{
-        value: string;
-    }>): void {
-        viewport = `${viewportWidth}x${event.detail.value}`;
-    }
+    onMount(() => {
+        if (state.fitViewportOnCreate) {
+            fitToWindow();
+        }
+    });
 
     const SHORTCUTS: ShortcutList = [
         [undoShortcut, () => state.undo()],
@@ -144,46 +136,11 @@
     use:shortcuts={SHORTCUTS}
 >
     <div class="canvas__topbar" bind:this={topbar}>
-        <Select
-            bind:value={selectViewport}
-            items={viewportList}
-            theme="canvas"
-            title={$l10nString('previewSize')}
-            on:change={onViewportSelectChange}
+        <ViewportControl
+            bind:viewport={viewport}
+            bind:scale={scale}
+            on:fitToWindow={fitToWindow}
         />
-
-        {#if selectViewport === 'custom'}
-            <Text
-                value={viewportWidth}
-                subtype="integer"
-                size="small"
-                width="small"
-                min={100}
-                title={$l10nString('props.width')}
-                on:change={onViewportWidthChange}
-            />
-            <Text
-                value={viewportHeight}
-                subtype="integer"
-                size="small"
-                width="small"
-                min={100}
-                title={$l10nString('props.height')}
-                on:change={onViewportHeightChange}
-            />
-        {/if}
-
-        {#if safeAreaEmulation}
-            <CanvasButton
-                title={$l10n($safeAreaEmulationEnabled ? 'safeAreaOff' : 'safeAreaOn')}
-                on:click={() => $safeAreaEmulationEnabled = !$safeAreaEmulationEnabled}
-            >
-                <div
-                    class="canvas__button-icon canvas__button-icon_inversed"
-                    style:background-image="url({encodeBackground($safeAreaEmulationEnabled ? safeAreaOnIcon : safeAreaOffIcon)})"
-                ></div>
-            </CanvasButton>
-        {/if}
 
         {#if $paletteEnabled}
             <CanvasButton
@@ -195,26 +152,6 @@
                     style:background-image="url({encodeBackground($previewThemeStore === 'light' ? lightThemeIcon : darkThemeIcon)})"
                 ></div>
             </CanvasButton>
-        {/if}
-
-        {#if directionSelector}
-            <CanvasButton
-                title={$l10n($direction === 'ltr' ? 'rtl.switchToRTL' : 'rtl.switchToLTR')}
-                on:click={() => $direction = ($direction === 'ltr' ? 'rtl' : 'ltr')}
-            >
-                <div class="canvas__rtl-button">
-                    {$direction === 'ltr' ? 'LTR' : 'RTL'}
-                </div>
-            </CanvasButton>
-        {/if}
-
-        {#if cardLocales.length}
-            <Select
-                bind:value={$locale}
-                items={cardLocales.map(it => ({ value: it.id, text: it.text[$lang] }))}
-                theme="canvas"
-                title={$l10nString('previewLang')}
-            />
         {/if}
 
         <CanvasButton
@@ -263,8 +200,17 @@
         </CanvasButton>
     </div>
 
-    <div class="canvas__renderer-wrapper" bind:this={wrapper}>
-        <Renderer bind:viewport={viewport} theme={$previewThemeStore} />
+    <div
+        class="canvas__renderer-wrapper"
+        bind:this={wrapper}
+        on:wheel|nonpassive={onWheel}
+    >
+        <Renderer
+            bind:this={renderer}
+            bind:viewport={viewport}
+            bind:scale={scale}
+            theme={$previewThemeStore}
+        />
     </div>
 </div>
 <ErrorsDialog bind:this={errorsDialog} />
@@ -284,10 +230,11 @@
         position: sticky;
         z-index: 1;
         top: 0;
+        left: 0;
         display: flex;
         gap: 12px;
         height: 32px;
-        padding: 20px 20px 10px;
+        padding: 20px 20px;
         background: var(--background-overflow-transparent);
     }
 
@@ -296,7 +243,8 @@
         justify-content: center;
         align-items: start;
         flex: 1 1 auto;
-        margin-top: 10px;
+        min-width: max-content;
+        margin-top: 4px;
     }
 
     .canvas__button-icon {
@@ -323,9 +271,5 @@
         display: flex;
         align-items: center;
         padding: 0 4px;
-    }
-
-    .canvas__rtl-button {
-        padding: 0 12px;
     }
 </style>

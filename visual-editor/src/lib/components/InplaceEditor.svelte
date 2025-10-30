@@ -26,6 +26,7 @@
     export let disabled = false;
     export let textDisabled = false;
     export let rotation = 0;
+    export let scale: number;
 
     export function getValue() {
         return {
@@ -505,7 +506,7 @@
     }
 
     $: style = {
-        'font-size': pxToEm(fontSize),
+        'font-size': pxToEm(fontSize * scale),
         'line-height': lineHeight,
         // 'max-height': maxHeight,
         // '-webkit-line-clamp': lineClamp,

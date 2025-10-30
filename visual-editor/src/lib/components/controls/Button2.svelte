@@ -4,16 +4,22 @@
     export let title = '';
     export let slim = false;
     export let tag: 'button' | 'div' = 'button';
-    export let theme: 'border' | 'normal' = 'border';
+    export let theme: 'border' | 'border-gray' | 'normal' = 'border';
+    export let size: 'small' | 'medium' = 'medium';
+    export let centerContent = false;
+    export let customTooltips = false;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={tag}
-    class="button2 button2_theme_{theme} {cls}"
+    class="button2 button2_theme_{theme} button2_size_{size} {cls}"
     class:button2_slim={slim}
+    class:button2_center-content={centerContent}
     disabled={disabled ? true : undefined}
-    {title}
+    data-custom-tooltip={customTooltips ? title : ''}
+    title={customTooltips ? undefined : title}
+    aria-label={title}
     on:click
 >
     <slot />
@@ -37,6 +43,19 @@
         transition: .15s ease-in-out;
         transition-property: border-color, background-color;
         cursor: pointer;
+    }
+
+    .button2_theme_border-gray {
+        background: var(--fill-transparent-minus-1);
+    }
+
+    .button2_center-content {
+        justify-content: center;
+    }
+
+    .button2_size_small {
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     .button2_theme_normal {

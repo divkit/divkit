@@ -76,6 +76,7 @@
             disabled={currentProps.disabled}
             textDisabled={currentProps.textDisabled}
             rotation={currentProps.rotation}
+            scale={currentProps.scale}
             bind:this={editor}
             on:close={onEditorClose}
             on:resize={onEditorResize}

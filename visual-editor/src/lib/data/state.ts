@@ -176,6 +176,8 @@ export class State {
         };
     });
 
+    fitViewportOnCreate?: boolean;
+
     fileLimits: FileLimits | undefined;
 
     constructor({

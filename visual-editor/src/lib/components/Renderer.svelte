@@ -45,6 +45,7 @@
     import Select from './Select.svelte';
 
     export let viewport: string;
+    export let scale = 1;
     export let theme: 'light' | 'dark';
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
@@ -332,10 +333,10 @@
                 }
 
                 const finalBox = {
-                    top: top - marginTop,
-                    right: left + elem.offsetWidth + marginRight,
-                    bottom: top + elem.offsetHeight + marginBottom,
-                    left: left - marginLeft,
+                    top: top - marginTop * scale,
+                    right: left + elem.offsetWidth * scale + marginRight * scale,
+                    bottom: top + elem.offsetHeight * scale + marginBottom * scale,
+                    left: left - marginLeft * scale,
                 };
 
                 let emptyFileType = '';
@@ -395,9 +396,9 @@
                     if (highlightMode === 'margins') {
                         insets = [
                             'M 0 0',
-                            `h ${finalBox.right - finalBox.left}`,
-                            `v ${finalBox.bottom - finalBox.top}`,
-                            `h ${-(finalBox.right - finalBox.left)}`,
+                            `h ${(finalBox.right - finalBox.left) / scale}`,
+                            `v ${(finalBox.bottom - finalBox.top) / scale}`,
+                            `h ${-(finalBox.right - finalBox.left) / scale}`,
                             'Z',
                             `M ${marginLeft} ${marginTop}`,
                             `v ${elem.offsetHeight}`,
@@ -595,7 +596,7 @@
         );
     }
 
-    $: if (instance && viewport) {
+    $: if (instance && viewport && scale) {
         // wait till DOM update and then update sizes
         tick().then(updateHighlightNoDeps);
     }
@@ -1467,7 +1468,7 @@
         const computed = getComputedStyle(node);
         componentClone = node.cloneNode(true) as HTMLElement;
         componentClone.classList.add('renderer__component-clone');
-        componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${rotation}deg)`;
+        componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${rotation}deg) scale(${scale})`;
         componentClone.style.width = `${Math.ceil(offsetWidth)}px`;
         componentClone.style.height = `${Math.ceil(offsetHeight)}px`;
         componentClone.style.fontSize = computed.fontSize;
@@ -1645,7 +1646,7 @@
                 targetX = Math.max(0, Math.min(maxX, targetX));
                 targetY = Math.max(0, Math.min(maxY, targetY));
 
-                componentClone.style.transform = `translate(${targetX}px, ${targetY}px) rotate(${rotation}deg)`;
+                componentClone.style.transform = `translate(${targetX}px, ${targetY}px) rotate(${rotation}deg) scale(${scale})`;
                 componentCloneRect = {
                     ...componentCloneRect,
                     top: targetY + containerBbox.top,
@@ -1776,12 +1777,16 @@
 
                 const oldMargins = json.margins || {};
                 const margins: Record<string, number> = {};
+                const parentBbox = leaf.parent?.props.node?.getBoundingClientRect() || {
+                    top: 0,
+                    left: 0
+                };
                 if (moveX) {
                     if (hAlign === 'left' || isMatchParentWidth) {
-                        margins.left = Math.round(targetX);
+                        margins.left = Math.max(0, Math.round((targetX - (parentBbox.left - containerBbox.left)) / scale));
                     }
                     if (hAlign === 'right' || isMatchParentWidth) {
-                        margins.right = Math.floor(containerBbox.width - targetX - startBbox.width);
+                        margins.right = Math.max(0, Math.floor((containerBbox.width - targetX - startBbox.width) / scale));
                     }
                 } else {
                     margins.left = oldMargins.left;
@@ -1789,10 +1794,10 @@
                 }
                 if (moveY) {
                     if (vAlign === 'top' || isMatchParentHeight) {
-                        margins.top = Math.round(targetY);
+                        margins.top = Math.max(0, Math.round((targetY - (parentBbox.top - containerBbox.top)) / scale));
                     }
                     if (vAlign === 'bottom' || isMatchParentHeight) {
-                        margins.bottom = Math.floor(containerBbox.height - targetY - startBbox.height);
+                        margins.bottom = Math.max(0, Math.floor((containerBbox.height - targetY - startBbox.height) / scale));
                     }
                 } else {
                     margins.top = oldMargins.top;
@@ -1838,11 +1843,11 @@
             let newHeight = startHeight;
 
             if (isXResize) {
-                newWidth += (event.clientX - startEventX) * 2;
+                newWidth += (event.clientX - startEventX) * 2 / scale;
                 newWidth = Math.round(Math.max(100, newWidth));
             }
             if (isYResize) {
-                newHeight += event.clientY - startEventY;
+                newHeight += (event.clientY - startEventY) / scale;
                 newHeight = Math.round(Math.max(100, newHeight));
             }
 
@@ -1945,7 +1950,7 @@
         const computed = getComputedStyle(node);
         componentClone = node.cloneNode(true) as HTMLElement;
         componentClone.classList.add('renderer__component-clone');
-        componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${rotation || 0}deg)`;
+        componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${rotation || 0}deg) scale(${scale})`;
         componentClone.style.width = `${Math.ceil(offsetWidth)}px`;
         componentClone.style.height = `${Math.ceil(offsetHeight)}px`;
         componentClone.style.fontSize = computed.fontSize;
@@ -1975,9 +1980,10 @@
             y: center.y + (- offsetWidth / 2) * rotationSin + (- offsetHeight / 2) * rotationCos,
         };
 
-        const maxX = parentBbox ?
+        const maxX = (parentBbox ?
             parentBbox.right - containerBbox.left - startPosX :
-            size[0] - startPosX;
+            size[0] - startPosX
+        ) / scale;
         // eslint-disable-next-line no-nested-ternary
         const maxY = isGridChild ?
             Infinity :
@@ -1985,12 +1991,12 @@
                 parentBbox ?
                     parentBbox.bottom - containerBbox.top - startPosY :
                     size[1] - startPosY
-            );
+            ) / scale;
 
         let targetX = startPosX + startBbox.width;
         let targetY = startPosY + startBbox.height;
-        let targetWidth = startBbox.width;
-        let targetHeight = startBbox.height;
+        let targetWidth = startBbox.width / scale;
+        let targetHeight = startBbox.height / scale;
 
         let snapX: Snap[] = [];
         let snapY: Snap[] = [];
@@ -2107,7 +2113,7 @@
             const calcedHeight = (snappedTargetY && snapYOffset !== undefined && (snappedTargetY.val - snapYOffset) || targetY) - startPosY;
             if (isXResize) {
                 if (!gridProps || !gridPosition || calcedWidth <= gridMaxItemWidth) {
-                    targetWidth = calcedWidth;
+                    targetWidth = calcedWidth / scale;
                     targetWidth = Math.max(0, Math.min(maxX, targetWidth));
                     gridReachMaxWidth = false;
                 } else {
@@ -2132,7 +2138,7 @@
             }
             if (isYResize) {
                 if (!gridProps || !gridPosition || calcedHeight <= gridMaxItemHeight) {
-                    targetHeight = calcedHeight;
+                    targetHeight = calcedHeight / scale;
                     targetHeight = Math.max(0, Math.min(maxY, targetHeight));
                     gridReachMaxHeight = false;
                 } else {
@@ -2193,7 +2199,7 @@
                 diffX = topLeftCorner.x - topLeftCorner2.x;
                 diffY = topLeftCorner.y - topLeftCorner2.y;
 
-                componentClone.style.transform = `translate(${startPosX + diffX}px, ${startPosY + diffY}px) rotate(${componentCloneRotation}deg)`;
+                componentClone.style.transform = `translate(${startPosX + diffX}px, ${startPosY + diffY}px) rotate(${componentCloneRotation}deg) scale(${scale})`;
 
                 componentCloneRect = {
                     top: startPosY + diffY + containerBbox.top,
@@ -2543,10 +2549,13 @@
         const computed = getComputedStyle(node);
         componentClone = node.cloneNode(true) as HTMLElement;
         componentClone.classList.add('renderer__component-clone');
-        componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${rotation || 0}deg)`;
+        componentClone.style.transform = `translate(${startPosX + offsetWidth * scale / 2}px, ${startPosY + offsetHeight * scale / 2}px) rotate(${rotation || 0}deg) scale(${scale})`;
+        componentClone.style.transformOrigin = '50% 50%';
         componentClone.style.width = `${Math.ceil(offsetWidth)}px`;
         componentClone.style.height = `${Math.ceil(offsetHeight)}px`;
         componentClone.style.fontSize = computed.fontSize;
+        componentClone.style.left = `${-offsetWidth / 2}px`;
+        componentClone.style.top = `${-offsetHeight / 2}px`;
         clonesContainer.appendChild(componentClone);
         node.style.opacity = '0';
         componentCloneRect = {
@@ -2564,8 +2573,8 @@
         isRotate = true;
 
         const center = {
-            x: startBbox.left + offsetWidth / 2,
-            y: startBbox.top + offsetHeight / 2
+            x: startBbox.left + offsetWidth * scale / 2,
+            y: startBbox.top + offsetHeight * scale / 2
         };
 
         const pointermove = (event: PointerEvent) => {
@@ -2587,7 +2596,7 @@
             if (componentCloneRotation < 0) {
                 componentCloneRotation += 360;
             }
-            componentClone.style.transform = `translate(${startPosX}px, ${startPosY}px) rotate(${componentCloneRotation}deg)`;
+            componentClone.style.transform = `translate(${startPosX + offsetWidth * scale / 2}px, ${startPosY + offsetHeight * scale / 2}px) rotate(${componentCloneRotation}deg) scale(${scale})`;
 
             event.preventDefault();
         };
@@ -2929,7 +2938,7 @@
         componentClone = node.cloneNode(true) as HTMLElement;
         componentClone.classList.add('renderer__component-clone');
         componentClone.classList.add('renderer__component-clone_inplace');
-        componentClone.style.transform = `translate(${startBbox.left - containerBbox.left}px, ${startBbox.top - containerBbox.top}px) rotate(${rotation}deg)`;
+        componentClone.style.transform = `translate(${startBbox.left - containerBbox.left}px, ${startBbox.top - containerBbox.top}px) rotate(${rotation}deg) scale(${scale})`;
         componentClone.style.paddingRight = `${paddingRight}px`;
         componentClone.style.paddingLeft = `${paddingLeft}px`;
         componentClone.style.width = `${Math.ceil(offsetWidth - paddingLeft - paddingRight)}px`;
@@ -2943,10 +2952,10 @@
         clonesContainer.appendChild(componentClone);
 
         const style = {
-            left: `${startBbox.left + paddingLeft}px`,
-            top: `${startBbox.top + paddingTop}px`,
-            width: `${Math.ceil(offsetWidth - paddingLeft - paddingRight)}px`,
-            maxWidth: `${parentBbox.right - startBbox.left - paddingLeft - paddingRight}px`,
+            left: `${startBbox.left + paddingLeft * scale}px`,
+            top: `${startBbox.top + paddingTop * scale}px`,
+            width: `${Math.ceil((offsetWidth - paddingLeft - paddingRight) * scale)}px`,
+            maxWidth: `${parentBbox.right - startBbox.left - (paddingLeft + paddingRight) * scale}px`,
             fontSize: computedStyle.fontSize
         };
 
@@ -2960,10 +2969,10 @@
         componentCloneRect = {
             top: startPosY + containerBbox.top,
             left: startPosX + containerBbox.left,
-            right: startPosX + offsetWidth + containerBbox.left,
-            bottom: startPosY + offsetHeight + containerBbox.top,
-            width: offsetWidth,
-            height: offsetHeight
+            right: startPosX + offsetWidth * scale + containerBbox.left,
+            bottom: startPosY + offsetHeight * scale + containerBbox.top,
+            width: offsetWidth * scale,
+            height: offsetHeight * scale
         };
         componentCloneRotation = rotation;
 
@@ -2988,6 +2997,7 @@
             disabled: $readOnly,
             textDisabled: $readOnly || Boolean(tankerKey) || text !== evalText,
             style,
+            scale,
             onResoze: onInplaceEditorResize,
             callback: onInplaceEditorClose
         });
@@ -2998,8 +3008,8 @@
         height: number;
     }): void {
         if (componentClone) {
-            componentClone.style.width = size.width + 'px';
-            componentClone.style.height = size.height + 'px';
+            componentClone.style.width = size.width / scale + 'px';
+            componentClone.style.height = size.height / scale + 'px';
         }
     }
 
@@ -3299,6 +3309,7 @@
         class="renderer__container"
         style:--width="{size[0]}px"
         style:--height="{size[1]}px"
+        style:--scale="{scale}"
     >
         <!-- svelte-ignore a11y_mouse_events_have_key_events -->
         <div
@@ -3333,8 +3344,9 @@
     <div class="renderer__overlay-elemens renderer__overlay-root">
         <div
             class="renderer__overlay-center"
-            style:width="{size[0]}px"
-            style:height="{size[1]}px"
+            style:width="{size[0] * scale}px"
+            style:height="{size[1] * scale}px"
+            style:--scale="{scale}"
         >
             <div class="renderer__clones-container" bind:this={clonesContainer}></div>
 
@@ -3386,8 +3398,8 @@
                     <div class="renderer__highlight-inner">
                         <div
                             class="renderer__highlight"
-                            style:left="{highlight.left + highlight.margins.left}px"
-                            style:top="{highlight.top + highlight.margins.top}px"
+                            style:left="{highlight.left + highlight.margins.left * scale}px"
+                            style:top="{highlight.top + highlight.margins.top * scale}px"
                             style:width="{highlight.widthNum}px"
                             style:height="{highlight.heightNum}px"
                             style:margin-top="{-scrollY}px"
@@ -3402,19 +3414,20 @@
                                     <svg
                                         class="renderer__highlight-insets"
                                         xmlns="http://www.w3.org/2000/svg"
-                                        width={highlight.widthNum + highlight.margins.left + highlight.margins.right}
-                                        height={highlight.heightNum + highlight.margins.top + highlight.margins.bottom}
-                                        style:top="{-highlight.margins.top}px"
-                                        style:left="{-highlight.margins.left}px"
+                                        width={(highlight.widthNum + highlight.margins.left + highlight.margins.right) * scale}
+                                        height={(highlight.heightNum + highlight.margins.top + highlight.margins.bottom) * scale}
+                                        style:top="{-highlight.margins.top * scale}px"
+                                        style:left="{-highlight.margins.left * scale}px"
+                                        viewBox="0 0 {highlight.widthNum + highlight.margins.left + highlight.margins.right} {highlight.heightNum + highlight.margins.top + highlight.margins.bottom}"
                                     >
                                         <defs>
                                             <pattern id="pattern"
-                                                width="6"
-                                                height="10"
+                                                width="{6 / scale}"
+                                                height="{10 / scale}"
                                                 patternUnits="userSpaceOnUse"
                                                 patternTransform="rotate(45 50 50)"
                                             >
-                                                <line style="stroke:var(--accent-purple)" stroke-width="2px" y2="10"/>
+                                                <line style="stroke:var(--accent-purple)" stroke-width="{2 / scale}px" y2="{10 / scale}"/>
                                             </pattern>
                                         </defs>
                                         <path
@@ -3543,8 +3556,8 @@
                     {#if highlight.permanent && !highlight.insets || highlight.isResize}
                         <div
                             class="renderer__highlight-info"
-                            style:left="{highlight.left + highlight.margins.left + highlight.widthNum / 2 - scrollX}px"
-                            style:top="{highlight.top + highlight.margins.top + highlight.heightNum - scrollY}px"
+                            style:left="{highlight.left + scale * (highlight.margins.left + highlight.widthNum / 2 - scrollX)}px"
+                            style:top="{highlight.top + scale * (highlight.margins.top + highlight.heightNum - scrollY)}px"
                         >
                             <div class="renderer__highlight-info-inner">
                                 {highlight.width}x{highlight.height}
@@ -3597,7 +3610,7 @@
                             style:margin-left="{-scrollX}px"
                         >
                             <div class="renderer__highlight-distance-info">
-                                {formatSize(item.length)}
+                                {formatSize(item.length / scale)}
                             </div>
                         </div>
 
@@ -3623,6 +3636,7 @@
 <style>
     .renderer {
         position: relative;
+        min-width: max-content;
         width: 100%;
         height: 100%;
         outline: none;
@@ -3643,8 +3657,8 @@
         display: grid;
         margin: 28px auto 0;
         width: min-content;
-        grid-template-columns: auto var(--resizer-size);
-        grid-template-rows: auto var(--resizer-size);
+        grid-template-columns: calc(var(--width) * var(--scale)) var(--resizer-size);
+        grid-template-rows: calc(var(--height) * var(--scale)) var(--resizer-size);
     }
 
     .renderer__resizer {
@@ -3718,6 +3732,8 @@
         touch-action: none;
         color: #000;
         background: #fff;
+        transform: scale(var(--scale));
+        transform-origin: left top;
     }
 
     .renderer__content-bg {
@@ -3784,8 +3800,8 @@
         top: 0;
         left: 0;
         box-sizing: border-box;
-        width: calc(100% + 6px);
-        height: calc(100% + 6px);
+        width: calc(100% * var(--scale) + 6px);
+        height: calc(100% * var(--scale) + 6px);
         margin-top: -3px;
         margin-left: -3px;
         border: 3px solid var(--accent-purple);
@@ -4166,6 +4182,7 @@
         left: 0;
         box-sizing: border-box !important;
         margin: 0 !important;
+        transform-origin: top left;
     }
 
     :global(.renderer__component-clone_inplace) {

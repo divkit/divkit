@@ -193,6 +193,7 @@ export interface DivProEditorOptions {
     direction?: 'ltr' | 'rtl';
     perThemeProps?: boolean;
     safeAreaEmulation?: SafeAreaEmulation;
+    fitViewportOnCreate?: boolean;
 }
 
 export interface EditorError {
@@ -233,6 +234,7 @@ export const DivProEditor = {
         state.safeAreaEmulation = opts.safeAreaEmulation;
         state.safeAreaEmulationEnabled.set(Boolean(opts.safeAreaEmulation));
         state.valueFilters = opts.valueFilters;
+        state.fitViewportOnCreate = opts.fitViewportOnCreate;
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');

@@ -90,6 +90,7 @@ const editor = window.editor = DivProEditor.init({
             value: 0
         }
     },
+    fitViewportOnCreate: true,
     card: {
         json: JSON.stringify({
             card: {
