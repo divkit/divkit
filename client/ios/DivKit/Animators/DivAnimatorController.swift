@@ -44,7 +44,7 @@ final class DivAnimatorController {
 
   func initializeIfNeeded(path: UIElementPath, id: String, animator: Variable<Animator?>) {
     lock.withLock {
-      guard let animator = animator.value else { return }
+      guard animators[path + id] == nil, let animator = animator.value else { return }
       animators[path + id] = animator
     }
   }
