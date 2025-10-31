@@ -26,11 +26,10 @@ val COLOR_INT_TO_STRING: Converter<Int, String> = { value -> Color(value).toStri
 fun getCOLOR_INT_TO_STRING() = COLOR_INT_TO_STRING
 
 @JvmField
-val STRING_TO_COLOR_INT: Converter<Any?, Int?> = { value ->
+val STRING_TO_COLOR_INT: Converter<Any, Int> = { value ->
     when (value) {
         is String -> Color.parse(value).value
         is Color -> value.value
-        null -> null
         else -> throw ClassCastException("Received value of wrong type")
     }
 }
@@ -67,12 +66,12 @@ val ANY_TO_URI: Converter<Any, Uri> = { value ->
 fun getANY_TO_URI() = ANY_TO_URI
 
 @JvmField
-val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
+val ANY_TO_BOOLEAN: Converter<Any, Boolean> = { value ->
     when (value) {
         is Boolean -> value
         is Number -> value.toBoolean()
-        else -> throw ClassCastException("Received value of wrong type")
-    }
+        else -> null
+    } ?: throw ClassCastException("Received value of wrong type")
 }
 
 @Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")

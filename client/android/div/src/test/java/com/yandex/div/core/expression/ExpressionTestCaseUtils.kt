@@ -5,22 +5,9 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.interactive.IntegrationTestCase
 import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
-import com.yandex.div.internal.parser.ANY_TO_URI
-import com.yandex.div.internal.parser.JsonExpressionParser
-import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
-import com.yandex.div.internal.parser.NUMBER_TO_INT
-import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
-import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
-import com.yandex.div.internal.parser.TYPE_HELPER_COLOR
-import com.yandex.div.internal.parser.TYPE_HELPER_DICT
-import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
-import com.yandex.div.internal.parser.TYPE_HELPER_INT
-import com.yandex.div.internal.parser.TYPE_HELPER_JSON_ARRAY
-import com.yandex.div.internal.parser.TYPE_HELPER_STRING
-import com.yandex.div.internal.parser.TYPE_HELPER_URI
-import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.Expression
@@ -29,7 +16,9 @@ import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
 import com.yandex.div.test.expression.TestCaseOrError
 import com.yandex.div.test.expression.TestCaseParsingError
+import com.yandex.div.test.expression.parseAsUTC
 import com.yandex.div2.DivData
+import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivVariable
 import org.json.JSONArray
 import org.json.JSONException
@@ -103,18 +92,15 @@ object ExpressionTestCaseUtils {
     private fun JSONObject.getValue(): Any {
         val value: Any = when (type) {
             VALUE_TYPE_STRING -> getString(VALUE_FIELD)
-            VALUE_TYPE_URL -> Uri.parse(getString(VALUE_FIELD))
-            VALUE_TYPE_COLOR -> Color.parse(getString(VALUE_FIELD)).value
+            VALUE_TYPE_URL -> Url(getString(VALUE_FIELD))
+            VALUE_TYPE_COLOR -> Color.parse(getString(VALUE_FIELD))
             VALUE_TYPE_INTEGER -> getLong(VALUE_FIELD)
             VALUE_TYPE_DECIMAL -> getDouble(VALUE_FIELD)
             VALUE_TYPE_DICT -> getJSONObject(VALUE_FIELD)
             VALUE_TYPE_ARRAY -> getJSONArray(VALUE_FIELD)
             VALUE_TYPE_UNORDERED_ARRAY -> getJSONArray(VALUE_FIELD)
-            VALUE_TYPE_BOOLEAN, VALUE_TYPE_BOOL_INT -> {
-                val value = get(VALUE_FIELD)
-                ANY_TO_BOOLEAN(value) ?: throw IllegalAccessException("Unknown variable value: $value")
-            }
-            VALUE_TYPE_DATE_TIME -> getString(VALUE_FIELD)
+            VALUE_TYPE_BOOLEAN, VALUE_TYPE_BOOL_INT -> ANY_TO_BOOLEAN(get(VALUE_FIELD))
+            VALUE_TYPE_DATE_TIME -> parseAsUTC(getString(VALUE_FIELD))
             VALUE_TYPE_UNIT -> Unit
             VALUE_TYPE_ERROR -> EvaluableException(optString(VALUE_FIELD))
             else -> throw IllegalAccessException("Unknown variable type: $type")
@@ -123,8 +109,6 @@ object ExpressionTestCaseUtils {
     }
 
     val JSONObject.type: String get() = getString(TYPE_FIELD)
-
-    fun JSONObject.toVariable() = type.let { createVariable(it, getString("name"), getVariableValue(it)) }
 
     fun JSONObject.getVariableValue(type: String): Any {
         return when (type) {
@@ -136,23 +120,8 @@ object ExpressionTestCaseUtils {
             VALUE_TYPE_URL -> Uri.parse(getString(VALUE_FIELD))
             VALUE_TYPE_DICT -> getJSONObject(VALUE_FIELD)
             VALUE_TYPE_ARRAY -> getJSONArray(VALUE_FIELD)
+            VALUE_TYPE_DATE_TIME -> parseAsUTC(getString(VALUE_FIELD))
             else -> throw IllegalAccessException("Unknown variable type: $type")
-        }
-    }
-
-    private fun String.getTypeHelper(): TypeHelper<out Any> {
-        return when (this) {
-            VALUE_TYPE_STRING -> TYPE_HELPER_STRING
-            VALUE_TYPE_INTEGER -> TYPE_HELPER_INT
-            VALUE_TYPE_DECIMAL -> TYPE_HELPER_DOUBLE
-            VALUE_TYPE_BOOLEAN, VALUE_TYPE_BOOL_INT -> TYPE_HELPER_BOOLEAN
-            VALUE_TYPE_DATE_TIME -> TYPE_HELPER_STRING
-            VALUE_TYPE_URL -> TYPE_HELPER_URI
-            VALUE_TYPE_COLOR -> TYPE_HELPER_COLOR
-            VALUE_TYPE_DICT -> TYPE_HELPER_DICT
-            VALUE_TYPE_ARRAY, VALUE_TYPE_UNORDERED_ARRAY -> TYPE_HELPER_JSON_ARRAY
-            VALUE_TYPE_ERROR -> TYPE_HELPER_STRING
-            else -> throw JSONException("Unknown expected result type: $this")
         }
     }
 
@@ -161,10 +130,7 @@ object ExpressionTestCaseUtils {
             VALUE_TYPE_STRING -> Variable.StringVariable(name, value as String? ?: "")
             VALUE_TYPE_INTEGER -> Variable.IntegerVariable(name, value as Long? ?: 0)
             VALUE_TYPE_DECIMAL -> Variable.DoubleVariable(name, value as Double? ?: 0.0)
-            VALUE_TYPE_BOOLEAN -> {
-                ANY_TO_BOOLEAN(value ?: false)?.let { Variable.BooleanVariable(name, it) }
-                    ?: throw IllegalAccessException("Unknown variable value: $value")
-            }
+            VALUE_TYPE_BOOLEAN -> Variable.BooleanVariable(name, ANY_TO_BOOLEAN(value ?: false))
             VALUE_TYPE_COLOR -> Variable.ColorVariable(name, (value as Color?)?.value ?: 0)
             VALUE_TYPE_URL -> Variable.UrlVariable(name, value as Uri? ?: Uri.EMPTY)
             VALUE_TYPE_DICT -> Variable.DictVariable(name, value as JSONObject? ?: JSONObject())
@@ -233,58 +199,12 @@ object ExpressionTestCaseUtils {
         val context = DivParsingEnvironment(logger)
         val key = "value"
         val obj = JSONObject().put(key, raw)
-
-        return when (expectedType) {
-            VALUE_TYPE_STRING,
-            VALUE_TYPE_DICT,
-            VALUE_TYPE_ARRAY,
-            VALUE_TYPE_UNORDERED_ARRAY,
-            VALUE_TYPE_DATE_TIME,
-            VALUE_TYPE_ERROR -> {
-                JsonExpressionParser.readExpression(context, obj, key, expectedType.getTypeHelper())
-            }
-
-            VALUE_TYPE_INTEGER -> JsonExpressionParser.readExpression(
-                context,
-                obj,
-                key,
-                TYPE_HELPER_INT,
-                NUMBER_TO_INT
-            )
-
-            VALUE_TYPE_DECIMAL -> JsonExpressionParser.readExpression(
-                context,
-                obj,
-                key,
-                TYPE_HELPER_DOUBLE,
-                NUMBER_TO_DOUBLE
-            )
-
-            VALUE_TYPE_BOOLEAN, VALUE_TYPE_BOOL_INT ->
-                JsonExpressionParser.readExpression(
-                    context,
-                    obj,
-                    key,
-                    TYPE_HELPER_BOOLEAN,
-                    ANY_TO_BOOLEAN
-                )
-
-            VALUE_TYPE_URL -> JsonExpressionParser.readExpression(
-                context,
-                obj,
-                key,
-                TYPE_HELPER_URI,
-                ANY_TO_URI
-            )
-
-            VALUE_TYPE_COLOR -> JsonExpressionParser.readExpression(
-                context,
-                obj,
-                key,
-                TYPE_HELPER_COLOR,
-                STRING_TO_COLOR_INT
-            )
-
+        return DivEvaluableType.fromString(expectedType)?.let {
+            DivExpressionParser.readTypedExpression(context, obj, key, it)
+        } ?: when (expectedType) {
+            VALUE_TYPE_ERROR -> DivExpressionParser.readStringExpression(context, obj, key)
+            VALUE_TYPE_BOOL_INT -> DivExpressionParser.readBooleanExpression(context, obj, key)
+            VALUE_TYPE_UNORDERED_ARRAY -> DivExpressionParser.readArrayExpression(context, obj, key)
             else -> throw JSONException("Unknown expected result type: $expectedType")
         }
     }
