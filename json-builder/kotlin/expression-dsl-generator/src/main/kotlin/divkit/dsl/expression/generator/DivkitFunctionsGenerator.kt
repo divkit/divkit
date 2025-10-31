@@ -35,7 +35,7 @@ class DivkitFunctionsGenerator(
         val duplicates = signatures.groupingBy { it }.eachCount().filter { it.value > 1 }
         if (duplicates.isNotEmpty()) {
             val fullSignatures = duplicates.keys.joinToString { signature ->
-                (signature.functionName + "(" + signature.arguments.joinToString(",") { argument ->
+                (signature.name + "(" + signature.arguments.joinToString(",") { argument ->
                     argument.type.serializedName
                 } + ")\n")
             }

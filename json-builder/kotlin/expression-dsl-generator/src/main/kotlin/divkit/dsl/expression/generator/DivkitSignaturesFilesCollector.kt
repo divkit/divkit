@@ -17,8 +17,8 @@ class DivkitSignaturesFilesCollector {
     private val objectMapper = ObjectMapper()
 
     init {
-        val resource = javaClass.getResource("/functions_json_schema.json")
-            ?: throw IllegalStateException("Absent functions_json_schema.json!")
+        val resource = javaClass.getResource("/schema.json")
+            ?: throw IllegalStateException("Absent schema.json!")
         val jsonSchema = objectMapper.readTree(resource)
         val jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
         schema = jsonSchemaFactory.getSchema(jsonSchema)

@@ -1,0 +1,565 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "parseUnixTime",
+      "description": {
+        "$ref": "translations.json#/parseunixtime_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/parseunixtime_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "parseUnixTimeAsLocal",
+      "description": {
+        "$ref": "translations.json#/parseunixtimeaslocal_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/parseunixtimeaslocal_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "nowLocal",
+      "description": {
+        "$ref": "translations.json#/nowlocal"
+      },
+      "arguments": [],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "addMillis",
+      "description": {
+        "$ref": "translations.json#/addmillis_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/addmillis_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/addmillis_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setYear",
+      "description": {
+        "$ref": "translations.json#/setyear_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setyear_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setyear_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setMonth",
+      "description": {
+        "$ref": "translations.json#/setmonth_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setmonth_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setmonth_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setDay",
+      "description": {
+        "$ref": "translations.json#/setday_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setday_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setday_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setHours",
+      "description": {
+        "$ref": "translations.json#/sethours_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/sethours_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/sethours_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setMinutes",
+      "description": {
+        "$ref": "translations.json#/setminutes_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setminutes_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setminutes_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setSeconds",
+      "description": {
+        "$ref": "translations.json#/setseconds_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setseconds_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setseconds_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setMillis",
+      "description": {
+        "$ref": "translations.json#/setmillis_datetime_integer"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/setmillis_datetime_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/setmillis_datetime_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "datetime",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getYear",
+      "description": {
+        "$ref": "translations.json#/getyear_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getyear_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getMonth",
+      "description": {
+        "$ref": "translations.json#/getmonth_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getmonth_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDay",
+      "description": {
+        "$ref": "translations.json#/getday_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getday_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDayOfWeek",
+      "description": {
+        "$ref": "translations.json#/getdayofweek_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getdayofweek_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getHours",
+      "description": {
+        "$ref": "translations.json#/gethours_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/gethours_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getMinutes",
+      "description": {
+        "$ref": "translations.json#/getminutes_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getminutes_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getSeconds",
+      "description": {
+        "$ref": "translations.json#/getseconds_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getseconds_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getMillis",
+      "description": {
+        "$ref": "translations.json#/getmillis_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/getmillis_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "formatDateAsLocal",
+      "description": {
+        "$ref": "translations.json#/formatdateaslocal_datetime_string"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/formatdateaslocal_datetime_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateaslocal_datetime_string_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "formatDateAsUTC",
+      "description": {
+        "$ref": "translations.json#/formatdateasutc_datetime_string"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/formatdateasutc_datetime_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateasutc_datetime_string_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "formatDateAsLocalWithLocale",
+      "description": {
+        "$ref": "translations.json#/formatdateaslocalwithlocale_datetime_string_string"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/formatdateaslocalwithlocale_datetime_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateaslocalwithlocale_datetime_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateaslocalwithlocale_datetime_string_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale",
+      "description": {
+        "$ref": "translations.json#/formatdateasutcwithlocale_datetime_string_string"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/formatdateasutcwithlocale_datetime_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateasutcwithlocale_datetime_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/formatdateasutcwithlocale_datetime_string_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

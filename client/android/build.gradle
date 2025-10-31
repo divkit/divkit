@@ -135,6 +135,7 @@ apiValidation {
         "divkit-demo-app",
         "divkit-perftests",
         "divkit-regression-testing",
+        "expression-test-common",
         "lint-rules",
         "sample",
         "screenshot-test-runtime",

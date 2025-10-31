@@ -296,6 +296,7 @@
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
 		9D5AE8362DFC680500D58B81 /* FilesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5AE8352DFC680300D58B81 /* FilesProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
+		9D772A612EAA28DE0085DB27 /* expression-api in Resources */ = {isa = PBXBuildFile; fileRef = 9D772A602EAA28DE0085DB27 /* expression-api */; };
 		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
 		9DEA2C752DDCC63400A074B5 /* RobotoFlex-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */; };
 		9DEA2C772DDCC63D00A074B5 /* RobotoFlex-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */; };
@@ -684,6 +685,7 @@
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
 		9D5AE8352DFC680300D58B81 /* FilesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
+		9D772A602EAA28DE0085DB27 /* expression-api */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "expression-api"; path = "../../../expression-api"; sourceTree = "<group>"; };
 		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
 		9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
 		9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
@@ -1137,6 +1139,7 @@
 			isa = PBXGroup;
 			children = (
 				0C9BB87D2DF02E1D001C4E72 /* ResourcesPreloader */,
+				9D772A602EAA28DE0085DB27 /* expression-api */,
 				9D0868BA2DD10F7E00C5B2CC /* integration_test_data */,
 				8C01499D287329D700BA5402 /* expression_test_data */,
 				8CE488632B76F64D00BDDAB9 /* parsing_test_data */,
@@ -1854,6 +1857,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D772A612EAA28DE0085DB27 /* expression-api in Resources */,
 				9D0868BB2DD10F7E00C5B2CC /* integration_test_data in Resources */,
 				8C01499E287329D700BA5402 /* expression_test_data in Resources */,
 				8C23F3D329DDB2440069F3F7 /* template_test_data in Resources */,

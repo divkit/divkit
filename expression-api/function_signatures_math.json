@@ -1,0 +1,590 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "div",
+      "description": {
+        "$ref": "translations.json#/div_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/div_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/div_integer_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "div",
+      "description": {
+        "$ref": "translations.json#/div_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/div_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/div_number_number_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "mod",
+      "description": {
+        "$ref": "translations.json#/mod_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/mod_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/mod_integer_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "mod",
+      "description": {
+        "$ref": "translations.json#/mod_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/mod_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/mod_number_number_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "mul",
+      "description": {
+        "$ref": "translations.json#/mul_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/mul_integer_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "mul",
+      "description": {
+        "$ref": "translations.json#/mul_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/mul_number_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "sub",
+      "description": {
+        "$ref": "translations.json#/sub_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/sub_integer_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "sub",
+      "description": {
+        "$ref": "translations.json#/sub_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/sub_number_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "sum",
+      "description": {
+        "$ref": "translations.json#/sum_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/sum_integer_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "sum",
+      "description": {
+        "$ref": "translations.json#/sum_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/sum_number_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "maxInteger",
+      "description": {
+        "$ref": "translations.json#/maxinteger"
+      },
+      "arguments": [],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "maxNumber",
+      "description": {
+        "$ref": "translations.json#/maxnumber"
+      },
+      "arguments": [],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "minInteger",
+      "description": {
+        "$ref": "translations.json#/mininteger"
+      },
+      "arguments": [],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "minNumber",
+      "description": {
+        "$ref": "translations.json#/minnumber"
+      },
+      "arguments": [],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "max",
+      "description": {
+        "$ref": "translations.json#/max_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/max_integer_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "max",
+      "description": {
+        "$ref": "translations.json#/max_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/max_number_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "min",
+      "description": {
+        "$ref": "translations.json#/min_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/min_integer_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "min",
+      "description": {
+        "$ref": "translations.json#/min_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/min_number_arg0"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "abs",
+      "description": {
+        "$ref": "translations.json#/abs_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/abs_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "abs",
+      "description": {
+        "$ref": "translations.json#/abs_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/abs_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "signum",
+      "description": {
+        "$ref": "translations.json#/signum_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/signum_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "signum",
+      "description": {
+        "$ref": "translations.json#/signum_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/signum_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "round",
+      "description": {
+        "$ref": "translations.json#/round_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/round_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "floor",
+      "description": {
+        "$ref": "translations.json#/floor_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/floor_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "ceil",
+      "description": {
+        "$ref": "translations.json#/ceil_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/ceil_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "copySign",
+      "description": {
+        "$ref": "translations.json#/copysign_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/copysign_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/copysign_integer_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "copySign",
+      "description": {
+        "$ref": "translations.json#/copysign_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/copysign_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/copysign_number_number_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

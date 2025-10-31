@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "definitions": {
+    "localized_string": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "ru": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "ru"
+      ]
+    }
+  },
+  "additionalProperties": {
+    "$ref": "#/definitions/localized_string"
+  }
+}

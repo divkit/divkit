@@ -1,0 +1,1057 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "getDictString",
+      "description": {
+        "$ref": "translations.json#/getdictstring_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictstring_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictstring_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictNumber",
+      "description": {
+        "$ref": "translations.json#/getdictnumber_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictnumber_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictnumber_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictInteger",
+      "description": {
+        "$ref": "translations.json#/getdictinteger_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictinteger_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictinteger_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictBoolean",
+      "description": {
+        "$ref": "translations.json#/getdictboolean_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictboolean_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictboolean_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictColor",
+      "description": {
+        "$ref": "translations.json#/getdictcolor_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictcolor_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictcolor_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictUrl",
+      "description": {
+        "$ref": "translations.json#/getdicturl_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdicturl_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdicturl_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptString",
+      "description": {
+        "$ref": "translations.json#/getdictoptstring_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptstring_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptstring_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptstring_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptNumber",
+      "description": {
+        "$ref": "translations.json#/getdictoptnumber_number_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getdictoptnumber_number_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptnumber_number_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptnumber_number_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptInteger",
+      "description": {
+        "$ref": "translations.json#/getdictoptinteger_integer_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getdictoptinteger_integer_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptinteger_integer_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptinteger_integer_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean",
+      "description": {
+        "$ref": "translations.json#/getdictoptboolean_boolean_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getdictoptboolean_boolean_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptboolean_boolean_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptboolean_boolean_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptColor",
+      "description": {
+        "$ref": "translations.json#/getdictoptcolor_color_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_color_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_color_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_color_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptColor",
+      "description": {
+        "$ref": "translations.json#/getdictoptcolor_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictoptcolor_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptUrl",
+      "description": {
+        "$ref": "translations.json#/getdictopturl_url_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_url_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_url_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_url_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictOptUrl",
+      "description": {
+        "$ref": "translations.json#/getdictopturl_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictopturl_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getStringFromDict",
+      "description": {
+        "$ref": "translations.json#/getstringfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getstringfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstringfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getNumberFromDict",
+      "description": {
+        "$ref": "translations.json#/getnumberfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getnumberfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getnumberfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntegerFromDict",
+      "description": {
+        "$ref": "translations.json#/getintegerfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getintegerfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getintegerfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getBooleanFromDict",
+      "description": {
+        "$ref": "translations.json#/getbooleanfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getbooleanfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getbooleanfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorFromDict",
+      "description": {
+        "$ref": "translations.json#/getcolorfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getcolorfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcolorfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getUrlFromDict",
+      "description": {
+        "$ref": "translations.json#/geturlfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/geturlfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/geturlfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictFromDict",
+      "description": {
+        "$ref": "translations.json#/getdictfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdictfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayFromDict",
+      "description": {
+        "$ref": "translations.json#/getarrayfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getarrayfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getarrayfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptStringFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptstringfromdict_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromdict_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromdict_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromdict_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptNumberFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptnumberfromdict_number_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromdict_number_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromdict_number_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromdict_number_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptIntegerFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptintegerfromdict_integer_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromdict_integer_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromdict_integer_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromdict_integer_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptBooleanFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptbooleanfromdict_boolean_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromdict_boolean_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromdict_boolean_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromdict_boolean_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptColorFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptcolorfromdict_color_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_color_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_color_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_color_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptColorFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptcolorfromdict_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromdict_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptUrlFromDict",
+      "description": {
+        "$ref": "translations.json#/getopturlfromdict_url_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_url_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_url_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_url_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptUrlFromDict",
+      "description": {
+        "$ref": "translations.json#/getopturlfromdict_string_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_string_dict_string_arg0"
+          }
+        },
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_string_dict_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getopturlfromdict_string_dict_string_arg2"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptArrayFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptarrayfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptarrayfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptarrayfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptDictFromDict",
+      "description": {
+        "$ref": "translations.json#/getoptdictfromdict_dict_string"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getoptdictfromdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptdictfromdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "len",
+      "description": {
+        "$ref": "translations.json#/len_dict"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/len_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "getDictKeys",
+      "description": {
+        "$ref": "translations.json#/getdictkeys_dict"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictkeys_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "getDictValues",
+      "description": {
+        "$ref": "translations.json#/getdictvalues_dict"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdictvalues_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

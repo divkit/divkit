@@ -10,7 +10,7 @@ final class FunctionSignaturesTests: XCTestCase {
 
 private func makeTestCases() -> [(String, SignatureTestCase)] {
   Bundle(for: DivKitTests.self)
-    .urls(forResourcesWithExtension: "json", subdirectory: "expression_test_data")!
+    .urls(forResourcesWithExtension: "json", subdirectory: "expression-api")!
     .flatMap { url in
       let fileName = url.lastPathComponent
       let testCases = try! JSONDecoder()
@@ -49,10 +49,10 @@ private struct TestCases: Decodable {
 
 private struct SignatureTestCase: Decodable {
   private enum CodingKeys: String, CodingKey {
-    case functionName = "function_name"
+    case functionName = "name"
     case isMethod = "is_method"
     case arguments
-    case resultType = "result_type"
+    case resultType = "return_type"
     case platforms
   }
 
@@ -115,7 +115,7 @@ extension ArgumentSignature: Swift.Decodable {
 
   private enum CodingKeys: String, CodingKey {
     case type
-    case vararg
+    case vararg = "is_vararg"
   }
 }
 

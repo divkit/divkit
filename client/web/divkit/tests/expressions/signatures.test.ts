@@ -10,7 +10,7 @@ import { register } from '../../src/expressions/funcs';
 const path = require('path');
 const fs = require('fs');
 
-const dir = path.resolve(__filename, '../../../../../../test_data/expression_test_data');
+const dir = path.resolve(__filename, '../../../../../../expression-api');
 
 const tests = fs.readdirSync(dir);
 
@@ -20,7 +20,7 @@ function runCase(item: any) {
     const expectedArgs: any[] = item.arguments || [];
 
     let func: Func | null = null;
-    const list = (item.is_method ? methods : funcs).get(item.function_name);
+    const list = (item.is_method ? methods : funcs).get(item.name);
     if (list) {
         for (let i = 0; i < list.length; ++i) {
             const candidate = list[i];
@@ -32,7 +32,7 @@ function runCase(item: any) {
                     const candidateType = typeof candidateArg === 'object' ? candidateArg.type : candidateArg;
                     const candidateVararg = typeof candidateArg === 'object' ? Boolean(candidateArg.isVararg) : false;
 
-                    return candidateType === expectedArg.type && candidateVararg === Boolean(expectedArg.vararg);
+                    return candidateType === expectedArg.type && candidateVararg === Boolean(expectedArg.is_vararg);
                 })) {
                     func = candidate;
                     break;
@@ -53,9 +53,9 @@ describe('signatures', () => {
             describe(name, () => {
                 for (const item of contents.signatures) {
                     if (item.platforms.includes('web')) {
-                        test(item.name || (`${item.function_name}(${(item.arguments || []).map((it: {
+                        test(`${item.name}(${(item.arguments || []).map((it: {
                             type: string;
-                        }) => it.type).join(', ')})`), () => {
+                        }) => it.type).join(', ')})`, () => {
                             runCase(item);
                         });
                     } else {

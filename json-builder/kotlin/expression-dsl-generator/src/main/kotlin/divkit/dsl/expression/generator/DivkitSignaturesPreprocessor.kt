@@ -7,10 +7,11 @@ class DivkitSignaturesPreprocessor {
     fun toCodegenSignatures(signatures: List<Signature>): List<CodegenSignature> {
         return signatures.map { signature ->
             CodegenSignature(
-                functionName = signature.functionName,
-                doc = signature.doc ?: "No documentation",
+                name = signature.name,
+                description = signature.description ?: "No documentation",
                 arguments = signature.arguments.map { it.toCodegenArgument() },
-                resultType = signature.resultType,
+                returnType = signature.returnType,
+                isMethod = signature.isMethod
             )
         }.toSet().toList()
     }
@@ -19,7 +20,7 @@ class DivkitSignaturesPreprocessor {
 private fun Argument.toCodegenArgument(): CodegenArgument {
     return CodegenArgument(
         type = type,
-        doc = doc ?: "no documentation",
-        vararg = vararg,
+        description = description ?: "no documentation",
+        isVararg = isVararg,
     )
 }

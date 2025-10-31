@@ -1,0 +1,173 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "getIntervalSeconds",
+      "description": {
+        "$ref": "translations.json#/getintervalseconds_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervalseconds_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds",
+      "description": {
+        "$ref": "translations.json#/getintervaltotalseconds_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervaltotalseconds_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes",
+      "description": {
+        "$ref": "translations.json#/getintervalminutes_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervalminutes_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes",
+      "description": {
+        "$ref": "translations.json#/getintervaltotalminutes_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervaltotalminutes_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalHours",
+      "description": {
+        "$ref": "translations.json#/getintervalhours_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervalhours_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours",
+      "description": {
+        "$ref": "translations.json#/getintervaltotalhours_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervaltotalhours_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays",
+      "description": {
+        "$ref": "translations.json#/getintervaltotaldays_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervaltotaldays_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks",
+      "description": {
+        "$ref": "translations.json#/getintervaltotalweeks_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintervaltotalweeks_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

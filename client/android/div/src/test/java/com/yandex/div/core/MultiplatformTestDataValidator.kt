@@ -1,6 +1,7 @@
 package com.yandex.div.core
 
 import com.yandex.div.BuildConfig.DIV2_JSON_PATH
+import com.yandex.div.BuildConfig.EXPRESSION_API_PATH
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -17,29 +18,31 @@ class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
 
     @Test
     fun `validate unsupported_platforms scheme`() {
-        val underTest = testCase.json.opt(UNSUPPORTED_PLATFORMS) ?: return
+        val underTest = testCase.json.opt(FIELD_UNSUPPORTED_PLATFORMS) ?: return
         val platformsDict = underTest as? JSONObject
-                ?: throw AssertionError("Expecting a dict at '$UNSUPPORTED_PLATFORMS' field!")
+                ?: throw AssertionError("Expecting a dict at '$FIELD_UNSUPPORTED_PLATFORMS' field!")
 
         platformsDict.keys().forEach { key ->
-            Assert.assertTrue("Expecting a dict with strings at '$UNSUPPORTED_PLATFORMS'!",
+            Assert.assertTrue("Expecting a dict with strings at '$FIELD_UNSUPPORTED_PLATFORMS'!",
                     platformsDict.get(key) is String)
         }
     }
 
     companion object {
-        private const val UNSUPPORTED_PLATFORMS = "unsupported_platforms"
-        private const val CASES_FIELD = "cases"
-        private const val SIGNATURES_FIELD = "signatures"
-        private const val CASE_NAME_FIELD = "name"
-        private const val TEST_CASES_FILE_PATH = DIV2_JSON_PATH
+        private const val FIELD_UNSUPPORTED_PLATFORMS = "unsupported_platforms"
+        private const val FIELD_CASES = "cases"
+        private const val FIELD_SIGNATURES = "signatures"
+        private const val FIELD_CASE_NAME = "name"
+        private const val FIELD_ARGUMENTS = "arguments"
+        private const val FIELD_TYPE = "type"
 
-        private val TEST_CASES_ROOT = File(TEST_CASES_FILE_PATH)
+        private val TEST_CASES_ROOT = File(DIV2_JSON_PATH)
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun cases(): List<TestCaseOrError> {
             val cases = mutableListOf<TestCaseOrError>()
+            cases.addAll(walkIn(File(EXPRESSION_API_PATH)).flatMap { f -> extractExpressionCases(f) })
             cases.addAll(walkIn("expression_test_data").flatMap { f -> extractExpressionCases(f) })
             cases.addAll(walkIn("interactive_snapshot_test_data").map { f -> toCommonUiTestCase(f) })
             cases.addAll(walkIn("regression_test_data").map { f -> toCommonUiTestCase(f) })
@@ -48,9 +51,11 @@ class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
             return cases
         }
 
-        private fun walkIn(dir: String) = File(TEST_CASES_FILE_PATH, dir)
-                .walkTopDown()
-                .filter { it.extension == "json" }
+        private fun walkIn(dir: String): Sequence<File> = walkIn(File(DIV2_JSON_PATH, dir))
+
+        private fun walkIn(directory: File): Sequence<File> = directory
+            .walkTopDown()
+            .filter { it.extension == "json" }
 
         private fun extractExpressionCases(f: File): List<TestCaseOrError> {
             fun JSONArray?.toListOfJSONObject(): List<JSONObject> {
@@ -70,18 +75,21 @@ class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
             } catch (e: JSONException) {
                 return listOf(TestCaseOrError.Error(f.toTestPath(), e))
             }
-            val cases = root.optJSONArray(CASES_FIELD)
+            val cases = root.optJSONArray(FIELD_CASES)
                     .toListOfJSONObject()
                     .map {
                         TestCaseOrError.TestCase(
-                            path = f.toTestPath() + ":" + it.optString(CASE_NAME_FIELD),
+                            path = f.toTestPath() + ":" + it.optString(FIELD_CASE_NAME),
                             json = it)
                     }
-            val signatures = root.optJSONArray(SIGNATURES_FIELD)
+            val signatures = root.optJSONArray(FIELD_SIGNATURES)
                     .toListOfJSONObject()
                     .map {
+                        val args = it.optJSONArray(FIELD_ARGUMENTS)
+                            .toListOfJSONObject()
+                            .mapNotNull { arg -> arg.optString(FIELD_TYPE) }
                         TestCaseOrError.TestCase(
-                            path = f.toTestPath() + ":" + it.optString(CASE_NAME_FIELD),
+                            path = "${f.toTestPath()}:${it.optString(FIELD_CASE_NAME)}(${args.joinToString()})",
                             json = it)
                     }
             results.addAll(cases)

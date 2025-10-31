@@ -1,0 +1,121 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "decimalFormat",
+      "description": {
+        "$ref": "translations.json#/decimalformat_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/decimalformat_integer_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_integer_string_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "decimalFormat",
+      "description": {
+        "$ref": "translations.json#/decimalformat_number_string"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/decimalformat_number_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_number_string_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "decimalFormat",
+      "description": {
+        "$ref": "translations.json#/decimalformat_integer_string_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/decimalformat_integer_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_integer_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_integer_string_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "decimalFormat",
+      "description": {
+        "$ref": "translations.json#/decimalformat_number_string_string"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/decimalformat_number_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_number_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decimalformat_number_string_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    }
+  ]
+}

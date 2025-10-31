@@ -1,0 +1,498 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "len",
+      "description": {
+        "$ref": "translations.json#/len_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/len_string_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "contains",
+      "description": {
+        "$ref": "translations.json#/contains_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/contains_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/contains_string_string_arg1"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "substring",
+      "description": {
+        "$ref": "translations.json#/substring_string_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/substring_string_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/substring_string_integer_integer_arg1"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/substring_string_integer_integer_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "replaceAll",
+      "description": {
+        "$ref": "translations.json#/replaceall_string_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/replaceall_string_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/replaceall_string_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/replaceall_string_string_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "index",
+      "description": {
+        "$ref": "translations.json#/index_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/index_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/index_string_string_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "lastIndex",
+      "description": {
+        "$ref": "translations.json#/lastindex_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/lastindex_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/lastindex_string_string_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "encodeUri",
+      "description": {
+        "$ref": "translations.json#/encodeuri_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/encodeuri_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "decodeUri",
+      "description": {
+        "$ref": "translations.json#/decodeuri_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/decodeuri_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "trim",
+      "description": {
+        "$ref": "translations.json#/trim_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/trim_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "trimLeft",
+      "description": {
+        "$ref": "translations.json#/trimleft_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/trimleft_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "trimRight",
+      "description": {
+        "$ref": "translations.json#/trimright_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/trimright_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toUpperCase",
+      "description": {
+        "$ref": "translations.json#/touppercase_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/touppercase_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toLowerCase",
+      "description": {
+        "$ref": "translations.json#/tolowercase_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/tolowercase_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "padStart",
+      "description": {
+        "$ref": "translations.json#/padstart_string_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padstart_string_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padstart_string_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padstart_string_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "padStart",
+      "description": {
+        "$ref": "translations.json#/padstart_integer_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padstart_integer_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padstart_integer_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padstart_integer_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "padEnd",
+      "description": {
+        "$ref": "translations.json#/padend_string_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padend_string_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padend_string_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padend_string_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "padEnd",
+      "description": {
+        "$ref": "translations.json#/padend_integer_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padend_integer_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/padend_integer_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/padend_integer_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "testRegex",
+      "description": {
+        "$ref": "translations.json#/testregex_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/testregex_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/testregex_string_string_arg1"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "encodeRegex",
+      "description": {
+        "$ref": "translations.json#/encoderegex_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/encoderegex_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "web",
+        "android"
+      ]
+    }
+  ]
+}

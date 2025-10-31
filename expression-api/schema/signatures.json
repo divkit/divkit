@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "definitions": {
+    "reference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "required": [
+        "$ref"
+      ]
+    },
+    "localized_string": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "ru": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "ru"
+      ]
+    },
+    "signature": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/localized_string"
+            },
+            {
+              "$ref": "#/definitions/reference"
+            }
+          ]
+        },
+        "is_method": {
+          "type": "boolean",
+          "default": false
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/argument"
+          }
+        },
+        "return_type": {
+          "$ref": "#/definitions/type"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/platform"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "arguments",
+        "return_type",
+        "platforms"
+      ]
+    },
+    "argument": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/type"
+        },
+        "description": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/localized_string"
+            },
+            {
+              "$ref": "#/definitions/reference"
+            }
+          ]
+        },
+        "is_vararg": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "type",
+        "description"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "array",
+        "boolean",
+        "color",
+        "datetime",
+        "dict",
+        "integer",
+        "number",
+        "string",
+        "url"
+      ]
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  },
+  "properties": {
+    "signatures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/signature"
+      }
+    }
+  },
+  "required": [
+    "signatures"
+  ]
+}

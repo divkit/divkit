@@ -3,10 +3,11 @@ package divkit.dsl.expression.generator
 import divkit.dsl.expression.generator.model.Type
 
 data class CodegenSignature(
-    val functionName: String,
-    val doc: String,
+    val name: String,
+    val description: String,
     val arguments: List<CodegenArgument>,
-    val resultType: Type,
+    val returnType: Type,
+    val isMethod: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -14,29 +15,29 @@ data class CodegenSignature(
 
         other as CodegenSignature
 
-        if (functionName != other.functionName) return false
+        if (name != other.name) return false
         if (arguments.size != other.arguments.size) return false
         arguments.indices.forEach {index ->
             if (arguments[index] != other.arguments[index]) return false
         }
         if (arguments != other.arguments) return false
-        if (resultType.resolveKotlinType() != other.resultType.resolveKotlinType()) return false
+        if (returnType.resolveKotlinType() != other.returnType.resolveKotlinType()) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = functionName.hashCode()
+        var result = name.hashCode()
         result = 31 * result + arguments.hashCode()
-        result = 31 * result + resultType.resolveKotlinType().hashCode()
+        result = 31 * result + returnType.resolveKotlinType().hashCode()
         return result
     }
 }
 
 data class CodegenArgument(
     val type: Type,
-    val doc: String,
-    val vararg: Boolean,
+    val description: String,
+    val isVararg: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,7 +45,7 @@ data class CodegenArgument(
 
         other as CodegenArgument
 
-        if (vararg != other.vararg) return false
+        if (isVararg != other.isVararg) return false
         if (type.resolveKotlinArgumentType() != type.resolveKotlinArgumentType()) return false
 
         return true
@@ -52,7 +53,7 @@ data class CodegenArgument(
 
     override fun hashCode(): Int {
         var result = type.resolveKotlinArgumentType().hashCode()
-        result = 31 * result + vararg.hashCode()
+        result = 31 * result + isVararg.hashCode()
         return result
     }
 }

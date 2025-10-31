@@ -1,0 +1,2603 @@
+{
+  "$schema": "schema/translations.json",
+  "getarrayboolean_array_integer": {
+    "en": "Returns a boolean property from array.",
+    "ru": "Возвращает логическое значение из массива."
+  },
+  "getarrayboolean_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayboolean_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarraycolor_array_integer": {
+    "en": "Returns a color property from array.",
+    "ru": "Возвращает свойство цвета из массива."
+  },
+  "getarraycolor_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarraycolor_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayfromarray_array_integer": {
+    "en": "Returns an array value from array",
+    "ru": "Возвращает значение массива из массива"
+  },
+  "getarrayfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayinteger_array_integer": {
+    "en": "Returns an integer value from array.",
+    "ru": "Возвращает целочисленное значение из массива."
+  },
+  "getarrayinteger_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayinteger_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarraynumber_array_integer": {
+    "en": "Returns a number value from array.",
+    "ru": "Возвращает числовое значение из массива."
+  },
+  "getarraynumber_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarraynumber_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptboolean_array_integer_boolean": {
+    "en": "Returns an optional boolean value from array.",
+    "ru": "Возвращает опциональное логическое значение из массива."
+  },
+  "getarrayoptboolean_array_integer_boolean_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptboolean_array_integer_boolean_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptboolean_array_integer_boolean_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a boolean.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является логическим."
+  },
+  "getarrayoptcolor_array_integer_color": {
+    "en": "Returns an optional color value from array.",
+    "ru": "Возвращает опциональное значение цвета из массива."
+  },
+  "getarrayoptcolor_array_integer_color_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptcolor_array_integer_color_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptcolor_array_integer_color_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a color.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является цветом."
+  },
+  "getarrayoptcolor_array_integer_string": {
+    "en": "Returns an optional color value from array.",
+    "ru": "Возвращает опциональное значение цвета из массива."
+  },
+  "getarrayoptcolor_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptcolor_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptcolor_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a color.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является цветом."
+  },
+  "getarrayoptinteger_array_integer_integer": {
+    "en": "Returns an optional integer property from array.",
+    "ru": "Возвращает опциональное целочисленное свойство из массива."
+  },
+  "getarrayoptinteger_array_integer_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptinteger_array_integer_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptinteger_array_integer_integer_arg2": {
+    "en": "Fallback value if property does not exist or a property value is not an integer.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является целым числом."
+  },
+  "getarrayoptnumber_array_integer_number": {
+    "en": "Returns an optional number property from array.",
+    "ru": "Возвращает опциональное числовое свойство из массива."
+  },
+  "getarrayoptnumber_array_integer_number_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptnumber_array_integer_number_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptnumber_array_integer_number_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a number.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является числом."
+  },
+  "getarrayoptstring_array_integer_string": {
+    "en": "Returns an optional string property from array.",
+    "ru": "Возвращает опциональное строковое свойство из массива."
+  },
+  "getarrayoptstring_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayoptstring_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayoptstring_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a string.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является строкой."
+  },
+  "getarrayopturl_array_integer_string": {
+    "en": "Returns an optional url value from array.",
+    "ru": "Возвращает опциональное значение URL из массива."
+  },
+  "getarrayopturl_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayopturl_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayopturl_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a url.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является URL."
+  },
+  "getarrayopturl_array_integer_url": {
+    "en": "Returns an optional url value from array.",
+    "ru": "Возвращает опциональное значение URL из массива."
+  },
+  "getarrayopturl_array_integer_url_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayopturl_array_integer_url_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayopturl_array_integer_url_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a url.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является URL."
+  },
+  "getarraystring_array_integer": {
+    "en": "Returns a string value from array.",
+    "ru": "Возвращает строковое значение из массива."
+  },
+  "getarraystring_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarraystring_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getarrayurl_array_integer": {
+    "en": "Returns an url value from array.",
+    "ru": "Возвращает значение URL из массива."
+  },
+  "getarrayurl_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarrayurl_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getbooleanfromarray_array_integer": {
+    "en": "Returns a boolean property from array.",
+    "ru": "Возвращает логическое свойство из массива."
+  },
+  "getbooleanfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getbooleanfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getcolorfromarray_array_integer": {
+    "en": "Returns a color property from array.",
+    "ru": "Возвращает свойство цвета из массива."
+  },
+  "getcolorfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getcolorfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getdictfromarray_array_integer": {
+    "en": "Returns an dict value from array",
+    "ru": "Возвращает значение словаря из массива"
+  },
+  "getdictfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getdictfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getintegerfromarray_array_integer": {
+    "en": "Returns an integer value from array.",
+    "ru": "Возвращает целочисленное значение из массива."
+  },
+  "getintegerfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getintegerfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getnumberfromarray_array_integer": {
+    "en": "Returns a number value from array.",
+    "ru": "Возвращает числовое значение из массива."
+  },
+  "getnumberfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getnumberfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptarrayfromarray_array_integer": {
+    "en": "Returns an array value from array if exist or empty array otherwise",
+    "ru": "Возвращает значение массива из массива, если существует, иначе пустой массив"
+  },
+  "getoptarrayfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptarrayfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptbooleanfromarray_array_integer_boolean": {
+    "en": "Returns an optional boolean value from array.",
+    "ru": "Возвращает опциональное логическое значение из массива."
+  },
+  "getoptbooleanfromarray_array_integer_boolean_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptbooleanfromarray_array_integer_boolean_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptbooleanfromarray_array_integer_boolean_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a boolean.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является логическим."
+  },
+  "getoptcolorfromarray_array_integer_color": {
+    "en": "Returns an optional color value from array.",
+    "ru": "Возвращает опциональное значение цвета из массива."
+  },
+  "getoptcolorfromarray_array_integer_color_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptcolorfromarray_array_integer_color_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptcolorfromarray_array_integer_color_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a color.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является цветом."
+  },
+  "getoptcolorfromarray_array_integer_string": {
+    "en": "Returns an optional color value from array.",
+    "ru": "Возвращает опциональное значение цвета из массива."
+  },
+  "getoptcolorfromarray_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptcolorfromarray_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptcolorfromarray_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a color.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является цветом."
+  },
+  "getoptdictfromarray_array_integer": {
+    "en": "Returns an dict value from array if exist or empty dict otherwise",
+    "ru": "Возвращает значение словаря из массива, если существует, иначе пустой словарь"
+  },
+  "getoptdictfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptdictfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptintegerfromarray_array_integer_integer": {
+    "en": "Returns an optional integer property from array.",
+    "ru": "Возвращает опциональное целочисленное свойство из массива."
+  },
+  "getoptintegerfromarray_array_integer_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptintegerfromarray_array_integer_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptintegerfromarray_array_integer_integer_arg2": {
+    "en": "Fallback value if property does not exist or a property value is not an integer.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является целым числом."
+  },
+  "getoptnumberfromarray_array_integer_number": {
+    "en": "Returns an optional number property from array.",
+    "ru": "Возвращает опциональное числовое свойство из массива."
+  },
+  "getoptnumberfromarray_array_integer_number_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptnumberfromarray_array_integer_number_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptnumberfromarray_array_integer_number_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a number.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является числом."
+  },
+  "getoptstringfromarray_array_integer_string": {
+    "en": "Returns an optional string property from array.",
+    "ru": "Возвращает опциональное строковое свойство из массива."
+  },
+  "getoptstringfromarray_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getoptstringfromarray_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getoptstringfromarray_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a string.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является строкой."
+  },
+  "getopturlfromarray_array_integer_string": {
+    "en": "Returns an optional url value from array.",
+    "ru": "Возвращает опциональное значение URL из массива."
+  },
+  "getopturlfromarray_array_integer_string_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getopturlfromarray_array_integer_string_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getopturlfromarray_array_integer_string_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a url.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является URL."
+  },
+  "getopturlfromarray_array_integer_url": {
+    "en": "Returns an optional url value from array.",
+    "ru": "Возвращает опциональное значение URL из массива."
+  },
+  "getopturlfromarray_array_integer_url_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getopturlfromarray_array_integer_url_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "getopturlfromarray_array_integer_url_arg2": {
+    "en": "Fallback value if value by index not exists or it's is not a url.",
+    "ru": "Резервное значение, если значение по индексу не существует или не является URL."
+  },
+  "getstringfromarray_array_integer": {
+    "en": "Returns a string value from array.",
+    "ru": "Возвращает строковое значение из массива."
+  },
+  "getstringfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getstringfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "geturlfromarray_array_integer": {
+    "en": "Returns an url value from array.",
+    "ru": "Возвращает значение URL из массива."
+  },
+  "geturlfromarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "geturlfromarray_array_integer_arg1": {
+    "en": "Index at array.",
+    "ru": "Индекс в массиве."
+  },
+  "len_array": {
+    "en": "Gets the length of array. Returns integer value.",
+    "ru": "Получает длину массива. Возвращает целочисленное значение."
+  },
+  "len_array_arg0": {
+    "en": "Array value to get length of.",
+    "ru": "Значение массива для получения длины."
+  },
+  "argb_number_number_number_number": {
+    "en": "Creates color from values of alpha, red, green, blue values. Returns string value of color in hex format '#FFAABBCC'.",
+    "ru": "Создает цвет из значений альфа, красного, зеленого и синего. Возвращает строковое значение цвета в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "argb_number_number_number_number_arg0": {
+    "en": "Number value of alpha in range 0.0 to 1.0.",
+    "ru": "Числовое значение альфа-канала в диапазоне от 0.0 до 1.0."
+  },
+  "argb_number_number_number_number_arg1": {
+    "en": "Number value of red in range 0.0 to 1.0.",
+    "ru": "Числовое значение красного цвета в диапазоне от 0.0 до 1.0."
+  },
+  "argb_number_number_number_number_arg2": {
+    "en": "Number value of green in range 0.0 to 1.0.",
+    "ru": "Числовое значение зеленого цвета в диапазоне от 0.0 до 1.0."
+  },
+  "argb_number_number_number_number_arg3": {
+    "en": "Number value of blue in range 0.0 to 1.0.",
+    "ru": "Числовое значение синего цвета в диапазоне от 0.0 до 1.0."
+  },
+  "getcoloralpha_color": {
+    "en": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
+    "ru": "Получает значение альфа-канала из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 альфа-канала цвета."
+  },
+  "getcoloralpha_color_arg0": {
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  "getcoloralpha_string": {
+    "en": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
+    "ru": "Получает значение альфа-канала из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 альфа-канала цвета."
+  },
+  "getcoloralpha_string_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "getcolorblue_color": {
+    "en": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
+    "ru": "Получает значение синего цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 синего компонента цвета."
+  },
+  "getcolorblue_color_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "getcolorblue_string": {
+    "en": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
+    "ru": "Получает значение синего цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 синего компонента цвета."
+  },
+  "getcolorblue_string_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "getcolorgreen_color": {
+    "en": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
+    "ru": "Получает значение зеленого цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 зеленого компонента цвета."
+  },
+  "getcolorgreen_color_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "getcolorgreen_string": {
+    "en": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
+    "ru": "Получает значение зеленого цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 зеленого компонента цвета."
+  },
+  "getcolorgreen_string_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "getcolorred_color": {
+    "en": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
+    "ru": "Получает значение красного цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 красного компонента цвета."
+  },
+  "getcolorred_color_arg0": {
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  "getcolorred_string": {
+    "en": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
+    "ru": "Получает значение красного цвета из аргумента цвета. Возвращает числовое значение в диапазоне от 0.0 до 1.0 красного компонента цвета."
+  },
+  "getcolorred_string_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "rgb_number_number_number": {
+    "en": "Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns color value of color in hex format '#FFAABBCC'.",
+    "ru": "Создает цвет из значений красного, зеленого и синего цветов. Устанавливает значение альфа-канала как 1.0. Возвращает цветовое значение в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "rgb_number_number_number_arg0": {
+    "en": "Number value of red in range 0.0 to 1.0.",
+    "ru": "Числовое значение красного цвета в диапазоне от 0.0 до 1.0."
+  },
+  "rgb_number_number_number_arg1": {
+    "en": "Number value of green in range 0.0 to 1.0.",
+    "ru": "Числовое значение зеленого цвета в диапазоне от 0.0 до 1.0."
+  },
+  "rgb_number_number_number_arg2": {
+    "en": "Number value of blue in range 0.0 to 1.0.",
+    "ru": "Числовое значение синего цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcoloralpha_color_number": {
+    "en": "Sets alpha value of argument color. Returns color.",
+    "ru": "Устанавливает значение альфа-канала для аргумента цвета. Возвращает цвет."
+  },
+  "setcoloralpha_color_number_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "setcoloralpha_color_number_arg1": {
+    "en": "Number value of alpha in range 0.0 to 1.0.",
+    "ru": "Числовое значение альфа-канала в диапазоне от 0.0 до 1.0."
+  },
+  "setcoloralpha_string_number": {
+    "en": "Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+    "ru": "Устанавливает значение альфа-канала для аргумента цвета. Возвращает строковое значение цвета в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "setcoloralpha_string_number_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "setcoloralpha_string_number_arg1": {
+    "en": "Number value of alpha in range 0.0 to 1.0.",
+    "ru": "Числовое значение альфа-канала в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorblue_color_number": {
+    "en": "Sets blue value of argument color. Returns Color.",
+    "ru": "Устанавливает значение синего цвета для аргумента цвета. Возвращает цвет."
+  },
+  "setcolorblue_color_number_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "setcolorblue_color_number_arg1": {
+    "en": "Number value of blue in range 0.0 to 1.0.",
+    "ru": "Числовое значение синего цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorblue_string_number": {
+    "en": "Sets blue value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+    "ru": "Устанавливает значение синего цвета для аргумента цвета. Возвращает строковое значение цвета в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "setcolorblue_string_number_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "setcolorblue_string_number_arg1": {
+    "en": "Number value of blue in range 0.0 to 1.0.",
+    "ru": "Числовое значение синего цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorgreen_color_number": {
+    "en": "Sets green value of argument color. Returns Color.",
+    "ru": "Устанавливает значение зеленого цвета для аргумента цвета. Возвращает цвет."
+  },
+  "setcolorgreen_color_number_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "setcolorgreen_color_number_arg1": {
+    "en": "Number value of green in range 0.0 to 1.0.",
+    "ru": "Числовое значение зеленого цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorgreen_string_number": {
+    "en": "Sets green value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+    "ru": "Устанавливает значение зеленого цвета для аргумента цвета. Возвращает строковое значение цвета в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "setcolorgreen_string_number_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "setcolorgreen_string_number_arg1": {
+    "en": "Number value of green in range 0.0 to 1.0.",
+    "ru": "Числовое значение зеленого цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorred_color_number": {
+    "en": "Sets red value of argument color. Returns color.",
+    "ru": "Устанавливает значение красного цвета для аргумента цвета. Возвращает цвет."
+  },
+  "setcolorred_color_number_arg0": {
+    "en": "Color.",
+    "ru": "Цвет."
+  },
+  "setcolorred_color_number_arg1": {
+    "en": "Number value of red in range 0.0 to 1.0.",
+    "ru": "Числовое значение красного цвета в диапазоне от 0.0 до 1.0."
+  },
+  "setcolorred_string_number": {
+    "en": "Sets red value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+    "ru": "Устанавливает значение красного цвета для аргумента цвета. Возвращает строковое значение цвета в шестнадцатеричном формате '#FFAABBCC'."
+  },
+  "setcolorred_string_number_arg0": {
+    "en": "String value of color in hex format.",
+    "ru": "Строковое значение цвета в шестнадцатеричном формате."
+  },
+  "setcolorred_string_number_arg1": {
+    "en": "Number value of red in range 0.0 to 1.0.",
+    "ru": "Числовое значение красного цвета в диапазоне от 0.0 до 1.0."
+  },
+  "addmillis_datetime_integer": {
+    "en": "Adds milliseconds to original date. Returns datetime with added time in milliseconds.",
+    "ru": "Добавляет миллисекунды к исходной дате. Возвращает дату и время с добавленным временем в миллисекундах."
+  },
+  "addmillis_datetime_integer_arg0": {
+    "en": "Datetime value, date to add milliseconds.",
+    "ru": "Значение даты и времени, дата для добавления миллисекунд."
+  },
+  "addmillis_datetime_integer_arg1": {
+    "en": "Integer value, count of milliseconds to add.",
+    "ru": "Целочисленное значение, количество миллисекунд для добавления."
+  },
+  "formatdateaslocal_datetime_string": {
+    "en": "Formatting dates in a local timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+    "ru": "Форматирование дат в местном часовом поясе в локали пользователя. Используется локаль по умолчанию. Смотрите https://en.wikipedia.org/wiki/ISO_8601 для дополнительной информации. `Z` для часовых поясов не поддерживается."
+  },
+  "formatdateaslocal_datetime_string_arg0": {
+    "en": "Datetime value, date to get milliseconds.",
+    "ru": "Значение даты и времени, дата для получения миллисекунд."
+  },
+  "formatdateaslocal_datetime_string_arg1": {
+    "en": "Date and time formats are specified by date and time pattern strings.",
+    "ru": "Форматы даты и времени указываются строками шаблонов даты и времени."
+  },
+  "formatdateaslocalwithlocale_datetime_string_string": {
+    "en": "Formatting dates in a local timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+    "ru": "Форматирование дат в местном часовом поясе с локализацией. Смотрите https://en.wikipedia.org/wiki/ISO_8601 для дополнительной информации. `Z` для часовых поясов не поддерживается."
+  },
+  "formatdateaslocalwithlocale_datetime_string_string_arg0": {
+    "en": "Datetime value, date to get milliseconds.",
+    "ru": "Значение даты и времени, дата для получения миллисекунд."
+  },
+  "formatdateaslocalwithlocale_datetime_string_string_arg1": {
+    "en": "Date and time formats are specified by date and time pattern strings.",
+    "ru": "Форматы даты и времени указываются строками шаблонов даты и времени."
+  },
+  "formatdateaslocalwithlocale_datetime_string_string_arg2": {
+    "en": "Language for specified date and time pattern strings.",
+    "ru": "Язык для указанных строк шаблонов даты и времени."
+  },
+  "formatdateasutc_datetime_string": {
+    "en": "Formatting dates in a UTC timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+    "ru": "Форматирование дат в часовом поясе UTC в локали пользователя. Используется локаль по умолчанию. Смотрите https://en.wikipedia.org/wiki/ISO_8601 для дополнительной информации. `Z` для часовых поясов не поддерживается."
+  },
+  "formatdateasutc_datetime_string_arg0": {
+    "en": "Datetime value, date to get milliseconds.",
+    "ru": "Значение даты и времени, дата для получения миллисекунд."
+  },
+  "formatdateasutc_datetime_string_arg1": {
+    "en": "Date and time formats are specified by date and time pattern strings.",
+    "ru": "Форматы даты и времени указываются строками шаблонов даты и времени."
+  },
+  "formatdateasutcwithlocale_datetime_string_string": {
+    "en": "Formatting dates in a UTC timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+    "ru": "Форматирование дат в часовом поясе UTC с локализацией. Смотрите https://en.wikipedia.org/wiki/ISO_8601 для дополнительной информации. `Z` для часовых поясов не поддерживается."
+  },
+  "formatdateasutcwithlocale_datetime_string_string_arg0": {
+    "en": "Datetime value, date to get milliseconds.",
+    "ru": "Значение даты и времени, дата для получения миллисекунд."
+  },
+  "formatdateasutcwithlocale_datetime_string_string_arg1": {
+    "en": "Date and time formats are specified by date and time pattern strings.",
+    "ru": "Форматы даты и времени указываются строками шаблонов даты и времени."
+  },
+  "formatdateasutcwithlocale_datetime_string_string_arg2": {
+    "en": "Language for specified date and time pattern strings.",
+    "ru": "Язык для указанных строк шаблонов даты и времени."
+  },
+  "getday_datetime": {
+    "en": "Returns day of month of original date.",
+    "ru": "Возвращает день месяца исходной даты."
+  },
+  "getday_datetime_arg0": {
+    "en": "Datetime value, date to get day of month.",
+    "ru": "Значение даты и времени, дата для получения дня месяца."
+  },
+  "getdayofweek_datetime": {
+    "en": "Returns day of week of original date, where Sunday is 7.",
+    "ru": "Возвращает день недели исходной даты, где воскресенье - 7."
+  },
+  "getdayofweek_datetime_arg0": {
+    "en": "Datetime value, date to get day of week.",
+    "ru": "Значение даты и времени, дата для получения дня недели."
+  },
+  "gethours_datetime": {
+    "en": "Returns hours number of original date.",
+    "ru": "Возвращает значение часов исходной даты."
+  },
+  "gethours_datetime_arg0": {
+    "en": "Datetime value, date to get hours.",
+    "ru": "Значение даты и времени, дата для получения часов."
+  },
+  "getmillis_datetime": {
+    "en": "Returns milliseconds number of original date.",
+    "ru": "Возвращает значение миллисекунд исходной даты."
+  },
+  "getmillis_datetime_arg0": {
+    "en": "Datetime value, date to get milliseconds.",
+    "ru": "Значение даты и времени, дата для получения миллисекунд."
+  },
+  "getminutes_datetime": {
+    "en": "Returns minutes number of original date.",
+    "ru": "Возвращает значение минут исходной даты."
+  },
+  "getminutes_datetime_arg0": {
+    "en": "Datetime value, date to get minutes.",
+    "ru": "Значение даты и времени, дата для получения минут."
+  },
+  "getmonth_datetime": {
+    "en": "Returns month number of original date.",
+    "ru": "Возвращает номер месяца исходной даты."
+  },
+  "getmonth_datetime_arg0": {
+    "en": "Datetime value, date to get month.",
+    "ru": "Значение даты и времени, дата для получения месяца."
+  },
+  "getseconds_datetime": {
+    "en": "Returns seconds number of original date.",
+    "ru": "Возвращает значение секунд исходной даты."
+  },
+  "getseconds_datetime_arg0": {
+    "en": "Datetime value, date to get seconds.",
+    "ru": "Значение даты и времени, дата для получения секунд."
+  },
+  "getyear_datetime": {
+    "en": "Returns year number of original date.",
+    "ru": "Возвращает номер года исходной даты."
+  },
+  "getyear_datetime_arg0": {
+    "en": "Datetime value, date to get year.",
+    "ru": "Значение даты и времени, дата для получения года."
+  },
+  "nowlocal": {
+    "en": "Creates datetime from time of now. Returns datetime value.",
+    "ru": "Создает дату и время из текущего времени. Возвращает значение даты и времени."
+  },
+  "parseunixtime_integer": {
+    "en": "Creates datetime from integer value of unix time. Returns datetime value.",
+    "ru": "Создает дату и время из целочисленного значения времени unix. Возвращает значение даты и времени."
+  },
+  "parseunixtime_integer_arg0": {
+    "en": "Time in UTC seconds from the epoch.",
+    "ru": "Время в секундах UTC от начала эпохи."
+  },
+  "parseunixtimeaslocal_integer": {
+    "en": "Creates datetime in local timezone from integer value of unix time. Returns datetime value.",
+    "ru": "Создает дату и время в местном часовом поясе из целочисленного значения времени unix. Возвращает значение даты и времени."
+  },
+  "parseunixtimeaslocal_integer_arg0": {
+    "en": "Time in local time zone seconds from the epoch.",
+    "ru": "Время в секундах местного часового пояса от начала эпохи."
+  },
+  "setday_datetime_integer": {
+    "en": "Sets day of month number to original date. Returns datetime with day of month set.",
+    "ru": "Устанавливает день месяца для исходной даты. Возвращает дату и время с установленным днем месяца."
+  },
+  "setday_datetime_integer_arg0": {
+    "en": "Datetime value, date to set day of month.",
+    "ru": "Значение даты и времени, дата для установки дня месяца."
+  },
+  "setday_datetime_integer_arg1": {
+    "en": "Integer value, day of month to set to date.",
+    "ru": "Целочисленное значение, день месяца для установки в дату."
+  },
+  "sethours_datetime_integer": {
+    "en": "Sets hours number to original date. Returns datetime with hours set.",
+    "ru": "Устанавливает часы для исходной даты. Возвращает дату и время с установленными часами."
+  },
+  "sethours_datetime_integer_arg0": {
+    "en": "Datetime value, date to set hours.",
+    "ru": "Значение даты и времени, дата для установки часов."
+  },
+  "sethours_datetime_integer_arg1": {
+    "en": "Integer value, hours to set to date.",
+    "ru": "Целочисленное значение, часы для установки в дату."
+  },
+  "setmillis_datetime_integer": {
+    "en": "Sets milliseconds number to original date. Returns datetime with milliseconds set.",
+    "ru": "Устанавливает миллисекунды для исходной даты. Возвращает дату и время с установленными миллисекундами."
+  },
+  "setmillis_datetime_integer_arg0": {
+    "en": "Datetime value, date to set milliseconds.",
+    "ru": "Значение даты и времени, дата для установки миллисекунд."
+  },
+  "setmillis_datetime_integer_arg1": {
+    "en": "Integer value, milliseconds to set to date.",
+    "ru": "Целочисленное значение, миллисекунды для установки в дату."
+  },
+  "setminutes_datetime_integer": {
+    "en": "Sets minutes number to original date. Returns datetime with minutes set.",
+    "ru": "Устанавливает минуты для исходной даты. Возвращает дату и время с установленными минутами."
+  },
+  "setminutes_datetime_integer_arg0": {
+    "en": "Datetime value, date to set minutes.",
+    "ru": "Значение даты и времени, дата для установки минут."
+  },
+  "setminutes_datetime_integer_arg1": {
+    "en": "Integer value, minutes to set to date.",
+    "ru": "Целочисленное значение, минуты для установки в дату."
+  },
+  "setmonth_datetime_integer": {
+    "en": "Sets month number to original date. Returns datetime with month set.",
+    "ru": "Устанавливает номер месяца для исходной даты. Возвращает дату и время с установленным месяцем."
+  },
+  "setmonth_datetime_integer_arg0": {
+    "en": "Datetime value, date to set month.",
+    "ru": "Значение даты и времени, дата для установки месяца."
+  },
+  "setmonth_datetime_integer_arg1": {
+    "en": "Integer value, month to set to date. Expected values from 1 to 12.",
+    "ru": "Целочисленное значение, месяц для установки в дату. Ожидаемые значения от 1 до 12."
+  },
+  "setseconds_datetime_integer": {
+    "en": "Sets seconds number to original date. Returns datetime with seconds set.",
+    "ru": "Устанавливает секунды для исходной даты. Возвращает дату и время с установленными секундами."
+  },
+  "setseconds_datetime_integer_arg0": {
+    "en": "Datetime value, date to set seconds.",
+    "ru": "Значение даты и времени, дата для установки секунд."
+  },
+  "setseconds_datetime_integer_arg1": {
+    "en": "Integer value, seconds to set to date.",
+    "ru": "Целочисленное значение, секунды для установки в дату."
+  },
+  "setyear_datetime_integer": {
+    "en": "Sets year number to original date. Returns datetime with year set.",
+    "ru": "Устанавливает номер года для исходной даты. Возвращает дату и время с установленным годом."
+  },
+  "setyear_datetime_integer_arg0": {
+    "en": "Datetime value, date to set year.",
+    "ru": "Значение даты и времени, дата для установки года."
+  },
+  "setyear_datetime_integer_arg1": {
+    "en": "Integer value, year to set to date.",
+    "ru": "Целочисленное значение, год для установки в дату."
+  },
+  "getarrayfromdict_dict_string": {
+    "en": "Returns an array property from dictionary.",
+    "ru": "Возвращает свойство массива из словаря."
+  },
+  "getarrayfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getarrayfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getbooleanfromdict_dict_string": {
+    "en": "Returns a boolean property from dictionary.",
+    "ru": "Возвращает логическое свойство из словаря."
+  },
+  "getbooleanfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getbooleanfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getcolorfromdict_dict_string": {
+    "en": "Returns a color property from dictionary.",
+    "ru": "Возвращает свойство цвета из словаря."
+  },
+  "getcolorfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getcolorfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictboolean_dict_string": {
+    "en": "Returns a boolean property from dictionary.",
+    "ru": "Возвращает логическое свойство из словаря."
+  },
+  "getdictboolean_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictboolean_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictcolor_dict_string": {
+    "en": "Returns a color property from dictionary.",
+    "ru": "Возвращает свойство цвета из словаря."
+  },
+  "getdictcolor_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictcolor_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictfromdict_dict_string": {
+    "en": "Returns an dict property from dictionary.",
+    "ru": "Возвращает свойство словаря из словаря."
+  },
+  "getdictfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictinteger_dict_string": {
+    "en": "Returns an integer value from dictionary.",
+    "ru": "Возвращает целочисленное значение из словаря."
+  },
+  "getdictinteger_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictinteger_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictkeys_dict": {
+    "en": "Return a collection containing just the keys of the dictionary.",
+    "ru": "Возвращает коллекцию, содержащую только ключи словаря."
+  },
+  "getdictkeys_dict_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictnumber_dict_string": {
+    "en": "Returns a number value from dictionary.",
+    "ru": "Возвращает числовое значение из словаря."
+  },
+  "getdictnumber_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictnumber_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptboolean_boolean_dict_string": {
+    "en": "Returns an optional boolean property from dictionary.",
+    "ru": "Возвращает опциональное логическое свойство из словаря."
+  },
+  "getdictoptboolean_boolean_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a boolean.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является логическим."
+  },
+  "getdictoptboolean_boolean_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptboolean_boolean_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptcolor_color_dict_string": {
+    "en": "Returns an optional color property from dictionary.",
+    "ru": "Возвращает опциональное свойство цвета из словаря."
+  },
+  "getdictoptcolor_color_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a color.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является цветом."
+  },
+  "getdictoptcolor_color_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptcolor_color_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptcolor_string_dict_string": {
+    "en": "Returns an optional color property from dictionary.",
+    "ru": "Возвращает опциональное свойство цвета из словаря."
+  },
+  "getdictoptcolor_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a color.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является цветом."
+  },
+  "getdictoptcolor_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptcolor_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptinteger_integer_dict_string": {
+    "en": "Returns an optional integer property from dictionary.",
+    "ru": "Возвращает опциональное целочисленное свойство из словаря."
+  },
+  "getdictoptinteger_integer_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an integer.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является целым числом."
+  },
+  "getdictoptinteger_integer_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptinteger_integer_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptnumber_number_dict_string": {
+    "en": "Returns an optional number property from dictionary.",
+    "ru": "Возвращает опциональное числовое свойство из словаря."
+  },
+  "getdictoptnumber_number_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a number.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является числом."
+  },
+  "getdictoptnumber_number_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptnumber_number_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictoptstring_string_dict_string": {
+    "en": "Returns an optional string property from dictionary.",
+    "ru": "Возвращает опциональное строковое свойство из словаря."
+  },
+  "getdictoptstring_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a string.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является строкой."
+  },
+  "getdictoptstring_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictoptstring_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictopturl_string_dict_string": {
+    "en": "Returns an optional url property from dictionary.",
+    "ru": "Возвращает опциональное свойство URL из словаря."
+  },
+  "getdictopturl_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an url.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является URL."
+  },
+  "getdictopturl_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictopturl_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictopturl_url_dict_string": {
+    "en": "Returns an optional url property from dictionary.",
+    "ru": "Возвращает опциональное свойство URL из словаря."
+  },
+  "getdictopturl_url_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an url.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является URL."
+  },
+  "getdictopturl_url_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictopturl_url_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictstring_dict_string": {
+    "en": "Returns a string value from dictionary.",
+    "ru": "Возвращает строковое значение из словаря."
+  },
+  "getdictstring_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdictstring_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdicturl_dict_string": {
+    "en": "Returns an url property from dictionary.",
+    "ru": "Возвращает свойство URL из словаря."
+  },
+  "getdicturl_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getdicturl_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdictvalues_dict": {
+    "en": "Return a collection containing just the values of the dictionary.",
+    "ru": "Возвращает коллекцию, содержащую только значения словаря."
+  },
+  "getdictvalues_dict_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getintegerfromdict_dict_string": {
+    "en": "Returns an integer value from dictionary.",
+    "ru": "Возвращает целочисленное значение из словаря."
+  },
+  "getintegerfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getintegerfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getnumberfromdict_dict_string": {
+    "en": "Returns a number value from dictionary.",
+    "ru": "Возвращает числовое значение из словаря."
+  },
+  "getnumberfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getnumberfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptarrayfromdict_dict_string": {
+    "en": "Returns an array value from dict if exist or empty array otherwise.",
+    "ru": "Возвращает значение массива из словаря, если существует, иначе пустой массив."
+  },
+  "getoptarrayfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptarrayfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptbooleanfromdict_boolean_dict_string": {
+    "en": "Returns an optional boolean property from dictionary.",
+    "ru": "Возвращает опциональное логическое свойство из словаря."
+  },
+  "getoptbooleanfromdict_boolean_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a boolean.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является логическим."
+  },
+  "getoptbooleanfromdict_boolean_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptbooleanfromdict_boolean_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptcolorfromdict_color_dict_string": {
+    "en": "Returns an optional color property from dictionary.",
+    "ru": "Возвращает опциональное свойство цвета из словаря."
+  },
+  "getoptcolorfromdict_color_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a color.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является цветом."
+  },
+  "getoptcolorfromdict_color_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptcolorfromdict_color_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptcolorfromdict_string_dict_string": {
+    "en": "Returns an optional color property from dictionary.",
+    "ru": "Возвращает опциональное свойство цвета из словаря."
+  },
+  "getoptcolorfromdict_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a color.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является цветом."
+  },
+  "getoptcolorfromdict_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptcolorfromdict_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptdictfromdict_dict_string": {
+    "en": "Returns an dict value from dict if exist or empty dict otherwise.",
+    "ru": "Возвращает значение словаря из словаря, если существует, иначе пустой словарь."
+  },
+  "getoptdictfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptdictfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptintegerfromdict_integer_dict_string": {
+    "en": "Returns an optional integer property from dictionary.",
+    "ru": "Возвращает опциональное целочисленное свойство из словаря."
+  },
+  "getoptintegerfromdict_integer_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an integer.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является целым числом."
+  },
+  "getoptintegerfromdict_integer_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptintegerfromdict_integer_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptnumberfromdict_number_dict_string": {
+    "en": "Returns an optional number property from dictionary.",
+    "ru": "Возвращает опциональное числовое свойство из словаря."
+  },
+  "getoptnumberfromdict_number_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a number.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является числом."
+  },
+  "getoptnumberfromdict_number_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptnumberfromdict_number_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getoptstringfromdict_string_dict_string": {
+    "en": "Returns an optional string property from dictionary.",
+    "ru": "Возвращает опциональное строковое свойство из словаря."
+  },
+  "getoptstringfromdict_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not a string.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является строкой."
+  },
+  "getoptstringfromdict_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getoptstringfromdict_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getopturlfromdict_string_dict_string": {
+    "en": "Returns an optional url property from dictionary.",
+    "ru": "Возвращает опциональное свойство URL из словаря."
+  },
+  "getopturlfromdict_string_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an url.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является URL."
+  },
+  "getopturlfromdict_string_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getopturlfromdict_string_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getopturlfromdict_url_dict_string": {
+    "en": "Returns an optional url property from dictionary.",
+    "ru": "Возвращает опциональное свойство URL из словаря."
+  },
+  "getopturlfromdict_url_dict_string_arg0": {
+    "en": "Fallback value if property does not exist or a property value is not an url.",
+    "ru": "Резервное значение, если свойство не существует или значение свойства не является URL."
+  },
+  "getopturlfromdict_url_dict_string_arg1": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getopturlfromdict_url_dict_string_arg2": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getstringfromdict_dict_string": {
+    "en": "Returns a string value from dictionary.",
+    "ru": "Возвращает строковое значение из словаря."
+  },
+  "getstringfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getstringfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "geturlfromdict_dict_string": {
+    "en": "Returns an url property from dictionary.",
+    "ru": "Возвращает свойство URL из словаря."
+  },
+  "geturlfromdict_dict_string_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "geturlfromdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "len_dict": {
+    "en": "Counts the number of elements in a dictionary.",
+    "ru": "Подсчитывает количество элементов в словаре."
+  },
+  "len_dict_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "decimalformat_integer_string": {
+    "en": "Returns a string value from an integer using format.",
+    "ru": "Возвращает строковое значение из целого числа, используя формат."
+  },
+  "decimalformat_integer_string_arg0": {
+    "en": "Integer value to format.",
+    "ru": "Целочисленное значение для форматирования."
+  },
+  "decimalformat_integer_string_arg1": {
+    "en": "Number format, similar to ICU-like.",
+    "ru": "Формат числа, похожий на ICU."
+  },
+  "decimalformat_integer_string_string": {
+    "en": "Returns a string value from an integer using format and locale.",
+    "ru": "Возвращает строковое значение из целого числа, используя формат и локаль."
+  },
+  "decimalformat_integer_string_string_arg0": {
+    "en": "Integer value to format.",
+    "ru": "Целочисленное значение для форматирования."
+  },
+  "decimalformat_integer_string_string_arg1": {
+    "en": "Number format, similar to ICU-like.",
+    "ru": "Формат числа, похожий на ICU."
+  },
+  "decimalformat_integer_string_string_arg2": {
+    "en": "Locale.",
+    "ru": "Локаль."
+  },
+  "decimalformat_number_string": {
+    "en": "Returns a string value from an number using format.",
+    "ru": "Возвращает строковое значение из числа, используя формат."
+  },
+  "decimalformat_number_string_arg0": {
+    "en": "Number value to format.",
+    "ru": "Числовое значение для форматирования."
+  },
+  "decimalformat_number_string_arg1": {
+    "en": "Number format, similar to ICU-like.",
+    "ru": "Формат числа, похожий на ICU."
+  },
+  "decimalformat_number_string_string": {
+    "en": "Returns a string value from an number using format and locale.",
+    "ru": "Возвращает строковое значение из числа, используя формат и локаль."
+  },
+  "decimalformat_number_string_string_arg0": {
+    "en": "Number value to format.",
+    "ru": "Числовое значение для форматирования."
+  },
+  "decimalformat_number_string_string_arg1": {
+    "en": "Number format, similar to ICU-like.",
+    "ru": "Формат числа, похожий на ICU."
+  },
+  "decimalformat_number_string_string_arg2": {
+    "en": "Locale.",
+    "ru": "Локаль."
+  },
+  "getintervalhours_integer": {
+    "en": "Gets the hours component of the duration. Expressed as a value between 0 and 23.",
+    "ru": "Получает компонент часов продолжительности. Выражается как значение от 0 до 23."
+  },
+  "getintervalhours_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervalminutes_integer": {
+    "en": "Gets the minutes component of the duration. Expressed as a value between 0 and 59.",
+    "ru": "Получает компонент минут продолжительности. Выражается как значение от 0 до 59."
+  },
+  "getintervalminutes_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervalseconds_integer": {
+    "en": "Gets the seconds component of the duration. Expressed as a value between 0 and 59.",
+    "ru": "Получает компонент секунд продолжительности. Выражается как значение от 0 до 59."
+  },
+  "getintervalseconds_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervaltotaldays_integer": {
+    "en": "Gets the number of days in duration.",
+    "ru": "Получает количество дней в продолжительности."
+  },
+  "getintervaltotaldays_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervaltotalhours_integer": {
+    "en": "Gets the number of hours in duration.",
+    "ru": "Получает количество часов в продолжительности."
+  },
+  "getintervaltotalhours_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervaltotalminutes_integer": {
+    "en": "Gets the number of minutes in duration.",
+    "ru": "Получает количество минут в продолжительности."
+  },
+  "getintervaltotalminutes_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervaltotalseconds_integer": {
+    "en": "Gets the number of seconds in duration.",
+    "ru": "Получает количество секунд в продолжительности."
+  },
+  "getintervaltotalseconds_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "getintervaltotalweeks_integer": {
+    "en": "Gets the number of weeks in duration.",
+    "ru": "Получает количество недель в продолжительности."
+  },
+  "getintervaltotalweeks_integer_arg0": {
+    "en": "Milliseconds count",
+    "ru": "Количество миллисекунд"
+  },
+  "abs_integer": {
+    "en": "Gets absolute value of argument. Returns integer value.",
+    "ru": "Получает абсолютное значение аргумента. Возвращает целочисленное значение."
+  },
+  "abs_integer_arg0": {
+    "en": "Integer value to get absolute.",
+    "ru": "Целочисленное значение для получения абсолютного значения."
+  },
+  "abs_number": {
+    "en": "Gets absolute value of argument. Returns number value.",
+    "ru": "Получает абсолютное значение аргумента. Возвращает числовое значение."
+  },
+  "abs_number_arg0": {
+    "en": "Number value to get absolute.",
+    "ru": "Числовое значение для получения абсолютного значения."
+  },
+  "ceil_number": {
+    "en": "Rounds argument value up. 1.49 -> 2.0, 1.5 -> 2.0. Returns number value.",
+    "ru": "Округляет значение аргумента вверх. 1.49 -> 2.0, 1.5 -> 2.0. Возвращает числовое значение."
+  },
+  "ceil_number_arg0": {
+    "en": "Number value to round.",
+    "ru": "Числовое значение для округления."
+  },
+  "copysign_integer_integer": {
+    "en": "Gets value of first argument with sign of the second argument. Returns integer value.",
+    "ru": "Получает значение первого аргумента со знаком второго аргумента. Возвращает целочисленное значение."
+  },
+  "copysign_integer_integer_arg0": {
+    "en": "Integer value to copy value from.",
+    "ru": "Целочисленное значение, откуда копируется значение."
+  },
+  "copysign_integer_integer_arg1": {
+    "en": "Integer value to copy sign from.",
+    "ru": "Целочисленное значение, откуда копируется знак."
+  },
+  "copysign_number_number": {
+    "en": "Gets value of first argument with sign of the second argument. Returns number value.",
+    "ru": "Получает значение первого аргумента со знаком второго аргумента. Возвращает числовое значение."
+  },
+  "copysign_number_number_arg0": {
+    "en": "Number value to copy value from.",
+    "ru": "Числовое значение, откуда копируется значение."
+  },
+  "copysign_number_number_arg1": {
+    "en": "Number value to copy sign from.",
+    "ru": "Числовое значение, откуда копируется знак."
+  },
+  "div_integer_integer": {
+    "en": "Calculates division between the first number and the second. Returns integer quotient of division.",
+    "ru": "Вычисляет деление между первым числом и вторым. Возвращает целочисленное частное от деления."
+  },
+  "div_integer_integer_arg0": {
+    "en": "Divisible integer value.",
+    "ru": "Делимое целочисленное значение."
+  },
+  "div_integer_integer_arg1": {
+    "en": "Divisor integer value.",
+    "ru": "Делитель целочисленное значение."
+  },
+  "div_number_number": {
+    "en": "Calculates division between the first number and the second. Returns number quotient of division.",
+    "ru": "Вычисляет деление между первым числом и вторым. Возвращает числовое частное от деления."
+  },
+  "div_number_number_arg0": {
+    "en": "Divisible number value.",
+    "ru": "Делимое числовое значение."
+  },
+  "div_number_number_arg1": {
+    "en": "Divisor number value.",
+    "ru": "Делитель числовое значение."
+  },
+  "floor_number": {
+    "en": "Rounds argument value down. 1.49 -> 1.0, 1.5 -> 1.0. Returns number value.",
+    "ru": "Округляет значение аргумента вниз. 1.49 -> 1.0, 1.5 -> 1.0. Возвращает числовое значение."
+  },
+  "floor_number_arg0": {
+    "en": "Number value to round.",
+    "ru": "Числовое значение для округления."
+  },
+  "max_integer": {
+    "en": "Gets max value of argument values. Returns max integer value.",
+    "ru": "Получает максимальное значение из значений аргументов. Возвращает максимальное целочисленное значение."
+  },
+  "max_integer_arg0": {
+    "en": "Integer value.",
+    "ru": "Целочисленное значение."
+  },
+  "max_number": {
+    "en": "Gets max value of argument values. Returns max number value.",
+    "ru": "Получает максимальное значение из значений аргументов. Возвращает максимальное числовое значение."
+  },
+  "max_number_arg0": {
+    "en": "Number value.",
+    "ru": "Числовое значение."
+  },
+  "maxinteger": {
+    "en": "Gets max value of integer type. Returns max integer value.",
+    "ru": "Получает максимальное значение целочисленного типа. Возвращает максимальное целочисленное значение."
+  },
+  "maxnumber": {
+    "en": "Gets max value of number type. Returns max number value.",
+    "ru": "Получает максимальное значение числового типа. Возвращает максимальное числовое значение."
+  },
+  "min_integer": {
+    "en": "Gets min value of argument values. Returns min integer value.",
+    "ru": "Получает минимальное значение из значений аргументов. Возвращает минимальное целочисленное значение."
+  },
+  "min_integer_arg0": {
+    "en": "Integer value.",
+    "ru": "Целочисленное значение."
+  },
+  "min_number": {
+    "en": "Gets min value of argument values. Returns min number value.",
+    "ru": "Получает минимальное значение из значений аргументов. Возвращает минимальное числовое значение."
+  },
+  "min_number_arg0": {
+    "en": "Number value.",
+    "ru": "Числовое значение."
+  },
+  "mininteger": {
+    "en": "Gets min value of integer type. Returns min integer value.",
+    "ru": "Получает минимальное значение целочисленного типа. Возвращает минимальное целочисленное значение."
+  },
+  "minnumber": {
+    "en": "Gets min value of number type. Returns min number value.",
+    "ru": "Получает минимальное значение числового типа. Возвращает минимальное числовое значение."
+  },
+  "mod_integer_integer": {
+    "en": "Calculates remainder of division the first number and the second. Returns integer remainder of division.",
+    "ru": "Вычисляет остаток от деления первого числа на второе. Возвращает целочисленный остаток от деления."
+  },
+  "mod_integer_integer_arg0": {
+    "en": "Divisible integer value.",
+    "ru": "Делимое целочисленное значение."
+  },
+  "mod_integer_integer_arg1": {
+    "en": "Divisor integer value.",
+    "ru": "Делитель целочисленное значение."
+  },
+  "mod_number_number": {
+    "en": "Calculates remainder of division the first number and the second. Returns number remainder of division.",
+    "ru": "Вычисляет остаток от деления первого числа на второе. Возвращает числовой остаток от деления."
+  },
+  "mod_number_number_arg0": {
+    "en": "Divisible number value.",
+    "ru": "Делимое числовое значение."
+  },
+  "mod_number_number_arg1": {
+    "en": "Divisor number value.",
+    "ru": "Делитель числовое значение."
+  },
+  "mul_integer": {
+    "en": "Calculates multiplication between argument values. Returns integer result of multiplication.",
+    "ru": "Вычисляет умножение между значениями аргументов. Возвращает целочисленный результат умножения."
+  },
+  "mul_integer_arg0": {
+    "en": "Integer value to multiply.",
+    "ru": "Целочисленное значение для умножения."
+  },
+  "mul_number": {
+    "en": "Calculates multiplication between argument values. Returns number result of multiplication.",
+    "ru": "Вычисляет умножение между значениями аргументов. Возвращает числовой результат умножения."
+  },
+  "mul_number_arg0": {
+    "en": "Number value to multiply.",
+    "ru": "Числовое значение для умножения."
+  },
+  "round_number": {
+    "en": "Rounds argument value to the closest integer value. 1.49 -> 1.0, 1.5 -> 2.0. Returns number value.",
+    "ru": "Округляет значение аргумента до ближайшего целого значения. 1.49 -> 1.0, 1.5 -> 2.0. Возвращает числовое значение."
+  },
+  "round_number_arg0": {
+    "en": "Number value to round.",
+    "ru": "Числовое значение для округления."
+  },
+  "signum_integer": {
+    "en": "Gets sign value from argument. Returns -1 if value is negative, 0 if value is equal to 0, 1 if value is positive.",
+    "ru": "Получает значение знака из аргумента. Возвращает -1, если значение отрицательное, 0, если значение равно 0, 1, если значение положительное."
+  },
+  "signum_integer_arg0": {
+    "en": "Integer value to get sign value.",
+    "ru": "Целочисленное значение для получения значения знака."
+  },
+  "signum_number": {
+    "en": "Gets sign value from argument. Returns -1.0 if value is negative, 0.0 if value is equal to 0, 1.0 if value is positive.",
+    "ru": "Получает значение знака из аргумента. Возвращает -1.0, если значение отрицательное, 0.0, если значение равно 0, 1.0, если значение положительное."
+  },
+  "signum_number_arg0": {
+    "en": "Number value to get sign value.",
+    "ru": "Числовое значение для получения значения знака."
+  },
+  "sub_integer": {
+    "en": "Calculates subtraction between argument values. Returns integer result of subtraction.",
+    "ru": "Вычисляет вычитание между значениями аргументов. Возвращает целочисленный результат вычитания."
+  },
+  "sub_integer_arg0": {
+    "en": "Integer value to subtract.",
+    "ru": "Целочисленное значение для вычитания."
+  },
+  "sub_number": {
+    "en": "Calculates subtraction between argument values. Returns number result of subtraction.",
+    "ru": "Вычисляет вычитание между значениями аргументов. Возвращает числовой результат вычитания."
+  },
+  "sub_number_arg0": {
+    "en": "Number value to subtract.",
+    "ru": "Числовое значение для вычитания."
+  },
+  "sum_integer": {
+    "en": "Calculates sum between argument values. Returns integer result of sum.",
+    "ru": "Вычисляет сумму между значениями аргументов. Возвращает целочисленный результат суммы."
+  },
+  "sum_integer_arg0": {
+    "en": "Integer value to sum.",
+    "ru": "Целочисленное значение для суммирования."
+  },
+  "sum_number": {
+    "en": "Calculates sum between argument values. Returns number result of sum.",
+    "ru": "Вычисляет сумму между значениями аргументов. Возвращает числовой результат суммы."
+  },
+  "sum_number_arg0": {
+    "en": "Number value to sum.",
+    "ru": "Числовое значение для суммирования."
+  },
+  "getbooleanvalue_string_boolean": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getbooleanvalue_string_boolean_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getbooleanvalue_string_boolean_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getcolorvalue_string_color": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getcolorvalue_string_color_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getcolorvalue_string_color_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getcolorvalue_string_string": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getcolorvalue_string_string_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getcolorvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getintegervalue_string_integer": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getintegervalue_string_integer_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getintegervalue_string_integer_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getnumbervalue_string_number": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getnumbervalue_string_number_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getnumbervalue_string_number_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredarrayvalue_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет выброшено исключение."
+  },
+  "getstoredarrayvalue_string_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredbooleanvalue_string_boolean": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredbooleanvalue_string_boolean_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredbooleanvalue_string_boolean_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredcolorvalue_string_color": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredcolorvalue_string_color_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredcolorvalue_string_color_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredcolorvalue_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredcolorvalue_string_string_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredcolorvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoreddictvalue_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет выброшено исключение."
+  },
+  "getstoreddictvalue_string_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredintegervalue_string_integer": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredintegervalue_string_integer_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredintegervalue_string_integer_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstorednumbervalue_string_number": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstorednumbervalue_string_number_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstorednumbervalue_string_number_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredstringvalue_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredstringvalue_string_string_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredstringvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredurlvalue_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredurlvalue_string_string_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredurlvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstoredurlvalue_string_url": {
+    "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredurlvalue_string_url_arg0": {
+    "en": "Stored value name.",
+    "ru": "Имя сохраненного значения."
+  },
+  "getstoredurlvalue_string_url_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "getstringvalue_string_string": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstringvalue_string_string_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "getstringvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "geturlvalue_string_string": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "geturlvalue_string_string_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "geturlvalue_string_string_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "geturlvalue_string_url": {
+    "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает значение переменной по ее имени. Если переменная не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "geturlvalue_string_url_arg0": {
+    "en": "Variable name.",
+    "ru": "Имя переменной."
+  },
+  "geturlvalue_string_url_arg1": {
+    "en": "Fallback value.",
+    "ru": "Резервное значение."
+  },
+  "toboolean_integer": {
+    "en": "Converts argument value to boolean type. Returns true if argument is 1, false if argument is 0, error if argument is other.",
+    "ru": "Преобразует значение аргумента в логический тип. Возвращает true, если аргумент равен 1, false, если аргумент равен 0, ошибку, если аргумент другой."
+  },
+  "toboolean_integer_arg0": {
+    "en": "Integer value to convert.",
+    "ru": "Целочисленное значение для преобразования."
+  },
+  "toboolean_string": {
+    "en": "Converts argument value to boolean type. Returns true if argument is \"true\", false if argument is \"false\", error if argument is other.",
+    "ru": "Преобразует значение аргумента в логический тип. Возвращает true, если аргумент равен \"true\", false, если аргумент равен \"false\", ошибку, если аргумент другой."
+  },
+  "toboolean_string_arg0": {
+    "en": "String value to convert.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "tocolor_string": {
+    "en": "Converts argument value to color type. Returns color value.",
+    "ru": "Преобразует значение аргумента в тип цвета. Возвращает значение цвета."
+  },
+  "tocolor_string_arg0": {
+    "en": "String value to convert.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "tointeger_boolean": {
+    "en": "Converts argument value to integer type. Returns 1 if argument is true, 0 if argument is false.",
+    "ru": "Преобразует значение аргумента в целочисленный тип. Возвращает 1, если аргумент равен true, 0, если аргумент равен false."
+  },
+  "tointeger_boolean_arg0": {
+    "en": "Boolean value to convert.",
+    "ru": "Логическое значение для преобразования."
+  },
+  "tointeger_number": {
+    "en": "Converts argument value to integer type. Rounds number value down. Returns integer value.",
+    "ru": "Преобразует значение аргумента в целочисленный тип. Округляет числовое значение вниз. Возвращает целочисленное значение."
+  },
+  "tointeger_number_arg0": {
+    "en": "Number value to convert.",
+    "ru": "Числовое значение для преобразования."
+  },
+  "tointeger_string": {
+    "en": "Converts argument value to integer type. Returns integer value.",
+    "ru": "Преобразует значение аргумента в целочисленный тип. Возвращает целочисленное значение."
+  },
+  "tointeger_string_arg0": {
+    "en": "String value to convert.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "tonumber_integer": {
+    "en": "Converts argument value to number type. Returns number value.",
+    "ru": "Преобразует значение аргумента в числовой тип. Возвращает числовое значение."
+  },
+  "tonumber_integer_arg0": {
+    "en": "Integer value to convert.",
+    "ru": "Целочисленное значение для преобразования."
+  },
+  "tonumber_string": {
+    "en": "Converts argument value to number type. Returns number value.",
+    "ru": "Преобразует значение аргумента в числовой тип. Возвращает числовое значение."
+  },
+  "tonumber_string_arg0": {
+    "en": "String value to convert.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "tourl_string": {
+    "en": "Converts argument value to url type. Returns url value.",
+    "ru": "Преобразует значение аргумента в тип URL. Возвращает значение URL."
+  },
+  "tourl_string_arg0": {
+    "en": "String value to convert.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "contains_string_string": {
+    "en": "Gets if second string argument contains in first string argument. Returns boolean value.",
+    "ru": "Проверяет, содержится ли второй строковый аргумент в первом строковом аргументе. Возвращает логическое значение."
+  },
+  "contains_string_string_arg0": {
+    "en": "String value to find substring.",
+    "ru": "Строковое значение для поиска подстроки."
+  },
+  "contains_string_string_arg1": {
+    "en": "String value substring to find.",
+    "ru": "Строковое значение подстроки для поиска."
+  },
+  "decodeuri_string": {
+    "en": "Decodes a application/x-www-form-urlencoded string using a specific encoding scheme. Returns string value, decoded string.",
+    "ru": "Декодирует строку application/x-www-form-urlencoded с использованием определенной схемы кодирования. Возвращает строковое значение, декодированную строку."
+  },
+  "decodeuri_string_arg0": {
+    "en": "String value to decode.",
+    "ru": "Строковое значение для декодирования."
+  },
+  "encoderegex_string": {
+    "en": "Encodes a string for safe use in regular expressions.",
+    "ru": "Кодирует строку для безопасного использования в регулярных выражениях."
+  },
+  "encoderegex_string_arg0": {
+    "en": "A string to encode.",
+    "ru": "Строка для кодирования."
+  },
+  "encodeuri_string": {
+    "en": "Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. Returns string value, encoded string.",
+    "ru": "Преобразует строку в формат application/x-www-form-urlencoded с использованием определенной схемы кодирования. Возвращает строковое значение, закодированную строку."
+  },
+  "encodeuri_string_arg0": {
+    "en": "String value to translate.",
+    "ru": "Строковое значение для перевода."
+  },
+  "index_string_string": {
+    "en": "Gets first index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
+    "ru": "Получает первый индекс второго аргумента в первом аргументе. Возвращает целочисленное значение, индекс вхождения или -1, если подстрока не найдена."
+  },
+  "index_string_string_arg0": {
+    "en": "String value, original string.",
+    "ru": "Строковое значение, исходная строка."
+  },
+  "index_string_string_arg1": {
+    "en": "String value, string to find.",
+    "ru": "Строковое значение, строка для поиска."
+  },
+  "lastindex_string_string": {
+    "en": "Gets last index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
+    "ru": "Получает последний индекс второго аргумента в первом аргументе. Возвращает целочисленное значение, индекс вхождения или -1, если подстрока не найдена."
+  },
+  "lastindex_string_string_arg0": {
+    "en": "String value, original string.",
+    "ru": "Строковое значение, исходная строка."
+  },
+  "lastindex_string_string_arg1": {
+    "en": "String value, string to find.",
+    "ru": "Строковое значение, строка для поиска."
+  },
+  "len_string": {
+    "en": "Gets the length of string argument. Returns integer value.",
+    "ru": "Получает длину строкового аргумента. Возвращает целочисленное значение."
+  },
+  "len_string_arg0": {
+    "en": "String value to get length of.",
+    "ru": "Строковое значение для получения длины."
+  },
+  "padend_integer_integer_string": {
+    "en": "Converts given integer to a string and pads it to a given string length, inserting at end",
+    "ru": "Преобразует данное целое число в строку и дополняет ее до заданной длины строки, вставляя в конец"
+  },
+  "padend_integer_integer_string_arg0": {
+    "en": "Integer value to pad.",
+    "ru": "Целочисленное значение для дополнения."
+  },
+  "padend_integer_integer_string_arg1": {
+    "en": "String length",
+    "ru": "Длина строки"
+  },
+  "padend_integer_integer_string_arg2": {
+    "en": "String character to pad with",
+    "ru": "Строковый символ для дополнения"
+  },
+  "padend_string_integer_string": {
+    "en": "Pads a string to a given string length, inserting at end",
+    "ru": "Дополняет строку до заданной длины строки, вставляя в конец"
+  },
+  "padend_string_integer_string_arg0": {
+    "en": "String value to pad.",
+    "ru": "Строковое значение для дополнения."
+  },
+  "padend_string_integer_string_arg1": {
+    "en": "String length",
+    "ru": "Длина строки"
+  },
+  "padend_string_integer_string_arg2": {
+    "en": "String character to pad with",
+    "ru": "Строковый символ для дополнения"
+  },
+  "padstart_integer_integer_string": {
+    "en": "Converts given integer to a string and pads it to a given string length, inserting at start",
+    "ru": "Преобразует данное целое число в строку и дополняет ее до заданной длины строки, вставляя в начало"
+  },
+  "padstart_integer_integer_string_arg0": {
+    "en": "Integer value to pad.",
+    "ru": "Целочисленное значение для дополнения."
+  },
+  "padstart_integer_integer_string_arg1": {
+    "en": "String length",
+    "ru": "Длина строки"
+  },
+  "padstart_integer_integer_string_arg2": {
+    "en": "String character to pad with",
+    "ru": "Строковый символ для дополнения"
+  },
+  "padstart_string_integer_string": {
+    "en": "Pads a string to a given string length, inserting at start",
+    "ru": "Дополняет строку до заданной длины строки, вставляя в начало"
+  },
+  "padstart_string_integer_string_arg0": {
+    "en": "String value to pad.",
+    "ru": "Строковое значение для дополнения."
+  },
+  "padstart_string_integer_string_arg1": {
+    "en": "String length",
+    "ru": "Длина строки"
+  },
+  "padstart_string_integer_string_arg2": {
+    "en": "String character to pad with",
+    "ru": "Строковый символ для дополнения"
+  },
+  "replaceall_string_string_string": {
+    "en": "Replaces all occurrences of the second argument in the first argument with the third argument. Returns string value of replaced string.",
+    "ru": "Заменяет все вхождения второго аргумента в первом аргументе на третий аргумент. Возвращает строковое значение замененной строки."
+  },
+  "replaceall_string_string_string_arg0": {
+    "en": "String value, original string.",
+    "ru": "Строковое значение, исходная строка."
+  },
+  "replaceall_string_string_string_arg1": {
+    "en": "String value, string to find.",
+    "ru": "Строковое значение, строка для поиска."
+  },
+  "replaceall_string_string_string_arg2": {
+    "en": "String value, string to replace.",
+    "ru": "Строковое значение, строка для замены."
+  },
+  "substring_string_integer_integer": {
+    "en": "Gets substring of first argument in range of last arguments. Returns string value.",
+    "ru": "Получает подстроку первого аргумента в диапазоне последних аргументов. Возвращает строковое значение."
+  },
+  "substring_string_integer_integer_arg0": {
+    "en": "String value to get substring from.",
+    "ru": "Строковое значение для получения подстроки."
+  },
+  "substring_string_integer_integer_arg1": {
+    "en": "Integer value, left index of substring.",
+    "ru": "Целочисленное значение, левый индекс подстроки."
+  },
+  "substring_string_integer_integer_arg2": {
+    "en": "Integer value, right index of substring.",
+    "ru": "Целочисленное значение, правый индекс подстроки."
+  },
+  "testregex_string_string": {
+    "en": "Checks whether the string matches the regular expression.",
+    "ru": "Проверяет, соответствует ли строка регулярному выражению."
+  },
+  "testregex_string_string_arg0": {
+    "en": "A string to test.",
+    "ru": "Строка для проверки."
+  },
+  "testregex_string_string_arg1": {
+    "en": "Regex string.",
+    "ru": "Строка регулярного выражения."
+  },
+  "tolowercase_string": {
+    "en": "Returns converted to lower case string.",
+    "ru": "Возвращает строку, преобразованную в нижний регистр."
+  },
+  "tolowercase_string_arg0": {
+    "en": "String value to transform.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "touppercase_string": {
+    "en": "Returns converted to upper case string.",
+    "ru": "Возвращает строку, преобразованную в верхний регистр."
+  },
+  "touppercase_string_arg0": {
+    "en": "String value to transform.",
+    "ru": "Строковое значение для преобразования."
+  },
+  "trim_string": {
+    "en": "Returns a string having leading and trailing whitespace removed.",
+    "ru": "Возвращает строку с удаленными начальными и конечными пробелами."
+  },
+  "trim_string_arg0": {
+    "en": "String value to trim.",
+    "ru": "Строковое значение для обрезки."
+  },
+  "trimleft_string": {
+    "en": "Returns a string having leading whitespace removed.",
+    "ru": "Возвращает строку с удаленными начальными пробелами."
+  },
+  "trimleft_string_arg0": {
+    "en": "String value to trim.",
+    "ru": "Строковое значение для обрезки."
+  },
+  "trimright_string": {
+    "en": "Returns a string having trailing whitespace removed.",
+    "ru": "Возвращает строку с удаленными конечными пробелами."
+  },
+  "trimright_string_arg0": {
+    "en": "String value to trim.",
+    "ru": "Строковое значение для обрезки."
+  },
+  "tostring_array": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_array_arg0": {
+    "en": "Array value.",
+    "ru": "Значение массива."
+  },
+  "tostring_boolean": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_boolean_arg0": {
+    "en": "Boolean value.",
+    "ru": "Логическое значение."
+  },
+  "tostring_color": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_color_arg0": {
+    "en": "Color value.",
+    "ru": "Значение цвета."
+  },
+  "tostring_dict": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_dict_arg0": {
+    "en": "Dictionary value.",
+    "ru": "Значение словаря."
+  },
+  "tostring_integer": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_integer_arg0": {
+    "en": "Integer Value.",
+    "ru": "Целочисленное значение."
+  },
+  "tostring_number": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_number_arg0": {
+    "en": "Number value.",
+    "ru": "Числовое значение."
+  },
+  "tostring_string": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_string_arg0": {
+    "en": "String value.",
+    "ru": "Строковое значение."
+  },
+  "tostring_url": {
+    "en": "Returns a string representation of given value.",
+    "ru": "Возвращает строковое представление заданного значения."
+  },
+  "tostring_url_arg0": {
+    "en": "Url value.",
+    "ru": "Значение URL."
+  },
+  "acos_number": {
+    "en": "Calculates the angle in radians of the given cosine value",
+    "ru": "Вычисляет угол в радианах для заданного значения косинуса"
+  },
+  "acos_number_arg0": {
+    "en": "Cosine value.",
+    "ru": "Значение косинуса."
+  },
+  "asin_number": {
+    "en": "Calculates the angle in radians of the given sine value",
+    "ru": "Вычисляет угол в радианах для заданного значения синуса"
+  },
+  "asin_number_arg0": {
+    "en": "Sine value.",
+    "ru": "Значение синуса."
+  },
+  "atan2_number_number": {
+    "en": "Calculates the angle in radians for given values (y,x)",
+    "ru": "Вычисляет угол в радианах для заданных значений (y,x)"
+  },
+  "atan2_number_number_arg0": {
+    "en": "Y coordinate of the point",
+    "ru": "Y-координата точки"
+  },
+  "atan2_number_number_arg1": {
+    "en": "X coordinate of the point",
+    "ru": "X-координата точки"
+  },
+  "atan_number": {
+    "en": "Calculates the angle in radians for a given tangent value",
+    "ru": "Вычисляет угол в радианах для заданного значения тангенса"
+  },
+  "atan_number_arg0": {
+    "en": "Tangent value.",
+    "ru": "Значение тангенса."
+  },
+  "cos_number": {
+    "en": "Calculates the cosine of the given angle in radians",
+    "ru": "Вычисляет косинус заданного угла в радианах"
+  },
+  "cos_number_arg0": {
+    "en": "Angle in radians.",
+    "ru": "Угол в радианах."
+  },
+  "cot_number": {
+    "en": "Calculates the cotangent of the given angle in radians",
+    "ru": "Вычисляет котангенс заданного угла в радианах"
+  },
+  "cot_number_arg0": {
+    "en": "Angle in radians.",
+    "ru": "Угол в радианах."
+  },
+  "pi": {
+    "en": "Returns value of the `π`: ratio of the circumference of a circle to its diameter",
+    "ru": "Возвращает значение `π`: отношение длины окружности к ее диаметру"
+  },
+  "sin_number": {
+    "en": "Calculates the sine of the given angle in radians",
+    "ru": "Вычисляет синус заданного угла в радианах"
+  },
+  "sin_number_arg0": {
+    "en": "Angle in radians.",
+    "ru": "Угол в радианах."
+  },
+  "tan_number": {
+    "en": "Calculates the tangent of the given angle in radians",
+    "ru": "Вычисляет тангенс заданного угла в радианах"
+  },
+  "tan_number_arg0": {
+    "en": "Angle in radians.",
+    "ru": "Угол в радианах."
+  },
+  "todegrees_number": {
+    "en": "Converts the argument value from radians to degrees",
+    "ru": "Преобразует значение аргумента из радиан в градусы"
+  },
+  "todegrees_number_arg0": {
+    "en": "Number value representing radians.",
+    "ru": "Числовое значение, представляющее радианы."
+  },
+  "toradians_number": {
+    "en": "Converts the argument value from degrees to radians",
+    "ru": "Преобразует значение аргумента из градусов в радианы"
+  },
+  "toradians_number_arg0": {
+    "en": "Number value representing degrees.",
+    "ru": "Числовое значение, представляющее градусы."
+  },
+  "filter_array_function": {
+    "en": "Returns filtered array by calling boolean function to each element of array.",
+    "ru": "Возвращает отфильтрованный массив, вызывая логическую функцию для каждого элемента массива."
+  },
+  "filter_array_function_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "filter_array_function_arg1": {
+    "en": "Accepts each element of array, returns bool.",
+    "ru": "Принимает каждый элемент массива, возвращает логическое значение."
+  },
+  "getarray_array_integer": {
+    "en": "Returns an array value from array by position.",
+    "ru": "Возвращает значение массива из массива по позиции."
+  },
+  "getarray_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getarray_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getboolean_array_integer": {
+    "en": "Returns a boolean value from array by position.",
+    "ru": "Возвращает логическое значение из массива по позиции."
+  },
+  "getboolean_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getboolean_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getcolor_array_integer": {
+    "en": "Returns a color value from array by position.",
+    "ru": "Возвращает значение цвета из массива по позиции."
+  },
+  "getcolor_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getcolor_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getdict_array_integer": {
+    "en": "Returns a dict value from array by position.",
+    "ru": "Возвращает значение словаря из массива по позиции."
+  },
+  "getdict_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getdict_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getinteger_array_integer": {
+    "en": "Returns an integer value from array by position.",
+    "ru": "Возвращает целочисленное значение из массива по позиции."
+  },
+  "getinteger_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getinteger_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getnumber_array_integer": {
+    "en": "Returns a number value from array by position.",
+    "ru": "Возвращает числовое значение из массива по позиции."
+  },
+  "getnumber_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getnumber_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "getstring_array_integer": {
+    "en": "Returns a string value from array by position.",
+    "ru": "Возвращает строковое значение из массива по позиции."
+  },
+  "getstring_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "getstring_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "geturl_array_integer": {
+    "en": "Returns a url value from array by position.",
+    "ru": "Возвращает значение URL из массива по позиции."
+  },
+  "geturl_array_integer_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "geturl_array_integer_arg1": {
+    "en": "Position in array.",
+    "ru": "Позиция в массиве."
+  },
+  "isempty_array": {
+    "en": "The method returns boolean true if array is empty else false.",
+    "ru": "Метод возвращает логическое значение true, если массив пуст, иначе false."
+  },
+  "isempty_array_arg0": {
+    "en": "Array.",
+    "ru": "Массив."
+  },
+  "containskey_dict_string": {
+    "en": "Returns true if the given key is present in the dictionary.",
+    "ru": "Возвращает true, если данный ключ присутствует в словаре."
+  },
+  "containskey_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "containskey_dict_string_arg1": {
+    "en": "Key in dictionary.",
+    "ru": "Ключ в словаре."
+  },
+  "getarray_dict_string": {
+    "en": "Returns an array value from dict by key.",
+    "ru": "Возвращает значение массива из словаря по ключу."
+  },
+  "getarray_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getarray_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getboolean_dict_string": {
+    "en": "Returns a boolean value from dict by key.",
+    "ru": "Возвращает логическое значение из словаря по ключу."
+  },
+  "getboolean_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getboolean_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getcolor_dict_string": {
+    "en": "Returns a color value from dict by key.",
+    "ru": "Возвращает значение цвета из словаря по ключу."
+  },
+  "getcolor_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getcolor_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getdict_dict_string": {
+    "en": "Returns a dict value from dict by key.",
+    "ru": "Возвращает значение словаря из словаря по ключу."
+  },
+  "getdict_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getdict_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getinteger_dict_string": {
+    "en": "Returns an integer value from dict by key.",
+    "ru": "Возвращает целочисленное значение из словаря по ключу."
+  },
+  "getinteger_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getinteger_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getkeys_dict": {
+    "en": "Return a collection containing just the keys of the dictionary.",
+    "ru": "Возвращает коллекцию, содержащую только ключи словаря."
+  },
+  "getkeys_dict_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "getnumber_dict_string": {
+    "en": "Returns a number value from dict by key.",
+    "ru": "Возвращает числовое значение из словаря по ключу."
+  },
+  "getnumber_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getnumber_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getstring_dict_string": {
+    "en": "Returns a string value from dict by key.",
+    "ru": "Возвращает строковое значение из словаря по ключу."
+  },
+  "getstring_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "getstring_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "geturl_dict_string": {
+    "en": "Returns a url value from dict by key.",
+    "ru": "Возвращает значение URL из словаря по ключу."
+  },
+  "geturl_dict_string_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  },
+  "geturl_dict_string_arg1": {
+    "en": "Path in dictionary.",
+    "ru": "Путь в словаре."
+  },
+  "getvalues_dict": {
+    "en": "Return a collection containing just the values of the dictionary.",
+    "ru": "Возвращает коллекцию, содержащую только значения словаря."
+  },
+  "getvalues_dict_arg0": {
+    "en": "Dictionary.",
+    "ru": "Словарь."
+  },
+  "isempty_dict": {
+    "en": "The method returns boolean true if dict is empty else false.",
+    "ru": "Метод возвращает логическое значение true, если словарь пуст, иначе false."
+  },
+  "isempty_dict_arg0": {
+    "en": "Dict.",
+    "ru": "Словарь."
+  }
+}

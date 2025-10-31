@@ -1,0 +1,227 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "pi",
+      "description": {
+        "$ref": "translations.json#/pi"
+      },
+      "arguments": [],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toRadians",
+      "description": {
+        "$ref": "translations.json#/toradians_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/toradians_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toDegrees",
+      "description": {
+        "$ref": "translations.json#/todegrees_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/todegrees_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "sin",
+      "description": {
+        "$ref": "translations.json#/sin_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/sin_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "cos",
+      "description": {
+        "$ref": "translations.json#/cos_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/cos_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "tan",
+      "description": {
+        "$ref": "translations.json#/tan_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/tan_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "asin",
+      "description": {
+        "$ref": "translations.json#/asin_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/asin_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "acos",
+      "description": {
+        "$ref": "translations.json#/acos_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/acos_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "atan",
+      "description": {
+        "$ref": "translations.json#/atan_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/atan_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "atan2",
+      "description": {
+        "$ref": "translations.json#/atan2_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/atan2_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/atan2_number_number_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "cot",
+      "description": {
+        "$ref": "translations.json#/cot_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/cot_number_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

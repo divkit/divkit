@@ -1,0 +1,173 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_array"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/tostring_array_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_boolean"
+      },
+      "arguments": [
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/tostring_boolean_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/tostring_color_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_dict"
+      },
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/tostring_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_integer"
+      },
+      "arguments": [
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/tostring_integer_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/tostring_number_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/tostring_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_url"
+      },
+      "arguments": [
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/tostring_url_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

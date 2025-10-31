@@ -1,0 +1,159 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/tostring_string_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_number"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/tostring_number_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_boolean"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/tostring_boolean_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_color"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/tostring_color_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_url"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/tostring_url_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_array"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/tostring_array_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "toString",
+      "description": {
+        "$ref": "translations.json#/tostring_dict"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/tostring_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

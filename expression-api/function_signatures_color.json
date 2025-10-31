@@ -1,0 +1,455 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "getColorAlpha",
+      "description": {
+        "$ref": "translations.json#/getcoloralpha_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcoloralpha_string_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorAlpha",
+      "description": {
+        "$ref": "translations.json#/getcoloralpha_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getcoloralpha_color_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorRed",
+      "description": {
+        "$ref": "translations.json#/getcolorred_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcolorred_string_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorRed",
+      "description": {
+        "$ref": "translations.json#/getcolorred_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getcolorred_color_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorGreen",
+      "description": {
+        "$ref": "translations.json#/getcolorgreen_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcolorgreen_string_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorGreen",
+      "description": {
+        "$ref": "translations.json#/getcolorgreen_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getcolorgreen_color_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorBlue",
+      "description": {
+        "$ref": "translations.json#/getcolorblue_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcolorblue_string_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorBlue",
+      "description": {
+        "$ref": "translations.json#/getcolorblue_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getcolorblue_color_arg0"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setColorAlpha",
+      "description": {
+        "$ref": "translations.json#/setcoloralpha_string_number"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/setcoloralpha_string_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcoloralpha_string_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha",
+      "description": {
+        "$ref": "translations.json#/setcoloralpha_color_number"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/setcoloralpha_color_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcoloralpha_color_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setColorRed",
+      "description": {
+        "$ref": "translations.json#/setcolorred_string_number"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/setcolorred_string_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorred_string_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorRed",
+      "description": {
+        "$ref": "translations.json#/setcolorred_color_number"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/setcolorred_color_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorred_color_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setColorGreen",
+      "description": {
+        "$ref": "translations.json#/setcolorgreen_string_number"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/setcolorgreen_string_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorgreen_string_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorGreen",
+      "description": {
+        "$ref": "translations.json#/setcolorgreen_color_number"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/setcolorgreen_color_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorgreen_color_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "setColorBlue",
+      "description": {
+        "$ref": "translations.json#/setcolorblue_string_number"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/setcolorblue_string_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorblue_string_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorBlue",
+      "description": {
+        "$ref": "translations.json#/setcolorblue_color_number"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/setcolorblue_color_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/setcolorblue_color_number_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "argb",
+      "description": {
+        "$ref": "translations.json#/argb_number_number_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/argb_number_number_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/argb_number_number_number_number_arg1"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/argb_number_number_number_number_arg2"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/argb_number_number_number_number_arg3"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "rgb",
+      "description": {
+        "$ref": "translations.json#/rgb_number_number_number"
+      },
+      "arguments": [
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/rgb_number_number_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/rgb_number_number_number_arg1"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/rgb_number_number_number_arg2"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

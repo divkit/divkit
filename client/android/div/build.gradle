@@ -12,6 +12,7 @@ apply from: "${project.projectDir}/../publish-android.gradle"
 apply plugin: 'de.mobilej.unmock'
 apply plugin: 'kotlinx-serialization'
 
+def expressionApiDir = "${project.projectDir}/../../../expression-api/"
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
 
 android {
@@ -20,6 +21,7 @@ android {
     buildFeatures { buildConfig = true }
 
     defaultConfig {
+        buildConfigField "String", "EXPRESSION_API_PATH", JsonOutput.toJson(expressionApiDir)
         buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)
     }
 }

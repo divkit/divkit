@@ -1,0 +1,986 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "getArrayString",
+      "description": {
+        "$ref": "translations.json#/getarraystring_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarraystring_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarraystring_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayNumber",
+      "description": {
+        "$ref": "translations.json#/getarraynumber_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarraynumber_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarraynumber_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayInteger",
+      "description": {
+        "$ref": "translations.json#/getarrayinteger_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayinteger_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayinteger_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayBoolean",
+      "description": {
+        "$ref": "translations.json#/getarrayboolean_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayboolean_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayboolean_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayColor",
+      "description": {
+        "$ref": "translations.json#/getarraycolor_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarraycolor_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarraycolor_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptString",
+      "description": {
+        "$ref": "translations.json#/getarrayoptstring_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptstring_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptstring_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getarrayoptstring_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptNumber",
+      "description": {
+        "$ref": "translations.json#/getarrayoptnumber_array_integer_number"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptnumber_array_integer_number_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptnumber_array_integer_number_arg1"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getarrayoptnumber_array_integer_number_arg2"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptInteger",
+      "description": {
+        "$ref": "translations.json#/getarrayoptinteger_array_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptinteger_array_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptinteger_array_integer_integer_arg1"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptinteger_array_integer_integer_arg2"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptBoolean",
+      "description": {
+        "$ref": "translations.json#/getarrayoptboolean_array_integer_boolean"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptboolean_array_integer_boolean_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptboolean_array_integer_boolean_arg1"
+          }
+        },
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getarrayoptboolean_array_integer_boolean_arg2"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptColor",
+      "description": {
+        "$ref": "translations.json#/getarrayoptcolor_array_integer_color"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_color_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_color_arg1"
+          }
+        },
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_color_arg2"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptColor",
+      "description": {
+        "$ref": "translations.json#/getarrayoptcolor_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getarrayoptcolor_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayUrl",
+      "description": {
+        "$ref": "translations.json#/getarrayurl_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayurl_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayurl_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptUrl",
+      "description": {
+        "$ref": "translations.json#/getarrayopturl_array_integer_url"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_url_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_url_arg1"
+          }
+        },
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_url_arg2"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayOptUrl",
+      "description": {
+        "$ref": "translations.json#/getarrayopturl_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getarrayopturl_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getStringFromArray",
+      "description": {
+        "$ref": "translations.json#/getstringfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getstringfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getstringfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getNumberFromArray",
+      "description": {
+        "$ref": "translations.json#/getnumberfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getnumberfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getnumberfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getIntegerFromArray",
+      "description": {
+        "$ref": "translations.json#/getintegerfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getintegerfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getintegerfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getBooleanFromArray",
+      "description": {
+        "$ref": "translations.json#/getbooleanfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getbooleanfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getbooleanfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColorFromArray",
+      "description": {
+        "$ref": "translations.json#/getcolorfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getcolorfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getcolorfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptStringFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptstringfromarray_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromarray_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromarray_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptstringfromarray_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptNumberFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptnumberfromarray_array_integer_number"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromarray_array_integer_number_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromarray_array_integer_number_arg1"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getoptnumberfromarray_array_integer_number_arg2"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptIntegerFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptintegerfromarray_array_integer_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromarray_array_integer_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromarray_array_integer_integer_arg1"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptintegerfromarray_array_integer_integer_arg2"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptBooleanFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptbooleanfromarray_array_integer_boolean"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromarray_array_integer_boolean_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromarray_array_integer_boolean_arg1"
+          }
+        },
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getoptbooleanfromarray_array_integer_boolean_arg2"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptColorFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptcolorfromarray_array_integer_color"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_color_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_color_arg1"
+          }
+        },
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_color_arg2"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptColorFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptcolorfromarray_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getoptcolorfromarray_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getUrlFromArray",
+      "description": {
+        "$ref": "translations.json#/geturlfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/geturlfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/geturlfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptUrlFromArray",
+      "description": {
+        "$ref": "translations.json#/getopturlfromarray_array_integer_url"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_url_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_url_arg1"
+          }
+        },
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_url_arg2"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptUrlFromArray",
+      "description": {
+        "$ref": "translations.json#/getopturlfromarray_array_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_string_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getopturlfromarray_array_integer_string_arg2"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getArrayFromArray",
+      "description": {
+        "$ref": "translations.json#/getarrayfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getarrayfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getarrayfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptArrayFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptarrayfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptarrayfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptarrayfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDictFromArray",
+      "description": {
+        "$ref": "translations.json#/getdictfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getdictfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getdictfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getOptDictFromArray",
+      "description": {
+        "$ref": "translations.json#/getoptdictfromarray_array_integer"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/getoptdictfromarray_array_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getoptdictfromarray_array_integer_arg1"
+          }
+        }
+      ],
+      "return_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "len",
+      "description": {
+        "$ref": "translations.json#/len_array"
+      },
+      "arguments": [
+        {
+          "type": "array",
+          "description": {
+            "$ref": "translations.json#/len_array_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    }
+  ]
+}

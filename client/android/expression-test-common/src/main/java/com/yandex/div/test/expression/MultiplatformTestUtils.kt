@@ -11,12 +11,20 @@ private const val JSON_EXTENSION = "json"
 private const val DIV2_JSON_PATH = "../../../test_data/"
 
 object MultiplatformTestUtils {
+
     fun walkJSONs(
         relativePath: String,
         parseAction: (file: File, json: String) -> Unit
     ): List<TestCaseParsingError> {
+        return walkJSONs(directory = File(DIV2_JSON_PATH, relativePath), parseAction)
+    }
+
+    fun walkJSONs(
+        directory: File,
+        parseAction: (file: File, json: String) -> Unit
+    ): List<TestCaseParsingError> {
         val errors = mutableListOf<TestCaseParsingError>()
-        getFiles(File(DIV2_JSON_PATH, relativePath))
+        getFiles(directory)
             .forEach { file ->
                 val json = try {
                     file.readText(Charsets.UTF_8)

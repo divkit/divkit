@@ -28,7 +28,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
             functionProvider.ensureFunctionRegistered(
                 signature.functionName,
                 signature.arguments,
-                signature.resultType,
+                signature.returnType,
                 signature.isMethod
             )
         } catch (e: EvaluableException) {
@@ -40,7 +40,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         val name: String,
         val functionName: String,
         val arguments: List<FunctionArgument>,
-        val resultType: EvaluableType,
+        val returnType: EvaluableType,
         val isMethod: Boolean,
     ) {
         override fun toString(): String {
@@ -49,22 +49,22 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
     }
 
     companion object {
-        private const val SIGNATURES_FILE_PATH = "expression_test_data"
+        private const val SIGNATURES_DIR_PATH = "../../../expression-api"
 
-        private const val SIGNATURE_FIELD = "signatures"
-        private const val SIGNATURE_FUNCTION_NAME = "function_name"
-        private const val SIGNATURE_ARGUMENTS_FIELD = "arguments"
-        private const val SIGNATURE_RESULT_TYPE_FIELD = "result_type"
-        private const val SIGNATURE_IS_METHOD_FIELD = "is_method"
-        private const val ARGUMENT_TYPE_FIELD = "type"
-        private const val ARGUMENT_VARARG_FIELD = "vararg"
+        private const val FIELD_SIGNATURE = "signatures"
+        private const val FIELD_SIGNATURE_NAME = "name"
+        private const val FIELD_SIGNATURE_ARGUMENTS = "arguments"
+        private const val FIELD_SIGNATURE_RETURN_TYPE = "return_type"
+        private const val FIELD_SIGNATURE_IS_METHOD = "is_method"
+        private const val FIELD_ARGUMENT_TYPE = "type"
+        private const val FIELD_ARGUMENT_IS_VARARG = "is_vararg"
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun signatures(): List<TestCaseOrError<SignatureTestCase>> {
             val cases = mutableListOf<TestCaseOrError<SignatureTestCase>>()
-            val errors = MultiplatformTestUtils.walkJSONs(SIGNATURES_FILE_PATH) { file, jsonString ->
-                val newCases = JSONObject(jsonString).optJSONArray(SIGNATURE_FIELD).toListOfJSONObject()
+            val errors = MultiplatformTestUtils.walkJSONs(File(SIGNATURES_DIR_PATH)) { file, jsonString ->
+                val newCases = JSONObject(jsonString).optJSONArray(FIELD_SIGNATURE).toListOfJSONObject()
                     .filter { isForAndroidPlatform(parsePlatform(it)) }
                     .map { parseSignature(file, it) }
                     .filter { it.error == null }
@@ -75,25 +75,25 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         }
 
         private fun parseSignature(file: File, json: JSONObject): TestCaseOrError<SignatureTestCase> {
-            val functionName = json.getString(SIGNATURE_FUNCTION_NAME)
-            val arguments = json.optJSONArray(SIGNATURE_ARGUMENTS_FIELD)?.let { array ->
+            val functionName = json.getString(FIELD_SIGNATURE_NAME)
+            val arguments = json.optJSONArray(FIELD_SIGNATURE_ARGUMENTS)?.let { array ->
                 val result = mutableListOf<FunctionArgument>()
                 for (i in 0 until array.length()) {
                     val argument = array.getJSONObject(i)
                     val type = EvaluableType.valueOf(
-                        argument.getString(ARGUMENT_TYPE_FIELD).uppercase()
+                        argument.getString(FIELD_ARGUMENT_TYPE).uppercase()
                     )
-                    val vararg = argument.optBoolean(ARGUMENT_VARARG_FIELD)
+                    val vararg = argument.optBoolean(FIELD_ARGUMENT_IS_VARARG)
                     result.add(FunctionArgument(type, vararg))
                 }
                 result
             }
             val resultType = try {
-                EvaluableType.valueOf(json.getString(SIGNATURE_RESULT_TYPE_FIELD).uppercase())
+                EvaluableType.valueOf(json.getString(FIELD_SIGNATURE_RETURN_TYPE).uppercase())
             } catch (e: JSONException) {
                 return TestCaseOrError(TestCaseParsingError(file.name, json, e))
             }
-            val isMethod = json.optBoolean(SIGNATURE_IS_METHOD_FIELD)
+            val isMethod = json.optBoolean(FIELD_SIGNATURE_IS_METHOD)
             return TestCaseOrError(SignatureTestCase(
                 "$functionName(${arguments ?: ""}) $resultType",
                 functionName,

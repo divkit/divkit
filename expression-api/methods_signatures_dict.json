@@ -1,0 +1,327 @@
+{
+  "$schema": "schema/signatures.json",
+  "signatures": [
+    {
+      "name": "getArray",
+      "description": {
+        "$ref": "translations.json#/getarray_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getarray_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getarray_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getBoolean",
+      "description": {
+        "$ref": "translations.json#/getboolean_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getboolean_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getboolean_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getColor",
+      "description": {
+        "$ref": "translations.json#/getcolor_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getcolor_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getcolor_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getDict",
+      "description": {
+        "$ref": "translations.json#/getdict_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getdict_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getdict_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "dict",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getInteger",
+      "description": {
+        "$ref": "translations.json#/getinteger_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getinteger_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getinteger_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getNumber",
+      "description": {
+        "$ref": "translations.json#/getnumber_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getnumber_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getnumber_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "number",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getString",
+      "description": {
+        "$ref": "translations.json#/getstring_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getstring_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstring_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getUrl",
+      "description": {
+        "$ref": "translations.json#/geturl_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/geturl_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/geturl_dict_string_arg1"
+          },
+          "is_vararg": true
+        }
+      ],
+      "return_type": "url",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "containsKey",
+      "description": {
+        "$ref": "translations.json#/containskey_dict_string"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/containskey_dict_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/containskey_dict_string_arg1"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "isEmpty",
+      "description": {
+        "$ref": "translations.json#/isempty_dict"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/isempty_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "name": "getKeys",
+      "description": {
+        "$ref": "translations.json#/getkeys_dict"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getkeys_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "getValues",
+      "description": {
+        "$ref": "translations.json#/getvalues_dict"
+      },
+      "is_method": true,
+      "arguments": [
+        {
+          "type": "dict",
+          "description": {
+            "$ref": "translations.json#/getvalues_dict_arg0"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ]
+}
