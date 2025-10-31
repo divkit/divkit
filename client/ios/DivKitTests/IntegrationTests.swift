@@ -32,7 +32,11 @@ private func makeTestCases() -> [(String, IntegrationTestData)] {
       .map { index, testCase in
         (
           "\(fileName): test case index - [\(index)]",
-          IntegrationTestData(divData: test.divData, testCase: testCase)
+          IntegrationTestData(
+            divData: test.divData,
+            testCase: testCase,
+            deserializationErrorMessages: test.deserializationErrorMessages,
+          )
         )
       }
   }
@@ -44,6 +48,11 @@ private func runTest(_ testData: IntegrationTestData) async {
   let reporter = MockReporter()
   DivKitLogger.isEnabled = true
   DivKitLogger.setLogger { reporter.insertErrorMessage($0) }
+
+  for deserializationErrorMessage in testData.deserializationErrorMessages {
+    reporter.insertErrorMessage(deserializationErrorMessage)
+  }
+
   let globalStorage = DivVariableStorage()
   globalStorage.put(
     testCase.expected.makeDefaultVariables(),
@@ -56,7 +65,12 @@ private func runTest(_ testData: IntegrationTestData) async {
   )
 
   let divView = DivView(divKitComponents: divkitComponents)
-  await divView.setSource(DivViewSource(kind: .divData(testData.divData), cardId: cardId))
+  await divView.setSource(
+    DivViewSource(
+      kind: .divData(testData.divData ?? emptyDivData),
+      cardId: cardId
+    )
+  )
 
   testCase.divActions?.forEach {
     divkitComponents.actionHandler.handle(
@@ -118,14 +132,16 @@ private final class MockReporter: @unchecked Sendable, DivReporter {
 }
 
 private struct IntegrationTestData {
-  let divData: DivData
+  let divData: DivData?
   let testCase: IntegrationTestCase
+  let deserializationErrorMessages: [String]
 }
 
 private struct IntegrationTest: Decodable, @unchecked Sendable {
   let description: String
-  let divData: DivData
+  let divData: DivData?
   let cases: [IntegrationTestCase]
+  let deserializationErrorMessages: [String]
 
   init(_ data: Data) throws {
     let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
@@ -133,9 +149,12 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     let divDataJson = json["div_data"] as! [String: Any]
     let card = divDataJson["card"] as! [String: Any]
     let templates = divDataJson["templates"] as? [String: Any] ?? [:]
-
     self.description = json["description"] as! String
-    self.divData = try DivData.resolve(card: card, templates: templates).unwrap()
+
+    let result = DivData.resolve(card: card, templates: templates)
+    let errors = result.errorsOrWarnings?.asArray() ?? []
+    self.deserializationErrorMessages = errors.map(\.errorMessage)
+    self.divData = try? DivData.resolve(card: card, templates: templates).unwrap()
     self.cases = try! JSONDecoder().decode(
       [IntegrationTestCase].self,
       from: try JSONSerialization.data(withJSONObject: casesJson)
@@ -293,3 +312,15 @@ private func makeDefault(_ value: ExpectedValue) -> DivVariableValue? {
 }
 
 private let cardId: DivCardID = "test_card"
+
+private var emptyDivData: DivData {
+  DivData(
+    functions: nil,
+    logId: "empty",
+    states: [.init(div: divContainer(id: "container", items: []), stateId: 0)],
+    timers: nil,
+    transitionAnimationSelector: nil,
+    variableTriggers: nil,
+    variables: nil
+  )
+}
