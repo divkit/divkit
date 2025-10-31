@@ -9,41 +9,51 @@ struct MainView: View {
   }
 
   var body: some View {
-    NavigationView {
-      VStack(spacing: 10) {
-        Image("Logo")
-        Text("Welcome to DivKit – the modern layout technology by Yandex")
-          .font(ThemeFont.text)
-          .multilineTextAlignment(.center)
-          .padding(EdgeInsets(top: 18, leading: 0, bottom: 18, trailing: 0))
-        HStack(spacing: 8) {
-          NavigationButton("samples", color: ThemeColor.samples) {
-            SamplesView()
-          }
-          GeometryReader { geometry in
-            VStack(spacing: 10) {
-              NavigationButton("playground", color: ThemeColor.divKit) {
-                UrlInputView(divViewProvider: makeDivViewProvider())
-              }
-              NavigationButton("testing", color: ThemeColor.regression, shape: .circle) {
-                RegressionView(divViewProvider: makeDivViewProvider())
-              }
-              .frame(height: geometry.size.width)
-            }
-          }
-        }
-        NavigationButton(
-          "settings",
-          color: colorScheme.settingsColor,
-          labelColor: colorScheme.settingsLabelColor
-        ) {
-          SettingsView()
-        }
-        .frame(height: 80)
+    if #available(iOS 16.0, *) {
+      NavigationStack {
+        contentView
       }
-      .padding(EdgeInsets(top: 46, leading: 20, bottom: 20, trailing: 20))
-      .navigationBarHidden(true)
+    } else {
+      NavigationView {
+        contentView
+      }
     }
+  }
+
+  private var contentView: some View {
+    VStack(spacing: 10) {
+      Image("Logo")
+      Text("Welcome to DivKit – the modern layout technology by Yandex")
+        .font(ThemeFont.text)
+        .multilineTextAlignment(.center)
+        .padding(EdgeInsets(top: 18, leading: 0, bottom: 18, trailing: 0))
+      HStack(spacing: 8) {
+        NavigationButton("samples", color: ThemeColor.samples) {
+          SamplesView()
+        }
+        GeometryReader { geometry in
+          VStack(spacing: 10) {
+            NavigationButton("playground", color: ThemeColor.divKit) {
+              UrlInputView(divViewProvider: makeDivViewProvider())
+            }
+            NavigationButton("testing", color: ThemeColor.regression, shape: .circle) {
+              RegressionView(divViewProvider: makeDivViewProvider())
+            }
+            .frame(height: geometry.size.width)
+          }
+        }
+      }
+      NavigationButton(
+        "settings",
+        color: colorScheme.settingsColor,
+        labelColor: colorScheme.settingsLabelColor
+      ) {
+        SettingsView()
+      }
+      .frame(height: 80)
+    }
+    .padding(EdgeInsets(top: 46, leading: 20, bottom: 20, trailing: 20))
+    .navigationBarHidden(true)
   }
 
   private func makeDivViewProvider() -> DivViewProvider {
