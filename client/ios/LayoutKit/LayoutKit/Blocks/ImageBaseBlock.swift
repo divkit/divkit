@@ -9,7 +9,7 @@ public protocol ImageBaseBlock: BlockWithWidthTrait {
   var imageHolder: ImageHolder { get }
   var state: ImageBaseBlockState { get }
 
-  func makeCopy() -> Self
+  func makeCopy(withState state: ImageBaseBlockState) -> Self
 }
 
 public enum ImageBlockHeight: Equatable {
@@ -34,6 +34,7 @@ public struct ImageBaseBlockState: ElementState, Equatable {
 
 extension ImageBaseBlock {
   public var intrinsicContentWidth: CGFloat {
+    let imageSize = state.intrinsicContentSize ?? .zero
     switch widthTrait {
     case let .fixed(value):
       return value
@@ -41,17 +42,17 @@ extension ImageBaseBlock {
       let intrinsicWidth: CGFloat
       switch height {
       case let .trait(.fixed(height)):
-        let aspectRatio = imageHolder.currentImageSize.aspectRatio ?? 0
+        let aspectRatio = imageSize.aspectRatio ?? 0
         intrinsicWidth = aspectRatio * height
       case .trait(let .intrinsic(_, minHeight, maxHeight)):
         let size = AspectRatioConstrainedSize.calculate(
-          imageSize: imageHolder.currentImageSize,
+          imageSize: imageSize,
           widthConstraints: (minWidth, maxWidth),
           heightConstraints: (minHeight, maxHeight)
         )
         intrinsicWidth = size.width
       case .trait(.weighted), .ratio:
-        intrinsicWidth = imageHolder.currentImageSize.width
+        intrinsicWidth = imageSize.width
       }
 
       return clamp(intrinsicWidth, min: minWidth, max: maxWidth)
@@ -65,23 +66,24 @@ extension ImageBaseBlock {
     case let .trait(.fixed(value)):
       return value
     case .trait(let .intrinsic(_, minHeight, maxHeight)):
+      let imageSize = state.intrinsicContentSize ?? .zero
       let intrinsicHeight: CGFloat
       switch widthTrait {
       case let .fixed(width):
-        if let aspectRatio = imageHolder.currentImageSize.aspectRatio {
+        if let aspectRatio = imageSize.aspectRatio {
           intrinsicHeight = width / aspectRatio
         } else {
           intrinsicHeight = 0
         }
       case let .intrinsic(_, minWidth, maxWidth):
         let size = AspectRatioConstrainedSize.calculate(
-          imageSize: imageHolder.currentImageSize,
+          imageSize: imageSize,
           widthConstraints: (minWidth, maxWidth),
           heightConstraints: (minHeight, maxHeight)
         )
         intrinsicHeight = size.height
       case .weighted:
-        intrinsicHeight = imageHolder.currentImageSize.height
+        intrinsicHeight = imageSize.height
       }
 
       return clamp(intrinsicHeight, min: minHeight, max: maxHeight)
@@ -134,7 +136,7 @@ extension ImageBaseBlock {
           newState != self.state else {
       return self
     }
-    return self.makeCopy()
+    return self.makeCopy(withState: newState)
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {

@@ -37,7 +37,7 @@ struct AspectRatioConstrainedSize {
     }
 
     let heightConstrainedByHeight = clamp(
-      imageSize.height,
+      heightForConstrainedWidth,
       min: heightConstraints.min,
       max: heightConstraints.max
     )

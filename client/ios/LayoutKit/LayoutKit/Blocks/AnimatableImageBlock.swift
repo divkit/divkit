@@ -17,7 +17,8 @@ public final class AnimatableImageBlock: ImageBaseBlock {
     height: ImageBlockHeight,
     contentMode: ImageContentMode = .default,
     accessibilityElement: AccessibilityElement? = nil,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    state: ImageBaseBlockState? = nil
   ) {
     self.imageHolder = imageHolder
     self.widthTrait = widthTrait
@@ -25,7 +26,7 @@ public final class AnimatableImageBlock: ImageBaseBlock {
     self.contentMode = contentMode
     self.accessibilityElement = accessibilityElement
     self.path = path
-    self.state = ImageBaseBlockState(
+    self.state = state ?? ImageBaseBlockState(
       widthTrait: widthTrait,
       height: height,
       imageHolder: imageHolder

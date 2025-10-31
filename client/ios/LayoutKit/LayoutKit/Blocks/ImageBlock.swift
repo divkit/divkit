@@ -31,7 +31,8 @@ public final class ImageBlock: ImageBaseBlock {
     appearanceAnimation: TransitioningAnimation? = nil,
     blurUsingMetal: Bool? = nil,
     tintUsingMetal: Bool? = nil,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    state: ImageBaseBlockState? = nil
   ) {
     self.imageHolder = imageHolder
     self.widthTrait = widthTrait
@@ -46,7 +47,7 @@ public final class ImageBlock: ImageBaseBlock {
     self.blurUsingMetal = blurUsingMetal
     self.tintUsingMetal = tintUsingMetal
     self.path = path
-    self.state = ImageBaseBlockState(
+    self.state = state ?? ImageBaseBlockState(
       widthTrait: widthTrait,
       height: height,
       imageHolder: imageHolder

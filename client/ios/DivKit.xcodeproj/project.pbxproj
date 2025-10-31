@@ -17,6 +17,7 @@
 		0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
 		0CE1B3552E04197A00677706 /* LottieExtensionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */; };
 		0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */; };
+		0CE62AF42EABC25500958FAA /* ImageBaseBlockStateUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE62AF32EABC25500958FAA /* ImageBaseBlockStateUpdateTests.swift */; };
 		0CE65E942E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */; };
 		0CECADB32EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */; };
 		0CECADB72EA102A900B3E60A /* ImageBaseBlockStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */; };
@@ -398,9 +399,10 @@
 		0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivExtensionHandler.swift; sourceTree = "<group>"; };
 		0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieExtensionHandlerTests.swift; sourceTree = "<group>"; };
 		0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericViewBlockTests.swift; sourceTree = "<group>"; };
+		0CE62AF32EABC25500958FAA /* ImageBaseBlockStateUpdateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockStateUpdateTests.swift; sourceTree = "<group>"; };
 		0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLResourceRequester.swift; sourceTree = "<group>"; };
 		0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioConstrainedSizeTests.swift; sourceTree = "<group>"; };
-		0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockStateTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = "xcode.lang.module-map"; };
+		0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockStateTests.swift; sourceTree = "<group>"; };
 		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
@@ -1422,6 +1424,7 @@
 		8CF3293C2875D5C8003F799A /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
+				0CE62AF32EABC25500958FAA /* ImageBaseBlockStateUpdateTests.swift */,
 				0CECADB62EA102A900B3E60A /* ImageBaseBlockStateTests.swift */,
 				0CECADB22EA0E16500B3E60A /* AspectRatioConstrainedSizeTests.swift */,
 				0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */,
@@ -2203,6 +2206,7 @@
 				8C8354542C296710004EF2AE /* UIElementPathTests.swift in Sources */,
 				8CF329502875D5C8003F799A /* GalleryViewMetricsTests.swift in Sources */,
 				8CF3294C2875D5C8003F799A /* ScrollableContentPagerTests.swift in Sources */,
+				0CE62AF42EABC25500958FAA /* ImageBaseBlockStateUpdateTests.swift in Sources */,
 				8CF329542875D5C8003F799A /* GalleryBlockTests.swift in Sources */,
 				65509D292A98EA9200F75699 /* PhoneMaskFormatterTests.swift in Sources */,
 				0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */,

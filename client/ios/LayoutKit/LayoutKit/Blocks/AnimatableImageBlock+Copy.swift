@@ -1,14 +1,15 @@
 import VGSL
 
 extension AnimatableImageBlock {
-  public func makeCopy() -> AnimatableImageBlock {
-    AnimatableImageBlock(
+  public func makeCopy(withState state: ImageBaseBlockState) -> Self {
+    Self(
       imageHolder: imageHolder,
       widthTrait: widthTrait,
       height: height,
       contentMode: contentMode,
       accessibilityElement: accessibilityElement,
-      path: path
+      path: path,
+      state: state
     )
   }
 }

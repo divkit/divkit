@@ -198,4 +198,49 @@ final class AspectRatioConstrainedSizeTests: XCTestCase {
     XCTAssertEqual(result.width, 100, accuracy: 0.01)
     XCTAssertEqual(result.height, 50, accuracy: 0.01)
   }
+
+  func test_VeryWideImage_WithMinHeightConstraint_UsesMinHeightNotMax() {
+    let imageSize = CGSize(width: 7500, height: 2400)
+    let widthConstraints: Constraints = (min: 100.0, max: 300.0)
+    let heightConstraints: Constraints = (min: 100.0, max: 268.0)
+
+    let result = AspectRatioConstrainedSize.calculate(
+      imageSize: imageSize,
+      widthConstraints: widthConstraints,
+      heightConstraints: heightConstraints
+    )
+
+    XCTAssertEqual(result.width, 312.5, accuracy: 0.01)
+    XCTAssertEqual(result.height, 100, accuracy: 0.01)
+  }
+
+  func test_WideImage_HeightBelowMin_UsesMinHeight() {
+    let imageSize = CGSize(width: 1000, height: 200)
+    let widthConstraints: Constraints = (min: 50.0, max: 400.0)
+    let heightConstraints: Constraints = (min: 100.0, max: 300.0)
+
+    let result = AspectRatioConstrainedSize.calculate(
+      imageSize: imageSize,
+      widthConstraints: widthConstraints,
+      heightConstraints: heightConstraints
+    )
+
+    XCTAssertEqual(result.width, 500, accuracy: 0.01)
+    XCTAssertEqual(result.height, 100, accuracy: 0.01)
+  }
+
+  func test_WideImage_HeightAboveMax_UsesMaxHeight() {
+    let imageSize = CGSize(width: 1000, height: 800)
+    let widthConstraints: Constraints = (min: 50.0, max: 400.0)
+    let heightConstraints: Constraints = (min: 100.0, max: 300.0)
+
+    let result = AspectRatioConstrainedSize.calculate(
+      imageSize: imageSize,
+      widthConstraints: widthConstraints,
+      heightConstraints: heightConstraints
+    )
+
+    XCTAssertEqual(result.width, 375, accuracy: 0.01)
+    XCTAssertEqual(result.height, 300, accuracy: 0.01)
+  }
 }
