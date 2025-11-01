@@ -3,6 +3,7 @@ package divkit.convention
 import com.yandex.divkit.gradle.applyProperties
 import com.yandex.divkit.gradle.optProperty
 import java.net.URI
+import java.time.Duration
 
 plugins {
     id("io.github.gradle-nexus.publish-plugin")
@@ -33,6 +34,9 @@ if (publishToMavenCentral) {
                 snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
                 username.set(sonatypeUsername)
                 password.set(sonatypePassword)
+
+                clientTimeout.set(Duration.ofMinutes(30))
+                connectTimeout.set(Duration.ofMinutes(30))
             }
         }
     }

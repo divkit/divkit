@@ -55,7 +55,7 @@ publishing {
     }
 
     publications {
-        named<MavenPublication>("kotlinMultiplatform").configure {
+        withType<MavenPublication> {
             version = divkitVersionSuffixed
 
             pom {
