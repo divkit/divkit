@@ -1,3 +1,16 @@
+## 32.25.0
+
+# Android Client:
+* Support hot reloading via debug panel at DivView.
+
+# iOS Client:
+* Fixed a possible issue where focus would disappear from elements within a gallery when changing the number of elements.
+
+# Web Client:
+* Added support for the `property` variable type.
+* Fixed an issue with the layout of `wrap_content` components inside `container`.
+
+
 ## 32.24.0
 
 # Android Client:

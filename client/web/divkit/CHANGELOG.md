@@ -1,3 +1,9 @@
+## 32.25.0 (November 10, 2025)
+
+* Added support for the `property` variable type.
+* Fixed an issue with the layout of `wrap_content` components inside `container`.
+
+
 ## 32.24.0 (November 3, 2025)
 
 * Fixed an error with missing global variables when calculating the values of local card-level variables.
