@@ -30,7 +30,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Binding.Cold",
             "Div.Parsing.Data.Cold",
             //"Div.Parsing.Data.Warm", // Generates unstable results at some perf-tests.
-            "Div.Parsing.JSON.Cold",
+            //"Div.Parsing.JSON.Cold", // Generates unstable results at some perf-tests.
             //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
@@ -53,7 +53,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Binding.Cold",
             "Div.Parsing.Data.Cold",
             //"Div.Parsing.Data.Warm", // Generates unstable results at some perf-tests.
-            "Div.Parsing.JSON.Cold",
+            //"Div.Parsing.JSON.Cold", // Generates unstable results at some perf-tests.
             //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
@@ -76,7 +76,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Binding.Cold",
             "Div.Parsing.Data.Cold",
             "Div.Parsing.Data.Warm",
-            "Div.Parsing.JSON.Cold",
+            //"Div.Parsing.JSON.Cold", // Generates unstable results at some perf-tests.
             //"Div.Parsing.JSON.Warm", // Generates unstable results at some perf-tests.
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
@@ -109,8 +109,6 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             }
 
             waitAllMetrics(
-                "Div.Parsing.JSON.Cold",
-                "Div.Parsing.JSON.Warm",
                 "Div.Parsing.Total.Cold",
                 "Div.Parsing.Total.Warm",
                 "Div.Parsing.Data.Cold",

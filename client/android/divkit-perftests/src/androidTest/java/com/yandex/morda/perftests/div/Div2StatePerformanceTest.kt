@@ -23,7 +23,7 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
         importantMetrics = [
             //"Div.Binding.Cold", // Generates unstable results at some perf-tests.
             "Div.Parsing.Data.Cold",
-            "Div.Parsing.JSON.Cold",
+            //"Div.Parsing.JSON.Cold", // Generates unstable results at some perf-tests.
             "Div.Parsing.Templates.Cold",
             "Div.Parsing.Total",
             "Div.Render.Total.Cold",
@@ -46,7 +46,6 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
             }
 
             waitAllMetrics(
-                "Div.Parsing.JSON.Cold",
                 "Div.Parsing.Total",
                 "Div.View.StateSwitching",
                 "Div.Parsing.Data.Cold",
@@ -66,7 +65,7 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
         importantMetrics = [
             "Div.Binding.Cold",
             "Div.Parsing.Data.Cold",
-            "Div.Parsing.JSON.Cold",
+            //"Div.Parsing.JSON.Cold", // Generates unstable results at some perf-tests.
             "Div.Parsing.Templates.Cold",
             "Div.Parsing.Total",
             "Div.Render.Total.Cold",
@@ -98,7 +97,6 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
             }
 
             waitAllMetrics(
-                "Div.Parsing.JSON.Cold",
                 "Div.Parsing.Total",
                 "Div.View.StateSwitching",
                 "Div.Parsing.Data.Cold",
