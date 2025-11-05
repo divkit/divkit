@@ -1,0 +1,191 @@
+{
+  "templates": {
+    "image_block": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      }
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "current_state",
+        "type": "string",
+        "value": "state1"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "id": "animator_scope",
+          "variables": [
+            {
+                "name": "background_color",
+                "type": "color",
+                "value": "#23F"
+            }
+          ],
+          "animators": [
+            {
+                "type": "color_animator",
+                "id": "background_animator",
+                "duration": 1000,
+                "start_value": "#23F",
+                "end_value": "#2DC75C",
+                "variable_name": "background_color"
+            }
+          ],
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "state",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "div_id": "transition_change_demo_state",
+              "state_id_variable": "current_state",
+              "states": [
+                {
+                  "state_id": "state1",
+                  "div": {
+                    "type": "image_block",
+                    "id": "image",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "top",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "transition_out": {
+                      "type": "fade",
+                      "duration": 1000
+                    },
+                    "transition_in": {
+                      "type": "fade",
+                      "duration": 1000
+                    }
+                  }
+                },
+                {
+                  "state_id": "state2",
+                  "div": {
+                    "type": "image_block",
+                    "visibility": "invisible",
+                    "id": "image",
+                    "alignment_horizontal": "right",
+                    "alignment_vertical": "bottom"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "margins": {
+                "top": 8,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "@{background_color}"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Animate",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "current_state",
+                    "value": {
+                        "type": "string",
+                        "value": "@{(current_state == 'state1') ? 'state2' : 'state1'}"
+                    }
+                  }
+                },
+                {
+                    "log_id": "start_animator",
+                    "scope_id": "animator_scope",
+                    "typed": {
+                        "type": "animator_start",
+                        "animator_id": "background_animator"
+                    }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

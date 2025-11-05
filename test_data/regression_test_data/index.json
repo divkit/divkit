@@ -1374,6 +1374,42 @@
       "case_id": 479
     },
     {
+      "title": "Synchronizing transition change animation with running div-animator.",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'Animate'"
+      ],
+      "expected_results": [
+        "The rectangle color change should be animated",
+        "Image resizing should be animated"
+      ],
+      "file": "animations/animators/transition_change_with_animators.json",
+      "case_id": 484
+    },
+    {
+      "title": "Synchronizing transition out animation with running div-animator.",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'Animate'"
+      ],
+      "expected_results": [
+        "The rectangle color change should be animated",
+        "Image should disappear and appear with animations"
+      ],
+      "file": "animations/animators/transition_out_with_animators.json",
+      "case_id": 485
+    },
+    {
       "title": "Infinite variable animator",
       "case_id": 174,
       "platforms": [
