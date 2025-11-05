@@ -8,6 +8,8 @@ import UIKit
 
 protocol Animator {
   var id: String { get }
+  var isRunning: Bool { get }
+
   func start(
     startValue: DivVariableValue?,
     endValue: DivVariableValue?,
@@ -17,6 +19,7 @@ protocol Animator {
     progressInterpolator: ProgressInterpolator?,
     repeatCount: RepeatCount?
   )
+
   func stop()
 }
 
@@ -46,6 +49,8 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
   }
 
   let id: String
+
+  var isRunning = false
 
   private var configuration: Configuration
   private let animationBlock: (AnimatedType) -> Void
@@ -134,6 +139,8 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     } else {
       item.perform()
     }
+
+    isRunning = true
   }
 
   func stop() {
@@ -142,6 +149,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     displayLink?.invalidate()
     displayLink = nil
     cancelAction()
+    isRunning = false
   }
 
   @objc private func update() {
@@ -180,6 +188,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
         displayLink?.invalidate()
         displayLink = nil
         endAction()
+        isRunning = false
       } else {
         self.startTime = currentMediaTime()
         if configuration.direction == .alternate || configuration.direction == .alternateReverse {
