@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.reuse
 
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div2.Div
+import com.yandex.div.data.Hashable
 import java.util.LinkedList
 
 internal class ReusableTokenList {
@@ -18,7 +18,7 @@ internal class ReusableTokenList {
 
     fun contains(hash: Int): Boolean = reusable.containsKey(hash)
 
-    fun contains(div: Div): Boolean = reusable.containsKey(div.propertiesHash())
+    fun contains(item: Hashable): Boolean = reusable.containsKey(item.propertiesHash())
 
     fun add(token: ExistingToken) {
         val hash = token.divHash
@@ -38,12 +38,12 @@ internal class ReusableTokenList {
         }
     }
 
-    fun pop(div: Div): ExistingToken? = pop(div.propertiesHash())
+    fun pop(item: Hashable): ExistingToken? = pop(item.propertiesHash())
 
-    fun get(div: Div): ExistingToken? = reusable[div.propertiesHash()]?.firstOrNull()
+    fun get(item: Hashable): ExistingToken? = reusable[item.propertiesHash()]?.firstOrNull()
 
-    fun getUniqueViewForDiv(div: Div): View? {
-        val hash = div.propertiesHash()
+    fun getUniqueView(item: Hashable): View? {
+        val hash = item.propertiesHash()
         val index = viewIndexShift.getOrPut(hash) { 0 }
 
         return reusable[hash]?.getOrNull(index)?.let {

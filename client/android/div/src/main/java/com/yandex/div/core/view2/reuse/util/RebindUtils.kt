@@ -11,7 +11,7 @@ internal fun ViewGroup.tryRebindRecycleContainerChildren(
     div2View: Div2View,
     div: Div
 ): Boolean {
-    val reusableView = div2View.currentRebindReusableList?.getUniqueViewForDiv(div) ?: return false
+    val reusableView = div2View.currentRebindReusableList?.getUniqueView(div) ?: return false
 
     addView(reusableView)
     return true
@@ -26,7 +26,7 @@ internal fun ViewGroup.tryRebindPlainContainerChildren(
     removeAllViews()
 
     for(item in items) {
-        val foundReusable = reusableList.getUniqueViewForDiv(item.div)
+        val foundReusable = reusableList.getUniqueView(item.div)
         val viewToAdd = foundReusable ?: divViewCreator.get().create(item.div, item.expressionResolver)
 
         addView(viewToAdd)

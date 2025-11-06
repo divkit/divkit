@@ -73,7 +73,10 @@ import com.yandex.div.core.view2.logging.patch.PatchEventReporter
 import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
+import com.yandex.div.core.view2.reuse.RebindTaskImpl
 import com.yandex.div.core.view2.reuse.ReusableTokenList
+import com.yandex.div.core.view2.reuse.isInProgress
+import com.yandex.div.core.view2.reuse.reusableList
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
@@ -115,7 +118,8 @@ class Div2View private constructor(
         .build()
 
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
-    private val complexRebindEnabled = div2Component.isComplexRebindEnabled
+    private val isComplexRebindEnabled
+        inline get() = div2Component.isComplexRebindEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 
@@ -164,14 +168,12 @@ class Div2View private constructor(
     private var config = DivViewConfig.DEFAULT
 
     private var rebindTask: RebindTask? = null
-    internal val currentRebindReusableList: ReusableTokenList?
-        get() {
-            if (!complexRebindInProgress) return null
 
-            return rebindTask?.reusableList
-        }
+    internal val currentRebindReusableList: ReusableTokenList?
+        get() = if (isComplexRebindEnabled) rebindTask.reusableList else null
+
     internal val complexRebindInProgress: Boolean
-        get() = rebindTask?.rebindInProgress ?: false
+        get() = if (isComplexRebindEnabled) rebindTask.isInProgress else false
 
     private val renderConfig = {
         DivKit.getInstance(context).component.histogramRecordConfiguration.renderConfiguration.get()
@@ -338,7 +340,7 @@ class Div2View private constructor(
                 updateNow(data, tag, reporter)
             }
             !isDataReplaceable
-                && complexRebindEnabled
+                && isComplexRebindEnabled
                 && view.getChildAt(0) is ViewGroup
                 && complexRebind(data, oldData, reporter)
             -> {
@@ -399,7 +401,7 @@ class Div2View private constructor(
         val result = when {
             oldData == null -> updateNow(data, tag, reporter)
             !isDataReplaceable
-                && complexRebindEnabled
+                && isComplexRebindEnabled
                 && view.getChildAt(0) is ViewGroup
                 && complexRebind(data, oldData, reporter)
             -> {
@@ -491,7 +493,7 @@ class Div2View private constructor(
             bindingReporter
         )
         return when {
-            !isDataReplaceable && complexRebindEnabled && view.getChildAt(0) is ViewGroup &&
+            !isDataReplaceable && isComplexRebindEnabled && view.getChildAt(0) is ViewGroup &&
                 complexRebind(newDivData, oldData, bindingReporter) -> true
             isDataReplaceable -> {
                 rebind(newDivData, false, reporter)
@@ -1231,13 +1233,7 @@ class Div2View private constructor(
         histogramReporter.onRebindingStarted()
         divData = newData
 
-        val task = this.rebindTask ?: RebindTask(
-            div2View = this,
-            div2Component.divBinder,
-            oldExpressionResolver,
-            expressionResolver,
-            reporter
-        ).also {
+        val task = this.rebindTask ?: createRebindTask(reporter).also {
             this.rebindTask = it
         }
 
@@ -1255,6 +1251,20 @@ class Div2View private constructor(
 
         histogramReporter.onRebindingFinished()
         return true
+    }
+
+    private fun createRebindTask(reporter: ComplexRebindReporter): RebindTask {
+        return if (isComplexRebindEnabled) {
+            RebindTaskImpl(
+                div2View = this,
+                div2Component.divBinder,
+                oldExpressionResolver,
+                expressionResolver,
+                reporter
+            )
+        } else {
+            RebindTask.NO_OP
+        }
     }
 
     private val DivData.stateToBind get() = states.find { it.stateId == stateId } ?: states.firstOrNull()

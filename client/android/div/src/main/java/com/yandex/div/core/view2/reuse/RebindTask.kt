@@ -14,13 +14,47 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 
-internal class RebindTask(
+internal interface RebindTask {
+
+    var rebindInProgress: Boolean
+    val tokenList: ReusableTokenList
+
+    fun prepareAndRebind(oldDivData: DivData, newDivData: DivData, rootView: ViewGroup, path: DivStatePath): Boolean
+
+    fun clear()
+
+    class UnsupportedElementException(type: Class<*>): IllegalArgumentException() {
+        override val message: String = "$type is unsupported by complex rebind"
+    }
+
+    companion object {
+
+        const val TAG = "RebindTask"
+
+        val NO_OP = object : RebindTask {
+
+            override var rebindInProgress = false
+            override val tokenList = ReusableTokenList()
+
+            override fun prepareAndRebind(
+                oldDivData: DivData,
+                newDivData: DivData,
+                rootView: ViewGroup,
+                path: DivStatePath
+            ) = false
+
+            override fun clear() = Unit
+        }
+    }
+}
+
+internal class RebindTaskImpl(
     private val div2View: Div2View,
     private val divBinder: DivBinder,
     private val oldResolver: ExpressionResolver,
     private val newResolver: ExpressionResolver,
     private val reporter: ComplexRebindReporter,
-) {
+) : RebindTask {
     private val bindingPoints = mutableSetOf<ExistingToken>()
     private val idsToBind = mutableListOf<ExistingToken>()
 
@@ -28,10 +62,10 @@ internal class RebindTask(
     private val aloneNew = mutableListOf<NewToken>()
     private val aloneIds = mutableMapOf<String, ExistingToken>()
 
-    var rebindInProgress = false
-    val reusableList = ReusableTokenList()
+    override var rebindInProgress = false
+    override val tokenList = ReusableTokenList()
 
-    fun prepareAndRebind(
+    override fun prepareAndRebind(
         oldDivData: DivData,
         newDivData: DivData,
         rootView: ViewGroup,
@@ -42,7 +76,7 @@ internal class RebindTask(
 
         val result = try {
             calculateDiff(oldDivData, newDivData, rootView)
-        } catch (e: UnsupportedElementException) {
+        } catch (e: RebindTask.UnsupportedElementException) {
             reporter.onComplexRebindUnsupportedElementException(e)
             false
         }
@@ -52,9 +86,9 @@ internal class RebindTask(
         return rebind(path)
     }
 
-    fun clear() {
+    override fun clear() {
         rebindInProgress = false
-        reusableList.clear()
+        tokenList.clear()
         bindingPoints.clear()
         aloneExisting.clear()
         aloneNew.clear()
@@ -98,7 +132,7 @@ internal class RebindTask(
                 return false
             }
 
-            reusableList.remove(lastReal)
+            tokenList.remove(lastReal)
             bindingPoints.add(lastReal)
         }
 
@@ -129,7 +163,7 @@ internal class RebindTask(
         if (aloneNewChild.size != aloneExistingChild.size) {
             bindingPoints.add(combinedToken)
         } else {
-            reusableList.add(combinedToken)
+            tokenList.add(combinedToken)
         }
 
         aloneExistingChild.forEach {
@@ -187,7 +221,7 @@ internal class RebindTask(
 
     @MainThread
     private fun rebind(path: DivStatePath): Boolean {
-        if (bindingPoints.isEmpty() && reusableList.isEmpty()) {
+        if (bindingPoints.isEmpty() && tokenList.isEmpty()) {
             reporter.onComplexRebindNothingToBind()
             return false
         }
@@ -228,12 +262,10 @@ internal class RebindTask(
             else -> Unit
         }
     }
-
-    internal class UnsupportedElementException(type: Class<*>): IllegalArgumentException() {
-        override val message: String = "$type is unsupported by complex rebind"
-    }
-
-    companion object {
-        const val TAG = "RebindTask"
-    }
 }
+
+internal val RebindTask?.isInProgress: Boolean
+    get() = this != null && rebindInProgress
+
+internal val RebindTask?.reusableList: ReusableTokenList?
+    get() = if (!isInProgress) null else this?.tokenList
