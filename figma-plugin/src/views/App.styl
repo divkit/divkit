@@ -1,0 +1,63 @@
+@font-face
+    font-family "YS Text Variable"
+    src url(https://yastatic.net/s3/home/fonts/ys/3/text-variable-full.woff2) format('woff2-variations')
+    font-display optional
+    font-weight 400 700
+
+body
+    margin 0
+    width 100%
+    height 100%
+    font-size 16px
+    font-family 'YS Text Variable', system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif
+    font-variant-numeric proportional-nums
+    -webkit-font-feature-settings 'liga', 'kern', 'pnum'
+    -moz-font-feature-settings 'liga', 'kern', 'pnum'
+    font-feature-settings 'liga', 'kern', 'pnum'
+    -webkit-font-smoothing antialiased
+    color #000
+
+    & *
+        box-sizing border-box
+
+button
+    background none
+    border none
+    padding 0
+    margin 0
+    cursor pointer
+    font-family inherit
+    display flex
+    align-items center
+    justify-content center
+
+    &:disabled
+        cursor not-allowed
+
+.plugin
+    display flex
+    width 100%
+    height 100%
+    flex-direction column
+
+.plugin-header
+    margin 0
+    padding 0
+    font-size 18px
+    font-weight 700
+
+.plugin-button
+    border-radius 12px
+    font-size 14px
+    font-weight 500
+    height 36px
+    padding 0 20px
+
+    &_primary
+        background-color #FFCC00
+
+    &_secondary
+        background-color rgba(#000, 0.06)
+
+    &:disabled
+        background-color rgba(#000, 0.06)

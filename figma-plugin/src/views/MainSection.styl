@@ -1,0 +1,93 @@
+.main-section
+    display flex
+    flex-direction column
+    justify-content space-between
+    height 100%
+
+    &__header
+        margin-top 80px
+        padding 16px
+        font-size 81px
+        font-weight 900
+        text-align center
+
+    &__header-part
+        color rgba(#000, 0.45)
+        font-size 32px
+
+    &__start-section
+        padding 0 16px
+        display flex
+        flex-direction column
+        align-items center
+        margin-top 12px
+        margin-bottom 16px
+
+    &__start-text
+        font-size 18px
+        width 100%
+        text-align center
+
+    &__start-button
+        width 250px
+        margin-top 10px
+
+    &__generated-list-section
+        padding 16px
+        border-top 1px solid rgba(#000, 0.08)
+
+    &__generated-list
+        list-style-type none
+        padding 0
+        overflow-y auto
+
+    &__generated-node
+        display flex
+        align-items center
+        margin-bottom 10px
+        height 44px
+
+    &__generated-node-button
+        cursor pointer
+        justify-content flex-start
+        width calc(100% - 20px)
+
+    &__generated-node-name
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+
+    &__generated-node-icon
+        display inline-block
+        width 18px
+        height 18px
+        background-size 18px
+        background-image url(../assets/figma-component.svg?data-uri)
+        background-position 50%
+        background-repeat no-repeat
+        margin-right 13px
+        flex-shrink 0
+
+    &__remove-node-button
+        margin-left auto
+        width 20px
+        height 20px
+
+    &__remove-icon
+        background-image url(../assets/remove.svg?data-uri)
+        background-position 50%
+        background-repeat no-repeat
+        width 18px
+        height 2px
+        background-size 18px 2px
+
+    &_with-generated-list
+        justify-content flex-start
+
+        .main-section
+            &__header
+                display none
+
+            &__start-button
+                width 100%

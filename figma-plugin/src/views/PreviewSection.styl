@@ -1,0 +1,159 @@
+.preview-section
+    overflow-x hidden
+
+    &__header
+        display flex
+        align-items center
+        height 92px
+        border-bottom 1px solid rgba(#000, 0.08)
+        padding 0 16px
+
+    &__header-icon
+        width 40px
+        height 40px
+        background-size 40px
+        background-image url(../assets/chess.png?data-uri)
+        background-position 50%
+        background-repeat no-repeat
+        flex-shrink 0
+
+    &__header-title
+        font-size 18px
+        font-weight 700
+        margin-left 10px
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+
+    &__create-button
+        margin-left auto
+
+    &__subheader
+        display flex
+        height 60px
+        align-items center
+        padding 0 16px
+        border-top 1px solid rgba(#000, 0.08)
+
+        .plugin-header
+            margin-right auto
+
+        .plugin-button
+            margin-right 10px
+
+    &__preview-wrapper
+        overflow hidden
+        margin 16px auto
+
+    &__middle-section
+        display flex
+        height 250px
+
+    &__parameters-section
+        border-right 1px solid rgba(#000, 0.08)
+        overflow-y auto
+
+    &__parameters-section,
+    &__generation-settings
+        flex 0 0 50%
+        padding 10px 18px 0
+
+    &__generation-settings-header
+        font-weight 400
+        font-size 16px
+
+    &__parameters-section-header
+        font-weight 400
+        font-size 16px
+        display flex
+        width 100%
+        align-items center
+        justify-content space-between
+
+    &__add-parameter-button
+        width 20px
+        height 20px
+        color rgba(#000, 0.66)
+
+        svg
+            width 16px
+            height 16px
+
+        &:disabled
+            color rgba(#000, 0.25)
+
+    &__parameters-list
+        list-style-type none
+        padding 0
+        margin 0 -18px
+
+    &__parameter-icon
+        width 16px
+        height 16px
+        background-image url(../assets/figma-image.svg?data-uri)
+        background-position 50%
+        background-repeat no-repeat
+        background-size 16px
+        margin-right 10px
+
+    &__parameter-item
+        display flex
+        align-items center
+        height 34px
+        margin-top 10px
+        padding 0 18px
+
+    &__parameter-name
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        font-size 14px
+
+    &__remove-parameter-button
+        margin-left auto
+        width 20px
+        height 20px
+        flex-shrink 0
+
+    &__remove-parameter-icon
+        background-image url(../assets/remove.svg?data-uri)
+        background-position 50%
+        background-repeat no-repeat
+        width 18px
+        height 2px
+        background-size 18px 2px
+
+    &__checkbox-wrapper
+        display flex
+        align-items center
+        position relative
+        cursor pointer
+        height 48px
+
+    &__checkbox
+        position absolute
+        top 0
+        left 0
+        width 0
+        height 0
+        opacity 0
+
+    &__checkbox-icon
+        width 20px
+        height 20px
+        border 2px solid rgba(#000, 0.18)
+        border-radius 4px
+        margin-right 8px
+
+        .preview-section__checkbox:checked ~ &
+            background-image url(../assets/check.svg?data-uri)
+            background-size 12px 9px
+            background-position 50%
+            background-repeat no-repeat
+            background-color #0077FF
+            border none
+
+    &__checkbox-title
+        font-size 14px

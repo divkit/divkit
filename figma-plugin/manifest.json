@@ -1,0 +1,11 @@
+{
+    "name": "DivKit Layout Builder",
+    "id": "1159051827053749482",
+    "api": "1.0.0",
+    "main": "./dist/code.js",
+    "ui": "./dist/ui.html",
+    "editorType": [
+        "figma"
+    ],
+    "enablePrivatePluginApi": true
+}

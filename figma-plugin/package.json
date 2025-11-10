@@ -1,0 +1,50 @@
+{
+    "name": "divkit-figma-plugin",
+    "version": "0.0.5 (Alpha)",
+    "description": "DivKit Figma Plugin",
+    "main": "code.js",
+    "scripts": {
+        "watch:dev": "webpack --mode=development --watch",
+        "build:dev": "webpack --mode=development",
+        "build:prod": "webpack --mode=production",
+        "eslint:fix": "eslint 'src/**/*.{ts,tsx,svelte}' --fix",
+        "check:ts": "tsc --noEmit",
+        "check:eslint": "eslint --quiet .",
+        "check:svelte": "svelte-check --threshold error"
+    },
+    "author": "",
+    "license": "",
+    "devDependencies": {
+        "@babel/core": "7.28.3",
+        "@babel/preset-env": "7.28.3",
+        "@babel/preset-typescript": "7.27.1",
+        "@eslint/js": "9.38.0",
+        "@figma/plugin-typings": "1.117.0",
+        "@typescript-eslint/eslint-plugin": "8.39.1",
+        "@typescript-eslint/parser": "8.39.1",
+        "babel-loader": "10.0.0",
+        "css-loader": "7.1.2",
+        "css-minimizer-webpack-plugin": "7.0.2",
+        "eslint": "9.38.0",
+        "eslint-plugin-svelte": "3.12.5",
+        "globals": "16.4.0",
+        "html-inline-script-webpack-plugin": "3.2.1",
+        "html-webpack-plugin": "5.6.4",
+        "style-loader": "4.0.0",
+        "stylus": "0.55.0",
+        "stylus-loader": "8.1.1",
+        "svelte": "4.2.20",
+        "svelte-check": "4.3.1",
+        "svelte-loader": "3.1.5",
+        "svelte-preprocess": "6.0.3",
+        "ts-loader": "9.5.2",
+        "typescript": "5.9.2",
+        "typescript-eslint": "8.46.2",
+        "webpack": "5.101.2",
+        "webpack-cli": "6.0.1"
+    },
+    "dependencies": {
+        "@divkitframework/divkit": "32.12.0",
+        "@figma-plugin/helpers": "0.15.2"
+    }
+}
