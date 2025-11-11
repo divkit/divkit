@@ -55,25 +55,51 @@ class DefaultDivDownloader(
             val json: String = try {
                 val result = downloadJson(downloadUrl)
                 result.getOrElse { t ->
-                    logFailAndNotify(downloadUrl, t, callback)
+                    logFailAndNotify(
+                        exception = RuntimeException(
+                            "Failed to download patch JSON from $downloadUrl", t
+                        ),
+                        callback = callback,
+                        divView = divView,
+                    )
                     return@launch
                 }
             } catch (e: Exception) {
-                logFailAndNotify(downloadUrl, e, callback)
-                return@launch
-            }
-
-            val patch = try {
-                JSONObject(json).asDivPatchWithTemplates(histogramReporter, parsingErrorLogger)
-            } catch (e: JSONException) {
-                parsingErrorLogger.logError(
-                    IllegalArgumentException("Failed to parse patch JSON from $downloadUrl", e)
+                logFailAndNotify(
+                    exception = RuntimeException("Failed to apply patch JSON from $downloadUrl", e),
+                    callback = callback, divView = divView
                 )
-                notifyMain { callback.onFail() }
                 return@launch
             }
 
-            notifyMain { callback.onSuccess(patch) }
+
+            val errorsInsidePatch = mutableListOf<Throwable>()
+            val patch = try {
+                JSONObject(json).asDivPatchWithTemplates(histogramReporter) {
+                    errorsInsidePatch.add(RuntimeException(
+                        "Patch parsing non-critical error #${errorsInsidePatch.size + 1}", it))
+                    parsingErrorLogger.logError(it)
+                }
+            } catch (e: JSONException) {
+                val error = RuntimeException("Failed to parse patch JSON from $downloadUrl", e)
+                divView.logError(error)
+                parsingErrorLogger.logError(error)
+
+                notifyMain {
+                    callback.onFail()
+                    errorsInsidePatch.forEach {
+                        divView.logError(it)
+                    }
+                }
+                return@launch
+            }
+
+            notifyMain {
+                callback.onSuccess(patch)
+                errorsInsidePatch.forEach {
+                    divView.logError(it)
+                }
+            }
         }
 
         return LoadReference { job.cancel("cancel all downloads") }
@@ -84,14 +110,15 @@ class DefaultDivDownloader(
     }
 
     private suspend fun logFailAndNotify(
-        downloadUrl: String,
-        cause: Throwable,
-        callback: DivPatchDownloadCallback
+        exception: Exception,
+        callback: DivPatchDownloadCallback,
+        divView: Div2View,
     ) {
-        loadingErrorLogger.logError(
-            IOException("Failed to download patch from $downloadUrl", cause)
-        )
-        notifyMain { callback.onFail() }
+        loadingErrorLogger.logError(exception)
+        notifyMain {
+            callback.onFail()
+            divView.logError(exception)
+        }
     }
 }
 

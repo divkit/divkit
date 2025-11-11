@@ -11,7 +11,6 @@ import androidx.core.net.toUri
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Binding

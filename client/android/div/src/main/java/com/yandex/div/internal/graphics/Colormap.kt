@@ -1,6 +1,5 @@
 package com.yandex.div.internal.graphics
 
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.view2.Div2View
 
 internal class Colormap(

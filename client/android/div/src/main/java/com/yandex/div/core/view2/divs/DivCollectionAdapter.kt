@@ -49,7 +49,9 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         bindingContext: BindingContext,
     ): Boolean {
         val patch = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return false
-        val divPatchApply = DivPatchApply(patch)
+        val divPatchApply = DivPatchApply(patch) {
+            bindingContext.divView.logError(it)
+        }
 
         val appliedToListPatchIds = mutableSetOf<String>()
         var index = 0

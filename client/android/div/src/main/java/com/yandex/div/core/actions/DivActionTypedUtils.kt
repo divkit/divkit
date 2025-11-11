@@ -9,13 +9,6 @@ import com.yandex.div.core.view2.errors.ErrorObserver
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTypedValue
 
-internal fun Div2View.logError(throwable: Throwable) {
-    viewComponent
-        .errorCollectors
-        .getOrCreate(dataTag, divData)
-        .logError(throwable)
-}
-
 internal fun Div2View.logWarning(throwable: Throwable) {
     viewComponent
         .errorCollectors

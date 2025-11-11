@@ -4,7 +4,6 @@ import androidx.annotation.WorkerThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.KLog

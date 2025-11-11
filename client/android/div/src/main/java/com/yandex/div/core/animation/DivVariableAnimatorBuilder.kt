@@ -8,7 +8,6 @@ import androidx.core.animation.doOnEnd
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.actions.colorIntValue
 import com.yandex.div.core.actions.doubleValue
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.actions.longValue
 import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.util.androidInterpolator

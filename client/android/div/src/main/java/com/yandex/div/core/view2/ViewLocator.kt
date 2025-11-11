@@ -2,7 +2,6 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.actions.logError
 
 internal object ViewLocator {
 

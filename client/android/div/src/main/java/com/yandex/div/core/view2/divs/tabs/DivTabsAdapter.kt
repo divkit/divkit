@@ -10,6 +10,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -119,9 +120,9 @@ internal class DivTabsAdapter(
         }
     }
 
-    fun applyPatch(resolver: ExpressionResolver, div: Div.Tabs): Div.Tabs? {
+    fun applyPatch(resolver: ExpressionResolver, div: Div.Tabs, divView: Div2View): Div.Tabs? {
         val patchMap = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return null
-        val newTabs = DivPatchApply(patchMap).applyPatchForDiv(div, resolver)[0] as Div.Tabs
+        val newTabs = DivPatchApply(patchMap) { divView.logError(it) }.applyPatchForDiv(div, resolver)[0] as Div.Tabs
         val displayMetrics = bindingContext.divView.resources.displayMetrics
         val list = newTabs.value.items.map { DivSimpleTab(it, displayMetrics, resolver) }
         setData ({ list }, mPager.currentItem)

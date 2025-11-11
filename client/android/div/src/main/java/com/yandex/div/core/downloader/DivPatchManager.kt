@@ -6,6 +6,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
@@ -34,10 +35,15 @@ internal class DivPatchManager @Inject constructor(
         return patched.associateWith { divViewCreator.get().createView(it, context, context.divView.currentRootPath) }
     }
 
-    fun createPatchedDivData(oldDivData: DivData, divDataTag: DivDataTag, patch: DivPatch,
-                             resolver: ExpressionResolver): DivData? {
+    fun createPatchedDivData(
+        oldDivData: DivData, divDataTag: DivDataTag, patch: DivPatch,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ): DivData? {
         val patchMap = putPatch(divDataTag, patch)
-        val states = DivPatchApply(patchMap).applyPatch(oldDivData.states, resolver)
+        val states = DivPatchApply(patchMap) {
+            divView.logError(it)
+        }.applyPatch(oldDivData.states, resolver)
         if (states == null) {
             removePatch(divDataTag)
             return null

@@ -2,8 +2,8 @@ package com.yandex.div.core.util
 
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchMap
-import com.yandex.div.internal.graphics.Colormap
 import com.yandex.div.internal.util.compareWith
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -514,7 +514,12 @@ internal fun DivInput.NativeInterface?.isConstant(): Boolean {
 
 fun DivData.applyPatch(patch: DivPatch): DivData? {
     val patchMap = DivPatchMap(patch)
-    val states = DivPatchApply(patchMap).applyPatch(states, ExpressionResolver.EMPTY) ?: return null
+    val errorsInsidePatch = mutableListOf<Exception>()
+    val states = DivPatchApply(patchMap) {
+        errorsInsidePatch.add(RuntimeException(
+            "Patch parsing non-critical error #${errorsInsidePatch.size + 1}", it))
+    }
+        .applyPatch(states, ExpressionResolver.EMPTY) ?: return null
     return DivData(
         logId = logId,
         states = states,
@@ -522,6 +527,10 @@ fun DivData.applyPatch(patch: DivPatch): DivData? {
         transitionAnimationSelector = transitionAnimationSelector,
         variableTriggers = variableTriggers,
         variables = variables,
-        parsingErrors = parsingErrors,
+        parsingErrors = if (errorsInsidePatch.isEmpty()) {
+            parsingErrors
+        } else {
+            parsingErrors.orEmpty() + errorsInsidePatch
+        },
     )
 }

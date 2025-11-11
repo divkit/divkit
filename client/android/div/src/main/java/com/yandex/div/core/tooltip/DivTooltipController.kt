@@ -21,7 +21,6 @@ import com.yandex.div.R
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.AccessibilityStateProvider

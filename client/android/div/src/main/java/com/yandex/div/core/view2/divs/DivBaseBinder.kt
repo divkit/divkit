@@ -10,7 +10,6 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.R
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant

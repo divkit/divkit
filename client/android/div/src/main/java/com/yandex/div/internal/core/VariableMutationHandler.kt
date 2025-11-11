@@ -1,6 +1,5 @@
 package com.yandex.div.internal.core
 
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.view2.Div2View

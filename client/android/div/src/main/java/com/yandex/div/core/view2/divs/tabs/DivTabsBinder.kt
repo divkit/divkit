@@ -88,7 +88,7 @@ internal class DivTabsBinder @Inject constructor(
     override fun bindView(context: BindingContext, view: DivTabsLayout, div: Div.Tabs, path: DivStatePath) {
         val oldDiv = view.div
         if (oldDiv === div) {
-            view.divTabsAdapter?.applyPatch(context.expressionResolver, div)?.let {
+            view.divTabsAdapter?.applyPatch(context.expressionResolver, div, context.divView)?.let {
                 view.div = it
                 return@bindView
             }

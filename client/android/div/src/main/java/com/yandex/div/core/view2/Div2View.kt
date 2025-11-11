@@ -30,7 +30,6 @@ import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.actions.logError
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
@@ -434,7 +433,13 @@ class Div2View private constructor(
 
     fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
         val oldData: DivData = divData ?: return false
-        val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
+        val newDivData = div2Component.patchManager.createPatchedDivData(
+            oldDivData = oldData,
+            divDataTag = dataTag,
+            patch = patch,
+            resolver = expressionResolver,
+            divView = this,
+        )
         val reporter = patchReporterProvider.get(patch)
 
         if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
@@ -682,6 +687,13 @@ class Div2View private constructor(
         }
 
         return canBeReplaced
+    }
+
+    fun logError(throwable: Throwable) {
+        viewComponent
+            .errorCollectors
+            .getOrCreate(dataTag, divData)
+            .logError(throwable)
     }
 
     fun loadMedia() {

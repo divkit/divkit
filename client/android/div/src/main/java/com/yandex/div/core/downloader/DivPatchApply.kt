@@ -10,6 +10,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -22,13 +23,21 @@ import com.yandex.div2.DivPatch
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 
-internal class DivPatchApply(private val patch: DivPatchMap) {
+internal class DivPatchApply(
+    private val patch: DivPatchMap,
+    private val errorLogger: ParsingErrorLogger,
+) {
     private val appliedPatches = mutableSetOf<String>()
 
      fun applyPatch(states: List<DivData.State>, resolver: ExpressionResolver): List<DivData.State>? {
         val list: MutableList<DivData.State> = ArrayList(states.size)
         for (oldState in states) {
-            val newState = DivData.State(oldState.div.applyPatch(resolver)[0], oldState.stateId)
+            val div = oldState.div.applyPatch(resolver).getOrElse(0) {
+                errorLogger.logError(RuntimeException(
+                    "Patch contains empty or invalid div for state '${oldState.stateId}'!"))
+                return null
+            }
+            val newState = DivData.State(div, oldState.stateId)
             list.add(newState)
         }
         if (patch.mode.evaluate(resolver) == DivPatch.Mode.TRANSACTIONAL && appliedPatches.size != patch.patches.size) {
@@ -266,7 +275,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     pathIterator,
                     resolver,
                     { Div.Container(currentDivValue.copy(items = it)) },
-                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                    { DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver) }
                 )
             }
 
@@ -277,7 +286,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     pathIterator,
                     resolver,
                     { Div.Grid(currentDivValue.copy(items = it)) },
-                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                    { DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver) }
                 )
             }
 
@@ -288,7 +297,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     pathIterator,
                     resolver,
                     { Div.Gallery(currentDivValue.copy(items = it)) },
-                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                    { DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver) }
                 )
             }
 
@@ -299,7 +308,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     pathIterator,
                     resolver,
                     { Div.Pager(currentDivValue.copy(items = it)) },
-                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                    { DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver) }
                 )
             }
 
@@ -320,7 +329,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     )
                     Div.Tabs(currentDivValue.copy(items = newItems))
                 } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
+                    DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver)
                 }
             }
 
@@ -346,7 +355,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
 
                     Div.State(currentDivValue.copy(states = newItems))
                 } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
+                    DivPatchApply(patch, errorLogger).applyPatch(currentDivValue, resolver)
                 }
             }
 
