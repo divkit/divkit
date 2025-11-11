@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+
+How ios divkit convert json to views:
+
+0. Files in `div-schema` folder describe format of div json files for all platforms.
+Swift Div structs are generated from div-schema with `divkit/client/ios/codegen_DivKit.sh`
+This script updates files in `generated_output` folder.
+1. JSON is parsed into Div classes (DivKit/generated_sources/*.swift)
+2. Div classes are converted to Block classes (LayoutKit/LayoutKit/Blocks/*.swift) inside Div*Extensions (DivKit/Extensions/Div*Extensions.swift)
+3. Block classes are rendered as UIViews (LayoutKit/LayoutKit/UI/Blocks/*+UIViewRenderableBlock.swift)

@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+---
+
+# Mocking
+
+Don't create new mock classes for these classes, use simplest inits:
+
+DivKitComponents
+DivBlockModelingContext -> MockDivBlockModelingContext
+DivBlockStateStorage
+ExpressionResolver
+
+DivData - use DivBuilders.swift to create DivData for testing
+
+
+# Adding New Test .swift Files
+
+When adding new test files to the project, you need to update the Xcode project configuration to include them:
+
+1. Create your test file in the appropriate directory under LayoutKitTests or DivKitTests
+2. Add the file to the Xcode project by updating the project.pbxproj file in public/client/ios/DivKit.xcodeproj:
+   - Add a PBXBuildFile entry to include the file in the build
+   - Add a PBXFileReference entry to define the file
+   - Add the file to the appropriate group in the project structure
+   - Add the file to the Sources build phase for the corresponding test target
+
+Without these steps, the test file won't be discovered and run as part of the test suite.

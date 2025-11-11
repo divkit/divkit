@@ -1,0 +1,133 @@
+---
+alwaysApply: true
+---
+
+# iOS Build and Test Instructions
+
+This document provides instructions for building and testing the DivKit iOS project.
+
+## Project Structure
+
+The main iOS project is located at `public/client/ios/DivKit.xcodeproj` and contains the following targets:
+
+- **DivKitPlayground**: A sample app demonstrating DivKit functionality
+- **DivKitTests**: Unit tests for DivKit
+- **DivKitExtensionsTests**: Unit tests for DivKit extensions
+- **DivKitSnapshotTests**: Snapshot tests that compare the visual appearance of DivKit layouts
+- **LayoutKitTests**: Unit tests for the LayoutKit framework
+- **LayoutKitSnapshotTests**: Snapshot tests for the LayoutKit framework
+- **SnapshotTests**: Meta-scheme that runs both DivKitSnapshotTests and LayoutKitSnapshotTests
+- **SnapshotTestsUpdate**: Run all snapshot tests in update mode, creates png references
+
+## Building the Project
+
+Main build command:
+```bash
+cd public/client/ios && xcodebuild -project DivKit.xcodeproj -scheme DivKitPlayground -sdk iphonesimulator -destination "name=iPhone Air" -quiet
+```
+
+To build the DivKit iOS project, use the `xcodebuild` command. The following command builds the DivKitPlayground target for the iOS simulator:
+
+```bash
+xcodebuild -project public/client/ios/DivKit.xcodeproj -scheme DivKitPlayground -sdk iphonesimulator -quiet
+```
+
+Important: The `-quiet` flag reduces the output to show only warnings and errors.
+
+**Important:** When running build commands without the `-quiet` flag, never pass the entire command output to the LLM context as it generates excessive logs that can overload the context limit. Instead, only share relevant parts like errors or warnings when seeking help.
+
+## Running Tests
+
+### Running Unit Tests
+
+To run the DivKitExtensionsTests, use the following command:
+
+```bash
+cd public/client/ios
+xcodebuild test -project DivKit.xcodeproj -scheme DivKitExtensionsTests -destination "name=iPhone 14" -quiet
+```
+
+Similarly, to run LayoutKitTests:
+
+```bash
+cd public/client/ios
+xcodebuild test -project DivKit.xcodeproj -scheme LayoutKitTests -destination "name=iPhone 14" -quiet
+```
+
+Note: You need to specify a concrete device for running tests. For snapshot tests, it's recommended to use iPhone 14 or iPhone SE2 simulators.
+
+### Running Snapshot Tests
+
+Snapshot tests compare the visual appearance of layouts. The test data for snapshot tests is located in `public/test_data/snapshot_test_data`. To run the different snapshot test targets:
+
+```bash
+# For DivKitSnapshotTests
+cd public/client/ios
+xcodebuild test -project DivKit.xcodeproj -scheme DivKitSnapshotTests -destination "name=iPhone 14" -quiet
+
+# For LayoutKitSnapshotTests
+xcodebuild test -project DivKit.xcodeproj -scheme LayoutKitSnapshotTests -destination "name=iPhone 14" -quiet
+
+# For general SnapshotTests (runs both DivKitSnapshotTests and LayoutKitSnapshotTests)
+xcodebuild test -project DivKit.xcodeproj -scheme SnapshotTests -destination "name=iPhone 14" -quiet
+```
+
+### Updating Snapshot Reference Images
+
+Snapshot tests can run in two modes:
+1. **Verify mode (default)**: Compares rendered views against existing reference images
+2. **Update mode**: Generates new reference images
+
+To run snapshot tests in update mode run `SnapshotTestsUpdate` scheme:
+
+```bash
+cd public/client/ios
+xcodebuild test -project DivKit.xcodeproj -scheme SnapshotTestsUpdate -destination "name=iPhone 14" -quiet
+```
+
+This will generate device-specific reference images in the `public/client/ios/Tests/reference_snapshots` directory. The image filenames follow the format `[test_name]_[width]@[scale]x.png`, for example:
+- `gradient-color-with-text-color-priority_414@3x.png` for iPhone 14 (414pt width with 3x scale)
+- `gradient-color-with-text-color-priority_375@2x.png` for iPhone SE2 (375pt width with 2x scale)
+
+It's recommended to run snapshot tests on multiple device types to ensure consistent rendering across different screen sizes:
+
+```bash
+# Generate snapshots for iPhone 14
+xcodebuild test -project DivKit.xcodeproj -scheme SnapshotTestsUpdate -destination "name=iPhone 14" -quiet
+
+# Generate snapshots for iPhone SE (2nd generation)
+xcodebuild test -project DivKit.xcodeproj -scheme SnapshotTestsUpdate -destination "name=iPhone SE 2" -quiet
+```
+
+**Note:** Even if the terminal shows test failures, check the reference_snapshots directory to confirm if the images were successfully generated.
+
+## Troubleshooting
+
+### Finding Available Simulators
+
+If you need to see a list of available simulators, you can use:
+
+```bash
+xcrun simctl list devices
+```
+
+### Build Errors
+
+If you encounter build errors, check the output for specific error messages. Common issues include:
+
+- Missing dependencies
+- Syntax errors in Swift code
+- Missing files or resources
+
+### Test Failures
+
+When tests fail, the output will show which tests failed and why. For snapshot tests, failures usually indicate a visual difference between the expected and actual appearance.
+
+## Tips for Efficient Testing
+
+1. Use the `-quiet` flag to reduce output noise
+2. Specify a concrete device with the `-destination` parameter
+3. For snapshot tests, always use the same device model (iPhone 14 or iPhone SE2) to ensure consistent results
+4. Use the `-only-testing` flag to run specific tests when debugging failures:
+   ```bash
+   xcodebuild test -project DivKit.xcodeproj -scheme DivKitExtensionsTests -destination "name=iPhone 14" -quiet -only-testing:ShimmerImagePreviewStyleTests/test_WhenDecodingImagePreviewStyleWithExactValues_DecodesCorrectly

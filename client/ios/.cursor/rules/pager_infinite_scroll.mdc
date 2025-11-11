@@ -1,0 +1,221 @@
+---
+alwaysApply: true
+---
+
+# Infinite Scroll in DivKit Pager on iOS
+
+## Overview
+
+The `infinite_scroll` property in DivKit Pager creates the illusion of an infinite collection by enabling smooth transitions from the last element to the first. When a user scrolls past the last element, the collection seamlessly transitions back to the first element, creating a continuous scrolling experience.
+
+> **Note:** The `infinite_scroll` property is only available in the `div-pager` component, not in `div-gallery`.
+
+## Technical Implementation
+
+The implementation of infinite scroll in DivKit iOS involves several key components working together:
+
+### 1. Buffer System
+
+The core concept behind infinite scroll is the creation of buffer zones at both ends of the collection. These buffer zones contain duplicated elements that allow for the seamless transition.
+
+```mermaid
+graph LR
+    B1["Buffer N-1"] --- B2["Buffer N"] --- O1["Item 1"] --- O2["Item 2"] --- O3["..."] --- O4["Item N-1"] --- O5["Item N"] --- A1["Buffer 1"] --- A2["Buffer 2"]
+
+    style B1 fill:#f9d5e5,stroke:#333
+    style B2 fill:#f9d5e5,stroke:#333
+    style O1 fill:#eeeeee,stroke:#333
+    style O2 fill:#eeeeee,stroke:#333
+    style O3 fill:#eeeeee,stroke:#333
+    style O4 fill:#eeeeee,stroke:#333
+    style O5 fill:#eeeeee,stroke:#333
+    style A1 fill:#d5e5f9,stroke:#333
+    style A2 fill:#d5e5f9,stroke:#333
+
+    linkStyle default stroke-width:2px
+```
+
+**Collection with Infinite Scroll (bufferSize = 2)**
+
+#### Implementation in DivGalleryProtocol
+
+In `DivGalleryProtocol.swift`, when `infiniteScroll` is enabled, buffer elements are added to the collection by:
+
+1. Taking the last `bufferSize` elements and creating a leading buffer (shown in pink in the diagram)
+2. Taking the first `bufferSize` elements and creating a trailing buffer (shown in blue in the diagram)
+3. Reconstructing the collection with both buffers surrounding the original elements
+
+See `DivGalleryProtocol.swift` for the implementation details.
+
+The `bufferSize` parameter is crucial as it determines how many elements are duplicated at each end. For Pager, this is determined by the layout mode:
+
+- For `pageSize` mode: `Int(1 / relativeValue.rawValue) + 1`
+- For `neighbourPageSize` mode: `2`
+- For `pageContentSize` mode: Equal to the total item count
+
+### 2. Position Detection and Adjustment
+
+The `InfiniteScroll` class in `InfiniteScroll.swift` contains the core logic for detecting when scrolling reaches the buffer zones and calculating the new position to create the infinite effect.
+
+#### Scroll Position Adjustment System
+
+In `GalleryView.swift`, the `onDidScroll` method orchestrates the infinite scroll behavior:
+
+```mermaid
+flowchart TD
+    A[onDidScroll called] --> B{Is infinite scroll enabled?}
+    B -->|No| Z[Continue normal scrolling]
+    B -->|Yes| C{Position adjustment needed?}
+    C -->|No| Z
+
+    subgraph "getNewPosition in InfiniteScroll.swift"
+    C -->|Yes| GP[Calculate cycle boundaries]
+    GP --> GC{Is scroll position in buffer zone?}
+    GC -->|No| GD[Return nil]
+    GC -->|Yes| GE[Calculate equivalent position in main content]
+    GE --> GF[Return new position and page index]
+    end
+
+    GF --> D[Remove scroll delegates]
+    D --> E[Update content offset without animation]
+    E --> F[Restore scroll delegates]
+    F --> G{Is user dragging?}
+    G -->|Yes| Z
+    G -->|No| H[Animate to correct page position]
+
+    style A fill:#f5f5f5,stroke:#333
+    style B fill:#f5f5f5,stroke:#333
+    style C fill:#f5f5f5,stroke:#333
+    style GP fill:#ffffcc,stroke:#333
+    style GC fill:#ffdddd,stroke:#333
+    style GE fill:#ddffdd,stroke:#333
+    style E fill:#ffffcc,stroke:#333
+    style H fill:#ccffcc,stroke:#333
+```
+
+This system works in two parts:
+1. The `getNewPosition` method in `InfiniteScroll.swift` determines if and how the position needs to be adjusted when scrolling reaches a buffer zone
+2. The `onDidScroll` method in `GalleryView.swift` applies these adjustments in a way that creates a seamless visual transition
+
+Together, they create the illusion of infinite content by making the transition between buffer zones imperceptible to the user.
+
+### 3. View Model Configuration
+
+The `GalleryViewModel.swift` maintains the state needed for infinite scroll with properties that:
+
+- Track whether infinite scroll is enabled
+- Store the buffer size
+- Calculate the actual number of items excluding buffer elements
+- Provide the correction factor for index calculations
+
+These properties ensure that the view model can correctly manage the state of the infinite scroll collection.
+
+### 4. Integration with DivKit Components
+
+#### Pager Implementation
+
+In `DivPagerExtensions.swift`, the infinite scroll property is resolved from the JSON and passed to the gallery model. The buffer size is calculated based on the layout mode and capped at the total item count to ensure proper functioning.
+
+## Technical Considerations
+
+### Performance Implications
+
+The infinite scroll implementation adds complexity to the scrolling logic and requires additional elements to be rendered. Key performance considerations include:
+
+1. **Buffer Size**: Larger buffer sizes provide smoother transitions but require more memory
+2. **Element Complexity**: Complex elements in the buffer zones can impact performance
+3. **Scroll Event Handling**: The position adjustment logic runs on every scroll event
+
+### Edge Cases
+
+Several edge cases are handled in the implementation:
+
+1. **Empty Collections**: The `infiniteCorrection` calculation checks for empty collections
+2. **Single Element**: When there's only one element, infinite scroll effectively becomes a no-op
+3. **Dragging vs. Programmatic Scrolling**: Different behavior is applied based on whether the user is actively dragging
+4. **Last-to-First Item Transition**: When using `set_next_item` action on the last item, the `shiftedInfiniteScrollContentPosition` method ensures smooth transition to the first item without visual jumps
+
+### Corner Case: Programmatic Index Shifting for Infinite Scroll
+
+When using a `div-pager` with `infinite_scroll` enabled, a special corner case occurs when the `set_next_item` action is used to navigate from the last item to the first item.
+
+```mermaid
+graph LR
+    B1["Buffer 3"] --- B2["Buffer 4"] --- O1["Item 0"] --- O2["Item 1"] --- O3["Item 2"] --- O4["Item 3"] --- O5["Item 4<br>(Current)"] --- A1["Buffer 0"] --- A2["Buffer 1"]
+    I0["0"] --- I1["1"] --- I2["2"] --- I3["3"] --- I4["4"] --- I5["5"] --- I6["6"] ---- I7["7"] --- I8["8"]
+
+    O5 -..-> |"Want to scroll to"| O1
+    O5 ---> |"Actually scroll to"| A1
+
+    style B1 fill:#f9d5e5,stroke:#333,color:#000
+    style B2 fill:#f9d5e5,stroke:#333,color:#000
+    style O1 fill:#eeeeee,stroke:#333,color:#000
+    style O2 fill:#eeeeee,stroke:#333,color:#000
+    style O3 fill:#eeeeee,stroke:#333,color:#000
+    style O4 fill:#eeeeee,stroke:#333,color:#000
+    style O5 fill:#eeeeee,stroke:#333,color:#000,stroke-width:3px
+    style A1 fill:#d5e5f9,stroke:#333,color:#000,stroke-width:3px
+    style A2 fill:#d5e5f9,stroke:#333,color:#000
+
+    style I0 fill:none,stroke:none,color:#000
+    style I1 fill:none,stroke:none,color:#000
+    style I2 fill:none,stroke:none,color:#000
+    style I3 fill:none,stroke:none,color:#000
+    style I4 fill:none,stroke:none,color:#000
+    style I5 fill:none,stroke:none,color:#000
+    style I6 fill:none,stroke:none,color:#000
+    style I7 fill:none,stroke:none,color:#000
+    style I8 fill:none,stroke:none,color:#000
+```
+
+When a user is viewing the last item (Item 4 at index 6) and triggers the `set_next_item` action to navigate to the first item (Item 0 at index 2), a special handling is required to maintain the infinite scroll illusion.
+
+Without special handling, the pager would jump directly from the last item to the first item, creating a jarring visual discontinuity. To solve this, the `shiftedInfiniteScrollContentPosition` method detects this specific transition and redirects the scroll to the buffer copy of the first item (Buffer 0 at index 7) instead.
+
+This creates a smooth visual transition as if the user had naturally scrolled past the last item to reach the first item, maintaining the seamless infinite scroll experience even when using programmatic navigation actions.
+
+The implementation checks if:
+1. The old state's page index was the last real item (index 6)
+2. The new state's page index is the first real item (index 2)
+
+If both conditions are true, it returns a position pointing to the buffer copy (index 7) instead of the actual first item.
+## Relationship with Other Components
+
+The infinite scroll feature interacts with several other components:
+
+1. **Scroll Mode**: Works with both continuous and paging scroll modes
+2. **Layout Modes**: Different layout modes affect the buffer size calculation
+3. **Transformations**: Page transformations are applied consistently across the infinite scroll boundaries
+
+## Implementation Flow
+
+```mermaid
+sequenceDiagram
+    participant JSON as JSON Configuration
+    participant DivPager as DivPager
+    participant Gallery as GalleryViewModel
+    participant View as GalleryView
+    participant Scroll as InfiniteScroll
+
+    JSON->>DivPager: Parse infinite_scroll property
+    DivPager->>Gallery: Configure with infiniteScroll=true
+    DivPager->>Gallery: Add buffer elements
+    Gallery->>View: Initialize with buffer elements
+
+    loop On Scroll
+        View->>Scroll: Check if position adjustment needed
+        Scroll-->>View: Return new position if needed
+        View->>View: Adjust scroll position seamlessly
+    end
+```
+
+## Summary
+
+The infinite scroll implementation in DivKit iOS creates a seamless scrolling experience by:
+
+1. Adding buffer elements at both ends of the collection
+2. Detecting when scrolling reaches these buffer zones
+3. Seamlessly adjusting the scroll position to create the illusion of infinite content
+4. Maintaining the visual continuity throughout the transition
+
+This implementation allows for a smooth user experience while efficiently managing the underlying complexity of creating an infinite scrolling effect.

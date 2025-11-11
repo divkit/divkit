@@ -1,0 +1,152 @@
+---
+alwaysApply: true
+---
+
+# div-tooltip for iOS
+
+## Working principle on iOS
+
+DivTooltip on iOS is implemented as a component that integrates with the DivKit rendering system. The main implementation components are:
+
+1. **DivTooltip** - data model describing tooltip parameters.
+2. **BlockTooltip** - block used for displaying the tooltip in LayoutKit.
+3. **TooltipManager** - manager that controls tooltip display.
+4. **TooltipViewFactory** - factory for creating tooltip views.
+
+### DivTooltip workflow diagram on iOS
+
+```mermaid
+sequenceDiagram
+    participant User as User
+    participant DivView as DivView
+    participant TooltipManager as TooltipManager
+    participant TooltipFactory as TooltipViewFactory
+    participant TooltipView as TooltipView
+
+    User->>DivView: Interaction with element
+    DivView->>TooltipManager: showTooltip(info)
+    TooltipManager->>TooltipFactory: makeTooltip(id)
+    TooltipFactory-->>TooltipView: Create view
+    TooltipManager->>TooltipView: Add to view hierarchy
+    TooltipView-->>User: Display tooltip
+
+    alt Duration specified
+        TooltipView-->>TooltipView: Automatic hiding after duration
+    else Tap outside tooltip
+        User->>TooltipManager: Tap outside tooltip
+        TooltipManager->>TooltipView: hideTooltip(id)
+    end
+
+    TooltipView-->>User: Hide tooltip
+```
+
+### Tooltip positioning
+
+The tooltip position is determined by the `position` parameter and can be one of the following:
+
+The tooltip is automatically positioned relative to the element according to the selected position. If the tooltip doesn't fit in the visible screen area, it is automatically moved to remain visible.
+
+## Implementation features on iOS
+
+### Modal and non-modal modes
+
+Two tooltip display modes are implemented in iOS:
+
+1. **Modal mode** (`mode: { "type": "modal" }`):
+   - The tooltip is displayed in a separate window above all content.
+   - Clicks outside the tooltip don't pass through and are not available to elements underneath.
+   - Restricts focus within the tooltip.
+   - Back gesture on iOS closes the tooltip.
+
+2. **Non-modal mode** (`mode: { "type": "non_modal" }`):
+   - The tooltip is displayed in the same window as the main content.
+   - Clicks outside are processed by elements under the tooltip.
+   - Does not restrict focus within the tooltip.
+   - Back gesture on iOS does not close the tooltip.
+
+### Automatic closing
+
+On iOS, a tooltip can be closed in several ways:
+
+- Automatically after a specified time (`duration`).
+- By tapping outside the tooltip area if `close_by_tap_outside` is set to `true`.
+- When the device orientation changes.
+- By programmatically calling `hideTooltip(id:)`.
+
+### Animations
+
+The tooltip on iOS supports appearance and disappearance animations, which are configured through the `animation_in` and `animation_out` parameters. By default, a gradual fade in/out animation with an offset from the anchor point is used.
+
+### Accessibility
+
+The tooltip on iOS supports VoiceOver through the `background_accessibility_description` parameter, which allows setting a description for the action of tapping on the tooltip background.
+
+## Technical implementation
+
+In the iOS implementation, DivTooltip uses the following key components:
+
+1. **DivTooltip** - data model that stores all tooltip parameters.
+2. **BlockTooltip** - LayoutKit block responsible for calculating dimensions and positioning the tooltip.
+3. **TooltipManager** - manager that controls tooltip display, their lifecycle, and interaction handling.
+4. **TooltipViewFactory** - factory for creating tooltip views based on DivView.
+5. **TooltipContainerView** - container for the tooltip view that handles taps and animations.
+
+When displaying a tooltip in modal mode, a separate window with level `UIWindow.Level.alert + 1` is created so that the tooltip is displayed above all content. In non-modal mode, the tooltip is added as a subview to the root view of the main window.
+
+## Usage example
+
+```json
+{
+  "type": "container",
+  "width": {
+    "type": "match_parent"
+  },
+  "height": {
+    "type": "wrap_content"
+  },
+  "orientation": "vertical",
+  "tooltips": [
+    {
+      "id": "tooltip_example",
+      "div": {
+        "type": "text",
+        "text": "This is a tooltip example",
+        "font_size": 14,
+        "text_color": "#FFFFFF"
+      },
+      "position": "bottom",
+      "duration": 3000,
+      "mode": {
+        "type": "modal"
+      },
+      "animation_in": {
+        "name": "fade",
+        "start_value": 0,
+        "end_value": 1,
+        "duration": 300
+      },
+      "animation_out": {
+        "name": "fade",
+        "start_value": 1,
+        "end_value": 0,
+        "duration": 300
+      },
+      "background_accessibility_description": "Close tooltip"
+    }
+  ],
+  "items": [
+    {
+      "type": "text",
+      "text": "Tap to show tooltip",
+      "font_size": 16,
+      "actions": [
+        {
+          "log_id": "show_tooltip",
+          "url": "div-action://show_tooltip?id=tooltip_example",
+          "type": "show_tooltip"
+        }
+      ]
+    }
+  ]
+}
+

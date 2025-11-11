@@ -1,0 +1,159 @@
+---
+alwaysApply: true
+---
+
+# Path formation logic in DivKit for iOS
+
+Paths in DivKit for iOS are used to identify elements in the hierarchy and to track element states. This page describes the path formation logic in DivKit for iOS.
+
+## Main components
+
+### UIElementPath
+
+`UIElementPath` is a class that represents the path to an element in the DivKit hierarchy. It consists of:
+- Card identifier (`cardId`)
+- Sequence of path components, which can be strings or numbers
+
+Path example: `card_id/0/container/1/text`
+
+### DivBlockModelingContext
+
+`DivBlockModelingContext` is a context used when creating blocks from Div elements. It contains:
+- `path` - current path in the hierarchy
+- `currentDivId` - identifier of the current Div element
+- `overridenId` - overridden identifier (used in prototypes)
+
+### DivBlockModeling
+
+`DivBlockModeling` is a protocol implemented by all Div elements. It contains methods:
+- `makeBlock(context:)` - creates a block from a Div element
+- `pathSuffix(parentContext:)` - returns the path suffix for the element
+
+## Path formation
+
+### Basic logic
+
+1. Each Div element has a `pathSuffix(parentContext:)` method that returns the path suffix for the element
+2. By default, the path suffix is the element's `id` or the element's `type` if `id` is not specified
+3. When creating a block from a Div element, the path is formed by adding the suffix to the current path in the context
+
+### Path formation example
+
+```swift
+// Base implementation in the DivBlockModeling protocol
+extension DivBlockModeling {
+  public func pathSuffix(parentContext: DivBlockModelingContext) -> String? {
+    parentContext.overridenId ?? id
+  }
+}
+
+// Context modification with path suffix addition
+extension DivBlockModeling {
+  func modifiedContextParentPath(_ parentContext: DivBlockModelingContext)
+    -> DivBlockModelingContext {
+    let pathSuffix = pathSuffix(parentContext: parentContext)
+    return parentContext.modifying(
+      currentDivId: pathSuffix,
+      pathSuffix: pathSuffix ?? Self.type
+    )
+  }
+}
+```
+
+### Special cases
+
+#### Elements with identifiers
+
+If an element has an identifier (`id`), it is used as the path suffix:
+
+```json
+{
+  "type": "text",
+  "id": "my_text",
+  "text": "Hello, world!"
+}
+```
+
+Path: `card_id/0/my_text`
+
+#### Elements without identifiers
+
+If an element doesn't have an identifier, the element type is used:
+
+```json
+{
+  "type": "text",
+  "text": "Hello, world!"
+}
+```
+
+Path: `card_id/0/text`
+
+#### Nested elements
+
+For nested elements, the path is formed by adding suffixes to the parent element's path:
+
+```json
+{
+  "type": "container",
+  "id": "my_container",
+  "items": [
+    {
+      "type": "text",
+      "id": "my_text",
+      "text": "Hello, world!"
+    }
+  ]
+}
+```
+
+Path to container: `card_id/0/my_container`
+Path to text: `card_id/0/my_container/0/my_text`
+
+#### Elements in prototypes
+
+For elements in prototypes, `overridenId` is used to override the identifier:
+
+```json
+{
+  "type": "container",
+  "item_builder": {
+    "prototypes": [
+      {
+        "id": "prototype_id",
+        "div": {
+          "type": "text",
+          "id": "text_id",
+          "text": "Hello, world!"
+        }
+      }
+    ],
+    "data": [
+      { "text": "Item 1" },
+      { "text": "Item 2" }
+    ]
+  }
+}
+```
+
+Path to first element: `card_id/0/container/0/prototype_id/text_id`
+Path to second element: `card_id/0/container/1/prototype_id/text_id`
+
+## Path usage
+
+Paths are used for:
+- Element identification in analytics
+- Tracking element states (focus, selection, etc.)
+- Updating variables
+- Performing actions on elements
+
+## Changes in version 59aa6639
+
+The following changes were made to the path formation logic in version 59aa6639:
+
+1. Renamed property `parentPath` to `path` in `DivBlockModelingContext`
+2. Added new properties `currentDivId` and `overridenId` to `DivBlockModelingContext`
+3. Added method `pathSuffix(parentContext:)` to the `DivBlockModeling` protocol
+4. Changed the path formation logic for elements
+
+These changes improve working with paths in DivKit for iOS and make the code more understandable and maintainable.

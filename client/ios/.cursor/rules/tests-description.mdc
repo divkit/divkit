@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+---
+
+# Description
+
+DivKit contains various test types defined in JSON files with specific structures. These files are parsed by each platform (iOS, Android, Web) to construct platform-specific tests that validate the functionality described in the test cases.
+
+All test data are stored in the `public/test_data/` directory.
+
+# Guidelines
+
+When creating test files, adhere to these principles:
+- Design minimal div cards that focus on testing a single feature or behavior.
+- Keep it simple and straightforward. Avoid creating multiple test cases for similar scenarios.
+- Use descriptive variable names and readable text content. Make variables trivial.
+- Cover edge cases and common usage patterns.
+- Each test should validate one specific aspect independently.
+- Avoid platform-specific features unless testing platform differences.
+
+# Test structure comprehension
+
+The `.roo/rules-divkit-documentation-writer/public-documentation-structure.md` file provides functionality to access public documentation resources that help comprehend test structures and architecture.
+
+# Types of tests and paths
+
+## Unit type tests
+  - **Integration tests** - located in `public/test_data/integration_test_data`
+  - **Expression tests** - located in `public/test_data/expression_test_data`
+  - **Parsing tests** - located in `public/test_data/parsing_test_data`
+  - **Template tests** - located in `public/test_data/template_test_data`
+  - **Unit tests** - located in `public/test_data/unit_test_data`
+
+## UI type tests
+  - **Snapshot tests** - located in `public/test_data/snapshot_test_data`
+  - **Interactive snapshot tests** - located in `public/test_data/interactive_snapshot_test_data/`
+

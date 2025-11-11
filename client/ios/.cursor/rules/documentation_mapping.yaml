@@ -1,0 +1,554 @@
+# iOS Documentation Mapping
+# This file maps iOS source files to documentation files
+# Format: 
+# - source: Path to iOS source file relative to divkit/public/client/ios/
+#   docs:
+#     - Path to documentation file relative to docs/yateam/divkit/common/{language}/
+#     - Paths are listed without language prefix (en/ or ru/) as they are the same for both languages
+
+# Tooltip related files
+- source: DivKit/Extensions/DivTooltipExtensions.swift
+  docs:
+    - concepts/tooltips.md
+    - concepts/divs/2/div-tooltip.md
+    - concepts/divs/2/div-tooltip-mode.md
+    - concepts/divs/2/div-tooltip-mode-modal.md
+    - concepts/divs/2/div-tooltip-mode-non-modal.md
+
+- source: LayoutKit/LayoutKit/Blocks/BlockTooltipParams.swift
+  docs:
+    - concepts/divs/2/div-tooltip.md
+
+- source: LayoutKit/LayoutKit/Tooltips/TooltipManager.swift
+  docs:
+    - concepts/tooltips.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/TooltipContainerView.swift
+  docs:
+    - concepts/tooltips.md
+
+- source: DivKit/Actions/TooltipActionHandler.swift
+  docs:
+    - concepts/tooltips.md
+    - concepts/divs/2/div-action-show-tooltip.md
+    - concepts/divs/2/div-action-hide-tooltip.md
+
+# Animation related files
+- source: DivKit/Extensions/DivAnimationActionExtensions.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animation.md
+
+- source: DivKit/Extensions/DivAnimationExtensions.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animation.md
+
+- source: DivKit/Extensions/DivAnimationTransitionExtension.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animation.md
+    - concepts/divs/2/div-appearance-transition.md
+
+- source: DivKit/Extensions/DivAppearanceTransitionExtensions.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-appearance-transition.md
+    - concepts/divs/2/div-appearance-set-transition.md
+
+- source: DivKit/Extensions/DivChangeTransitionExtensions.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-change-transition.md
+    - concepts/divs/2/div-change-bounds-transition.md
+    - concepts/divs/2/div-change-set-transition.md
+
+- source: DivKit/Animators/Animator.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animator.md
+
+- source: DivKit/Animators/DivAnimatorController.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animator.md
+
+- source: DivKit/Extensions/DivAnimator/DivAnimatorExtensions.swift
+  docs:
+    - concepts/animation.md
+    - concepts/divs/2/div-animator.md
+    - concepts/divs/2/div-animator-base.md
+
+- source: LayoutKit/LayoutKit/Blocks/DetachableAnimationBlock.swift
+  docs:
+    - concepts/animation.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/DetachableAnimationBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/animation.md
+
+- source: LayoutKit/LayoutKit/Blocks/TransitioningBlock.swift
+  docs:
+    - concepts/animation.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/TransitioningBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/animation.md
+
+# Container related files
+- source: DivKit/Extensions/DivContainer/DivContainerExtensions.swift
+  docs:
+    - concepts/divs/2/div-container.md
+    - concepts/layout.md
+
+- source: DivKit/Extensions/DivContainer/DivContainerItemsExtensions.swift
+  docs:
+    - concepts/divs/2/div-container.md
+
+- source: DivKit/Extensions/DivContainer/DivCollectionItemsBuilderExtensions.swift
+  docs:
+    - concepts/divs/2/div-container.md
+    - concepts/divs/2/div-collection-item-builder.md
+
+- source: LayoutKit/LayoutKit/Blocks/Container/ContainerBlock.swift
+  docs:
+    - concepts/divs/2/div-container.md
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/ContainerBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-container.md
+    - concepts/layout.md
+
+# Text related files
+- source: DivKit/Extensions/DivTextExtensions.swift
+  docs:
+    - concepts/divs/2/div-text.md
+    - concepts/text.md
+
+- source: LayoutKit/LayoutKit/Blocks/TextBlock.swift
+  docs:
+    - concepts/divs/2/div-text.md
+    - concepts/text.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/TextBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-text.md
+    - concepts/text.md
+
+# Image related files
+- source: DivKit/Extensions/DivImage/DivImageExtensions.swift
+  docs:
+    - concepts/divs/2/div-image.md
+    - concepts/image.md
+
+- source: DivKit/Extensions/DivImage/DivGifImageExtensions.swift
+  docs:
+    - concepts/divs/2/div-gif-image.md
+    - concepts/image.md
+
+- source: LayoutKit/LayoutKit/Blocks/ImageBlock.swift
+  docs:
+    - concepts/divs/2/div-image.md
+    - concepts/image.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/ImageBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-image.md
+    - concepts/image.md
+
+- source: LayoutKit/LayoutKit/Blocks/AnimatableImageBlock.swift
+  docs:
+    - concepts/divs/2/div-gif-image.md
+    - concepts/image.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/AnimatableImageBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-gif-image.md
+    - concepts/image.md
+
+# Gallery related files
+- source: DivKit/Extensions/DivGallery/DivGalleryExtensions.swift
+  docs:
+    - concepts/divs/2/div-gallery.md
+
+- source: LayoutKit/LayoutKit/Blocks/GalleryBlock.swift
+  docs:
+    - concepts/divs/2/div-gallery.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/GalleryBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-gallery.md
+
+# Grid related files
+- source: DivKit/Extensions/DivGridExtensions.swift
+  docs:
+    - concepts/divs/2/div-grid.md
+
+- source: LayoutKit/LayoutKit/Blocks/Grid/GridBlock.swift
+  docs:
+    - concepts/divs/2/div-grid.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/GridBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-grid.md
+
+# Pager related files
+- source: DivKit/Extensions/DivPagerExtensions.swift
+  docs:
+    - concepts/divs/2/div-pager.md
+
+- source: LayoutKit/LayoutKit/Blocks/PagerBlock.swift
+  docs:
+    - concepts/divs/2/div-pager.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/PagerBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-pager.md
+
+# State related files
+- source: DivKit/Extensions/DivStateExtensions.swift
+  docs:
+    - concepts/divs/2/div-state.md
+
+- source: LayoutKit/LayoutKit/Blocks/StateBlock.swift
+  docs:
+    - concepts/divs/2/div-state.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/StateBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-state.md
+
+# Action related files
+- source: DivKit/Extensions/DivAction/DivActionExtensions.swift
+  docs:
+    - concepts/divs/2/div-action.md
+    - concepts/interaction.md
+
+- source: DivKit/Actions/DivActionHandler.swift
+  docs:
+    - concepts/divs/2/div-action.md
+    - concepts/interaction.md
+
+- source: DivKit/Actions/SetVariableActionHandler.swift
+  docs:
+    - concepts/divs/2/div-action-set-variable.md
+    - concepts/variables.md
+
+- source: DivKit/Actions/SetStateActionHandler.swift
+  docs:
+    - concepts/divs/2/div-action-set-state.md
+
+- source: DivKit/Actions/ScrollActionHandler.swift
+  docs:
+    - concepts/divs/2/div-action-scroll-to.md
+    - concepts/divs/2/div-action-scroll-by.md
+
+# Variable related files
+- source: DivKit/Variables/DivVariableStorage.swift
+  docs:
+    - concepts/variables.md
+    - concepts/divs/2/div-variable.md
+
+- source: DivKit/Variables/DivVariablesStorage.swift
+  docs:
+    - concepts/variables.md
+
+- source: DivKit/Variables/DivVariableTracker.swift
+  docs:
+    - concepts/variables.md
+
+# Expression related files
+- source: DivKit/Expressions/ExpressionResolver.swift
+  docs:
+    - concepts/expressions.md
+
+- source: DivKit/Expressions/Expression.swift
+  docs:
+    - concepts/expressions.md
+
+# Accessibility related files
+- source: DivKit/Extensions/DivAccessibilityExtensions.swift
+  docs:
+    - concepts/accessibility.md
+    - concepts/divs/2/div-accessibility.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/AccessibilityBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/accessibility.md
+    - concepts/divs/2/div-accessibility.md
+
+# Background related files
+- source: DivKit/Extensions/DivBackgroundExtensions.swift
+  docs:
+    - concepts/divs/2/div-background.md
+    - concepts/visual.md
+
+- source: LayoutKit/LayoutKit/Blocks/BackgroundBlock.swift
+  docs:
+    - concepts/divs/2/div-background.md
+    - concepts/visual.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/BackgroundBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-background.md
+    - concepts/visual.md
+
+# Border related files
+- source: DivKit/Extensions/DivBorderExtensions.swift
+  docs:
+    - concepts/divs/2/div-border.md
+    - concepts/visual.md
+
+# Video related files
+- source: DivKit/Extensions/DivVideoExtensions.swift
+  docs:
+    - concepts/divs/2/div-video.md
+    - concepts/video.md
+
+- source: LayoutKit/LayoutKit/Blocks/Video/VideoBlock.swift
+  docs:
+    - concepts/divs/2/div-video.md
+    - concepts/video.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/VideoBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-video.md
+    - concepts/video.md
+
+# Tabs related files
+- source: DivKit/Extensions/DivTabsExtensions.swift
+  docs:
+    - concepts/divs/2/div-tabs.md
+
+- source: LayoutKit/LayoutKit/Blocks/TabsBlock.swift
+  docs:
+    - concepts/divs/2/div-tabs.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/TabsBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-tabs.md
+
+# Slider related files
+- source: DivKit/Extensions/DivSliderExtensions.swift
+  docs:
+    - concepts/divs/2/div-slider.md
+
+- source: LayoutKit/LayoutKit/Blocks/Slider/SliderBlock.swift
+  docs:
+    - concepts/divs/2/div-slider.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/SliderBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-slider.md
+
+# Input related files
+- source: DivKit/Extensions/DivInputExtensions.swift
+  docs:
+    - concepts/divs/2/div-input.md
+
+- source: LayoutKit/LayoutKit/Blocks/TextInputBlock.swift
+  docs:
+    - concepts/divs/2/div-input.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/TextInputBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-input.md
+
+# Select related files
+- source: DivKit/Extensions/DivSelectExtensions.swift
+  docs:
+    - concepts/divs/2/div-select.md
+    - concepts/select.md
+
+# Switch related files
+- source: DivKit/Extensions/DivSwitchExtensions.swift
+  docs:
+    - concepts/divs/2/div-switch.md
+
+- source: LayoutKit/LayoutKit/Blocks/SwitchBlock.swift
+  docs:
+    - concepts/divs/2/div-switch.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/SwitchBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-switch.md
+
+# Separator related files
+- source: DivKit/Extensions/DivSeparatorExtensions.swift
+  docs:
+    - concepts/divs/2/div-separator.md
+
+- source: LayoutKit/LayoutKit/Blocks/SeparatorBlock.swift
+  docs:
+    - concepts/divs/2/div-separator.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/SeparatorBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-separator.md
+
+# Indicator related files
+- source: DivKit/Extensions/DivIndicatorExtensions.swift
+  docs:
+    - concepts/divs/2/div-indicator.md
+
+- source: LayoutKit/LayoutKit/Blocks/PageControlBlock.swift
+  docs:
+    - concepts/divs/2/div-indicator.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/PageControlBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-indicator.md
+
+# Custom related files
+- source: DivKit/Extensions/DivCustom/DivCustomExtensions.swift
+  docs:
+    - concepts/divs/2/div-custom.md
+    - concepts/extensions.md
+
+# Timer related files
+- source: DivKit/Timers/DivTimerController.swift
+  docs:
+    - concepts/timer.md
+    - concepts/divs/2/div-timer.md
+
+# Visibility action related files
+- source: DivKit/Extensions/DivVisibilityActionExtensions.swift
+  docs:
+    - concepts/divs/2/div-visibility-action.md
+
+# Disappear action related files
+- source: DivKit/Extensions/DivDisappearActionExtensions.swift
+  docs:
+    - concepts/divs/2/div-disappear-action.md
+
+# Filter related files
+- source: DivKit/Extensions/DivFilterExtensions.swift
+  docs:
+    - concepts/divs/2/div-filter.md
+    - concepts/divs/2/div-filter-rtl-mirror.md
+
+# Transform related files
+- source: DivKit/Extensions/DivTransformExtensions.swift
+  docs:
+    - concepts/divs/2/div-transform.md
+
+# Aspect related files
+- source: DivKit/Extensions/DivAspectExtensions.swift
+  docs:
+    - concepts/divs/2/div-aspect.md
+
+- source: LayoutKit/LayoutKit/Blocks/Aspect/AspectBlock.swift
+  docs:
+    - concepts/divs/2/div-aspect.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/AspectBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-aspect.md
+
+# Size related files
+- source: DivKit/Extensions/DivSizeExtensions.swift
+  docs:
+    - concepts/divs/2/div-size.md
+    - concepts/layout.md
+
+# Edge insets related files
+- source: DivKit/Extensions/DivEdgeInsetsExtensions.swift
+  docs:
+    - concepts/divs/2/div-edge-insets.md
+    - concepts/layout.md
+
+# Absolute edge insets related files
+- source: DivKit/Extensions/DivAbsoluteEdgeInsetsExtensions.swift
+  docs:
+    - concepts/divs/2/div-absolute-edge-insets.md
+    - concepts/layout.md
+
+# Point related files
+- source: DivKit/Extensions/DivPointExtensions.swift
+  docs:
+    - concepts/divs/2/div-point.md
+
+# Patch related files
+- source: DivKit/Extensions/DivData/DivDataPatchExtensions.swift
+  docs:
+    - concepts/divs/2/div-patch.md
+
+# Shadow related files
+- source: DivKit/Extensions/DivShadowExtensions.swift
+  docs:
+    - concepts/divs/2/div-shadow.md
+    - concepts/visual.md
+
+- source: LayoutKit/LayoutKit/Blocks/Shadow/ShadedBlock.swift
+  docs:
+    - concepts/divs/2/div-shadow.md
+    - concepts/visual.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/ShadedBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/divs/2/div-shadow.md
+    - concepts/visual.md
+
+# Blur related files
+- source: DivKit/Extensions/DivBlurExtensions.swift
+  docs:
+    - concepts/divs/2/div-blur.md
+    - concepts/visual.md
+
+# Extension related files
+- source: DivKit/DivExtensionHandler.swift
+  docs:
+    - concepts/extensions.md
+    - concepts/divs/2/div-extension.md
+
+# Path logic related files
+- source: DivKit/DivBlockModeling.swift
+  docs:
+    - concepts/path/ios.md
+
+- source: DivKit/DivBlockModelingContext.swift
+  docs:
+    - concepts/path/ios.md
+
+# Gesture related files
+- source: LayoutKit/LayoutKit/Blocks/GestureBlock.swift
+  docs:
+    - concepts/interaction.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/GestureBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/interaction.md
+
+# Base block files
+- source: LayoutKit/LayoutKit/Blocks/Block.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/Blocks/BlockWithLayout.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/Blocks/BlockWithTraits.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/Blocks/LaidOutBlock.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/LaidOutBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/Blocks/LayeredBlock.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/UI/Blocks/LayeredBlock+UIViewRenderableBlock.swift
+  docs:
+    - concepts/layout.md
+
+- source: LayoutKit/LayoutKit/Blocks/WrapperBlock.swift
+  docs:
+    - concepts/layout.md

@@ -1,0 +1,283 @@
+---
+alwaysApply: true
+---
+
+# DivDataResourcesPreloader и параметр preload_required
+
+## Обзор
+
+`DivDataResourcesPreloader` - это компонент DivKit, отвечающий за предварительную загрузку ресурсов (изображений, видео), используемых в DivData. Предварительная загрузка ресурсов позволяет улучшить пользовательский опыт, так как ресурсы будут доступны к моменту отображения UI-элементов.
+
+## Реализация DivDataResourcesPreloader
+
+`DivDataResourcesPreloader` - это класс, отвечающий за предварительную загрузку ресурсов:
+
+```swift
+public final class DivDataResourcesPreloader {
+  public init(
+    resourceRequester: URLResourceRequesting,
+    extensionHandlers: [DivExtensionHandler]? = nil
+  )
+
+  public func downloadResources(
+    for divData: DivData,
+    filter: ResourcePreloadFilter,
+    context: DivBlockModelingContext,
+    completion: @escaping (Bool) -> Void
+  )
+}
+
+public enum ResourcePreloadFilter {
+  case all
+  case onlyRequired
+}
+```
+
+## Параметр preload_required
+
+Каждый элемент DivKit, который может содержать ресурсы (изображения, видео), имеет параметр `preloadRequired`:
+
+- `DivImage.preloadRequired`
+- `DivGifImage.preloadRequired`
+- `DivVideo.preloadRequired`
+- `DivImageBackground.preloadRequired`
+- `DivText.Image.preloadRequired`
+
+По умолчанию значение `preloadRequired` равно `false`. Когда параметр установлен в `true`, это указывает, что ресурс должен быть загружен заранее, до отображения UI-элемента.
+
+## Интеграция с DivKitComponents
+
+`DivDataResourcesPreloader` интегрирован в `DivKitComponents` через опциональное свойство:
+
+```swift
+public final class DivKitComponents {
+  // ...
+  public let resourcesPreloader: DivDataResourcesPreloader?
+  // ...
+
+  public init(
+    // ...
+    resourcesPreloader: DivDataResourcesPreloader? = nil
+  ) {
+    // ...
+    self.resourcesPreloader = resourcesPreloader
+  }
+}
+```
+
+## Автоматическая предзагрузка ресурсов
+
+При обновлении DivData в DivBlockProvider автоматически запускается предзагрузка ресурсов с `preloadRequired: true`:
+
+```swift
+private func update(divData: DivData?) {
+  // ...
+  if let resourcesPreloader = divKitComponents.resourcesPreloader {
+    resourcesPreloader.downloadResources(
+      for: divData,
+      filter: .onlyRequired,
+      context: makeCurrentContext(),
+      completion: { _ in }
+    )
+  }
+  // ...
+}
+```
+
+## Логика работы DivDataResourcesPreloader
+
+### Сбор URL ресурсов
+
+При вызове метода `downloadResources`, `DivDataResourcesPreloader` выполняет следующие действия:
+
+1. Собирает URL всех ресурсов из `DivData` в зависимости от параметра `filter`:
+   - Если `filter` равен `.all`, собираются URL всех ресурсов
+   - Если `filter` равен `.onlyRequired`, собираются только URL ресурсов с `preloadRequired: true`
+   - Дополнительно собираются URL из расширений (extension handlers)
+
+2. Фильтрует URL, оставляя только те, у которых есть хост (исключаются локальные URL и URL с относительными путями)
+
+### Загрузка ресурсов
+
+После сбора URL, `DivDataResourcesPreloader` запускает загрузку каждого ресурса с помощью `URLResourceRequesting`:
+
+```swift
+for url in urls {
+  _ = resourceRequester.getData(from: url) { result in
+    // Обработка результата
+  }
+}
+```
+
+### Обработка результатов
+
+`DivDataResourcesPreloader` отслеживает количество успешных и неудачных загрузок. Когда все ресурсы загружены (успешно или с ошибкой), вызывается completion handler с результатом:
+
+- `true` - если все ресурсы загружены успешно
+- `false` - если хотя бы один ресурс не удалось загрузить
+
+## Внутренняя реализация
+
+### Сбор URL ресурсов из элементов
+
+Внутри `DivData` и его элементов реализованы методы для сбора URL ресурсов:
+
+- `makeImageURLs(with:filter:)` - собирает URL изображений
+- `makeVideoURLs(with:filter:)` - собирает URL видео
+
+Для различных типов элементов определены методы `preloadURLs`, которые собирают URL ресурсов с учетом параметра `preloadRequired`:
+
+```swift
+// Протокол для элементов с ресурсами
+private protocol ResourceDiv {
+  func resolvePreloadURLs(_ resolver: ExpressionResolver) -> [URL?]
+  func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool
+}
+
+// Реализация для всех элементов с ресурсами
+extension ResourceDiv {
+  fileprivate func preloadURLs(
+    _ resolver: ExpressionResolver,
+    filter: ResourcePreloadFilter
+  ) -> [URL] {
+    guard filter == .all || resolvePreloadRequired(resolver) else {
+      return []
+    }
+    return resolvePreloadURLs(resolver).compactMap { $0 }
+  }
+}
+```
+
+Этот протокол реализуют следующие элементы:
+- `DivImage` - изображения
+- `DivGifImage` - GIF-изображения
+- `DivVideo` - видео
+- `DivBackground` - фоновые изображения
+- `DivText.Image` - изображения в тексте
+
+Каждый из этих элементов предоставляет свою реализацию методов `resolvePreloadURLs` и `resolvePreloadRequired`.
+
+### Интеграция с расширениями (Extension Handlers)
+
+`DivExtensionHandler` имеет метод для предоставления URL ресурсов для предзагрузки:
+
+```swift
+public protocol DivExtensionHandler {
+  // ...
+  func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL]
+}
+
+// Реализация по умолчанию
+extension DivExtensionHandler {
+  public func getPreloadURLs(div _: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
+    []
+  }
+}
+```
+
+Это позволяет расширениям (например, Lottie-анимациям) предоставлять свои ресурсы для предзагрузки. Пример реализации для Lottie-расширения:
+
+```swift
+public func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL] {
+  [Self.getPreloadURL(div: div)].compactMap { $0 }
+}
+
+static func getPreloadURL(div: DivBase) -> URL? {
+  let extensionData = div.extensions?.first { $0.id == "lottie" }
+  guard let paramsDict = extensionData?.params,
+        let urlString = paramsDict["url"] as? String else {
+    return nil
+  }
+  return URL(string: urlString)
+}
+```
+
+
+## Реализация URLResourceRequesting
+
+Интерфейс `URLResourceRequesting` используется для загрузки ресурсов, но его реализация не входит в состав DivKit. Реализацию этого интерфейса должен предоставить клиент библиотеки.
+
+В качестве реализации может использоваться класс `CachedURLResourceRequester` из библиотеки vgsl, который обеспечивает кэширование загруженных ресурсов для повторного использования.
+
+## Диаграмма работы DivDataResourcesPreloader
+
+```mermaid
+flowchart TD
+    Start([Начало]) --> Input[Получение DivData]
+    Input --> Filter{Выбор фильтра}
+    Filter -->|.all| AllResources[Сбор всех URL ресурсов]
+    Filter -->|.onlyRequired| RequiredResources[Сбор URL ресурсов с preloadRequired=true]
+    AllResources --> HostFilter[Фильтрация URL: только с хостом]
+    RequiredResources --> HostFilter
+    HostFilter --> CheckEmpty{URLs пустой?}
+    CheckEmpty -->|Да| Success[Завершение успешно]
+    CheckEmpty -->|Нет| Download[Загрузка ресурсов]
+    Download --> TrackResults[Отслеживание результатов]
+    TrackResults --> CheckComplete{Все загружены?}
+    CheckComplete -->|Нет| TrackResults
+    CheckComplete -->|Да| CheckErrors{Есть ошибки?}
+    CheckErrors -->|Да| Failure[Завершение с ошибкой]
+    CheckErrors -->|Нет| Success
+    Success --> End([Конец])
+    Failure --> End
+```
+
+### Диаграмма компонентов
+
+```mermaid
+classDiagram
+    class DivDataResourcesPreloader {
+        -URLResourceRequesting resourceRequester
+        -[DivExtensionHandler]? extensionHandlers
+        +downloadResources(divData, filter, context, completion)
+    }
+
+    class ResourcePreloadFilter {
+        <<enumeration>>
+        all
+        onlyRequired
+    }
+
+    class URLResourceRequesting {
+        <<interface>>
+        +getData(from: URL, completion)
+    }
+
+    class DivData {
+        +makeImageURLs(with: ExpressionResolver, filter: ResourcePreloadFilter)
+        +makeVideoURLs(with: ExpressionResolver, filter: ResourcePreloadFilter)
+    }
+
+    class DivExtensionHandler {
+        <<interface>>
+        +getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver)
+    }
+
+    class ResourceDiv {
+        <<interface>>
+        +resolvePreloadURLs(ExpressionResolver)
+        +resolvePreloadRequired(ExpressionResolver)
+        +preloadURLs(ExpressionResolver, filter)
+    }
+
+    class DivKitComponents {
+        +resourcesPreloader: DivDataResourcesPreloader?
+    }
+
+    class DivBlockProvider {
+        -update(divData: DivData?)
+    }
+
+    DivDataResourcesPreloader --> ResourcePreloadFilter : uses
+    DivDataResourcesPreloader --> URLResourceRequesting : uses
+    DivDataResourcesPreloader --> DivData : collect urls
+    DivData --> ResourceDiv : collect urls
+    DivData --> DivExtensionHandler : collect urls
+    DivImage ..|> ResourceDiv : implements
+    DivGifImage ..|> ResourceDiv : implements
+    DivVideo ..|> ResourceDiv : implements
+    DivBackground ..|> ResourceDiv : implements
+    DivText_Image ..|> ResourceDiv : implements
+    DivKitComponents --> DivDataResourcesPreloader : contains
+    DivBlockProvider --> DivDataResourcesPreloader : uses
+```
