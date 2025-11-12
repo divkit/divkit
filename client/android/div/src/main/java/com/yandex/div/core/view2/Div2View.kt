@@ -12,7 +12,6 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
@@ -54,7 +53,6 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
-import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.drawShadow
@@ -145,6 +143,7 @@ class Div2View private constructor(
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
+    private val layoutProviderBinder get() = viewComponent.layoutProviderBinder
     internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
     internal var inMiddleOfBind = false
 
@@ -196,10 +195,6 @@ class Div2View private constructor(
 )
 
     internal val inputFocusTracker = viewComponent.inputFocusTracker
-
-    internal val layoutSizes = mutableMapOf<ExpressionResolver, MutableMap<String, Int>>()
-    internal val variablesHolders = mutableMapOf<DivData, DivLayoutProviderVariablesHolder>()
-    internal var clearVariablesListener: ViewTreeObserver.OnPreDrawListener? = null
 
     var dataTag: DivDataTag = DivDataTag.INVALID
         internal set(value) {
@@ -319,6 +314,7 @@ class Div2View private constructor(
 
         val oldData = divData ?: oldDivData
         updateRuntimeStore(data, tag)
+        layoutProviderBinder.release(oldData)
         dataTag = tag
 
         data.states.forEach {
@@ -381,6 +377,7 @@ class Div2View private constructor(
 
         val oldData = divData
         updateRuntimeStore(data, tag)
+        layoutProviderBinder.release(oldData)
         val isDataReplaceable = DivComparator.isDivDataReplaceable(
             oldData,
             data,
@@ -649,6 +646,7 @@ class Div2View private constructor(
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
         divTimerEventDispatcher?.onAttach(this)
+        layoutProviderBinder.onAttach()
     }
 
     override fun onDetachedFromWindow() {
@@ -657,6 +655,7 @@ class Div2View private constructor(
         divTimerEventDispatcher?.onDetach(this)
         viewComponent.animatorController.onDetachedFromWindow()
         runtimeStore.onDetachedFromWindow(this)
+        layoutProviderBinder.onDetach()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -726,6 +725,7 @@ class Div2View private constructor(
             releaseAndRemoveChildren(this) // Removes children
         }
         viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
+        layoutProviderBinder.release(divData)
         divData = null
         dataTag = DivDataTag.INVALID
     }

@@ -36,7 +36,9 @@ class DivBaseBinderTest {
     private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
     private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
-    private val viewComponent = mock<Div2ViewComponent>()
+    private val viewComponent = mock<Div2ViewComponent> {
+        on { layoutProviderBinder } doReturn mock()
+    }
     private val divView = mock<Div2View> {
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { viewComponent } doReturn viewComponent
