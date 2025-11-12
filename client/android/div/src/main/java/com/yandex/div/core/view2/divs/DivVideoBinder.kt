@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
+import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.DecodeBase64ImageTask
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
@@ -32,6 +34,7 @@ import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
+import com.yandex.div2.DivVideoSource as Div2VideoSource
 
 @DivScope
 internal class DivVideoBinder @Inject constructor(
@@ -64,12 +67,7 @@ internal class DivVideoBinder @Inject constructor(
     ) {
         val resolver = bindingContext.expressionResolver
         val source = div.createSource(resolver)
-        val config = DivPlayerPlaybackConfig(
-            autoplay = div.autostart.evaluate(resolver),
-            isMuted = div.muted.evaluate(resolver),
-            repeatable = div.repeatable.evaluate(resolver),
-            payload = div.playerSettingsPayload
-        )
+        val config = div.createConfig(resolver)
 
         val currentPlayerView = getPlayerView()
         var currentPreviewView: PreviewImageView? = null
@@ -110,6 +108,7 @@ internal class DivVideoBinder @Inject constructor(
         observeElapsedTime(div, bindingContext, player, path)
         observeMuted(div, resolver, player)
         observeScale(div, resolver, playerView, previewImageView)
+        observeSource(div, resolver, player)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             removeAllViews()
@@ -209,6 +208,53 @@ internal class DivVideoBinder @Inject constructor(
         )
     }
 
+    private fun DivVideoView.observeSource(
+        div: DivVideo,
+        resolver: ExpressionResolver,
+        player: DivPlayer,
+    ) {
+        addVideoSubscription(
+            div.observeSource(resolver) {
+                player.setSource(it, div.createConfig(resolver))
+            }
+        )
+    }
+
+    private fun DivVideo.observeSource(
+        resolver: ExpressionResolver,
+        callback: (List<DivVideoSource>) -> Unit,
+    ): Disposable {
+        val itemCallback = { _ : Any -> callback(createSource(resolver)) }
+
+        if (videoSources.size == 1) {
+            return videoSources.first().observe(resolver, itemCallback)
+        }
+
+        val disposable = CompositeDisposable()
+        videoSources.forEach {
+            disposable.add(it.observe(resolver, itemCallback))
+        }
+
+        return disposable
+    }
+
+    private fun Div2VideoSource.observe(
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit,
+    ): Disposable {
+        val disposable = CompositeDisposable()
+
+        bitrate?.let { disposable.add(it.observe(resolver, callback)) }
+        disposable.add(mimeType.observe(resolver, callback))
+        resolution?.let {
+            disposable.add(it.height.observe(resolver, callback))
+            disposable.add(it.width.observe(resolver, callback))
+        }
+        disposable.add(url.observe(resolver, callback))
+
+        return disposable
+    }
+
     private fun DivVideo.applyPreview(
         resolver: ExpressionResolver,
         onPreviewDecoded: (ImageRepresentation?) -> Unit,
@@ -223,6 +269,15 @@ internal class DivVideoBinder @Inject constructor(
         val decodeTask = DecodeBase64ImageTask(base64String, false, onPreviewDecoded)
         executorService.submit(decodeTask)
     }
+
+    private fun DivVideo.createConfig(
+        resolver: ExpressionResolver,
+    ) = DivPlayerPlaybackConfig(
+        autoplay = autostart.evaluate(resolver),
+        isMuted = muted.evaluate(resolver),
+        repeatable = repeatable.evaluate(resolver),
+        payload = playerSettingsPayload,
+    )
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
