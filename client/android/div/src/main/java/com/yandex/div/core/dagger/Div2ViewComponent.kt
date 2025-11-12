@@ -15,6 +15,7 @@ import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
 import com.yandex.div.core.view.DrawingPassOverrideStrategy
+import com.yandex.div.core.view2.divs.DivLayoutProviderBinder
 import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
@@ -43,6 +44,7 @@ internal interface Div2ViewComponent {
     val divTooltipController: DivTooltipController
     val runtimeVisitor: DivRuntimeVisitor
     val drawingPassOverrideStrategy: DrawingPassOverrideStrategy
+    val layoutProviderBinder: DivLayoutProviderBinder
 
     @Component.Builder
     interface Builder {

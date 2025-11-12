@@ -2,14 +2,10 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.DisplayMetrics
 import android.view.View
-import androidx.core.view.doOnAttach
-import androidx.core.view.doOnDetach
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
-import com.yandex.div.R
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant
@@ -17,7 +13,6 @@ import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeTransform
-import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
@@ -27,7 +22,6 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -72,7 +66,7 @@ internal class DivBaseBinder @Inject constructor(
         bindLayoutParams(bindingContext, div, oldDiv, subscriber)
         bindMargins(div, oldDiv, resolver, subscriber)
         bindAlignment(div, oldDiv, resolver, subscriber)
-        bindLayoutProvider(bindingContext, div, oldDiv)
+        divView.viewComponent.layoutProviderBinder.bind(this, div.layoutProvider, oldDiv?.layoutProvider, resolver)
         bindAccessibility(div, oldDiv, resolver, subscriber)
         bindAlpha(div, oldDiv, resolver, subscriber)
 
@@ -173,116 +167,6 @@ internal class DivBaseBinder @Inject constructor(
         }
         subscriber.addSubscription(newDiv.alignmentHorizontal?.observe(resolver, callback))
         subscriber.addSubscription(newDiv.alignmentVertical?.observe(resolver, callback))
-    }
-
-    private fun View.bindLayoutProvider(
-        bindingContext: BindingContext,
-        newDiv: DivBase,
-        oldDiv: DivBase?,
-    ) {
-        val divView = bindingContext.divView
-        val data = divView.divData ?: return
-        val layoutProvider = newDiv.layoutProvider ?: return
-        if (layoutProvider.widthVariableName.equals(oldDiv?.layoutProvider?.widthVariableName)
-            && layoutProvider.heightVariableName.equals(oldDiv?.layoutProvider?.heightVariableName)) {
-            return
-        }
-        if (oldDiv?.layoutProvider != null) {
-            clearLayoutProviderVariables()
-        }
-        val widthVariable = layoutProvider.widthVariableName
-        val heightVariable = layoutProvider.heightVariableName
-        if (widthVariable.isNullOrEmpty() && heightVariable.isNullOrEmpty()) {
-            divView.logError(Throwable("Neither width_variable_name nor height_variable_name found."))
-            return
-        }
-
-        val variablesHolder = divView.variablesHolders[data] ?: DivLayoutProviderVariablesHolder()
-            .apply { observeDivData(data, bindingContext) }
-            .also { divView.variablesHolders[data] = it }
-
-        val listener = View.OnLayoutChangeListener { _, left, top, right, bottom,
-                                                     oldLeft, oldTop, oldRight, oldBottom ->
-            val metrics = resources.displayMetrics
-            updateSizeVariable(
-                divView,
-                metrics,
-                widthVariable,
-                variablesHolder,
-                left,
-                right,
-                oldLeft,
-                oldRight,
-                bindingContext.expressionResolver,
-            )
-            updateSizeVariable(
-                divView,
-                metrics,
-                heightVariable,
-                variablesHolder,
-                top,
-                bottom,
-                oldTop,
-                oldBottom,
-                bindingContext.expressionResolver
-            )
-        }
-        if (width > 0 || height > 0) {
-            listener.onLayoutChange(this, left, top, right, bottom, 0, 0, 0, 0)
-        }
-        addOnLayoutChangeListener(listener)
-        setTag(R.id.div_layout_provider_listener_id, listener)
-        if (divView.clearVariablesListener != null) return
-
-        val clearVariablesListener = onPreDrawListener {
-            variablesHolder.clear()
-            divView.layoutSizes.forEach { (resolver, variableMap) ->
-                variableMap.forEach {
-                    VariableMutationHandler.setVariable(divView, it.key, it.value.toString(), resolver)
-                }
-            }
-            divView.layoutSizes.clear()
-            true
-        }
-        divView.clearVariablesListener = clearVariablesListener
-
-        divView.apply {
-            doOnAttach {
-                viewTreeObserver.addOnPreDrawListener(clearVariablesListener)
-                doOnDetach { viewTreeObserver.removeOnPreDrawListener(clearVariablesListener) }
-            }
-        }
-    }
-
-    private fun updateSizeVariable(
-        divView: Div2View,
-        metrics: DisplayMetrics,
-        variableName: String?,
-        variablesHolder: DivLayoutProviderVariablesHolder,
-        start: Int,
-        end: Int,
-        oldStart: Int,
-        oldEnd: Int,
-        resolver: ExpressionResolver,
-    ) {
-        if (variableName.isNullOrEmpty()) return
-
-        val size = end - start
-        if (size == oldEnd - oldStart) return
-
-        if (variablesHolder.contains(variableName)) {
-            divView.logError(Throwable(
-                "Size subscriber affects original view size. Relayout was prevented."))
-            return
-        }
-
-        divView.layoutSizes.getOrPut(resolver) { mutableMapOf() }.also {
-            it[variableName] = size.pxToDp(metrics)
-        }
-    }
-
-    private fun View.clearLayoutProviderVariables() {
-        removeOnLayoutChangeListener(getTag(R.id.div_layout_provider_listener_id) as? View.OnLayoutChangeListener)
     }
 
     //endregion
