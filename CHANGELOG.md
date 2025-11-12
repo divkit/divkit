@@ -1,3 +1,13 @@
+## 32.26.0
+
+# Android Client:
+* Added subscriptions to `video_sources` expressions in DivVideo.
+* Notify DivView about various patch errors.
+
+# iOS Client:
+* Fixed animator configuration update. Now, if animator parameters are set using expressions, they will be recalculated and displayed correctly.
+
+
 ## 32.25.0
 
 # Android Client:
