@@ -20,7 +20,6 @@ extension TextBlock {
       maxIntrinsicNumberOfLines: block.maxIntrinsicNumberOfLines,
       minNumberOfHiddenLines: block.minNumberOfHiddenLines,
       images: block.images,
-      accessibilityElement: nil,
       truncationToken: nil,
       additionalTextInsets: block.additionalTextInsets,
       canSelect: block.canSelect,
