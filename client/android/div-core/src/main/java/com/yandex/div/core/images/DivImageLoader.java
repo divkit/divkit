@@ -28,6 +28,7 @@ public interface DivImageLoader {
      *
      * @return true if image loader supports svg.
      */
+    @Deprecated
     default Boolean hasSvgSupport() {
         return false;
     }
@@ -55,7 +56,10 @@ public interface DivImageLoader {
      */
     @MainThread
     @NonNull
-    LoadReference loadImage(@NonNull String imageUrl, @NonNull ImageView imageView);
+    @Deprecated
+    default LoadReference loadImage(@NonNull String imageUrl, @NonNull ImageView imageView) {
+        return () -> { /* do nothing */ };
+    }
 
     /**
      * Starts image loading by given <code>imageUrl</code>.

@@ -11,6 +11,7 @@ import androidx.annotation.StyleRes;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -34,6 +35,7 @@ import com.yandex.yatagan.Module;
 import com.yandex.yatagan.Provides;
 
 @Module
+@InternalApi
 abstract public class Div2Module {
 
     @Binds
@@ -100,10 +102,9 @@ abstract public class Div2Module {
     @DivScope
     @NonNull
     public static DivImageLoader provideDivImageLoader(
-            @NonNull @Named(Names.UNWRAPPED_IMAGE_LOADER) DivImageLoader divImageLoader,
-            @NonNull @Named(Names.CONTEXT) Context context
+            @NonNull @Named(Names.UNWRAPPED_IMAGE_LOADER) DivImageLoader divImageLoader
     ) {
-        return new DivImageLoaderWrapper(divImageLoader, context);
+        return new DivImageLoaderWrapper(divImageLoader);
     }
 
     @Provides

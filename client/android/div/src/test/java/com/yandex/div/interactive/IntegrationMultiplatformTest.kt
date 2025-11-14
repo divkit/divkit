@@ -1,7 +1,6 @@
 package com.yandex.div.interactive
 
 import android.app.Activity
-import android.widget.ImageView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -103,7 +102,6 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
         private val EMPTY_REF = LoadReference { }
         private val IMAGE_LOADER_STUB = object : DivImageLoader {
             override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback) = EMPTY_REF
-            override fun loadImage(imageUrl: String, imageView: ImageView) = EMPTY_REF
             override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback) = EMPTY_REF
         }
 
