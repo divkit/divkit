@@ -59,6 +59,7 @@ include ':screenshot-test-runtime'
 include ':ui-test-common'
 include ':utils'
 include ':video-custom'
+include ':div-video-m3'
 
 def internalSettings = file("settings.internal.gradle")
 if (internalSettings.exists()) {

@@ -17,6 +17,7 @@ private const val TAG = "DivExoPlayerCacheManager"
 /**
  * This class will preload videos for ExoDivPlayer
  */
+@Deprecated("Use com.yandex.div.video.m3.ExoPlayerVideoPreloader")
 public class ExoPlayerVideoPreloader(
     private val context: Context,
     private val cache: ExoPlayerCache = ExoPlayerCache(context)

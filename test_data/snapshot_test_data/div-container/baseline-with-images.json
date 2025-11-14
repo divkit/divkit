@@ -71,7 +71,7 @@
               "video_sources": [
                 {
                   "type": "video_source",
-                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "url": "empty://",
                   "mime_type": "video/mp4"
                 }
               ],

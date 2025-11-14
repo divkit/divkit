@@ -8,6 +8,7 @@ import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoSource
 
+@Deprecated("Use com.yandex.div.video.m3.ExoDivPlayerFactory")
 public class ExoDivPlayerFactory(
     private val context: Context
 ) : DivPlayerFactory {

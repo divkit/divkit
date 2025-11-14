@@ -11,6 +11,7 @@ import java.io.File
 private const val VIDEO_CACHE_DIR = "divKit_video_cache"
 private const val CACHE_SIZE = 90L * 1024 * 1024
 
+@Deprecated("Use com.yandex.div.video.m3.ExoPlayerCache")
 public class ExoPlayerCache(private val context: Context) {
     internal val cacheDataSourceFactory: CacheDataSource.Factory = CacheDataSource.Factory()
         .setCache(simpleCache)

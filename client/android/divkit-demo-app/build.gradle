@@ -102,7 +102,7 @@ dependencies {
     implementation project(path: ':utils')
     implementation project(path: ':video-custom')
     implementation project(path: ':div-storage')
-    implementation project(path: ':div-video')
+    implementation project(path: ':div-video-m3')
     implementation project(path: ':picasso')
     implementation project(path: ':glide')
     implementation project(path: ':coil')
