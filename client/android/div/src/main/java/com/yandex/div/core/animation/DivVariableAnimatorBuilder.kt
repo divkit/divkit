@@ -15,7 +15,6 @@ import com.yandex.div.core.util.isAlternated
 import com.yandex.div.core.util.isReversed
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
-import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionAnimatorStart
@@ -56,7 +55,7 @@ internal object DivVariableAnimatorBuilder {
 
             else ->  {
                 divView.logError(
-                    MissingVariableException("Unable to find number variable with name '${animator.variableName}'")
+                    RuntimeException("Unable to find number variable with name '${animator.variableName}'")
                 )
                 null
             }
@@ -105,7 +104,9 @@ internal object DivVariableAnimatorBuilder {
     ): Animator? {
         val variable = findVariable<Variable.ColorVariable>(animator.variableName, resolver)
         if (variable == null) {
-            divView.logError(MissingVariableException("Unable to find color variable with name '${animator.variableName}'"))
+            divView.logError(
+                RuntimeException("Unable to find color variable with name '${animator.variableName}'")
+            )
             return null
         }
 

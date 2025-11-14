@@ -83,7 +83,7 @@ internal class ExpressionResolverImpl(
             val variableName = tryGetMissingVariableName(e)
 
             if (variableName != null) {
-                throw missingVariable(expressionKey, rawExpression, variableName, e)
+                throw missingVariable(rawExpression, variableName, e)
             }
             throw resolveFailed(expressionKey, rawExpression, e)
         }

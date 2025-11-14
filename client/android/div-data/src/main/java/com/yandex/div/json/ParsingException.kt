@@ -1,5 +1,6 @@
 package com.yandex.div.json
 
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.util.JsonArray
 import com.yandex.div.internal.util.JsonNode
@@ -19,6 +20,7 @@ class ParsingException internal constructor(
     val jsonSummary: String? = null,
 ) : RuntimeException(message, cause)
 
+@InternalApi
 fun missingValue(json: JSONObject, key: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.MISSING_VALUE,
@@ -28,6 +30,7 @@ fun missingValue(json: JSONObject, key: String): ParsingException {
     )
 }
 
+@InternalApi
 fun missingValue(json: JSONArray, key: String, index: Int): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.MISSING_VALUE,
@@ -37,6 +40,7 @@ fun missingValue(json: JSONArray, key: String, index: Int): ParsingException {
     )
 }
 
+@InternalApi
 fun missingValue(key: String, path: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.MISSING_VALUE,
@@ -44,6 +48,7 @@ fun missingValue(key: String, path: String): ParsingException {
     )
 }
 
+@InternalApi
 fun typeMismatch(json: JSONObject, key: String, value: Any): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
@@ -53,6 +58,7 @@ fun typeMismatch(json: JSONObject, key: String, value: Any): ParsingException {
     )
 }
 
+@InternalApi
 fun typeMismatch(json: JSONArray, key: String, index: Int, value: Any): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
@@ -62,6 +68,7 @@ fun typeMismatch(json: JSONArray, key: String, index: Int, value: Any): ParsingE
     )
 }
 
+@InternalApi
 fun typeMismatch(path: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
@@ -69,6 +76,7 @@ fun typeMismatch(path: String): ParsingException {
     )
 }
 
+@InternalApi
 fun typeMismatch(
     expressionKey: String,
     rawExpression: String,
@@ -82,6 +90,7 @@ fun typeMismatch(
     )
 }
 
+@InternalApi
 fun typeMismatch(
     index: Int,
     value: Any
@@ -92,6 +101,7 @@ fun typeMismatch(
     )
 }
 
+@InternalApi
 fun templateNotFound(json: JSONObject, templateId: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.MISSING_TEMPLATE,
@@ -102,6 +112,7 @@ fun templateNotFound(json: JSONObject, templateId: String): ParsingException {
 
 }
 
+@InternalApi
 fun <T> invalidValue(json: JSONObject, key: String, value: T): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -111,6 +122,7 @@ fun <T> invalidValue(json: JSONObject, key: String, value: T): ParsingException 
     )
 }
 
+@InternalApi
 fun invalidValue(
     expressionKey: String,
     rawExpression: String,
@@ -133,7 +145,7 @@ private fun Any?.trimLength(): String {
     }
 }
 
-
+@InternalApi
 fun <T> invalidValue(json: JSONObject, key: String, value: T, cause: Throwable): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -143,6 +155,7 @@ fun <T> invalidValue(json: JSONObject, key: String, value: T, cause: Throwable):
     )
 }
 
+@InternalApi
 fun <T> invalidValue(json: JSONArray, key: String, index: Int, value: T, cause: Throwable): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -152,6 +165,7 @@ fun <T> invalidValue(json: JSONArray, key: String, index: Int, value: T, cause: 
     )
 }
 
+@InternalApi
 fun <T> invalidValue(json: JSONArray, key: String, index: Int, value: T): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -161,6 +175,7 @@ fun <T> invalidValue(json: JSONArray, key: String, index: Int, value: T): Parsin
     )
 }
 
+@InternalApi
 fun <T> invalidValue(path: String, value: T): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -168,6 +183,7 @@ fun <T> invalidValue(path: String, value: T): ParsingException {
     )
 }
 
+@InternalApi
 fun <T> resolveFailed(key: String, value: T, cause: Throwable? = null): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -176,6 +192,7 @@ fun <T> resolveFailed(key: String, value: T, cause: Throwable? = null): ParsingE
     )
 }
 
+@InternalApi
 fun <T> invalidValue(key: String, path: String, value: T): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
@@ -183,17 +200,18 @@ fun <T> invalidValue(key: String, path: String, value: T): ParsingException {
     )
 }
 
+@InternalApi
 fun missingVariable(
-    key: String,
     expression: String,
     variableName: String,
     cause: Throwable? = null
 ) = ParsingException(
     reason = ParsingExceptionReason.MISSING_VARIABLE,
-    message = "Undefined variable '$variableName' at \"$key\": \"$expression\"",
+    message = "Variable '$variableName' is missing. Expression: $expression",
     cause = cause
 )
 
+@InternalApi
 fun missingVariable(variableName: String, cause: Throwable? = null) =
     ParsingException(
         reason = ParsingExceptionReason.MISSING_VARIABLE,
@@ -201,6 +219,7 @@ fun missingVariable(variableName: String, cause: Throwable? = null) =
         cause = cause
     )
 
+@InternalApi
 fun dependencyFailed(json: JSONObject, key: String, cause: ParsingException): ParsingException {
     return dependencyFailed(json, key, cause as Exception)
 }
@@ -215,6 +234,7 @@ internal fun dependencyFailed(json: JSONObject, key: String, cause: Exception): 
     )
 }
 
+@InternalApi
 fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: ParsingException): ParsingException {
     return dependencyFailed(json, key, index, cause as Exception)
 }
@@ -229,6 +249,7 @@ internal fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: E
     )
 }
 
+@InternalApi
 fun dependencyFailed(path: String, cause: ParsingException): ParsingException {
     return dependencyFailed(path, cause as Exception)
 }
@@ -241,6 +262,7 @@ internal fun dependencyFailed(path: String, cause: Exception): ParsingException 
     )
 }
 
+@InternalApi
 fun dependencyFailed(key: String, path: String, cause: ParsingException): ParsingException {
     return dependencyFailed(key, path, cause as Exception)
 }
@@ -253,6 +275,7 @@ fun dependencyFailed(key: String, path: String, cause: Exception): ParsingExcept
     )
 }
 
+@InternalApi
 fun invalidCondition(message: String, input: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE, message = message,
@@ -260,6 +283,7 @@ fun invalidCondition(message: String, input: String): ParsingException {
     )
 }
 
+@InternalApi
 val SILENT_PARSING_EXCEPTION = ParsingException(
     reason = ParsingExceptionReason.MISSING_VARIABLE,
     message = "",
