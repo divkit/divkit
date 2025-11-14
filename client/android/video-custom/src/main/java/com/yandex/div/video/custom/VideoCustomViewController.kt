@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "VideoCustomViewController"
 
+@Deprecated("Use div.video.m3 package")
 class VideoCustomViewController(
     private val cache: VideoCache,
     private val coroutineScope: CoroutineScope,

@@ -36,6 +36,7 @@ private const val DEFAULT_VIDEO_CACHE_DIR = "video_custom_cache"
 private const val VIDEO_DATABASE_NAME = "div_custom_video.db"
 private const val VIDEO_DATABASE_VERSION = 1
 
+@Deprecated("Use div.video.m3 package")
 class VideoCache @JvmOverloads constructor(
     private val imageLoader: DivImageLoader,
     private val imageCache: Provider<ImageCache>,
@@ -161,6 +162,7 @@ class VideoCache @JvmOverloads constructor(
     }
 }
 
+@Deprecated("Use div.video.m3 package")
 sealed class VideoCachingException(
     message: String?,
     cause: Throwable?,

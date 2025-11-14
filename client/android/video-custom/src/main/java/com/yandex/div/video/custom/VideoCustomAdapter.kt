@@ -11,6 +11,7 @@ import com.yandex.div2.DivCustom
 
 private const val CUSTOM_VIDEO_TYPE = "custom_video"
 
+@Deprecated("Use div.video.m3 package")
 class VideoCustomAdapter(
     private val videoCustomViewController: VideoCustomViewController
 ) : DivCustomContainerViewAdapter {

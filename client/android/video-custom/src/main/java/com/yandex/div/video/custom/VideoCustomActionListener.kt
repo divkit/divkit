@@ -1,5 +1,6 @@
 package com.yandex.div.video.custom
 
+@Deprecated("Use div.video.m3 package")
 interface VideoCustomActionListener {
 
     /**

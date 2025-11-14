@@ -11,6 +11,7 @@ private const val AUTHORITY_RESET = "reset"
 
 private const val PARAM_VIDEO_ID = "id"
 
+@Deprecated("Use div.video.m3 package")
 class VideoCustomUriHandler(
     private val videoCustomViewController: VideoCustomViewController
 ) : UriHandler {
