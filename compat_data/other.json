@@ -132,6 +132,9 @@
         "compat": {
             "ios": {
                 "version_added": "32.14.0"
+            },
+            "web": {
+                "version_added": "32.25.0"
             }
         }
     }]
