@@ -452,13 +452,15 @@ open class SliderView @JvmOverloads constructor(
                 }
             }
         }
-        for (i in minValue.toInt()..maxValue.toInt()) {
-            val tickmarkDrawable = if (i in start.toInt()..end.toInt()) {
-                activeTickMarkDrawable
-            } else {
-                inactiveTickMarkDrawable
+        if (activeTickMarkDrawable != null || inactiveTickMarkDrawable != null) {
+            for (i in minValue.toInt()..maxValue.toInt()) {
+                val tickmarkDrawable = if (i in start.toInt()..end.toInt()) {
+                    activeTickMarkDrawable
+                } else {
+                    inactiveTickMarkDrawable
+                }
+                sliderDrawDelegate.drawOnPosition(canvas, tickmarkDrawable, i.toPosition())
             }
-            sliderDrawDelegate.drawOnPosition(canvas, tickmarkDrawable, i.toPosition())
         }
 
         sliderDrawDelegate.drawThumb(
