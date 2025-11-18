@@ -15,7 +15,6 @@ import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.util.hotreload.HotReloadController
 import com.yandex.div.core.util.hotreload.HotReloadStatus
@@ -28,7 +27,6 @@ import org.json.JSONObject
 
 private const val SHOW_LIMIT = 25
 private const val HOT_RELOAD_ANNOUNCE_DURATION = 5000L
-private const val MIN_SIZE_FOR_DETAILS_DP = 150
 private const val DOC_LINK = "https://github.com/divkit/divkit/tools/hot_reload/README.md"
 
 /**
@@ -279,13 +277,8 @@ internal class DebugViewModelProvider(
         return div2View::logError
     }
 
-    fun onCounterClick(rootWidth: Int, rootHeight: Int) {
-        val minSizePx = MIN_SIZE_FOR_DETAILS_DP.dpToPx(div2View.context.resources.displayMetrics)
-        if (rootWidth < minSizePx || rootHeight < minSizePx) {
-            copyReportToClipboard()
-        } else {
-            showDetails()
-        }
+    fun onCounterClick() {
+        showDetails()
     }
 
     fun copyReportToClipboard() {

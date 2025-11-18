@@ -260,7 +260,7 @@ def create_json_file() -> str:
                                 },
                                 {
                                     'type': 'text',
-                                    'text': f'Hello this div is hot-reload! We are waiting for card to send us its div-json so you could edit it.\nRendered div-json is located server: \n{filename}',
+                                    'text': f'Hello this is "Hot Reload"! We are waiting for card to send us its div-json so you could edit it.\nCurrently rendered div-json is located at server: \n{filename}',
                                     'font_size': 14,
                                     'margins': {'bottom': 8}
                                 },

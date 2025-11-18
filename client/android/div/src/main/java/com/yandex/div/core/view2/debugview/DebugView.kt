@@ -10,6 +10,7 @@ import android.text.style.ClickableSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatEditText
@@ -32,6 +33,7 @@ internal class DebugView(
 ) : Disposable {
     private var counterViewHolder: CounterViewHolder? = null
     private var detailsViewHolder: DetailsViewHolder? = null
+    private var detailsPopupWindow: PopupWindow? = null
     private var viewModel: DebugViewModel = DebugViewModel.Hidden
         set(value) {
             field = value
@@ -88,13 +90,33 @@ internal class DebugView(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
         )
-        root.addView(holder.rootView, layoutParams)
+
+        val minSizePx = MIN_SIZE_FOR_DETAILS_DP.dpToPx(root.context.resources.displayMetrics)
+        if (root.width < minSizePx || root.height < minSizePx) {
+            detailsPopupWindow = PopupWindow(
+                holder.rootView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true // focusable
+            ).apply {
+                isOutsideTouchable = true
+                showAsDropDown(root, 0, -root.height)
+                setOnDismissListener { errorModel.hideDetails() }
+            }
+        } else {
+            root.addView(holder.rootView, layoutParams)
+        }
         detailsViewHolder = holder
     }
 
     private fun removeDetailsView() {
         detailsViewHolder?.let { holder ->
-            root.removeView(holder.rootView)
+            if (detailsPopupWindow?.isShowing == true) {
+                detailsPopupWindow?.dismiss()
+                detailsPopupWindow = null
+            } else {
+                root.removeView(holder.rootView)
+            }
         }
         detailsViewHolder = null
     }
@@ -107,7 +129,7 @@ internal class DebugView(
         val holder = CounterViewHolder(
             context = root.context,
             typefaceProvider = typefaceProvider,
-            onCounterClick = { errorModel.onCounterClick(root.width, root.height) }
+            onCounterClick = { errorModel.onCounterClick() }
         )
 
         root.addView(holder.rootView, ViewGroup.LayoutParams(
@@ -122,9 +144,7 @@ internal class DebugView(
         counterViewHolder?.let { holder ->
             root.removeView(holder.rootView)
         }
-        detailsViewHolder?.let { holder ->
-            root.removeView(holder.rootView)
-        }
+        removeDetailsView()
     }
 }
 
@@ -391,3 +411,5 @@ private class DetailsViewHolder(
         hotReloadDocLinkView.text = spannableString
     }
 }
+
+private const val MIN_SIZE_FOR_DETAILS_DP = 150
