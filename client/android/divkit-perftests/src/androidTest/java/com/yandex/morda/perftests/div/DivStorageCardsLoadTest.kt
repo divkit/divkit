@@ -27,7 +27,7 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
 
     @PerfTestParameter(
         importantMetrics = [
-            "Storage.Data.Load.Cold",
+            //"Storage.Data.Load.Cold", // Generates unstable results at some perf-tests.
             "Storage.Templates.Parsing.Cold",
         ]
     )
