@@ -96,7 +96,7 @@
               "height": {
                 "type": "wrap_content"
               },
-              "div_id": "transition_change_demo_state",
+              "id": "transition_out_demo_state",
               "state_id_variable": "current_state",
               "states": [
                 {
@@ -124,7 +124,7 @@
                   "div": {
                     "type": "image_block",
                     "visibility": "invisible",
-                    "id": "image",
+                    "id": "image2",
                     "alignment_horizontal": "right",
                     "alignment_vertical": "bottom"
                   }

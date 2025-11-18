@@ -1376,7 +1376,9 @@
     {
       "title": "Synchronizing transition change animation with running div-animator.",
       "platforms": [
-        "ios"
+        "ios",
+        "android",
+        "web"
       ],
       "tags": [
         "Animations"
@@ -1394,7 +1396,9 @@
     {
       "title": "Synchronizing transition out animation with running div-animator.",
       "platforms": [
-        "ios"
+        "ios",
+        "android",
+        "web"
       ],
       "tags": [
         "Animations"

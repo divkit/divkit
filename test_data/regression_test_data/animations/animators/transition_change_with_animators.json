@@ -97,7 +97,7 @@
                 "type": "fixed",
                 "value": 250
               },
-              "div_id": "transition_change_demo_state",
+              "id": "transition_change_demo_state",
               "state_id_variable": "current_state",
               "states": [
                 {
