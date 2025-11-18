@@ -17,7 +17,8 @@
         ActionStore,
         ActionSubmit,
         ActionScrollBy,
-        ActionScrollTo
+        ActionScrollTo,
+        ActionUpdateStructure
     } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
@@ -69,6 +70,9 @@
             } else if (parsed.type === 'typed:array_set_value') {
                 type = $l10n('actions.array_set_value');
                 text = (parsed.typedParams as ActionArraySetValue)?.variable_name || '';
+            } else if (parsed.type === 'typed:update_structure') {
+                type = $l10n('actions.update_structure');
+                text = (parsed.typedParams as ActionUpdateStructure)?.variable_name || '';
             } else if (parsed.type === 'typed:copy_to_clipboard') {
                 type = $l10n('actions.copy_to_clipboard');
                 text = '';

@@ -7,6 +7,7 @@
         array_remove_value: 'div-action-array-remove-value',
         dict_set_value: 'div-action-dict-set-value',
         array_set_value: 'div-action-array-set-value',
+        update_structure: 'div-action-update-structure',
         copy_to_clipboard: 'div-action-copy-to-clipboard',
         show_tooltip: 'div-action-show-tooltip',
         hide_tooltip: 'div-action-hide-tooltip',
@@ -156,6 +157,9 @@
     }, {
         value: 'typed:dict_set_value',
         text: $l10n('actions.dict_set_value')
+    }, {
+        value: 'typed:update_structure',
+        text: $l10n('actions.update_structure')
     }, {
         value: 'typed:copy_to_clipboard',
         text: $l10n('actions.copy_to_clipboard')
