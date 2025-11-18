@@ -95,12 +95,12 @@ export const DEFAULT_EDITOR_VALUE = `{
           "width": {
             "type": "fixed",
             "value": 28,
-            "unit": 28
+            "unit": "sp"
           },
           "height": {
             "type": "fixed",
             "value": 28,
-            "unit": 28
+            "unit": "sp"
           },
           "margins": {
             "top": 2,
