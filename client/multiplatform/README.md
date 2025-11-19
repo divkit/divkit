@@ -12,41 +12,21 @@ Open the project in Android Studio. You can run both Android and iOS targets dir
 
 ## Using the library in your KMP project
 
+The library is published in Maven Central inside group `com.yandex.divkit.multiplatform` and versioned in accordance with the versions of the main DivKit library.
+
 ### 1) Gradle dependency
 
 Add the library as a dependency of your shared module:
-
-#### Snapshots (current distribution)
-
-This library is currently available only as a Maven snapshot. Add the Sonatype snapshots repository and use the latest `-SNAPSHOT` version.
-
-Add the repository (project-level):
-
-```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-    repositories {
-        maven {
-            name = "Central Portal Snapshots"
-            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-        }
-    }
-}
-```
-
-Declare the dependency in your shared module:
 
 ```kotlin
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("com.yandex.div:divkit-multiplatform:<latest-SNAPSHOT>")
+            implementation("com.yandex.divkit.multiplatform:divkit-multiplatform:<divkit-version>")
         }
     }
 }
 ```
-
-Latest snapshot version - `32.18.0-20250922.175208-SNAPSHOT`
 
 ### 2) iOS: add the `DivKitKMP` CocoaPod
 
@@ -104,4 +84,19 @@ fun setVariables() {
         )
     )
 }
+```
+
+Also you can setup some platform-specific dependencies in platform-specific code. For example:
+
+In Android part:
+
+```kotlin
+DivKitAndroidEnvironment.set(
+    DivKitEnvironment(
+        imageLoaderFactory = { ctx ->
+            PicassoDivImageLoader(ctx)
+        },
+        lifecycleOwner = null
+    )
+)
 ```
