@@ -1,3 +1,17 @@
+## 32.27.0
+
+# Android Client:
+* Decoding of images in `svg` format has been moved to image loaders.
+* Fixed UI hovering when moving slider when there is a large difference between `min_value` and `max_value`.
+* Show error details in popup window for small cards.
+* Support Androidx Media3 library in `div-video-m3` artifact and `div-video` deprecate.
+* Use local resolver for tracking sight-actions inside gallery.
+* `video-custom` is now deprecate. Use `div-video-m3` instead.
+
+# iOS Client:
+* Fixed bugs in visibility actions on iOS 26.
+
+
 ## 32.26.0
 
 # Android Client:
