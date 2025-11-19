@@ -84,8 +84,10 @@ private final class VideoBlockLegacyView: BlockView {
   func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 
   private func configurePlayer(with playerItem: AVPlayerItem) {
-    avPlayer.replaceCurrentItem(with: playerItem)
-    resumePlayer()
+    onMainThreadAsync { [self] in
+      avPlayer.replaceCurrentItem(with: AVPlayerItem(asset: playerItem.asset))
+      resumePlayer()
+    }
   }
 
   @objc private func resumePlayer() {
