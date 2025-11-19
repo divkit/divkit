@@ -17,6 +17,9 @@ final class DivViewTests: XCTestCase {
     divView.disappear()
     divView.appear()
 
+    let delays = divView.visibilityHierarchyDepth()
+    await skipMainRunLoopCycles(delays)
+
     XCTAssertEqual(components.visibilityCounter.visibilityCount(for: appearPath), 2)
   }
 
@@ -28,6 +31,9 @@ final class DivViewTests: XCTestCase {
     divView.disappear()
     divView.appear()
     divView.disappear()
+
+    let delays = divView.visibilityHierarchyDepth()
+    await skipMainRunLoopCycles(delays)
 
     XCTAssertEqual(components.visibilityCounter.visibilityCount(for: disappearPath), 2)
   }

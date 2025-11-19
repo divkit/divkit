@@ -291,6 +291,8 @@
 		988C89112E60677400D3A925 /* GalleryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */; };
 		98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
+		98D560C02ECB4DAC00D01478 /* SkipRunLoopCycles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */; };
+		98D560C22ECCF6C600D01478 /* VisibleBoundsTracking+CountPossibleDelays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+CountPossibleDelays.swift */; };
 		9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */; };
 		9D0868BB2DD10F7E00C5B2CC /* integration_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 9D0868BA2DD10F7E00C5B2CC /* integration_test_data */; };
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
@@ -680,6 +682,8 @@
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
 		988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewModelTests.swift; sourceTree = "<group>"; };
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
+		98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipRunLoopCycles.swift; sourceTree = "<group>"; };
+		98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+CountPossibleDelays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VisibleBoundsTracking+CountPossibleDelays.swift"; sourceTree = "<group>"; };
 		9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		9D0868BA2DD10F7E00C5B2CC /* integration_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = integration_test_data; path = ../../../test_data/integration_test_data; sourceTree = "<group>"; };
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
@@ -1211,6 +1215,7 @@
 				8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */,
 				8CC357F82BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift */,
 				52CD806A2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift */,
+				98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+CountPossibleDelays.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1458,6 +1463,7 @@
 			isa = PBXGroup;
 			children = (
 				9D5AE8352DFC680300D58B81 /* FilesProvider.swift */,
+				98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2049,6 +2055,7 @@
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C0662302D09A43500B30CE3 /* SetStoredValueActionHandlerTests.swift in Sources */,
 				8C23F43A29DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift in Sources */,
+				98D560C22ECCF6C600D01478 /* VisibleBoundsTracking+CountPossibleDelays.swift in Sources */,
 				8C22BBBC2B037BA20076BAEB /* WithDefaultTemplate.swift in Sources */,
 				8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C22BBC12B037BA20076BAEB /* WithoutDefault.swift in Sources */,
@@ -2107,6 +2114,7 @@
 				8C23F43629DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift in Sources */,
 				8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */,
 				8C23F41C29DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift in Sources */,
+				98D560C02ECB4DAC00D01478 /* SkipRunLoopCycles.swift in Sources */,
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,
 				8C23F43829DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift in Sources */,
 				E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */,

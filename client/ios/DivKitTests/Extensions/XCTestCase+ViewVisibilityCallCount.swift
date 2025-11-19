@@ -1,17 +1,19 @@
 import LayoutKit
+import VGSL
 import XCTest
 
 extension XCTestCase {
+  @MainActor
   func getViewVisibilityCallCount(
     view: BlockView,
     rect: CGRect,
     visibilityRect: CGRect? = nil,
     timerScheduler: TestTimerScheduler
-  ) -> Int {
+  ) async throws -> Int {
     let performer = UIActionEventPerformerMock()
 
     performer.addSubview(view)
-    changeViewVisibility(
+    try await changeViewVisibility(
       view: view,
       rect: rect,
       visibilityRect: visibilityRect,
@@ -37,32 +39,27 @@ final class VisibilityTester {
   let timer: TestTimerScheduler
   let performer = UIActionEventPerformerMock()
 
-  var callsCount: Int {
-    performer.callCount
-  }
+  var callsCount: Int { performer.callCount }
 
-  init(
-    block: Block,
-    timer: TestTimerScheduler
-  ) {
+  init(block: Block, timer: TestTimerScheduler) {
     self.view = block.makeBlockView()
     self.timer = timer
     performer.addSubview(view)
   }
 
-  func setViewAppear() {
-    updateViewVisibility(isVisible: true)
-  }
-
-  func setViewDisappear() {
-    updateViewVisibility(isVisible: false)
-  }
-
-  func setViewVisibleAndDissappear(repeatCount: Int) {
+  func setViewVisibleAndDisappear(repeatCount: Int) async throws {
     for _ in 0..<repeatCount {
-      setViewAppear()
-      setViewDisappear()
+      try await setViewAppear()
+      try await setViewDisappear()
     }
+  }
+
+  func setViewAppear() async throws {
+    try await updateViewVisibility(isVisible: true)
+  }
+
+  func setViewDisappear() async throws {
+    try await updateViewVisibility(isVisible: false)
   }
 
   func callsCount(type: VisibilityActionType, url: URL? = nil) -> Int {
@@ -71,9 +68,10 @@ final class VisibilityTester {
     }.count
   }
 
-  private func updateViewVisibility(isVisible: Bool) {
+  private func updateViewVisibility(isVisible: Bool) async throws {
     let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
-    changeViewVisibility(
+
+    try await changeViewVisibility(
       view: view,
       rect: rect,
       visibilityRect: isVisible ? rect : .zero,
@@ -90,14 +88,21 @@ extension UIActionEvent {
   }
 }
 
-private func changeViewVisibility(
+@MainActor
+func changeViewVisibility(
   view: BlockView,
   rect: CGRect,
   visibilityRect: CGRect? = nil,
   timerScheduler: TestTimerScheduler
-) {
+) async throws {
   view.frame = rect
   view.layoutIfNeeded()
   view.onVisibleBoundsChanged(from: rect, to: visibilityRect ?? rect)
-  timerScheduler.timers.forEach { guard $0.isValid else { return }; $0.fire() }
+
+  await skipMainRunLoopCycles(view.visibilityHierarchyDepth())
+
+  for timer in timerScheduler.timers {
+    guard timer.isValid else { continue }
+    timer.fire()
+  }
 }

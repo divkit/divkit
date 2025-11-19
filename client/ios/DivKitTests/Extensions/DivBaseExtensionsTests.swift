@@ -417,15 +417,15 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WhenCreatesBlockAfterItBeingGone_ReportsVisibility() throws {
-    try expectVisibilityActionsToRun(
+  func test_WhenCreatesBlockAfterItBeingGone_ReportsVisibility() async throws {
+    try await expectVisibilityActionsToRun(
       forVisibleBlockFile: "div-text-visibility-actions-visible",
       invisibleBlockFile: "div-text-visibility-actions-gone"
     )
   }
 
-  func test_WhenCreatesBlockAfterItBeingInvisible_ReportsVisibility() throws {
-    try expectVisibilityActionsToRun(
+  func test_WhenCreatesBlockAfterItBeingInvisible_ReportsVisibility() async throws {
+    try await expectVisibilityActionsToRun(
       forVisibleBlockFile: "div-text-visibility-actions-visible",
       invisibleBlockFile: "div-text-visibility-actions-invisible"
     )
@@ -466,7 +466,8 @@ final class DivBaseExtensionsTests: XCTestCase {
     XCTAssertEqual(oldTimers.allSatisfy { !$0.isValid }, true)
   }
 
-  func test_WhenBlockHasVisibilityAndDisappearAction_DoNotShareVisibilityCounter() throws {
+  @MainActor
+  func test_WhenBlockHasVisibilityAndDisappearAction_DoNotShareVisibilityCounter() async throws {
     let context = DivBlockModelingContext(scheduler: timer)
 
     let blockVisibleFirst = try makeBlock(
@@ -476,22 +477,28 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
     let view = blockVisibleFirst.makeBlockView()
-    XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timer), 1)
+    var result = try await getViewVisibilityCallCount(
+      view: view,
+      rect: rect,
+      timerScheduler: timer
+    )
+
+    XCTAssertEqual(result, 1)
 
     let invisibleRect: CGRect = .zero
-    XCTAssertEqual(
-      getViewVisibilityCallCount(
-        view: view,
-        rect: rect,
-        visibilityRect: invisibleRect,
-        timerScheduler: timer
-      ),
-      1
+    result = try await getViewVisibilityCallCount(
+      view: view,
+      rect: rect,
+      visibilityRect: invisibleRect,
+      timerScheduler: timer
     )
+
+    XCTAssertEqual(result, 1)
   }
 
+  @MainActor
   func test_WhenBlockHasVisibilityAndDisappearAction_WithCommonIds_DoNotShareVisibilityCounter(
-  ) throws {
+  ) async throws {
     let context = DivBlockModelingContext(scheduler: timer)
     let commonLogId = "common_id"
 
@@ -517,14 +524,15 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
 
     let visibilityTester = VisibilityTester(block: block, timer: timer)
-    visibilityTester.setViewVisibleAndDissappear(repeatCount: 10)
+    try await visibilityTester.setViewVisibleAndDisappear(repeatCount: 10)
 
     XCTAssertEqual(visibilityTester.callsCount, 6)
     XCTAssertEqual(visibilityTester.callsCount(type: .appear), 2)
     XCTAssertEqual(visibilityTester.callsCount(type: .disappear), 4)
   }
 
-  func test_WhenBlockHasVisibilityActions_WithCommonIds_ShareCounterAndAddWarning() throws {
+  @MainActor
+  func test_WhenBlockHasVisibilityActions_WithCommonIds_ShareCounterAndAddWarning() async throws {
     let context = DivBlockModelingContext(scheduler: timer)
     let appearId = "appear_id"
 
@@ -555,7 +563,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
 
     let visibilityTester = VisibilityTester(block: block, timer: timer)
-    visibilityTester.setViewVisibleAndDissappear(repeatCount: 20)
+    try await visibilityTester.setViewVisibleAndDisappear(repeatCount: 20)
 
     XCTAssertEqual(visibilityTester.callsCount(type: .appear), 3)
 
@@ -576,7 +584,8 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
   }
 
-  func test_WhenBlockHasDisappearActions_WithCommonIds_ShareCounterAndAddWarning() throws {
+  @MainActor
+  func test_WhenBlockHasDisappearActions_WithCommonIds_ShareCounterAndAddWarning() async throws {
     let context = DivBlockModelingContext(scheduler: timer)
     let disappearId = "dissappear_id"
 
@@ -602,7 +611,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
 
     let visibilityTester = VisibilityTester(block: block, timer: timer)
-    visibilityTester.setViewVisibleAndDissappear(repeatCount: 20)
+    try await visibilityTester.setViewVisibleAndDisappear(repeatCount: 20)
 
     XCTAssertEqual(visibilityTester.callsCount(type: .disappear), 3)
 
@@ -652,10 +661,11 @@ final class DivBaseExtensionsTests: XCTestCase {
     }
   }
 
+  @MainActor
   private func expectVisibilityActionsToRun(
     forVisibleBlockFile file: String,
     invisibleBlockFile: String
-  ) throws {
+  ) async throws {
     let context = DivBlockModelingContext(scheduler: timer)
 
     let blockVisibleFirst = try makeBlock(fromFile: file, context: context)
@@ -663,13 +673,24 @@ final class DivBaseExtensionsTests: XCTestCase {
     // trigger visibility actions for first time
     let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
     let view = blockVisibleFirst.makeBlockView()
-    XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timer), 1)
+    var result = try await getViewVisibilityCallCount(
+      view: view,
+      rect: rect,
+      timerScheduler: timer
+    )
+
+    XCTAssertEqual(result, 1)
 
     // expect to drop lastVisibleBounds
     _ = try makeBlock(fromFile: invisibleBlockFile, context: context)
     let view2 = blockVisibleFirst.makeBlockView()
+    result = try await getViewVisibilityCallCount(
+      view: view2,
+      rect: rect,
+      timerScheduler: timer
+    )
 
-    XCTAssertEqual(getViewVisibilityCallCount(view: view2, rect: rect, timerScheduler: timer), 1)
+    XCTAssertEqual(result, 1)
   }
 }
 
