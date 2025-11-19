@@ -13,6 +13,7 @@ import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
+import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.duration
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
@@ -156,7 +157,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
             } else {
                 previousVisibilityIsFull[currentView] = isViewFullyVisible
                 currentDiv?.let {
-                    trackVisibilityActionsOf(context.divView, context.expressionResolver, currentView, it)
+                    val ctx = currentView.bindingContext ?: context
+                    trackVisibilityActionsOf(context.divView, ctx.expressionResolver, currentView, it)
                 }
                 true
             }
@@ -166,7 +168,10 @@ internal class DivVisibilityActionTracker @Inject constructor(
     fun cancelTrackingViewsHierarchy(context: BindingContext, root: View, div: Div?) {
         trackViewsHierarchy(context, root, div) { currentView, currentDiv ->
             previousVisibilityIsFull.remove(currentView)
-            currentDiv?.let { trackVisibilityActionsOf(context.divView, context.expressionResolver, null, it) }
+            currentDiv?.let {
+                val ctx = currentView.bindingContext ?: context
+                trackVisibilityActionsOf(context.divView, ctx.expressionResolver, null, it)
+            }
             true
         }
     }

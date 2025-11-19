@@ -36,6 +36,7 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
+import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -375,7 +376,23 @@ internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
     focusTracker.removeFocusFromFocusedInput()
 }
 
-internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingContext
+internal val View.bindingContext: BindingContext? get() {
+    (this as? DivHolderView<*>)?.bindingContext?.let { return it }
+
+    val divViewWrapper = this as? DivViewWrapper
+        ?: return null
+
+    val itemChild: View = divViewWrapper.child
+        ?: return null
+
+    val divHolderView = itemChild as? DivHolderView<*>
+        ?: return null
+
+    val context = divHolderView.bindingContext
+        ?: return null
+
+    return context
+}
 
 internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
     builder.data.observe(resolver, callback)
