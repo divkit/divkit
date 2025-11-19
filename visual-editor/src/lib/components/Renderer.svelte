@@ -1217,7 +1217,7 @@
             const paletteVariable = vars.get('local_palette');
             if (paletteVariable) {
                 const variableDesc = divjson.card.variables?.find((it: JsonVariable) => it.name === 'local_palette');
-                paletteVariable.setValue(variableDesc?.value || {});
+                paletteVariable.setValue(variableDesc && 'value' in variableDesc && variableDesc.value || {});
             }
             if (themeVariable) {
                 themeVariable.set(theme);

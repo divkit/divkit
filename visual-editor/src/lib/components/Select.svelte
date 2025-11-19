@@ -438,6 +438,7 @@
     .select_theme_preview .select__item {
         min-height: auto;
         padding: 4px 8px;
+        white-space: nowrap;
     }
 
     .select_icon-theme_transparent  .select__item_icon {

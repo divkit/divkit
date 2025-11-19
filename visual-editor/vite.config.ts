@@ -8,5 +8,8 @@ export default defineConfig({
     plugins: [
         svelte()
     ],
-    base: isProduction ? process.env.PROD_BASE : undefined
+    base: isProduction ? process.env.PROD_BASE : undefined,
+    server: {
+        host: true
+    }
 });
