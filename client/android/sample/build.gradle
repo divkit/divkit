@@ -35,7 +35,7 @@ dependencies {
     implementation project(':div-core')
     implementation project(':div')
     implementation project(':div-json')
-    implementation project(':coil')
+    implementation project(':picasso')
     implementation project(':div-rive')
     implementation project(':utils')
     implementation project(':div-pinch-to-zoom')

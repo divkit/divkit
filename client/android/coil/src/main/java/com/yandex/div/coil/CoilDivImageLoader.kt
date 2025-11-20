@@ -36,7 +36,6 @@ class CoilDivImageLoader private constructor(
 
     constructor(context: Context) : this(context, ::OkHttpClient)
 
-    @Suppress("unused")
     constructor(
         context: Context,
         okHttpClient: OkHttpClient
@@ -69,10 +68,8 @@ class CoilDivImageLoader private constructor(
         }
     }
 
-    @Deprecated("Is unused in DivKit, will be removed in future")
     override fun hasSvgSupport() = true
 
-    @Deprecated("Is unused in DivKit, will be removed in future")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
 

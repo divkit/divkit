@@ -62,7 +62,7 @@ internal class DecodeBase64ImageTask(
     }
 
     private fun decodeToPictureDrawable(bytes: ByteArray): PictureDrawable? {
-        return SvgDecoder.decode(bytes.inputStream())
+        return SvgDecoder().decode(bytes.inputStream())
     }
 
     private fun isSvg(base64string: String): Boolean {

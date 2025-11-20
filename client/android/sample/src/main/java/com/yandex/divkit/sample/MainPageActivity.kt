@@ -2,10 +2,10 @@ package com.yandex.divkit.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.yandex.div.coil.CoilDivImageLoader
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
+import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.div.rive.OkHttpDivRiveNetworkDelegate
 import com.yandex.div.rive.RiveCustomViewAdapter
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
@@ -42,7 +42,7 @@ class MainPageActivity : AppCompatActivity() {
     }
 
     private fun createDivConfiguration(): DivConfiguration {
-        return DivConfiguration.Builder(CoilDivImageLoader(this))
+        return DivConfiguration.Builder(PicassoDivImageLoader(this))
             .actionHandler(SampleDivActionHandler())
             .extension(
                 DivPinchToZoomExtensionHandler(
