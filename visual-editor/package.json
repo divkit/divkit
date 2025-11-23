@@ -41,7 +41,7 @@
     "@codemirror/state": "6.4.1",
     "@codemirror/theme-one-dark": "6.1.2",
     "@codemirror/view": "6.27.0",
-    "@divkitframework/divkit": "32.26.0-canary-ef96dd0b366e133a1ac3a04a93147f37bf4de343",
+    "@divkitframework/divkit": "32.27.0-canary-48acc2af1301995e78aece832ea389dd1a76cf61",
     "@lezer/generator": "1.7.3",
     "@lezer/highlight": "1.2.1",
     "@lezer/lr": "1.4.2",
