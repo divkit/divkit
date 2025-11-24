@@ -21,12 +21,14 @@
     import RadioToggler from './controls/RadioToggler.svelte';
     import Button2 from './controls/Button2.svelte';
     import oneIcon from '../../assets/one.svg?url';
+    import lightThemeIcon from '../../assets/lightTheme.svg?url';
+    import darkThemeIcon from '../../assets/darkTheme.svg?url';
     import Switcher from './controls/Switcher.svelte';
+    import CanvasButton from './CanvasButton.svelte';
 
     export let viewport: string;
     export let scale: number;
     export let disabled = false;
-    export let mix = '';
 
     const { l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const {
@@ -37,7 +39,9 @@
     const {
         safeAreaEmulationEnabled,
         direction,
-        locale
+        locale,
+        paletteEnabled,
+        previewThemeStore
     } = state;
 
     const id = 'select' + Math.random();
@@ -130,164 +134,185 @@
     on:resize={toggled ? calcDirectionThrottled : undefined}
 />
 
-<div
-    bind:this={node}
-    class="viewport-control {mix}"
-    class:viewport-control_disabled={disabled}
->
+<div class="viewport-control">
     <div
-        bind:this={control}
-        class="viewport-control__select"
-        tabindex="0"
-        aria-disabled={disabled}
-        aria-expanded={toggled}
-        aria-autocomplete="list"
-        aria-controls="popup_{id}"
-        aria-label={$l10nString('previewSettings')}
-        data-custom-tooltip={$l10nString('previewSettings')}
-        role="combobox"
-        on:click|preventDefault={onControlClick}
-        on:keydown={onKeyDown}
+        bind:this={node}
+        class="viewport-control__select-button"
+        class:viewport-control__select-button_disabled={disabled}
     >
-        {viewport}
-    </div>
-    <div class="viewport-control__arrow"></div>
-
-    {#if toggled}
         <div
-            bind:this={popup}
-            class="viewport-control__popup viewport-control__popup_direction_{popupDirection}"
-            id="popup_{id}"
-            transition:fly={{
-                duration: 200,
-                y: 10
-            }}
+            bind:this={control}
+            class="viewport-control__select"
+            tabindex="0"
+            aria-disabled={disabled}
+            aria-expanded={toggled}
+            aria-autocomplete="list"
+            aria-controls="popup_{id}"
+            aria-label={$l10nString('previewSettings')}
+            data-custom-tooltip={$l10nString('previewSettings')}
+            role="combobox"
+            on:click|preventDefault={onControlClick}
+            on:keydown={onKeyDown}
         >
-            <div class="viewport-control__label">
-                {$l10nString('previewViewport')}
-            </div>
-            <ul class="viewport-control__list">
-                {#each VIEWPORT_LIST as item}
-                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <li
-                        class="viewport-control__item"
-                        class:viewport-control__item_selected={item === viewport}
-                        on:click|preventDefault={() => selectViewport(item)}
-                    >
-                        {item}
-                    </li>
-                {/each}
-            </ul>
-            {#if safeAreaEmulationEnabled}
-                <hr class="viewport-control__hr">
-
-                <label
-                    class="viewport-control__item viewport-control__item_spaced"
-                >
-                    {$l10nString('safeArea')}
-
-                    <Switcher
-                        bind:checked={$safeAreaEmulationEnabled}
-                    />
-                </label>
-            {/if}
-            <hr class="viewport-control__hr">
-            <div class="viewport-control__label">
-                {$l10nString('previewZoom')}
-            </div>
-            <div class="viewport-control__zoom">
-                <input
-                    type="range"
-                    class="viewport-control__zoom-input"
-                    min="0.33"
-                    max="5"
-                    step="0.01"
-                    bind:value={scale}
-                />
-
-                <Text
-                    bind:value={scale}
-                    subtype="percent"
-                    size="small"
-                    width="small"
-                    min={33}
-                    max={500}
-                />
-            </div>
-
-            <div class="viewport-control__row">
-                <Button2
-                    cls="viewport-control__expand-button"
-                    theme="border-gray"
-                    size="small"
-                    centerContent
-                    on:click={fitToWindow}
-                >
-                    {$l10nString('previewFitToWindow')}
-                </Button2>
-
-                <Button2
-                    theme="border-gray"
-                    slim
-                    title={$l10nString('previewResetZoom')}
-                    customTooltips
-                    on:click={resetZoom}
-                >
-                    <div
-                        class="viewport-control__icon"
-                        style:background-image="url({encodeBackground(oneIcon)})"
-                    ></div>
-                </Button2>
-            </div>
-
-            {#if cardLocales.length > 1}
-                <hr class="viewport-control__hr">
-
-                <div class="viewport-control__label">
-                    {$l10nString('previewLang')}
-                </div>
-
-                {#each cardLocales as item}
-                    <button
-                        class="viewport-control__item"
-                        class:viewport-control__item_selected={item.id === $locale}
-                        on:click|preventDefault={() => selectLocale(item.id)}
-                    >
-                        {item.text[$lang]}
-                    </button>
-                {/each}
-            {/if}
-
-            {#if directionSelector}
-                <hr class="viewport-control__hr">
-
-                <div class="viewport-control__label">
-                    {$l10nString('previewDirection')}
-                </div>
-
-                <div class="viewport-control__row viewport-control__row_spaced-bottom">
-                    <RadioToggler
-                        mix="viewport-control__toggler"
-                        name="direction"
-                        theme="tertiary"
-                        bind:value={$direction}
-                        options={[{
-                            text: 'LTR',
-                            value: 'ltr'
-                        }, {
-                            text: 'RTL',
-                            value: 'rtl'
-                        }]}
-                    />
-                </div>
-            {/if}
+            {viewport}
         </div>
+        <div class="viewport-control__arrow"></div>
+
+        {#if toggled}
+            <div
+                bind:this={popup}
+                class="viewport-control__popup viewport-control__popup_direction_{popupDirection}"
+                id="popup_{id}"
+                transition:fly={{
+                    duration: 200,
+                    y: 10
+                }}
+            >
+                <div class="viewport-control__label">
+                    {$l10nString('previewViewport')}
+                </div>
+                <ul class="viewport-control__list">
+                    {#each VIEWPORT_LIST as item}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                        <li
+                            class="viewport-control__item"
+                            class:viewport-control__item_selected={item === viewport}
+                            on:click|preventDefault={() => selectViewport(item)}
+                        >
+                            {item}
+                        </li>
+                    {/each}
+                </ul>
+                {#if safeAreaEmulationEnabled}
+                    <hr class="viewport-control__hr">
+
+                    <label
+                        class="viewport-control__item viewport-control__item_spaced"
+                    >
+                        {$l10nString('safeArea')}
+
+                        <Switcher
+                            bind:checked={$safeAreaEmulationEnabled}
+                        />
+                    </label>
+                {/if}
+                <hr class="viewport-control__hr">
+                <div class="viewport-control__label">
+                    {$l10nString('previewZoom')}
+                </div>
+                <div class="viewport-control__zoom">
+                    <input
+                        type="range"
+                        class="viewport-control__zoom-input"
+                        min="0.33"
+                        max="5"
+                        step="0.01"
+                        bind:value={scale}
+                    />
+
+                    <Text
+                        bind:value={scale}
+                        subtype="percent"
+                        size="small"
+                        width="small"
+                        min={33}
+                        max={500}
+                    />
+                </div>
+
+                <div class="viewport-control__row">
+                    <Button2
+                        cls="viewport-control__expand-button"
+                        theme="border-gray"
+                        size="small"
+                        centerContent
+                        on:click={fitToWindow}
+                    >
+                        {$l10nString('previewFitToWindow')}
+                    </Button2>
+
+                    <Button2
+                        theme="border-gray"
+                        slim
+                        title={$l10nString('previewResetZoom')}
+                        customTooltips
+                        on:click={resetZoom}
+                    >
+                        <div
+                            class="viewport-control__icon"
+                            style:background-image="url({encodeBackground(oneIcon)})"
+                        ></div>
+                    </Button2>
+                </div>
+
+                {#if cardLocales.length > 1}
+                    <hr class="viewport-control__hr">
+
+                    <div class="viewport-control__label">
+                        {$l10nString('previewLang')}
+                    </div>
+
+                    {#each cardLocales as item}
+                        <button
+                            class="viewport-control__item"
+                            class:viewport-control__item_selected={item.id === $locale}
+                            on:click|preventDefault={() => selectLocale(item.id)}
+                        >
+                            {item.text[$lang]}
+                        </button>
+                    {/each}
+                {/if}
+
+                {#if directionSelector}
+                    <hr class="viewport-control__hr">
+
+                    <div class="viewport-control__label">
+                        {$l10nString('previewDirection')}
+                    </div>
+
+                    <div class="viewport-control__row">
+                        <RadioToggler
+                            mix="viewport-control__toggler"
+                            name="direction"
+                            theme="tertiary"
+                            bind:value={$direction}
+                            options={[{
+                                text: 'LTR',
+                                value: 'ltr'
+                            }, {
+                                text: 'RTL',
+                                value: 'rtl'
+                            }]}
+                        />
+                    </div>
+                {/if}
+            </div>
+        {/if}
+    </div>
+
+    {#if $paletteEnabled}
+        <div class="viewport-control__divider"></div>
+
+        <CanvasButton
+            stickLeft
+            title={$l10nString($previewThemeStore === 'light' ? 'lightTheme' : 'darkTheme')}
+            on:click={() => $previewThemeStore = ($previewThemeStore === 'light' ? 'dark' : 'light')}
+        >
+            <div
+                class="viewport-control__button-icon viewport-control__button-icon_inversed"
+                style:background-image="url({encodeBackground($previewThemeStore === 'light' ? lightThemeIcon : darkThemeIcon)})"
+            ></div>
+        </CanvasButton>
     {/if}
 </div>
 
 <style>
     .viewport-control {
+        display: flex;
+    }
+
+    .viewport-control__select-button {
         position: relative;
         user-select: none;
     }
@@ -306,7 +331,7 @@
         filter: var(--icon-filter);
     }
 
-    .viewport-control_disabled .viewport-control__arrow {
+    .viewport-control__select-button_disabled .viewport-control__arrow {
         opacity: .33;
     }
 
@@ -327,11 +352,16 @@
         appearance: none;
     }
 
+    .viewport-control__select-button:not(:last-child) .viewport-control__select {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
     .viewport-control__select_icon {
         padding-left: 6px;
     }
 
-    .viewport-control:not(.viewport-control_disabled) .viewport-control__select {
+    .viewport-control__select-button:not(.viewport-control__select-button_disabled) .viewport-control__select {
         cursor: pointer;
     }
 
@@ -361,7 +391,7 @@
         box-sizing: border-box;
         min-width: 250px;
         max-height: calc(80vh - 50px);
-        padding: 4px 0;
+        padding: 4px 0 12px;
         border-radius: 8px;
         box-shadow: var(--shadow-16);
         background: var(--background-tertiary);
@@ -447,10 +477,6 @@
         padding: 0 16px;
     }
 
-    .viewport-control__row_spaced-bottom {
-        padding-bottom: 8px;
-    }
-
     :global(.viewport-control__toggler) {
         flex: 1 1 auto;
     }
@@ -473,5 +499,23 @@
         margin: 8px 0;
         border: none;
         background: var(--fill-transparent-1);
+    }
+
+    .viewport-control__divider {
+        flex: 0 0 auto;
+        width: 1px;
+        background: var(--fill-transparent-minus-1);
+    }
+
+    .viewport-control__button-icon {
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        background: no-repeat 50% 50%;
+        background-size: 20px;
+    }
+
+    .viewport-control__button-icon_inversed {
+        filter: var(--icon-filter);
     }
 </style>

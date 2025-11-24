@@ -1,10 +1,9 @@
 <script lang="ts">
     import { getContext, onMount } from 'svelte';
+    import { Tween } from 'svelte/motion';
     import Renderer from './Renderer.svelte';
     import CanvasButton from './CanvasButton.svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../ctx/languageContext';
-    import lightThemeIcon from '../../assets/lightTheme.svg?url';
-    import darkThemeIcon from '../../assets/darkTheme.svg?url';
     import errorsIcon from '../../assets/errors.svg?url';
     import errorsLightIcon from '../../assets/errorsLight.svg?url';
     import warningsIcon from '../../assets/warnings.svg?url';
@@ -20,7 +19,6 @@
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
     const {
-        paletteEnabled,
         currentUndoStore,
         currentRedoStore,
         rendererErrorsOnly,
@@ -38,7 +36,9 @@
     });
 
     let viewport = DEFAULT_VIEWPORT;
-    let scale = 1;
+    let scale = new Tween(1, {
+        duration: 100
+    });
     let errorButtonNode: HTMLElement;
     let errorsDialog: ErrorsDialog;
 
@@ -95,22 +95,24 @@
             newScale = availWidth / size[0];
         }
         newScale = Math.max(.33, Math.min(5, newScale));
-        scale = newScale;
+        scale.set(newScale, {
+            duration: 0
+        });
     }
 
     function onWheel(event: WheelEvent): void {
-        if (event.ctrlKey) {
+        if (event.metaKey || event.ctrlKey) {
             event.preventDefault();
 
-            let newScale = scale;
+            let newScale = scale.target;
             if (event.deltaY > 0) {
-                newScale *= 1.1;
-            } else {
                 newScale /= 1.1;
+            } else {
+                newScale *= 1.1;
             }
 
             newScale = Math.max(.33, Math.min(5, newScale));
-            scale = newScale;
+            scale.target = newScale;
         }
     }
 
@@ -138,21 +140,9 @@
     <div class="canvas__topbar" bind:this={topbar}>
         <ViewportControl
             bind:viewport={viewport}
-            bind:scale={scale}
+            bind:scale={scale.target}
             on:fitToWindow={fitToWindow}
         />
-
-        {#if $paletteEnabled}
-            <CanvasButton
-                title={$l10n($previewThemeStore === 'light' ? 'lightTheme' : 'darkTheme')}
-                on:click={() => $previewThemeStore = ($previewThemeStore === 'light' ? 'dark' : 'light')}
-            >
-                <div
-                    class="canvas__button-icon canvas__button-icon_inversed"
-                    style:background-image="url({encodeBackground($previewThemeStore === 'light' ? lightThemeIcon : darkThemeIcon)})"
-                ></div>
-            </CanvasButton>
-        {/if}
 
         <CanvasButton
             title={$l10n('undo') + ($currentUndoStore ? ' — ' + $l10n($currentUndoStore.toLangKey()) : '')}
@@ -208,7 +198,7 @@
         <Renderer
             bind:this={renderer}
             bind:viewport={viewport}
-            bind:scale={scale}
+            bind:scale={scale.current}
             theme={$previewThemeStore}
         />
     </div>

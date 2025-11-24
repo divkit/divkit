@@ -2,10 +2,12 @@
     export let node: HTMLElement | undefined = undefined;
     export let title: string;
     export let disabled = false;
+    export let stickLeft = false;
 </script>
 
 <button
     class="canvas-button"
+    class:canvas-button_stick-left={stickLeft}
     {disabled}
     aria-label={title}
     data-custom-tooltip={title}
@@ -33,6 +35,11 @@
         appearance: none;
         transition: background-color .15s ease-in-out;
         cursor: pointer;
+    }
+
+    .canvas-button_stick-left {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
     .canvas-button[disabled] {
