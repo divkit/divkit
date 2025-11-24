@@ -710,14 +710,10 @@
                 return;
             }
 
-            const listBBox = tabsElem.getBoundingClientRect();
-            const elemBBox = elem.getBoundingClientRect();
-
             selectedTabStyles = {
-                top: `${elemBBox.top - listBBox.top}px`,
-                left: `${elemBBox.left - listBBox.left + tabsElem.scrollLeft}px`,
-                width: `${elemBBox.width}px`,
-                height: `${elemBBox.height}px`
+                left: `${elem.offsetLeft}px`,
+                width: `${elem.offsetWidth}px`,
+                height: `${elem.offsetHeight}px`
             };
         });
     }
@@ -852,13 +848,14 @@
                         })}
                     >{item.title}</span>
                 {/each}
+
+                {#if animationType === 'slide' && selectedTabStyles}
+                    <div
+                        class={css['tabs__tabs-highlighter']}
+                        style={makeStyle(selectedTabStyles)}
+                    ></div>
+                {/if}
             </div>
-            {#if animationType === 'slide' && selectedTabStyles}
-                <div
-                    class={css['tabs__tabs-highlighter']}
-                    style={makeStyle(selectedTabStyles)}
-                ></div>
-            {/if}
             <div class={css['tabs__items-text']}>
                 {#each $childStore as item}
                     {@const index = item.index}
