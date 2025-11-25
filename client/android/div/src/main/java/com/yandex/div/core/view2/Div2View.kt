@@ -306,6 +306,7 @@ class Div2View private constructor(
             loadMedia()
             return false
         }
+        mediaWasReleased = false
 
         notifyBindStarted()
         bindOnAttachRunnable?.cancel()
@@ -370,6 +371,7 @@ class Div2View private constructor(
             loadMedia()
             return false
         }
+        mediaWasReleased = false
         notifyBindStarted()
         bindOnAttachRunnable?.cancel()
 
