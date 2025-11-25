@@ -438,6 +438,10 @@ extension GalleryView: ScrollDelegate {
       disableLooping = true
     }
 
+    if isDragging {
+      evaluatePagingDuringDrag(scrollView: scrollView, offset: offset)
+    }
+
     let contentPosition: GalleryViewState.Position = switch model.scrollMode {
     case .default:
       .offset(
@@ -542,6 +546,23 @@ extension GalleryView: ScrollDelegate {
     }
   }
 
+  private func evaluatePagingDuringDrag(
+    scrollView: ScrollView,
+    offset: CGFloat
+  ) {
+    guard let scrollView = scrollView as? UIScrollView,
+          let scrollStartOffset,
+          !model.scrollMode.isDefault else {
+      return
+    }
+
+    let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
+    let currentPage = layout.pageIndex(forContentOffset: offset)
+    if currentPage >= startPage + 1 || currentPage <= startPage - 1 {
+      scrollView.interruptScroll()
+    }
+  }
+
   private func calculateNewInfiniteScrollPosition(_: ScrollView, offset: CGFloat) -> InfiniteScroll
     .Position? {
     guard model.infiniteScroll else { return nil }
@@ -629,6 +650,13 @@ extension GalleryView {
         layout.contentSize.height - bounds.height,
       animated: state.animated
     )
+  }
+}
+
+extension UIScrollView {
+  fileprivate func interruptScroll() {
+    isScrollEnabled = false
+    isScrollEnabled = true
   }
 }
 #endif

@@ -13,6 +13,10 @@ public struct GalleryViewModel: Equatable {
     case `default`
     case autoPaging(inertionEnabled: Bool)
     case fixedPaging(pageSize: CGFloat)
+
+    var isDefault: Bool {
+      self == .default
+    }
   }
 
   public struct Item: Equatable {
