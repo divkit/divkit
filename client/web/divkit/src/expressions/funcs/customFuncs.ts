@@ -59,6 +59,7 @@ export function customFunctionWrap(fn: DivFunction): Func {
     let ast: Node | undefined;
 
     return {
+        name: fn.name,
         args: fn.arguments.map(it => {
             return {
                 type: it.type
@@ -74,6 +75,9 @@ export function customFunctionWrap(fn: DivFunction): Func {
 
             const vars: VariablesMap = new Map();
             args.forEach((arg, index) => {
+                if (arg.type === 'function') {
+                    throw new Error('Incorrect argument type: function');
+                }
                 const instance = createConstVariable(fn.arguments[index].name, arg.type, arg.value);
                 // DatetimeVariable doesnt exist right know, but works fine
                 vars.set(instance.getName(), instance as Variable);

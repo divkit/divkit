@@ -24,7 +24,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -51,7 +52,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -74,7 +76,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{toString(myFunction)}",
@@ -96,7 +100,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

@@ -60,6 +60,8 @@ export function valToString(val: EvalValue, stringifyComplex: boolean): string {
         return '<dict>';
     } else if (val.type === 'array') {
         return '<array>';
+    } else if (val.type === 'function') {
+        return val.value[0].name || 'Function';
     }
 
     // For purpose when new eval value types will be added
@@ -186,6 +188,10 @@ export function convertJsValueToDivKit(
     val: unknown,
     evalType: EvalTypesWithoutDatetime
 ): EvalValue {
+    if (evalType === 'function') {
+        throw new Error('Cannot convert function');
+    }
+
     const jsType = EVAL_TYPE_TO_JS_TYPE[evalType];
 
     let type: string = typeof val;

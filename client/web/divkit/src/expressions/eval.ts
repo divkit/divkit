@@ -32,9 +32,9 @@ import type { CustomFunctions } from './funcs/customFuncs';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
-export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'dict' | 'array';
+export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'dict' | 'array' | 'function';
 
-export type EvalTypesWithoutDatetime = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
+export type EvalTypesWithoutDatetime = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array' | 'function';
 
 export interface EvalValueBase {
     type: string;
@@ -86,8 +86,13 @@ export interface ArrayValue extends EvalValueBase {
     value: unknown[];
 }
 
+export interface FuncValue extends EvalValueBase {
+    type: 'function';
+    value: Func[];
+}
+
 export type EvalValue = StringValue | UrlValue | ColorValue | NumberValue | IntegerValue |
-    BooleanValue | DatetimeValue | DictValue | ArrayValue;
+    BooleanValue | DatetimeValue | DictValue | ArrayValue | FuncValue;
 
 export interface EvalError {
     type: 'error';
@@ -463,7 +468,7 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
             const builtInFindRes = findBestMatchedFunc(funcs, funcName, args);
 
             // Assign errors only there is no match error in user defined funcs
-            if ('func' in builtInFindRes || !findRes) {
+            if ('func' in builtInFindRes || !findRes || findRes.type === 'missing') {
                 findRes = builtInFindRes;
             }
         }
@@ -566,6 +571,14 @@ function evalMethodExpression(ctx: EvalContext, expr: MethodExpression): EvalVal
 
 function evalVariable(ctx: EvalContext, expr: Variable): EvalValue {
     const varName = expr.id.name;
+    const customFuncs = ctx.customFunctions?.get(varName);
+    if (customFuncs) {
+        return {
+            type: 'function',
+            value: customFuncs
+        };
+    }
+
     const variable = ctx.variables.get(varName);
 
     if (variable) {

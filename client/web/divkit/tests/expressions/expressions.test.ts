@@ -9,6 +9,8 @@ import { evalExpression, type EvalResult } from '../../src/expressions/eval';
 import { transformColorValue, valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';
+import { customFunctionWrap, type CustomFunctions } from '../../src/expressions/funcs/customFuncs';
+import type { DivFunction } from '../../typings/common';
 
 const path = require('path');
 const fs = require('fs');
@@ -46,6 +48,7 @@ function convertVals(val: EvalResult) {
 
 function runCase(item: any) {
     const vars = new Map();
+    const customFunctions: CustomFunctions = new Map();
     if (item.variables) {
         for (const variable of item.variables) {
             let value;
@@ -89,6 +92,14 @@ function runCase(item: any) {
             vars.set(variable.name, createVariable(variable.name, variable.type, value));
         }
     }
+    if (item.functions) {
+        for (const func of item.functions) {
+            const fn = func as DivFunction;
+            const list = customFunctions.get(fn.name) || [];
+            list.push(customFunctionWrap(fn));
+            customFunctions.set(fn.name, list);
+        }
+    }
     let ast;
     try {
         ast = parse(item.expression, {
@@ -105,7 +116,7 @@ function runCase(item: any) {
         }
         return;
     }
-    const res = evalExpression(vars, undefined, undefined, ast, {
+    const res = evalExpression(vars, customFunctions, undefined, ast, {
         weekStartDay: item.platform_specific?.web?.weekStartDay || 0
     });
     if (item.expected.value !== '' || res.result.type !== 'error') {

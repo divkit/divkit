@@ -9,6 +9,7 @@ export type FuncArg = EvalTypes | {
 }
 
 export interface Func {
+    name?: string;
     args: FuncArg[];
     cb(ctx: EvalContext, ...args: EvalValue[]): EvalValue;
 }

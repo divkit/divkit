@@ -105,6 +105,12 @@ class ExpressionBinding {
                     usedVars: res.usedVars
                 };
             }
+            if (result.type === 'function') {
+                return {
+                    result: `<${result.value[0]?.name || 'Function'}>` as T,
+                    usedVars: res.usedVars
+                };
+            }
             if (!keepComplex && (result.type === 'array' || result.type === 'dict')) {
                 try {
                     return {
