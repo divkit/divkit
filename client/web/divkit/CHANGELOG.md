@@ -1,3 +1,8 @@
+## 32.28.0 (December 1, 2025)
+
+* Fix active tab scaling inside the scaled element.
+
+
 ## 32.25.0 (November 10, 2025)
 
 * Added support for the `property` variable type.

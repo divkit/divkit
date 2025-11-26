@@ -1,3 +1,12 @@
+## 32.28.0
+
+# iOS Client:
+* Fixed a possible scroll rollback when performing a wide swipe.
+
+# Web Client:
+* Fix active tab scaling inside the scaled element.
+
+
 ## 32.27.0
 
 # Android Client:
