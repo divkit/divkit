@@ -21,6 +21,11 @@
           "enum": [
             "gif"
           ]
+        },
+        "preview_url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_gif_image_preview_url",
+          "platforms": []
         }
       }
     }
