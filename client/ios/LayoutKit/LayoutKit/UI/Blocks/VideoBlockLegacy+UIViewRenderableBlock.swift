@@ -24,6 +24,7 @@ extension VideoBlockLegacy {
     if videoView.videoAssetHolder?.url != videoAssetHolder.url {
       videoView.videoAssetHolder = videoAssetHolder
     }
+    videoView.preview = preview
   }
 }
 
@@ -41,18 +42,31 @@ private final class VideoBlockLegacyView: BlockView {
     }
   }
 
+  var preview: ImageHolder? {
+    didSet {
+      updatePreview()
+    }
+  }
+
   let autoplayAllowed: ObservableVariableConnection<Bool>
 
   let effectiveBackgroundColor: UIColor? = nil
 
   private let disposePool = AutodisposePool()
   private let avPlayer = AVPlayer()
+  private let previewImageView = UIImageView()
+  private var isObservingRate = false
 
   private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
 
   init() {
     autoplayAllowed = .init(initialValue: false)
     super.init(frame: .zero)
+
+    previewImageView.contentMode = .scaleAspectFill
+    previewImageView.clipsToBounds = true
+    addSubview(previewImageView)
+
     autoplayAllowed.target.newValues.skipRepeats().addObserver { _ in
       self.resumePlayer()
     }.dispose(in: disposePool)
@@ -79,13 +93,64 @@ private final class VideoBlockLegacyView: BlockView {
 
   deinit {
     NotificationCenter.default.removeObserver(self)
+    if isObservingRate {
+      avPlayer.removeObserver(self, forKeyPath: "rate")
+    }
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    previewImageView.frame = bounds
+  }
+
+  override func observeValue(
+    forKeyPath keyPath: String?,
+    of object: Any?,
+    change _: [NSKeyValueChangeKey: Any]?,
+    context _: UnsafeMutableRawPointer?
+  ) {
+    if keyPath == "rate", let player = object as? AVPlayer, player === avPlayer {
+      if player.isPlaying {
+        previewImageView.isHidden = true
+      }
+    }
   }
 
   func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 
+  private func updatePreview() {
+    guard let preview else {
+      previewImageView.image = nil
+      previewImageView.isHidden = true
+      return
+    }
+
+    if case let .image(placeholderImage) = preview.placeholder {
+      previewImageView.image = placeholderImage
+      previewImageView.isHidden = false
+    }
+
+    _ = preview.requestImageWithCompletion { [weak self] image in
+      guard let self else { return }
+      if let image, !avPlayer.isPlaying {
+        previewImageView.image = image
+        previewImageView.isHidden = false
+      }
+    }
+  }
+
   private func configurePlayer(with playerItem: AVPlayerItem) {
     onMainThreadAsync { [self] in
       avPlayer.replaceCurrentItem(with: AVPlayerItem(asset: playerItem.asset))
+      if !isObservingRate {
+        avPlayer.addObserver(
+          self,
+          forKeyPath: "rate",
+          options: [.new],
+          context: nil
+        )
+        isObservingRate = true
+      }
       resumePlayer()
     }
   }
@@ -101,6 +166,12 @@ private final class VideoBlockLegacyView: BlockView {
       avPlayer.seek(to: .zero)
       resumePlayer()
     }
+  }
+}
+
+extension AVPlayer {
+  fileprivate var isPlaying: Bool {
+    rate > 0
   }
 }
 #endif

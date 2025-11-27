@@ -20,6 +20,7 @@ public final class VideoBlockLegacy: BlockWithTraits {
   public let videoAssetHolder: VideoAssetHolder
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
+  public let preview: ImageHolder?
 
   public let intrinsicContentWidth: CGFloat = 0
 
@@ -33,17 +34,21 @@ public final class VideoBlockLegacy: BlockWithTraits {
     videoAssetHolder: VideoAssetHolder,
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait,
-    autoplayAllowed: ObservableVariable<Bool>
+    autoplayAllowed: ObservableVariable<Bool>,
+    preview: ImageHolder? = nil
   ) {
     self.videoAssetHolder = videoAssetHolder
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.autoplayAllowed = autoplayAllowed
+    self.preview = preview
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat { 0 }
 
-  public func getImageHolders() -> [ImageHolder] { [] }
+  public func getImageHolders() -> [ImageHolder] {
+    preview.asArray()
+  }
 
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? VideoBlockLegacy else {
