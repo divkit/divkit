@@ -12,7 +12,6 @@
     import type { SwitchElements } from '../../types/switch-elements';
     import type { Orientation } from '../../types/orientation';
     import type { MaybeMissing } from '../../expressions/json';
-    import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext, ComponentKey } from '../../types/componentContext';
     import type { Variable } from '../../expressions/variable';
@@ -27,7 +26,6 @@
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
-    import { joinTemplateSizes } from '../../utils/joinTemplateSizes';
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
@@ -42,7 +40,6 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     interface ChildInfo {
-        size?: MaybeMissing<Size>;
         visibility?: string;
     }
 
@@ -84,7 +81,6 @@
         'margin-right'?: string;
         'margin-bottom'?: string;
     } | undefined;
-    let templateSizes: string[] = [];
     let childStore: Readable<ChildInfo[]>;
     let scrollerStyle: Style = {};
     let scrollSnap = false;
@@ -292,14 +288,11 @@
         };
     }
 
-    $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
     $: {
         let children: Readable<ChildInfo>[] = [];
 
         items.forEach(item => {
-            const itemSize = orientation === 'horizontal' ? 'width' : 'height';
             children.push(item.getDerivedFromVars({
-                size: item.json[itemSize],
                 visibility: item.json.visibility
             }));
         });
@@ -311,39 +304,18 @@
     $: itemsGrid = rebuildItemsGrid(items, $childStore, columns);
 
     $: {
-        templateSizes = [];
-        if (columns > 1) {
-            // TODO: think about match_parent in this task DIVKIT-307
-            templateSizes.push('auto');
-        } else {
-            $childStore.forEach((childInfo, index) => {
-                if (childInfo.visibility === 'gone') {
-                    return;
-                }
-
-                if ((!childInfo.size && orientation === 'horizontal') || childInfo.size?.type === 'match_parent') {
-                    templateSizes.push('100%');
-                } else {
-                    templateSizes.push('max-content');
-                }
-
-                if (index + 1 < $childStore.length) {
-                    templateSizes.push('auto');
-                }
-            });
-            templateSizes.push('auto');
-        }
-    }
-
-    $: {
         const newScrollerStyle: Style = {};
         let newChildLayoutParams: LayoutParams = {};
         scrollSnap = false;
 
+        newChildLayoutParams.treatMatchParentAs100 = true;
+
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentVAlign = align;
+            newChildLayoutParams.parentContainerOrientation = 'horizontal';
         } else {
             newChildLayoutParams.parentHAlign = align;
+            newChildLayoutParams.parentContainerOrientation = 'vertical';
         }
 
         if ($jsonScrollMode === 'paging') {
@@ -365,10 +337,6 @@
     $: gridStyle = {
         padding,
         'grid-gap': crossGridGap
-    };
-
-    $: columnStyle = {
-        [gridTemplate]: joinTemplateSizes(templateSizes)
     };
 
     $: mods = {
@@ -702,7 +670,6 @@
             {#each itemsGrid as itemsRow, rowIndex}
                 <div
                     class={css.gallery__items}
-                    style={makeStyle(columnStyle)}
                     bind:this={galleryItemsWrappers[rowIndex]}
                 >
                     {#each itemsRow as item}
@@ -720,7 +687,7 @@
                         />
                     {/each}
 
-                    <div style={makeStyle(lastPaddingSize)}></div>
+                    <div class={css.gallery__gap} style={makeStyle(lastPaddingSize)}></div>
                 </div>
             {/each}
         </div>

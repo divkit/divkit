@@ -1,7 +1,8 @@
 {
   "description": "Horizontal container with aspect height and items with match_parent height with constraints",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "test_container": {

@@ -1,0 +1,93 @@
+{
+  "description": "Vertical container with layout_mode = wrap and elements with match_parent height with constraints",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 3
+        }
+      },
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "height": {
+            "type": "fixed",
+            "value": 140
+          },
+          "layout_mode": "wrap",
+          "orientation": "vertical",
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent"
+              },
+              "text": "No constraints"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 160
+                }
+              },
+              "text": "Min height > container height"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 60
+                }
+              },
+              "text": "Max height = 60"
+            },
+            {
+              "type": "item",
+              "height": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 70
+                }
+              },
+              "text": "Max height = 70"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

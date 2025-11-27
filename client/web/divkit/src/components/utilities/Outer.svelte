@@ -73,7 +73,6 @@
     import { Truthy } from '../../utils/truthy';
     import { shadowToCssBoxShadow } from '../../utils/shadow';
     import { isDeepEqual } from '../../utils/isDeepEqual';
-    import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
     import { layoutProvider } from '../../use/layoutProvider';
     import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
@@ -426,34 +425,6 @@
                 }
             }
 
-            if (type === 'wrap_content') {
-                const width = $jsonWidth as WrapContentSize;
-                let min;
-                let max;
-                if (width.min_size && isNonNegativeNumber(width.min_size.value)) {
-                    min = width.min_size.value;
-                }
-                if (width.max_size && isNonNegativeNumber(width.max_size.value)) {
-                    max = width.max_size.value;
-                }
-                if (min !== undefined && max !== undefined && min > max) {
-                    componentContext.logError(wrapError(new Error('Element has incorrect width constraints (min size is bigger than max size).'), {
-                        additional: {
-                            id: componentContext.json.id,
-                            minSize: min + 'dp',
-                            maxSize: max + 'dp'
-                        }
-                    }));
-                    min = max = undefined;
-                }
-                if (min !== undefined) {
-                    newWidthMin = pxToEm(min);
-                }
-                if (max !== undefined) {
-                    newWidthMax = pxToEm(max);
-                }
-            }
-
             if (type === 'match_parent' || !type) {
                 componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
@@ -470,7 +441,8 @@
             if (
                 layoutParams.parentLayoutOrientation === 'vertical' ||
                 layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerKnownWidth ||
-                layoutParams.stretchWidth
+                layoutParams.stretchWidth ||
+                layoutParams.treatMatchParentAs100
             ) {
                 const leftMargin = ($direction === 'ltr' ? $jsonMargins?.start : $jsonMargins?.end) ??
                     $jsonMargins?.left ??
@@ -487,11 +459,42 @@
                 } else {
                     newWidth = totalWidth;
                 }
+                if (layoutParams.parentContainerOrientation === 'horizontal') {
+                    // newWidthFill = true;
+                }
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
                 newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
                 if (layoutParams.parentContainerWrap) {
                     newWidthFill = true;
                 }
+            }
+        }
+
+        if (type === 'wrap_content' || type === 'match_parent') {
+            const width = $jsonWidth as (WrapContentSize | MatchParentSize);
+            let min;
+            let max;
+            if (width.min_size && isNonNegativeNumber(width.min_size.value)) {
+                min = width.min_size.value;
+            }
+            if (width.max_size && isNonNegativeNumber(width.max_size.value)) {
+                max = width.max_size.value;
+            }
+            if (min !== undefined && max !== undefined && min > max) {
+                componentContext.logError(wrapError(new Error('Element has incorrect width constraints (min size is bigger than max size).'), {
+                    additional: {
+                        id: componentContext.json.id,
+                        minSize: min + 'dp',
+                        maxSize: max + 'dp'
+                    }
+                }));
+                min = max = undefined;
+            }
+            if (min !== undefined) {
+                newWidthMin = pxToEm(min);
+            }
+            if (max !== undefined) {
+                newWidthMax = pxToEm(max);
             }
         }
 
@@ -554,7 +557,8 @@
             if (
                 layoutParams.parentLayoutOrientation === 'horizontal' ||
                 layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerKnownHeight ||
-                layoutParams.stretchHeight
+                layoutParams.stretchHeight ||
+                layoutParams.treatMatchParentAs100
             ) {
                 const topMargin = $jsonMargins?.top ?? 0;
                 const bottomMargin = $jsonMargins?.bottom ?? 0;
@@ -566,6 +570,9 @@
                     newHeightMin = totalHeight;
                 } else {
                     newHeight = totalHeight;
+                }
+                if (layoutParams.parentContainerOrientation === 'vertical') {
+                    // newHeightFill = true;
                 }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
                 newFlexGrow = ($jsonHeight as MatchParentSize)?.weight || 1;
@@ -585,38 +592,38 @@
                 }
             }
 
-            if (type === 'wrap_content') {
-                const height = $jsonHeight as WrapContentSize;
-                let min;
-                let max;
-                if (height.min_size && isNonNegativeNumber(height.min_size.value)) {
-                    min = height.min_size.value;
-                }
-                if (height.max_size && isNonNegativeNumber(height.max_size.value)) {
-                    max = height.max_size.value;
-                }
-                if (min !== undefined && max !== undefined && min > max) {
-                    componentContext.logError(wrapError(new Error('Element has incorrect height constraints (min size is bigger than max size).'), {
-                        additional: {
-                            id: componentContext.json.id,
-                            minSize: min + 'dp',
-                            maxSize: max + 'dp'
-                        }
-                    }));
-                    min = max = undefined;
-                }
-                if (min !== undefined) {
-                    newHeightMin = pxToEm(min);
-                }
-                if (max !== undefined) {
-                    newHeightMax = pxToEm(max);
-                }
-            }
-
             if (type === 'match_parent') {
                 componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
                 }));
+            }
+        }
+
+        if (type === 'match_parent' || type === 'wrap_content') {
+            const height = $jsonHeight as (WrapContentSize | MatchParentSize);
+            let min;
+            let max;
+            if (height.min_size && isNonNegativeNumber(height.min_size.value)) {
+                min = height.min_size.value;
+            }
+            if (height.max_size && isNonNegativeNumber(height.max_size.value)) {
+                max = height.max_size.value;
+            }
+            if (min !== undefined && max !== undefined && min > max) {
+                componentContext.logError(wrapError(new Error('Element has incorrect height constraints (min size is bigger than max size).'), {
+                    additional: {
+                        id: componentContext.json.id,
+                        minSize: min + 'dp',
+                        maxSize: max + 'dp'
+                    }
+                }));
+                min = max = undefined;
+            }
+            if (min !== undefined) {
+                newHeightMin = pxToEm(min);
+            }
+            if (max !== undefined) {
+                newHeightMax = pxToEm(max);
             }
         }
 

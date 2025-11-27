@@ -15,12 +15,16 @@
     "min_size": {
       "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_min",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "max_size": {
       "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_max",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   },
   "required": [

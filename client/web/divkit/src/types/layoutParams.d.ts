@@ -16,6 +16,7 @@ export interface LayoutParams {
     parentVerticalWrapContent?: boolean;
     stretchWidth?: boolean;
     stretchHeight?: boolean;
+    treatMatchParentAs100?: boolean;
     overlapParent?: boolean;
     gridArea?: {
         x: number;

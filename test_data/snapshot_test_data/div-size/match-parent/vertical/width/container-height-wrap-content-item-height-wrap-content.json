@@ -1,7 +1,8 @@
 {
   "description": "Vertical container with wrap_content width and height and items with wrap_content height and match_parent width with constraints",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "test_container": {

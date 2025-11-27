@@ -1,0 +1,85 @@
+{
+  "description": "Horizontal container with layout_mode = wrap and elements with match_parent width with constraints.",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 3
+        }
+      },
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 360
+          },
+          "layout_mode": "wrap",
+          "orientation": "horizontal",
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent"
+              },
+              "text": "No constraints"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 400
+                }
+              },
+              "text": "Min width > container width"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 150
+                }
+              },
+              "text": "Max width = 150"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 200
+                }
+              },
+              "text": "Max width = 200"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

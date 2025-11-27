@@ -1,7 +1,8 @@
 {
   "description": "Vertical gallery with 2 columns with paddings and elements with match_parent width with constraints",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "item": {

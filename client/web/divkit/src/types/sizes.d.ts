@@ -8,6 +8,8 @@ export interface FixedSize {
 export interface MatchParentSize {
     type: 'match_parent';
     weight?: number;
+    min_size?: ConstraintSize;
+    max_size?: ConstraintSize;
 }
 
 export interface ConstraintSize {
