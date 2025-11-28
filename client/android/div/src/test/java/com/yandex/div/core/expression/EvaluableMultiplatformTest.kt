@@ -69,7 +69,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         warnings.clear()
         errors.clear()
         testCase = caseOrError.getCaseOrThrow()
-        val testDivData = createDivDataFromTestVars(testCase.variables, testParsingLogger)
+        val testDivData = createDivDataFromTestVars(testCase.variables, testCase.functions, testParsingLogger)
 
         runtimeProvider = ExpressionsRuntimeProvider(
             mockDivVariableController,

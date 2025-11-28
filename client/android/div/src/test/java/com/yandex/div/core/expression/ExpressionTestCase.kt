@@ -7,6 +7,7 @@ data class ExpressionTestCase(
     val fileName: String,
     val expression: String,
     val variables: List<JSONObject>,
+    val functions: List<JSONObject>,
     val platform: List<String>,
     val expectedType: String,
     val expectedValue: Any,
@@ -29,11 +30,13 @@ data class ExpressionTestCase(
                 else -> expectedValue.toString()
             }
             val description = "$formattedExpression -> $result"
-            return if (variables.isEmpty()) {
-                description
-            } else {
-                "$description (variables hash ${variables.hashCode()})"
+            val variablesHash = if (variables.isEmpty()) "" else ("variables hash " + variables.hashCode())
+            val functionsHash = if (functions.isEmpty()) "" else ("functions hash " + functions.hashCode())
+            if (variablesHash.isEmpty() && functionsHash.isEmpty()) {
+                return description
             }
+            return "$description ($variablesHash" +
+                (if (variablesHash.isNotEmpty() && functionsHash.isNotEmpty()) ", " else "") + "$functionsHash)"
         }
 
     override fun toString(): String {

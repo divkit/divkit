@@ -19,6 +19,7 @@ import com.yandex.div.test.expression.TestCaseParsingError
 import com.yandex.div.test.expression.parseAsUTC
 import com.yandex.div2.DivData
 import com.yandex.div2.DivEvaluableType
+import com.yandex.div2.DivFunction
 import com.yandex.div2.DivVariable
 import org.json.JSONArray
 import org.json.JSONException
@@ -43,6 +44,7 @@ object ExpressionTestCaseUtils {
 
     private const val CASES_FIELD = "cases"
     private const val CASE_VARIABLES_FIELD = "variables"
+    private const val CASE_FUNCTIONS_FIELD = "functions"
     private const val CASE_VARIABLE_NAME_FIELD = "variable_name"
     private const val CASE_EXPECTED_VALUE_FIELD = "expected"
     private const val CASE_EXPECTED_WARNINGS_FIELD = "expected_warnings"
@@ -63,6 +65,7 @@ object ExpressionTestCaseUtils {
                 fileName,
                 json.getString(CASE_EXPRESSION_VALUE_FIELD),
                 json.optJSONArray(CASE_VARIABLES_FIELD).toListOfJSONObject(),
+                json.optJSONArray(CASE_FUNCTIONS_FIELD).toListOfJSONObject(),
                 parsePlatform(json),
                 json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).type,
                 json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).getValue(),
@@ -181,13 +184,19 @@ object ExpressionTestCaseUtils {
         return IntegrationTestCase(name, data, actions, expected)
     }
 
-    fun createDivDataFromTestVars(vars: List<JSONObject>, logger: ParsingErrorLogger): DivData {
+    fun createDivDataFromTestVars(
+        vars: List<JSONObject>,
+        functions: List<JSONObject>,
+        logger: ParsingErrorLogger
+    ): DivData {
         val env = DivParsingEnvironment(logger)
         val divVars: List<DivVariable> = vars.map { json -> DivVariable(env, json) }
+        val divFunctions = functions.map { DivFunction(env, it) }
         return DivData(
             logId = "testLogId",
             states = emptyList(),
             variables = divVars,
+            functions = divFunctions,
         )
     }
 
