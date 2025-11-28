@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.net.Uri
 import android.util.AttributeSet
+import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.widget.DivExtendableView
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div2.Div
@@ -18,6 +19,8 @@ internal open class DivGifImageView @JvmOverloads constructor(
     MediaReleasable {
 
     internal var gifUrl: Uri? = null
+    internal var loadPreviewReference: LoadReference? = null
+    internal var previewUrl: Uri? = null
 
     init {
         cropToPadding = true
