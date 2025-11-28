@@ -71,6 +71,7 @@ data class GifImage internal constructor(
             pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
             pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             preview = additive.preview ?: properties.preview,
+            previewUrl = additive.previewUrl ?: properties.previewUrl,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scale = additive.scale ?: properties.scale,
@@ -238,6 +239,10 @@ data class GifImage internal constructor(
          */
         val preview: Property<String>?,
         /**
+         * Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
+         */
+        val previewUrl: Property<Url>?,
+        /**
          * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
@@ -346,6 +351,7 @@ data class GifImage internal constructor(
             result.tryPutProperty("press_end_actions", pressEndActions)
             result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("preview", preview)
+            result.tryPutProperty("preview_url", previewUrl)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scale", scale)
@@ -403,6 +409,7 @@ data class GifImage internal constructor(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -458,6 +465,7 @@ fun DivScope.gifImage(
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
     preview: String? = null,
+    previewUrl: Url? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
@@ -511,6 +519,7 @@ fun DivScope.gifImage(
         pressEndActions = valueOrNull(pressEndActions),
         pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
+        previewUrl = valueOrNull(previewUrl),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
@@ -566,6 +575,7 @@ fun DivScope.gifImage(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -621,6 +631,7 @@ fun DivScope.gifImageProps(
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
     preview: String? = null,
+    previewUrl: Url? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
@@ -673,6 +684,7 @@ fun DivScope.gifImageProps(
     pressEndActions = valueOrNull(pressEndActions),
     pressStartActions = valueOrNull(pressStartActions),
     preview = valueOrNull(preview),
+    previewUrl = valueOrNull(previewUrl),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     scale = valueOrNull(scale),
@@ -727,6 +739,7 @@ fun DivScope.gifImageProps(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -782,6 +795,7 @@ fun TemplateScope.gifImageRefs(
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
+    previewUrl: ReferenceProperty<Url>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
@@ -834,6 +848,7 @@ fun TemplateScope.gifImageRefs(
     pressEndActions = pressEndActions,
     pressStartActions = pressStartActions,
     preview = preview,
+    previewUrl = previewUrl,
     reuseId = reuseId,
     rowSpan = rowSpan,
     scale = scale,
@@ -888,6 +903,7 @@ fun TemplateScope.gifImageRefs(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -943,6 +959,7 @@ fun GifImage.override(
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
     preview: String? = null,
+    previewUrl: Url? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
@@ -996,6 +1013,7 @@ fun GifImage.override(
         pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
         pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         preview = valueOrNull(preview) ?: properties.preview,
+        previewUrl = valueOrNull(previewUrl) ?: properties.previewUrl,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scale = valueOrNull(scale) ?: properties.scale,
@@ -1051,6 +1069,7 @@ fun GifImage.override(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1106,6 +1125,7 @@ fun GifImage.defer(
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
+    previewUrl: ReferenceProperty<Url>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
@@ -1159,6 +1179,7 @@ fun GifImage.defer(
         pressEndActions = pressEndActions ?: properties.pressEndActions,
         pressStartActions = pressStartActions ?: properties.pressStartActions,
         preview = preview ?: properties.preview,
+        previewUrl = previewUrl ?: properties.previewUrl,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
@@ -1214,6 +1235,7 @@ fun GifImage.defer(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1269,6 +1291,7 @@ fun GifImage.modify(
     pressEndActions: Property<List<Action>>? = null,
     pressStartActions: Property<List<Action>>? = null,
     preview: Property<String>? = null,
+    previewUrl: Property<Url>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
@@ -1322,6 +1345,7 @@ fun GifImage.modify(
         pressEndActions = pressEndActions ?: properties.pressEndActions,
         pressStartActions = pressStartActions ?: properties.pressStartActions,
         preview = preview ?: properties.preview,
+        previewUrl = previewUrl ?: properties.previewUrl,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
@@ -1354,6 +1378,7 @@ fun GifImage.modify(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1373,6 +1398,7 @@ fun GifImage.evaluate(
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
+    previewUrl: ExpressionProperty<Url>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<ImageScale>? = null,
@@ -1413,6 +1439,7 @@ fun GifImage.evaluate(
         pressEndActions = properties.pressEndActions,
         pressStartActions = properties.pressStartActions,
         preview = preview ?: properties.preview,
+        previewUrl = previewUrl ?: properties.previewUrl,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
@@ -1468,6 +1495,7 @@ fun GifImage.evaluate(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1523,6 +1551,7 @@ fun Component<GifImage>.override(
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
     preview: String? = null,
+    previewUrl: Url? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
@@ -1577,6 +1606,7 @@ fun Component<GifImage>.override(
         pressEndActions = valueOrNull(pressEndActions),
         pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
+        previewUrl = valueOrNull(previewUrl),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
@@ -1632,6 +1662,7 @@ fun Component<GifImage>.override(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1687,6 +1718,7 @@ fun Component<GifImage>.defer(
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
+    previewUrl: ReferenceProperty<Url>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
@@ -1741,6 +1773,7 @@ fun Component<GifImage>.defer(
         pressEndActions = pressEndActions,
         pressStartActions = pressStartActions,
         preview = preview,
+        previewUrl = previewUrl,
         reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
@@ -1773,6 +1806,7 @@ fun Component<GifImage>.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1792,6 +1826,7 @@ fun Component<GifImage>.evaluate(
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
+    previewUrl: ExpressionProperty<Url>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<ImageScale>? = null,
@@ -1833,6 +1868,7 @@ fun Component<GifImage>.evaluate(
         pressEndActions = null,
         pressStartActions = null,
         preview = preview,
+        previewUrl = previewUrl,
         reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
@@ -1888,6 +1924,7 @@ fun Component<GifImage>.evaluate(
  * @param pressEndActions Actions performed after clicking/tapping an element.
  * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param previewUrl Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
@@ -1943,6 +1980,7 @@ fun Component<GifImage>.modify(
     pressEndActions: Property<List<Action>>? = null,
     pressStartActions: Property<List<Action>>? = null,
     preview: Property<String>? = null,
+    previewUrl: Property<Url>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
@@ -1997,6 +2035,7 @@ fun Component<GifImage>.modify(
         pressEndActions = pressEndActions,
         pressStartActions = pressStartActions,
         preview = preview,
+        previewUrl = previewUrl,
         reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
