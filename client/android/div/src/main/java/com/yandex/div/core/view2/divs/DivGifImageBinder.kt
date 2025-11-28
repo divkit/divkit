@@ -113,28 +113,7 @@ internal class DivGifImageBinder @Inject constructor(
         resetImageLoaded()
         loadReference?.cancel()
 
-        // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
-        placeholderLoader.applyPlaceholder(
-            this,
-            errorCollector,
-            div.preview?.evaluate(resolver),
-            div.placeholderColor.evaluate(resolver),
-            synchronous = false,
-            onSetPlaceholder = {
-                if (!isImageLoaded && !isImagePreview) {
-                    setPlaceholder(it)
-                }
-            },
-            onSetPreview = {
-                if (!isImageLoaded) {
-                    when (it) {
-                        is ImageRepresentation.Bitmap -> setPreview(it.value)
-                        is ImageRepresentation.PictureDrawable -> setPreview(it.value)
-                    }
-                    previewLoaded()
-                }
-            }
-        )
+        applyPlaceholders(divView, resolver, div, errorCollector)
 
         gifUrl = newGifUrl
 
@@ -173,6 +152,82 @@ internal class DivGifImageBinder @Inject constructor(
     private fun DivGifImageView.loadDrawable(cachedBitmap: CachedBitmap) {
         LoadDrawableOnPostPTask(WeakReference(this), cachedBitmap)
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
+
+    private fun DivGifImageView.applyPlaceholders(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        div: DivGifImage,
+        errorCollector: ErrorCollector,
+    ) {
+
+        val preview = div.preview?.evaluate(resolver)
+
+        // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
+        placeholderLoader.applyPlaceholder(
+            imageView = this,
+            errorCollector = errorCollector,
+            currentPreview = preview,
+            currentPlaceholderColor = div.placeholderColor.evaluate(resolver),
+            synchronous = false,
+            onSetPlaceholder = {
+                if (!isImageLoaded && !isImagePreview) {
+                    setPlaceholder(it)
+                }
+            },
+            onSetPreview = {
+                if (!isImageLoaded) {
+                    when (it) {
+                        is ImageRepresentation.Bitmap -> setPreview(it.value)
+                        is ImageRepresentation.PictureDrawable -> setPreview(it.value)
+                    }
+                    previewLoaded()
+                }
+            }
+        )
+
+        val newPreviewUrl = div.previewUrl?.evaluate(resolver)
+        if (preview != null ||
+            newPreviewUrl == null ||
+            isImageLoaded ||
+            previewUrl == newPreviewUrl
+        ) return
+
+        previewUrl = newPreviewUrl
+        applyPreviewUrl(divView, newPreviewUrl.toString())
+    }
+
+    private fun DivGifImageView.applyPreviewUrl(divView: Div2View, newPreviewUrl: String) {
+        loadPreviewReference?.cancel()
+
+        val reference = imageLoader.loadImage(
+            newPreviewUrl,
+            object : DivIdLoggingImageDownloadCallback(divView) {
+                override fun onSuccess(cachedBitmap: CachedBitmap) {
+                    super.onSuccess(cachedBitmap)
+                    if (!isImageLoaded) {
+                        setPreview(cachedBitmap.bitmap)
+                        previewLoaded()
+                    }
+                }
+
+                override fun onSuccess(drawable: Drawable) {
+                    super.onSuccess(drawable)
+                    if (!isImageLoaded) {
+                        setPreview(drawable)
+                        previewLoaded()
+                    }
+                }
+
+                override fun onError() {
+                    super.onError()
+                    previewUrl = null
+                }
+            }
+        )
+
+        divView.addLoadReference(reference, this)
+        loadPreviewReference = reference
     }
 
     fun loadGifImage(
