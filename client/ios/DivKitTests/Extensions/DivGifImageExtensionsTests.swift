@@ -61,6 +61,36 @@ final class DivGifImageExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithPreviewUrl() {
+    let block = makeBlock(
+      divGifImage(
+        gifUrl: "https://image.url",
+        height: fixedSize(200),
+        previewUrl: "https://preview.url",
+        width: fixedSize(100)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: AnimatableImageBlock(
+          imageHolder: ImageWithPreviewHolder(
+            mainHolder: FakeImageHolder(),
+            previewHolder: FakeImageHolder()
+          ),
+          widthTrait: .fixed(100),
+          height: .trait(.fixed(200)),
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
+        ),
+        accessibilityElement: accessibility(traits: .image)
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WhenWidthIsWrapContent_UsesIntrinsicContentSize() {
     let block = makeBlock(
       divGifImage(

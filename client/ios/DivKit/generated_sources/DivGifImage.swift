@@ -40,6 +40,7 @@ public final class DivGifImage: DivBase, Sendable {
   public let pressEndActions: [DivAction]?
   public let pressStartActions: [DivAction]?
   public let preview: Expression<String>?
+  public let previewUrl: Expression<URL>?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scale: Expression<DivImageScale> // default value: fill
@@ -99,6 +100,10 @@ public final class DivGifImage: DivBase, Sendable {
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(preview)
+  }
+
+  public func resolvePreviewUrl(_ resolver: ExpressionResolver) -> URL? {
+    resolver.resolveUrl(previewUrl)
   }
 
   public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
@@ -164,6 +169,7 @@ public final class DivGifImage: DivBase, Sendable {
     pressEndActions: [DivAction]? = nil,
     pressStartActions: [DivAction]? = nil,
     preview: Expression<String>? = nil,
+    previewUrl: Expression<URL>? = nil,
     reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     scale: Expression<DivImageScale>? = nil,
@@ -215,6 +221,7 @@ public final class DivGifImage: DivBase, Sendable {
     self.pressEndActions = pressEndActions
     self.pressStartActions = pressStartActions
     self.preview = preview
+    self.previewUrl = previewUrl
     self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scale = scale ?? .value(.fill)
@@ -316,41 +323,46 @@ extension DivGifImage: Equatable {
     }
     guard
       lhs.preview == rhs.preview,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.previewUrl == rhs.previewUrl,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
+    else {
+      return false
+    }
+    guard
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -398,6 +410,7 @@ extension DivGifImage: Serializable {
     result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
     result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
     result["preview"] = preview?.toValidSerializationValue()
+    result["preview_url"] = previewUrl?.toValidSerializationValue()
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scale"] = scale.toValidSerializationValue()

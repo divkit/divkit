@@ -61,6 +61,7 @@ public func divGifImage(
   gifUrl: String,
   height: DivSize? = nil,
   id: String? = nil,
+  previewUrl: String? = nil,
   width: DivSize? = nil
 ) -> Div {
   .divGifImage(DivGifImage(
@@ -68,6 +69,7 @@ public func divGifImage(
     gifUrl: .value(url(gifUrl)),
     height: height,
     id: id,
+    previewUrl: previewUrl.map { .value(url($0)) },
     width: width
   ))
 }
