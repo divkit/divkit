@@ -15,10 +15,17 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let imageHolder = context.imageHolderFactory.make(
+    let placeholder = resolvePlaceholder(expressionResolver)
+    var imageHolder = context.imageHolderFactory.make(
       resolveGifUrl(expressionResolver),
-      resolvePlaceholder(expressionResolver)
+      placeholder
     )
+
+    if let previewUrl = resolvePreviewUrl(expressionResolver) {
+      let previewHolder = context.imageHolderFactory.make(previewUrl, placeholder)
+      imageHolder = ImageWithPreviewHolder(mainHolder: imageHolder, previewHolder: previewHolder)
+    }
+
     let widthTrait = resolveContentWidthTrait(context)
     let height = resolveHeight(context)
 

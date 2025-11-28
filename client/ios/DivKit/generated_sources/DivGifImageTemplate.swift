@@ -41,6 +41,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
   public let pressEndActions: Field<[DivActionTemplate]>?
   public let pressStartActions: Field<[DivActionTemplate]>?
   public let preview: Field<Expression<String>>?
+  public let previewUrl: Field<Expression<URL>>?
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let scale: Field<Expression<DivImageScale>>? // default value: fill
@@ -95,6 +96,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActions: dictionary.getOptionalArray("press_end_actions", templateToType: templateToType),
       pressStartActions: dictionary.getOptionalArray("press_start_actions", templateToType: templateToType),
       preview: dictionary.getOptionalExpressionField("preview"),
+      previewUrl: dictionary.getOptionalExpressionField("preview_url", transform: URL.makeFromNonEncodedString),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       scale: dictionary.getOptionalExpressionField("scale"),
@@ -150,6 +152,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     pressEndActions: Field<[DivActionTemplate]>? = nil,
     pressStartActions: Field<[DivActionTemplate]>? = nil,
     preview: Field<Expression<String>>? = nil,
+    previewUrl: Field<Expression<URL>>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     scale: Field<Expression<DivImageScale>>? = nil,
@@ -202,6 +205,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     self.pressEndActions = pressEndActions
     self.pressStartActions = pressStartActions
     self.preview = preview
+    self.previewUrl = previewUrl
     self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scale = scale
@@ -255,6 +259,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     let pressEndActionsValue = { parent?.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let pressStartActionsValue = { parent?.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let previewValue = { parent?.preview?.resolveOptionalValue(context: context) ?? .noValue }()
+    let previewUrlValue = { parent?.previewUrl?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
     let scaleValue = { parent?.scale?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -306,6 +311,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
       pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
+      previewUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview_url", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
@@ -366,6 +372,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActions: { pressEndActionsValue.value }(),
       pressStartActions: { pressStartActionsValue.value }(),
       preview: { previewValue.value }(),
+      previewUrl: { previewUrlValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
       scale: { scaleValue.value }(),
@@ -424,6 +431,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     var pressEndActionsValue: DeserializationResult<[DivAction]> = .noValue
     var pressStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var previewValue: DeserializationResult<Expression<String>> = { parent?.preview?.value() ?? .noValue }()
+    var previewUrlValue: DeserializationResult<Expression<URL>> = { parent?.previewUrl?.value() ?? .noValue }()
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
     var scaleValue: DeserializationResult<Expression<DivImageScale>> = { parent?.scale?.value() ?? .noValue }()
@@ -613,6 +621,11 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
         _ = {
           if key == "preview" {
            previewValue = deserialize(__dictValue).merged(with: previewValue)
+          }
+        }()
+        _ = {
+          if key == "preview_url" {
+           previewUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: previewUrlValue)
           }
         }()
         _ = {
@@ -866,6 +879,11 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.previewUrl?.link {
+           previewUrlValue = previewUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+          }
+        }()
+        _ = {
          if key == parent?.reuseId?.link {
            reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
           }
@@ -1017,6 +1035,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
       pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
+      previewUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview_url", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
@@ -1077,6 +1096,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActions: { pressEndActionsValue.value }(),
       pressStartActions: { pressStartActionsValue.value }(),
       preview: { previewValue.value }(),
+      previewUrl: { previewUrlValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
       scale: { scaleValue.value }(),
@@ -1140,6 +1160,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActions: pressEndActions ?? mergedParent.pressEndActions,
       pressStartActions: pressStartActions ?? mergedParent.pressStartActions,
       preview: preview ?? mergedParent.preview,
+      previewUrl: previewUrl ?? mergedParent.previewUrl,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       scale: scale ?? mergedParent.scale,
@@ -1198,6 +1219,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       pressEndActions: merged.pressEndActions?.tryResolveParent(templates: templates),
       pressStartActions: merged.pressStartActions?.tryResolveParent(templates: templates),
       preview: merged.preview,
+      previewUrl: merged.previewUrl,
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       scale: merged.scale,
