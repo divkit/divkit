@@ -39,6 +39,7 @@ class PicassoDivImageLoader(
         .build()
     private val coroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: MainScope()
 
+    @Deprecated("Was needed for internal usa")
     val isIdle: Boolean
         get() = targets.size == 0
 
@@ -98,6 +99,7 @@ class PicassoDivImageLoader(
         return loadReference
     }
 
+    @Deprecated("Was needed for internal usa")
     fun resetIdle() {
         //TODO(DIVKIT-290): Find out why picasso loses callbacks.
         targets.clean()
@@ -142,6 +144,7 @@ class PicassoDivImageLoader(
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
     }
 
+    @Deprecated("Was needed for internal usa")
     inner class TargetList {
         private val activeTargets = ArrayList<Target>()
         val size get() = activeTargets.size

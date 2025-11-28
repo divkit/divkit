@@ -7,7 +7,6 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.div.rule.ImageLoadingIdlingResource
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.Container
@@ -100,9 +99,9 @@ internal class InteractiveScreenshotSteps {
 
     private fun waitForConditions(delay: Long) {
         try {
-            waitForIdlingResource(ImageLoadingIdlingResource(Container.imageLoader as PicassoDivImageLoader))
+            waitForIdlingResource(ImageLoadingIdlingResource(Container.imageLoader))
         } catch (e: Exception) {
-            (Container.imageLoader as PicassoDivImageLoader).resetIdle()
+            Container.imageLoader.resetIdle()
             throw e
         }
 

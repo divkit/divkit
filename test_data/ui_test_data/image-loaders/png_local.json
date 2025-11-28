@@ -1,0 +1,51 @@
+{
+  "description": "Image in .png format from assets",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Image in .png format from assets",
+              "font_size": 16,
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "divkit-asset://test-images/local-chess.png",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "border": {
+                "stroke": {
+                  "color": "#000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

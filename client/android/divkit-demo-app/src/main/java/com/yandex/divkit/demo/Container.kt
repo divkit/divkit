@@ -14,6 +14,7 @@ import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.div.video.custom.VideoCache
 import com.yandex.div.video.custom.VideoCustomViewController
+import com.yandex.divkit.demo.div.DemoDivImageLoaderWrapper
 import com.yandex.divkit.demo.div.editor.NaiveSSLContext
 import com.yandex.divkit.demo.div.histogram.DemoHistogramConfiguration
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
@@ -83,11 +84,12 @@ internal object Container {
     }
 
     val imageLoader by lazy {
-        when (preferences.imageLoader) {
+        val loader = when (preferences.imageLoader) {
             Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder)
             Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context)
             Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder)
         }
+        DemoDivImageLoaderWrapper(loader)
     }
 
     val uriHandler by lazy { DivkitDemoUriHandler(context) }

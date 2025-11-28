@@ -15,7 +15,13 @@ open class ActivityParamsTestRule<A : Activity>(
 
     constructor(activityClass: Class<A>, vararg params: Pair<String, Any?>) : this(
         activityClass = activityClass,
-        action = null,
+        launchActivity = true,
+        params = params
+    )
+
+    constructor(activityClass: Class<A>, launchActivity: Boolean, vararg params: Pair<String, Any?>) : this(
+        activityClass = activityClass,
+        launchActivity = launchActivity,
         params = Bundle().fill(params)
     )
 

@@ -15,8 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
+import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.divContext
+import com.yandex.divkit.demo.settings.Preferences
 import java.io.File
 
 private const val TAG = "DivScreenshotActivity"
@@ -38,6 +40,9 @@ class DivScreenshotActivity : AppCompatActivity() {
     private val templatesAssetName: String
         get() = cardAssetName.substringBeforeLast(File.separator) + "${File.separator}templates.json"
 
+    private val imageLoaderName: String?
+        get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
+
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -54,6 +59,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setImageLoader()
         divContext = divContext(activity = this)
         super.onCreate(savedInstanceState)
 
@@ -79,6 +85,16 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
         applyConfiguration(divView)
         setContentView(divView)
+    }
+
+    private fun setImageLoader() {
+        val loader = when (imageLoaderName) {
+            IMAGE_LOADER_PICASSO -> Preferences.ImageLoaderOption.PICASSO
+            IMAGE_LOADER_GLIDE -> Preferences.ImageLoaderOption.GLIDE
+            IMAGE_LOADER_COIL -> Preferences.ImageLoaderOption.COIL
+            else -> return
+        }
+        Container.preferences.imageLoader = loader
     }
 
     fun getTestCaseJson() = assetReader.read(cardAssetName)
@@ -141,5 +157,10 @@ class DivScreenshotActivity : AppCompatActivity() {
     companion object {
         const val REBIND_DIV_WITH_SAME_DATA_ACTION = "DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA"
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
+        const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
+
+        const val IMAGE_LOADER_PICASSO = "picasso"
+        const val IMAGE_LOADER_GLIDE = "glide"
+        const val IMAGE_LOADER_COIL = "coil"
     }
 }
