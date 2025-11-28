@@ -1,0 +1,36 @@
+{
+  "description": "Text with image with tint in .png format",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Text with image with tint\nin .png format - ",
+          "images": [
+            {
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "tint_color": "#FF0000",
+              "tint_mode": "multiply",
+              "start": 43
+            }
+          ],
+          "font_size": 24,
+          "text_alignment_horizontal": "center",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          }
+        }
+      }
+    ]
+  }
+}

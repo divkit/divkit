@@ -1,0 +1,78 @@
+{
+  "description": "Image in .png format in tabs delimiter",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 16,
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "text": "Image in .png format in tabs delimiter"
+            },
+            {
+              "type": "tabs",
+              "items": [
+                {
+                  "div": {
+                    "type": "text_block",
+                    "text": "Item 0"
+                  },
+                  "title": "Tab 0"
+                },
+                {
+                  "div": {
+                    "type": "text_block",
+                    "text": "Item 1"
+                  },
+                  "title": "Tab 1"
+                }
+              ],
+              "tab_title_delimiter": {
+                "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "border": {
+                "stroke": {
+                  "color": "#000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

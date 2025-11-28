@@ -1,0 +1,34 @@
+{
+  "description": "Text with image in .png format",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Text with image\nin .png format - ",
+          "images": [
+            {
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "start": 33
+            }
+          ],
+          "font_size": 24,
+          "text_alignment_horizontal": "center",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          }
+        }
+      }
+    ]
+  }
+}
