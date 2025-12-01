@@ -29,7 +29,6 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sign
 
-@Suppress("unused", "MemberVisibilityCanBePrivate")
 internal open class LinearContainerLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -255,7 +254,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             childIndex > lastVisibleChildIndex -> showDividers and ShowSeparatorsMode.SHOW_AT_END != 0
             showDividers and ShowSeparatorsMode.SHOW_BETWEEN != 0 -> {
                 for (i in childIndex - 1 downTo 0) {
-                    if (!getChildAt(childIndex).isGone) return true
+                    if (!getChildAt(i).isGone) return true
                 }
                 false
             }
@@ -420,9 +419,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     ) {
         if (isExact(heightMeasureSpec)) {
             measureChildWithMargins(child, widthMeasureSpec, 0, makeExactSpec(0), 0)
-            if (child.lp.height == MATCH_PARENT) {
-                totalMatchParentLength = getMaxLength(totalMatchParentLength, child.measuredHeight)
-            }
+            if (!considerHeight) return
+            totalMatchParentLength = getMaxLength(totalMatchParentLength, child.measuredHeight)
             return
         }
 
