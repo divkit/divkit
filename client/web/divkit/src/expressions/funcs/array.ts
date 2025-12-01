@@ -1,8 +1,9 @@
+import { parseColor } from '../../utils/correctColor';
 import { toBigInt } from '../bigint';
-import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
-import { checkIntegerOverflow, checkUrl, transformColorValue, typeToString } from '../utils';
-import { registerFunc, registerMethod } from './funcs';
+import { ARRAY, BOOLEAN, COLOR, DICT, FUNCTION, INTEGER, NUMBER, STRING, URL } from '../const';
+import { logFunctionMatchError, type ArrayValue, type BooleanValue, type ColorValue, type EvalContext, type EvalTypes, type EvalValue, type FuncValue, type IntegerValue, type NumberValue, type StringValue, type UrlValue } from '../eval';
+import { checkIntegerOverflow, checkUrl, convertJsValueToDivKit, safeCheckUrl, transformColorValue, typeToString } from '../utils';
+import { findBestMatchedFuncList, registerFunc, registerMethod, type Func, type FuncMatch } from './funcs';
 
 function arrayGetter(jsType: string, runtimeType: string) {
     return (ctx: EvalContext, array: ArrayValue, index: IntegerValue): EvalValue => {
@@ -125,6 +126,111 @@ function isEmpty(_ctx: EvalContext, array: ArrayValue): EvalValue {
     return {
         type: BOOLEAN,
         value: array.value.length === 0 ? 1 : 0
+    };
+}
+
+function filter(ctx: EvalContext, array: ArrayValue, fn: FuncValue): EvalValue {
+    if (!array.value.length) {
+        return {
+            type: ARRAY,
+            value: []
+        };
+    }
+
+    return {
+        type: ARRAY,
+        value: array.value.filter(it => {
+            const argMatchers: EvalValue[][] = [];
+
+            if (typeof it === 'string') {
+                if (parseColor(it)) {
+                    argMatchers.push([{
+                        type: COLOR,
+                        value: it
+                    }]);
+                }
+                if (safeCheckUrl(it)) {
+                    argMatchers.push([{
+                        type: URL,
+                        value: it
+                    }]);
+                }
+                argMatchers.push([{
+                    type: STRING,
+                    value: it
+                }]);
+            } else if (typeof it === 'number') {
+                if (Math.round(it) === it) {
+                    checkIntegerOverflow(ctx, it);
+                    argMatchers.push([{
+                        type: INTEGER,
+                        value: toBigInt(it)
+                    }]);
+                }
+                argMatchers.push([{
+                    type: NUMBER,
+                    value: it
+                }]);
+            } else if (typeof it === 'bigint') {
+                checkIntegerOverflow(ctx, it);
+                argMatchers.push([{
+                    type: INTEGER,
+                    value: it
+                }]);
+            } else if (Array.isArray(it)) {
+                argMatchers.push([{
+                    type: ARRAY,
+                    value: it
+                }]);
+            } else if (typeof it === 'object') {
+                if (it === null) {
+                    throw new Error('Incorrect value type: Null');
+                }
+                argMatchers.push([{
+                    type: DICT,
+                    value: it
+                }]);
+            } else if (typeof it === 'boolean') {
+                argMatchers.push([{
+                    type: BOOLEAN,
+                    value: it ? 1 : 0
+                }]);
+            } else {
+                throw new Error(`Incorrect value type: ${typeToString(typeof it)}`);
+            }
+
+            let fnMatch: FuncMatch = {
+                type: 'missing'
+            };
+            for (const matchItem of argMatchers) {
+                fnMatch = findBestMatchedFuncList(fn.value, matchItem);
+                if ('func' in fnMatch) {
+                    break;
+                }
+            }
+
+            let selectedFn: Func;
+            if ('func' in fnMatch) {
+                selectedFn = fnMatch.func;
+            } else {
+                const selectedFn = fn.value[0];
+                logFunctionMatchError(selectedFn.name || 'Function', argMatchers[0], fnMatch, true);
+            }
+
+            const argType = selectedFn.args[0];
+            const value = convertJsValueToDivKit(
+                ctx,
+                it,
+                typeof argType === 'string' ? argType : argType.type
+            );
+            const res = selectedFn.cb(ctx, value);
+
+            if (res.type !== BOOLEAN) {
+                throw new Error('Function must return boolean value.');
+            }
+
+            return res.value;
+        })
     };
 }
 
@@ -302,4 +408,5 @@ export function registerArray(): void {
     registerMethod('getArray', [ARRAY, INTEGER], getArrayArray);
     registerMethod('getDict', [ARRAY, INTEGER], getArrayDict);
     registerMethod('isEmpty', [ARRAY], isEmpty);
+    registerMethod('filter', [ARRAY, FUNCTION], filter);
 }

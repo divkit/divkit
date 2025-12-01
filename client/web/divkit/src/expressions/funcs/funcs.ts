@@ -259,8 +259,7 @@ function matchFuncArgs(func: Func, args: EvalValue[], hasOverloads: boolean): {
     };
 }
 
-export function findBestMatchedFunc(map: Map<string, Func[]>, funcName: string, args: EvalValue[]): FuncMatch {
-    const list = map.get(funcName);
+export function findBestMatchedFuncList(list: Func[] | undefined, args: EvalValue[]): FuncMatch {
     if (!list) {
         return {
             type: 'missing'
@@ -296,6 +295,10 @@ export function findBestMatchedFunc(map: Map<string, Func[]>, funcName: string, 
     }
 
     return bestFunc;
+}
+
+export function findBestMatchedFunc(map: Map<string, Func[]>, funcName: string, args: EvalValue[]): FuncMatch {
+    return findBestMatchedFuncList(map.get(funcName), args);
 }
 
 export function convertArgs(func: Func, args: EvalValue[]): EvalValue[] {

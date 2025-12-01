@@ -40,7 +40,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(equalsOne)}",
@@ -74,7 +76,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(lessThanThree)}",
@@ -109,7 +113,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(alwaysFalse)}",
@@ -141,7 +147,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{boolArray.filter(isTrue)}",
@@ -177,13 +185,15 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(nonExistentFunction)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [filter(nonExistentFunction)]. Unknown function name: nonExistentFunction."
+        "value": "Variable 'nonExistentFunction' is missing."
       },
       "variables": [
         {
@@ -196,7 +206,9 @@
         }
       ],
       "functions": [],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(wrongReturnType)}",
@@ -227,13 +239,15 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{source.filter(containsQuery)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [containsQuery]. Exactly 2 argument(s) expected."
+        "value": "Failed to evaluate [filter(containsQuery)]. Exactly 2 argument(s) expected."
       },
       "variables": [
         {
@@ -263,13 +277,15 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "expression": "@{heterogeneousArray.filter(isStringOne)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [filter(isStringOne)]. Incorrect value type: expected String, got Integer."
+        "value": "Failed to evaluate [filter(isStringOne)]. Invalid argument type: expected String, got Integer."
       },
       "variables": [
         {
@@ -295,7 +311,253 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{emptyArray.filter(anyFunc)}",
+      "expected": {
+        "type": "array",
+        "value": []
+      },
+      "variables": [
+        {
+          "name": "emptyArray",
+          "type": "array",
+          "value": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "anyFunc",
+          "body": "@{true}",
+          "return_type": "boolean",
+          "arguments": []
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{integerArray.filter(manyFunc)}",
+      "expected": {
+        "type": "array",
+        "value": [
+        ]
+      },
+      "variables": [
+        {
+          "name": "integerArray",
+          "type": "array",
+          "value": [
+            20,
+            40
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "manyFunc",
+          "body": "@{val > 10.0}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "number"
+            }
+          ]
+        },
+        {
+          "name": "manyFunc",
+          "body": "@{val < 10}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{mixedArray.filter(manyNumberFunc)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          40.5
+        ]
+      },
+      "variables": [
+        {
+          "name": "mixedArray",
+          "type": "array",
+          "value": [
+            20,
+            40.5
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "manyNumberFunc",
+          "body": "@{val > 10.0}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "number"
+            }
+          ]
+        },
+        {
+          "name": "manyNumberFunc",
+          "body": "@{val < 10}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{mixedColorArray.filter(manyColorFunc)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          "#f00",
+          "blue"
+        ]
+      },
+      "variables": [
+        {
+          "name": "mixedColorArray",
+          "type": "array",
+          "value": [
+            "#f00",
+            "blue"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "manyColorFunc",
+          "body": "@{val == toColor('#FFFF0000')}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "color"
+            }
+          ]
+        },
+        {
+          "name": "manyColorFunc",
+          "body": "@{val == 'blue'}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{mixedUrlArray.filter(manyUrlFunc)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          "https://divkit.tech",
+          "str"
+        ]
+      },
+      "variables": [
+        {
+          "name": "mixedUrlArray",
+          "type": "array",
+          "value": [
+            "https://divkit.tech",
+            "str"
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "manyUrlFunc",
+          "body": "@{val == toUrl('https://divkit.tech')}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "url"
+            }
+          ]
+        },
+        {
+          "name": "manyUrlFunc",
+          "body": "@{val == 'str'}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "expression": "@{integerArray.filter(datetimeFunc)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [filter(datetimeFunc)]. Invalid argument type: expected DateTime, got Integer."
+      },
+      "variables": [
+        {
+          "name": "integerArray",
+          "type": "array",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "datetimeFunc",
+          "body": "@{true}",
+          "return_type": "boolean",
+          "arguments": [
+            {
+              "name": "val",
+              "type": "datetime"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

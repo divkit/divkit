@@ -13,3 +13,4 @@ export const URL = 'url';
 export const DATETIME = 'datetime';
 export const DICT = 'dict';
 export const ARRAY = 'array';
+export const FUNCTION = 'function';

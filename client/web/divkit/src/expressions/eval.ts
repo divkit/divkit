@@ -16,6 +16,8 @@ import { convertArgs, findBestMatchedFunc, type Func, funcByArgs, type FuncMatch
 import {
     checkIntegerOverflow,
     evalError,
+    evalOuterError,
+    FuncError,
     integerToNumber,
     roundInteger,
     typeToString,
@@ -492,35 +494,46 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     try {
         return func.cb(ctx, ...args);
     } catch (err: any) {
+        if (err && err instanceof FuncError) {
+            throw err;
+        }
+
         const prefix = `${funcName}(${argsToStr(args)})`;
         evalError(prefix, err.message);
     }
 }
 
-function logFunctionMatchError(funcName: string, args: EvalValue[], findRes: FuncMatchError): never {
+export function logFunctionMatchError(
+    funcName: string,
+    args: EvalValue[],
+    findRes: FuncMatchError,
+    isOuterFunc = false
+): never {
     const argsType = args.map(arg => typeToString(arg.type)).join(', ');
     const prefix = `${funcName}(${argsToStr(args)})`;
+    const makeError: (msg: string, details: string) => never =
+        isOuterFunc ? evalOuterError : evalError;
 
     if (findRes.type === 'few' && args.length === 0 && findRes.hasOverloads) {
-        evalError(prefix, 'Function requires non empty argument list.');
+        makeError(prefix, 'Function requires non empty argument list.');
     } else if (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch') {
         if (findRes.hasOverloads) {
-            evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
+            makeError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
         } else {
             // eslint-disable-next-line no-lonely-if
             if (findRes.type === 'many' || findRes.type === 'few') {
                 if (findRes.def.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
-                    evalError(prefix, `At least ${findRes.def.args.length} argument(s) expected.`);
+                    makeError(prefix, `At least ${findRes.def.args.length} argument(s) expected.`);
                 } else {
-                    evalError(prefix, `Exactly ${findRes.def.args.length} argument(s) expected.`);
+                    makeError(prefix, `Exactly ${findRes.def.args.length} argument(s) expected.`);
                 }
             } else {
                 const expectedArgs = findRes.def.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
-                evalError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
+                makeError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
             }
         }
     } else {
-        evalError(prefix, `Unknown function name: ${funcName}.`);
+        makeError(prefix, `Unknown function name: ${funcName}.`);
     }
 }
 
@@ -564,6 +577,10 @@ function evalMethodExpression(ctx: EvalContext, expr: MethodExpression): EvalVal
     try {
         return func.cb(ctx, ...args);
     } catch (err: any) {
+        if (err && err instanceof FuncError) {
+            throw err;
+        }
+
         const prefix = `${methodName}(${argsToStr(args.slice(1))})`;
         evalError(prefix, err.message);
     }

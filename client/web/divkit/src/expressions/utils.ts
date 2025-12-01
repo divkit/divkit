@@ -1,4 +1,4 @@
-import type { EvalContext, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
+import type { EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';
@@ -8,6 +8,9 @@ import { MAX_INT, MIN_INT, toBigInt } from './bigint';
 import { BOOLEAN, NUMBER } from './const';
 import type { TypedValue } from '../../typings/common';
 import type { MaybeMissing } from './json';
+
+export class FuncError extends Error {
+}
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -112,6 +115,15 @@ export function checkUrl(val: unknown): void {
     }
 }
 
+export function safeCheckUrl(val: unknown): boolean {
+    try {
+        checkUrl(val);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 export function gatherVarsFromAst(ast: Node): string[] {
     const res = new Set<string>();
 
@@ -125,7 +137,11 @@ export function gatherVarsFromAst(ast: Node): string[] {
 }
 
 export function evalError(msg: string, details: string): never {
-    throw new Error(`Failed to evaluate [${msg}]. ${details}`);
+    throw new FuncError(`Failed to evaluate [${msg}]. ${details}`);
+}
+
+export function evalOuterError(_msg: string, details: string): never {
+    throw new Error(details);
 }
 
 export function containsUnsetVariables(ast: Node, variables: VariablesMap): boolean {
@@ -181,12 +197,13 @@ const EVAL_TYPE_TO_JS_TYPE = {
     color: 'string',
     url: 'string',
     array: 'array',
-    dict: 'object'
+    dict: 'object',
+    datetime: 'never'
 };
 export function convertJsValueToDivKit(
     ctx: EvalContext | undefined,
     val: unknown,
-    evalType: EvalTypesWithoutDatetime
+    evalType: EvalTypes
 ): EvalValue {
     if (evalType === 'function') {
         throw new Error('Cannot convert function');

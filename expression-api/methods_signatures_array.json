@@ -268,7 +268,9 @@
         }
       ],
       "return_type": "array",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
