@@ -1,6 +1,10 @@
 ## 32.28.0
 
+# Android Client:
+* Add support property `preview_url` to `div-gif-image`.
+
 # iOS Client:
+* Add support property `preview_url` to `div-gif-image`.
 * Fixed a possible scroll rollback when performing a wide swipe.
 
 # Web Client:
