@@ -156,7 +156,6 @@ final class SnapshotTestRunner {
     try SnapshotTestKit.compareSnapshot(
       #require(nonEmptyView.makeSnapshot()),
       referenceFileUrl: referenceFileUrl(screen: screen, caseName: caseName, stepName: stepName),
-      resultFolderUrl: resultsFolderUrl(screen: screen, caseName: caseName, stepName: stepName),
       mode: mode
     )
   }
@@ -177,23 +176,6 @@ final class SnapshotTestRunner {
         isDirectory: false
       )
   }
-
-  private func resultsFolderUrl(
-    screen: Screen,
-    caseName: String,
-    stepName: String?
-  ) -> URL {
-    var stepDescription = ""
-    if let stepName {
-      stepDescription = "_" + stepName
-    }
-    return URL(fileURLWithPath: ReferenceSet.resultSnapshotsPath, isDirectory: true)
-      .appendingPathComponent(file.subdirectory)
-      .appendingPathComponent(
-        "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription)",
-        isDirectory: true
-      )
-  }
 }
 
 private func readJson(path: String) -> [String: any Sendable]? {
@@ -203,10 +185,11 @@ private func readJson(path: String) -> [String: any Sendable]? {
   return (try? JSONSerialization.jsonObject(with: data)) as? [String: any Sendable]
 }
 
-private final class TestImageHolderFactory: DivImageHolderFactory {
+private final class TestImageHolderFactory: @MainActor DivImageHolderFactory {
   private var reportedUrls = Set<String>()
   private let testBundle = Bundle(for: SnapshotTestRunner.self)
 
+  @MainActor
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
     guard let url, url.absoluteString != "empty://" else {
       return placeholder?.toImageHolder() ?? NilImageHolder()
@@ -228,7 +211,7 @@ private final class TestImageHolderFactory: DivImageHolderFactory {
   }
 }
 
-private struct TestStep {
+private struct TestStep: Sendable {
   let name: String?
   let actions: [DivActionBase]?
 

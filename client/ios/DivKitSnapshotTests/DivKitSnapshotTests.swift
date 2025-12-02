@@ -34,7 +34,13 @@ struct DivKitSnapshotTests {
     try await test.run(
       caseName: file.name.removingFileExtension,
       blocksState: defaultPagerViewState,
-      extensions: [labelImagePreviewExtension, MarkdownExtensionHandler()]
+      extensions: [
+        CustomImagePreviewExtensionHandler(
+          id: "label_image_preview",
+          viewProvider: LabelImagePreviewProvider()
+        ),
+        MarkdownExtensionHandler(),
+      ]
     )
   }
 
@@ -60,12 +66,8 @@ private let exclusions = [
   "div-indicator/fixed-width-max_items_rectangle_worm.json",
 ]
 
-private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(
-  id: "label_image_preview",
-  viewProvider: LabelImagePreviewProvider()
-)
-
-private class LabelImagePreviewProvider: ViewProvider {
+@MainActor
+private class LabelImagePreviewProvider: @MainActor ViewProvider {
   private var label: UILabel?
 
   func loadView() -> ViewType {

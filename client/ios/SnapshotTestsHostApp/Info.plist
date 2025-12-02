@@ -4,8 +4,6 @@
 <dict>
 	<key>REFERENCE_SNAPSHOTS_PATH</key>
 	<string>$(PROJECT_DIR)/Tests/reference_snapshots/</string>
-	<key>RESULT_SNAPSHOTS_PATH</key>
-	<string>$(PROJECT_DIR)/Tests/results/</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>YSText-Bold.ttf</string>

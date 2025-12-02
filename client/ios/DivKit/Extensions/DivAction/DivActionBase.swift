@@ -3,7 +3,7 @@ import LayoutKit
 import Serialization
 import VGSL
 
-public protocol DivActionBase: Serializable {
+public protocol DivActionBase: Serializable, Sendable {
   var downloadCallbacks: DivDownloadCallbacks? { get }
   var payload: [String: Any]? { get }
   var typed: DivActionTyped? { get }

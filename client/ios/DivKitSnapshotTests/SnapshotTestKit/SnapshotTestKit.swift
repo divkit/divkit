@@ -10,10 +10,10 @@ enum TestMode {
 }
 
 enum SnapshotTestKit {
+  @MainActor
   static func compareSnapshot(
     _ snapshot: UIImage,
     referenceFileUrl: URL,
-    resultFolderUrl: URL,
     mode: TestMode
   ) throws {
     let deviceModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]
@@ -26,9 +26,6 @@ enum SnapshotTestKit {
       )
     )
 
-    let fileName = referenceFileUrl.lastPathComponent
-    removeFile(path: resultFolderUrl, fileName: fileName)
-
     switch mode {
     case .update:
       if let reference = try? UIImage.makeWith(url: referenceFileUrl),
@@ -38,37 +35,23 @@ enum SnapshotTestKit {
 
       try! saveFile(
         path: referenceFileUrl.deletingLastPathComponent(),
-        fileName: fileName,
+        fileName: referenceFileUrl.lastPathComponent,
         image: snapshot
       )
 
-      Issue.record(
-        Comment("Snapshot saved. Don't forget to change mode back to `verify`.")
-      )
+      Issue.record(Comment("Snapshot saved. Don't forget to change mode back to `verify`."))
     case .verify:
       let reference = try! UIImage.makeWith(url: referenceFileUrl)
       if snapshot.compare(with: reference) {
         return
       }
 
-      let diff = snapshot.makeDiff(with: reference)
-      try! saveFile(path: resultFolderUrl, fileName: "result.png", image: snapshot)
-      try! saveFile(path: resultFolderUrl, fileName: "reference.png", image: reference)
-      try! saveFile(path: resultFolderUrl, fileName: "diff.png", image: diff)
+      try recordAttachment(fileName: "result.png", image: snapshot)
+      try recordAttachment(fileName: "reference.png", image: reference)
+      try recordAttachment(fileName: "diff.png", image: snapshot.makeDiff(with: reference))
 
-      Issue.record(
-        Comment(
-          "Actual snapshot is not equal to the reference. Diff is saved in Tests/results folder."
-        )
-      )
+      Issue.record(Comment("Actual snapshot is not equal to the reference."))
     }
-  }
-}
-
-private func removeFile(path: URL, fileName: String) {
-  let fileManager = FileManager.default
-  if !fileManager.fileExists(atPath: path.path) {
-    try? fileManager.removeItem(at: path.appendingPathComponent(fileName))
   }
 }
 
@@ -86,7 +69,14 @@ private func saveFile(
   try pngData.write(to: path.appendingPathComponent(fileName))
 }
 
+private func recordAttachment(fileName: String, image: UIImage) throws {
+  let pngData = try #require(image.pngData())
+  let attachment = Attachment(pngData, named: fileName)
+  Attachment.record(attachment)
+}
+
 extension UIImage {
+  @MainActor
   fileprivate static func makeWith(url: URL) throws -> UIImage {
     let data = try Data(contentsOf: url)
     let image = try #require(UIImage(data: data, scale: UIScreen.main.scale))

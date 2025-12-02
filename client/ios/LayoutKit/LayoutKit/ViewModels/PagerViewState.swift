@@ -1,7 +1,7 @@
 import CoreGraphics
 import VGSL
 
-public struct PagerViewState: ElementState, Equatable {
+public struct PagerViewState: ElementState, Equatable, Sendable {
   public static let `default` = Self(
     numberOfPages: 0,
     currentPage: 0,
