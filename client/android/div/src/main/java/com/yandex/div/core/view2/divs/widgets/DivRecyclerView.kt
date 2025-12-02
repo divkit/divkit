@@ -8,19 +8,25 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.asDivHolderView
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
 import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.core.widget.isUnspecified
+import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivGallery.ScrollMode
+import com.yandex.div2.DivSize
 import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.ceil
@@ -55,11 +61,48 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     var widthMeasureSpec = 0
     var heightMeasureSpec = 0
+    var considerMatchParent = false
+    var measureAll = true
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        measureAll = true
         widthMeasureSpec = widthSpec
         heightMeasureSpec = heightSpec
+
+        val orientation = when (val layoutManager = layoutManager) {
+            is LinearLayoutManager -> layoutManager.orientation
+            is DivGridLayoutManager -> layoutManager.orientation
+            else -> HORIZONTAL
+        }
+        considerMatchParent = if (orientation == HORIZONTAL) {
+            needConsiderMatchParent(heightMeasureSpec) { height }
+        } else {
+            needConsiderMatchParent(widthMeasureSpec) { width }
+        }
+
         super.onMeasure(widthSpec, heightSpec)
+
+        if (considerMatchParent) {
+            measureAll = false
+            considerMatchParent = false
+            val newWidthSpec = getMaxSizeSpec(orientation == VERTICAL, widthSpec) { measuredWidth }
+            val newHeightSpec = getMaxSizeSpec(orientation == HORIZONTAL, heightSpec) { measuredHeight }
+            super.onMeasure(newWidthSpec, newHeightSpec)
+        }
+    }
+
+    private fun needConsiderMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
+        if (!isUnspecified(spec)) return false
+        return children.all {
+            val childDiv = it.asDivHolderView?.div?.value() ?: return@all false
+            childDiv.size() is DivSize.MatchParent
+        }
+    }
+
+    private fun getMaxSizeSpec(isCrossAxis: Boolean, oldSpec: Int, size: View.() -> Int): Int {
+        if (!isCrossAxis) return oldSpec
+        val maxSize = children.maxOf { it.size() }
+        return makeExactSpec(maxSize)
     }
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {

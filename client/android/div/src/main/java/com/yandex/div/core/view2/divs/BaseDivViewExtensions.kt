@@ -376,23 +376,15 @@ internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
     focusTracker.removeFocusFromFocusedInput()
 }
 
-internal val View.bindingContext: BindingContext? get() {
-    (this as? DivHolderView<*>)?.bindingContext?.let { return it }
+internal val View.asDivHolderView: DivHolderView<*>? get() {
+    if (this is DivHolderView<*>) return this
 
-    val divViewWrapper = this as? DivViewWrapper
-        ?: return null
+    val divViewWrapper = this as? DivViewWrapper ?: return null
 
-    val itemChild: View = divViewWrapper.child
-        ?: return null
-
-    val divHolderView = itemChild as? DivHolderView<*>
-        ?: return null
-
-    val context = divHolderView.bindingContext
-        ?: return null
-
-    return context
+    return divViewWrapper.child as? DivHolderView<*>
 }
+
+internal val View.bindingContext: BindingContext? get() = asDivHolderView?.bindingContext
 
 internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
     builder.data.observe(resolver, callback)

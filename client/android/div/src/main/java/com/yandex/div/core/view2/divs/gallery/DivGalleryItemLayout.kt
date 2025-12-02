@@ -21,32 +21,42 @@ internal class DivGalleryItemLayout(
     var crossSpacing: () -> Float = { 0f }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        child?.let {
-            val lp = it.lp
-            val recyclerView = parent as DivRecyclerView
-            val isHorizontal = orientation() == RecyclerView.HORIZONTAL
-            val widthSpec = getMeasureSpec(
-                recyclerView.widthMeasureSpec,
-                recyclerView.paddingLeft + recyclerView.paddingRight,
-                lp.width,
-                it.minimumWidth,
-                lp.maxWidth,
-                lp.horizontalMargins,
-                isHorizontal,
-            )
-            val heightSpec = getMeasureSpec(
-                recyclerView.heightMeasureSpec,
-                recyclerView.paddingTop + recyclerView.paddingBottom,
-                lp.height,
-                it.minimumHeight,
-                lp.maxHeight,
-                lp.verticalMargins,
-                !isHorizontal,
-            )
-            super.onMeasure(widthSpec, heightSpec)
-            return
-        }
+        val child = child ?: return setEmptySize(widthMeasureSpec, heightMeasureSpec)
 
+        val lp = child.lp
+        val recyclerView = parent as DivRecyclerView
+        val isHorizontal = orientation() == RecyclerView.HORIZONTAL
+        val widthSpec = getMeasureSpec(
+            recyclerView.widthMeasureSpec,
+            recyclerView.paddingLeft + recyclerView.paddingRight,
+            lp.width,
+            child.minimumWidth,
+            lp.maxWidth,
+            lp.horizontalMargins,
+            isHorizontal,
+            recyclerView.considerMatchParent,
+            recyclerView.measureAll,
+        )
+        val heightSpec = getMeasureSpec(
+            recyclerView.heightMeasureSpec,
+            recyclerView.paddingTop + recyclerView.paddingBottom,
+            lp.height,
+            child.minimumHeight,
+            lp.maxHeight,
+            lp.verticalMargins,
+            !isHorizontal,
+            recyclerView.considerMatchParent,
+            recyclerView.measureAll,
+        )
+
+        if (widthSpec != null && heightSpec != null) {
+            super.onMeasure(widthSpec, heightSpec)
+        } else {
+            setMeasuredDimension(measuredWidthAndState, measuredHeightAndState)
+        }
+    }
+
+    private fun setEmptySize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minWidth = paddingLeft + suggestedMinimumWidth + paddingRight
         val minHeight = paddingTop + suggestedMinimumHeight + paddingBottom
         setMeasuredDimension(
@@ -63,12 +73,21 @@ internal class DivGalleryItemLayout(
         maxSize: Int,
         margins: Int,
         alongScrollAxis: Boolean,
-    ): Int {
+        considerMatchParent: Boolean,
+        measureAll: Boolean,
+    ): Int? {
         val parentSize = (MeasureSpec.getSize(parentSpec) - paddings).let {
             if (alongScrollAxis) it else ((it - crossSpacing() * (columnCount() - 1)) / columnCount()).roundToInt()
         }
         val actualMaxSize = if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) maxSize else maxSize + margins
-        return when (size) {
+        val actualSize = when {
+            alongScrollAxis -> size
+            considerMatchParent && size == LayoutParams.MATCH_PARENT -> LayoutParams.WRAP_CONTENT
+            !measureAll && size != LayoutParams.MATCH_PARENT -> return null
+            else -> size
+        }
+
+        return when (actualSize) {
             LayoutParams.MATCH_PARENT -> makeExactSpec(min(max(parentSize, minSize + margins), actualMaxSize))
             LayoutParams.WRAP_CONTENT -> {
                 if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) {
