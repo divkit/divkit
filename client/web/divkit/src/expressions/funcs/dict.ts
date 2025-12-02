@@ -188,6 +188,10 @@ export function registerDict(): void {
 
     registerFunc('getOptDictFromDict', [DICT, STRING_VARARG], getDictOptDict);
 
+    registerFunc('len', [DICT], len);
+    registerFunc('getDictKeys', [DICT], getDictKeys);
+    registerFunc('getDictValues', [DICT], getDictValues);
+
     registerMethod('getString', [DICT, STRING_VARARG], getDictString);
     registerMethod('getBoolean', [DICT, STRING_VARARG], getDictBoolean);
     registerMethod('getInteger', [DICT, STRING_VARARG], getDictInteger);
@@ -198,8 +202,6 @@ export function registerDict(): void {
     registerMethod('getDict', [DICT, STRING_VARARG], getDictDict);
     registerMethod('containsKey', [DICT, STRING], containsKey);
     registerMethod('isEmpty', [DICT], isEmpty);
-
-    registerFunc('len', [DICT], len);
-    registerFunc('getDictKeys', [DICT], getDictKeys);
-    registerFunc('getDictValues', [DICT], getDictValues);
+    registerMethod('getKeys', [DICT], getDictKeys);
+    registerMethod('getValues', [DICT], getDictValues);
 }
