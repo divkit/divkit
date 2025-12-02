@@ -462,8 +462,8 @@
                 }
             } else {
                 html = `<span data-image="${htmlFilter(JSON.stringify(images[item.index]))}" data-image-index="${htmlFilter(String(item.index))}" class="inplace-editor__image-wrapper" style="${htmlFilter(makeStyle(item.image.wrapperStyle) || '')}">` +
-                    `<img class="inplace-editor__image" src=${htmlFilter(item.image.url)} loading="lazy" decoding="async" ` +
-                    `aria-hidden="true" alt="" style=${htmlFilter(makeStyle({
+                    `<img class="inplace-editor__image" src="${htmlFilter(item.image.url)}" loading="lazy" decoding="async" ` +
+                    `aria-hidden="true" alt="" style="${htmlFilter(makeStyle({
                         width: item.image.width,
                         height: item.image.height,
                         // Normalizes line-height for the containing text line
