@@ -1,0 +1,52 @@
+{
+  "description": "Image in .svg format with scale in gif-image",
+  "platforms": [
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Image in .svg format with scale in gif-image",
+              "font_size": 16,
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              }
+            },
+            {
+              "type": "gif",
+              "gif_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+              "scale": "fill",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              },
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "border": {
+                "stroke": {
+                  "color": "#000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

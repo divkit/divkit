@@ -1,0 +1,45 @@
+{
+  "description": "Image in .svg format with wrap_content size",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Image in .svg format with wrap_content size",
+              "font_size": 16,
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+              "scale": "no_scale",
+              "width": {
+                "type": "wrap_content"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
