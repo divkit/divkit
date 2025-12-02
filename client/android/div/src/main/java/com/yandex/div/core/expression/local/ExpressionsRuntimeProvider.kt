@@ -9,6 +9,8 @@ import com.yandex.div.core.expression.FunctionProviderDecorator
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
+import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
 import com.yandex.div.core.state.DivStatePath
@@ -17,12 +19,15 @@ import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.FunctionProvider
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
+import com.yandex.div2.DivVariable
 import javax.inject.Inject
 
 @DivScope
@@ -56,26 +61,18 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             val warning = "Warning occurred while evaluating '$rawExpr':"
             errorCollector.logWarning(Throwable(warning, Throwable(message)))
         }
-        val evaluationContext =
-            EvaluationContext(variableController, storedValueProvider, functionProvider, warningSender)
-        val evaluator = Evaluator(evaluationContext)
 
-        val resolver = ExpressionResolverImpl(
+        return createRuntime(
+            data.variables,
+            data.variableTriggers,
+            variableController,
+            storedValueProvider,
+            functionProvider,
+            warningSender,
             path = "",
             runtimeStore,
-            variableController,
-            evaluator,
             errorCollector,
         )
-
-        data.variables?.forEach {
-            variableController.declare(it, resolver, errorCollector)
-        }
-
-        val triggersController = data.variableTriggers
-            .toTriggersController(resolver, errorCollector)
-
-        return ExpressionsRuntime(resolver, triggersController)
     }
 
     fun createChildRuntime(
@@ -92,29 +89,52 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             functionProvider += functions.toLocalFunctions()
         }
 
-        val evaluationContext = EvaluationContext(
+        return createRuntime(
+            div.variables,
+            div.variableTriggers,
             localVariableController,
             parentResolver.evaluator.evaluationContext.storedValueProvider,
             functionProvider,
-            parentResolver.evaluator.evaluationContext.warningSender
-        )
-        val evaluator = Evaluator(evaluationContext)
-
-        val childResolver = ExpressionResolverImpl(
+            parentResolver.evaluator.evaluationContext.warningSender,
             path = parentResolver.path + "/" + path.lastDivId,
             parentResolver.runtimeStore,
-            localVariableController,
-            evaluator,
             errorCollector,
         )
+    }
 
-        div.variables?.forEach {
-            localVariableController.declare(it, childResolver, errorCollector)
+    private fun createRuntime(
+        variables: List<DivVariable>?,
+        variableTriggers: List<DivTrigger>?,
+        variableController: VariableController,
+        storedValueProvider: StoredValueProvider,
+        functionProvider: FunctionProvider,
+        warningSender: WarningSender,
+        path: String,
+        runtimeStore: RuntimeStore,
+        errorCollector: ErrorCollector,
+    ): ExpressionsRuntime {
+        val evaluationContext =
+            EvaluationContext(variableController, storedValueProvider, functionProvider, warningSender)
+        val evaluator = Evaluator(evaluationContext)
+        val resolver = ExpressionResolverImpl(path, runtimeStore, variableController, evaluator, errorCollector)
+
+        var propertyExecutor: PropertyVariableExecutorImpl? = null
+
+        variables?.forEach { variable ->
+            if (variable is DivVariable.Property && propertyExecutor == null) {
+                propertyExecutor = PropertyVariableExecutorImpl(resolver)
+            }
+            variableController.declare(
+                variable,
+                resolver,
+                propertyExecutor ?: PropertyVariableExecutor.STUB,
+                errorCollector,
+            )
         }
 
-        val triggerController = div.variableTriggers.toTriggersController(childResolver, errorCollector)
+        val triggerController = variableTriggers.toTriggersController(resolver, errorCollector)
 
-        return ExpressionsRuntime(childResolver, triggerController)
+        return ExpressionsRuntime(resolver, propertyExecutor, triggerController)
     }
 
     private fun List<DivTrigger>?.toTriggersController(

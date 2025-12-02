@@ -54,6 +54,7 @@ public class DivActionHandler {
         public static final String ANIMATION_CANCEL = "animation_cancel";
         public static final String ENTER = "enter";
         public static final String SUBMIT = "submit";
+        public static final String PROPERTY_VARIABLE_SET = "property_variable_set";
     }
 
     private static final String SCHEME_DIV_ACTION = "div-action";

@@ -7,19 +7,25 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.data.PropertyDelegate
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
-import com.yandex.div.internal.util.toBoolean
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsBoolean
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsColor
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsDouble
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsJsonArray
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsJsonObject
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsLong
+import com.yandex.div.internal.util.ParsingValueUtils.parseAsUri
 import com.yandex.div.json.JSONSerializable
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.BoolVariable
+import com.yandex.div2.DivEvaluableType
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 
 @Mockable
 sealed class Variable {
     abstract val name: String
-    private val observers = ObserverList<(Variable) -> Unit>()
+    protected val observers = ObserverList<(Variable) -> Unit>()
 
     class StringVariable(
         override val name: String,
@@ -108,9 +114,7 @@ sealed class Variable {
         @MainThread
         @Throws(VariableMutationException::class)
         fun set(newValue: Color) {
-            val color = STRING_TO_COLOR_INT(newValue) ?: throw VariableMutationException(
-                    "Wrong value format for color variable: '$newValue'")
-            value = Color(color)
+            value = Color(STRING_TO_COLOR_INT(newValue))
         }
     }
 
@@ -171,9 +175,49 @@ sealed class Variable {
         }
     }
 
-    class PropertyVariable(
+    class PropertyVariable @InternalApi constructor(
         override val name: String,
-    ): Variable()
+        @property:InternalApi val valueType: DivEvaluableType,
+        delegate: PropertyDelegate,
+    ) : Variable() {
+
+        @InternalApi
+        var delegate: PropertyDelegate = delegate
+            set(value) {
+                field.release()
+                field = value
+                if (!observers.isEmpty) {
+                    field.observe { notifyVariableChanged(this) }
+                }
+            }
+
+        internal var value: Any
+            get() = delegate.get()
+            set(value) = delegate.set(value)
+
+        @InternalApi
+        val getExpression: Expression<*> get() = delegate.getExpression
+
+        override fun addObserver(observer: (Variable) -> Unit) {
+            if (observers.isEmpty) {
+                delegate.observe { notifyVariableChanged(this) }
+            }
+            super.addObserver(observer)
+        }
+
+        override fun removeObserver(observer: (Variable) -> Unit) {
+            super.removeObserver(observer)
+            if (observers.isEmpty) {
+                delegate.release()
+            }
+        }
+
+        @MainThread
+        @InternalApi
+        fun set(newValue: Any) {
+            value = newValue
+        }
+    }
 
     fun getValue(): Any {
         return when (this) {
@@ -185,7 +229,7 @@ sealed class Variable {
             is UrlVariable -> value
             is DictVariable -> value
             is ArrayVariable -> value
-            is PropertyVariable -> TODO("Support property variables")
+            is PropertyVariable -> value
         }
     }
 
@@ -199,7 +243,7 @@ sealed class Variable {
             is UrlVariable -> defaultValue
             is DictVariable -> defaultValue
             is ArrayVariable -> defaultValue
-            is PropertyVariable -> TODO("Support property variables")
+            is PropertyVariable -> throw UnsupportedOperationException("PropertyVariable '$name' has no default value")
         }
     }
 
@@ -228,7 +272,7 @@ sealed class Variable {
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
             is ArrayVariable -> value = newValue.parseAsJsonArray()
-            is PropertyVariable -> TODO("Support property variables")
+            is PropertyVariable -> delegate.set(newValue)
         }
     }
 
@@ -244,7 +288,7 @@ sealed class Variable {
             this is UrlVariable && from is UrlVariable -> this.value = from.value
             this is DictVariable && from is DictVariable -> this.value = from.value
             this is ArrayVariable && from is ArrayVariable -> this.value = from.value
-            this is PropertyVariable && from is PropertyVariable -> TODO("Support property variables")
+            this is PropertyVariable && from is PropertyVariable -> this.value = from.value
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
         }
     }
@@ -263,83 +307,24 @@ sealed class Variable {
                 is UrlVariable -> value = newValue as Uri
                 is DictVariable -> value = newValue as JSONObject
                 is ArrayVariable -> value = newValue as JSONArray
-                is PropertyVariable -> TODO("Support property variables")
+                is PropertyVariable -> value = newValue
             }
-        } catch (e: ClassCastException) {
+        } catch (_: ClassCastException) {
             throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to $this")
-        }
-    }
-
-    private fun String.parseAsLong(): Long {
-        return try {
-            this.toLong()
-        } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsInt(): Int {
-        return try {
-            this.toInt()
-        } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsBoolean(): Boolean {
-        return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
-            ?: throw VariableMutationException("Unable to convert $this to boolean")
-    }
-
-    private fun String.parseAsDouble(): Double {
-        return try {
-            this.toDouble()
-        } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsColor(): Color {
-        val color = STRING_TO_COLOR_INT(this)
-            ?: throw VariableMutationException("Wrong value format for color variable: '$this'")
-        return Color(color)
-    }
-
-    private fun String.parseAsUri(): Uri {
-        return try {
-            Uri.parse(this)
-        } catch (e: IllegalArgumentException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsJsonObject(): JSONObject {
-        return try {
-            JSONObject(this)
-        } catch (e: JSONException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsJsonArray(): JSONArray {
-        return try {
-            JSONArray(this)
-        } catch (e: JSONException) {
-            throw VariableMutationException(cause = e)
         }
     }
 
     fun writeToJSON(): JSONObject {
         val serializable: JSONSerializable = when (this) {
             is ArrayVariable -> com.yandex.div2.ArrayVariable(this.name, Expression.constant(this.value))
-            is BooleanVariable -> BoolVariable(this.name, Expression.constant(this.value))
+            is BooleanVariable -> com.yandex.div2.BoolVariable(this.name, Expression.constant(this.value))
             is ColorVariable -> com.yandex.div2.ColorVariable(this.name, Expression.constant(this.value.value))
             is DictVariable -> com.yandex.div2.DictVariable(this.name, Expression.constant(this.value))
             is DoubleVariable -> com.yandex.div2.NumberVariable(this.name, Expression.constant(this.value))
             is IntegerVariable -> com.yandex.div2.IntegerVariable(this.name, Expression.constant(this.value))
             is StringVariable -> com.yandex.div2.StrVariable(this.name, Expression.constant(this.value))
             is UrlVariable -> com.yandex.div2.UrlVariable(this.name, Expression.constant(this.value))
-            is PropertyVariable -> TODO("Support property variables")
+            is PropertyVariable -> this.delegate.toDivVariable()
         }
 
         return serializable.writeToJSON()

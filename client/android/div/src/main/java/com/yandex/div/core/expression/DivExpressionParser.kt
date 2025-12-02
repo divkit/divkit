@@ -6,8 +6,8 @@ import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
 import com.yandex.div.internal.parser.Converter
-import com.yandex.div.internal.parser.JsonExpressionParser.readExpression
-import com.yandex.div.internal.parser.JsonParsers
+import com.yandex.div.internal.parser.JsonParsers.alwaysValid
+import com.yandex.div.internal.parser.JsonParsers.doNotConvert
 import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
 import com.yandex.div.internal.parser.NUMBER_TO_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
@@ -17,62 +17,56 @@ import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_JSON_ARRAY
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TypeHelper
-import com.yandex.div.internal.parser.ValueValidator
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.serialization.ParsingContext
+import com.yandex.div.json.typeMismatch
 import com.yandex.div2.DivEvaluableType
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.TimeZone
 
-@Suppress("NOTHING_TO_INLINE")
 internal object DivExpressionParser {
 
-    inline fun readTypedExpression(
-        context: ParsingContext,
-        obj: JSONObject,
+    fun readTypedExpression(
+        raw: String,
         key: String,
         expectedType: DivEvaluableType,
-    ) : Expression<*> {
+        logger: ParsingErrorLogger,
+    ): Expression<*> {
         return when (expectedType) {
-            DivEvaluableType.STRING -> readStringExpression(context, obj, key)
-            DivEvaluableType.INTEGER -> readExpression(context, obj, key, TYPE_HELPER_INT, NUMBER_TO_INT)
-            DivEvaluableType.NUMBER -> readExpression(context, obj, key, TYPE_HELPER_DOUBLE, NUMBER_TO_DOUBLE)
-            DivEvaluableType.BOOLEAN -> readBooleanExpression(context, obj, key)
-            DivEvaluableType.URL -> readExpression(context, obj, key, TYPE_HELPER_URL, ANY_TO_URL)
-            DivEvaluableType.COLOR -> readExpression(context, obj, key, TYPE_HELPER_COLOR_OBJ, ANY_TO_COLOR)
-            DivEvaluableType.DICT -> readExpression(context, obj, key, TYPE_HELPER_DICT)
-            DivEvaluableType.ARRAY -> readArrayExpression(context, obj, key)
-            DivEvaluableType.DATETIME -> readExpression(context, obj, key, TYPE_HELPER_DATETIME)
+            DivEvaluableType.STRING -> readExpression(raw, key, TYPE_HELPER_STRING, logger)
+            DivEvaluableType.INTEGER -> readExpression(raw, key, TYPE_HELPER_INT, NUMBER_TO_INT, logger)
+            DivEvaluableType.NUMBER -> readExpression(raw, key, TYPE_HELPER_DOUBLE, NUMBER_TO_DOUBLE, logger)
+            DivEvaluableType.BOOLEAN -> readExpression(raw, key, TYPE_HELPER_BOOLEAN, ANY_TO_BOOLEAN, logger)
+            DivEvaluableType.URL -> readExpression(raw, key, TYPE_HELPER_URL, ANY_TO_URL, logger)
+            DivEvaluableType.COLOR -> readExpression(raw, key, TYPE_HELPER_COLOR_OBJ, ANY_TO_COLOR, logger)
+            DivEvaluableType.DICT -> readExpression(raw, key, TYPE_HELPER_DICT, logger)
+            DivEvaluableType.ARRAY -> readExpression(raw, key, TYPE_HELPER_JSON_ARRAY, logger)
+            DivEvaluableType.DATETIME -> readExpression(raw, key, TYPE_HELPER_DATETIME, logger)
         }
     }
 
-    @JvmStatic
-    @JvmOverloads
-    inline fun readStringExpression(
-        context: ParsingContext,
-        obj: JSONObject,
+    private fun <T: Any> readExpression(
+        raw: String,
         key: String,
-        validator: ValueValidator<String> = JsonParsers.alwaysValid(),
-    ): Expression<String> = readExpression(context, obj, key, TYPE_HELPER_STRING, validator)
+        typeHelper: TypeHelper<T>,
+        logger: ParsingErrorLogger,
+    ): Expression<T> = readExpression<T, T>(raw, key, typeHelper, doNotConvert(), logger)
 
-    @JvmStatic
-    @JvmOverloads
-    inline fun readBooleanExpression(
-        context: ParsingContext,
-        obj: JSONObject,
+    private fun <T, R: Any> readExpression(
+        raw: String,
         key: String,
-        validator: ValueValidator<Boolean> = JsonParsers.alwaysValid(),
-    ): Expression<Boolean> = readExpression(context, obj, key, TYPE_HELPER_BOOLEAN, ANY_TO_BOOLEAN, validator)
+        typeHelper: TypeHelper<R>,
+        converter: Function1<T, R>,
+        logger: ParsingErrorLogger,
+    ): Expression<R> {
+        if (Expression.mayBeExpression(raw)) {
+            return Expression.MutableExpression<T, R>(key, raw, converter, alwaysValid<R>(), logger, typeHelper)
+        }
 
-    @JvmStatic
-    @JvmOverloads
-    inline fun readArrayExpression(
-        context: ParsingContext,
-        obj: JSONObject,
-        key: String,
-        validator: ValueValidator<JSONArray> = JsonParsers.alwaysValid(),
-    ): Expression<JSONArray> = readExpression(context, obj, key, TYPE_HELPER_JSON_ARRAY, validator)
+        if (!typeHelper.isTypeValid(raw)) {
+            throw typeMismatch(key, raw, raw)
+        }
+        return Expression.constant(raw as R, logger)
+    }
 
     private val TYPE_HELPER_URL = object : TypeHelper<Url> {
         override val typeDefault = Url("")
@@ -100,7 +94,7 @@ internal object DivExpressionParser {
 
     private val ANY_TO_COLOR: Converter<Any, Color> = { value ->
         when (value) {
-            is String -> Color.Companion.parse(value)
+            is String -> Color.parse(value)
             is Color -> value
             is Int -> Color(value)
             else -> throw ClassCastException("Received value of wrong type")

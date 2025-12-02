@@ -12,7 +12,13 @@ class IntegrationTestLogger : ParsingErrorLogger {
     }
 
     fun logErrorDirectly(e: Throwable) {
-        e.message?.let { _messages.add(it) }
+        collectChainMessages(e)
+    }
+
+    private fun collectChainMessages(t: Throwable) {
+        generateSequence(t) { it.cause }
+            .mapNotNull { it.message }
+            .forEach { _messages.add(it) }
     }
 
     fun clear() = _messages.clear()

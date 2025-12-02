@@ -207,6 +207,7 @@
       "type": "object",
       "$description": "translations.json#/div_property",
       "platforms": [
+        "android",
         "ios",
         "web"
       ],
@@ -223,7 +224,8 @@
         },
         "value_type": {
           "$ref": "div-evaluable-type.json",
-          "$desciption": "translations.json#/div_property_value_type"
+          "$description": "translations.json#/div_property_value_type",
+          "supports_expressions": false
         },
         "new_value_variable_name": {
           "$ref": "div-variable-name.json",

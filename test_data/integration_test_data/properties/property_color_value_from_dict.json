@@ -77,6 +77,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -84,7 +85,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=color_prop&value=#FF00FF",
+          "url": "div-action://set_variable?name=color_prop&value=%23FF00FF",
           "log_id": "set_color_var"
         }
       ],
@@ -109,6 +110,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

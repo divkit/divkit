@@ -7,10 +7,12 @@ import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.variables.declare
+import com.yandex.div.core.expression.variables.parseGet
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections
@@ -27,21 +29,22 @@ internal class RuntimeStoreProvider @Inject constructor(
     private val errorCollectors: ErrorCollectors,
 ) {
 
-    private val runtimeStores = Collections.synchronizedMap(mutableMapOf<String, RuntimeStore>())
+    private val runtimeStores = Collections.synchronizedMap(mutableMapOf<String, RuntimeStoreImpl>())
     private val divDataTags = WeakHashMap<Div2View, MutableSet<String>>()
 
     internal fun getOrCreate(tag: DivDataTag, data: DivData, div2View: Div2View): RuntimeStore {
         divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
 
+        val errorCollector = errorCollectors.getOrCreate(tag, data)
         runtimeStores[tag.id]?.let {
-            val errorCollector = errorCollectors.getOrCreate(tag, data)
-            ensureVariablesSynced(it.rootRuntime.expressionResolver, data, errorCollector)
+            ensureVariablesSynced(it.rootRuntime, data, errorCollector, div2View)
             it.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
             return it
         }
 
-        return RuntimeStoreImpl(data, runtimeProvider, errorCollectors.getOrCreate(tag, data)).also {
+        return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also {
             runtimeStores[tag.id] = it
+            it.rootRuntime.propertyVariableExecutor?.attachView(div2View)
         }
     }
 
@@ -63,17 +66,24 @@ internal class RuntimeStoreProvider @Inject constructor(
     }
 
     private fun ensureVariablesSynced(
-        resolver: ExpressionResolverImpl,
+        runtime: ExpressionsRuntime,
         data: DivData,
-        errorCollector: ErrorCollector
+        errorCollector: ErrorCollector,
+        view: Div2View,
     ) {
-        val v = resolver.variableController
-        data.variables?.forEach {
-            val existingVariable = v.getMutableVariable(it.name) ?: run {
-                v.declare(it, resolver, errorCollector)
+        val resolver = runtime.expressionResolver
+        val variableController = resolver.variableController
+        val propertyExecutor = runtime.propertyVariableExecutor?.apply {
+            attachView(view)
+        } ?: PropertyVariableExecutor.STUB
+
+        data.variables?.forEach { divVariable ->
+            val existingVariable = variableController.getMutableVariable(divVariable.name) ?: run {
+                variableController.declare(divVariable, resolver, propertyExecutor, errorCollector)
                 return@forEach
             }
-            val consistent = when (it) {
+
+            val consistent = when (divVariable) {
                 is DivVariable.Bool -> existingVariable is Variable.BooleanVariable
                 is DivVariable.Integer -> existingVariable is Variable.IntegerVariable
                 is DivVariable.Number -> existingVariable is Variable.DoubleVariable
@@ -82,7 +92,10 @@ internal class RuntimeStoreProvider @Inject constructor(
                 is DivVariable.Url -> existingVariable is Variable.UrlVariable
                 is DivVariable.Dict -> existingVariable is Variable.DictVariable
                 is DivVariable.Array -> existingVariable is Variable.ArrayVariable
-                is DivVariable.Property -> existingVariable is Variable.PropertyVariable
+                is DivVariable.Property -> {
+                    existingVariable is Variable.PropertyVariable &&
+                        divVariable.value.valueType == existingVariable.valueType
+                }
             }.apply { /*exhaustive*/ }
 
             // This usually happens when you're using same DivDataTag for DivData
@@ -92,11 +105,22 @@ internal class RuntimeStoreProvider @Inject constructor(
                     IllegalArgumentException(
                         """
                            Variable inconsistency detected!
-                           at DivData: ${it.name} ($it)
-                           at VariableController: ${v.getMutableVariable(it.name)}
+                           at DivData: ${divVariable.name} ($divVariable)
+                           at VariableController: $existingVariable
                         """.trimIndent()
                     )
                 )
+                return@forEach
+            }
+
+            if (divVariable is DivVariable.Property && existingVariable is Variable.PropertyVariable) {
+                val newGetExpression = divVariable.value.parseGet(resolver, errorCollector) ?: return@forEach
+                val delegate = existingVariable.delegate.copy(
+                    newGetExpression,
+                    divVariable.value.set,
+                    divVariable.value.newValueVariableName
+                )
+                existingVariable.delegate = delegate
             }
         }
     }

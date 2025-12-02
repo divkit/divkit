@@ -10,7 +10,6 @@ import com.yandex.div.interactive.IntegrationTestCase
 import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
 import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.expression.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
@@ -200,21 +199,12 @@ object ExpressionTestCaseUtils {
         )
     }
 
-    fun readExpression(
-        raw: String,
-        expectedType: String,
-        logger: ParsingErrorLogger
-    ): Expression<*> {
-        val context = DivParsingEnvironment(logger)
-        val key = "value"
-        val obj = JSONObject().put(key, raw)
-        return DivEvaluableType.fromString(expectedType)?.let {
-            DivExpressionParser.readTypedExpression(context, obj, key, it)
-        } ?: when (expectedType) {
-            VALUE_TYPE_ERROR -> DivExpressionParser.readStringExpression(context, obj, key)
-            VALUE_TYPE_BOOL_INT -> DivExpressionParser.readBooleanExpression(context, obj, key)
-            VALUE_TYPE_UNORDERED_ARRAY -> DivExpressionParser.readArrayExpression(context, obj, key)
-            else -> throw JSONException("Unknown expected result type: $expectedType")
+    fun String.toEvaluableType() : DivEvaluableType {
+        return DivEvaluableType.fromString(this) ?: when(this) {
+            VALUE_TYPE_BOOL_INT -> DivEvaluableType.BOOLEAN
+            VALUE_TYPE_UNORDERED_ARRAY -> DivEvaluableType.ARRAY
+            VALUE_TYPE_ERROR -> DivEvaluableType.STRING
+            else -> throw JSONException("Unknown expected result type: $this")
         }
     }
 }

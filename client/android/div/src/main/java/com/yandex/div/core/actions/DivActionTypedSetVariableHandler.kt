@@ -1,20 +1,22 @@
 package com.yandex.div.core.actions
 
 import android.net.Uri
-import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.evaluable.types.Url
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
+import com.yandex.div2.DivEvaluableType
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DivActionTypedSetVariableHandler @Inject constructor()
-    : DivActionTypedHandler {
+internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActionTypedHandler {
 
     override fun handleAction(
         scopeId: String?,
@@ -64,7 +66,8 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
 
                     is Variable.UrlVariable ->
                         checkValueAndCast<Uri>(newValue, view, variableName)?.let(::set)
-                    is Variable.PropertyVariable -> TODO("Support property variables")
+
+                    is Variable.PropertyVariable -> if (isValid(newValue, view)) set(newValue)
                 }
             }
         }
@@ -88,4 +91,19 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
                 ))
             }
         }
+
+    private fun Variable.PropertyVariable.isValid(newValue: Any, view: Div2View): Boolean {
+        val castValue = when (valueType) {
+            DivEvaluableType.STRING -> checkValueAndCast<String>(newValue, view, name)
+            DivEvaluableType.INTEGER -> checkValueAndCast<Long>(newValue, view, name)
+            DivEvaluableType.NUMBER -> checkValueAndCast<Double>(newValue, view, name)
+            DivEvaluableType.BOOLEAN -> checkValueAndCast<Boolean>(newValue, view, name)
+            DivEvaluableType.URL -> checkValueAndCast<Url>(newValue, view, name)
+            DivEvaluableType.COLOR -> checkValueAndCast<Color>(newValue, view, name)
+            DivEvaluableType.DICT -> checkValueAndCast<JSONObject>(newValue, view, name)
+            DivEvaluableType.ARRAY -> checkValueAndCast<JSONArray>(newValue, view, name)
+            DivEvaluableType.DATETIME -> checkValueAndCast<DateTime>(newValue, view, name)
+        }
+        return castValue != null
+    }
 }

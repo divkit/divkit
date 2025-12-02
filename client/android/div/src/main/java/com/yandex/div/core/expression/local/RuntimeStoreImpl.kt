@@ -5,6 +5,7 @@ import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -22,6 +23,7 @@ internal class RuntimeStoreImpl(
     private val runtimeProvider: ExpressionsRuntimeProvider,
     private val errorCollector: ErrorCollector,
 ) : RuntimeStore {
+
     private var warningShown = false
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime>()
     private val pathToRuntime = mutableMapOf<String, ExpressionsRuntime>()
@@ -48,9 +50,13 @@ internal class RuntimeStoreImpl(
         path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
+        divView: Div2View,
     ): ExpressionsRuntime {
         val pathString = path.fullPath
-        pathToRuntime[pathString]?.let { return it }
+        pathToRuntime[pathString]?.let {
+            it.propertyVariableExecutor?.attachView(divView)
+            return it
+        }
 
         if (parentResolver !is ExpressionResolverImpl) return rootRuntime
 
@@ -64,9 +70,10 @@ internal class RuntimeStoreImpl(
             return parentRuntime
         }
 
-        return runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector).also {
-            putRuntime(it, pathString, parentRuntime)
-        }
+        val runtime = runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector)
+        putRuntime(runtime, pathString, parentRuntime)
+        runtime.propertyVariableExecutor?.attachView(divView)
+        return runtime
     }
 
     override fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
@@ -91,7 +98,10 @@ internal class RuntimeStoreImpl(
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
         val pathString = path.fullPath
-        pathToRuntime[pathString]?.let { return it }
+        pathToRuntime[pathString]?.let { runtime ->
+            (divView as? Div2View)?.let { runtime.propertyVariableExecutor?.attachView(divView) }
+            return runtime
+        }
 
         if (resolver !is ExpressionResolverImpl) return null
 
@@ -104,10 +114,13 @@ internal class RuntimeStoreImpl(
             div.needLocalRuntime -> {
                 runtimeProvider.createChildRuntime(path, div.value(), resolver, errorCollector).also {
                     putRuntime(it, pathString, parentRuntime)
+                    if (divView is Div2View) {
+                        it.propertyVariableExecutor?.attachView(divView)
+                    }
                 }
             }
             resolver != parentResolver -> {
-                ExpressionsRuntime(resolver, null).also {
+                ExpressionsRuntime(resolver).also {
                     putRuntime(it, pathString, parentRuntime)
                 }
             }

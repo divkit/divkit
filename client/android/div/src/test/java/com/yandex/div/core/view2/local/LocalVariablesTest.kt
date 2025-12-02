@@ -127,7 +127,7 @@ class LocalVariablesTest {
     }
 
     private fun setVariable(name: String, value: String, path: DivStatePath) {
-        val variable = div2View.runtimeStore.getOrCreateRuntime(path, div, div2View.expressionResolver)
+        val variable = div2View.runtimeStore.getOrCreateRuntime(path, div, div2View.expressionResolver, div2View)
             .expressionResolver.variableController.getMutableVariable(name) ?: return
         variable.set(value)
     }

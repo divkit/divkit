@@ -145,6 +145,6 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 }
 
 internal fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, expressionResolver)
+    val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, expressionResolver, divView)
     return getFor(runtime.expressionResolver)
 }

@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -21,6 +22,7 @@ internal interface RuntimeStore {
         path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
+        divView: Div2View,
     ): ExpressionsRuntime
 
     fun getRuntimeWithOrNull(resolver: ExpressionResolver): ExpressionsRuntime?
@@ -59,7 +61,8 @@ internal interface RuntimeStore {
             override fun getOrCreateRuntime(
                 path: DivStatePath,
                 div: Div,
-                parentResolver: ExpressionResolver
+                parentResolver: ExpressionResolver,
+                divView: Div2View,
             ) = throw IllegalStateException()
 
             override fun getRuntimeWithOrNull(resolver: ExpressionResolver) = throwException()

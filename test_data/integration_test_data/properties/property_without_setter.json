@@ -42,6 +42,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios"
       ],
       "unsupported_platforms": {

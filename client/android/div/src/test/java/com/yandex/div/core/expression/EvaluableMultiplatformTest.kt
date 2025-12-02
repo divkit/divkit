@@ -3,7 +3,7 @@ package com.yandex.div.core.expression
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_UNORDERED_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createDivDataFromTestVars
-import com.yandex.div.core.expression.ExpressionTestCaseUtils.readExpression
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.toEvaluableType
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -138,11 +138,14 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     private fun evalExpression(): Any {
-        val value = readExpression(
-            raw = testCase.expression,
-            expectedType = testCase.expectedType,
-            logger = testParsingLogger,
-        ).evaluate(resolver)
+        val value = runCatching {
+            DivExpressionParser.readTypedExpression(
+                raw = testCase.expression,
+                key = "value",
+                expectedType = testCase.expectedType.toEvaluableType(),
+                logger = testParsingLogger,
+            ).evaluate(resolver)
+        }.getOrElse { return it }
 
         val expectedSorted = testCase.expectedWarnings.sorted()
         val actualSorted = warnings.sorted()
@@ -156,7 +159,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     companion object {
 
-        private lateinit var assertStatic: MockedStatic<com.yandex.div.internal.Assert>
+        private lateinit var assertStatic: MockedStatic<DivAssert>
 
         @JvmStatic
         @BeforeClass

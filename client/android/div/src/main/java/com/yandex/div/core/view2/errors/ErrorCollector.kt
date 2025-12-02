@@ -4,7 +4,9 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
+import java.lang.Exception
 
 typealias ErrorObserver = (errors: List<Throwable>, warnings: List<Throwable>) -> Unit
 
@@ -13,7 +15,7 @@ internal class ErrorCollector(
     internal val divData: DivData?,
     private val divDataTag: DivDataTag,
     private val divErrorsReporter: DivErrorsReporter,
-) {
+) : ParsingErrorLogger {
     private val observers = mutableSetOf<ErrorObserver>()
     private val runtimeErrors = mutableListOf<Throwable>()
     private var parsingErrors = emptyList<Throwable>()
@@ -27,6 +29,8 @@ internal class ErrorCollector(
         divErrorsReporter.onRuntimeError(divData, divDataTag, e)
         notifyObservers()
     }
+
+    override fun logError(e: Exception) = logError(e as Throwable)
 
     fun logWarning(warning: Throwable) {
         warnings.add(warning)

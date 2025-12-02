@@ -7,6 +7,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.types.Url
+import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVariable
 
@@ -53,10 +54,11 @@ internal fun Any?.wrapVariableValue() = when(this) {
 internal fun VariableController.declare(
     divVariable: DivVariable,
     resolver: ExpressionResolver,
+    propertyVariableExecutor: PropertyVariableExecutor,
     errorCollector: ErrorCollector
 ) {
     try {
-        declare(divVariable.toVariable(resolver))
+        divVariable.toVariable(resolver, propertyVariableExecutor, errorCollector)?.let { declare(it) }
     } catch (e: VariableDeclarationException) {
         errorCollector.logError(e)
     }

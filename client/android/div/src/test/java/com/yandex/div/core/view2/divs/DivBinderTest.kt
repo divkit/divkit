@@ -52,7 +52,7 @@ open class DivBinderTest {
         on { expressionResolver } doReturn resolver
     }
     private val runtimeStore = mock<RuntimeStore> {
-        on { getOrCreateRuntime(any(), any(), any()) } doReturn runtime
+        on { getOrCreateRuntime(any(), any(), any(), any()) } doReturn runtime
         on { resolveRuntimeWith(any(), any(), any(), any(), any()) } doReturn runtime
     }
     internal val divView = mock<Div2View> {

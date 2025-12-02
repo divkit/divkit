@@ -1,9 +1,9 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -38,7 +38,7 @@ class RuntimeStoreImplTest {
     private val underTest = RuntimeStoreImpl(mock(), runtimeProvider, mock())
 
     private val divBase = mock<DivBase>()
-    private val divView = mock<DivViewFacade>()
+    private val divView = mock<Div2View>()
     private val div = mock<Div> {
         on { value() } doReturn divBase
     }
@@ -60,20 +60,20 @@ class RuntimeStoreImplTest {
     fun `getOrCreateRuntime returns runtime for path if exist`() {
         underTest.putRuntime(childRuntime, PATH, rootRuntime)
 
-        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(path, div, resolver))
+        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(path, div, resolver, divView))
         Assert.assertEquals(childRuntime, underTest.getRuntimeWithOrNull(resolver))
     }
 
     @Test
     fun `getOrCreateRuntime returns parent runtime for path if no variables provided`() {
-        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(path, div, rootResolver))
+        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(path, div, rootResolver, divView))
     }
 
     @Test
     fun `getOrCreateRuntime returns new runtime if new variables provided`() {
         setVariable()
 
-        val runtime = underTest.getOrCreateRuntime(path, div, rootResolver)
+        val runtime = underTest.getOrCreateRuntime(path, div, rootResolver, divView)
 
         Assert.assertNotNull(runtime)
         Assert.assertNotSame(rootRuntime, runtime)
@@ -81,7 +81,7 @@ class RuntimeStoreImplTest {
 
     @Test
     fun `getOrCreateRuntime returns root runtime if parent runtime is not found`() {
-        val runtime = underTest.getOrCreateRuntime(path, div, mock<ExpressionResolverImpl>())
+        val runtime = underTest.getOrCreateRuntime(path, div, mock<ExpressionResolverImpl>(), divView)
 
         Assert.assertEquals(rootRuntime, runtime)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))

@@ -223,5 +223,5 @@ private fun Variable.getType() =
         is Variable.IntegerVariable -> "integer"
         is Variable.StringVariable -> "string"
         is Variable.UrlVariable -> "url"
-        is Variable.PropertyVariable -> TODO("Support property variables")
+        is Variable.PropertyVariable -> "property"
     }

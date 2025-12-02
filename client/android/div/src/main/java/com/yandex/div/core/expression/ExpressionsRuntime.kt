@@ -2,9 +2,11 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.triggers.TriggersController
+import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
 
 internal class ExpressionsRuntime(
     val expressionResolver: ExpressionResolverImpl,
+    val propertyVariableExecutor: PropertyVariableExecutorImpl? = null,
     val triggersController: TriggersController? = null,
 ) {
     private var unsubscribed = true
