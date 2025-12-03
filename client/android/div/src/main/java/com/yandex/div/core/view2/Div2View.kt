@@ -110,18 +110,10 @@ class Div2View private constructor(
 ) : FrameContainerLayout(context, attrs, defStyleAttr), DivViewFacade {
 
     internal val div2Component: Div2Component = context.div2Component
-    internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
-        .divView(this)
-        .build()
 
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
     private val isComplexRebindEnabled
         inline get() = div2Component.isComplexRebindEnabled
-
-    private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
-
-    private val bindingReporterProvider = BindingEventReporterProvider(this)
-    private val patchReporterProvider = PatchEventReporterProvider(this)
 
     private val divBuilder: Div2Builder = context.div2Component.div2Builder
     private val loadReferences = mutableListOf<LoadReference>()
@@ -146,8 +138,6 @@ class Div2View private constructor(
     private val layoutProviderBinder get() = viewComponent.layoutProviderBinder
     internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
     internal var inMiddleOfBind = false
-
-    internal var bindingContext: BindingContext = BindingContext(this, ExpressionResolver.EMPTY)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -193,8 +183,6 @@ class Div2View private constructor(
         },
         Handler(Looper.getMainLooper())
 )
-
-    internal val inputFocusTracker = viewComponent.inputFocusTracker
 
     var dataTag: DivDataTag = DivDataTag.INVALID
         internal set(value) {
@@ -274,6 +262,18 @@ class Div2View private constructor(
     private var mediaWasReleased = false
 
     internal val divTransitionHandler = DivTransitionHandler(this)
+
+    private val bindingReporterProvider = BindingEventReporterProvider(this)
+    private val patchReporterProvider = PatchEventReporterProvider(this)
+    internal var bindingContext: BindingContext = BindingContext(this, ExpressionResolver.EMPTY)
+
+    internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
+        .divView(this)
+        .build()
+
+    private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
+
+    internal val inputFocusTracker = viewComponent.inputFocusTracker
 
     init {
         timeCreated = DivCreationTracker.currentUptimeMillis
