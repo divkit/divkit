@@ -1163,13 +1163,13 @@
     "en": "Direct URL to a GIF image.",
     "ru": "Прямая ссылка на gif-изображение."
   },
-  "div_gif_image_short": {
-    "en": "Gif image.",
-    "ru": "Gif-изображение."
-  },
   "div_gif_image_preview_url": {
     "en": "Direct URL to an image for loading preview. When both `preview` and `preview_url` are used, `preview` will be used.",
     "ru": "Прямая ссылка на изображение для загрузки превью. При одновременном использовании `preview` и `preview_url` будет использоваться `preview`."
+  },
+  "div_gif_image_short": {
+    "en": "Gif image.",
+    "ru": "Gif-изображение."
   },
   "div_gradient_background": {
     "en": "Gradient background.",
