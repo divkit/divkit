@@ -18,8 +18,9 @@ struct PlaygroundView: View {
       divViewProvider.makeDivView(url)
     }
     .overlay(reloadButton, alignment: .topTrailing)
-    .onChange(of: colorScheme) { _ in
+    .onChange(of: colorScheme) { newValue in
       divViewProvider.jsonProvider.refreshPalette()
+      divViewProvider.setColorScheme(newValue)
     }
   }
 

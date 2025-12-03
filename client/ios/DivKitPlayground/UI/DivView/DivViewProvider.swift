@@ -8,7 +8,14 @@ final class DivViewProvider {
   private let divKitComponents: DivKitComponents
   private let layoutDirection: UIUserInterfaceLayoutDirection
 
-  init(layoutDirection: UIUserInterfaceLayoutDirection = .system) {
+  private var themeManager: DivThemeManager {
+    divKitComponents.themeManager
+  }
+
+  init(
+    layoutDirection: UIUserInterfaceLayoutDirection = .system,
+    colorScheme: ColorScheme
+  ) {
     self.layoutDirection = layoutDirection
     let jsonProvider = PlaygroundJsonProvider()
     let urlHandler = PlaygroundUrlHandler(
@@ -20,6 +27,8 @@ final class DivViewProvider {
       variableStorage: jsonProvider.paletteVariableStorage
     )
     self.jsonProvider = jsonProvider
+
+    themeManager.setTheme(theme: colorScheme == .dark ? .dark : .light)
   }
 
   func makeDivView(_ url: URL) -> some View {
@@ -34,6 +43,10 @@ final class DivViewProvider {
     .onDisappear { [weak self] in
       self?.divKitComponents.reset(cardId: cardId)
     }
+  }
+
+  func setColorScheme(_ colorScheme: ColorScheme) {
+    themeManager.setTheme(theme: colorScheme == .dark ? .dark : .light)
   }
 }
 

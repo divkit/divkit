@@ -1,0 +1,116 @@
+{
+  "card": {
+    "variables": [
+      {
+        "type": "color",
+        "name": "bg_color",
+        "value": "@{theme == 'light' ? '#85c2ff' : '#00508a'}"
+      }
+    ],
+    "log_id": "theme_switch_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "text",
+              "id": "text",
+              "text": "@{theme == 'light' ? 'light' : 'dark'}",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "@{theme == 'light' ? '#000' : '#FFF'}",
+              "font_size": 38,
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 200
+              },
+              "animators": [
+                {
+                  "type": "color_animator",
+                  "id": "background_animator",
+                  "variable_name": "bg_color",
+                  "start_value": "@{theme == 'light' ? '#85c2ff' : '#00508a'}",
+                  "end_value": "@{theme == 'light' ? '#FFF' : '#000'}",
+                  "duration": 1500,
+                  "interpolator": "ease_in_out"
+                }
+              ],
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "@{bg_color}"
+                }
+              ],
+              "variable_triggers": [
+                {
+                  "condition": "@{theme != ''}",
+                  "mode": "on_variable",
+                  "actions": [
+                    {
+                      "log_id": "theme_change",
+                      "url": "div-action://set_variable?name=bg_color&value=@{theme == 'light' ? '#85c2ff' : '#00508a'}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Start animator",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "#FFF",
+              "font_size": 18,
+              "font_weight": "medium",
+              "margins": {
+                "top": 40
+              },
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "border": {
+                "corner_radius": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#999"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "start_animator",
+                  "scope_id": "text",
+                  "typed": {
+                    "type": "animator_start",
+                    "animator_id": "background_animator"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -4,6 +4,8 @@ struct RegressionTestView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
+  @Environment(\.colorScheme) var colorScheme
+
   let model: RegressionTestModel
   let divViewProvider: DivViewProvider
 
@@ -24,6 +26,10 @@ struct RegressionTestView: View {
         .frame(maxWidth: .infinity, maxHeight: 220)
         .background(Color(red: 0xF2 / 255, green: 0xF2 / 255, blue: 0xF2 / 255))
         .accessibilityHidden(true)
+        .onChange(of: colorScheme) { newValue in
+          divViewProvider.jsonProvider.refreshPalette()
+          divViewProvider.setColorScheme(newValue)
+        }
       }
     }
   }

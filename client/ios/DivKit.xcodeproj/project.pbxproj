@@ -288,6 +288,7 @@
 		9860E7E72D9C326E00F93B48 /* TextInputBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */; };
 		986F579A2CD68E8400990A2A /* TooltipsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F57992CD68E8400990A2A /* TooltipsUITests.swift */; };
 		986F579C2CD68E8400990A2A /* AppLaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */; };
+		98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */; };
 		988C89112E60677400D3A925 /* GalleryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */; };
 		98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
@@ -680,6 +681,7 @@
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		986F57992CD68E8400990A2A /* TooltipsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipsUITests.swift; sourceTree = "<group>"; };
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
+		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
 		988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewModelTests.swift; sourceTree = "<group>"; };
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
 		98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipRunLoopCycles.swift; sourceTree = "<group>"; };
@@ -1223,6 +1225,7 @@
 		8C7B1BE42865C01C0036EF4C /* Variables */ = {
 			isa = PBXGroup;
 			children = (
+				98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */,
 				8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */,
 				8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */,
 				8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */,
@@ -2134,6 +2137,7 @@
 				8C23F42E29DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift in Sources */,
 				8C7B1BF82865C01C0036EF4C /* DivGifImageExtensionsTests.swift in Sources */,
 				8C7B1BFE2865C01C0036EF4C /* DivSerializationTests.swift in Sources */,
+				98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */,
 				8C23F43529DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift in Sources */,
 				8C23F43C29DDB3810069F3F7 /* ArrayWithTransformTests.swift in Sources */,
 				8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */,

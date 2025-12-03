@@ -57,7 +57,10 @@ struct MainView: View {
   }
 
   private func makeDivViewProvider() -> DivViewProvider {
-    DivViewProvider(layoutDirection: isRTLEnabled ? .rightToLeft : .leftToRight)
+    DivViewProvider(
+      layoutDirection: isRTLEnabled ? .rightToLeft : .leftToRight,
+      colorScheme: colorScheme
+    )
   }
 }
 

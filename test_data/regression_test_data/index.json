@@ -4049,6 +4049,27 @@
       ],
       "file": "input_in_gallery.json",
       "case_id": 477
+    },
+    {
+      "title": "Color scheme dependent color animator",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Tap the \"Start animator\" button",
+        "Change the color scheme on your device",
+        "Tap the \"Start animator\" button again"
+      ],
+      "expected_results": [
+        "Initially, you see a light-filled square labeled \"light\" or a dark-filled square labeled \"dark\" depending on the device's current color scheme",
+        "After the animator starts, depending on the color scheme, the dark fill color will animate to black or the light fill color will animate to white",
+        "After switching the screen theme, the dark square becomes light and the light square becomes dark",
+        "The animation triggered by the button should change to one that matches the current color scheme"
+      ],
+      "file": "animations/animators/color_scheme_dependent_color_animator.json"
     }
   ]
 }

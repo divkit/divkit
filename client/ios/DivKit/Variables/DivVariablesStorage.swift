@@ -31,7 +31,14 @@ public final class DivVariablesStorage {
     }
   }
 
+  struct AccessToken {
+    fileprivate init() {}
+  }
+
   public let changeEvents: Signal<ChangeEvent>
+
+  private lazy var internalPropertiesStorage: DivVariableStorage = globalStorage
+    .getInternalPropertiesStorage(token: AccessToken())
 
   private let globalStorage: DivVariableStorage
   private var localStorages: [UIElementPath: DivVariableStorage] = [:]
@@ -47,10 +54,21 @@ public final class DivVariablesStorage {
   public init(outerStorage: DivVariableStorage?) {
     globalStorage = DivVariableStorage(outerStorage: outerStorage, initialPath: nil)
 
+    changeEvents = Self.makeSignal(
+      globalStorage: globalStorage,
+      signal: changeEventsPipe.signal
+    )
+  }
+
+  static func makeSignal(
+    globalStorage: DivVariableStorage,
+    signal: Signal<DivVariablesStorage.ChangeEvent>
+  ) -> Signal<ChangeEvent> {
     let globalStorageEvents: Signal<ChangeEvent> = globalStorage.changeEvents.compactMap {
       ChangeEvent(.global($0.changedVariables))
     }
-    changeEvents = Signal.merge(globalStorageEvents, changeEventsPipe.signal)
+
+    return Signal.merge(globalStorageEvents, signal)
   }
 
   public func getVariableValue<T>(
@@ -411,6 +429,12 @@ extension DivVariablesStorage {
     }
     let isUpdated = storage?.update(path: path, name: name, newValue: value) == true
     return isUpdated
+  }
+}
+
+extension DivVariablesStorage {
+  func createPropertiesManager<Manager: DivSystemPropertyManager>() -> Manager {
+    Manager(storage: internalPropertiesStorage)
   }
 }
 

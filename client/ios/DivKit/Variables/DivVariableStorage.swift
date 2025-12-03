@@ -53,14 +53,36 @@ public final class DivVariableStorage {
     outerStorage: DivVariableStorage?,
     initialPath: UIElementPath?
   ) {
+    let outerStorage = if let outerStorage {
+      outerStorage
+    } else {
+      DivVariableStorage() // final storage
+    }
+
     self.outerStorage = outerStorage
     self.initialPath = initialPath
 
-    if let outerStorage {
-      changeEvents = Signal.merge(outerStorage.changeEvents, changeEventsPipe.signal)
-    } else {
-      changeEvents = changeEventsPipe.signal
-    }
+    self.changeEvents = Self.makeSignal(
+      outerStorage: outerStorage,
+      signal: changeEventsPipe.signal
+    )
+  }
+
+  private init() {
+    self.outerStorage = nil
+    self.initialPath = nil
+
+    self.changeEvents = Self.makeSignal(
+      outerStorage: outerStorage,
+      signal: changeEventsPipe.signal
+    )
+  }
+
+  static func makeSignal(
+    outerStorage: DivVariableStorage?,
+    signal: Signal<DivVariableStorage.ChangeEvent>
+  ) -> Signal<ChangeEvent> {
+    outerStorage.map { Signal.merge($0.changeEvents, signal) } ?? signal
   }
 
   /// Gets variable value.
@@ -127,6 +149,7 @@ public final class DivVariableStorage {
       }
       return changedVariables
     }
+
     if !changedVariables.isEmpty {
       notify(ChangeEvent(changedVariables: changedVariables))
     }
@@ -226,6 +249,16 @@ public final class DivVariableStorage {
   private func notify(_ event: ChangeEvent) {
     onMainThread { [weak self] in
       self?.changeEventsPipe.send(event)
+    }
+  }
+}
+
+extension DivVariableStorage {
+  func getInternalPropertiesStorage(token: DivVariablesStorage.AccessToken) -> DivVariableStorage {
+    if let outerStorage {
+      outerStorage.getInternalPropertiesStorage(token: token)
+    } else {
+      self
     }
   }
 }

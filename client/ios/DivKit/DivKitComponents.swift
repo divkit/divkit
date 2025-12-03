@@ -21,16 +21,19 @@ public final class DivKitComponents {
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let reporter: DivReporter
-  public let safeAreaManager: DivSafeAreaManager
+  public let resourcesPreloader: DivDataResourcesPreloader?
+  public lazy var safeAreaManager: DivSafeAreaManager = variablesStorage.createPropertiesManager()
+
   public let stateManagement: DivStateManagement
   public let submitter: DivSubmitter
+  public lazy var themeManager: DivThemeManager = variablesStorage.createPropertiesManager()
+
   public let tooltipManager: TooltipManager
   public let triggersStorage: DivTriggersStorage
   public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
-  public let resourcesPreloader: DivDataResourcesPreloader?
 
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
@@ -127,8 +130,6 @@ public final class DivKitComponents {
     self.updateCardPipe = updateCardPipe
 
     layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
-
-    safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
     updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardPipe.send)
     updateCard = updateAggregator.aggregate(_:)
