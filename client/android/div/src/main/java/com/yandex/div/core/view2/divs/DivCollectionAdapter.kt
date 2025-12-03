@@ -29,7 +29,6 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         val item = visibleItems[position]
         val childPath = path.appendDiv(ids[items.indexOf(item)])
         val resolver = bindingContext.divView.runtimeStore.resolveRuntimeWith(
-            bindingContext.divView,
             childPath,
             item.div,
             item.expressionResolver,

@@ -122,7 +122,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
         variables?.forEach { variable ->
             if (variable is DivVariable.Property && propertyExecutor == null) {
-                propertyExecutor = PropertyVariableExecutorImpl(resolver)
+                propertyExecutor = PropertyVariableExecutorImpl(resolver, runtimeStore.viewProvider)
             }
             variableController.declare(
                 variable,

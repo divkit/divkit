@@ -1,16 +1,18 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
+import javax.inject.Provider
 
 internal interface RuntimeStore {
 
     val rootRuntime: ExpressionsRuntime
+
+    val viewProvider: Provider<Div2View?>
 
     fun showWarningIfNeeded(child: DivBase) = Unit
 
@@ -22,26 +24,24 @@ internal interface RuntimeStore {
         path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
-        divView: Div2View,
     ): ExpressionsRuntime
 
     fun getRuntimeWithOrNull(resolver: ExpressionResolver): ExpressionsRuntime?
 
     fun resolveRuntimeWith(
-        divView: DivViewFacade?,
         path: DivStatePath,
         div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime?
 
-    fun cleanupRuntimes(divView: DivViewFacade)
+    fun cleanupRuntimes(divView: Div2View)
 
     fun updateSubscriptions()
 
-    fun clearBindings(divView: DivViewFacade)
+    fun clearBindings(divView: Div2View)
 
-    fun onDetachedFromWindow(divView: DivViewFacade)
+    fun onDetachedFromWindow(divView: Div2View)
 
     fun traverseFrom(runtime: ExpressionsRuntime, path: DivStatePath, callback: (ExpressionsRuntime) -> Unit)
 
@@ -58,30 +58,30 @@ internal interface RuntimeStore {
 
             override val rootRuntime: ExpressionsRuntime get() = throwException()
 
+            override val viewProvider: Provider<Div2View?> get() = Provider { null }
+
             override fun getOrCreateRuntime(
                 path: DivStatePath,
                 div: Div,
                 parentResolver: ExpressionResolver,
-                divView: Div2View,
             ) = throw IllegalStateException()
 
             override fun getRuntimeWithOrNull(resolver: ExpressionResolver) = throwException()
 
             override fun resolveRuntimeWith(
-                divView: DivViewFacade?,
                 path: DivStatePath,
                 div: Div,
                 resolver: ExpressionResolver,
                 parentResolver: ExpressionResolver
             ) = throwException()
 
-            override fun cleanupRuntimes(divView: DivViewFacade) = Unit
+            override fun cleanupRuntimes(divView: Div2View) = Unit
 
             override fun updateSubscriptions() = Unit
 
-            override fun clearBindings(divView: DivViewFacade) = Unit
+            override fun clearBindings(divView: Div2View) = Unit
 
-            override fun onDetachedFromWindow(divView: DivViewFacade) = Unit
+            override fun onDetachedFromWindow(divView: Div2View) = Unit
 
             override fun traverseFrom(
                 runtime: ExpressionsRuntime,

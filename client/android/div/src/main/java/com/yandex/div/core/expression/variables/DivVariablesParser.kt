@@ -40,7 +40,9 @@ object DivVariablesParser {
         }
         val divVariables: List<DivVariable> = JsonParser.readList(
             jsonObject, key, DivVariable.CREATOR, listValidator, logger, env)
-        val executor = resolver.asImpl?.let { PropertyVariableExecutorImpl(it) } ?: PropertyVariableExecutor.STUB
+        val executor = resolver.asImpl?.let {
+            PropertyVariableExecutorImpl(it) { null }
+        } ?: PropertyVariableExecutor.STUB
         return divVariables.mapNotNull { it.toVariable(resolver, executor, logger) }
     }
 }

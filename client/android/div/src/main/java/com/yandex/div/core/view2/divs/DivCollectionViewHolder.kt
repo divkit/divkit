@@ -41,13 +41,7 @@ internal abstract class DivCollectionViewHolder(
 
         oldDiv = div
 
-        divView.runtimeStore.resolveRuntimeWith(
-            divView,
-            path,
-            div,
-            resolver,
-            parentContext.expressionResolver,
-        )
+        divView.runtimeStore.resolveRuntimeWith(path, div, resolver, parentContext.expressionResolver)
 
         divBinder.bind(bindingContext, childView, div, path)
         divView.runtimeStore.showWarningIfNeeded(div.value())

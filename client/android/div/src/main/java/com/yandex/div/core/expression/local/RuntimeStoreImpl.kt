@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
@@ -12,6 +11,8 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
+import java.lang.ref.WeakReference
+import javax.inject.Provider
 
 internal const val ERROR_PARENT_RUNTIME_NOT_STORED = "Parent runtime for path '%s' is not stored."
 private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
@@ -31,8 +32,16 @@ internal class RuntimeStoreImpl(
     private val tree = RuntimeTree()
     private val itemBuilderResolvers = mutableMapOf<String, ExpressionResolver>()
 
+    private var viewRef: WeakReference<Div2View>? = null
+
+    override val viewProvider = Provider { viewRef?.get() }
+
     override val rootRuntime = runtimeProvider.createRootRuntime(data, errorCollector, this).also {
         putRuntime(it, "", null)
+    }
+
+    fun attachView(view: Div2View) {
+        viewRef = WeakReference(view)
     }
 
     override fun showWarningIfNeeded(child: DivBase) {
@@ -50,13 +59,9 @@ internal class RuntimeStoreImpl(
         path: DivStatePath,
         div: Div,
         parentResolver: ExpressionResolver,
-        divView: Div2View,
     ): ExpressionsRuntime {
         val pathString = path.fullPath
-        pathToRuntime[pathString]?.let {
-            it.propertyVariableExecutor?.attachView(divView)
-            return it
-        }
+        pathToRuntime[pathString]?.let { return it }
 
         if (parentResolver !is ExpressionResolverImpl) return rootRuntime
 
@@ -72,7 +77,6 @@ internal class RuntimeStoreImpl(
 
         val runtime = runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector)
         putRuntime(runtime, pathString, parentRuntime)
-        runtime.propertyVariableExecutor?.attachView(divView)
         return runtime
     }
 
@@ -91,17 +95,13 @@ internal class RuntimeStoreImpl(
     }
 
     override fun resolveRuntimeWith(
-        divView: DivViewFacade?,
         path: DivStatePath,
         div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
         val pathString = path.fullPath
-        pathToRuntime[pathString]?.let { runtime ->
-            (divView as? Div2View)?.let { runtime.propertyVariableExecutor?.attachView(divView) }
-            return runtime
-        }
+        pathToRuntime[pathString]?.let { return it }
 
         if (resolver !is ExpressionResolverImpl) return null
 
@@ -114,9 +114,6 @@ internal class RuntimeStoreImpl(
             div.needLocalRuntime -> {
                 runtimeProvider.createChildRuntime(path, div.value(), resolver, errorCollector).also {
                     putRuntime(it, pathString, parentRuntime)
-                    if (divView is Div2View) {
-                        it.propertyVariableExecutor?.attachView(divView)
-                    }
                 }
             }
             resolver != parentResolver -> {
@@ -132,16 +129,16 @@ internal class RuntimeStoreImpl(
         }
     }
 
-    override fun cleanupRuntimes(divView: DivViewFacade) {
+    override fun cleanupRuntimes(divView: Div2View) {
         warningShown = false
         allRuntimes.forEach { it.cleanup(divView) }
     }
 
     override fun updateSubscriptions() = allRuntimes.forEach { it.updateSubscriptions() }
 
-    override fun clearBindings(divView: DivViewFacade) = allRuntimes.forEach { it.clearBinding(divView) }
+    override fun clearBindings(divView: Div2View) = allRuntimes.forEach { it.clearBinding(divView) }
 
-    override fun onDetachedFromWindow(divView: DivViewFacade) = allRuntimes.forEach {
+    override fun onDetachedFromWindow(divView: Div2View) = allRuntimes.forEach {
         it.onDetachedFromWindow(divView)
     }
 

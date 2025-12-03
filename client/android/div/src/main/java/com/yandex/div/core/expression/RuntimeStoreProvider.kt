@@ -37,14 +37,15 @@ internal class RuntimeStoreProvider @Inject constructor(
 
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         runtimeStores[tag.id]?.let {
-            ensureVariablesSynced(it.rootRuntime, data, errorCollector, div2View)
+            it.attachView(div2View)
+            ensureVariablesSynced(it.rootRuntime, data, errorCollector)
             it.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
             return it
         }
 
         return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also {
             runtimeStores[tag.id] = it
-            it.rootRuntime.propertyVariableExecutor?.attachView(div2View)
+            it.attachView(div2View)
         }
     }
 
@@ -69,13 +70,10 @@ internal class RuntimeStoreProvider @Inject constructor(
         runtime: ExpressionsRuntime,
         data: DivData,
         errorCollector: ErrorCollector,
-        view: Div2View,
     ) {
         val resolver = runtime.expressionResolver
         val variableController = resolver.variableController
-        val propertyExecutor = runtime.propertyVariableExecutor?.apply {
-            attachView(view)
-        } ?: PropertyVariableExecutor.STUB
+        val propertyExecutor = runtime.propertyVariableExecutor ?: PropertyVariableExecutor.STUB
 
         data.variables?.forEach { divVariable ->
             val existingVariable = variableController.getMutableVariable(divVariable.name) ?: run {

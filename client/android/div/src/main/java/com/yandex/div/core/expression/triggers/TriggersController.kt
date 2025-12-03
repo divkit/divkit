@@ -3,7 +3,6 @@ package com.yandex.div.core.expression.triggers
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler.DivActionReason
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
@@ -25,7 +24,7 @@ internal class TriggersController(
     private val divActionBinder: DivActionBinder
 ) {
     private val executors = mutableMapOf<List<DivTrigger>, MutableList<TriggerExecutor>>()
-    private var currentView: DivViewFacade? = null
+    private var currentView: Div2View? = null
     private var activeTriggers: List<DivTrigger>? = null
 
     fun ensureTriggersSynced(divTriggers: List<DivTrigger>) {
@@ -79,12 +78,12 @@ internal class TriggersController(
         return null
     }
 
-    fun clearBinding(view: DivViewFacade?) {
+    fun clearBinding(view: Div2View?) {
         currentView = null
         executors.forEach { (_, value) -> value.forEach { it.onDetach(view) } }
     }
 
-    fun onAttachedToWindow(view: DivViewFacade) {
+    fun onAttachedToWindow(view: Div2View) {
         if (currentView == view) return
         currentView = view
         activeTriggers?.let {
@@ -92,7 +91,7 @@ internal class TriggersController(
         }
     }
 
-    fun onDetachedFromWindow(view: DivViewFacade) {
+    fun onDetachedFromWindow(view: Div2View) {
         if (currentView == view) {
             currentView = null
         }
@@ -112,18 +111,18 @@ private class TriggerExecutor(
     private val changeTrigger = { _: Boolean -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
-    private var wasConditionSatisfied = WeakHashMap<DivViewFacade, Boolean>()
+    private var wasConditionSatisfied = WeakHashMap<Div2View, Boolean>()
     private var observersDisposable = Disposable.NULL
     private var removingDisposable = Disposable.NULL
     private var bindCompletionDisposable = Disposable.NULL
-    private val attachedViews = mutableSetOf<DivViewFacade>()
+    private val attachedViews = mutableSetOf<Div2View>()
 
-    fun onAttach(view: DivViewFacade) {
+    fun onAttach(view: Div2View) {
         attachedViews.add(view)
         invalidateObservation()
     }
 
-    fun onDetach(view: DivViewFacade?) {
+    fun onDetach(view: Div2View?) {
         attachedViews.remove(view)
         invalidateObservation()
     }
@@ -160,22 +159,20 @@ private class TriggerExecutor(
         attachedViews.forEach { tryTriggerActions(it) }
     }
 
-    private fun tryTriggerActions(viewFacade: DivViewFacade) {
-        (viewFacade as? Div2View)?.takeIf { it.inMiddleOfBind }?.let { div2View ->
-            tryTriggerActionsAfterBind(div2View)
+    private fun tryTriggerActions(view: Div2View) {
+        if (view.inMiddleOfBind) {
+            tryTriggerActionsAfterBind(view)
             return
         }
 
-        if (!conditionSatisfied(viewFacade)) {
+        if (!conditionSatisfied(view)) {
             return
         }
 
         actions.forEach {
-            (viewFacade as? Div2View)?.let { div2View ->
-                logger.logTrigger(div2View, it)
-            }
+            logger.logTrigger(view, it)
         }
-        divActionBinder.handleActions(viewFacade, resolver, actions, DivActionReason.TRIGGER)
+        divActionBinder.handleActions(view, resolver, actions, DivActionReason.TRIGGER)
     }
 
     private fun tryTriggerActionsAfterBind(div2View: Div2View) {
@@ -194,7 +191,7 @@ private class TriggerExecutor(
         div2View.addPersistentDivDataObserver(observer)
     }
 
-    private fun conditionSatisfied(viewFacade: DivViewFacade): Boolean {
+    private fun conditionSatisfied(view: Div2View): Boolean {
         val nowSatisfied: Boolean = try {
             expression.evaluate(resolver)
         } catch (e: Exception) {
@@ -210,8 +207,8 @@ private class TriggerExecutor(
             return false
         }
 
-        val wasSatisfied = wasConditionSatisfied[viewFacade] ?: false
-        wasConditionSatisfied[viewFacade] = nowSatisfied
+        val wasSatisfied = wasConditionSatisfied[view] ?: false
+        wasConditionSatisfied[view] = nowSatisfied
 
         if (!nowSatisfied) {
             return false

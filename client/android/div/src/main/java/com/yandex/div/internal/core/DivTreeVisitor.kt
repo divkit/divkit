@@ -69,7 +69,6 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         builtItems.forEachIndexed { index, item ->
             val childPath = path.appendDiv(ids[index])
             val resolver = context.divView.runtimeStore.resolveRuntimeWith(
-                context.divView,
                 childPath,
                 item.div,
                 item.expressionResolver,
@@ -145,6 +144,6 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 }
 
 internal fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, expressionResolver, divView)
+    val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, expressionResolver)
     return getFor(runtime.expressionResolver)
 }

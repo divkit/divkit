@@ -1,8 +1,8 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
+import com.yandex.div.core.view2.Div2View
 
 internal class ExpressionsRuntime(
     val expressionResolver: ExpressionResolverImpl,
@@ -11,15 +11,15 @@ internal class ExpressionsRuntime(
 ) {
     private var unsubscribed = true
 
-    fun clearBinding(view: DivViewFacade) {
+    fun clearBinding(view: Div2View) {
         triggersController?.clearBinding(view)
     }
 
-    fun onAttachedToWindow(view: DivViewFacade) {
+    fun onAttachedToWindow(view: Div2View) {
         triggersController?.onAttachedToWindow(view)
     }
 
-    fun onDetachedFromWindow(view: DivViewFacade) {
+    fun onDetachedFromWindow(view: Div2View) {
         triggersController?.onDetachedFromWindow(view)
     }
 
@@ -30,7 +30,7 @@ internal class ExpressionsRuntime(
         }
     }
 
-    internal fun cleanup(divView: DivViewFacade?) {
+    internal fun cleanup(divView: Div2View?) {
         if (!unsubscribed) {
             unsubscribed = true
             triggersController?.clearBinding(divView)
