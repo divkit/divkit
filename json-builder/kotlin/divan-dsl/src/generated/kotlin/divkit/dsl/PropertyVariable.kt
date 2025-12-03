@@ -64,6 +64,9 @@ data class PropertyVariable internal constructor(
          * Action when setting a property.
          */
         val set: Property<List<Action>>?,
+        /**
+         * Return property value type.
+         */
         val valueType: Property<EvaluableType>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -84,6 +87,7 @@ data class PropertyVariable internal constructor(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun DivScope.propertyVariable(
@@ -108,6 +112,7 @@ fun DivScope.propertyVariable(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun DivScope.propertyVariableProps(
@@ -130,6 +135,7 @@ fun DivScope.propertyVariableProps(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun TemplateScope.propertyVariableRefs(
@@ -152,6 +158,7 @@ fun TemplateScope.propertyVariableRefs(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun PropertyVariable.override(
@@ -176,6 +183,7 @@ fun PropertyVariable.override(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun PropertyVariable.defer(
@@ -200,6 +208,7 @@ fun PropertyVariable.defer(
  * @param name Property name.
  * @param newValueVariableName Name for accessing the data passed to the setter.
  * @param set Action when setting a property.
+ * @param valueType Return property value type.
  */
 @Generated
 fun PropertyVariable.modify(
@@ -226,14 +235,13 @@ fun PropertyVariable.modify(
 fun PropertyVariable.evaluate(
     `use named arguments`: Guard = Guard.instance,
     get: ExpressionProperty<String>? = null,
-    valueType: ExpressionProperty<EvaluableType>? = null,
 ): PropertyVariable = PropertyVariable(
     PropertyVariable.Properties(
         get = get ?: properties.get,
         name = properties.name,
         newValueVariableName = properties.newValueVariableName,
         set = properties.set,
-        valueType = valueType ?: properties.valueType,
+        valueType = properties.valueType,
     )
 )
 
