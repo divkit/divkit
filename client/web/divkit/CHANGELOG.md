@@ -1,3 +1,11 @@
+## 32.29.0 (December 8, 2025)
+
+* Added support for the `filter` method of an `array`.
+* Added support for the `getKeys` and `getValues` `dict` methods.
+* Added support for the `min_size` and `max_size` in `match_parent` size.
+* Functions in expressions can now be accessed by their name (not call, but just name). Function names are now more important than variables with the same names.
+
+
 ## 32.28.0 (December 1, 2025)
 
 * Fix active tab scaling inside the scaled element.

@@ -1,3 +1,17 @@
+## 32.29.0
+
+# Android Client:
+* Fixed crash "config must not be null" when binding DivView.
+* Fixed size of gallery with `wrap_content` size and children with `match_parent` size along cross axis.
+* Support property variable.
+
+# Web Client:
+* Added support for the `filter` method of an `array`.
+* Added support for the `getKeys` and `getValues` `dict` methods.
+* Added support for the `min_size` and `max_size` in `match_parent` size.
+* Functions in expressions can now be accessed by their name (not call, but just name). Function names are now more important than variables with the same names.
+
+
 ## 32.28.0
 
 # Android Client:
