@@ -3,6 +3,9 @@
   "platforms": [
     "android"
   ],
+  "unsupported_platforms": {
+    "web": "Already tested in snapshot_test_card"
+  },
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
