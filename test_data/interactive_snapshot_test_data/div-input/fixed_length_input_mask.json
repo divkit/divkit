@@ -1,6 +1,7 @@
 {
   "description": "Fixed length input mask",
   "platforms": [
+    "ios",
     "android",
     "web"
   ],
@@ -31,7 +32,7 @@
         {
           "name": "filter_1",
           "type": "string",
-          "value": "[a-z]"
+          "value": "."
         },
         {
           "name": "placeholder",
@@ -46,7 +47,7 @@
         {
           "name": "filter_2",
           "type": "string",
-          "value": "[A-Z]"
+          "value": "."
         },
         {
           "name": "always_visible",
@@ -68,7 +69,11 @@
             "items": [
               {
                 "type": "text",
-                "text": "Value in input: '@{input}'"
+                "text": "Formatted value: '@{input}'"
+              },
+              {
+                "type": "text",
+                "text": "Raw value: '@{raw_input}'"
               },
               {
                 "type": "input",
@@ -163,6 +168,60 @@
         }
       ],
       "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=",
+          "log_id": "clear_input"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%D0%9C%D0%B8%D1%80",
+          "log_id": "input_cyrillic"
+        }
+      ],
+      "expected_screenshot": "step6.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=😀😃",
+          "log_id": "input_emoji"
+        }
+      ],
+      "expected_screenshot": "step7.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=Hi123%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82",
+          "log_id": "input_mixed"
+        }
+      ],
+      "expected_screenshot": "step8.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=!@%23$%25^&*()",
+          "log_id": "input_special"
+        }
+      ],
+      "expected_screenshot": "step9.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=1234567890",
+          "log_id": "input_numbers"
+        }
+      ],
+      "expected_screenshot": "step10.png"
     }
   ]
 }

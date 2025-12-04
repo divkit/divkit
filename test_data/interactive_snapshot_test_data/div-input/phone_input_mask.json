@@ -1,6 +1,7 @@
 {
   "description": "Phone input mask",
   "platforms": [
+    "ios",
     "android",
     "web"
   ],
@@ -31,6 +32,10 @@
               }
             ],
             "items": [
+              {
+                "type": "text",
+                "text": "Formatted value: '@{input}'"
+              },
               {
                 "type": "text",
                 "text": "Raw value: '@{raw_input}'"
@@ -89,6 +94,24 @@
         }
       ],
       "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=%D0%9F",
+          "log_id": "input_single_cyrillic"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%D0%9C%D0%B8%D1%80123",
+          "log_id": "input_cyrillic_mixed_numbers"
+        }
+      ],
+      "expected_screenshot": "step4.png"
     }
   ]
 }
