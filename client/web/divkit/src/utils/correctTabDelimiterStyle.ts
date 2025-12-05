@@ -17,7 +17,9 @@ export function correctTabDelimiterStyle(
     }
 
     const res: TabsDelimiter = {
-        url: style.image_url
+        url: style.image_url,
+        width: 12,
+        height: 12
     };
 
     if (style.width?.type === 'fixed' && isPositiveNumber(style.width.value)) {

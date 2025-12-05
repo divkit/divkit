@@ -1,7 +1,8 @@
 {
   "description": "Image in .svg format in tabs delimiter",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_block": {
