@@ -38,6 +38,7 @@ data class Tooltip internal constructor(
             animationIn = additive.animationIn ?: properties.animationIn,
             animationOut = additive.animationOut ?: properties.animationOut,
             backgroundAccessibilityDescription = additive.backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
+            bringToTopId = additive.bringToTopId ?: properties.bringToTopId,
             closeByTapOutside = additive.closeByTapOutside ?: properties.closeByTapOutside,
             div = additive.div ?: properties.div,
             duration = additive.duration ?: properties.duration,
@@ -45,6 +46,7 @@ data class Tooltip internal constructor(
             mode = additive.mode ?: properties.mode,
             offset = additive.offset ?: properties.offset,
             position = additive.position ?: properties.position,
+            substrateDiv = additive.substrateDiv ?: properties.substrateDiv,
             tapOutsideActions = additive.tapOutsideActions ?: properties.tapOutsideActions,
         )
     )
@@ -63,6 +65,10 @@ data class Tooltip internal constructor(
          * Description for accessibility of the tap action on the background of the tooltip.
          */
         val backgroundAccessibilityDescription: Property<String>?,
+        /**
+         * An element that will be brought to the top of the substrate.
+         */
+        val bringToTopId: Property<String>?,
         /**
          * Allows dismissing tooltip by tapping outside of it.
          * Default value: `true`.
@@ -95,6 +101,10 @@ data class Tooltip internal constructor(
          */
         val position: Property<Position>?,
         /**
+         * An element that will be used as a substrate for the tooltip.
+         */
+        val substrateDiv: Property<Div>?,
+        /**
          * Specifies actions triggered by tapping outside the tooltip.
          */
         val tapOutsideActions: Property<List<Action>>?,
@@ -105,6 +115,7 @@ data class Tooltip internal constructor(
             result.tryPutProperty("animation_in", animationIn)
             result.tryPutProperty("animation_out", animationOut)
             result.tryPutProperty("background_accessibility_description", backgroundAccessibilityDescription)
+            result.tryPutProperty("bring_to_top_id", bringToTopId)
             result.tryPutProperty("close_by_tap_outside", closeByTapOutside)
             result.tryPutProperty("div", div)
             result.tryPutProperty("duration", duration)
@@ -112,6 +123,7 @@ data class Tooltip internal constructor(
             result.tryPutProperty("mode", mode)
             result.tryPutProperty("offset", offset)
             result.tryPutProperty("position", position)
+            result.tryPutProperty("substrate_div", substrateDiv)
             result.tryPutProperty("tap_outside_actions", tapOutsideActions)
             return result
         }
@@ -130,6 +142,7 @@ data class Tooltip internal constructor(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -137,6 +150,7 @@ data class Tooltip internal constructor(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -145,6 +159,7 @@ fun DivScope.tooltip(
     animationIn: Animation? = null,
     animationOut: Animation? = null,
     backgroundAccessibilityDescription: String? = null,
+    bringToTopId: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -152,12 +167,14 @@ fun DivScope.tooltip(
     mode: TooltipMode? = null,
     offset: Point? = null,
     position: Tooltip.Position? = null,
+    substrateDiv: Div? = null,
     tapOutsideActions: List<Action>? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = valueOrNull(animationIn),
         animationOut = valueOrNull(animationOut),
         backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription),
+        bringToTopId = valueOrNull(bringToTopId),
         closeByTapOutside = valueOrNull(closeByTapOutside),
         div = valueOrNull(div),
         duration = valueOrNull(duration),
@@ -165,6 +182,7 @@ fun DivScope.tooltip(
         mode = valueOrNull(mode),
         offset = valueOrNull(offset),
         position = valueOrNull(position),
+        substrateDiv = valueOrNull(substrateDiv),
         tapOutsideActions = valueOrNull(tapOutsideActions),
     )
 )
@@ -173,6 +191,7 @@ fun DivScope.tooltip(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -180,6 +199,7 @@ fun DivScope.tooltip(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -188,6 +208,7 @@ fun DivScope.tooltipProps(
     animationIn: Animation? = null,
     animationOut: Animation? = null,
     backgroundAccessibilityDescription: String? = null,
+    bringToTopId: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -195,11 +216,13 @@ fun DivScope.tooltipProps(
     mode: TooltipMode? = null,
     offset: Point? = null,
     position: Tooltip.Position? = null,
+    substrateDiv: Div? = null,
     tapOutsideActions: List<Action>? = null,
 ) = Tooltip.Properties(
     animationIn = valueOrNull(animationIn),
     animationOut = valueOrNull(animationOut),
     backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription),
+    bringToTopId = valueOrNull(bringToTopId),
     closeByTapOutside = valueOrNull(closeByTapOutside),
     div = valueOrNull(div),
     duration = valueOrNull(duration),
@@ -207,6 +230,7 @@ fun DivScope.tooltipProps(
     mode = valueOrNull(mode),
     offset = valueOrNull(offset),
     position = valueOrNull(position),
+    substrateDiv = valueOrNull(substrateDiv),
     tapOutsideActions = valueOrNull(tapOutsideActions),
 )
 
@@ -214,6 +238,7 @@ fun DivScope.tooltipProps(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -221,6 +246,7 @@ fun DivScope.tooltipProps(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -229,6 +255,7 @@ fun TemplateScope.tooltipRefs(
     animationIn: ReferenceProperty<Animation>? = null,
     animationOut: ReferenceProperty<Animation>? = null,
     backgroundAccessibilityDescription: ReferenceProperty<String>? = null,
+    bringToTopId: ReferenceProperty<String>? = null,
     closeByTapOutside: ReferenceProperty<Boolean>? = null,
     div: ReferenceProperty<Div>? = null,
     duration: ReferenceProperty<Int>? = null,
@@ -236,11 +263,13 @@ fun TemplateScope.tooltipRefs(
     mode: ReferenceProperty<TooltipMode>? = null,
     offset: ReferenceProperty<Point>? = null,
     position: ReferenceProperty<Tooltip.Position>? = null,
+    substrateDiv: ReferenceProperty<Div>? = null,
     tapOutsideActions: ReferenceProperty<List<Action>>? = null,
 ) = Tooltip.Properties(
     animationIn = animationIn,
     animationOut = animationOut,
     backgroundAccessibilityDescription = backgroundAccessibilityDescription,
+    bringToTopId = bringToTopId,
     closeByTapOutside = closeByTapOutside,
     div = div,
     duration = duration,
@@ -248,6 +277,7 @@ fun TemplateScope.tooltipRefs(
     mode = mode,
     offset = offset,
     position = position,
+    substrateDiv = substrateDiv,
     tapOutsideActions = tapOutsideActions,
 )
 
@@ -255,6 +285,7 @@ fun TemplateScope.tooltipRefs(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -262,6 +293,7 @@ fun TemplateScope.tooltipRefs(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -270,6 +302,7 @@ fun Tooltip.override(
     animationIn: Animation? = null,
     animationOut: Animation? = null,
     backgroundAccessibilityDescription: String? = null,
+    bringToTopId: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -277,12 +310,14 @@ fun Tooltip.override(
     mode: TooltipMode? = null,
     offset: Point? = null,
     position: Tooltip.Position? = null,
+    substrateDiv: Div? = null,
     tapOutsideActions: List<Action>? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = valueOrNull(animationIn) ?: properties.animationIn,
         animationOut = valueOrNull(animationOut) ?: properties.animationOut,
         backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription) ?: properties.backgroundAccessibilityDescription,
+        bringToTopId = valueOrNull(bringToTopId) ?: properties.bringToTopId,
         closeByTapOutside = valueOrNull(closeByTapOutside) ?: properties.closeByTapOutside,
         div = valueOrNull(div) ?: properties.div,
         duration = valueOrNull(duration) ?: properties.duration,
@@ -290,6 +325,7 @@ fun Tooltip.override(
         mode = valueOrNull(mode) ?: properties.mode,
         offset = valueOrNull(offset) ?: properties.offset,
         position = valueOrNull(position) ?: properties.position,
+        substrateDiv = valueOrNull(substrateDiv) ?: properties.substrateDiv,
         tapOutsideActions = valueOrNull(tapOutsideActions) ?: properties.tapOutsideActions,
     )
 )
@@ -298,6 +334,7 @@ fun Tooltip.override(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -305,6 +342,7 @@ fun Tooltip.override(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -313,6 +351,7 @@ fun Tooltip.defer(
     animationIn: ReferenceProperty<Animation>? = null,
     animationOut: ReferenceProperty<Animation>? = null,
     backgroundAccessibilityDescription: ReferenceProperty<String>? = null,
+    bringToTopId: ReferenceProperty<String>? = null,
     closeByTapOutside: ReferenceProperty<Boolean>? = null,
     div: ReferenceProperty<Div>? = null,
     duration: ReferenceProperty<Int>? = null,
@@ -320,12 +359,14 @@ fun Tooltip.defer(
     mode: ReferenceProperty<TooltipMode>? = null,
     offset: ReferenceProperty<Point>? = null,
     position: ReferenceProperty<Tooltip.Position>? = null,
+    substrateDiv: ReferenceProperty<Div>? = null,
     tapOutsideActions: ReferenceProperty<List<Action>>? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = animationIn ?: properties.animationIn,
         animationOut = animationOut ?: properties.animationOut,
         backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
+        bringToTopId = bringToTopId ?: properties.bringToTopId,
         closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
         div = div ?: properties.div,
         duration = duration ?: properties.duration,
@@ -333,6 +374,7 @@ fun Tooltip.defer(
         mode = mode ?: properties.mode,
         offset = offset ?: properties.offset,
         position = position ?: properties.position,
+        substrateDiv = substrateDiv ?: properties.substrateDiv,
         tapOutsideActions = tapOutsideActions ?: properties.tapOutsideActions,
     )
 )
@@ -341,6 +383,7 @@ fun Tooltip.defer(
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param bringToTopId An element that will be brought to the top of the substrate.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -348,6 +391,7 @@ fun Tooltip.defer(
  * @param mode Tooltip modes.
  * @param offset Shift relative to an anchor point.
  * @param position The position of a tooltip relative to an element it belongs to.
+ * @param substrateDiv An element that will be used as a substrate for the tooltip.
  * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
  */
 @Generated
@@ -356,6 +400,7 @@ fun Tooltip.modify(
     animationIn: Property<Animation>? = null,
     animationOut: Property<Animation>? = null,
     backgroundAccessibilityDescription: Property<String>? = null,
+    bringToTopId: Property<String>? = null,
     closeByTapOutside: Property<Boolean>? = null,
     div: Property<Div>? = null,
     duration: Property<Int>? = null,
@@ -363,12 +408,14 @@ fun Tooltip.modify(
     mode: Property<TooltipMode>? = null,
     offset: Property<Point>? = null,
     position: Property<Tooltip.Position>? = null,
+    substrateDiv: Property<Div>? = null,
     tapOutsideActions: Property<List<Action>>? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = animationIn ?: properties.animationIn,
         animationOut = animationOut ?: properties.animationOut,
         backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
+        bringToTopId = bringToTopId ?: properties.bringToTopId,
         closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
         div = div ?: properties.div,
         duration = duration ?: properties.duration,
@@ -376,6 +423,7 @@ fun Tooltip.modify(
         mode = mode ?: properties.mode,
         offset = offset ?: properties.offset,
         position = position ?: properties.position,
+        substrateDiv = substrateDiv ?: properties.substrateDiv,
         tapOutsideActions = tapOutsideActions ?: properties.tapOutsideActions,
     )
 )
@@ -398,6 +446,7 @@ fun Tooltip.evaluate(
         animationIn = properties.animationIn,
         animationOut = properties.animationOut,
         backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
+        bringToTopId = properties.bringToTopId,
         closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
         div = properties.div,
         duration = duration ?: properties.duration,
@@ -405,6 +454,7 @@ fun Tooltip.evaluate(
         mode = properties.mode,
         offset = properties.offset,
         position = position ?: properties.position,
+        substrateDiv = properties.substrateDiv,
         tapOutsideActions = properties.tapOutsideActions,
     )
 )

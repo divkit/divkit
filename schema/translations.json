@@ -2715,6 +2715,14 @@
     "en": "Specifies actions triggered by tapping outside the tooltip.",
     "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
   },
+  "div_tooltip_substrate_div": {
+    "en": "An element that will be used as a substrate for the tooltip.",
+    "ru": "Элемент, который будет использоваться как подложка для тултипа."
+  },
+  "div_tooltip_bring_to_top_id": {
+    "en": "An element that will be brought to the top of the substrate.",
+    "ru": "Идентификатор элемента, который будет подниматься над подложкой тултипа."
+  },
   "div_transform": {
     "en": "Transformation of the element.",
     "ru": "Преобразование элемента."
