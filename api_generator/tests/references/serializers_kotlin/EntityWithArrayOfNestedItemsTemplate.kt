@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
-    @JvmField val items: Field<List<ItemTemplate>>
-
-    constructor(
-        items: Field<List<ItemTemplate>>,
-    ) {
-        this.items = items
-    }
+class EntityWithArrayOfNestedItemsTemplate(
+    @JvmField val items: Field<List<ItemTemplate>>,
+) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
 
     constructor(
         env: ParsingEnvironment,
@@ -51,17 +46,10 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItemsTemplate(env, json = it) }
     }
 
-    class ItemTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
-        @JvmField val entity: Field<EntityTemplate>
-        @JvmField val property: Field<Expression<String>>
-
-        constructor(
-            entity: Field<EntityTemplate>,
-            property: Field<Expression<String>>,
-        ) {
-            this.entity = entity
-            this.property = property
-        }
+    class ItemTemplate(
+        @JvmField val entity: Field<EntityTemplate>,
+        @JvmField val property: Field<Expression<String>>,
+    ) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
 
         constructor(
             env: ParsingEnvironment,

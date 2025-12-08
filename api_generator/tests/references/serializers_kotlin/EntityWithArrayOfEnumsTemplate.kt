@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfEnums> {
-    @JvmField val items: Field<List<EntityWithArrayOfEnums.Item>>
-
-    constructor(
-        items: Field<List<EntityWithArrayOfEnums.Item>>,
-    ) {
-        this.items = items
-    }
+class EntityWithArrayOfEnumsTemplate(
+    @JvmField val items: Field<List<EntityWithArrayOfEnums.Item>>,
+) : JSONSerializable, JsonTemplate<EntityWithArrayOfEnums> {
 
     constructor(
         env: ParsingEnvironment,

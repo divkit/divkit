@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringEnumPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithStringEnumProperty> {
-    @JvmField val property: Field<Expression<EntityWithStringEnumProperty.Property>>
-
-    constructor(
-        property: Field<Expression<EntityWithStringEnumProperty.Property>>,
-    ) {
-        this.property = property
-    }
+class EntityWithStringEnumPropertyTemplate(
+    @JvmField val property: Field<Expression<EntityWithStringEnumProperty.Property>>,
+) : JSONSerializable, JsonTemplate<EntityWithStringEnumProperty> {
 
     constructor(
         env: ParsingEnvironment,

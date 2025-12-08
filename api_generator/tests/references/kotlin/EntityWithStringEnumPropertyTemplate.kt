@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringEnumPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithStringEnumProperty> {
-    @JvmField val property: Field<Expression<EntityWithStringEnumProperty.Property>>
-
-    constructor(
-        property: Field<Expression<EntityWithStringEnumProperty.Property>>,
-    ) {
-        this.property = property
-    }
+class EntityWithStringEnumPropertyTemplate(
+    @JvmField val property: Field<Expression<EntityWithStringEnumProperty.Property>>,
+) : JSONSerializable, JsonTemplate<EntityWithStringEnumProperty> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithStringEnumPropertyTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
-    }
+    ) : this(
+        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING, env.logger, env, TYPE_HELPER_PROPERTY)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringEnumProperty {
         return EntityWithStringEnumProperty(

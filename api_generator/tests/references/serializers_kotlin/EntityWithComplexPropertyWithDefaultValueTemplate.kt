@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue> {
-    @JvmField val property: Field<PropertyTemplate>
-
-    constructor(
-        property: Field<PropertyTemplate>,
-    ) {
-        this.property = property
-    }
+class EntityWithComplexPropertyWithDefaultValueTemplate(
+    @JvmField val property: Field<PropertyTemplate>,
+) : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue> {
 
     constructor(
         env: ParsingEnvironment,
@@ -53,14 +48,9 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    class PropertyTemplate : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue.Property> {
-        @JvmField val value: Field<Expression<String>>
-
-        constructor(
-            value: Field<Expression<String>>,
-        ) {
-            this.value = value
-        }
+    class PropertyTemplate(
+        @JvmField val value: Field<Expression<String>>,
+    ) : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue.Property> {
 
         constructor(
             env: ParsingEnvironment,

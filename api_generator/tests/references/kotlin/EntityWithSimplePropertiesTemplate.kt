@@ -13,56 +13,34 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<EntityWithSimpleProperties> {
-    @JvmField val boolean: Field<Expression<Boolean>>
-    @JvmField val booleanInt: Field<Expression<Boolean>>
-    @JvmField val color: Field<Expression<Int>>
-    @JvmField val double: Field<Expression<Double>>
-    @JvmField val id: Field<Long>
-    @JvmField val integer: Field<Expression<Long>>
-    @JvmField val positiveInteger: Field<Expression<Long>>
-    @JvmField val string: Field<Expression<String>>
-    @JvmField val url: Field<Expression<Uri>>
-
-    constructor(
-        boolean: Field<Expression<Boolean>>,
-        booleanInt: Field<Expression<Boolean>>,
-        color: Field<Expression<Int>>,
-        double: Field<Expression<Double>>,
-        id: Field<Long>,
-        integer: Field<Expression<Long>>,
-        positiveInteger: Field<Expression<Long>>,
-        string: Field<Expression<String>>,
-        url: Field<Expression<Uri>>,
-    ) {
-        this.boolean = boolean
-        this.booleanInt = booleanInt
-        this.color = color
-        this.double = double
-        this.id = id
-        this.integer = integer
-        this.positiveInteger = positiveInteger
-        this.string = string
-        this.url = url
-    }
+class EntityWithSimplePropertiesTemplate(
+    @JvmField val boolean: Field<Expression<Boolean>>,
+    @JvmField val booleanInt: Field<Expression<Boolean>>,
+    @JvmField val color: Field<Expression<Int>>,
+    @JvmField val double: Field<Expression<Double>>,
+    @JvmField val id: Field<Long>,
+    @JvmField val integer: Field<Expression<Long>>,
+    @JvmField val positiveInteger: Field<Expression<Long>>,
+    @JvmField val string: Field<Expression<String>>,
+    @JvmField val url: Field<Expression<Uri>>,
+) : JSONSerializable, JsonTemplate<EntityWithSimpleProperties> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithSimplePropertiesTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-        booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-        color = JsonTemplateParser.readOptionalFieldWithExpression(json, "color", topLevel, parent?.color, STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR)
-        double = JsonTemplateParser.readOptionalFieldWithExpression(json, "double", topLevel, parent?.double, NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE)
-        id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, logger, env)
-        integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
-        positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-        string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, logger, env, TYPE_HELPER_URI)
-    }
+    ) : this(
+        boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN),
+        booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN),
+        color = JsonTemplateParser.readOptionalFieldWithExpression(json, "color", topLevel, parent?.color, STRING_TO_COLOR_INT, env.logger, env, TYPE_HELPER_COLOR),
+        double = JsonTemplateParser.readOptionalFieldWithExpression(json, "double", topLevel, parent?.double, NUMBER_TO_DOUBLE, env.logger, env, TYPE_HELPER_DOUBLE),
+        id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, env.logger, env),
+        integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, env.logger, env, TYPE_HELPER_INT),
+        positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_INT),
+        string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, env.logger, env, TYPE_HELPER_STRING),
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithSimpleProperties {
         return EntityWithSimpleProperties(

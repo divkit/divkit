@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithStringArrayProperty> {
-    @JvmField val array: Field<ExpressionList<String>>
-
-    constructor(
-        array: Field<ExpressionList<String>>,
-    ) {
-        this.array = array
-    }
+class EntityWithStringArrayPropertyTemplate(
+    @JvmField val array: Field<ExpressionList<String>>,
+) : JSONSerializable, JsonTemplate<EntityWithStringArrayProperty> {
 
     constructor(
         env: ParsingEnvironment,

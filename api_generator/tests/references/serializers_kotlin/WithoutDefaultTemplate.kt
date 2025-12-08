@@ -13,18 +13,14 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class WithoutDefaultTemplate : JSONSerializable, JsonTemplate<WithoutDefault> {
-
-    constructor()
+class WithoutDefaultTemplate() : JSONSerializable, JsonTemplate<WithoutDefault> {
 
     constructor(
         env: ParsingEnvironment,
         parent: WithoutDefaultTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) : this() {
-        throw UnsupportedOperationException("Do not use this constructor directly.")
-    }
+    ) : this()
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): WithoutDefault {
         return builtInParserComponent.withoutDefaultJsonTemplateResolver

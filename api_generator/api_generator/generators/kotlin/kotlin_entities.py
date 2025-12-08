@@ -235,26 +235,21 @@ class KotlinEntity(Entity):
                 text += prop.declaration(
                     overridden=overridden,
                     in_interface=False,
-                    with_comma=not is_template,
+                    with_comma=True,
                     with_default=not is_template
                 ).indented(indent_width=4)
             return text
 
-        if self.generation_mode.is_template:
-            result += prefix + suffix
-            if self.instance_properties:
-                result = add_instance_properties(text=result, is_template=True)
+        constructor_prefix = ''
+        if kotlin_annotations.constructors:
+            constructor_annotations = ', '.join(kotlin_annotations.constructors)
+            constructor_prefix = f' {constructor_annotations} constructor '
+        if not self.instance_properties:
+            result += f'{prefix}{constructor_prefix}(){suffix}'
         else:
-            constructor_prefix = ''
-            if kotlin_annotations.constructors:
-                constructor_annotations = ', '.join(kotlin_annotations.constructors)
-                constructor_prefix = f' {constructor_annotations} constructor '
-            if not self.instance_properties:
-                result += f'{prefix}{constructor_prefix}(){suffix}'
-            else:
-                result += f'{prefix}{constructor_prefix}('
-                result = add_instance_properties(text=result, is_template=False)
-                result += f'){suffix}'
+            result += f'{prefix}{constructor_prefix}('
+            result = add_instance_properties(text=result, is_template=self.generation_mode.is_template)
+            result += f'){suffix}'
         return result
 
     def serializer_declaration(self) -> Text:
@@ -1013,7 +1008,7 @@ class KotlinProperty(Property):
         return Text(f'{self.declaration_name}: {self.type_declaration}{default_assignment},')
 
     def deserialization_declaration(self, mode: GenerationMode) -> str:
-        deserialization_expr = self.deserialization_expression(mode=mode, reuse_logger_instance=True)
+        deserialization_expr = self.deserialization_expression(mode=mode, reuse_logger_instance=not mode.is_template)
         return f'{self.declaration_name} = {deserialization_expr}{self.default_value_coalescing(mode)}'
 
     def deserialization_expression(self, mode: GenerationMode, reuse_logger_instance: bool) -> str:

@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfEnums> {
-    @JvmField val items: Field<List<EntityWithArrayOfEnums.Item>>
-
-    constructor(
-        items: Field<List<EntityWithArrayOfEnums.Item>>,
-    ) {
-        this.items = items
-    }
+class EntityWithArrayOfEnumsTemplate(
+    @JvmField val items: Field<List<EntityWithArrayOfEnums.Item>>,
+) : JSONSerializable, JsonTemplate<EntityWithArrayOfEnums> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayOfEnumsTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
-    }
+    ) : this(
+        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, env.logger, env)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfEnums {
         return EntityWithArrayOfEnums(

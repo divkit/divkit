@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawArray> {
-    @JvmField val array: Field<Expression<JSONArray>>
-
-    constructor(
-        array: Field<Expression<JSONArray>>,
-    ) {
-        this.array = array
-    }
+class EntityWithRawArrayTemplate(
+    @JvmField val array: Field<Expression<JSONArray>>,
+) : JSONSerializable, JsonTemplate<EntityWithRawArray> {
 
     constructor(
         env: ParsingEnvironment,

@@ -13,20 +13,11 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
-    @JvmField val int: Field<Expression<Long>>
-    @JvmField val nested: Field<NestedTemplate>
-    @JvmField val url: Field<Expression<Uri>>
-
-    constructor(
-        int: Field<Expression<Long>>,
-        nested: Field<NestedTemplate>,
-        url: Field<Expression<Uri>>,
-    ) {
-        this.int = int
-        this.nested = nested
-        this.url = url
-    }
+class EntityWithPropertyWithDefaultValueTemplate(
+    @JvmField val int: Field<Expression<Long>>,
+    @JvmField val nested: Field<NestedTemplate>,
+    @JvmField val url: Field<Expression<Uri>>,
+) : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
 
     constructor(
         env: ParsingEnvironment,
@@ -62,20 +53,11 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    class NestedTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
-        @JvmField val int: Field<Expression<Long>>
-        @JvmField val nonOptional: Field<Expression<String>>
-        @JvmField val url: Field<Expression<Uri>>
-
-        constructor(
-            int: Field<Expression<Long>>,
-            nonOptional: Field<Expression<String>>,
-            url: Field<Expression<Uri>>,
-        ) {
-            this.int = int
-            this.nonOptional = nonOptional
-            this.url = url
-        }
+    class NestedTemplate(
+        @JvmField val int: Field<Expression<Long>>,
+        @JvmField val nonOptional: Field<Expression<String>>,
+        @JvmField val url: Field<Expression<Uri>>,
+    ) : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
 
         constructor(
             env: ParsingEnvironment,

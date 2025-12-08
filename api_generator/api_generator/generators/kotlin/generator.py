@@ -335,17 +335,6 @@ class KotlinEntityTemplateGenerator:
 
     def entity_declaration(self, entity: KotlinEntity) -> Text:
         result: Text = entity.header_declaration(self._kotlin_annotations, self._generate_serialization)
-        result += EMPTY
-        if entity.instance_properties_kotlin:
-            result += '    constructor('
-            for property in entity.instance_properties_kotlin:
-                result += property.argument_declaration(with_default=False).indented(indent_width=8)
-            result += '    ) {'
-            for property in entity.instance_properties_kotlin:
-                result += f'        this.{property.declaration_name} = {property.declaration_name}'
-            result += '    }'
-        else:
-            result += '    constructor()'
 
         if self._generate_serialization:
             result += EMPTY
@@ -360,18 +349,17 @@ class KotlinEntityTemplateGenerator:
                     for property in entity.instance_properties_kotlin:
                         result += f'        {property.declaration_name} = Field.nullField(false),'
                     result += '    ) {'
+                    result += '        throw UnsupportedOperationException("Do not use this constructor directly.")'
+                    result += '    }'
                 else:
-                    result += '    ) : this() {'
+                    result += '    ) : this()'
             else:
-                result += '    ) {'
-            if self._generate_serializers:
-                result += '        throw UnsupportedOperationException("Do not use this constructor directly.")'
-            else:
-                constructor = entity.constructor_body(with_commas=False).indented(indent_width=8)
-                if constructor.lines:
-                    result += '        val logger = env.logger'
-                    result += constructor
-            result += '    }'
+                if entity.instance_properties_kotlin:
+                    result += '    ) : this('
+                    result += entity.constructor_body(with_commas=True).indented(indent_width=8)
+                    result += '    )'
+                else:
+                    result += '    ) : this()'
 
         result += EMPTY
         result += entity.value_resolving_declaration(self._generate_serializers).indented(indent_width=4)

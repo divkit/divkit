@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringEnumPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithStringEnumPropertyWithDefaultValue> {
-    @JvmField val value: Field<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>>
-
-    constructor(
-        value: Field<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>>,
-    ) {
-        this.value = value
-    }
+class EntityWithStringEnumPropertyWithDefaultValueTemplate(
+    @JvmField val value: Field<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>>,
+) : JSONSerializable, JsonTemplate<EntityWithStringEnumPropertyWithDefaultValue> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithStringEnumPropertyWithDefaultValueTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        value = JsonTemplateParser.readOptionalFieldWithExpression(json, "value", topLevel, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, logger, env, TYPE_HELPER_VALUE)
-    }
+    ) : this(
+        value = JsonTemplateParser.readOptionalFieldWithExpression(json, "value", topLevel, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, env.logger, env, TYPE_HELPER_VALUE)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
         return EntityWithStringEnumPropertyWithDefaultValue(

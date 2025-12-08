@@ -13,17 +13,14 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithoutPropertiesTemplate : JSONSerializable, JsonTemplate<EntityWithoutProperties> {
-
-    constructor()
+class EntityWithoutPropertiesTemplate() : JSONSerializable, JsonTemplate<EntityWithoutProperties> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithoutPropertiesTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-    }
+    ) : this()
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithoutProperties {
         return EntityWithoutProperties()

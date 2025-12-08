@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
-    @JvmField val items: Field<List<ItemTemplate>>
-
-    constructor(
-        items: Field<List<ItemTemplate>>,
-    ) {
-        this.items = items
-    }
+class EntityWithArrayOfNestedItemsTemplate(
+    @JvmField val items: Field<List<ItemTemplate>>,
+) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayOfNestedItemsTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, logger, env)
-    }
+    ) : this(
+        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, env.logger, env)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems {
         return EntityWithArrayOfNestedItems(
@@ -57,28 +51,20 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItemsTemplate(env, json = it) }
     }
 
-    class ItemTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
-        @JvmField val entity: Field<EntityTemplate>
-        @JvmField val property: Field<Expression<String>>
-
-        constructor(
-            entity: Field<EntityTemplate>,
-            property: Field<Expression<String>>,
-        ) {
-            this.entity = entity
-            this.property = property
-        }
+    class ItemTemplate(
+        @JvmField val entity: Field<EntityTemplate>,
+        @JvmField val property: Field<Expression<String>>,
+    ) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
 
         constructor(
             env: ParsingEnvironment,
             parent: ItemTemplate? = null,
             topLevel: Boolean = false,
             json: JSONObject
-        ) {
-            val logger = env.logger
-            entity = JsonTemplateParser.readField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
-            property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
-        }
+        ) : this(
+            entity = JsonTemplateParser.readField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, env.logger, env),
+            property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, env.logger, env, TYPE_HELPER_STRING)
+        )
 
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems.Item {
             return EntityWithArrayOfNestedItems.Item(

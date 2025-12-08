@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayTemplate : JSONSerializable, JsonTemplate<EntityWithArray> {
-    @JvmField val array: Field<List<EntityTemplate>>
-
-    constructor(
-        array: Field<List<EntityTemplate>>,
-    ) {
-        this.array = array
-    }
+class EntityWithArrayTemplate(
+    @JvmField val array: Field<List<EntityTemplate>>,
+) : JSONSerializable, JsonTemplate<EntityWithArray> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        array = JsonTemplateParser.readListField(json, "array", topLevel, parent?.array, EntityTemplate.CREATOR, ARRAY_TEMPLATE_VALIDATOR, logger, env)
-    }
+    ) : this(
+        array = JsonTemplateParser.readListField(json, "array", topLevel, parent?.array, EntityTemplate.CREATOR, ARRAY_TEMPLATE_VALIDATOR, env.logger, env)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArray {
         return EntityWithArray(

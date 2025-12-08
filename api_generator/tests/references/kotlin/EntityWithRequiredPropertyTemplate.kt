@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithRequiredPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithRequiredProperty> {
-    @JvmField val property: Field<Expression<String>>
-
-    constructor(
-        property: Field<Expression<String>>,
-    ) {
-        this.property = property
-    }
+class EntityWithRequiredPropertyTemplate(
+    @JvmField val property: Field<Expression<String>>,
+) : JSONSerializable, JsonTemplate<EntityWithRequiredProperty> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithRequiredPropertyTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
-    }
+    ) : this(
+        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_STRING)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRequiredProperty {
         return EntityWithRequiredProperty(

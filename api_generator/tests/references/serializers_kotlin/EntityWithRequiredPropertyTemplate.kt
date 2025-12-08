@@ -13,14 +13,9 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithRequiredPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithRequiredProperty> {
-    @JvmField val property: Field<Expression<String>>
-
-    constructor(
-        property: Field<Expression<String>>,
-    ) {
-        this.property = property
-    }
+class EntityWithRequiredPropertyTemplate(
+    @JvmField val property: Field<Expression<String>>,
+) : JSONSerializable, JsonTemplate<EntityWithRequiredProperty> {
 
     constructor(
         env: ParsingEnvironment,

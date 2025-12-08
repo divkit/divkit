@@ -13,24 +13,18 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithOptionalStringEnumPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithOptionalStringEnumProperty> {
-    @JvmField val property: Field<Expression<EntityWithOptionalStringEnumProperty.Property>>
-
-    constructor(
-        property: Field<Expression<EntityWithOptionalStringEnumProperty.Property>>,
-    ) {
-        this.property = property
-    }
+class EntityWithOptionalStringEnumPropertyTemplate(
+    @JvmField val property: Field<Expression<EntityWithOptionalStringEnumProperty.Property>>,
+) : JSONSerializable, JsonTemplate<EntityWithOptionalStringEnumProperty> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithOptionalStringEnumPropertyTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithOptionalStringEnumProperty.Property.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
-    }
+    ) : this(
+        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithOptionalStringEnumProperty.Property.FROM_STRING, env.logger, env, TYPE_HELPER_PROPERTY)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithOptionalStringEnumProperty {
         return EntityWithOptionalStringEnumProperty(

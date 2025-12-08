@@ -13,32 +13,22 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
-    @JvmField val int: Field<Expression<Long>>
-    @JvmField val nested: Field<NestedTemplate>
-    @JvmField val url: Field<Expression<Uri>>
-
-    constructor(
-        int: Field<Expression<Long>>,
-        nested: Field<NestedTemplate>,
-        url: Field<Expression<Uri>>,
-    ) {
-        this.int = int
-        this.nested = nested
-        this.url = url
-    }
+class EntityWithPropertyWithDefaultValueTemplate(
+    @JvmField val int: Field<Expression<Long>>,
+    @JvmField val nested: Field<NestedTemplate>,
+    @JvmField val url: Field<Expression<Uri>>,
+) : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
 
     constructor(
         env: ParsingEnvironment,
         parent: EntityWithPropertyWithDefaultValueTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
-    ) {
-        val logger = env.logger
-        int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-        nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, logger, env)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
-    }
+    ) : this(
+        int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_INT),
+        nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, env.logger, env),
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_URI)
+    )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
         return EntityWithPropertyWithDefaultValue(
@@ -76,32 +66,22 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    class NestedTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
-        @JvmField val int: Field<Expression<Long>>
-        @JvmField val nonOptional: Field<Expression<String>>
-        @JvmField val url: Field<Expression<Uri>>
-
-        constructor(
-            int: Field<Expression<Long>>,
-            nonOptional: Field<Expression<String>>,
-            url: Field<Expression<Uri>>,
-        ) {
-            this.int = int
-            this.nonOptional = nonOptional
-            this.url = url
-        }
+    class NestedTemplate(
+        @JvmField val int: Field<Expression<Long>>,
+        @JvmField val nonOptional: Field<Expression<String>>,
+        @JvmField val url: Field<Expression<Uri>>,
+    ) : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
 
         constructor(
             env: ParsingEnvironment,
             parent: NestedTemplate? = null,
             topLevel: Boolean = false,
             json: JSONObject
-        ) {
-            val logger = env.logger
-            int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-            nonOptional = JsonTemplateParser.readFieldWithExpression(json, "non_optional", topLevel, parent?.nonOptional, logger, env, TYPE_HELPER_STRING)
-            url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
-        }
+        ) : this(
+            int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_INT),
+            nonOptional = JsonTemplateParser.readFieldWithExpression(json, "non_optional", topLevel, parent?.nonOptional, env.logger, env, TYPE_HELPER_STRING),
+            url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_URI)
+        )
 
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
             return EntityWithPropertyWithDefaultValue.Nested(
