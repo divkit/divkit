@@ -136,7 +136,7 @@ class Div2Context @MainThread private constructor(
         div2Component.div2Builder
     }
 
-    fun reset(@ResetFlag flags: Int = RESET_NONE, tags: List<DivDataTag> = emptyList()) {
+    fun reset(@ResetFlag flags: Int = RESET_ALL, tags: List<DivDataTag> = emptyList()) {
         if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
             div2Component.runtimeStoreProvider.reset(tags)
         }
@@ -148,6 +148,9 @@ class Div2Context @MainThread private constructor(
         }
         if (flags and RESET_VISIBILITY_COUNTERS != 0) {
             div2Component.visibilityActionDispatcher.reset(tags)
+        }
+        if (flags and RESET_BITMAP_EFFECT_CACHE != 0) {
+            div2Component.bitmapEffectHelper.release()
         }
     }
 
@@ -182,21 +185,28 @@ class Div2Context @MainThread private constructor(
     @IntDef(
         flag = true,
         value = [
-            RESET_NONE,
+            RESET_ALL,
             RESET_EXPRESSION_RUNTIMES,
             RESET_ERROR_COLLECTORS,
             RESET_SELECTED_STATES,
-            RESET_VISIBILITY_COUNTERS
+            RESET_VISIBILITY_COUNTERS,
+            RESET_BITMAP_EFFECT_CACHE
         ]
     )
     annotation class ResetFlag
 
     companion object {
-        private const val RESET_NONE = 0
         const val RESET_EXPRESSION_RUNTIMES = 1 shl 0
         const val RESET_ERROR_COLLECTORS = 1 shl 1
         const val RESET_SELECTED_STATES = 1 shl 2
         const val RESET_VISIBILITY_COUNTERS = 1 shl 3
+        const val RESET_BITMAP_EFFECT_CACHE = 1 shl 4
+
+        private const val RESET_ALL = RESET_EXPRESSION_RUNTIMES and
+            RESET_ERROR_COLLECTORS and
+            RESET_SELECTED_STATES and
+            RESET_VISIBILITY_COUNTERS and
+            RESET_BITMAP_EFFECT_CACHE
     }
 
     private class Div2InflaterFactory(
