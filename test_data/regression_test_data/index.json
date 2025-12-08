@@ -4069,7 +4069,8 @@
         "After switching the screen theme, the dark square becomes light and the light square becomes dark",
         "The animation triggered by the button should change to one that matches the current color scheme"
       ],
-      "file": "animations/animators/color_scheme_dependent_color_animator.json"
+      "file": "animations/animators/color_scheme_dependent_color_animator.json",
+      "case_id": 485
     }
   ]
 }
