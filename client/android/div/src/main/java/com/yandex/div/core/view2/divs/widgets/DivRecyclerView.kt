@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.asDivHolderView
 import com.yandex.div.core.view2.divs.drawShadow
+import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
 import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.widget.DivViewWrapper
@@ -62,10 +63,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
     var widthMeasureSpec = 0
     var heightMeasureSpec = 0
     var considerMatchParent = false
-    var measureAll = true
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        measureAll = true
         widthMeasureSpec = widthSpec
         heightMeasureSpec = heightSpec
 
@@ -83,26 +82,32 @@ internal class DivRecyclerView @JvmOverloads constructor(
         super.onMeasure(widthSpec, heightSpec)
 
         if (considerMatchParent) {
-            measureAll = false
             considerMatchParent = false
-            val newWidthSpec = getMaxSizeSpec(orientation == VERTICAL, widthSpec) { measuredWidth }
-            val newHeightSpec = getMaxSizeSpec(orientation == HORIZONTAL, heightSpec) { measuredHeight }
-            super.onMeasure(newWidthSpec, newHeightSpec)
+            widthMeasureSpec =
+                getMaxSizeSpec(orientation == VERTICAL, widthSpec, paddingLeft + paddingRight) { measuredWidth }
+            heightMeasureSpec =
+                getMaxSizeSpec(orientation == HORIZONTAL, heightSpec, paddingTop + paddingBottom) { measuredHeight }
+            children.forEach {
+                val div = it.asDivHolderView?.div ?: return@forEach
+                if (!div.isMatchParent { if (orientation == HORIZONTAL) height else width }) return@forEach
+                it.measure(widthMeasureSpec, heightMeasureSpec)
+            }
         }
     }
 
     private fun needConsiderMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
         if (!isUnspecified(spec)) return false
-        return children.all {
-            val childDiv = it.asDivHolderView?.div?.value() ?: return@all false
-            childDiv.size() is DivSize.MatchParent
-        }
+        val adapter = adapter as? DivGalleryAdapter ?: return false
+        return adapter.visibleItems.all { it.div.isMatchParent(size) }
     }
 
-    private fun getMaxSizeSpec(isCrossAxis: Boolean, oldSpec: Int, size: View.() -> Int): Int {
+    private fun Div.isMatchParent(size: DivBase.() -> DivSize) = value().size() is DivSize.MatchParent
+
+    private fun getMaxSizeSpec(isCrossAxis: Boolean, oldSpec: Int, paddings: Int, size: View.() -> Int): Int {
         if (!isCrossAxis) return oldSpec
         val maxSize = children.maxOf { it.size() }
-        return makeExactSpec(maxSize)
+        val layoutManager = layoutManager as? DivGridLayoutManager ?: return makeExactSpec(maxSize + paddings)
+        return makeExactSpec(maxSize * 2 + layoutManager.crossSpacing + paddings)
     }
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {

@@ -35,7 +35,6 @@ internal class DivGalleryItemLayout(
             lp.horizontalMargins,
             isHorizontal,
             recyclerView.considerMatchParent,
-            recyclerView.measureAll,
         )
         val heightSpec = getMeasureSpec(
             recyclerView.heightMeasureSpec,
@@ -46,14 +45,9 @@ internal class DivGalleryItemLayout(
             lp.verticalMargins,
             !isHorizontal,
             recyclerView.considerMatchParent,
-            recyclerView.measureAll,
         )
 
-        if (widthSpec != null && heightSpec != null) {
-            super.onMeasure(widthSpec, heightSpec)
-        } else {
-            setMeasuredDimension(measuredWidthAndState, measuredHeightAndState)
-        }
+        super.onMeasure(widthSpec, heightSpec)
     }
 
     private fun setEmptySize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -74,8 +68,7 @@ internal class DivGalleryItemLayout(
         margins: Int,
         alongScrollAxis: Boolean,
         considerMatchParent: Boolean,
-        measureAll: Boolean,
-    ): Int? {
+    ): Int {
         val parentSize = (MeasureSpec.getSize(parentSpec) - paddings).let {
             if (alongScrollAxis) it else ((it - crossSpacing() * (columnCount() - 1)) / columnCount()).roundToInt()
         }
@@ -83,7 +76,6 @@ internal class DivGalleryItemLayout(
         val actualSize = when {
             alongScrollAxis -> size
             considerMatchParent && size == LayoutParams.MATCH_PARENT -> LayoutParams.WRAP_CONTENT
-            !measureAll && size != LayoutParams.MATCH_PARENT -> return null
             else -> size
         }
 

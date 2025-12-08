@@ -27,11 +27,12 @@ internal class DivGridLayoutManager(
     private val itemSpacing
         get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
 
-    private val crossSpacing
+    val crossSpacing
         get() = div.crossSpacing?.evaluate(bindingContext.expressionResolver)?.dpToPx(view.resources.displayMetrics)
             ?: itemSpacing
 
-    private fun spacingByOrientation(alongOrientation: Int) = if (alongOrientation == orientation) itemSpacing else crossSpacing
+    private fun spacingByOrientation(alongOrientation: Int) =
+        if (alongOrientation == orientation) itemSpacing else crossSpacing
 
     override fun toLayoutManager() = this
 
