@@ -1,9 +1,11 @@
 ## 32.29.0
 
 # Android Client:
+* Fixed `Div2Context.reset()` method. If called without flags, it now performs a full reset.
 * Fixed crash "config must not be null" when binding DivView.
 * Fixed size of gallery with `wrap_content` size and children with `match_parent` size along cross axis.
 * Support property variable.
+* `Div2Context.reset(RESET_BITMAP_EFFECT_CACHE)` now clears the Bitmap effects cache.
 
 # Web Client:
 * Added support for the `filter` method of an `array`.
