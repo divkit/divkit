@@ -135,6 +135,9 @@
             },
             "web": {
                 "version_added": "32.25.0"
+            },
+            "android": {
+                "version_added": "32.29.0"
             }
         }
     }]

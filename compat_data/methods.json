@@ -121,6 +121,12 @@
         "compat": {
             "ios": {
                 "version_added": "32.9.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
+            },
+            "web": {
+                "version_added": "32.29.0"
             }
         }
     }, {
@@ -129,6 +135,20 @@
         "compat": {
             "ios": {
                 "version_added": "32.9.0"
+            },
+            "android": {
+                "version_added": "32.10.0"
+            },
+            "web": {
+                "version_added": "32.29.0"
+            }
+        }
+    }, {
+        "id": "method_array_filter",
+        "name": "array <code>filter</code> method",
+        "compat": {
+            "web": {
+                "version_added": "32.29.0"
             }
         }
     }]
