@@ -278,6 +278,15 @@ export function imageSize(scale?: ImageScale): string {
     return 'cover';
 }
 
+export function objectFitToBackgroundSize(objectFit: string): string {
+    if (objectFit === 'none') {
+        return 'auto';
+    } else if (objectFit === 'fill') {
+        return '100% 100%';
+    }
+    return objectFit;
+}
+
 export function imagePos(obj: {
     content_alignment_horizontal?: AlignmentHorizontal;
     content_alignment_vertical?: AlignmentVertical;

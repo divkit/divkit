@@ -22,7 +22,7 @@
     import { genClassName } from '../../utils/genClassName';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { imageSize } from '../../utils/background';
+    import { imageSize, objectFitToBackgroundSize } from '../../utils/background';
     import { correctImagePosition } from '../../utils/correctImagePosition';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctColor } from '../../utils/correctColor';
@@ -249,7 +249,7 @@
         // Image preview shows, if loading of original image is failed
         'background-image': backgroundImage,
         'background-color': backgroundImage ? undefined : placeholderColor,
-        'background-size': scale,
+        'background-size': objectFitToBackgroundSize(scale),
         'clip-path': filterClipPath || undefined,
         'object-fit': scale,
         'object-position': position,

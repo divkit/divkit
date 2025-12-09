@@ -1,6 +1,7 @@
 {
   "description": "Image preview in .svg format in gif-image",
   "platforms": [
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",
