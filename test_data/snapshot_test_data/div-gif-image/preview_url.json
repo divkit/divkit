@@ -1,7 +1,8 @@
 {
   "description": "Gif with preview url",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {},
   "card": {
@@ -20,7 +21,7 @@
             "value": 240
           },
           "placeholder_color": "#f00",
-          "gif_url": "https://none",
+          "gif_url": "empty://",
           "preview_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
         }
       }

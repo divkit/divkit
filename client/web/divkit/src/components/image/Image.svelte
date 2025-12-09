@@ -90,6 +90,7 @@
     $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
     $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
     $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
+    $: jsonPreviewUrl = componentContext.getDerivedFromVars(componentContext.json.preview_url);
     $: jsonPlaceholderColor = componentContext.getDerivedFromVars(componentContext.json.placeholder_color);
     $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
     $: jsonPosition = componentContext.getDerivedFromVars({
@@ -139,9 +140,10 @@
 
     $: {
         const preview = $jsonPreview;
+        const previewUrl = $jsonPreviewUrl;
 
-        if ((state === STATE_LOADING || state === STATE_ERROR || isEmpty) && preview) {
-            backgroundImage = `url("${prepareBase64(preview)}")`;
+        if ((state === STATE_LOADING || state === STATE_ERROR || isEmpty) && (preview || previewUrl)) {
+            backgroundImage = `url("${previewUrl ? previewUrl : prepareBase64(preview || '')}")`;
             highPrority = highPriorityPreview;
         } else {
             backgroundImage = '';

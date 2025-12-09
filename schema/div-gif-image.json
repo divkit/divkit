@@ -26,7 +26,8 @@
           "$ref": "common.json#/url",
           "$description": "translations.json#/div_gif_image_preview_url",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         }
       }

@@ -22,6 +22,7 @@ export interface DivImageData extends DivBaseData, DivActionableData {
     content_alignment_horizontal?: AlignmentHorizontal;
     content_alignment_vertical?: AlignmentVertical;
     preview?: string;
+    preview_url?: string;
     preload_required?: BooleanInt;
     aspect?: DivAspect;
     high_priority_preview_show?: BooleanInt;
