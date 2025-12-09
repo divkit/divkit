@@ -2435,6 +2435,7 @@ fun Slider.TextStyle.modify(
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
@@ -2446,6 +2447,7 @@ fun Slider.TextStyle.evaluate(
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -2455,7 +2457,7 @@ fun Slider.TextStyle.evaluate(
         fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
-        fontVariationSettings = properties.fontVariationSettings,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,

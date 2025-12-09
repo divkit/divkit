@@ -109,4 +109,14 @@ fun DictValue.modify(
 )
 
 @Generated
+fun DictValue.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Map<String, Any>>? = null,
+): DictValue = DictValue(
+    DictValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun DictValue.asList() = listOf(this)

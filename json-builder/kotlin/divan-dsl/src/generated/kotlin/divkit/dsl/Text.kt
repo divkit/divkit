@@ -2206,6 +2206,7 @@ fun Text.modify(
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
@@ -2239,6 +2240,7 @@ fun Text.evaluate(
     fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -2282,7 +2284,7 @@ fun Text.evaluate(
         fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
-        fontVariationSettings = properties.fontVariationSettings,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = properties.functions,
@@ -2786,6 +2788,7 @@ fun Component<Text>.defer(
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
@@ -2819,6 +2822,7 @@ fun Component<Text>.evaluate(
     fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -2863,7 +2867,7 @@ fun Component<Text>.evaluate(
         fontFeatureSettings = fontFeatureSettings,
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
-        fontVariationSettings = null,
+        fontVariationSettings = fontVariationSettings,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
         functions = null,
@@ -4030,6 +4034,7 @@ fun Text.Range.modify(
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
@@ -4050,6 +4055,7 @@ fun Text.Range.evaluate(
     fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -4071,7 +4077,7 @@ fun Text.Range.evaluate(
         fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
-        fontVariationSettings = properties.fontVariationSettings,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,

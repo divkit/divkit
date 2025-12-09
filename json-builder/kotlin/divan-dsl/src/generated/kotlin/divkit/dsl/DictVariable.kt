@@ -155,5 +155,19 @@ fun DictVariable.modify(
     )
 )
 
+/**
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun DictVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Map<String, Any>>? = null,
+): DictVariable = DictVariable(
+    DictVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun DictVariable.asList() = listOf(this)
