@@ -57,3 +57,15 @@
     appearance: none;
     pointer-events: auto;
 }
+
+.tooltip__substrate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    pointer-events: none;
+}

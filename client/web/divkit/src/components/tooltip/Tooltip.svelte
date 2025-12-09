@@ -13,6 +13,7 @@
 
 <script lang="ts">
     import { afterUpdate, getContext, onDestroy, onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
 
     import rootCss from '../Root.module.css';
     import css from './Tooltip.module.css';
@@ -24,8 +25,10 @@
     import Unknown from '../utilities/Unknown.svelte';
     import { genClassName } from '../../utils/genClassName';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
-    import { inOutAnimation } from '../../utils/inOutAnimation';
+    import { calcMaxDuration, inOutAnimation } from '../../utils/inOutAnimation';
     import { hasDialogSupport } from '../../utils/hasDialogSupport';
+    import { flattenAnimation } from '../../utils/flattenAnimation';
+    import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
 
     export let ownerNode: HTMLElement;
     export let data: MaybeMissing<Tooltip>;
@@ -39,6 +42,9 @@
     const creationTime = Date.now();
 
     let tooltipNode: HTMLDialogElement | HTMLElement;
+    let childrenContainer: HTMLDivElement | HTMLElement;
+    let substrateContainer: HTMLDivElement | undefined;
+    let substratePlace: HTMLDivElement | undefined;
     let visible = false;
     let tooltipX = '';
     let tooltipY = '';
@@ -46,6 +52,7 @@
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
     let componentContext: ComponentContext;
+    let substrateComponentContext: ComponentContext | undefined;
     let modal = true;
     let prevFocusedElement: Element | null = null;
 
@@ -56,6 +63,11 @@
         componentContext = parentComponentContext.produceChildContext(data.div || {}, {
             isTooltipRoot: true
         });
+        if (data.substrate_div) {
+            substrateComponentContext = parentComponentContext.produceChildContext(data.substrate_div, {
+                isTooltipRoot: true
+            });
+        }
     }
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);
@@ -64,6 +76,13 @@
 
     $: animationIn = parentComponentContext.getDerivedFromVars(data.animation_in);
     $: animationOut = parentComponentContext.getDerivedFromVars(data.animation_out);
+
+    $: animationInDuration = isPrefersReducedMotion() ?
+        0 :
+        calcMaxDuration(flattenAnimation($animationIn || DEFAULT_ANIMATION));
+    $: animationOutDuration = isPrefersReducedMotion() ?
+        0 :
+        calcMaxDuration(flattenAnimation($animationOut || DEFAULT_ANIMATION));
 
     $: if (data.mode?.type === 'non_modal') {
         modal = false;
@@ -225,6 +244,32 @@
         event.preventDefault();
     }
 
+    function onIntroStart(): void {
+        if (substrateContainer) {
+            // Manual animation, so it doesn't delay the dialog lifetime
+            substrateContainer.animate({ opacity: [0, 1] }, {
+                duration: animationInDuration,
+                easing: 'ease-in-out'
+            });
+        }
+    }
+
+    function onIntroEnd(): void {
+        if (substrateContainer) {
+            tooltipNode.insertBefore(substrateContainer, childrenContainer);
+        }
+    }
+
+    function onOutroStart(): void {
+        if (substratePlace?.parentElement && substrateContainer) {
+            substratePlace.parentElement.insertBefore(substrateContainer, substratePlace);
+            substrateContainer.animate({ opacity: [1, 0] }, {
+                duration: animationOutDuration,
+                easing: 'ease-in-out'
+            });
+        }
+    }
+
     onMount(() => {
         try {
             prevFocusedElement = document.activeElement;
@@ -256,6 +301,9 @@
         if (componentContext) {
             componentContext.destroy();
         }
+        if (substrateComponentContext) {
+            substrateComponentContext.destroy();
+        }
 
         resizeObserver?.disconnect();
 
@@ -284,6 +332,19 @@
 />
 
 {#if hasDialogSupport}
+    {#if substrateComponentContext}
+        <div
+            bind:this={substrateContainer}
+            class={css.tooltip__substrate}
+        >
+            <Unknown
+                componentContext={substrateComponentContext}
+            />
+        </div>
+
+        <div bind:this={substratePlace} />
+    {/if}
+
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <dialog
         bind:this={tooltipNode}
@@ -298,6 +359,9 @@
         on:close={onClose}
         on:cancel={onClose}
         on:click={onOutClick}
+        on:introstart={onIntroStart}
+        on:introend={onIntroEnd}
+        on:outrostart={onOutroStart}
     >
         {#if visible && modal && data.background_accessibility_description}
             <button
@@ -308,7 +372,7 @@
             ></button>
         {/if}
 
-        <div class={css.tooltip__inner}>
+        <div class={css.tooltip__inner} bind:this={childrenContainer}>
             <Unknown
                 {componentContext}
             />
@@ -333,6 +397,19 @@
         {/if}
     {/if}
 
+    {#if substrateComponentContext}
+        <div
+            bind:this={substrateContainer}
+            class={css.tooltip__substrate}
+        >
+            <Unknown
+                componentContext={substrateComponentContext}
+            />
+        </div>
+
+        <div bind:this={substratePlace} />
+    {/if}
+
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <div
         bind:this={tooltipNode}
@@ -346,8 +423,11 @@
         in:inOutAnimation|global={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
         out:inOutAnimation|global={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
         on:keydown={onKeyDown}
+        on:introstart={onIntroStart}
+        on:introend={onIntroEnd}
+        on:outrostart={onOutroStart}
     >
-        <div class={css.tooltip__inner}>
+        <div class={css.tooltip__inner} bind:this={childrenContainer}>
             <Unknown
                 {componentContext}
             />

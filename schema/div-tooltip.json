@@ -100,7 +100,9 @@
     "substrate_div": {
       "$ref": "div.json",
       "$description": "translations.json#/div_tooltip_substrate_div",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "bring_to_top_id": {
       "$ref": "common.json#/id",

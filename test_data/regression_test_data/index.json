@@ -2979,6 +2979,24 @@
       "file": "tooltips/tooltip-with-states.json"
     },
     {
+      "title": "Tooltip with substrate",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap 'Show tooltip' button",
+        "Close tooltip"
+      ],
+      "expected_results": [
+        "Tooltip is shown, substrate showed with the animation",
+        "Booth the tooltip and the'substrate are hidden"
+      ],
+      "file": "tooltips/tooltip-with-substrate.json"
+    },
+    {
       "title": "Persistent values storage",
       "case_id": 145,
       "platforms": [

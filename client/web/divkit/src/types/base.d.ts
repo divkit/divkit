@@ -125,6 +125,7 @@ export interface Tooltip {
     tap_outside_actions?: Action[];
     close_by_tap_outside?: boolean;
     background_accessibility_description?: string;
+    substrate_div?: DivBaseData;
 }
 
 export interface DivLayoutProvider {

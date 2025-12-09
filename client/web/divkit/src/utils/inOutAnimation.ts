@@ -16,7 +16,7 @@ export function calcMaxDuration(transitions: MaybeMissing<AnyAnimation>[]): numb
     ));
 }
 
-export function inOutAnimation(node: HTMLElement, {
+export function inOutAnimation(_node: HTMLElement, {
     animations,
     direction
 }: {
