@@ -3,6 +3,7 @@ package com.yandex.div.core.view2
 import android.graphics.Outline
 import android.view.ViewGroup
 import androidx.core.view.allViews
+import com.yandex.div.internal.util.UiThreadHandler
 
 /**
  * Disables [Outline] clipping for this [Div2View] and calls the specified function [block].
@@ -24,5 +25,25 @@ public inline fun <T> ViewGroup.withDivViewCanvasClipping(block: () -> T): T {
         return block()
     } finally {
         divViews.forEach { divView -> divView.forceCanvasClipping = false }
+    }
+}
+
+internal inline fun Div2View.runBindingAction(crossinline action: () -> Unit) {
+    if (UiThreadHandler.isMainThread()) {
+        action()
+    } else {
+        postBindingAction(action)
+    }
+}
+
+internal inline fun Div2View.postBindingAction(crossinline action: () -> Unit) {
+    val criticalSection = viewComponent.bindingCriticalSection
+    val handle = criticalSection.enter()
+    UiThreadHandler.postOnMainThread {
+        try {
+            action()
+        } finally {
+            criticalSection.exit(handle)
+        }
     }
 }

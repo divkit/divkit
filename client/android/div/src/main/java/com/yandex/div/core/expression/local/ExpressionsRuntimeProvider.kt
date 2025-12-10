@@ -44,7 +44,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         errorCollector: ErrorCollector,
         runtimeStore: RuntimeStore,
     ): ExpressionsRuntime {
-        val variableController = VariableControllerImpl()
+        val variableController = VariableControllerImpl(runtimeStore.viewProvider)
         variableController.addSource(divVariableController.variableSource)
 
         val storedValueProvider = StoredValueProvider { storedValueName ->
@@ -81,7 +81,10 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         parentResolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
     ): ExpressionsRuntime {
-        val localVariableController = VariableControllerImpl(parentResolver.variableController)
+        val localVariableController = VariableControllerImpl(
+            parentResolver.runtimeStore.viewProvider,
+            parentResolver.variableController
+        )
 
         val functions = div.functions
         var functionProvider = parentResolver.evaluator.evaluationContext.functionProvider as FunctionProviderDecorator

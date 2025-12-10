@@ -15,7 +15,6 @@ import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.duration
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -198,9 +197,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div,
         appearActions: List<DivVisibilityAction>,
         disappearActions: List<DivDisappearAction>
-    ) {
-        Assert.assertMainThread()
-
+    ) = scope.runBindingAction {
         val visibilityPercentage = view.let {
             val result = viewVisibilityCalculator.calculateVisibilityPercentage(view)
             updateVisibility(view, div, result)

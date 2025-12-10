@@ -3,6 +3,7 @@ package com.yandex.div.core.dagger
 import android.content.Context
 import com.yandex.android.beacon.SendBeaconConfiguration
 import com.yandex.android.beacon.SendBeaconManager
+import com.yandex.div.core.util.binding.SingleThreadExecutor
 import com.yandex.div.histogram.CpuUsageHistogramReporter
 import com.yandex.div.internal.viewpool.ViewCreator
 import com.yandex.yatagan.Module
@@ -29,5 +30,13 @@ internal object DivKitModule {
     @Singleton
     fun provideViewCreator(cpuUsageHistogramReporter: CpuUsageHistogramReporter): ViewCreator {
         return ViewCreator(cpuUsageHistogramReporter)
+    }
+
+    @JvmStatic
+    @Provides
+    @Singleton
+    @Named(Names.BACKGROUND_BINDING_EXECUTOR)
+    fun provideBackgroundBindingExecutor(): SingleThreadExecutor {
+        return SingleThreadExecutor.create(Names.BACKGROUND_BINDING_EXECUTOR)
     }
 }

@@ -7,6 +7,7 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
@@ -50,6 +51,7 @@ class DivMultipleStateSwitcherTest {
     private val viewBinder = mock<DivBinder>()
     private val pathCaptor = argumentCaptor<DivStatePath>()
     private val resolver = divView.expressionResolver
+    private val bindingContext = BindingContext(divView, resolver)
 
     private val stateSwitcher = DivMultipleStateSwitcher(divView, viewBinder)
 
@@ -58,7 +60,7 @@ class DivMultipleStateSwitcherTest {
         val activeState = "0/state_container/second".path
         val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, listOf(activeState))
 
         verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
     }
@@ -68,7 +70,7 @@ class DivMultipleStateSwitcherTest {
         val activeState = "0/state_container/first/container_item_two/two".path
         val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, listOf(activeState))
 
         verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
         Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -77,7 +79,7 @@ class DivMultipleStateSwitcherTest {
     @Test
     fun `switch to single state of missing state layout binds root div`() {
         val inactiveState = "0/state_container/second/second_state/hidden".path
-        stateSwitcher.switchStates(divDataState, listOf(inactiveState), resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, listOf(inactiveState))
         verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
     }
 
@@ -89,7 +91,7 @@ class DivMultipleStateSwitcherTest {
         val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
         val secondDiv = rootDiv.findDivState(secondPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths, resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
         verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
         Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -105,7 +107,7 @@ class DivMultipleStateSwitcherTest {
         val paths = listOf(firstPath, secondPath)
         val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths, resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
         verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
     }
@@ -117,7 +119,7 @@ class DivMultipleStateSwitcherTest {
         val paths = listOf(firstPath, secondPath)
         val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths, resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
         verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
         Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -131,7 +133,7 @@ class DivMultipleStateSwitcherTest {
         val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
         val secondDiv = rootDiv.findDivState(secondPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths, resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
         verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
         Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -144,7 +146,7 @@ class DivMultipleStateSwitcherTest {
         val secondPath = "0/state_container/second/second_state/clicked".path
         val paths = listOf(firstPath, secondPath)
 
-        stateSwitcher.switchStates(divDataState, paths, resolver)
+        stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
         verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
     }

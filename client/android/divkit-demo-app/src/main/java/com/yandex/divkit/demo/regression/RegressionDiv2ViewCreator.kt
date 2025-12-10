@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.regression
 import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
+import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.lottie.DivLottieExtensionHandler
@@ -21,6 +22,7 @@ import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
+import org.json.JSONObject
 import java.util.concurrent.Executors
 
 class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
@@ -33,13 +35,50 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
         Executors.newSingleThreadExecutor()
     )
 
-    override fun createDiv2View(
+    override fun createDiv2ViewByConfig(
         activity: Activity,
         scenarioPath: String,
         parent: ViewGroup,
-        logDelegate: ScenarioLogDelegate
-    ): Div2View {
+        logDelegate: ScenarioLogDelegate,
+        onBound: (Div2View) -> Unit
+    ) {
+        val divContext = createContext(activity, parent, logDelegate)
+
         val divJson = assetReader.read(scenarioPath)
+        when {
+            divJson.has("card") -> {
+                val templateJson = parseTemplates(divJson)
+                val cardJson = parseCard(divJson)
+                Div2ViewFactory(divContext, templateJson).createViewByConfig(cardJson, onBound)
+            }
+            else -> Div2ViewFactory(divContext).createViewByConfig(divJson, onBound)
+        }
+    }
+
+    override fun createDiv2ViewSync(
+        activity: Activity,
+        scenarioPath: String,
+        parent: ViewGroup,
+        logDelegate: ScenarioLogDelegate,
+    ): Div2View {
+        val divContext = createContext(activity, parent, logDelegate)
+
+        val divJson = assetReader.read(scenarioPath)
+        return when {
+            divJson.has("card") -> {
+                val templateJson = parseTemplates(divJson)
+                val cardJson = parseCard(divJson)
+                Div2ViewFactory(divContext, templateJson).createViewSync(cardJson)
+            }
+            else -> Div2ViewFactory(divContext).createViewSync(divJson)
+        }
+    }
+
+    private fun createContext(
+        activity: Activity,
+        parent: ViewGroup,
+        logDelegate: ScenarioLogDelegate
+    ): Div2Context {
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(parent)
         val divConfiguration =
             divConfiguration(activity, logDelegate)
@@ -57,19 +96,24 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                 .actionHandler(RegressionDivActionHandler(uriHandler, assetReader))
                 .enableAccessibility(true)
                 .build()
-        val divContext = divContext(
+        return divContext(
             baseContext = activity,
             configuration = divConfiguration,
             lifecycleOwner = activity.lifecycleOwner
-        )
-        divStateStorage.preloadState("div2")
-        return when {
-            divJson.has("card") -> {
-                val templateJson = divJson.optJSONObject("templates")
-                val cardJson = divJson.getJSONObject("card")
-                Div2ViewFactory(divContext, templateJson).createView(cardJson)
-            }
-            else -> Div2ViewFactory(divContext).createView(divJson)
+        ).also {
+            divStateStorage.preloadState("div2")
         }
+    }
+
+    private fun parseTemplates(
+        divJson: JSONObject,
+    ): JSONObject? {
+        return divJson.optJSONObject("templates")
+    }
+
+    private fun parseCard(
+        divJson: JSONObject,
+    ): JSONObject {
+        return divJson.getJSONObject("card")
     }
 }

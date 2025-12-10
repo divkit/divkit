@@ -6,10 +6,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.yandex.divkit.demo.databinding.Div2ViewBinding
 import com.yandex.divkit.demo.permissions.ActivityPermissionManager
-import com.yandex.divkit.demo.permissions.Permission
-import com.yandex.divkit.demo.permissions.PermissionRequestBuilder
-import com.yandex.divkit.demo.permissions.PermissionRequestCallback
-import com.yandex.divkit.demo.permissions.PermissionRequestResult
 import com.yandex.divkit.demo.ui.UIDiv2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
 
@@ -31,20 +27,20 @@ class LauncherActivity : AppCompatActivity() {
             Configuration.ORIENTATION_LANDSCAPE -> "application/menu-land.json"
             else -> "application/menu.json"
         }
-        val div = UIDiv2ViewCreator(this).createDiv2View(
+        UIDiv2ViewCreator(this).createDiv2ViewByConfig(
             this,
             path,
             binding.root,
             ScenarioLogDelegate.Stub
-        )
+        ) { div ->
+            div.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            ).apply {
+                weight = 1F
+            }
 
-        div.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        ).apply {
-            weight = 1F
+            binding.root.addView(div)
         }
-
-        binding.root.addView(div)
     }
 }

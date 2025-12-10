@@ -1,23 +1,20 @@
 package com.yandex.div.storage
 
-import androidx.annotation.UiThread
-import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.rawjson.RawJson
+import java.util.concurrent.ConcurrentHashMap
 
 private typealias JsonId = String
 
 internal class RawJsonRepositoryImpl(
     private val divStorage: DivStorage,
 ) : RawJsonRepository {
-    private val inMemoryData = mutableMapOf<JsonId, RawJson>()
+    private val inMemoryData = ConcurrentHashMap<JsonId, RawJson>()
 
     private var areJsonsSynchronizedWithInMemory = false
     private var jsonIdsWithErrors = setOf<JsonId>()
 
-    @UiThread
     override fun put(payload: RawJsonRepository.Payload): RawJsonRepositoryResult {
-        KAssert.assertMainThread()
         val rawJsons = payload.jsons
         rawJsons.forEach { inMemoryData[it.id] = it }
 
@@ -28,9 +25,7 @@ internal class RawJsonRepositoryImpl(
         return RawJsonRepositoryResult(rawJsons, exceptions)
     }
 
-    @UiThread
     override fun get(ids: List<JsonId>): RawJsonRepositoryResult {
-        KAssert.assertMainThread()
         if (ids.isEmpty()) {
             return RawJsonRepositoryResult.EMPTY
         }
@@ -52,9 +47,7 @@ internal class RawJsonRepositoryImpl(
         return RawJsonRepositoryResult(inMemoryResults, emptyList())
     }
 
-    @UiThread
     override fun getAll(): RawJsonRepositoryResult {
-        KAssert.assertMainThread()
         if (areJsonsSynchronizedWithInMemory && jsonIdsWithErrors.isEmpty()) {
             return RawJsonRepositoryResult(inMemoryData.values.toList(), emptyList())
         }
@@ -75,9 +68,7 @@ internal class RawJsonRepositoryImpl(
         return resultsWithInMemory
     }
 
-    @UiThread
     override fun remove(predicate: (RawJson) -> Boolean): RawJsonRepositoryRemoveResult {
-        KAssert.assertMainThread()
         val (deletedIds, storageExceptions) = divStorage.removeRawJsons(predicate)
         val exceptions = storageExceptions.toRawJsonRepositoryExceptions()
         removeFromInMemory(deletedIds)

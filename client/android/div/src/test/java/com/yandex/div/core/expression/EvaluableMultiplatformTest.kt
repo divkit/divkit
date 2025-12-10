@@ -5,6 +5,7 @@ import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_UNORDER
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createDivDataFromTestVars
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.toEvaluableType
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -23,16 +24,16 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import org.mockito.MockedStatic
 import org.mockito.Mockito
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.robolectric.ParameterizedRobolectricTestRunner
 import com.yandex.div.internal.Assert as DivAssert
 
-@RunWith(Parameterized::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
 
     @Rule
@@ -43,6 +44,9 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     private val mockDivVariableController = mock<DivVariableController> {
         on { variableSource } doReturn mock()
+    }
+    private val runtimeStore = mock<RuntimeStore> {
+        on { viewProvider } doReturn mock()
     }
 
     private val warnings = mutableListOf<String>()
@@ -81,7 +85,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         val rootRuntime = runtimeProvider.createRootRuntime(
             data = testDivData,
             errorCollector = errorCollector,
-            runtimeStore = mock()
+            runtimeStore = runtimeStore,
         )
         resolver = rootRuntime.expressionResolver
     }
@@ -176,7 +180,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private const val TEST_CASES_FILE_PATH = "expression_test_data"
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
+        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun cases(): List<TestCaseOrError<ExpressionTestCase>> {
             val cases = mutableListOf<TestCaseOrError<ExpressionTestCase>>()
             val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, jsonString ->

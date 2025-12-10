@@ -135,15 +135,15 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
             }
         }
         binding.singleContainer.isVisible = true
-        binding.singleContainer.addView(
-            div2ViewCreator.createDiv2View(
-                this,
-                "regression_test_data/${scenario.file}",
-                binding.singleContainer,
-                logDelegate,
-            )
-        )
-        initLogging()
+        div2ViewCreator.createDiv2ViewByConfig(
+            this,
+            "regression_test_data/${scenario.file}",
+            binding.singleContainer,
+            logDelegate,
+        ) {
+            binding.singleContainer.addView(it)
+            initLogging()
+        }
     }
 
     companion object {

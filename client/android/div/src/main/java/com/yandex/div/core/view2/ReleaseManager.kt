@@ -67,7 +67,9 @@ internal class ReleaseManager @Inject constructor(
             divToRelease[lifecycleOwner]?.add(divView)
         } else {
             divToRelease[lifecycleOwner] = mutableSetOf(divView)
-            lifecycleOwner.lifecycle.addObserver(observer)
+            divView.runBindingAction {
+                lifecycleOwner.lifecycle.addObserver(observer)
+            }
         }
     }
 

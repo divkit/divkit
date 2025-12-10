@@ -48,15 +48,16 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        div2View = UIDiv2ViewCreator(this).createDiv2View(
+        UIDiv2ViewCreator(this).createDiv2ViewByConfig(
             this,
             "application/settings.json",
             binding.scrollView,
             ScenarioLogDelegate.Stub
-        )
-
-        binding.scrollView.addView(div2View)
-        initSettings()
+        ) {
+            div2View = it
+            binding.scrollView.addView(div2View)
+            initSettings()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -102,6 +103,9 @@ class SettingsActivity : AppCompatActivity() {
         val appName = resources.getText(R.string.app_name)
         val appVersion = "$appName ${BuildConfig.VERSION_NAME}.${BuildConfig.BUILD_NUMBER} ${BuildConfig.BUILD_TYPE}"
         div2View.setVariable(APP_VERSION, appVersion)
+
+        val useAsyncBinding = Container.preferences.useBackgroundBinding
+        setPreferenceState(BACKGROUND_BINDING, useAsyncBinding)
     }
 
     private fun setPreferenceState(name: String, flag: Experiment) {

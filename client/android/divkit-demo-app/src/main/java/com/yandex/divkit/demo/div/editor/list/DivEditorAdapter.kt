@@ -42,16 +42,10 @@ class DivEditorAdapter(val context: Div2Context) :
         submitList(null)
     }
 
-    fun applyPath(divPatch: DivPatch, errorCallback: () -> Unit): Boolean {
-        var resultSuccessApplied = true
+    fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit) {
         viewHolderList.forEach { holder ->
-            val successApplied = holder.applyPatch(divPatch)
-            if (!successApplied) {
-                resultSuccessApplied = false
-                errorCallback.invoke()
-            }
+            holder.applyPatch(divPatch, errorCallback)
         }
-        return resultSuccessApplied
     }
 
     companion object {

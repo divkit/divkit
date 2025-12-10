@@ -20,7 +20,7 @@ internal class DivGalleryViewHolder(
     override fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
         super.bind(bindingContext, div, position, path)
         rootView.setTag(R.id.div_gallery_item_index, position)
-        divBinder.attachIndicators()
+        divBinder.attachIndicators(bindingContext.divView)
     }
 
     override fun logReuseError() = KLog.d(TAG) { "Gallery holder reuse failed" }

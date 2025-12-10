@@ -1,9 +1,9 @@
 package com.yandex.div.core.view2.divs.widgets
 
-import android.content.Context
+import android.app.Activity
+import android.os.Looper.getMainLooper
 import android.view.MotionEvent
 import android.view.View
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.view.MotionEventBuilder
 import com.yandex.div.internal.Assert
 import org.junit.Test
@@ -11,20 +11,22 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
+import org.robolectric.Shadows.shadowOf
 
-@Config(sdk = [21])
 @RunWith(RobolectricTestRunner::class)
 class StateLayoutTest {
-    private val context = ApplicationProvider.getApplicationContext<Context>()
-    private val view = View(context).apply {
+
+    private val activity = Robolectric.buildActivity(Activity::class.java).get()
+
+    private val view = View(activity).apply {
         left = 0
         right  = 1000
         top = 0
         bottom = 1000
     }
-    private val underTest = DivStateLayout(context).apply {
+    private val underTest = DivStateLayout(activity).apply {
         addView(view)
     }
 
@@ -35,6 +37,8 @@ class StateLayoutTest {
         underTest.onTouchEvent(event(MotionEvent.ACTION_MOVE, 400, 100))
         underTest.onTouchEvent(event(MotionEvent.ACTION_MOVE, 300, 100))
         underTest.onTouchEvent(event(MotionEvent.ACTION_UP, 300, 100))
+
+        drainMainLoop()
 
         verify(underTest.swipeOutCallback)!!.invoke()
     }
@@ -47,6 +51,8 @@ class StateLayoutTest {
         underTest.onTouchEvent(event(MotionEvent.ACTION_MOVE, 900, 100))
         underTest.onTouchEvent(event(MotionEvent.ACTION_UP, 900, 100))
 
+        drainMainLoop()
+
         verify(underTest.swipeOutCallback)!!.invoke()
     }
 
@@ -57,6 +63,8 @@ class StateLayoutTest {
         underTest.onTouchEvent(event(MotionEvent.ACTION_MOVE, 500, 100))
         underTest.onTouchEvent(event(MotionEvent.ACTION_MOVE, 800, 100))
         underTest.onTouchEvent(event(MotionEvent.ACTION_UP, 800, 100))
+
+        drainMainLoop()
 
         verify(underTest.swipeOutCallback, never())!!.invoke()
     }
@@ -72,6 +80,10 @@ class StateLayoutTest {
         .setAction(action)
         .setPointer(x.toFloat(), y.toFloat())
         .build()
+
+    private fun drainMainLoop() {
+        shadowOf(getMainLooper()).idle()
+    }
 }
 
 private interface SwipeOutCallback: () -> Unit

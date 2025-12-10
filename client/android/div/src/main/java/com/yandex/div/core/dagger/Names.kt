@@ -8,4 +8,5 @@ internal object Names {
     const val THEME = "theme"
     const val HAS_DEFAULTS = "has_defaults"
     const val UNWRAPPED_IMAGE_LOADER = "unwrapped_image_loader"
+    const val BACKGROUND_BINDING_EXECUTOR = "background_binding_executor"
 }

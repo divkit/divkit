@@ -1,5 +1,7 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
@@ -16,11 +18,13 @@ import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.util.toPorterDuffMode
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -178,10 +182,10 @@ internal class DivImageBinder @Inject constructor(
     ) {
         val bitmap = currentBitmapWithoutFilters
         if (bitmap == null) {
-            setImageBitmap(null)
+            setImageBitmap(bindingContext.divView, null)
         } else {
             applyBitmapFilters(bindingContext, bitmap, filters) {
-                setImageBitmap(it)
+                setImageBitmap(bindingContext.divView, it)
             }
         }
     }
@@ -218,6 +222,7 @@ internal class DivImageBinder @Inject constructor(
         synchronous: Boolean,
         errorCollector: ErrorCollector
     ) {
+        val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
         placeholderLoader.applyPlaceholder(
             this,
@@ -227,7 +232,7 @@ internal class DivImageBinder @Inject constructor(
             synchronous = synchronous,
             onSetPlaceholder = { drawable ->
                 if (!isImageLoaded && !isImagePreview) {
-                    setPlaceholder(drawable)
+                    setPlaceholder(bindingContext.divView, drawable)
                 }
             },
             onSetPreview = {
@@ -239,9 +244,10 @@ internal class DivImageBinder @Inject constructor(
                             previewLoaded()
                             applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                         }
+
                         is ImageRepresentation.PictureDrawable -> {
                             previewLoaded()
-                            setImageDrawable(it.value)
+                            setImageDrawable(bindingContext.divView, it.value)
                         }
                     }
                 }
@@ -332,7 +338,7 @@ internal class DivImageBinder @Inject constructor(
                     }
                     super.onSuccess(pictureDrawable)
 
-                    setImageDrawable(pictureDrawable)
+                    setImageDrawable(bindingContext.divView, pictureDrawable)
                     applyLoadingFade(div, resolver, null)
 
                     imageLoaded()
@@ -438,4 +444,22 @@ internal class DivImageBinder @Inject constructor(
         div: DivImage,
         errorCollector: ErrorCollector,
     ) = view.applyImage(bindingContext, div, errorCollector)
+
+    private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
+        divView.runBindingAction {
+            setImageDrawable(drawable)
+        }
+    }
+
+    private fun DivImageView.setImageBitmap(divView: Div2View, bitmap: Bitmap?) {
+        divView.runBindingAction {
+            setImageBitmap(bitmap)
+        }
+    }
+
+    private fun DivImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
+        divView.runBindingAction {
+            setPlaceholder(drawable)
+        }
+    }
 }

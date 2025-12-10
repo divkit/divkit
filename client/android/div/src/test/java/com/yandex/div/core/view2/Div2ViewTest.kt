@@ -101,9 +101,9 @@ class Div2ViewTest {
         )
 
         verify(stateSwitcher).switchStates(
+            bindingContext = any(),
             state = any(),
             paths = eq(listOf("0/state_container/first".path, "0/state_list/second".path)),
-            resolver = any()
         )
     }
 
@@ -118,9 +118,9 @@ class Div2ViewTest {
         }
 
         verify(stateSwitcher).switchStates(
+            bindingContext = any(),
             state = any(),
             paths = eq(listOf("0/state_container/first".path, "0/state_list/second".path)),
-            resolver = any()
         )
     }
 

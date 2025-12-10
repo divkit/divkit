@@ -28,6 +28,7 @@ import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivVideo
@@ -64,7 +65,7 @@ internal class DivVideoBinder @Inject constructor(
         bindingContext: BindingContext,
         div: DivVideo,
         path: DivStatePath,
-    ) {
+    ) = bindingContext.divView.runBindingAction {
         val resolver = bindingContext.expressionResolver
         val source = div.createSource(resolver)
         val config = div.createConfig(resolver)

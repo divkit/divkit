@@ -15,6 +15,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThreadBlocking
 import com.yandex.div2.Div
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
@@ -70,8 +71,10 @@ internal class DivCustomBinder @Inject constructor(
         ) {
             oldCustomView
         } else {
-            createView().apply {
-                setTag(R.id.div_custom_tag, div)
+            executeOnMainThreadBlocking {
+                createView().apply {
+                    setTag(R.id.div_custom_tag, div)
+                }
             }
         }
 
@@ -81,7 +84,9 @@ internal class DivCustomBinder @Inject constructor(
             replaceInParent(previousWrapper, customView, divView)
         }
 
-        bindView(customView)
+        executeOnMainThreadBlocking {
+            bindView(customView)
+        }
         baseBinder.bindId(divView, customView, div.id)
 
         extensionController.bindView(divView, context.expressionResolver, customView, div)

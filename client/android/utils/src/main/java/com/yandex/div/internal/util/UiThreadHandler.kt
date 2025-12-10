@@ -3,6 +3,8 @@ package com.yandex.div.internal.util
 import android.os.Handler
 import android.os.Looper
 import com.yandex.div.core.annotations.InternalApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 /**
  * Provides static access to the main thread handler.
@@ -59,6 +61,23 @@ public object UiThreadHandler {
             action()
         } else {
             get().post { action() }
+        }
+    }
+
+    /**
+     * Executes a given [action] on main thread.
+     * Executes runnable immediately if current thread is main thread, locks current thread and
+     * waits execution of the runnable on the main thread handler otherwise.
+     *
+     * @return result of the runnable execution.
+     */
+    public inline fun <T> executeOnMainThreadBlocking(crossinline action: () -> T): T {
+        return if (isMainThread()) {
+            action()
+        } else {
+            runBlocking(Dispatchers.Main) {
+                action()
+            }
         }
     }
 }

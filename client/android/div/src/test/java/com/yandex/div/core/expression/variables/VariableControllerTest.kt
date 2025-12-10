@@ -35,7 +35,9 @@ class VariableControllerTest {
     @Before
     fun initVariableController() {
         divVariableController = DivVariableController()
-        variableController = VariableControllerImpl().apply {
+        variableController = VariableControllerImpl(
+            viewProvider = { mock() }
+        ).apply {
             localVariables.forEach {
                 declare(it)
             }

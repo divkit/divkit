@@ -23,7 +23,7 @@ internal class ScenarioListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenarioViewHolder {
-        val item = div2ViewCreator.createDiv2View(
+        val item = div2ViewCreator.createDiv2ViewSync(
             activity,
             "application/scenario_list_item.json",
             parent,

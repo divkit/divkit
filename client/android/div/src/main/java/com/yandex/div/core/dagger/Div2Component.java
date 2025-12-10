@@ -1,7 +1,5 @@
 package com.yandex.div.core.dagger;
 
-import javax.inject.Named;
-
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
@@ -33,8 +31,8 @@ import com.yandex.div.core.state.DivStateManager;
 import com.yandex.div.core.state.TabsStateCache;
 import com.yandex.div.core.state.TemporaryDivStateCache;
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
-import com.yandex.div.core.tooltip.DivTooltipManager;
 import com.yandex.div.core.tooltip.DivTooltipController;
+import com.yandex.div.core.tooltip.DivTooltipManager;
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper;
 import com.yandex.div.core.view2.Div2Builder;
 import com.yandex.div.core.view2.DivBinder;
@@ -51,15 +49,20 @@ import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepos
 import com.yandex.yatagan.BindsInstance;
 import com.yandex.yatagan.Component;
 
+import javax.inject.Named;
+
 /**
  * Context scoped component for div2 {@link com.yandex.div.core.Div2Context}
  */
 @DivScope
-@Component(isRoot = false, modules = {
+@Component(isRoot = false,
+    multiThreadAccess = true,
+    modules = {
         Div2Module.class,
         DivConfiguration.class,
         DivHistogramsModule.class
-})
+    }
+)
 public interface Div2Component {
 
     @NonNull

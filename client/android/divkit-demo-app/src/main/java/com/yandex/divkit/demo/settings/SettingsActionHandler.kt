@@ -19,8 +19,8 @@ const val DIV2_DEMO_SHOW_RENDERING_TIME = "demo_activity_rendering_time"
 const val IMAGE_LOADER = "image_loader"
 const val COMPLEX_REBIND = "complex_rebind"
 const val PERMANENT_DEBUG_PANEL = "permanent_debug_panel"
-
 const val RENDER_EFFECT_ENABLED = "render_effect_enabled"
+const val BACKGROUND_BINDING = "background_binding"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"
@@ -57,6 +57,7 @@ internal object SettingsActionHandler {
             DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBooleanOrException())
             PERMANENT_DEBUG_PANEL -> setPreferencesBooleanFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED, valueInt.toBooleanOrException())
             RENDER_EFFECT_ENABLED -> setPreferencesBooleanFlag(Experiment.RENDER_EFFECT_ENABLED, valueInt.toBooleanOrException())
+            BACKGROUND_BINDING -> Container.preferences.useBackgroundBinding = valueInt.toBooleanOrException()
             else -> return false
         }
 

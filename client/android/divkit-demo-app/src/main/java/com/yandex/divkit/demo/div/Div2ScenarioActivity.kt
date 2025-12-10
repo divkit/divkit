@@ -51,6 +51,7 @@ import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
 import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.applyPatchByConfig
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
@@ -369,12 +370,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
     private fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit) {
         if (isSingleCardState()) {
-            if (!div2View.applyPatch(divPatch)) {
-                errorCallback()
+            div2View.applyPatchByConfig(divPatch) {
+                if (!it) errorCallback()
             }
-            return
+        } else {
+            div2Adapter.applyPatch(divPatch, errorCallback)
         }
-        div2Adapter.applyPath(divPatch, errorCallback)
     }
 
     private fun isSingleCardState(): Boolean {

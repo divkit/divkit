@@ -16,6 +16,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -56,7 +57,9 @@ class PicassoDivImageLoader(
         val target = DownloadCallbackAdapter(imageUri, callback)
         targets.addTarget(target)
 
-        picasso.load(imageUri).into(target)
+        executeOnMainThread {
+            picasso.load(imageUri).into(target)
+        }
 
         return LoadReference {
             picasso.cancelRequest(target)

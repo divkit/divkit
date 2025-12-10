@@ -47,6 +47,7 @@ import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.QRCaptureActivity
 import com.yandex.divkit.demo.utils.lifecycleOwner
+import com.yandex.divkit.demo.utils.setDataByConfig
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 import java.net.URL
@@ -122,17 +123,16 @@ class Div2Activity : AppCompatActivity() {
         div2Adapter = DivEditorAdapter(context)
         val divJson = DivAssetReader(context).read("application/demo.json")
         val divData = divJson.asDiv2DataWithTemplates(componentName = DEMO_ACTIVITY_COMPONENT_NAME)
-        val div = Div2View(context).apply {
-            setData(divData, DivDataTag("div2"))
+        val div = Div2View(context)
+        div.setDataByConfig(divData, DivDataTag("div2")) {
+            binding.container.addView(div)
+            div.layoutParams.width = MATCH_PARENT
+            div.layoutParams.height = MATCH_PARENT
+
+            qrScanContract = ScanContract()
+
+            bindLink()
         }
-
-        binding.container.addView(div)
-        div.layoutParams.width = MATCH_PARENT
-        div.layoutParams.height = MATCH_PARENT
-
-        qrScanContract = ScanContract()
-
-        bindLink()
     }
 
     private fun bindLink() {

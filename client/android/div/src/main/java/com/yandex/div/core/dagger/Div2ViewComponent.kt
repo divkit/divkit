@@ -2,11 +2,16 @@ package com.yandex.div.core.dagger
 
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.tooltip.DivTooltipController
+import com.yandex.div.core.util.binding.BindingCriticalSection
+import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.view.DrawingPassOverrideStrategy
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.core.view2.animations.DivAnimatorController
+import com.yandex.div.core.view2.divs.DivLayoutProviderBinder
+import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -14,14 +19,14 @@ import com.yandex.div.core.view2.errors.ErrorVisualMonitor
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
-import com.yandex.div.core.view.DrawingPassOverrideStrategy
-import com.yandex.div.core.view2.divs.DivLayoutProviderBinder
-import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 
 @DivViewScope
-@Component(isRoot = false, modules = [Div2ViewModule::class])
+@Component(isRoot = false,
+    multiThreadAccess = true,
+    modules = [Div2ViewModule::class],
+)
 internal interface Div2ViewComponent {
 
     val viewIdProvider: DivViewIdProvider
@@ -45,6 +50,8 @@ internal interface Div2ViewComponent {
     val runtimeVisitor: DivRuntimeVisitor
     val drawingPassOverrideStrategy: DrawingPassOverrideStrategy
     val layoutProviderBinder: DivLayoutProviderBinder
+    val bindingDispatcher: BindingDispatcher
+    val bindingCriticalSection: BindingCriticalSection
 
     @Component.Builder
     interface Builder {

@@ -10,9 +10,10 @@ import android.text.style.ClickableSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupWindow
+import androidx.annotation.MainThread
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
@@ -22,12 +23,15 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.errors.VariableMonitor
 import com.yandex.div.core.view2.errors.VariableMonitorView
+import com.yandex.div.core.view2.runBindingAction
 
 internal class DebugView(
     private val root: ViewGroup,
+    private val divView: Div2View,
     private val errorModel: DebugViewModelProvider,
     private val typefaceProvider: DivTypefaceProvider,
 ) : Disposable {
@@ -37,7 +41,9 @@ internal class DebugView(
     private var viewModel: DebugViewModel = DebugViewModel.Hidden
         set(value) {
             field = value
-            updateView(value)
+            divView.runBindingAction {
+                updateView(value)
+            }
         }
 
     private val modelObservation = errorModel.observeAndGet { m: DebugViewModel -> viewModel = m }
@@ -70,6 +76,7 @@ internal class DebugView(
         counterViewHolder = null
     }
 
+    @MainThread
     private fun tryAddDetailsView() {
         if (detailsViewHolder != null) {
             return
@@ -109,6 +116,7 @@ internal class DebugView(
         detailsViewHolder = holder
     }
 
+    @MainThread
     private fun removeDetailsView() {
         detailsViewHolder?.let { holder ->
             if (detailsPopupWindow?.isShowing == true) {
@@ -121,6 +129,7 @@ internal class DebugView(
         detailsViewHolder = null
     }
 
+    @MainThread
     private fun tryAddCounterView() {
         if (counterViewHolder != null) {
             return
@@ -133,12 +142,13 @@ internal class DebugView(
         )
 
         root.addView(holder.rootView, ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-        ))
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            ))
         counterViewHolder = holder
     }
 
+    @MainThread
     override fun close() {
         modelObservation.close()
         counterViewHolder?.let { holder ->

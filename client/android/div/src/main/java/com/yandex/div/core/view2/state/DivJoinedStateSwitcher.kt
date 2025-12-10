@@ -3,10 +3,10 @@ package com.yandex.div.core.view2.state
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.bindingContext
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import javax.inject.Inject
 
@@ -19,7 +19,8 @@ internal class DivJoinedStateSwitcher @Inject constructor(
     private val divBinder: DivBinder,
 ) : DivStateSwitcher {
 
-    override fun switchStates(state: DivData.State, paths: List<DivStatePath>, resolver: ExpressionResolver) {
+    override fun switchStates(bindingContext: BindingContext, state: DivData.State, paths: List<DivStatePath>) {
+        val resolver = bindingContext.expressionResolver
         val rootView = divView.getChildAt(0)
         val rootDiv = state.div
         var view = rootView
@@ -42,7 +43,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
         val bindingContext = view.bindingContext ?: divView.bindingContext
         divBinder.bind(bindingContext, view, div, path.parentState())
 
-        divBinder.attachIndicators()
+        divBinder.attachIndicators(bindingContext.divView)
     }
 
     private fun findCommonPath(pathList: List<DivStatePath>, rootPath: DivStatePath): DivStatePath {

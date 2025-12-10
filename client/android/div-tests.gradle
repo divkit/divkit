@@ -20,9 +20,6 @@ android {
                 testLogging {
                     events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
                 }
-
-                // Keep it synced with DivKitGlobalConfigProvider.
-                systemProperty 'robolectric.looperMode', "LEGACY"
             }
             includeAndroidResources = true
         }

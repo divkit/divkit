@@ -67,24 +67,28 @@ class DivScreenshotActivity : AppCompatActivity() {
         if (divJson.has("div_data")) {
             divJson = divJson.getJSONObject("div_data")
         }
-        divView = if (divJson.has("card")) {
-            val templateJson = divJson.optJSONObject("templates")
-            val cardJson = divJson.getJSONObject("card")
-            Div2ViewFactory(divContext, templateJson).createView(cardJson)
-        } else {
-            Div2ViewFactory(divContext, assetReader.tryRead(templatesAssetName)).createView(divJson)
+
+        val onBound: (Div2View) -> Unit = { divView ->
+            this.divView = divView
+            divView.apply {
+                val divViewHeight = if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                    ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
+                id = R.id.morda_screenshot_div
+                removeAutofocusForOldApis()
+                hideCursor()
+            }
+            applyConfiguration(divView)
+            setContentView(divView)
         }
 
-        divView.apply {
-            val divViewHeight = if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT)
-                ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
-            id = R.id.morda_screenshot_div
-            removeAutofocusForOldApis()
-            hideCursor()
+        if (divJson.has("card")) {
+            val templateJson = divJson.optJSONObject("templates")
+            val cardJson = divJson.getJSONObject("card")
+            Div2ViewFactory(divContext, templateJson).createViewByConfig(cardJson, onBound)
+        } else {
+            Div2ViewFactory(divContext, assetReader.tryRead(templatesAssetName)).createViewByConfig(divJson, onBound)
         }
-        applyConfiguration(divView)
-        setContentView(divView)
     }
 
     private fun setImageLoader() {

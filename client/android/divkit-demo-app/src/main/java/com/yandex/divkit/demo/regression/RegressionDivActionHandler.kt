@@ -11,6 +11,7 @@ import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.parseToDiv2
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.setDataByConfig
 import java.util.UUID
 
 private const val DIV_DEMO_ACTION_SCHEME = "div-demo-action"
@@ -46,6 +47,6 @@ class RegressionDivActionHandler(
     private fun setDivData(view: Div2View, divData: DivData) {
         val dataTag = view.dataTag.takeIf { it != DivDataTag.INVALID }
             ?: DivDataTag(UUID.randomUUID().toString())
-        view.setData(divData, dataTag)
+        view.setDataByConfig(divData, dataTag, null)
     }
 }

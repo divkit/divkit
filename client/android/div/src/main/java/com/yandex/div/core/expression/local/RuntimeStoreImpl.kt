@@ -75,7 +75,12 @@ internal class RuntimeStoreImpl(
             return parentRuntime
         }
 
-        val runtime = runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector)
+        val runtime = runtimeProvider.createChildRuntime(
+            path = path,
+            div = div.value(),
+            parentResolver = parentResolver,
+            errorCollector = errorCollector,
+        )
         putRuntime(runtime, pathString, parentRuntime)
         return runtime
     }
@@ -112,7 +117,12 @@ internal class RuntimeStoreImpl(
 
         return when {
             div.needLocalRuntime -> {
-                runtimeProvider.createChildRuntime(path, div.value(), resolver, errorCollector).also {
+                runtimeProvider.createChildRuntime(
+                    path = path,
+                    div = div.value(),
+                    parentResolver = resolver,
+                    errorCollector = errorCollector,
+                ).also {
                     putRuntime(it, pathString, parentRuntime)
                 }
             }

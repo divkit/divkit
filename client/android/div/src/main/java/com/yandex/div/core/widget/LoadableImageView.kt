@@ -12,6 +12,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.annotation.MainThread
 import com.yandex.div.R
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.Releasable
@@ -72,10 +73,19 @@ open class LoadableImageView(
      */
     override fun resetImageLoaded() = setTag(R.id.image_loaded_flag, null)
 
+    @MainThread
     override fun setPlaceholder(drawable: Drawable?) = setImageDrawable(drawable)
+
+    @MainThread
     override fun setPreview(drawable: Drawable?) = setImageDrawable(drawable)
+
+    @MainThread
     override fun setPreview(bitmap: Bitmap?) = setImageBitmap(bitmap)
+
+    @MainThread
     override fun setImage(bitmap: Bitmap?) = setImageBitmap(bitmap)
+
+    @MainThread
     override fun setImage(drawable: Drawable?) {
         setImageDrawable(drawable)
         val currentDrawable = this.drawable
@@ -92,6 +102,7 @@ open class LoadableImageView(
     override fun cleanLoadingTask() = setTag(R.id.bitmap_load_references_tag, null)
 
     @CallSuper
+    @MainThread
     override fun setImageDrawable(drawable: Drawable?) {
         sourceDrawable = drawable
 
@@ -111,6 +122,7 @@ open class LoadableImageView(
     }
 
     @CallSuper
+    @MainThread
     override fun setImageBitmap(bm: Bitmap?) {
         if (shouldScaleAccordingToDensity()) {
             bm?.density = DisplayMetrics.DENSITY_DEFAULT

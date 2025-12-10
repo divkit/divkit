@@ -2,7 +2,6 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.MainThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
@@ -74,7 +73,7 @@ internal class DivBinder @Inject constructor(
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val switchBinder: DivSwitchBinder
 ) {
-    @MainThread
+
     fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
         val context = parentContext.getChildContext(div, path)
         val divView = context.divView
@@ -120,8 +119,7 @@ internal class DivBinder @Inject constructor(
         }
     }
 
-    @MainThread
-    internal fun attachIndicators() {
+    internal fun attachIndicators(divView: Div2View) = divView.runBindingAction {
         pagerIndicatorConnector.attach()
     }
 

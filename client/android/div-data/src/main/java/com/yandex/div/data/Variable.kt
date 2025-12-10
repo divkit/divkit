@@ -6,7 +6,6 @@ import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.data.PropertyDelegate
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.ParsingValueUtils.parseAsBoolean
@@ -31,8 +30,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: String,
     ) : Variable() {
+
+        @field:Volatile
         internal var value: String = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -45,8 +46,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Long,
     ) : Variable() {
+
+        @field:Volatile
         internal var value: Long = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -64,8 +67,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Boolean
     ) : Variable() {
+
+        @field:Volatile
         internal var value: Boolean = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -83,8 +88,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Double
     ) : Variable() {
+
+        @field:Volatile
         internal var value: Double = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -102,8 +109,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Int,
     ) : Variable() {
+
+        @field:Volatile
         internal var value: Color = Color(defaultValue)
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -122,8 +131,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Uri,
     ) : Variable() {
+
+        @field:Volatile
         internal var value: Uri = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -141,8 +152,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: JSONObject,
     ) : Variable() {
+
+        @field:Volatile
         internal var value: JSONObject = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -160,8 +173,10 @@ sealed class Variable {
         override val name: String,
         val defaultValue: JSONArray
     ): Variable() {
+
+        @field:Volatile
         internal var value: JSONArray = defaultValue
-            set(value) {
+            set(value) = synchronized(this) {
                 if (field == value) {
                     return
                 }
@@ -182,8 +197,9 @@ sealed class Variable {
     ) : Variable() {
 
         @InternalApi
+        @field:Volatile
         var delegate: PropertyDelegate = delegate
-            set(value) {
+            set(value) = synchronized(this) {
                 field.release()
                 field = value
                 if (!observers.isEmpty) {
@@ -192,20 +208,20 @@ sealed class Variable {
             }
 
         internal var value: Any
-            get() = delegate.get()
-            set(value) = delegate.set(value)
+            get() = synchronized(this) { delegate.get() }
+            set(value) = synchronized(this) { delegate.set(value) }
 
         @InternalApi
-        val getExpression: Expression<*> get() = delegate.getExpression
+        val getExpression: Expression<*> get() = synchronized(this) { delegate.getExpression }
 
-        override fun addObserver(observer: (Variable) -> Unit) {
+        override fun addObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
             if (observers.isEmpty) {
                 delegate.observe { notifyVariableChanged(this) }
             }
             super.addObserver(observer)
         }
 
-        override fun removeObserver(observer: (Variable) -> Unit) {
+        override fun removeObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
             super.removeObserver(observer)
             if (observers.isEmpty) {
                 delegate.release()
@@ -247,16 +263,15 @@ sealed class Variable {
         }
     }
 
-    fun addObserver(observer: (Variable) -> Unit) {
+    fun addObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
         observers.addObserver(observer)
     }
 
-    fun removeObserver(observer: (Variable) -> Unit) {
+    fun removeObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
         observers.removeObserver(observer)
     }
 
     protected fun notifyVariableChanged(v: Variable) {
-        Assert.assertMainThread()
         observers.forEach { it.invoke(v) }
     }
 

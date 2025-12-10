@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')
+    implementation project(path: ':utils')
 
     implementation libs.androidx.lifecycle.runtime
     implementation libs.okhttp

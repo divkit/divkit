@@ -3,24 +3,30 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
-import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingVariable
+import java.util.Collections
+import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Provider
 
 @Mockable
 internal class VariableControllerImpl(
+    private val viewProvider: Provider<Div2View?>,
     private val delegate: VariableController? = null,
 ): VariableController {
-    private val variables = mutableMapOf<String, Variable>()
-    private val variableSources = mutableSetOf<VariableSource>()
-    private val activeVariableSources = mutableSetOf<VariableSource>()
-    private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
-    private val onRemoveObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
+    private val variables = ConcurrentHashMap<String, Variable>()
+    private val variableSources = Collections.synchronizedSet(mutableSetOf<VariableSource>())
+    private val activeVariableSources = Collections.synchronizedSet(mutableSetOf<VariableSource>())
+    private val onChangeObservers = ConcurrentHashMap<String, ObserverList<(Variable) -> Unit>>()
+    private val onRemoveObservers = ConcurrentHashMap<String, ObserverList<(Variable) -> Unit>>()
 
-    private val onAnyVariableChangeObservers = mutableMapOf<ExpressionResolver, (Variable) -> Unit>()
+    private val onAnyVariableChangeObservers = ConcurrentHashMap<ExpressionResolver, (Variable) -> Unit>()
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
     private val declarationObserver = object : DeclarationObserver {
         override fun onDeclared(variable: Variable) = onVariableDeclared(variable)
@@ -112,9 +118,10 @@ internal class VariableControllerImpl(
         }
 
         if (invokeOnSubscription) {
-            // Any on variable changed notify should be executed on main thread.
-            Assert.assertMainThread()
-            observer.invoke(variable)
+            doOnMainThread {
+                // Any on variable changed notify should be executed on main thread.
+                observer.invoke(variable)
+            }
         }
         addObserver(name, observer)
         return
@@ -125,10 +132,20 @@ internal class VariableControllerImpl(
     }
 
     private fun notifyVariableChanged(v: Variable) {
-        Assert.assertMainThread()
-        onAnyVariableChangeObservers.values.toList().forEach { callback -> callback.invoke(v) }
-        onChangeObservers[v.name]?.forEach {
-            it.invoke(v)
+        doOnMainThread {
+            onAnyVariableChangeObservers.values.toList().forEach { callback -> callback.invoke(v) }
+            onChangeObservers[v.name]?.forEach {
+                it.invoke(v)
+            }
+        }
+    }
+
+    private inline fun doOnMainThread(crossinline block: () -> Unit) {
+        val divView = viewProvider.get()
+        if (divView == null) {
+            UiThreadHandler.executeOnMainThread(block)
+        } else {
+            divView.runBindingAction(block)
         }
     }
 

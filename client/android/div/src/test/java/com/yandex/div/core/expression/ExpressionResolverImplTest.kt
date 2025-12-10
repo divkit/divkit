@@ -66,7 +66,9 @@ class ExpressionResolverImplTest {
     private val variableController = DivVariableController().apply {
         declare(*globalVariables.values.toTypedArray())
     }
-    private val externalVariables = VariableControllerImpl().apply {
+    private val externalVariables = VariableControllerImpl(
+        viewProvider = { mock() }
+    ).apply {
         variables.values.forEach {
             declare(it)
         }
@@ -92,7 +94,7 @@ class ExpressionResolverImplTest {
         ExpressionResolverImpl(
             "",
             mock(),
-            VariableControllerImpl(),
+            VariableControllerImpl(mock()),
             Evaluator(
                 EvaluationContext(
                     variableProvider = evaluationContext.variableProvider,
@@ -327,7 +329,7 @@ class ExpressionResolverImplTest {
             rawExpression = "@{sum(2,2)}",
             typeHelper = TYPE_HELPER_INT
         )
-        val increaseCounter = {
+        val increaseCounter: () -> Unit = {
             counter++
         }
         val expressionResolverImpl = withFuncGetCallback(increaseCounter)
@@ -345,7 +347,7 @@ class ExpressionResolverImplTest {
                 it is DateTime
             }
         )
-        val increaseCounter = {
+        val increaseCounter: () -> Unit = {
             counter++
         }
         val expressionResolverImpl = withFuncGetCallback(increaseCounter)

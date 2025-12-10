@@ -9,8 +9,8 @@ import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
@@ -155,8 +155,11 @@ private class TriggerExecutor(
     }
 
     private fun tryTriggerActions() {
-        Assert.assertMainThread()
-        attachedViews.forEach { tryTriggerActions(it) }
+        attachedViews.forEach { divView ->
+            (divView as? Div2View)?.runBindingAction {
+                tryTriggerActions(divView)
+            }
+        }
     }
 
     private fun tryTriggerActions(view: Div2View) {

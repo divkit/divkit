@@ -162,7 +162,10 @@ class DivVariableController(
 
                 existingVariable?.let { existing ->
                     existing.setValue(from = variable)
-                    variable.addObserver { existing.setValue(from = it) }
+                    variable.addObserver {
+                        // TODO(DIVKIT-7313): check out thread safety
+                        existing.setValue(from = it)
+                    }
                     return@forEach
                 }
                 this.variables.put(variable.name, variable)?.let { existing ->

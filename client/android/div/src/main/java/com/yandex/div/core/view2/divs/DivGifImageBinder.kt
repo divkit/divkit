@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
@@ -21,6 +22,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
@@ -126,14 +128,14 @@ internal class DivGifImageBinder @Inject constructor(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         loadDrawable(cachedBitmap)
                     } else {
-                        setImage(cachedBitmap.bitmap)
+                        setImage(divView, cachedBitmap.bitmap)
                         imageLoaded()
                     }
                 }
 
                 override fun onSuccess(drawable: Drawable) {
                     super.onSuccess(drawable)
-                    setImage(drawable)
+                    setImage(divView, drawable)
                     imageLoaded()
                 }
 
@@ -172,14 +174,14 @@ internal class DivGifImageBinder @Inject constructor(
             synchronous = false,
             onSetPlaceholder = {
                 if (!isImageLoaded && !isImagePreview) {
-                    setPlaceholder(it)
+                    setPlaceholder(divView, it)
                 }
             },
             onSetPreview = {
                 if (!isImageLoaded) {
                     when (it) {
-                        is ImageRepresentation.Bitmap -> setPreview(it.value)
-                        is ImageRepresentation.PictureDrawable -> setPreview(it.value)
+                        is ImageRepresentation.Bitmap -> setPreview(divView, it.value)
+                        is ImageRepresentation.PictureDrawable -> setPreview(divView, it.value)
                     }
                     previewLoaded()
                 }
@@ -206,7 +208,7 @@ internal class DivGifImageBinder @Inject constructor(
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
                     if (!isImageLoaded) {
-                        setPreview(cachedBitmap.bitmap)
+                        setPreview(divView, cachedBitmap.bitmap)
                         previewLoaded()
                     }
                 }
@@ -214,7 +216,7 @@ internal class DivGifImageBinder @Inject constructor(
                 override fun onSuccess(drawable: Drawable) {
                     super.onSuccess(drawable)
                     if (!isImageLoaded) {
-                        setPreview(drawable)
+                        setPreview(divView, drawable)
                         previewLoaded()
                     }
                 }
@@ -314,5 +316,35 @@ internal class DivGifImageBinder @Inject constructor(
 
     private companion object {
         const val TAG = "DivGifImageBinder"
+
+        private fun DivGifImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
+            divView.runBindingAction {
+                setPlaceholder(drawable)
+            }
+        }
+
+        private fun DivGifImageView.setPreview(divView: Div2View, drawable: Drawable?) {
+            divView.runBindingAction {
+                setPreview(drawable)
+            }
+        }
+
+        private fun DivGifImageView.setPreview(divView: Div2View, bitmap: Bitmap?) {
+            divView.runBindingAction {
+                setPreview(bitmap)
+            }
+        }
+
+        private fun DivGifImageView.setImage(divView: Div2View, bitmap: Bitmap?) {
+            divView.runBindingAction {
+                setImage(bitmap)
+            }
+        }
+
+        private fun DivGifImageView.setImage(divView: Div2View, drawable: Drawable?) {
+            divView.runBindingAction {
+                setImage(drawable)
+            }
+        }
     }
 }
