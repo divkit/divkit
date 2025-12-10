@@ -1,0 +1,78 @@
+{
+  "description": "Vertical gallery with wrap_content width and items with margins",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "margins": {
+        "left": 10,
+        "top": 5,
+        "right": 10,
+        "bottom": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "item_spacing": 0,
+          "height": {
+            "type": "fixed",
+            "value": 220
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "Text with margins"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Longer text that\ndetermines gallery width"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Short"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

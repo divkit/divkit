@@ -1,0 +1,90 @@
+{
+  "description": "Vertical gallery with wrap_content width, two columns, paddings and match_parent items",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "column_count": 2,
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 270
+          },
+          "paddings": {
+            "left": 15,
+            "top": 10,
+            "right": 20,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "Item 1"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item 2"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Long text\nthat determines\ncolumn width"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item 4"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item 5"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item 6"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

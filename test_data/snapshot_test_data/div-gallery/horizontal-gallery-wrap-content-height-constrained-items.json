@@ -1,0 +1,83 @@
+{
+  "description": "Horizontal gallery with wrap_content height and match_parent items with constraints",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 90
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "No constraints - this text will determine gallery height"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Min height 100",
+              "height": {
+                "type": "match_parent",
+                "min_size": {
+                  "value": 100
+                }
+              }
+            },
+            {
+              "type": "gallery_item",
+              "text": "Max height 80",
+              "height": {
+                "type": "match_parent",
+                "max_size": {
+                  "value": 80
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

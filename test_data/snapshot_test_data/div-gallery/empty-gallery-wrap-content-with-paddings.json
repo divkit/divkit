@@ -1,0 +1,34 @@
+{
+  "description": "Empty gallery with wrap_content and paddings",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "horizontal",
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "left": 20,
+            "top": 20,
+            "right": 20,
+            "bottom": 20
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": []
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "description": "Vertical gallery with constrained wrap_content width and match_parent items",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content",
+            "max_size": {
+              "value": 250
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 220
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "Short"
+            },
+            {
+              "type": "gallery_item",
+              "text": "This is a very long text that would normally make the gallery wider, but max_size constraint should limit it"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Medium text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
