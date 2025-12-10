@@ -1,0 +1,410 @@
+{
+  "description": "Gallery with nested state elements. Changes nested states, scrolls to trigger view reuse, verifies nested state hierarchy is preserved.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "card_item": {
+        "type": "container",
+        "orientation": "vertical",
+        "width": {
+          "type": "fixed",
+          "value": 160
+        },
+        "height": {
+          "type": "fixed",
+          "value": 220
+        },
+        "border": {
+          "corner_radius": 12,
+          "stroke": {
+            "color": "#34495E",
+            "width": 2
+          }
+        },
+        "paddings": {
+          "left": 12,
+          "top": 12,
+          "right": 12,
+          "bottom": 12
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FFFFFF"
+          }
+        ],
+        "items": [
+          {
+            "type": "state",
+            "$id": "outer_state_id",
+            "default_state_id": "collapsed",
+            "states": [
+              {
+                "state_id": "collapsed",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "▶ Collapsed",
+                      "font_size": 16,
+                      "font_weight": "bold",
+                      "text_color": "#7F8C8D"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "expanded",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "▼ Expanded",
+                      "font_size": 16,
+                      "font_weight": "bold",
+                      "text_color": "#2C3E50",
+                      "margins": {
+                        "bottom": 8
+                      }
+                    },
+                    {
+                      "type": "state",
+                      "$id": "inner_state_id",
+                      "default_state_id": "option_a",
+                      "states": [
+                        {
+                          "state_id": "option_a",
+                          "div": {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#3498DB"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "paddings": {
+                              "left": 8,
+                              "top": 8,
+                              "right": 8,
+                              "bottom": 8
+                            },
+                            "items": [
+                              {
+                                "type": "text",
+                                "text": "Option A",
+                                "font_size": 14,
+                                "text_color": "#FFFFFF",
+                                "text_alignment_horizontal": "center"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "state_id": "option_b",
+                          "div": {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#E67E22"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "paddings": {
+                              "left": 8,
+                              "top": 8,
+                              "right": 8,
+                              "bottom": 8
+                            },
+                            "items": [
+                              {
+                                "type": "text",
+                                "text": "Option B",
+                                "font_size": 14,
+                                "text_color": "#FFFFFF",
+                                "text_alignment_horizontal": "center"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "state_id": "option_c",
+                          "div": {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#9B59B6"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "paddings": {
+                              "left": 8,
+                              "top": 8,
+                              "right": 8,
+                              "bottom": 8
+                            },
+                            "items": [
+                              {
+                                "type": "text",
+                                "text": "Option C",
+                                "font_size": 14,
+                                "text_color": "#FFFFFF",
+                                "text_alignment_horizontal": "center"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "$text": "card_label",
+            "font_size": 12,
+            "text_color": "#95A5A6",
+            "text_alignment_horizontal": "center",
+            "margins": {
+              "top": 8
+            }
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "nested_state_test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Nested State Preservation",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 16,
+                  "bottom": 16
+                }
+              },
+              {
+                "type": "gallery",
+                "id": "nested_gallery",
+                "orientation": "horizontal",
+                "item_spacing": 0,
+                "height": {
+                  "type": "wrap_content"
+                },
+                "items": [
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card1_outer",
+                    "inner_state_id": "card1_inner",
+                    "card_label": "Card 1"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card2_outer",
+                    "inner_state_id": "card2_inner",
+                    "card_label": "Card 2"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card3_outer",
+                    "inner_state_id": "card3_inner",
+                    "card_label": "Card 3"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card4_outer",
+                    "inner_state_id": "card4_inner",
+                    "card_label": "Card 4"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card5_outer",
+                    "inner_state_id": "card5_inner",
+                    "card_label": "Card 5"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card6_outer",
+                    "inner_state_id": "card6_inner",
+                    "card_label": "Card 6"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card7_outer",
+                    "inner_state_id": "card7_inner",
+                    "card_label": "Card 7"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card8_outer",
+                    "inner_state_id": "card8_inner",
+                    "card_label": "Card 8"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card9_outer",
+                    "inner_state_id": "card9_inner",
+                    "card_label": "Card 9"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card10_outer",
+                    "inner_state_id": "card10_inner",
+                    "card_label": "Card 10"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card11_outer",
+                    "inner_state_id": "card11_inner",
+                    "card_label": "Card 11"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card12_outer",
+                    "inner_state_id": "card12_inner",
+                    "card_label": "Card 12"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card13_outer",
+                    "inner_state_id": "card13_inner",
+                    "card_label": "Card 13"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card14_outer",
+                    "inner_state_id": "card14_inner",
+                    "card_label": "Card 14"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card15_outer",
+                    "inner_state_id": "card15_inner",
+                    "card_label": "Card 15"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card16_outer",
+                    "inner_state_id": "card16_inner",
+                    "card_label": "Card 16"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card17_outer",
+                    "inner_state_id": "card17_inner",
+                    "card_label": "Card 17"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card18_outer",
+                    "inner_state_id": "card18_inner",
+                    "card_label": "Card 18"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card19_outer",
+                    "inner_state_id": "card19_inner",
+                    "card_label": "Card 19"
+                  },
+                  {
+                    "type": "card_item",
+                    "outer_state_id": "card20_outer",
+                    "inner_state_id": "card20_inner",
+                    "card_label": "Card 20"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/card1_outer/expanded",
+          "log_id": "expand_card1"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/card1_outer/expanded/card1_inner/option_b",
+          "log_id": "card1_select_b"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/card2_outer/expanded",
+          "log_id": "expand_card2"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/card2_outer/expanded/card2_inner/option_c",
+          "log_id": "card2_select_c"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=nested_gallery&animated=false",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/card19_outer/expanded",
+          "log_id": "expand_card19"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_start?id=nested_gallery&animated=false",
+          "log_id": "scroll_to_start"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

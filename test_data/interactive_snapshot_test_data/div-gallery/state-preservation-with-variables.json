@@ -1,0 +1,309 @@
+{
+  "description": "Gallery items with local variables. Changes local variables, scrolls to trigger view reuse, verifies local variable-dependent rendering is preserved during recycling. Tests variable scoping with similar names.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "counter_card": {
+        "type": "container",
+        "orientation": "vertical",
+        "$id": "card_id",
+        "width": {
+          "type": "fixed",
+          "value": 150
+        },
+        "height": {
+          "type": "fixed",
+          "value": 200
+        },
+        "border": {
+          "corner_radius": 10,
+          "stroke": {
+            "color": "#2C3E50",
+            "width": 2
+          }
+        },
+        "paddings": {
+          "left": 12,
+          "top": 12,
+          "right": 12,
+          "bottom": 12
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ECF0F1"
+          }
+        ],
+        "variables": [
+          {
+            "$name": "variable_name",
+            "type": "integer",
+            "value": 0
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "$text": "card_title_text",
+            "font_size": 14,
+            "font_weight": "bold",
+            "text_color": "#34495E",
+            "text_alignment_horizontal": "center",
+            "margins": {
+              "bottom": 8
+            }
+          },
+          {
+            "type": "text",
+            "$text": "counter_value",
+            "font_size": 32,
+            "font_weight": "bold",
+            "text_alignment_horizontal": "center",
+            "margins": {
+              "top": 8,
+              "bottom": 8
+            }
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "variable_preservation_test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "id": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Local Variable Preservation Test",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 16,
+                  "bottom": 16
+                }
+              },
+              {
+                "type": "gallery",
+                "id": "var_gallery",
+                "orientation": "horizontal",
+                "item_spacing": 0,
+                "height": {
+                  "type": "wrap_content"
+                },
+                "items": [
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_1",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 1",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_2",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 2",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_3",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 3",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_4",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 4",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_5",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 5",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_6",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 6",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_7",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 7",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_8",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 8",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_9",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 9",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_10",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 10",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_11",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 11",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_12",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 12",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_13",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 13",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_14",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 14",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_15",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 15",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_16",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 16",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_17",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 17",
+                    "counter_value": "@{value}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_18",
+                    "variable_name": "count",
+                    "card_title_text": "Counter 18",
+                    "counter_value": "@{count}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_19",
+                    "variable_name": "counter",
+                    "card_title_text": "Counter 19",
+                    "counter_value": "@{counter}"
+                  },
+                  {
+                    "type": "counter_card",
+                    "card_id": "card_20",
+                    "variable_name": "value",
+                    "card_title_text": "Counter 20",
+                    "counter_value": "@{value}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=5",
+          "scope_id": "card_1",
+          "log_id": "set_counter1"
+        },
+        {
+          "url": "div-action://set_variable?name=counter&value=3",
+          "scope_id": "card_2",
+          "log_id": "set_counter2"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=var_gallery&animated=false",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=counter&value=8",
+          "scope_id": "card_19",
+          "log_id": "set_counter19"
+        },
+        {
+          "url": "div-action://set_variable?name=value&value=10",
+          "scope_id": "card_20",
+          "log_id": "set_value20"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_start?id=var_gallery&animated=false",
+          "log_id": "scroll_to_start"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

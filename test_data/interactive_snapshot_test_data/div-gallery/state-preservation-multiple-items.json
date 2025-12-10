@@ -1,0 +1,300 @@
+{
+  "description": "Gallery with multiple items having independent states. Changes states of multiple items, scrolls through gallery to trigger view reuse, verifies all states are preserved independently.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "gallery_item": {
+        "type": "container",
+        "orientation": "vertical",
+        "width": {
+          "type": "fixed",
+          "value": 140
+        },
+        "height": {
+          "type": "fixed",
+          "value": 180
+        },
+        "border": {
+          "corner_radius": 8,
+          "stroke": {
+            "color": "#CCCCCC",
+            "width": 1
+          }
+        },
+        "paddings": {
+          "left": 10,
+          "top": 10,
+          "right": 10,
+          "bottom": 10
+        },
+        "margins": {
+          "left": 6,
+          "right": 6
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#F8F9FA"
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "$text": "item_number",
+            "font_size": 16,
+            "font_weight": "bold",
+            "text_alignment_horizontal": "center",
+            "text_color": "#34495E",
+            "margins": {
+              "bottom": 8
+            }
+          },
+          {
+            "type": "state",
+            "$id": "item_state_id",
+            "default_state_id": "inactive",
+            "states": [
+              {
+                "state_id": "inactive",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "●",
+                      "font_size": 32,
+                      "text_color": "#95A5A6",
+                      "text_alignment_horizontal": "center"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Inactive",
+                      "font_size": 14,
+                      "text_color": "#7F8C8D",
+                      "text_alignment_horizontal": "center",
+                      "margins": {
+                        "top": 4
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "active",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "●",
+                      "font_size": 32,
+                      "text_color": "#27AE60",
+                      "text_alignment_horizontal": "center"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Active",
+                      "font_size": 14,
+                      "text_color": "#229954",
+                      "text_alignment_horizontal": "center",
+                      "margins": {
+                        "top": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "multiple_states_test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Multiple Independent States",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 16,
+                  "bottom": 16
+                }
+              },
+              {
+                "type": "gallery",
+                "id": "multi_state_gallery",
+                "orientation": "horizontal",
+                "item_spacing": 0,
+                "height": {
+                  "type": "wrap_content"
+                },
+                "items": [
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 1",
+                    "item_state_id": "state_1"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 2",
+                    "item_state_id": "state_2"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 3",
+                    "item_state_id": "state_3"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 4",
+                    "item_state_id": "state_4"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 5",
+                    "item_state_id": "state_5"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 6",
+                    "item_state_id": "state_6"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 7",
+                    "item_state_id": "state_7"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 8",
+                    "item_state_id": "state_8"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 9",
+                    "item_state_id": "state_9"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 10",
+                    "item_state_id": "state_10"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 11",
+                    "item_state_id": "state_11"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 12",
+                    "item_state_id": "state_12"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 13",
+                    "item_state_id": "state_13"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 14",
+                    "item_state_id": "state_14"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 15",
+                    "item_state_id": "state_15"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 16",
+                    "item_state_id": "state_16"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 17",
+                    "item_state_id": "state_17"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 18",
+                    "item_state_id": "state_18"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 19",
+                    "item_state_id": "state_19"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_number": "Item 20",
+                    "item_state_id": "state_20"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/state_1/active",
+          "log_id": "activate_item1"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/state_2/active",
+          "log_id": "activate_item2"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=multi_state_gallery&animated=false",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/state_19/active",
+          "log_id": "activate_item19"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_start?id=multi_state_gallery&animated=false",
+          "log_id": "scroll_to_start"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

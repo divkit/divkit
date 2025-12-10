@@ -1,0 +1,278 @@
+{
+  "description": "Gallery with state elements - state preservation during view reuse. Changes state of first item, scrolls to end (hiding first item), then scrolls back to verify state is preserved.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "gallery_item": {
+        "type": "container",
+        "orientation": "vertical",
+        "width": {
+          "type": "fixed",
+          "value": 150
+        },
+        "height": {
+          "type": "fixed",
+          "value": 200
+        },
+        "border": {
+          "corner_radius": 8,
+          "stroke": {
+            "color": "#CCCCCC",
+            "width": 1
+          }
+        },
+        "paddings": {
+          "left": 12,
+          "top": 12,
+          "right": 12,
+          "bottom": 12
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "items": [
+          {
+            "type": "state",
+            "$id": "item_state_id",
+            "default_state_id": "off",
+            "states": [
+              {
+                "state_id": "off",
+                "div": {
+                  "type": "text",
+                  "text": "OFF",
+                  "font_size": 16,
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#E74C3C"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "on",
+                "div": {
+                  "type": "text",
+                  "text": "ON",
+                  "font_size": 16,
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#2ECC71"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "$text": "item_label_text",
+            "font_size": 14,
+            "text_color": "#666666",
+            "text_alignment_horizontal": "center",
+            "margins": {
+              "top": 8
+            }
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "state_preservation_test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "State Preservation Test",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 16,
+                  "bottom": 16
+                }
+              },
+              {
+                "type": "gallery",
+                "id": "test_gallery",
+                "orientation": "horizontal",
+                "item_spacing": 0,
+                "height": {
+                  "type": "wrap_content"
+                },
+                "items": [
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item1_state",
+                    "item_label_text": "Item 1",
+                    "action": {
+                      "url": "div-action://set_state?state_id=0/item1_state/on",
+                      "log_id": "turn_on_item1"
+                    }
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item2_state",
+                    "item_label_text": "Item 2"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item3_state",
+                    "item_label_text": "Item 3"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item4_state",
+                    "item_label_text": "Item 4"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item5_state",
+                    "item_label_text": "Item 5"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item6_state",
+                    "item_label_text": "Item 6"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item7_state",
+                    "item_label_text": "Item 7"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item8_state",
+                    "item_label_text": "Item 8"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item9_state",
+                    "item_label_text": "Item 9"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item10_state",
+                    "item_label_text": "Item 10"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item11_state",
+                    "item_label_text": "Item 11"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item12_state",
+                    "item_label_text": "Item 12"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item13_state",
+                    "item_label_text": "Item 13"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item14_state",
+                    "item_label_text": "Item 14"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item15_state",
+                    "item_label_text": "Item 15"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item16_state",
+                    "item_label_text": "Item 16"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item17_state",
+                    "item_label_text": "Item 17"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item18_state",
+                    "item_label_text": "Item 18"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item19_state",
+                    "item_label_text": "Item 19"
+                  },
+                  {
+                    "type": "gallery_item",
+                    "item_state_id": "item20_state",
+                    "item_label_text": "Item 20"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/item1_state/on",
+          "log_id": "turn_on_item1"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=test_gallery&animated=false",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_start?id=test_gallery&animated=false",
+          "log_id": "scroll_to_start"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}
