@@ -27,7 +27,7 @@ import org.json.JSONObject
 
 private const val SHOW_LIMIT = 25
 private const val HOT_RELOAD_ANNOUNCE_DURATION = 5000L
-private const val DOC_LINK = "https://github.com/divkit/divkit/tools/hot_reload/README.md"
+private const val DOC_LINK = "https://github.com/divkit/divkit/tree/main/tools/hot_reload/README.md"
 
 /**
  * Provides [DebugViewModel] to view for rendering.
