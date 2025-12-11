@@ -2675,6 +2675,10 @@
     "en": "Description for accessibility of the tap action on the background of the tooltip.",
     "ru": "Описание для доступности действия нажатия на фон тултипа."
   },
+  "div_tooltip_bring_to_top_id": {
+    "en": "An element that will be brought to the top of the substrate.",
+    "ru": "Идентификатор элемента, который будет подниматься над подложкой тултипа."
+  },
   "div_tooltip_close_by_tap_outside": {
     "en": "Allows dismissing tooltip by tapping outside of it.",
     "ru": "Позволяет закрывать подсказку при нажатии за ее пределами."
@@ -2711,17 +2715,13 @@
     "en": "The position of a tooltip relative to an element it belongs to.",
     "ru": "Положение подсказки относительно элемента, к которому она относится."
   },
-  "div_tooltip_tap_outside_actions": {
-    "en": "Specifies actions triggered by tapping outside the tooltip.",
-    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
-  },
   "div_tooltip_substrate_div": {
     "en": "An element that will be used as a substrate for the tooltip.",
     "ru": "Элемент, который будет использоваться как подложка для тултипа."
   },
-  "div_tooltip_bring_to_top_id": {
-    "en": "An element that will be brought to the top of the substrate.",
-    "ru": "Идентификатор элемента, который будет подниматься над подложкой тултипа."
+  "div_tooltip_tap_outside_actions": {
+    "en": "Specifies actions triggered by tapping outside the tooltip.",
+    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
   },
   "div_transform": {
     "en": "Transformation of the element.",
