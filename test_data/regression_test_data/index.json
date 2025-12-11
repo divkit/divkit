@@ -2994,7 +2994,8 @@
         "Tooltip is shown, substrate showed with the animation",
         "Booth the tooltip and the'substrate are hidden"
       ],
-      "file": "tooltips/tooltip-with-substrate.json"
+      "file": "tooltips/tooltip-with-substrate.json",
+      "case_id": 486
     },
     {
       "title": "Persistent values storage",
