@@ -1,3 +1,11 @@
+## 32.30.0 (December 15, 2025)
+
+* Added support for the `preview_url` property in the `gif` component.
+* Added support for the `substrate_div` property in the `tooltip` component.
+* Fixed `tabs` `delimiter` default values for the `width` and `height`.
+* Fixed preview size with the `scale` = `stretch` and `no_scale`.
+
+
 ## 32.29.0 (December 8, 2025)
 
 * Added support for the `filter` method of an `array`.
