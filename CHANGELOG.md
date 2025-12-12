@@ -1,3 +1,19 @@
+## 32.30.0
+
+# Android Client:
+* Experimental API: added methods for async binding of Div2View.
+
+# iOS Client:
+* Added `DivThemeManager` component to manage changes to the screen color scheme.
+* Added a global `theme` variable that depends on the screen color scheme.
+
+# Web Client:
+* Added support for the `preview_url` property in the `gif` component.
+* Added support for the `substrate_div` property in the `tooltip` component.
+* Fixed `tabs` `delimiter` default values for the `width` and `height`.
+* Fixed preview size with the `scale` = `stretch` and `no_scale`.
+
+
 ## 32.29.0
 
 # Android Client:
