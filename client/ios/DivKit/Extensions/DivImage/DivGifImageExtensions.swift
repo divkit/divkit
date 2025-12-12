@@ -21,7 +21,8 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
       placeholder
     )
 
-    if let previewUrl = resolvePreviewUrl(expressionResolver) {
+    if !(imageHolder is ImageWithPreviewHolder),
+       let previewUrl = resolvePreviewUrl(expressionResolver) {
       let previewHolder = context.imageHolderFactory.make(previewUrl, placeholder)
       imageHolder = ImageWithPreviewHolder(mainHolder: imageHolder, previewHolder: previewHolder)
     }
