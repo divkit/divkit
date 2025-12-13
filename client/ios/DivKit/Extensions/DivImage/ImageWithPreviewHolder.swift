@@ -36,8 +36,8 @@ final class ImageWithPreviewHolder: ImageHolder {
     return CompositeCancellable([previewCancellable, mainCancellable])
   }
 
-  func reused(with _: ImagePlaceholder?, remoteImageURL _: URL?) -> ImageHolder? {
-    nil
+  func reused(with placeholder: ImagePlaceholder?, remoteImageURL: URL?) -> ImageHolder? {
+    mainHolder.reused(with: placeholder, remoteImageURL: remoteImageURL) != nil ? self : nil
   }
 
   func equals(_ other: ImageHolder) -> Bool {
