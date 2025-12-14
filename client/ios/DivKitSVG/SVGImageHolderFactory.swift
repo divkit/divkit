@@ -9,10 +9,13 @@ public final class SVGImageHolderFactory: DivImageHolderFactory {
 
   public init(
     requester: URLResourceRequesting,
-    imageProcessingQueue: OperationQueueType
+    imageProcessingQueue: OperationQueueType? = nil
   ) {
     self.requester = requester
-    self.imageProcessingQueue = imageProcessingQueue
+    self.imageProcessingQueue = imageProcessingQueue ?? OperationQueue(
+      name: "tech.divkit.svg-image-processing",
+      qos: .userInitiated
+    )
   }
 
   public convenience init(
@@ -21,10 +24,7 @@ public final class SVGImageHolderFactory: DivImageHolderFactory {
   ) {
     self.init(
       requester: NetworkURLResourceRequester(performer: requestPerformer),
-      imageProcessingQueue: imageProcessingQueue ?? OperationQueue(
-        name: "tech.divkit.svg-image-processing",
-        qos: .userInitiated
-      )
+      imageProcessingQueue: imageProcessingQueue
     )
   }
 
