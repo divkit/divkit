@@ -1,0 +1,39 @@
+{
+  "description": "Typed custom actions",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "card_with_external_variable",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "external_variable: @{external_variable}"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change_external_variable",
+          "typed": {
+            "type": "custom"
+          },
+          "payload": {
+            "value": "updated"
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

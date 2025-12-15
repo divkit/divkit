@@ -378,11 +378,15 @@ export interface ActionUpdateStructure {
     value: TypedValue;
 }
 
+export interface ActionCustom {
+    type: 'custom';
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
     ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo |
-    ActionUpdateStructure;
+    ActionUpdateStructure | ActionCustom;
 
 export interface ActionBase {
     log_id: string;
@@ -426,7 +430,15 @@ export type StatCallback = (details: {
     action: Action | VisibilityAction | DisappearAction;
 }) => void;
 
+/**
+ * @deprecated Use CustomActionCallbackWithTyped
+ */
 export type CustomActionCallback = (action: Action & { url: string }) => void;
+/**
+ * A callback for a custom action, such as 'custom://' or any other non-standard scheme, or
+ * actions with typed: {type: "custom"})
+ */
+export type CustomActionCallbackWithTyped = (action: Action) => void;
 
 export type ComponentCallback = (details: {
     type: 'mount' | 'update' | 'destroy';

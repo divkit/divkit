@@ -55,7 +55,8 @@
         Overflow,
         VideoPlayerProvider,
         DivFunction,
-        DivPropertyVariable
+        DivPropertyVariable,
+        CustomActionCallbackWithTyped
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -108,7 +109,7 @@
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onSubmit: SubmitCallback | undefined = undefined;
-    export let onCustomAction: CustomActionCallback | undefined = undefined;
+    export let onCustomAction: CustomActionCallback | CustomActionCallbackWithTyped | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
     export let typefaceProvider: TypefaceProvider = _fontFamily => '';
     export let fetchInit: FetchInit = {};
@@ -1444,6 +1445,14 @@
                 }
                 case 'update_structure': {
                     updateStructure(componentContext, variables, log, actionTyped);
+                    break;
+                }
+                case 'custom': {
+                    execCustomAction({
+                        ...origAction,
+                        // todo remove in major release
+                        url: ''
+                    } as (Action | VisibilityAction) & { url: string });
                     break;
                 }
                 default: {

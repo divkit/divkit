@@ -9,7 +9,9 @@
       ]
     }
   },
-  "platforms": [],
+  "platforms": [
+    "web"
+  ],
   "required": [
     "type"
   ]

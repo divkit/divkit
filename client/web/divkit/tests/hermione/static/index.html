@@ -183,10 +183,8 @@
             .then(json => {
                 const root = document.querySelector('#root');
 
-                let globalVariablesController;
+                const globalVariablesController = Ya.DivKit.createGlobalVariablesController();
                 if (resultType) {
-                    globalVariablesController = Ya.DivKit.createGlobalVariablesController();
-
                     let value = '';
                     if (resultType === 'integer' || resultType === 'number') {
                         value = 0;
@@ -205,6 +203,9 @@
                     window.result = Ya.DivKit.createVariable('result', resultType, value);
                     globalVariablesController.setVariable(window.result);
                 }
+
+                const externalVariable = Ya.DivKit.createVariable('external_variable', 'string', 'initial');
+                globalVariablesController.setVariable(externalVariable);
 
                 window.divkitRoot = Ya.DivKit.render({
                     id: 'test',
@@ -241,6 +242,11 @@
                     onComponent(details) {
                         if (details.type === 'mount' && details.json.id) {
                             details.node.setAttribute('data-test-id', details.json.id);
+                        }
+                    },
+                    onCustomAction(action) {
+                        if (action.payload && action.payload.value) {
+                            externalVariable.setValue(action.payload.value);
                         }
                     }
                 });
