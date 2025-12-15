@@ -21,6 +21,8 @@ import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.request.allowHardware
+import coil3.size.Precision
+import coil3.size.Scale
 import coil3.svg.SvgDecoder
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
@@ -28,23 +30,46 @@ import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import okhttp3.OkHttpClient
+import kotlin.math.max
 
 class CoilDivImageLoader private constructor(
     private val context: Context,
-    private val okHttpClientFactory: () -> OkHttpClient
+    private val okHttpClientFactory: () -> OkHttpClient,
+    private val limitImageBitmapSizeEnabled: Boolean,
 ) : DivImageLoader {
 
-    constructor(context: Context) : this(context, ::OkHttpClient)
+    constructor(context: Context) : this(context, ::OkHttpClient, true)
 
     constructor(
         context: Context,
-        okHttpClient: OkHttpClient
-    ) : this(context, { okHttpClient.newBuilder().build() })
+        limitImageBitmapSizeEnabled: Boolean,
+    ) : this(context, ::OkHttpClient, limitImageBitmapSizeEnabled)
+
+    constructor(
+        context: Context,
+        okHttpClient: OkHttpClient,
+    ) : this(context, { okHttpClient.newBuilder().build() }, true)
+
+    constructor(
+        context: Context,
+        okHttpClient: OkHttpClient,
+        limitImageBitmapSizeEnabled: Boolean,
+    ) : this(context, { okHttpClient.newBuilder().build() }, limitImageBitmapSizeEnabled)
 
     constructor(
         context: Context,
         okHttpClientBuilder: OkHttpClient.Builder
-    ) : this(context, { okHttpClientBuilder.build() })
+    ) : this(context, { okHttpClientBuilder.build() }, true)
+
+    constructor(
+        context: Context,
+        okHttpClientBuilder: OkHttpClient.Builder,
+        limitImageBitmapSizeEnabled: Boolean,
+    ) : this(context, { okHttpClientBuilder.build() }, limitImageBitmapSizeEnabled)
+
+    private val maxDisplaySize = context.resources.displayMetrics.let {
+        max(it.widthPixels, it.heightPixels)
+    }
 
     @OptIn(ExperimentalCoilApi::class)
     private val imageLoader = ImageLoader.Builder(context)
@@ -70,6 +95,8 @@ class CoilDivImageLoader private constructor(
 
     override fun hasSvgSupport() = true
 
+    override fun needLimitBitmapSize() = false
+
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
 
@@ -86,6 +113,7 @@ class CoilDivImageLoader private constructor(
         val request = ImageRequest.Builder(context)
             .data(imageUri)
             .allowHardware(false)
+            .limitImageBitmapSizeIfNeed()
             .listener(BitmapRequestListener(context, callback, imageUri))
             .build()
 
@@ -105,6 +133,7 @@ class CoilDivImageLoader private constructor(
         val request = ImageRequest.Builder(context)
             .data(imageUri)
             .allowHardware(false)
+            .limitImageBitmapSizeIfNeed()
             .listener(GifRequestListener(context, callback))
             .build()
 
@@ -146,6 +175,12 @@ class CoilDivImageLoader private constructor(
 
         override fun onError(request: ImageRequest, result: ErrorResult) {
             callback.onError()
+        }
+    }
+
+    private fun ImageRequest.Builder.limitImageBitmapSizeIfNeed() = apply {
+        if (limitImageBitmapSizeEnabled) {
+            size(maxDisplaySize, maxDisplaySize).scale(Scale.FIT).precision(Precision.INEXACT)
         }
     }
 }

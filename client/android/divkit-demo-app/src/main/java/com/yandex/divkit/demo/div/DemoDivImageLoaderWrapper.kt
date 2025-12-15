@@ -12,6 +12,8 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
 
     private val targets = TargetList()
 
+    override fun needLimitBitmapSize(): Boolean = loader.needLimitBitmapSize()
+
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         targets.add(callback)
         val loadReference = loader.loadImage(imageUrl, CallbackWrapper(callback))

@@ -33,6 +33,16 @@ public interface DivImageLoader {
     }
 
     /**
+     * Property indicating if the image bitmap size can be limited after downloading by this loader.
+     * True if not overridden.
+     *
+     * @return true if need to limit image bitmap size
+     */
+    default Boolean needLimitBitmapSize() {
+        return true;
+    }
+
+    /**
      * Starts image loading by given <code>imageUrl</code>. Download raw bytes in result.
      * <p>
      * Contract : <code>callback</code> MUST BE stored in {@link java.lang.ref.WeakReference} in order to prevent leakage.

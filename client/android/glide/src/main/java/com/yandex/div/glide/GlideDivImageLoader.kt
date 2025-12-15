@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.BaseRequestOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
@@ -19,12 +20,20 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import kotlin.math.max
 
-class GlideDivImageLoader(
-    private val context: Context
+class GlideDivImageLoader @JvmOverloads constructor(
+    private val context: Context,
+    private val limitImageBitmapSizeEnabled: Boolean = true,
 ) : DivImageLoader {
 
+    private val maxDisplaySize = context.resources.displayMetrics.let {
+        max(it.widthPixels, it.heightPixels)
+    }
+
     override fun hasSvgSupport() = false
+
+    override fun needLimitBitmapSize() = false
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
@@ -36,7 +45,7 @@ class GlideDivImageLoader(
 
         // load result will be handled by RequestListener to get dataSource
         Glide.with(context).asBitmap().load(imageUri)
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .limitImageBitmapSizeIfNeed()
             .listener(BitmapRequestListener(callback, imageUri))
             .into(target)
 
@@ -64,7 +73,11 @@ class GlideDivImageLoader(
         }
 
         // load result will be handled by RequestListener to get dataSource
-        Glide.with(context).asGif().listener(GifImageRequestListener(callback, imageUri)).load(imageUri).into(target)
+        Glide.with(context).asGif()
+            .limitImageBitmapSizeIfNeed()
+            .listener(GifImageRequestListener(callback, imageUri))
+            .load(imageUri)
+            .into(target)
 
         return LoadReference {
             Glide.with(context).clear(target)
@@ -113,6 +126,13 @@ class GlideDivImageLoader(
             return true
         }
     }
+
+    private fun <T : BaseRequestOptions<T>> BaseRequestOptions<T>.limitImageBitmapSizeIfNeed(): T =
+        if (limitImageBitmapSizeEnabled) {
+            override(maxDisplaySize, maxDisplaySize).centerInside()
+        } else {
+            override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+        }
 }
 
 private fun DataSource.toBitmapSource(): BitmapSource {

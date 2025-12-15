@@ -85,9 +85,9 @@ internal object Container {
 
     val imageLoader by lazy {
         val loader = when (preferences.imageLoader) {
-            Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder)
-            Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context)
-            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder)
+            Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
+            Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context, preferences.limitImageBitmapSizeEnabled)
+            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
         }
         DemoDivImageLoaderWrapper(loader)
     }

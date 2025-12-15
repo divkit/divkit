@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Target
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
@@ -24,13 +25,25 @@ import kotlinx.coroutines.withContext
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import kotlin.math.max
 
 class PicassoDivImageLoader(
     context: Context,
     httpClientBuilder: OkHttpClient.Builder?,
+    private val limitImageBitmapSizeEnabled: Boolean,
 ) : DivImageLoader {
 
-    constructor(context: Context) : this(context, null)
+    constructor(context: Context) : this(context, null, true)
+
+    constructor(
+        context: Context,
+        httpClientBuilder: OkHttpClient.Builder?
+    ) : this(context, httpClientBuilder, true)
+
+    constructor(
+        context: Context,
+        limitImageBitmapSizeEnabled: Boolean,
+    ) : this(context, null, limitImageBitmapSizeEnabled)
 
     private val appContext = context.applicationContext
     private val picasso by lazy { createPicasso() }
@@ -39,6 +52,10 @@ class PicassoDivImageLoader(
         .cache(Cache(context.cacheDir, DISK_CACHE_SIZE))
         .build()
     private val coroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: MainScope()
+
+    private val maxDisplaySize = context.resources.displayMetrics.let {
+        max(it.widthPixels, it.heightPixels)
+    }
 
     @Deprecated("Was needed for internal usa")
     val isIdle: Boolean
@@ -52,13 +69,17 @@ class PicassoDivImageLoader(
 
     override fun hasSvgSupport() = false
 
+    override fun needLimitBitmapSize() = false
+
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         val target = DownloadCallbackAdapter(imageUri, callback)
         targets.addTarget(target)
 
         executeOnMainThread {
-            picasso.load(imageUri).into(target)
+            picasso.load(imageUri)
+            .limitImageBitmapSizeIfNeed()
+            .into(target)
         }
 
         return LoadReference {
@@ -162,6 +183,12 @@ class PicassoDivImageLoader(
 
         fun clean() {
             activeTargets.clear()
+        }
+    }
+
+    private fun RequestCreator.limitImageBitmapSizeIfNeed() = apply {
+        if (limitImageBitmapSizeEnabled) {
+            resize(maxDisplaySize, maxDisplaySize).centerInside().onlyScaleDown()
         }
     }
 }
