@@ -1,4 +1,6 @@
 ---
+description: Context from ai/bank/clients/ios/pager_infinite_scroll.md
+globs: 
 alwaysApply: true
 ---
 
@@ -21,7 +23,7 @@ The core concept behind infinite scroll is the creation of buffer zones at both 
 ```mermaid
 graph LR
     B1["Buffer N-1"] --- B2["Buffer N"] --- O1["Item 1"] --- O2["Item 2"] --- O3["..."] --- O4["Item N-1"] --- O5["Item N"] --- A1["Buffer 1"] --- A2["Buffer 2"]
-
+    
     style B1 fill:#f9d5e5,stroke:#333
     style B2 fill:#f9d5e5,stroke:#333
     style O1 fill:#eeeeee,stroke:#333
@@ -31,7 +33,7 @@ graph LR
     style O5 fill:#eeeeee,stroke:#333
     style A1 fill:#d5e5f9,stroke:#333
     style A2 fill:#d5e5f9,stroke:#333
-
+    
     linkStyle default stroke-width:2px
 ```
 
@@ -67,7 +69,7 @@ flowchart TD
     B -->|No| Z[Continue normal scrolling]
     B -->|Yes| C{Position adjustment needed?}
     C -->|No| Z
-
+    
     subgraph "getNewPosition in InfiniteScroll.swift"
     C -->|Yes| GP[Calculate cycle boundaries]
     GP --> GC{Is scroll position in buffer zone?}
@@ -75,14 +77,14 @@ flowchart TD
     GC -->|Yes| GE[Calculate equivalent position in main content]
     GE --> GF[Return new position and page index]
     end
-
+    
     GF --> D[Remove scroll delegates]
     D --> E[Update content offset without animation]
     E --> F[Restore scroll delegates]
     F --> G{Is user dragging?}
     G -->|Yes| Z
     G -->|No| H[Animate to correct page position]
-
+    
     style A fill:#f5f5f5,stroke:#333
     style B fill:#f5f5f5,stroke:#333
     style C fill:#f5f5f5,stroke:#333
@@ -143,10 +145,10 @@ When using a `div-pager` with `infinite_scroll` enabled, a special corner case o
 graph LR
     B1["Buffer 3"] --- B2["Buffer 4"] --- O1["Item 0"] --- O2["Item 1"] --- O3["Item 2"] --- O4["Item 3"] --- O5["Item 4<br>(Current)"] --- A1["Buffer 0"] --- A2["Buffer 1"]
     I0["0"] --- I1["1"] --- I2["2"] --- I3["3"] --- I4["4"] --- I5["5"] --- I6["6"] ---- I7["7"] --- I8["8"]
-
+    
     O5 -..-> |"Want to scroll to"| O1
     O5 ---> |"Actually scroll to"| A1
-
+    
     style B1 fill:#f9d5e5,stroke:#333,color:#000
     style B2 fill:#f9d5e5,stroke:#333,color:#000
     style O1 fill:#eeeeee,stroke:#333,color:#000
@@ -156,7 +158,7 @@ graph LR
     style O5 fill:#eeeeee,stroke:#333,color:#000,stroke-width:3px
     style A1 fill:#d5e5f9,stroke:#333,color:#000,stroke-width:3px
     style A2 fill:#d5e5f9,stroke:#333,color:#000
-
+    
     style I0 fill:none,stroke:none,color:#000
     style I1 fill:none,stroke:none,color:#000
     style I2 fill:none,stroke:none,color:#000
@@ -201,7 +203,7 @@ sequenceDiagram
     DivPager->>Gallery: Configure with infiniteScroll=true
     DivPager->>Gallery: Add buffer elements
     Gallery->>View: Initialize with buffer elements
-
+    
     loop On Scroll
         View->>Scroll: Check if position adjustment needed
         Scroll-->>View: Return new position if needed

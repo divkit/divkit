@@ -1,4 +1,6 @@
 ---
+description: Context from ai/bank/clients/ios/build_and_test.md
+globs: 
 alwaysApply: true
 ---
 
@@ -21,7 +23,7 @@ The main iOS project is located at `public/client/ios/DivKit.xcodeproj` and cont
 
 ## Building the Project
 
-Main build command:
+Main build command: 
 ```bash
 cd public/client/ios && xcodebuild -project DivKit.xcodeproj -scheme DivKitPlayground -sdk iphonesimulator -destination "name=iPhone Air" -quiet
 ```

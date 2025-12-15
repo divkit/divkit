@@ -1,4 +1,6 @@
 ---
+description: Context from ai/bank/clients/ios/resources_preload.md
+globs: 
 alwaysApply: true
 ---
 
@@ -54,7 +56,7 @@ public final class DivKitComponents {
   // ...
   public let resourcesPreloader: DivDataResourcesPreloader?
   // ...
-
+  
   public init(
     // ...
     resourcesPreloader: DivDataResourcesPreloader? = nil
@@ -231,43 +233,43 @@ classDiagram
         -[DivExtensionHandler]? extensionHandlers
         +downloadResources(divData, filter, context, completion)
     }
-
+    
     class ResourcePreloadFilter {
         <<enumeration>>
         all
         onlyRequired
     }
-
+    
     class URLResourceRequesting {
         <<interface>>
         +getData(from: URL, completion)
     }
-
+    
     class DivData {
         +makeImageURLs(with: ExpressionResolver, filter: ResourcePreloadFilter)
         +makeVideoURLs(with: ExpressionResolver, filter: ResourcePreloadFilter)
     }
-
+    
     class DivExtensionHandler {
         <<interface>>
         +getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver)
     }
-
+    
     class ResourceDiv {
         <<interface>>
         +resolvePreloadURLs(ExpressionResolver)
         +resolvePreloadRequired(ExpressionResolver)
         +preloadURLs(ExpressionResolver, filter)
     }
-
+    
     class DivKitComponents {
         +resourcesPreloader: DivDataResourcesPreloader?
     }
-
+    
     class DivBlockProvider {
         -update(divData: DivData?)
     }
-
+    
     DivDataResourcesPreloader --> ResourcePreloadFilter : uses
     DivDataResourcesPreloader --> URLResourceRequesting : uses
     DivDataResourcesPreloader --> DivData : collect urls

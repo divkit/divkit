@@ -1,4 +1,6 @@
 ---
+description: Context from ai/bank/clients/ios/div-tooltip.md
+globs: 
 alwaysApply: true
 ---
 
@@ -29,14 +31,14 @@ sequenceDiagram
     TooltipFactory-->>TooltipView: Create view
     TooltipManager->>TooltipView: Add to view hierarchy
     TooltipView-->>User: Display tooltip
-
+    
     alt Duration specified
         TooltipView-->>TooltipView: Automatic hiding after duration
     else Tap outside tooltip
         User->>TooltipManager: Tap outside tooltip
         TooltipManager->>TooltipView: hideTooltip(id)
     end
-
+    
     TooltipView-->>User: Hide tooltip
 ```
 
@@ -149,4 +151,3 @@ When displaying a tooltip in modal mode, a separate window with level `UIWindow.
     }
   ]
 }
-
