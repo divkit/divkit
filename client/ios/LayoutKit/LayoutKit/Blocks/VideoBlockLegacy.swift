@@ -21,6 +21,7 @@ public final class VideoBlockLegacy: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let preview: ImageHolder?
+  public let usePlayerPool: Bool?
 
   public let intrinsicContentWidth: CGFloat = 0
 
@@ -35,13 +36,15 @@ public final class VideoBlockLegacy: BlockWithTraits {
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait,
     autoplayAllowed: ObservableVariable<Bool>,
-    preview: ImageHolder? = nil
+    preview: ImageHolder? = nil,
+    usePlayerPool: Bool? = nil
   ) {
     self.videoAssetHolder = videoAssetHolder
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.autoplayAllowed = autoplayAllowed
     self.preview = preview
+    self.usePlayerPool = usePlayerPool
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat { 0 }

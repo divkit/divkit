@@ -20,6 +20,7 @@ extension VideoBlockLegacy {
     renderingDelegate _: RenderingDelegate?
   ) {
     let videoView = view as! VideoBlockLegacyView
+    videoView.usePlayerPool = usePlayerPool ?? false
     videoView.autoplayAllowed.source = autoplayAllowed.currentAndNewValues
     if videoView.videoAssetHolder?.url != videoAssetHolder.url {
       videoView.videoAssetHolder = videoAssetHolder
@@ -30,6 +31,8 @@ extension VideoBlockLegacy {
 
 private final class VideoBlockLegacyView: BlockView {
   override static var layerClass: AnyClass { AVPlayerLayer.self }
+
+  var usePlayerPool = false
 
   var videoAssetHolder: VideoBlockLegacy.VideoAssetHolder! {
     didSet {
@@ -53,9 +56,11 @@ private final class VideoBlockLegacyView: BlockView {
   let effectiveBackgroundColor: UIColor? = nil
 
   private let disposePool = AutodisposePool()
-  private let avPlayer = AVPlayer()
+  private var avPlayer: AVPlayer?
+  private var playerAsset: AVAsset?
   private let previewImageView = UIImageView()
-  private var isObservingRate = false
+  private var visibilityUpdateWorkItem: DispatchWorkItem?
+  private var pendingVisibilityIsVisible: Bool?
 
   private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
 
@@ -82,8 +87,13 @@ private final class VideoBlockLegacyView: BlockView {
       name: AVPlayerItem.didPlayToEndTimeNotification,
       object: nil
     )
-    playerLayer.player = avPlayer
     playerLayer.videoGravity = .resizeAspectFill
+    playerLayer.addObserver(
+      self,
+      forKeyPath: "readyForDisplay",
+      options: [.new],
+      context: nil
+    )
   }
 
   @available(*, unavailable)
@@ -93,14 +103,21 @@ private final class VideoBlockLegacyView: BlockView {
 
   deinit {
     NotificationCenter.default.removeObserver(self)
-    if isObservingRate {
-      avPlayer.removeObserver(self, forKeyPath: "rate")
-    }
+    playerLayer.removeObserver(self, forKeyPath: "readyForDisplay")
+    visibilityUpdateWorkItem?.cancel()
+    detachPlayer()
   }
 
   override func layoutSubviews() {
     super.layoutSubviews()
     previewImageView.frame = bounds
+  }
+
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if window == nil {
+      detachPlayer()
+    }
   }
 
   override func observeValue(
@@ -109,69 +126,143 @@ private final class VideoBlockLegacyView: BlockView {
     change _: [NSKeyValueChangeKey: Any]?,
     context _: UnsafeMutableRawPointer?
   ) {
-    if keyPath == "rate", let player = object as? AVPlayer, player === avPlayer {
-      if player.isPlaying {
-        previewImageView.isHidden = true
+    if keyPath == "readyForDisplay", object as? AVPlayerLayer === playerLayer {
+      if playerLayer.isReadyForDisplay {
+        runWithDelay { [self] in
+          updateVisibility()
+        }
       }
+      updateVisibility()
+      return
     }
   }
 
-  func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
-
-  private func updatePreview() {
-    guard let preview else {
-      previewImageView.image = nil
-      previewImageView.isHidden = true
+  func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+    guard usePlayerPool else {
       return
     }
+    let isVisible = !to.isEmpty
+    pendingVisibilityIsVisible = isVisible
 
-    if case let .image(placeholderImage) = preview.placeholder {
-      previewImageView.image = placeholderImage
-      previewImageView.isHidden = false
-    }
-
-    _ = preview.requestImageWithCompletion { [weak self] image in
+    visibilityUpdateWorkItem?.cancel()
+    let workItem = DispatchWorkItem { [weak self] in
       guard let self else { return }
-      if let image, !avPlayer.isPlaying {
-        previewImageView.image = image
-        previewImageView.isHidden = false
+      guard self.pendingVisibilityIsVisible == isVisible else { return }
+
+      if isVisible {
+        guard self.window != nil else { return }
+        if self.avPlayer == nil {
+          self.attachPlayer()
+        }
+        self.resumePlayer()
+      } else {
+        self.detachPlayer()
       }
+    }
+    visibilityUpdateWorkItem = workItem
+    DispatchQueue.main.asyncAfter(deadline: .now() + visibilityThrottleInterval, execute: workItem)
+  }
+
+  private func updateVisibility() {
+    guard let player = avPlayer,
+          player.currentItem?.url == videoAssetHolder?.url
+    else { return }
+    previewImageView.isHidden = playerLayer.isReadyForDisplay
+  }
+
+  private func runWithDelay(_ action: @escaping Action) {
+    let videoUrl = videoAssetHolder?.url
+    after(previewHideDelay) { [self] in
+      guard videoUrl == videoAssetHolder?.url else {
+        return
+      }
+      action()
+    }
+  }
+
+  private func updatePreview() {
+    previewImageView.image = preview?.image ?? preview?.placeholder?.toImageHolder().image
+    updateVisibility()
+
+    let videoUrl = videoAssetHolder?.url
+    preview?.requestImageWithCompletion { [weak self] image in
+      guard let self, videoAssetHolder.url == videoUrl else { return }
+      previewImageView.image = image
     }
   }
 
   private func configurePlayer(with playerItem: AVPlayerItem) {
     onMainThreadAsync { [self] in
-      avPlayer.replaceCurrentItem(with: AVPlayerItem(asset: playerItem.asset))
-      if !isObservingRate {
-        avPlayer.addObserver(
-          self,
-          forKeyPath: "rate",
-          options: [.new],
-          context: nil
-        )
-        isObservingRate = true
+      playerAsset = playerItem.asset
+      if !usePlayerPool {
+        avPlayer = AVPlayer()
+        playerLayer.player = avPlayer
       }
-      resumePlayer()
+      if let player = avPlayer {
+        player.replaceCurrentItem(with: AVPlayerItem(asset: playerItem.asset))
+        resumePlayer()
+      }
     }
+  }
+
+  private func attachPlayer() {
+    guard avPlayer == nil else { return }
+    let player = AVPlayerPool.shared.acquire()
+    avPlayer = player
+    playerLayer.player = player
+
+    if let asset = playerAsset {
+      player.replaceCurrentItem(with: AVPlayerItem(asset: asset))
+    }
+  }
+
+  private func detachPlayer() {
+    guard usePlayerPool, let player = avPlayer else { return }
+    playerLayer.player = nil
+    AVPlayerPool.shared.release(player)
+    avPlayer = nil
+    previewImageView.isHidden = false
   }
 
   @objc private func resumePlayer() {
     if autoplayAllowed.value {
-      avPlayer.play()
+      avPlayer?.play()
     }
   }
 
   @objc private func playerItemDidReachEnd(notification: Notification) {
-    if (notification.object as? AVPlayerItem) === avPlayer.currentItem {
-      avPlayer.seek(to: .zero)
+    if let player = avPlayer, (notification.object as? AVPlayerItem) === player.currentItem {
+      player.seek(to: .zero)
       resumePlayer()
     }
   }
 }
 
-extension AVPlayer {
-  fileprivate var isPlaying: Bool {
-    rate > 0
+private final class AVPlayerPool {
+  static let shared = AVPlayerPool()
+
+  private var players: [AVPlayer] = []
+
+  private var activeCount = 0
+
+  func acquire() -> AVPlayer {
+    players.popLast() ?? AVPlayer()
+  }
+
+  func release(_ player: AVPlayer) {
+    player.pause()
+    player.replaceCurrentItem(with: nil)
+    players.append(player)
   }
 }
+
+extension AVPlayerItem {
+  var url: URL? {
+    (asset as? AVURLAsset)?.url
+  }
+}
+
+private let visibilityThrottleInterval: TimeInterval = 0.2
+private let previewHideDelay: TimeInterval = 0.05
+
 #endif
