@@ -4,7 +4,7 @@ import android.view.View
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThreadBlocking
+import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import javax.inject.Inject

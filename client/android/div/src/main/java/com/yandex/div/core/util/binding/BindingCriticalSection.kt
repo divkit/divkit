@@ -213,7 +213,7 @@ internal class BindingCriticalSection @Inject constructor() {
 }
 
 internal inline fun BindingCriticalSection.runBindingAction(crossinline action: () -> Unit) {
-    if (UiThreadHandler.isMainThread()) {
+    if (UiThreadHandler.get().isMainThread()) {
         action()
     } else {
         postBindingAction(action)

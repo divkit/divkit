@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThreadBlocking
+import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 
 internal object ReleaseUtils {
 

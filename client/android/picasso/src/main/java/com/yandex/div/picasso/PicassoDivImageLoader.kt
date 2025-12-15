@@ -17,7 +17,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
-import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThread
+import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

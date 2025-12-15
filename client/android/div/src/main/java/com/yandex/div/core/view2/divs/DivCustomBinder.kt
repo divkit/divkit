@@ -15,7 +15,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThreadBlocking
+import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div2.Div
 import com.yandex.div2.DivCustom
 import javax.inject.Inject

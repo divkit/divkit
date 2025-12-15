@@ -1,11 +1,10 @@
 package com.yandex.div.core.expression.variables
 
-import android.os.Handler
-import android.os.Looper
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.UiThreadHandler
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -15,7 +14,6 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class DivVariableController(
     private val internalVariableController: DivVariableController? = null
 ) {
-    private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
     private val declarationObservers = ConcurrentLinkedQueue<DeclarationObserver>()
     private val undeclaredVariables = mutableMapOf<String, String>()
@@ -51,13 +49,9 @@ class DivVariableController(
             pendingDeclaration.addAll(variables.map { it.name })
         }
 
-        if (mainHandler.looper != Looper.myLooper()) {
-            mainHandler.post {
-                putOrUpdateInternal(*variables)
-            }
-            return
+        UiThreadHandler.executeOnMainThread {
+            putOrUpdateInternal(*variables)
         }
-        putOrUpdateInternal(*variables)
     }
 
     /**
@@ -95,13 +89,9 @@ class DivVariableController(
      */
     @Throws(VariableMutationException::class)
     fun putOrUpdate(vararg variables: Variable) {
-        if (mainHandler.looper != Looper.myLooper()) {
-            mainHandler.post {
-                putOrUpdateInternal(*variables)
-            }
-            return
+        UiThreadHandler.executeOnMainThread {
+            putOrUpdateInternal(*variables)
         }
-        putOrUpdateInternal(*variables)
     }
 
     /**
@@ -115,13 +105,9 @@ class DivVariableController(
      */
     @Throws(VariableMutationException::class)
     fun replaceAll(vararg variables: Variable)  {
-        if (mainHandler.looper != Looper.myLooper()) {
-            mainHandler.post {
-                replaceAllInternal(*variables)
-            }
-            return
+        UiThreadHandler.executeOnMainThread {
+            replaceAllInternal(*variables)
         }
-        replaceAllInternal(*variables)
     }
 
     /**
@@ -129,13 +115,9 @@ class DivVariableController(
      * Doesn't effect internalVariableController.
      */
     fun removeAll(vararg variablesNames: String)  {
-        if (mainHandler.looper != Looper.myLooper()) {
-            mainHandler.post {
-                removeVariableInternal(*variablesNames)
-            }
-            return
+        UiThreadHandler.executeOnMainThread {
+            removeVariableInternal(*variablesNames)
         }
-        removeVariableInternal(*variablesNames)
     }
 
     private fun putOrUpdateInternal(vararg variables: Variable) {

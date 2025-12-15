@@ -29,7 +29,7 @@ public inline fun <T> ViewGroup.withDivViewCanvasClipping(block: () -> T): T {
 }
 
 internal inline fun Div2View.runBindingAction(crossinline action: () -> Unit) {
-    if (UiThreadHandler.isMainThread()) {
+    if (UiThreadHandler.get().isMainThread()) {
         action()
     } else {
         postBindingAction(action)

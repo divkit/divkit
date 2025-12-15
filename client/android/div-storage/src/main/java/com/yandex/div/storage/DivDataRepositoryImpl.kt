@@ -73,7 +73,7 @@ internal class DivDataRepositoryImpl(
             ))
         }
 
-        if (UiThreadHandler.isMainThread()) {
+        if (UiThreadHandler.get().isMainThread()) {
             histogramRecorder.reportDivDataLoadTime(SystemClock.uptimeMillis() - parseStarted)
         }
 

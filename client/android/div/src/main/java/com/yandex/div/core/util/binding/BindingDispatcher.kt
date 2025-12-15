@@ -55,7 +55,7 @@ internal class BindingDispatcher @Inject constructor(
     inline fun <T> runWithinBindingContext(
         crossinline block: () -> T
     ) {
-        if (isBackgroundBindingInProgress && UiThreadHandler.isMainThread()) {
+        if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
             runOnBindingThread(null, block)
         } else {
             block()
@@ -75,7 +75,7 @@ internal class BindingDispatcher @Inject constructor(
      * In such case, rejects the execution returning [fallback].
      */
     inline fun <T> withLock(fallback: T, block: () -> T): T {
-        if (isBackgroundBindingInProgress && UiThreadHandler.isMainThread()) {
+        if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
             reportLockFail()
             return fallback
         }

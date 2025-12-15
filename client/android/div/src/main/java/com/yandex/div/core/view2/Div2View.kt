@@ -84,7 +84,7 @@ import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.VariableMutationHandler
-import com.yandex.div.internal.util.UiThreadHandler.executeOnMainThreadBlocking
+import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
