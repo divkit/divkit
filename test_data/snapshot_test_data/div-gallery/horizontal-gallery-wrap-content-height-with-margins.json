@@ -1,7 +1,8 @@
 {
   "description": "Horizontal gallery with wrap_content height and items with margins",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "gallery_item": {

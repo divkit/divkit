@@ -11,7 +11,6 @@ export interface LayoutParams {
     parentContainerKnownWidth?: boolean;
     parentContainerKnownHeight?: boolean;
     parentContainerWrap?: boolean;
-    parentLayoutOrientation?: Orientation;
     parentHorizontalWrapContent?: boolean;
     parentVerticalWrapContent?: boolean;
     stretchWidth?: boolean;

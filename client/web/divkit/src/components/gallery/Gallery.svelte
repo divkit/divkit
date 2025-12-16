@@ -325,11 +325,6 @@
             newScrollerStyle[scrollPadding] = pxToEm(itemSpacing / 2);
         }
 
-        // todo multiple columns
-        if (columns === 1) {
-            newChildLayoutParams.parentLayoutOrientation = orientation;
-        }
-
         scrollerStyle = assignIfDifferent(newScrollerStyle, scrollerStyle);
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }

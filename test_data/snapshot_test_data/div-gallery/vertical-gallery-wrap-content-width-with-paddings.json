@@ -1,7 +1,8 @@
 {
   "description": "Vertical gallery with wrap_content width, paddings and match_parent items",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "gallery_item": {

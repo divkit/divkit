@@ -1,7 +1,8 @@
 {
   "description": "Vertical gallery with wrap_content width, two columns and items with margins",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "gallery_item": {

@@ -1,7 +1,8 @@
 {
   "description": "Horizontal gallery with wrap_content height, two columns, paddings and match_parent items",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "gallery_item": {

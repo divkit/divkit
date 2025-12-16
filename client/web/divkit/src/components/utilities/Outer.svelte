@@ -439,10 +439,9 @@
                 }));
             }
             if (
-                layoutParams.parentLayoutOrientation === 'vertical' ||
                 layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerKnownWidth ||
                 layoutParams.stretchWidth ||
-                layoutParams.treatMatchParentAs100
+                layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.treatMatchParentAs100
             ) {
                 const leftMargin = ($direction === 'ltr' ? $jsonMargins?.start : $jsonMargins?.end) ??
                     $jsonMargins?.left ??
@@ -459,9 +458,9 @@
                 } else {
                     newWidth = totalWidth;
                 }
-                if (layoutParams.parentContainerOrientation === 'horizontal') {
-                    // newWidthFill = true;
-                }
+                // if (layoutParams.parentContainerOrientation === 'horizontal') {
+                //     newWidthFill = true;
+                // }
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
                 newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
                 if (layoutParams.parentContainerWrap) {
@@ -555,10 +554,9 @@
                 }));
             }
             if (
-                layoutParams.parentLayoutOrientation === 'horizontal' ||
                 layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerKnownHeight ||
                 layoutParams.stretchHeight ||
-                layoutParams.treatMatchParentAs100
+                layoutParams.parentContainerOrientation === 'vertical' && layoutParams.treatMatchParentAs100
             ) {
                 const topMargin = $jsonMargins?.top ?? 0;
                 const bottomMargin = $jsonMargins?.bottom ?? 0;
@@ -571,9 +569,9 @@
                 } else {
                     newHeight = totalHeight;
                 }
-                if (layoutParams.parentContainerOrientation === 'vertical') {
-                    // newHeightFill = true;
-                }
+                // if (layoutParams.parentContainerOrientation === 'vertical') {
+                //     newHeightFill = true;
+                // }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
                 newFlexGrow = ($jsonHeight as MatchParentSize)?.weight || 1;
                 if (layoutParams.parentContainerWrap) {
