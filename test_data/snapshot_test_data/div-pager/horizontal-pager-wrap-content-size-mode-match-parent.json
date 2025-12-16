@@ -1,7 +1,8 @@
 {
   "description": "Horizontal pager with wrap_content layout mode and children with match_parent width without constraints.",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_page": {

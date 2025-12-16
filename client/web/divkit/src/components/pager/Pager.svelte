@@ -109,7 +109,8 @@
     let itemSpacing = '0em';
     let paddingObj: EdgeInsets = {};
     let padding = '';
-    let sizeVal = '';
+    let autoSizeVal = '';
+    let templateSizeVal = '';
 
     let childLayoutParams: LayoutParams = {};
     let crossAxisAlignment: 'start' | 'center' | 'end' = 'start';
@@ -361,7 +362,8 @@
         padding = edgeInsertsToCss(paddingObj, $direction);
     }
 
-    $: gridSizeProp = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
+    $: gridAutoSizeProp = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
+    $: gridTemplateSizeProp = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
 
     $: if ($jsonScrollAxisAlignment === 'start' || $jsonScrollAxisAlignment === 'center' || $jsonScrollAxisAlignment === 'end') {
         scrollAxisAlignment = $jsonScrollAxisAlignment;
@@ -392,20 +394,39 @@
             const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value || 0;
 
             if (scrollAxisAlignment === 'center') {
-                sizeVal = `calc(100% + ${paddingStart} + ${paddingEnd} - 2 * ${pxToEmWithUnits(neighbourPageWidth)} - 2 * ${itemSpacing})`;
+                autoSizeVal = `calc(100% + ${paddingStart} + ${paddingEnd} - 2 * ${pxToEmWithUnits(neighbourPageWidth)} - 2 * ${itemSpacing})`;
             } else if (scrollAxisAlignment === 'start') {
-                sizeVal = `calc(100% + ${paddingEnd} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
+                autoSizeVal = `calc(100% + ${paddingEnd} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
             } else {
-                sizeVal = `calc(100% + ${paddingStart} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
+                autoSizeVal = `calc(100% + ${paddingStart} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
             }
+            templateSizeVal = '';
         } else if ($jsonLayoutMode?.type === 'percentage') {
             let pageWidth = $jsonLayoutMode.page_width?.value;
             if (typeof pageWidth !== 'number' || pageWidth < 0) {
                 pageWidth = 100;
             }
-            sizeVal = `calc(${(pageWidth / 100).toFixed(2)} * (100% + ${paddingStart} + ${paddingEnd}))`;
+            autoSizeVal = `calc(${(pageWidth / 100).toFixed(2)} * (100% + ${paddingStart} + ${paddingEnd}))`;
+            templateSizeVal = '';
         } else if ($jsonLayoutMode?.type === 'wrap_content') {
-            sizeVal = 'minmax(max-content, auto)';
+            autoSizeVal = '';
+            templateSizeVal = visibleItems.map(item => {
+                const size = item[orientation === 'horizontal' ? 'width' : 'height'];
+
+                if (size?.type === 'fixed' || size?.type === 'wrap_content') {
+                    return 'minmax(max-content, auto)';
+                }
+                let val = '100%';
+                if (size?.type === 'match_parent') {
+                    if (isNonNegativeNumber(size.max_size?.value)) {
+                        val = `min(${val}, ${pxToEmWithUnits(size.max_size.value)})`;
+                    }
+                    if (isNonNegativeNumber(size.min_size?.value)) {
+                        val = `max(${val}, ${pxToEmWithUnits(size.min_size.value)})`;
+                    }
+                }
+                return val;
+            }).join(' ');
         }
     }
 
@@ -420,7 +441,8 @@
     $: style = {
         'grid-gap': itemSpacing,
         padding,
-        [gridSizeProp]: sizeVal,
+        [gridAutoSizeProp]: autoSizeVal,
+        [gridTemplateSizeProp]: templateSizeVal,
         transform: transformStr,
     };
 
