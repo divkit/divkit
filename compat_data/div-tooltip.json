@@ -102,5 +102,13 @@
                 "version_added": "31.7.0"
             }
         }
+    }, {
+        "id": "tooltip_substrate",
+        "name": "<code>substrate_div</code> property for the tooltip",
+        "compat": {
+            "web": {
+                "version_added": "32.30.0"
+            }
+        }
     }]
 }

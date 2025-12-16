@@ -140,5 +140,13 @@
                 "version_added": "32.29.0"
             }
         }
+    }, {
+        "id": "theme_manager",
+        "name": "<code>ThemeManager</code> (or <code>DivThemeManager</code>)",
+        "compat": {
+            "ios": {
+                "version_added": "32.30.0"
+            }
+        }
     }]
 }
