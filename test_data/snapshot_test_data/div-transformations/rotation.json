@@ -1,0 +1,134 @@
+{
+  "desciption": "Different rotations",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 16
+    },
+    "block": {
+      "type": "container",
+      "orientation": "overlap",
+      "items": [
+        {
+          "type": "container",
+          "margins": {
+            "top": 20,
+            "right": 20,
+            "bottom": 20,
+            "left": 20
+          },
+          "width": {
+            "type": "fixed",
+            "value": 120
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#3e7"
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "margins": {
+            "top": 30,
+            "right": 30,
+            "bottom": 30,
+            "left": 30
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#37e"
+            }
+          ],
+          "$transformations": "transforms"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "Rotation in the center"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "rotation",
+                  "angle": 10
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Rotation in top left corner"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "rotation",
+                  "angle": 10,
+                  "pivot_x": {
+                    "type": "pivot-percentage",
+                    "value": 0
+                  },
+                  "pivot_y": {
+                    "type": "pivot-percentage",
+                    "value": 0
+                  }
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Rotation in bottom right corner"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "rotation",
+                  "angle": 10,
+                  "pivot_x": {
+                    "type": "pivot-percentage",
+                    "value": 100
+                  },
+                  "pivot_y": {
+                    "type": "pivot-percentage",
+                    "value": 100
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

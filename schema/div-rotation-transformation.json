@@ -2,6 +2,7 @@
   "type": "object",
   "$description": "translations.json#/div_transformation_rotation",
   "platforms": [
+    "web"
   ],
   "properties": {
     "type": {

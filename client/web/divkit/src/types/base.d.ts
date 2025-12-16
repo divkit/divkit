@@ -87,6 +87,34 @@ export interface Transform {
     rotation?: number;
 }
 
+export interface RotationTransformation {
+    type: 'rotation';
+    angle: number;
+    pivot_x?: PivotValue;
+    pivot_y?: PivotValue;
+}
+
+export interface PercentageTranslation {
+    type: 'translation-percentage';
+    value: number;
+}
+
+export interface FixedTranslation {
+    type: 'translation-fixed';
+    value: number;
+    // unit?:
+}
+
+export type Translation = PercentageTranslation | FixedTranslation;
+
+export interface TranslationTransformation {
+    type: 'translation';
+    x?: Translation;
+    y?: Translation;
+}
+
+export type Transformation = RotationTransformation | TranslationTransformation;
+
 export interface Extension {
     id: string;
     params?: object;
@@ -188,6 +216,7 @@ export interface DivBaseData {
     focus?: Focus;
     layout_provider?: DivLayoutProvider;
     transform?: Transform;
+    transformations?: Transformation[];
     variables?: DivVariable[];
     variable_triggers?: VariableTrigger[];
     animators?: Animator[];

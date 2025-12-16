@@ -257,6 +257,7 @@
       },
       "$description": "translations.json#/div_base_transformations",
       "platforms": [
+        "web"
       ]
     },
     "layout_provider": {

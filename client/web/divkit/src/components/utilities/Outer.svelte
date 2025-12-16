@@ -32,7 +32,7 @@
 
     import css from './Outer.module.css';
 
-    import type { DivBaseData, Extension } from '../../types/base';
+    import type { DivBaseData, Extension, Transformation } from '../../types/base';
     import type { Mods, Style } from '../../types/general';
     import type { DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
@@ -79,6 +79,7 @@
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import { componentFakePagerDuplicate } from '../../utils/componentContext';
+    import { transformationsToTransform } from '../../utils/transformationsToTransform';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -184,9 +185,6 @@
     let isVisibilityInited = false;
     let visibility: Visibility = 'visible';
 
-    let pivotXNum = 0;
-    let pivotYNum = 0;
-    let transformOrigin: string | undefined;
     let transform: string | undefined;
 
     let layoutProviderResizeObserver: ResizeObserver | undefined;
@@ -211,9 +209,6 @@
         alpha = 1;
         isVisibilityInited = false;
         visibility = 'visible';
-        pivotXNum = 0;
-        pivotYNum = 0;
-        transformOrigin = undefined;
         transform = undefined;
         captureFocusOnAction = true;
 
@@ -266,6 +261,7 @@
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
+    $: jsonTransformations = componentContext.getDerivedFromVars(componentContext.json.transformations);
     $: jsonCaptureFocusOnAction = componentContext.getDerivedFromVars(componentContext.json.capture_focus_on_action);
 
     $: {
@@ -974,21 +970,22 @@
     };
 
     $: {
-        if ($jsonTransform && $jsonTransform.rotation !== undefined) {
-            const pivotX = $jsonTransform.pivot_x || {
-                type: 'pivot-percentage',
-                value: 50
-            };
-            pivotXNum = correctNumber(pivotX.value, pivotXNum);
-            const pivotXCSSValue = pivotX.type === 'pivot-fixed' ? pxToEm(pivotXNum) : `${pivotXNum}%`;
-            const pivotY = $jsonTransform.pivot_y || {
-                type: 'pivot-percentage',
-                value: 50
-            };
-            pivotYNum = correctNumber(pivotY.value, pivotYNum);
-            const pivotYCSSValue = pivotY.type === 'pivot-fixed' ? pxToEm(pivotYNum) : `${pivotYNum}%`;
-            transformOrigin = `${pivotXCSSValue} ${pivotYCSSValue}`;
-            transform = `rotate(${$jsonTransform.rotation}deg)`;
+        let transformations;
+        if (Array.isArray($jsonTransformations)) {
+            transformations = $jsonTransformations;
+        } else if ($jsonTransform && $jsonTransform.rotation !== undefined) {
+            transformations = [{
+                type: 'rotation',
+                angle: $jsonTransform.rotation,
+                pivot_x: $jsonTransform.pivot_x,
+                pivot_y: $jsonTransform.pivot_y
+            }] as MaybeMissing<Transformation[]>;
+        }
+
+        if (transformations) {
+            transform = transformationsToTransform(transformations);
+        } else {
+            transform = undefined;
         }
     }
 
@@ -1013,7 +1010,7 @@
         margin,
         opacity,
         transition: actionAnimationTransition,
-        'transform-origin': transformOrigin,
+        'transform-origin': transform ? '0 0' : undefined,
         transform,
         'flex-grow': widthFlexGrow || heightFlexGrow || undefined,
         'flex-shrink': (widthFlexShrink || heightFlexShrink) ? 1 : undefined,

@@ -9,7 +9,8 @@
     "unit": {
       "$ref": "div-size-unit.json",
       "$description": "translations.json#/div_translation_fixed_unit",
-      "default_value": "dp"
+      "default_value": "dp",
+      "platforms": []
     },
     "type": {
       "type": "string",
@@ -19,6 +20,7 @@
     }
   },
   "platforms": [
+    "web"
   ],
   "required": [
     "type",

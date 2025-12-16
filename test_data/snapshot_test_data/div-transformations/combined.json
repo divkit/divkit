@@ -1,0 +1,147 @@
+{
+  "desciption": "Combined rotation and translation",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 16
+    },
+    "block": {
+      "type": "container",
+      "orientation": "overlap",
+      "items": [
+        {
+          "type": "container",
+          "margins": {
+            "top": 20,
+            "right": 20,
+            "bottom": 20,
+            "left": 20
+          },
+          "width": {
+            "type": "fixed",
+            "value": 120
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#3e7"
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "margins": {
+            "top": 30,
+            "right": 30,
+            "bottom": 30,
+            "left": 30
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#37e"
+            }
+          ],
+          "$transformations": "transforms"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "Rotate and translate"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "rotation",
+                  "angle": 45
+                },
+                {
+                  "type": "translation",
+                  "x": {
+                    "type": "translation-fixed",
+                    "value": 30
+                  }
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Translate and rotate"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "translation",
+                  "x": {
+                    "type": "translation-fixed",
+                    "value": 30
+                  }
+                },
+                {
+                  "type": "rotation",
+                  "angle": 45
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Rotate with pivot and translate"
+            },
+            {
+              "type": "block",
+              "transforms": [
+                {
+                  "type": "rotation",
+                  "angle": 45,
+                  "pivot_x": {
+                    "type": "pivot-fixed",
+                    "value": -30
+                  },
+                  "pivot_y": {
+                    "type": "pivot-fixed",
+                    "value": -30
+                  }
+                },
+                {
+                  "type": "translation",
+                  "y": {
+                    "type": "translation-fixed",
+                    "value": -45
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
