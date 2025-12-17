@@ -65,7 +65,8 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     getDerivedFromVars<T>(
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
-        keepComplex?: boolean
+        keepComplex?: boolean,
+        maxDepth?: number
     ): Readable<MaybeMissing<T>>;
     getJsonWithVars<T>(
         jsonProp: T,

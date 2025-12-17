@@ -16,6 +16,8 @@ export interface SliderTextStyle {
     // font_size_unit;
     font_weight?: FontWeight;
     font_weight_value?: number;
+    font_family?: string;
+    font_variation_settings?: FontVariationSettings;
     text_color?: string;
     offset?: Point;
 }

@@ -86,6 +86,32 @@ describe('correctPositiveNumber', () => {
         });
     });
 
+    test('interpolation with nesting limit success', () => {
+        const prepared = prepareVars({
+            prop: 'Hello, @{var}'
+        }, logError, undefined, 0, 1);
+        expect(prepared.vars).toStrictEqual(['var']);
+        const map = new Map();
+        const variable = new IntegerVariable('var', 123);
+        map.set('var', variable);
+        expect(prepared.applyVars(map).result).toStrictEqual({
+            prop: 'Hello, 123'
+        });
+    });
+
+    test('interpolation with nesting limit error', () => {
+        const prepared = prepareVars({
+            prop: 'Hello, @{var}'
+        }, logError, undefined, 0, 0);
+        expect(prepared.vars).toStrictEqual([]);
+        const map = new Map();
+        const variable = new IntegerVariable('var', 123);
+        map.set('var', variable);
+        expect(prepared.applyVars(map).result).toStrictEqual({
+            prop: 'Hello, @{var}'
+        });
+    });
+
     test('multiple vars', () => {
         const prepared = prepareVars({
             prop: 'Hello, @{var}. Good bye, @{var2}'

@@ -187,7 +187,8 @@ function prepareVarsObj<T>(
         vars: string[];
         hasExpression: boolean;
     },
-    logError: LogError
+    logError: LogError,
+    maxDepth: number
 ): unknown {
     if (jsonProp) {
         if (typeof jsonProp === 'string') {
@@ -230,12 +231,12 @@ function prepareVarsObj<T>(
                     }
                 }
             }
-        } else if (Array.isArray(jsonProp)) {
-            return jsonProp.map(item => prepareVarsObj(item, store, logError));
-        } else if (typeof jsonProp === 'object') {
+        } else if (Array.isArray(jsonProp) && maxDepth > 0) {
+            return jsonProp.map(item => prepareVarsObj(item, store, logError, maxDepth - 1));
+        } else if (typeof jsonProp === 'object' && maxDepth > 0) {
             const res: Record<string, unknown> = {};
             for (const key in jsonProp) {
-                res[key] = prepareVarsObj(jsonProp[key], store, logError);
+                res[key] = prepareVarsObj(jsonProp[key], store, logError, maxDepth - 1);
             }
             return res;
         }
@@ -335,7 +336,8 @@ export function prepareVars<T>(
     jsonProp: T,
     logError: LogError,
     store: Store | undefined,
-    weekStartDay: number
+    weekStartDay: number,
+    maxDepth = Infinity
 ): PreparedExpression<T> {
     const result: {
         vars: string[];
@@ -344,7 +346,7 @@ export function prepareVars<T>(
         vars: [],
         hasExpression: false
     };
-    const root = prepareVarsObj(jsonProp, result, logError);
+    const root = prepareVarsObj(jsonProp, result, logError, maxDepth);
 
     const vars = uniq(result.vars);
 

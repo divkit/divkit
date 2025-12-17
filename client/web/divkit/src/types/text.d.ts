@@ -8,6 +8,7 @@ import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
 import type { Shadow, Stroke } from './border';
 import type { EdgeInsets } from './edgeInserts';
+import type { FontVariationSettings } from './fontVariationSettings';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -28,6 +29,7 @@ export interface TextStyles {
     strike?: LineStyle;
     line_height?: number;
     text_shadow?: Shadow;
+    font_variation_settings?: FontVariationSettings;
 }
 
 export interface CloudBackground {

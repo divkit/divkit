@@ -20,6 +20,7 @@
     import { shadowToCssFilter } from '../../utils/shadow';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
+    import { variationSettingsToString } from '../../utils/variationSettings';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let text: string;
@@ -42,6 +43,7 @@
     let letterSpacing = '';
     let fontWeight: number | undefined = undefined;
     let fontFamily = '';
+    let fontVariationSettings = '';
     let color = '';
     let colorOverride: string | undefined;
     let border: {
@@ -63,6 +65,7 @@
         letterSpacing = '';
         fontWeight = undefined;
         fontFamily = '';
+        fontVariationSettings = '';
         color = '';
         colorOverride = undefined;
         border = null;
@@ -114,6 +117,13 @@
             });
         } else {
             fontFamily = '';
+        }
+    }
+
+    $: {
+        const newVal = variationSettingsToString(textStyles.font_variation_settings);
+        if (newVal !== fontVariationSettings) {
+            fontVariationSettings = newVal;
         }
     }
 
@@ -242,6 +252,7 @@
         'box-shadow': border ? `inset 0 0 0 ${pxToEm(border.width * 10 / fontSize)} ${border.color}` : undefined,
         'border-radius': borderRadius ? pxToEm(borderRadius * 10 / fontSize) : undefined,
         'font-feature-settings': textStyles.font_feature_settings || undefined,
+        'font-variation-settings': fontVariationSettings || undefined,
         '--divkit-text-mask-color': maskColor,
         '--divkit-text-mask-size': maskSize,
         '--divkit-text-mask-density': maskDensity,

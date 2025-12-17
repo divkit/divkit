@@ -5,6 +5,7 @@ import type { Action, BooleanInt } from '../../typings/common';
 import type { EdgeInsets } from './edgeInserts';
 import type { CornersRadius } from './border';
 import type { FixedSize } from './sizes';
+import type { FontVariationSettings } from './fontVariationSettings';
 
 export type TabsTitleAnimationType = 'slide' | 'fade' | 'none';
 
@@ -19,6 +20,8 @@ export interface TabsTitleStyle {
     active_font_weight?: FontWeight;
     inactive_font_weight?: FontWeight;
     font_family?: string;
+    active_font_variation_settings?: FontVariationSettings;
+    inactive_font_variation_settings?: FontVariationSettings;
     active_text_color?: string;
     inactive_text_color?: string;
     active_background_color?: string;

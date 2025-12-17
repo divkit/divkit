@@ -6,6 +6,8 @@ import {
 
 import { correctSliderTextStyle } from '../../src/utils/correctSliderTextStyle';
 
+const typefaceProvider = () => '';
+
 describe('correctSliderTextStyle', () => {
     test('simple', () => {
         const defaultVal = {
@@ -14,13 +16,13 @@ describe('correctSliderTextStyle', () => {
             textColor: '#f00'
         };
 
-        expect(correctSliderTextStyle(undefined, defaultVal)).toEqual(defaultVal);
+        expect(correctSliderTextStyle(undefined, typefaceProvider, defaultVal)).toEqual(defaultVal);
 
-        expect(correctSliderTextStyle({}, defaultVal)).toEqual(defaultVal);
+        expect(correctSliderTextStyle({}, typefaceProvider, defaultVal)).toEqual(defaultVal);
 
         expect(correctSliderTextStyle({
             font_size: 15
-        }, defaultVal)).toEqual({
+        }, typefaceProvider, defaultVal)).toEqual({
             fontSize: '1.5em',
             fontWeight: undefined,
             textColor: '#000'
@@ -30,7 +32,7 @@ describe('correctSliderTextStyle', () => {
             font_size: 15,
             font_weight: 'light',
             text_color: '#fc0'
-        }, defaultVal)).toEqual({
+        }, typefaceProvider, defaultVal)).toEqual({
             fontSize: '1.5em',
             fontWeight: 300,
             textColor: '#ffcc00'
@@ -48,7 +50,7 @@ describe('correctSliderTextStyle', () => {
                     value: 20
                 }
             }
-        }, defaultVal)).toEqual({
+        }, typefaceProvider, defaultVal)).toEqual({
             fontSize: '1.5em',
             fontWeight: 300,
             textColor: '#ffcc00',

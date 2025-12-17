@@ -1,7 +1,8 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
 import type { Action, BooleanInt } from '../../typings/common';
-import { AlignmentHorizontal, AlignmentVertical } from './alignment';
+import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
+import type { FontVariationSettings } from './fontVariationSettings';
 
 export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri' | 'password';
 
@@ -75,6 +76,7 @@ export interface DivInputData extends DivBaseData {
     font_family?: string;
     font_weight?: FontWeight;
     font_weight_value?: number;
+    font_variation_settings?: FontVariationSettings;
     filters?: InputFilter[];
     text_color?: string;
     text_variable: string;

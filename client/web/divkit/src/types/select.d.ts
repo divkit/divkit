@@ -1,4 +1,5 @@
 import type { DivBaseData } from './base';
+import type { FontVariationSettings } from './fontVariationSettings';
 import type { FontWeight } from './text';
 
 export interface SelectItem {
@@ -17,6 +18,7 @@ export interface DivSelectData extends DivBaseData {
     font_family?: string;
     font_weight?: FontWeight;
     font_weight_value?: number;
+    font_variation_settings?: FontVariationSettings;
     hint_text?: string;
     hint_color?: string;
     line_height?: number;

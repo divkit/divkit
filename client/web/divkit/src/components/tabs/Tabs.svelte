@@ -42,6 +42,7 @@
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
     import EnabledContext from '../utilities/EnabledContext.svelte';
     import type { WrapContentSize } from '../../types/sizes';
+  import { variationSettingsToString } from '../../utils/variationSettings';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -75,8 +76,10 @@
     let tabBorderRadius = '';
     let tabActiveFontWeight: number | undefined = undefined;
     let tabActiveFontFamily = '';
+    let tabActiveFontVariationSettings = '';
     let tabInactiveFontWeight: number | undefined = undefined;
     let tabInactiveFontFamily = '';
+    let tabInactiveFontVariationSettings = '';
     let tabActiveTextColor = '';
     let tabInactiveTextColor = '';
     let tabActiveBackground = '';
@@ -123,8 +126,10 @@
         tabBorderRadius = '';
         tabActiveFontWeight = undefined;
         tabActiveFontFamily = '';
+        tabActiveFontVariationSettings = '';
         tabInactiveFontWeight = undefined;
         tabInactiveFontFamily = '';
+        tabInactiveFontVariationSettings = '';
         tabActiveTextColor = '';
         tabInactiveTextColor = '';
         tabActiveBackground = '';
@@ -154,7 +159,11 @@
     });
 
     $: jsonSelectedTab = componentContext.getJsonWithVars(componentContext.json.selected_tab);
-    $: jsonTabStyle = componentContext.getDerivedFromVars(componentContext.json.tab_title_style);
+    $: jsonTabStyle = componentContext.getDerivedFromVars(
+        componentContext.json.tab_title_style,
+        undefined,
+        true
+    );
     $: jsonSeparator = componentContext.getDerivedFromVars(componentContext.json.has_separator);
     $: jsonSeparatorColor = componentContext.getDerivedFromVars(componentContext.json.separator_color);
     $: jsonSeparatorPaddings = componentContext.getDerivedFromVars(componentContext.json.separator_paddings);
@@ -324,6 +333,7 @@
         } else {
             tabActiveFontFamily = '';
         }
+        tabActiveFontVariationSettings = variationSettingsToString(tabStyle.active_font_variation_settings);
     }
 
     $: {
@@ -339,6 +349,7 @@
         } else {
             tabInactiveFontFamily = '';
         }
+        tabInactiveFontVariationSettings = variationSettingsToString(tabStyle.inactive_font_variation_settings);
     }
 
     $: {
@@ -819,6 +830,8 @@
             style:--divkit-tabs-inactive-font-weight={tabInactiveFontWeight || ''}
             style:--divkit-tabs-active-font-family={tabActiveFontFamily || ''}
             style:--divkit-tabs-inactive-font-family={tabInactiveFontFamily || ''}
+            style:--divkit-tabs-active-font-variation-settings={tabActiveFontVariationSettings || ''}
+            style:--divkit-tabs-inactive-font-variation-settings={tabInactiveFontVariationSettings || ''}
             style:--divkit-tabs-active-text-color={tabActiveTextColor}
             style:--divkit-tabs-inactive-text-color={tabInactiveTextColor}
             style:--divkit-tabs-active-background-color={tabActiveBackground}

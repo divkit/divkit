@@ -99,7 +99,12 @@
     }
 
     $: jsonText = componentContext.getDerivedFromVars(componentContext.json.text);
-    $: jsonRanges = componentContext.getDerivedFromVars(componentContext.json.ranges);
+    $: jsonRanges = componentContext.getDerivedFromVars(
+        componentContext.json.ranges,
+        undefined,
+        true,
+        2
+    );
     $: jsonImages = componentContext.getDerivedFromVars(componentContext.json.images);
     $: jsonRootTextStyles = componentContext.getDerivedFromVars({
         font_size: componentContext.json.font_size,
@@ -112,8 +117,9 @@
         strike: componentContext.json.strike,
         line_height: componentContext.json.line_height,
         text_shadow: componentContext.json.text_shadow,
-        font_feature_settings: componentContext.json.font_feature_settings
-    });
+        font_feature_settings: componentContext.json.font_feature_settings,
+        font_variation_settings: componentContext.json.font_variation_settings
+    }, undefined, true, 1);
     $: jsonTextSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
     $: jsonMaxLines = componentContext.getDerivedFromVars(componentContext.json.max_lines);

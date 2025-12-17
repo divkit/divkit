@@ -70,6 +70,7 @@
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { updatePhoneMask } from '../../utils/updatePhoneMask';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
+    import { variationSettingsToString } from '../../utils/variationSettings';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -92,6 +93,7 @@
     let fontSize = 12;
     let fontWeight: number | undefined = undefined;
     let fontFamily = '';
+    let fontVariationSettings = '';
     let lineHeight: number | undefined = undefined;
     let letterSpacing = '';
     let textColor = '#000';
@@ -123,6 +125,7 @@
         fontSize = 12;
         fontWeight = undefined;
         fontFamily = '';
+        fontVariationSettings = '';
         lineHeight = undefined;
         textColor = '#000';
         highlightColor = '';
@@ -156,6 +159,12 @@
     $: jsonFontWeight = componentContext.getDerivedFromVars(componentContext.json.font_weight);
     $: jsonFontWeightValue = componentContext.getDerivedFromVars(componentContext.json.font_weight_value);
     $: jsonFontFamily = componentContext.getDerivedFromVars(componentContext.json.font_family);
+    $: jsonFontVariationSettings = componentContext.getDerivedFromVars(
+        componentContext.json.font_variation_settings,
+        undefined,
+        true,
+        0
+    );
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
     $: jsonLetterSpacing = componentContext.getDerivedFromVars(componentContext.json.letter_spacing);
     $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
@@ -243,6 +252,13 @@
             });
         } else {
             fontFamily = '';
+        }
+    }
+
+    $: {
+        const newVal = variationSettingsToString($jsonFontVariationSettings);
+        if (newVal !== fontVariationSettings) {
+            fontVariationSettings = newVal;
         }
     }
 
@@ -357,6 +373,7 @@
         '--divkit-input-line-height': lineHeight,
         'font-weight': fontWeight,
         'font-family': fontFamily,
+        'font-variation-settings': fontVariationSettings,
         'letter-spacing': letterSpacing,
         color: textColor,
         'max-height': maxHeight

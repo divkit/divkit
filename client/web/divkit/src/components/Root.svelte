@@ -289,12 +289,14 @@
             additionalVars,
             keepComplex = false,
             customFunctions,
-            emptyVarsError
+            emptyVarsError,
+            maxDepth
         }: {
             additionalVars?: Map<string, Variable>;
             keepComplex?: boolean;
             customFunctions?: CustomFunctions;
-            emptyVarsError?: () => void
+            emptyVarsError?: () => void,
+            maxDepth?: number
         } = {}
     ): Readable<MaybeMissing<T>> {
         if (!jsonProp) {
@@ -303,7 +305,7 @@
 
         const vars = mergeMaps(variables, additionalVars);
 
-        const prepared = prepareVars(jsonProp as T, logError, store, weekStartDay);
+        const prepared = prepareVars(jsonProp as T, logError, store, weekStartDay, maxDepth);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
                 const res = prepared.applyVars(vars, customFunctions);
@@ -1959,14 +1961,15 @@
                     additionalVars: opts.additionalVars
                 });
             },
-            getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
+            getDerivedFromVars(jsonProp, additionalVars, keepComplex = false, maxDepth = Infinity) {
                 return getDerivedFromVars(
                     ctx.logError,
                     jsonProp,
                     {
                         additionalVars: mergeMaps(ctx.variables, additionalVars),
                         keepComplex,
-                        customFunctions: ctx.customFunctions
+                        customFunctions: ctx.customFunctions,
+                        maxDepth
                     }
                 );
             },

@@ -22,6 +22,7 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { makeStyle } from '../../utils/makeStyle';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
+    import { variationSettingsToString } from '../../utils/variationSettings';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -43,6 +44,7 @@
     let fontSize = 12;
     let fontWeight: number | undefined = undefined;
     let fontFamily = '';
+    let fontVariationSettings = '';
     let lineHeight: number | undefined = undefined;
     let letterSpacing = '';
     let textColor = '#000';
@@ -57,6 +59,7 @@
         fontSize = 12;
         fontWeight = undefined;
         fontFamily = '';
+        fontVariationSettings = '';
         lineHeight = undefined;
         letterSpacing = '';
         textColor = '#000';
@@ -80,6 +83,12 @@
     $: jsonFontWeight = componentContext.getDerivedFromVars(componentContext.json.font_weight);
     $: jsonFontWeightValue = componentContext.getDerivedFromVars(componentContext.json.font_weight_value);
     $: jsonFontFamily = componentContext.getDerivedFromVars(componentContext.json.font_family);
+    $: jsonFontVariationSettings = componentContext.getDerivedFromVars(
+        componentContext.json.font_variation_settings,
+        undefined,
+        true,
+        0
+    );
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
     $: jsonLetterSpacing = componentContext.getDerivedFromVars(componentContext.json.letter_spacing);
     $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
@@ -150,6 +159,13 @@
     }
 
     $: {
+        const newVal = variationSettingsToString($jsonFontVariationSettings);
+        if (newVal !== fontVariationSettings) {
+            fontVariationSettings = newVal;
+        }
+    }
+
+    $: {
         const val = $jsonLineHeight;
         if (isPositiveNumber(val)) {
             lineHeight = val / fontSize;
@@ -181,6 +197,7 @@
         '--divkit-input-hint-color': hintColor,
         'font-weight': fontWeight,
         'font-family': fontFamily,
+        'font-variation-settings': fontVariationSettings,
         color: textColor
     };
     $: innerStl = {

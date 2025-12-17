@@ -71,7 +71,8 @@
           "$description": "translations.json#/div_font_variation_settings",
           "platforms": [
             "ios",
-            "android"
+            "android",
+            "web"
           ]
         },
         "letter_spacing": {

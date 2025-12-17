@@ -127,12 +127,16 @@
             "active_font_variation_settings": {
               "type": "dict",
               "$description": "translations.json#/div_tabs_tab_title_style_active_font_variation_settings",
-              "platforms": []
+              "platforms": [
+                "web"
+              ]
             },
             "inactive_font_variation_settings": {
               "type": "dict",
               "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_variation_settings",
-              "platforms": []
+              "platforms": [
+                "web"
+              ]
             },
             "font_family": {
               "type": "string",

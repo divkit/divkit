@@ -39,6 +39,7 @@
     letter-spacing: var(--divkit-tabs-letter-spacing, 0);
     font-weight: var(--divkit-tabs-inactive-font-weight, 400);
     font-family: var(--divkit-tabs-inactive-font-family, inherit);
+    font-variation-settings: var(--divkit-tabs-inactive-font-variation-settings, inherit);
     border-radius: var(--divkit-tabs-border-radius, 100em);
     cursor: pointer;
     user-select: none;
@@ -57,6 +58,7 @@
     cursor: default;
     font-weight: var(--divkit-tabs-active-font-weight, 400);
     font-family: var(--divkit-tabs-active-font-family, inherit);
+    font-variation-settings: var(--divkit-tabs-active-font-variation-settings, inherit);
 }
 
 .tabs_animation_fade .tabs__item_selected,

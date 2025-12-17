@@ -4,6 +4,9 @@
     "ios",
     "android"
   ],
+  "unsupported_platforms": {
+    "web": "Doesnt support provided font in tests"
+  },
   "templates": {
     "text_template": {
       "type": "text",

@@ -113,8 +113,18 @@
     $: jsonTrackActiveStyle = componentContext.getDerivedFromVars(componentContext.json.track_active_style);
     $: jsonMarkActiveStyle = componentContext.getDerivedFromVars(componentContext.json.tick_mark_active_style);
     $: jsonMarkInactiveStyle = componentContext.getDerivedFromVars(componentContext.json.tick_mark_inactive_style);
-    $: jsonTextStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_text_style);
-    $: jsonSecondaryTextStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_secondary_text_style);
+    $: jsonTextStyle = componentContext.getDerivedFromVars(
+        componentContext.json.thumb_text_style,
+        undefined,
+        true,
+        1
+    );
+    $: jsonSecondaryTextStyle = componentContext.getDerivedFromVars(
+        componentContext.json.thumb_secondary_text_style,
+        undefined,
+        true,
+        1
+    );
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonSecondaryAccessibility = componentContext.getDerivedFromVars(
         componentContext.json.secondary_value_accessibility
@@ -213,11 +223,11 @@
     }
 
     $: {
-        textStyle = correctSliderTextStyle($jsonTextStyle, textStyle);
+        textStyle = correctSliderTextStyle($jsonTextStyle, rootCtx.typefaceProvider, textStyle);
     }
 
     $: {
-        textSecondaryStyle = correctSliderTextStyle($jsonSecondaryTextStyle, textStyle);
+        textSecondaryStyle = correctSliderTextStyle($jsonSecondaryTextStyle, rootCtx.typefaceProvider, textStyle);
     }
 
     $: if ($jsonAccessibility?.description) {
@@ -574,6 +584,8 @@
                                 class={css['slider__thumb-text-inner']}
                                 style:font-size={textStyle?.fontSize || '1em'}
                                 style:font-weight={textStyle?.fontWeight || ''}
+                                style:font-family={textStyle?.fontFamily || ''}
+                                style:font-variation-settings={textStyle?.fontVariationSettings || ''}
                                 style:color={textStyle?.textColor || '#000'}
                             >
                                 {value}
@@ -594,6 +606,8 @@
                                     class={css['slider__thumb-text-inner']}
                                     style:font-size={textSecondaryStyle?.fontSize || '1em'}
                                     style:font-weight={textSecondaryStyle?.fontWeight || ''}
+                                    style:font-family={textSecondaryStyle?.fontFamily || ''}
+                                    style:font-variation-settings={textSecondaryStyle?.fontVariationSettings || ''}
                                     style:color={textSecondaryStyle?.textColor || '#000'}
                                 >
                                     {value2}
