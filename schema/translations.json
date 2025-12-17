@@ -2677,7 +2677,7 @@
   },
   "div_tooltip_bring_to_top_id": {
     "en": "An element that will be brought to the top of the substrate.",
-    "ru": "Идентификатор элемента, который будет подниматься над подложкой тултипа."
+    "ru": "Идентификатор элемента, который будет перенесен поверх подложки."
   },
   "div_tooltip_close_by_tap_outside": {
     "en": "Allows dismissing tooltip by tapping outside of it.",
