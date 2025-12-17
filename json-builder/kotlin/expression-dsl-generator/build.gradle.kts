@@ -11,14 +11,6 @@ application {
     mainClass.set("divkit.dsl.expression.generator.Main")
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs("$rootDir/../../../expression-api")
-        }
-    }
-}
-
 dependencies {
     implementation(libs.kotlin.stdlib)
 

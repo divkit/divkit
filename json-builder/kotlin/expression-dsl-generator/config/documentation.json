@@ -1,0 +1,7 @@
+{
+  "$schema": "../src/main/resources/config-schema.json",
+  "mode": "documentation",
+  "schema": "$ARCADIA_ROOT/divkit/public/expression-api/schema/signatures.json",
+  "input": "$ARCADIA_ROOT/divkit/public/expression-api",
+  "output": "$ARCADIA_ROOT/divkit/public/json-builder/kotlin/documentation"
+}

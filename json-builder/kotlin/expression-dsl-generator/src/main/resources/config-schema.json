@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": true,
+  "definitions": {
+    "path": {
+      "type": "string",
+      "pattern": "^(\/)?([^\/\0]+(?:\/[^\/\0]+)*\/?)?([^\/\0]+)?$"
+    },
+    "package": {
+      "type": "string",
+      "pattern": "^([a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)*)$"
+    }
+  },
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "documentation",
+        "functions"
+      ]
+    },
+    "schema": {
+      "$ref": "#/definitions/path"
+    },
+    "input": {
+      "$ref": "#/definitions/path"
+    },
+    "output": {
+      "$ref": "#/definitions/path"
+    },
+    "package": {
+      "$ref": "#/definitions/package"
+    }
+  },
+  "required": [
+    "mode",
+    "schema",
+    "input",
+    "output"
+  ]
+}
