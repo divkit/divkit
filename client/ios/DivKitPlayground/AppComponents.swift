@@ -66,7 +66,8 @@ enum AppComponents {
       ],
       flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
-      imageHolderFactory: holderFactory,
+      imageHolderFactory: holderFactory
+        .withInMemoryCache(imageCountLimit: 20),
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
