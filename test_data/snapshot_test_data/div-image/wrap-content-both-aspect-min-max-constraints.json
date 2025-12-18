@@ -1,0 +1,144 @@
+{
+  "description": "Image with wrap_content on both dimensions, aspect ratio 1.5, min_width 80, max_width 180, min_height 60, max_height 120",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFEEEEEE"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Test: wrap_content both + aspect 1.5 + constraints",
+              "font_size": 11,
+              "text_color": "#FF000000",
+              "margins": {
+                "bottom": 4
+              }
+            },
+            {
+              "type": "text",
+              "text": "Expected: Image matches reference frame (180×120)",
+              "font_size": 10,
+              "text_color": "#FF666666",
+              "margins": {
+                "bottom": 8
+              }
+            },
+            {
+              "type": "container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "type": "fixed",
+                      "value": 80
+                    },
+                    "max_size": {
+                      "type": "fixed",
+                      "value": 180
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "type": "fixed",
+                      "value": 60
+                    },
+                    "max_size": {
+                      "type": "fixed",
+                      "value": 120
+                    }
+                  },
+                  "aspect": {
+                    "ratio": 1.5
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFCCCCFF"
+                    }
+                  ],
+                  "border": {
+                    "stroke": {
+                      "color": "#FFFF0000",
+                      "width": 2
+                    }
+                  },
+                  "margins": {
+                    "bottom": 8
+                  }
+                },
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 180
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 120
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "#FF00FF00",
+                      "width": 2
+                    }
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1100FF00"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "180×120",
+                      "font_size": 12,
+                      "text_color": "#FF00AA00",
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

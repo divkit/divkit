@@ -1,0 +1,132 @@
+{
+  "description": "Image with wrap_content height, aspect ratio 0.5, and min_width constraint of 300",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFEEEEEE"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Test: wrap_content height + aspect 0.5 + min_width 300",
+              "font_size": 11,
+              "text_color": "#FF000000",
+              "margins": {
+                "bottom": 4
+              }
+            },
+            {
+              "type": "text",
+              "text": "Expected: Image matches reference frame (300×600)",
+              "font_size": 10,
+              "text_color": "#FF666666",
+              "margins": {
+                "bottom": 8
+              }
+            },
+            {
+              "type": "container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "type": "fixed",
+                      "value": 300
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "aspect": {
+                    "ratio": 0.5
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFFFCCFF"
+                    }
+                  ],
+                  "border": {
+                    "stroke": {
+                      "color": "#FFFF0000",
+                      "width": 2
+                    }
+                  },
+                  "margins": {
+                    "right": 8
+                  }
+                },
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 300
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 600
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "#FF00FF00",
+                      "width": 2
+                    }
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1100FF00"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "300×600",
+                      "font_size": 12,
+                      "text_color": "#FF00AA00",
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
