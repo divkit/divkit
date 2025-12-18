@@ -103,7 +103,7 @@
         componentContext.json.ranges,
         undefined,
         true,
-        2
+        3
     );
     $: jsonImages = componentContext.getDerivedFromVars(componentContext.json.images);
     $: jsonRootTextStyles = componentContext.getDerivedFromVars({
