@@ -30,36 +30,25 @@ internal class StorageStatementExecutor(
         val exceptions = mutableListOf<DivStorageErrorException>()
         val executionErrorMessage = "Error during statements execution."
 
-        fun handleException(e: Exception) {
-            val errorMessage = "Exception at statement '$lastStatement' " +
-                    "($statementNumber out ${statements.size})"
-            when(actionOnError) {
-                ActionOnError.ABORT_TRANSACTION -> {
-                    throwWithLogging(message = errorMessage, exception = e)
-                }
-                ActionOnError.SKIP_ELEMENT -> {
-                    exceptions.add(DivStorageErrorException(errorMessage, e))
-                }
-            }
-        }
-
-        fun executeCatchingSqlException(compiler: ClosableSqlCompiler, statement: StorageStatement) {
-            try {
-                statement.execute(compiler)
-            } catch (e: SQLException) {
-                handleException(e)
-            } catch(e: IllegalStateException) {
-                handleException(e)
-            }
-        }
-
         try {
             db = dbProvider()
             compiler = ClosableSqlCompiler(db)
             db.beginTransaction()
             statements.forEach { statement ->
                 lastStatement = statement
-                executeCatchingSqlException(compiler, statement)
+                executeCatchingSqlException(compiler, statement) { e ->
+                    val errorMessage = "Exception at statement '$lastStatement' " +
+                            "($statementNumber out ${statements.size})"
+                    when (actionOnError) {
+                        ActionOnError.ABORT_TRANSACTION -> {
+                            throwWithLogging(message = errorMessage, exception = e)
+                        }
+
+                        ActionOnError.SKIP_ELEMENT -> {
+                            exceptions.add(DivStorageErrorException(errorMessage, e))
+                        }
+                    }
+                }
                 statementNumber++
             }
             db.setTransactionSuccessful()
@@ -86,6 +75,20 @@ internal class StorageStatementExecutor(
             vararg statements: StorageStatement
     ): ExecutionResult {
         return execute(ActionOnError.ABORT_TRANSACTION, *statements)
+    }
+
+    private fun executeCatchingSqlException(
+        compiler: ClosableSqlCompiler,
+        statement: StorageStatement,
+        handleException: (e: Exception) -> Unit,
+    ) {
+        try {
+            statement.execute(compiler)
+        } catch (e: SQLException) {
+            handleException(e)
+        } catch (e: IllegalStateException) {
+            handleException(e)
+        }
     }
 
     @Throws(SQLException::class)
