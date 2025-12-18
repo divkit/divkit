@@ -1,3 +1,14 @@
+## 32.31.0 (December 22, 2025)
+
+* Added support for the `font_family` in `slider` component.
+* Added support for the `font_variation_settings` properties (including `text`, `select`, `input`, `slider` and `tabs` components).
+* Added support for the `transformations` property in all components (div-base).
+* Added support for the typed `custom` action.
+* Fixed the layout of the `gallery` with the `match_parent` elements along the axis perpendicular to scrolling.
+* Fixed the layout of the `match_parent` items inside `pager` with `layout_mode` = `wrap_content`.
+* `CustomActionCallback` type is now deprecated. Use `CustomActionCallbackWithTyped` instead.
+
+
 ## 32.30.0 (December 15, 2025)
 
 * Added support for the `preview_url` property in the `gif` component.
