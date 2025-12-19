@@ -38,6 +38,10 @@ internal import DivKitExtensions
     return divView
   }
 
+  @objc public func getVariableValue(_ name: String) -> Any? {
+    globalVariablesStorage.getValue(DivVariableName(rawValue: name))
+  }
+
   @objc public func setGlobalVariables(_ variables: [String: Any]) {
     globalVariablesStorage.put(variables.divVariables)
   }

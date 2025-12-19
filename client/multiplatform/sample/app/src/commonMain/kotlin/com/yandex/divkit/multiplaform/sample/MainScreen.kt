@@ -3,90 +3,65 @@ package com.yandex.divkit.multiplaform.sample
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.yandex.divkit.multiplatform.DivKitFactory
+import com.yandex.divkit.multiplatform.DivKit
 import com.yandex.divkit.multiplatform.dependencies.ActionHandler
 import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
 import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
-import com.yandex.divkit.multiplatform.makeDivKitFactory
 
 @Composable
 internal fun MainScreen() {
-    initializeDivKitFactory()
-    Column(
-        modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        divKitFactory.DivView(
-            cardId = "Sample",
-            jsonData = jsonString,
-            modifier = Modifier.wrapContentSize()
-        )
-
-        Button(
-            onClick = {
-                divKitFactory.setGlobalVariables(
-                    variables = mapOf(
-                        Pair(
-                            "global_var",
-                            "Set from Compose"
-                        )
-                    )
-                )
-            },
-            content = {
-                Text("Set Global Variable from Compose")
-            }
-        )
+    DivKit(dependencies) {
+        var globalVar by variable(name = "global_var", value = "<initial>")
+        Column(
+            modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DivView(
+                cardId = "Sample",
+                jsonData = jsonString,
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                onClick = {
+                    globalVar = "Set by Compose Button"
+                },
+                content = {
+                    Text("Set Global Variable by Compose")
+                }
+            )
+        }
     }
 }
 
 private class ActionHandlerImpl(
-    private val setGlobalVariable: (Map<String, Any>) -> Unit
+    private val handleAction: (DivKit, Map<String, Any>) -> Unit
 ): ActionHandler {
-    override fun handle(url: String) {
+    override fun handle(divKit: DivKit, url: String) {
         if (url.startsWith("client-action") && url.endsWith("set_global_var")) {
-            setGlobalVariable(mapOf(Pair("global_var", "Set from ActionHandler")))
+            handleAction(divKit, mapOf("global_var" to "Set by DivKit action"))
         }
     }
 }
 
 private class ErrorReporterImpl: ErrorReporter {
     override fun report(cardId: String, message: String) {
-        print("Error: cardId - $cardId, message - $message")
+        println("[Error] cardId: $cardId, message: $message")
     }
 }
 
-private lateinit var divKitFactory: DivKitFactory
-
 private val dependencies = DivKitDependencies(
-    actionHandler = ActionHandlerImpl(setGlobalVariable = { variables ->
-        divKitFactory.setGlobalVariables(variables)
-    }),
+    actionHandler = ActionHandlerImpl { divKit, variables ->
+        divKit.setVariables(variables)
+    },
     errorReporter = ErrorReporterImpl()
 )
-
-private fun initializeDivKitFactory() {
-    divKitFactory = makeDivKitFactory(dependencies)
-    divKitFactory.setGlobalVariables(
-        variables = mapOf(
-            Pair(
-                "global_var",
-                "unset"
-            )
-        )
-    )
-}
 
 private val jsonString = """
 {
@@ -222,7 +197,7 @@ private val jsonString = """
           "items": [
             {
                 "type": "text",
-                "text": "Set Global Variable from DivKit",
+                "text": "Set Global Variable by DivKit",
                 "paddings": {
                     "top": 10,
                     "left": 10,
@@ -258,7 +233,7 @@ private val jsonString = """
             },
             {
                 "type": "text",
-                "text": "Global var - @{global_var}",
+                "text": "Global var = @{global_var}",
                 "width": {
                     "type": "wrap_content"
                 },

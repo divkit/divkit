@@ -48,41 +48,26 @@ end
 Common code:
 
 ```kotlin
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.yandex.divkit.multiplatform.DivKitFactory
-import com.yandex.divkit.multiplatform.makeDivKitFactory
-import com.yandex.divkit.multiplatform.dependencies.ActionHandler
-import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
-import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
-
-val factory: DivKitFactory = makeDivKitFactory(
-    dependencies = DivKitDependencies(
-        actionHandler = object : ActionHandler {
-            override fun handle(url: String) {
-                // Handle actions (deeplink/URL)
-            }
-        },
-        errorReporter = object : ErrorReporter {
-            override fun report(cardId: String, message: String) {
-                // Report parsing/rendering errors
-            }
-        }
-    )
-)
-
-@Composable
-fun DivScreen(cardId: String, json: String, modifier: Modifier = Modifier) {
-    factory.DivView(cardId = cardId, jsonData = json, modifier = modifier)
-}
-
-fun setVariables() {
-    factory.setGlobalVariables(
-        mapOf(
-            "user_name" to "Alex",
-            "is_premium" to true
+DivKit(dependencies) {
+    var greeting by variable(name = "greeting", value = "Hello, Username")
+    Column(
+        modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DivView(
+            cardId = "Sample",
+            jsonData = jsonString,
+            modifier = Modifier.wrapContentSize()
         )
-    )
+        Button(
+            onClick = {
+                greeting = "Hello, DivKit User"
+            },
+            content = {
+                Text("Say \"Hello\"")
+            }
+        )
+    }
 }
 ```
 
@@ -91,12 +76,14 @@ Also you can setup some platform-specific dependencies in platform-specific code
 In Android part:
 
 ```kotlin
-DivKitAndroidEnvironment.set(
-    DivKitEnvironment(
-        imageLoaderFactory = { ctx ->
-            PicassoDivImageLoader(ctx)
-        },
-        lifecycleOwner = null
-    )
-)
+val environment = DivKitEnvironment.Builder(baseContext = this)
+    .imageLoaderFactory { ctx -> PicassoDivImageLoader(ctx) }
+    .lifecycleOwner(this)
+    .build()
+
+setContent {
+    inject(environment) {
+        MainScreen()
+    }
+}
 ```
