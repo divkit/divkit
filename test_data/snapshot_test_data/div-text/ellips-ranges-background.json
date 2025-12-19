@@ -1,0 +1,339 @@
+{
+  "description": "Text with auto_ellipsize and ellipsis using various range properties",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no css implementation for this."
+  },
+  "templates": {
+    "title": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "font_size": 12,
+      "font_weight": "medium",
+      "text_color": "#586E75"
+    },
+    "test_text": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#002B36",
+      "width": {
+        "type": "fixed",
+        "value": 280
+      }
+    }
+  },
+  "card": {
+    "log_id": "ellipsis_range_properties",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "items": [
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with corner_radius and border stroke on range"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has corner_radius on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "border": {
+                      "corner_radius": 8,
+                      "stroke": {
+                        "color": "#191817",
+                        "width": 2.0
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with background_color on range"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has background_color on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "background": {
+                      "type": "solid",
+                      "color": "#FFEB3B"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with alignment_vertical: top"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has alignment_vertical top on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "font_size": 12,
+                    "alignment_vertical": "top",
+                    "text_color": "#FF0000"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with alignment_vertical: center"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has alignment_vertical center on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "font_size": 12,
+                    "alignment_vertical": "center",
+                    "text_color": "#00FF00"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with alignment_vertical: bottom"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has alignment_vertical bottom on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "font_size": 12,
+                    "alignment_vertical": "bottom",
+                    "text_color": "#0000FF"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with positive baseline_offset"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has positive baseline_offset on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "baseline_offset": 7,
+                    "text_color": "#FF5722"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis with negative baseline_offset"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis that has negative baseline_offset on range",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "baseline_offset": -7,
+                    "text_color": "#9C27B0"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis combining alignment_vertical, border stroke, corner_radius and background_color"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis combining border stroke, corner_radius, background and alignment_vertical properties",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "alignment_vertical": "top",
+                    "background": {
+                      "type": "solid",
+                      "color": "#FFEB3B"
+                    },
+                    "border": {
+                      "stroke": {
+                        "color": "#000",
+                        "width": 1.0
+                      },
+                      "corner_radius": 4
+                    },
+                    "font_size": 11,
+                    "text_color": "#1976D2"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ellipsis combining baseline_offset, border stroke, corner_radius and background_color"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "This is a very long text that will be truncated with ellipsis combining border stroke, corner_radius, background and baseline_offset properties",
+              "max_lines": 2,
+              "auto_ellipsize": true,
+              "ellipsis": {
+                "text": "… more",
+                "ranges": [
+                  {
+                    "font_size": 11,
+                    "background": {
+                      "type": "solid",
+                      "color": "#FFEB3B"
+                    },
+                    "border": {
+                      "stroke": {
+                        "color": "#000",
+                        "width": 1.0
+                      },
+                      "corner_radius": 4
+                    },
+                    "baseline_offset": -7,
+                    "text_color": "#1976D2"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

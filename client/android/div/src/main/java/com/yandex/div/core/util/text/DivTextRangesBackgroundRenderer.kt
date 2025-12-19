@@ -5,21 +5,24 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.text.Layout
+import android.text.TextPaint
 import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.supportFontVariations
 import com.yandex.div.core.view2.divs.widgets.widthPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSolidBackground
+import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextRangeBackground
 import com.yandex.div2.DivTextRangeBorder
 import kotlin.math.max
 import kotlin.math.min
 
-private const val DEFAULT_LINESPACING_EXTRA = 0f
-private const val DEFAULT_LINESPACING_MULTIPLIER = 1f
-
 internal abstract class DivTextRangesBackgroundRenderer() {
+
+    private val tempPaint = TextPaint()
+
     abstract fun draw(
         canvas: Canvas,
         layout: Layout,
@@ -27,56 +30,80 @@ internal abstract class DivTextRangesBackgroundRenderer() {
         endLine: Int,
         startOffset: Int,
         endOffset: Int,
-        border: DivTextRangeBorder?,
-        background: DivTextRangeBackground?,
+        span: DivBackgroundSpan,
     )
 
-    protected fun getLineTop(layout: Layout, line: Int): Int {
-        var lineTop = layout.getLineTop(line)
-        if (line == 0) {
-            lineTop -= layout.topPadding
-        }
-        return lineTop
-    }
+    protected fun getLineBounds(
+        layout: Layout,
+        line: Int,
+        span: DivBackgroundSpan,
+        isFirstLine: Boolean = false,
+    ): LineBounds {
+        val baseline = layout.getLineBaseline(line)
+        val lineAscent = layout.getLineAscent(line)
+        val lineDescent = layout.getLineDescent(line)
 
-    protected fun getLineBottom(layout: Layout, line: Int): Int {
-        var lineBottom = layout.getLineBottomWithoutSpacing(line)
-        if (line == layout.lineCount - 1) {
-            lineBottom -= layout.bottomPadding
-        }
-        return lineBottom
-    }
-
-    private fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
-        val lineBottom = getLineBottom(line)
-        val isLastLine = line == lineCount - 1
-
-        val lineBottomWithoutSpacing: Int
-        val lineSpacingExtra = spacingAdd
-        val lineSpacingMultiplier = spacingMultiplier
-        val hasLineSpacing = lineSpacingExtra != DEFAULT_LINESPACING_EXTRA
-            || lineSpacingMultiplier != DEFAULT_LINESPACING_MULTIPLIER
-
-        if (!hasLineSpacing || isLastLine) {
-            lineBottomWithoutSpacing = lineBottom
-        } else {
-            val extra: Float
-            if (lineSpacingMultiplier.compareTo(DEFAULT_LINESPACING_MULTIPLIER) != 0) {
-                val lineHeight = getLineHeight(line)
-                extra = lineHeight - (lineHeight - lineSpacingExtra) / lineSpacingMultiplier
-            } else {
-                extra = lineSpacingExtra
+        val textAscent: Int
+        val textDescent: Int
+        if (span.fontSize != null) {
+            tempPaint.textSize = span.fontSize.toFloat()
+            tempPaint.typeface = span.typeface
+            tempPaint.fontFeatureSettings = span.fontFeatureSettings
+            if (supportFontVariations) {
+                tempPaint.fontVariationSettings = span.fontVariationSettings
             }
 
-            lineBottomWithoutSpacing = (lineBottom - extra).toInt()
+            val fontMetrics = tempPaint.fontMetricsInt
+            textAscent = fontMetrics.ascent
+            textDescent = fontMetrics.descent
+        } else {
+            textAscent = lineAscent
+            textDescent = lineDescent
         }
 
-        return lineBottomWithoutSpacing
+        val backgroundAscent: Int
+        val backgroundDescent: Int
+        if (span.lineHeight != null) {
+            val textHeight = textDescent - textAscent
+            val extraSpace = span.lineHeight - textHeight
+            val extraTop = extraSpace / 2
+            val extraBottom = extraSpace - extraTop
+            backgroundAscent = textAscent - extraTop
+            backgroundDescent = textDescent + extraBottom
+        } else {
+            backgroundAscent = textAscent
+            backgroundDescent = textDescent
+        }
+
+        val baselineShift = when {
+            span.baselineOffset != 0 -> -span.baselineOffset
+            span.alignmentVertical == DivTextAlignmentVertical.TOP -> {
+                lineAscent - textAscent
+            }
+            span.alignmentVertical == DivTextAlignmentVertical.CENTER -> {
+                val lineCenter = (lineAscent + lineDescent) / 2
+                val textCenter = (textAscent + textDescent) / 2
+                lineCenter - textCenter
+            }
+
+            span.alignmentVertical == DivTextAlignmentVertical.BOTTOM -> {
+                lineDescent - textDescent
+            }
+            else -> 0
+        }
+
+        val topOffsetShift = if (isFirstLine) -(span.topOffset ?: 0) else 0
+
+        val top = baseline + backgroundAscent + baselineShift + topOffsetShift
+        val bottom = baseline + backgroundDescent + baselineShift
+
+        return LineBounds(top, bottom)
     }
 
-    private fun Layout.getLineHeight(line: Int): Int {
-        return getLineTop(line + 1) - getLineTop(line)
-    }
+    protected data class LineBounds(
+        val top: Int,
+        val bottom: Int
+    )
 }
 
 internal class SingleLineRenderer(
@@ -91,15 +118,13 @@ internal class SingleLineRenderer(
         endLine: Int,
         startOffset: Int,
         endOffset: Int,
-        border: DivTextRangeBorder?,
-        background: DivTextRangeBackground?,
+        span: DivBackgroundSpan,
     ) {
-        val lineTop = getLineTop(layout, startLine)
-        val lineBottom = getLineBottom(layout, startLine)
+        val bounds = getLineBounds(layout, startLine, span, isFirstLine = true)
         val left = min(startOffset, endOffset)
         val right = max(startOffset, endOffset)
-        val borderDrawer = BackgroundDrawer(view.resources.displayMetrics, border, background, canvas, resolver)
-        borderDrawer.drawBackground(left.toFloat(), lineTop.toFloat(), right.toFloat(), lineBottom.toFloat())
+        val borderDrawer = BackgroundDrawer(view.resources.displayMetrics, span.border, span.background, canvas, resolver)
+        borderDrawer.drawBackground(left.toFloat(), bounds.top.toFloat(), right.toFloat(), bounds.bottom.toFloat())
     }
 }
 
@@ -116,8 +141,7 @@ internal class MultiLineRenderer(
         endLine: Int,
         startOffset: Int,
         endOffset: Int,
-        border: DivTextRangeBorder?,
-        background: DivTextRangeBackground?,
+        span: DivBackgroundSpan,
     ) {
         val paragDir = layout.getParagraphDirection(startLine)
         val lineEndOffset = if (paragDir == Layout.DIR_RIGHT_TO_LEFT) {
@@ -126,20 +150,18 @@ internal class MultiLineRenderer(
             layout.getLineRight(startLine)
         }.toInt()
 
-        var lineBottom = getLineBottom(layout, startLine)
-        var lineTop = getLineTop(layout, startLine)
-        val drawer = BackgroundDrawer(view.resources.displayMetrics, border, background, canvas, resolver)
-        drawer.drawBackgroundStart(startOffset.toFloat(), lineTop.toFloat(),
-            lineEndOffset.toFloat(), lineBottom.toFloat())
+        var bounds = getLineBounds(layout, startLine, span, isFirstLine = true)
+        val drawer = BackgroundDrawer(view.resources.displayMetrics, span.border, span.background, canvas, resolver)
+        drawer.drawBackgroundStart(startOffset.toFloat(), bounds.top.toFloat(),
+            lineEndOffset.toFloat(), bounds.bottom.toFloat())
 
         for (line in startLine + 1 until endLine) {
-            lineTop = getLineTop(layout, line)
-            lineBottom = getLineBottom(layout, line)
+            bounds = getLineBounds(layout, line, span, isFirstLine = false)
             drawer.drawBackgroundMiddle(
                 (layout.getLineLeft(line).toInt()).toFloat(),
-                lineTop.toFloat(),
+                bounds.top.toFloat(),
                 (layout.getLineRight(line).toInt()).toFloat(),
-                lineBottom.toFloat()
+                bounds.bottom.toFloat()
             )
         }
 
@@ -149,11 +171,10 @@ internal class MultiLineRenderer(
             layout.getLineLeft(startLine)
         }.toInt()
 
-        lineBottom = getLineBottom(layout, endLine)
-        lineTop = getLineTop(layout, endLine)
+        bounds = getLineBounds(layout, endLine, span, isFirstLine = false)
 
-        drawer.drawBackgroundEnd(lineStartOffset.toFloat(), lineTop.toFloat(), endOffset.toFloat(),
-            lineBottom.toFloat())
+        drawer.drawBackgroundEnd(lineStartOffset.toFloat(), bounds.top.toFloat(), endOffset.toFloat(),
+            bounds.bottom.toFloat())
     }
 }
 

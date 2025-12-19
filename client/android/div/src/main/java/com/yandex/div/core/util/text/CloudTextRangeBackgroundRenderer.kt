@@ -13,8 +13,6 @@ import com.yandex.div.core.view2.divs.unitToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCloudBackground
 import com.yandex.div2.DivSizeUnit
-import com.yandex.div2.DivTextRangeBackground
-import com.yandex.div2.DivTextRangeBorder
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -39,10 +37,9 @@ internal class CloudTextRangeBackgroundRenderer(
         endLine: Int,
         startOffset: Int,
         endOffset: Int,
-        border: DivTextRangeBorder?,
-        background: DivTextRangeBackground?
+        span: DivBackgroundSpan,
     ) {
-        val cloudBackground = background?.value() as? DivCloudBackground ?: return
+        val cloudBackground = span.background?.value() as? DivCloudBackground ?: return
         draw(canvas, layout, startLine, endLine, startOffset, endOffset, cloudBackground)
     }
 

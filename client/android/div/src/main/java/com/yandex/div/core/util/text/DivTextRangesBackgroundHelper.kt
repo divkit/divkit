@@ -34,6 +34,14 @@ internal class DivTextRangesBackgroundHelper(
         val spannedText = text as? Spannable ?: return false
         return spans.any { span ->
             span.border == backgroundSpan.border && span.background == backgroundSpan.background
+                && span.baselineOffset == backgroundSpan.baselineOffset
+                && span.alignmentVertical == backgroundSpan.alignmentVertical
+                && span.lineHeight == backgroundSpan.lineHeight
+                && span.fontSize == backgroundSpan.fontSize
+                && span.topOffset == backgroundSpan.topOffset
+                && span.typeface == backgroundSpan.typeface
+                && span.fontFeatureSettings == backgroundSpan.fontFeatureSettings
+                && span.fontVariationSettings == backgroundSpan.fontVariationSettings
                 && end == spannedText.getSpanEnd(span) && start == spannedText.getSpanStart(span)
         }
     }
@@ -75,14 +83,12 @@ internal class DivTextRangesBackgroundHelper(
 
         when (span.background) {
             is DivTextRangeBackground.Cloud -> {
-                cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
-                    span.border, span.background)
+                cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset, span)
             }
 
             else -> {
                 val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
-                renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
-                    span.border, span.background)
+                renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset, span)
             }
         }
     }
