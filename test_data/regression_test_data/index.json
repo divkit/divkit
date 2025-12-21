@@ -17,6 +17,23 @@
       "case_id": 471
     },
     {
+      "title": "WebP animation",
+      "case_id": 487,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "DivGifImage"
+      ],
+      "expected_results": [
+        "Both animated WebP images are displayed and animated correctly"
+      ],
+      "file": "animations/webp_animation.json"
+    },
+    {
       "title": "Copy to clipboard",
       "case_id": 13,
       "tags": [

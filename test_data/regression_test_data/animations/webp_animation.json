@@ -1,0 +1,49 @@
+{
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#AA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Animated WebP"
+            },
+            {
+              "type": "gif",
+              "gif_url": "https://yastatic.net/s3/home/yandex-app/temp/animated_webp_transparent.webp",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "gif",
+              "gif_url": "https://yastatic.net/s3/home/yandex-app/temp/alpha_fade_transparent.webp",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
