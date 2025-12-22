@@ -23,6 +23,8 @@ public struct ShimmerImagePreviewStyle: Equatable {
   }
 }
 
+extension ShimmerImagePreviewStyle: Hashable {}
+
 extension ShimmerImagePreviewStyle {
   public static let `default` = ShimmerImagePreviewStyle(
     colorsAndLocations: defaultColorsAndLocations,

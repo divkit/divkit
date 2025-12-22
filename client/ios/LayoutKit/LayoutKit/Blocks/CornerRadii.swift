@@ -37,3 +37,5 @@ extension CornerRadii: ExpressibleByFloatLiteral {
 extension CornerRadii {
   public static var zero: CornerRadii = .init(0)
 }
+
+extension CornerRadii: Hashable {}
