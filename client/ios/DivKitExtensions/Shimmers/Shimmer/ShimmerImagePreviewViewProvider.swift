@@ -39,4 +39,19 @@ public final class ShimmerImagePreviewViewProvider: ViewProvider {
     return style == other.style && effectBeginTime == other.effectBeginTime && path == other.path
   }
 }
+
+extension ShimmerImagePreviewViewProvider: Hashable {
+  public static func ==(
+    lhs: ShimmerImagePreviewViewProvider,
+    rhs: ShimmerImagePreviewViewProvider
+  ) -> Bool {
+    lhs.equals(other: rhs)
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(effectBeginTime)
+    hasher.combine(style)
+    hasher.combine(path)
+  }
+}
 #endif

@@ -57,8 +57,8 @@ extension DivImageHolderFactory {
     }
   }
 
-  private func calculateKey(url: URL, _: ImagePlaceholder?) -> String {
-    url.absoluteString
+  private func calculateKey(url: URL, placeholder: ImagePlaceholder?) -> String {
+    url.absoluteString + (placeholder?.key ?? "")
   }
 }
 
@@ -128,5 +128,20 @@ private struct AssetsImageProvider: DivImageHolderFactory {
       localImage = Image(named: "divkit.\(name)")
     }
     return localImage ?? imageHolderFactory.make(url, placeholder)
+  }
+}
+
+extension ImagePlaceholder {
+  fileprivate var key: String {
+    switch self {
+    case let .imageData(imageData):
+      String(imageData.hashValue)
+    case let .image(image):
+      String(ObjectIdentifier(image).hashValue)
+    case let .color(color):
+      String(color.hashValue)
+    case let .view(viewProvider):
+      String((viewProvider as? AnyHashable).hashValue)
+    }
   }
 }

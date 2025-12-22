@@ -14,6 +14,8 @@ public struct ColorAndLocation: Equatable {
   }
 }
 
+extension ColorAndLocation: Hashable {}
+
 extension [ColorAndLocation] {
   var locations: [CGFloat] {
     map(\.location)
