@@ -3,6 +3,9 @@
 # Android Client:
 * Added bitmap size limiting to prevent Canvas rendering crash when loading large images and GIFs. New `limitImageBitmapSizeEnabled` parameter in all `DivImageLoader` implementations (enabled by default, can be disabled via constructor). In your own `DivImageLoader` you can override fun `needLimitBitmapSize`.
 
+# iOS Client:
+* Fixed display of ShimmerImagePreviewViewProvider.
+
 # Web Client:
 * Added support for the `font_family` in `slider` component.
 * Added support for the `font_variation_settings` properties (including `text`, `select`, `input`, `slider` and `tabs` components).
