@@ -1,8 +1,13 @@
+@value outer_width_content, outer_height_content from "../Cls.module.css";
+
 .gallery {
     display: block;
 }
 
 .gallery__scroller {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
     width: 100%;
     height: 100%;
 
@@ -55,6 +60,14 @@
 
 .gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid {
     flex-direction: row;
+}
+
+.gallery_orientation_horizontal.outer_height_content > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    height: auto;
+}
+
+.gallery_orientation_vertical.outer_width_content > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    width: auto;
 }
 
 .gallery__items {
