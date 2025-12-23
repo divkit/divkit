@@ -1,8 +1,16 @@
+import Testing
 import XCTest
+
+public func expectEqual<T: Equatable>(_ actual: T, _ expected: T) {
+  #expect(
+    actual == expected,
+    "Objects are not equal:\n\(diffBetweenDumps(actual, expected))"
+  )
+}
 
 public func assertEqual<T: Equatable>(_ actual: T, _ expected: T) {
   if actual != expected {
-    XCTFail("Objects are not equal: \n" + diffBetweenDumps(actual, expected))
+    XCTFail("Objects are not equal:\n\(diffBetweenDumps(actual, expected))")
   }
 }
 

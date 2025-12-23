@@ -1,6 +1,6 @@
 import CoreGraphics
 
-public struct CornerRadii: Equatable {
+public struct CornerRadii: Equatable, Sendable {
   public let topLeft: CGFloat
   public let topRight: CGFloat
   public let bottomLeft: CGFloat

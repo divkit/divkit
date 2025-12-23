@@ -4,7 +4,7 @@ import LayoutKit
 import UIKit
 import VGSL
 
-public struct ShimmerImagePreviewStyle: Equatable {
+public struct ShimmerImagePreviewStyle: Equatable, Sendable {
   public let colorsAndLocations: [ColorAndLocation]
   public let angle: CGFloat
   public let duration: CGFloat

@@ -2,19 +2,27 @@
 @testable import DivKitExtensions
 import DivKitTestsSupport
 @testable import LayoutKit
+import Testing
+import UIKit
 import VGSL
-import XCTest
 
-final class LottieExtensionHandlerTests: XCTestCase {
-  private var requester = MockURLResourceRequester()
-  private var factory = MockLottieAnimationFactory()
-  private var expressionResolver = DivBlockModelingContext.default.expressionResolver
-  private lazy var lottieExtensionHandler = LottieExtensionHandler(
-    factory: factory,
-    requester: requester
-  )
+@MainActor
+@Suite
+struct LottieExtensionHandlerTests {
+  private let requester = MockURLResourceRequester()
+  private let factory = MockLottieAnimationFactory()
+  private let expressionResolver = DivBlockModelingContext.default.expressionResolver
+  private let lottieExtensionHandler: LottieExtensionHandler
 
-  func test_getPreloadURLs() {
+  init() {
+    lottieExtensionHandler = LottieExtensionHandler(
+      factory: factory,
+      requester: requester
+    )
+  }
+
+  @Test
+  func getPreloadURLs() {
     let lottieURLString = "https://example.com/DivGif9.json"
     let divWithExtension = divContainer(
       id: "container_with_extension",
@@ -37,10 +45,11 @@ final class LottieExtensionHandlerTests: XCTestCase {
       expressionResolver: expressionResolver
     )
 
-    XCTAssertEqual(preloadURLs, [URL(string: lottieURLString)])
+    #expect(preloadURLs == [URL(string: lottieURLString)])
   }
 
-  func test_expressions() {
+  @Test
+  func expressions() {
     let variableStorage = DivVariableStorage()
     variableStorage.put(name: "lottie_url", value: .string("https://example.com/DivGif1.json"))
     variableStorage.put(name: "repeat_count", value: .integer(2))
@@ -70,7 +79,7 @@ final class LottieExtensionHandlerTests: XCTestCase {
       context: context
     )
 
-    let expectedBlock = makeExpectedBlockBlock(
+    let expectedBlock = makeExpectedBlock(
       factory: factory,
       requester: requester,
       url: URL(string: "https://example.com/DivGif1.json")!,
@@ -79,22 +88,26 @@ final class LottieExtensionHandlerTests: XCTestCase {
       context: context
     )
 
-    assertEqual(blockWithExpressions, expectedBlock)
+    expectEqual(blockWithExpressions, expectedBlock)
   }
 }
 
-private final class MockLottieAnimationFactory: AsyncSourceAnimatableViewFactory {
-  var returnView = MockAnimatableView(frame: .zero)
+@MainActor
+private final class MockLottieAnimationFactory: @MainActor AsyncSourceAnimatableViewFactory {
+  private let returnView = MockAnimatableView(frame: .zero)
 
-  func createAsyncSourceAnimatableView(withMode _: AnimationRepeatMode, repeatCount _: Float)
-    -> AsyncSourceAnimatableView {
+  func createAsyncSourceAnimatableView(
+    withMode _: AnimationRepeatMode,
+    repeatCount _: Float
+  ) -> AsyncSourceAnimatableView {
     returnView
   }
 }
 
-private final class MockAnimatableView: UIView, AsyncSourceAnimatableView {
-  var playCallsCount = 0
-  var receivedSources: [any DivKitExtensions.AnimationSourceType] = []
+@MainActor
+private final class MockAnimatableView: UIView, @MainActor AsyncSourceAnimatableView {
+  private var playCallsCount = 0
+  private var receivedSources: [any DivKitExtensions.AnimationSourceType] = []
 
   func play() {
     playCallsCount += 1
@@ -107,7 +120,7 @@ private final class MockAnimatableView: UIView, AsyncSourceAnimatableView {
   }
 }
 
-private func makeExpectedBlockBlock(
+private func makeExpectedBlock(
   factory: AsyncSourceAnimatableViewFactory,
   requester: URLResourceRequesting,
   url: URL,

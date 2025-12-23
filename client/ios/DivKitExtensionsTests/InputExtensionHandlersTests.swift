@@ -1,20 +1,23 @@
 @testable import DivKit
 @testable import DivKitExtensions
 import DivKitTestsSupport
+import Foundation
 @testable import LayoutKit
+import Testing
 import VGSL
-import XCTest
 
-final class InputExtensionHandlersTests: XCTestCase {
+@Suite
+struct InputExtensionHandlersTests {
   private let variableStorage = DivVariableStorage()
-  private var context: DivBlockModelingContext!
+  private let context: DivBlockModelingContext
 
-  override func setUp() {
-    variableStorage.put(name: "input_variable", value: .string("Hello!"))
+  init() {
     context = DivBlockModelingContext(variableStorage: variableStorage)
+    variableStorage.put(name: "input_variable", value: .string("Hello!"))
   }
 
-  func test_ApplyAllExtensionsToTextInput() throws {
+  @Test
+  func applyAllExtensionsToTextInput() throws {
     let contextWithExtensions = DivBlockModelingContext(
       extensionHandlers: [
         InputPropertiesExtensionHandler(),
@@ -45,18 +48,18 @@ final class InputExtensionHandlersTests: XCTestCase {
       context: contextWithExtensions
     )
 
-    let expectedBlock = makeExpectedBlockBlock(
+    let expectedBlock = makeExpectedBlock(
       autocorrection: true,
       enablesReturnKeyAutomatically: true,
       spellChecking: true,
       context: context
     )
 
-    assertEqual(block, expectedBlock)
+    expectEqual(block, expectedBlock)
   }
 }
 
-private func makeExpectedBlockBlock(
+private func makeExpectedBlock(
   autocorrection: Bool = true,
   enablesReturnKeyAutomatically: Bool = false,
   isSecure: Bool = false,

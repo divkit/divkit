@@ -823,10 +823,10 @@
 			isa = PBXGroup;
 			children = (
 				865E15572E04658B0039E4A6 /* InputExtensionHandlersTests.swift */,
-				52DED03C29F6E3D500D64519 /* ShimmerImagePreviewStyleTests.swift */,
-				9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */,
-				9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */,
 				0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */,
+				52DED03C29F6E3D500D64519 /* ShimmerImagePreviewStyleTests.swift */,
+				9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */,
+				9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */,
 			);
 			path = DivKitExtensionsTests;
 			sourceTree = "<group>";
@@ -2358,6 +2358,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2374,6 +2375,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

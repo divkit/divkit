@@ -1,28 +1,74 @@
 import DivKit
 @testable import DivKitExtensions
+import Foundation
 import LayoutKit
+import Testing
 import VGSL
-import XCTest
 
-final class ShineExtensionParamsTests: XCTestCase {
-  let tester = ShimmerStyleTester { dict, context in
+@MainActor
+@Suite
+struct ShineExtensionParamsTests {
+  private let tester = ShimmerStyleTester { dict, context in
     try ShineExtensionParams(dictionary: dict, context: context)
   }
 
-  func test_WhenDecodingEmptyShineExtensionParams_DecodesWithDefaultValues() throws {
-    try tester.assertStyle(ShineExtensionParams.default, .init())
+  @Test
+  func whenDecodingEmptyShineExtensionParams_DecodesWithDefaultValues() {
+    tester.assertStyle(ShineExtensionParams.default, .init())
   }
 
-  func test_WhenDecodingShineExtensionParamsWithExactValues_DecodesCorrectly() throws {
-    try tester.assertStyle(expectedShineExtensionParams, exactValuesShineExtensionParams)
+  @Test
+  func whenDecodingShineExtensionParamsWithExactValues_DecodesCorrectly() {
+    tester.assertStyle(
+      expectedParams,
+      [
+        "is_enabled": true,
+        "cycle_count": 1,
+        "interval": 2,
+        "delay": 3,
+        "duration": 4,
+        "angle": 5,
+        "colors": ["#ffffff00", "#ffffff", "#ffffff00"],
+        "locations": [0.1, 0.5, 0.9],
+        "on_cycle_start_actions": [
+          [
+            "log_id": "some_log_id",
+            "url": "div-action://test-action",
+          ],
+        ],
+      ]
+    )
   }
 
-  func test_WhenDecodingShineExtensionParamsWithExpressionValues_DecodesCorrectly() throws {
-    try tester.assertStyle(expectedShineExtensionParams, expressionValuesShineExtensionParams)
+  @Test
+  func whenDecodingShineExtensionParamsWithExpressionValues_DecodesCorrectly() {
+    tester.assertStyle(
+      expectedParams,
+      [
+        "is_enabled": "@{true}",
+        "cycle_count": "@{1}",
+        "interval": "@{2}",
+        "delay": "@{3}",
+        "duration": "@{4}",
+        "angle": "@{5}",
+        "colors": [
+          "@{'#ffffff00'}",
+          "@{'#ffffff'}",
+          "@{'#ffffff00'}",
+        ],
+        "locations": ["@{0.1}", "@{0.5}", "@{0.9}"],
+        "on_cycle_start_actions": [
+          [
+            "log_id": "some_log_id",
+            "url": "div-action://test-action",
+          ],
+        ],
+      ]
+    )
   }
 }
 
-private let expectedShineExtensionParams = ShineExtensionParams(
+private let expectedParams = ShineExtensionParams(
   isEnabled: true,
   repetitions: 1,
   interval: 2,
@@ -52,39 +98,3 @@ private let expectedShineExtensionParams = ShineExtensionParams(
     ),
   ]
 )
-private let exactValuesShineExtensionParams: [String: Any] = [
-  "is_enabled": true,
-  "cycle_count": 1,
-  "interval": 2,
-  "delay": 3,
-  "duration": 4,
-  "angle": 5,
-  "colors": ["#ffffff00", "#ffffff", "#ffffff00"],
-  "locations": [0.1, 0.5, 0.9],
-  "on_cycle_start_actions": [
-    [
-      "log_id": "some_log_id",
-      "url": "div-action://test-action",
-    ],
-  ],
-]
-private let expressionValuesShineExtensionParams: [String: Any] = [
-  "is_enabled": "@{true}",
-  "cycle_count": "@{1}",
-  "interval": "@{2}",
-  "delay": "@{3}",
-  "duration": "@{4}",
-  "angle": "@{5}",
-  "colors": [
-    "@{'#ffffff00'}",
-    "@{'#ffffff'}",
-    "@{'#ffffff00'}",
-  ],
-  "locations": ["@{0.1}", "@{0.5}", "@{0.9}"],
-  "on_cycle_start_actions": [
-    [
-      "log_id": "some_log_id",
-      "url": "div-action://test-action",
-    ],
-  ],
-]

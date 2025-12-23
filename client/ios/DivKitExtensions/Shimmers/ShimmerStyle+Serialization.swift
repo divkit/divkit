@@ -4,7 +4,7 @@ import Foundation
 import LayoutKit
 import VGSL
 
-public struct ColorAndLocation: Equatable {
+public struct ColorAndLocation: Equatable, Sendable {
   var color: Color
   var location: CGFloat
 

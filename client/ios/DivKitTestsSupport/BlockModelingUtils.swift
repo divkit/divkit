@@ -1,6 +1,7 @@
 @testable import DivKit
 import Foundation
 @testable import LayoutKit
+import Testing
 import VGSL
 import XCTest
 
@@ -13,6 +14,7 @@ public func makeBlock(
   let block = try! divData(div, stateId: stateId).makeBlock(context: context) as! StateBlock
   if !ignoreErrors, let error = context.errorsStorage.errors.first {
     XCTFail(error.message)
+    Issue.record(Comment(rawValue: error.message))
   }
   return block
 }

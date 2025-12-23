@@ -1,8 +1,8 @@
 import DivKit
 import DivKitTestsSupport
-import XCTest
+import Testing
 
-final class ShimmerStyleTester<Style: Equatable> {
+struct ShimmerStyleTester<Style: Equatable> {
   private let styleFactory: ([String: Any], DivBlockModelingContext) throws -> Style
 
   init(styleFactory: @escaping ([String: Any], DivBlockModelingContext) throws -> Style) {
@@ -12,10 +12,7 @@ final class ShimmerStyleTester<Style: Equatable> {
   func assertStyle(
     _ style: Style,
     _ dictionary: [String: Any]
-  ) throws {
-    XCTAssertEqual(
-      style,
-      try styleFactory(dictionary, .default)
-    )
+  ) {
+    #expect(style == (try! styleFactory(dictionary, .default)))
   }
 }
