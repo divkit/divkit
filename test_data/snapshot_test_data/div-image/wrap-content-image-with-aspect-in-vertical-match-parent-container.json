@@ -1,0 +1,54 @@
+{
+  "description": "Tests div-image with wrap_content sizing and aspect ratio inside vertical match_parent container",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFE0E0"
+            }
+          ],
+          "paddings": {
+            "left": 8,
+            "right": 8,
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "placeholder_color": "#F00",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "aspect": {
+                "ratio": 1.5
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
