@@ -57,7 +57,12 @@ function createInteractiveTestCase(testCase, testPath) {
         await this.browser.yaOpenCrossplatformJson(testPath);
 
         for (let i = 0; i < steps.length; i++) {
-            const { delay, div_actions } = steps[i];
+            const { delay, div_actions, web_keyboard } = steps[i];
+
+            if (web_keyboard) {
+                // enter, to force "keyboard" focus mode
+                await this.browser.keys('\uE007	');
+            }
 
             if (div_actions) {
                 for (const action of div_actions) {

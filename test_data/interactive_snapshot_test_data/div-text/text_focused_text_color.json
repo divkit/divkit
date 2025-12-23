@@ -1,7 +1,8 @@
 {
   "description": "Text with focused text color and focus background",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {
@@ -47,6 +48,13 @@
               "color": "#ff5500"
             }
           ]
+        },
+        "action": {
+          "log_id": "button",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "button_for_focus"
+          }
         }
       }
     },
@@ -89,7 +97,8 @@
         }
       ],
       "delay": 300,
-      "expected_screenshot": "step1.png"
+      "expected_screenshot": "step1.png",
+      "web_keyboard": true
     }
   ]
 }
