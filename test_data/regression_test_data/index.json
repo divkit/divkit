@@ -2784,9 +2784,11 @@
       "case_id": 152,
       "platforms": [
         "android",
-        "ios",
-        "web"
+        "ios"
       ],
+      "unsupported_platforms": {
+        "web": "Stream video from apple.com are not supported in the test environment"
+      },
       "tags": [
         "DivVideo"
       ],
