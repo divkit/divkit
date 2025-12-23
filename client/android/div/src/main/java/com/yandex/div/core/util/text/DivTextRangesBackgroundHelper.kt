@@ -75,6 +75,9 @@ internal class DivTextRangesBackgroundHelper(
     private fun applySpan(span: DivBackgroundSpan, canvas: Canvas, text: Spanned, layout: Layout) {
         val spanStart = text.getSpanStart(span)
         val spanEnd = text.getSpanEnd(span)
+
+        if (spanStart < 0 || spanEnd < 0 || spanStart >= spanEnd) return
+
         val startLine = layout.getLineForOffset(spanStart)
         val endLine = layout.getLineForOffset(spanEnd)
 
