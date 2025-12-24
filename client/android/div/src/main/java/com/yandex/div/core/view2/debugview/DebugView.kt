@@ -17,6 +17,7 @@ import androidx.annotation.MainThread
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.R
@@ -78,8 +79,12 @@ internal class DebugView(
 
     @MainThread
     private fun tryAddDetailsView() {
-        if (detailsViewHolder != null) {
-            return
+        detailsViewHolder?.rootView?.let { view ->
+            if (root.children.lastOrNull() == view) {
+                return
+            }
+            root.removeView(view)
+            detailsViewHolder = null
         }
 
         val holder = DetailsViewHolder(
@@ -131,8 +136,12 @@ internal class DebugView(
 
     @MainThread
     private fun tryAddCounterView() {
-        if (counterViewHolder != null) {
-            return
+        counterViewHolder?.rootView?.let { view ->
+            if (root.children.lastOrNull() == view) {
+                return
+            }
+            root.removeView(view)
+            counterViewHolder = null
         }
 
         val holder = CounterViewHolder(
@@ -189,6 +198,7 @@ private class CounterViewHolder(
         clipToPadding = false
         clipChildren = false
         orientation = LinearLayout.HORIZONTAL
+        elevation = rootView.resources.getDimension(R.dimen.div_shadow_elevation)
         val sidePadding = 8.dpToPx(metrics)
         setPadding(sidePadding, sidePadding, 0, 0)
         val counterSize = 24.dpToPx(metrics)
