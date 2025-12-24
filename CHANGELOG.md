@@ -1,3 +1,18 @@
+## 32.32.0
+
+# Android Client:
+* Fixed debug views hiding (re-add views if something covers them).
+* Fixed Verification in StorageStatementExecutor.
+* Fixed background and border drawing in ellipsis when text not ellipsize.
+* Fixed background and border drawing in text ranges when custom height and alignment.
+
+# iOS Client:
+* Fixed display of ShimmerImagePreviewViewProvider.
+
+# Web Client:
+* Fixed `gallery` layout in several conditions.
+
+
 ## 32.31.0
 
 # Android Client:

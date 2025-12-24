@@ -1,3 +1,8 @@
+## 32.32.0 (December 29, 2025)
+
+* Fixed `gallery` layout in several conditions.
+
+
 ## 32.31.0 (December 22, 2025)
 
 * Added support for the `font_family` in `slider` component.
