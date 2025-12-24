@@ -46,6 +46,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
   weak var observer: ElementStateObserver?
   var playerFactory: PlayerFactory?
   var effectiveBackgroundColor: UIColor?
+  var isPlayerReadyToPlay: Bool = false
 
   private var model: VideoBlockViewModel = .zero
   private var playerSignal: Disposable?
@@ -67,7 +68,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
           self.previousTime = time
         case .end:
           self.observer?.elementStateChanged(self.state, forPath: self.model.path)
-          self.model.endActions.perform(sendingFrom: self)
+          if self.isPlayerReadyToPlay {
+            self.model.endActions.perform(sendingFrom: self)
+          }
         case .buffering:
           self.model.bufferingActions.perform(sendingFrom: self)
         case .pause:
@@ -75,7 +78,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
             VideoBlockViewState(state: .paused),
             forPath: self.model.path
           )
-          self.model.pauseActions.perform(sendingFrom: self)
+          if self.isPlayerReadyToPlay {
+            self.model.pauseActions.perform(sendingFrom: self)
+          }
         case .fatal:
           self.model.fatalActions.perform(sendingFrom: self)
         case .play:
@@ -83,10 +88,16 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
             VideoBlockViewState(state: .playing),
             forPath: self.model.path
           )
-          self.model.resumeActions.perform(sendingFrom: self)
-          self.preview.currentValue?.isHidden = true
+          if self.isPlayerReadyToPlay {
+            self.model.resumeActions.perform(sendingFrom: self)
+            self.preview.currentValue?.isHidden = true
+          }
         case let .durationUpdate(duration):
           self.model.duration?.value = duration
+        case .readyToPlay:
+          self.isPlayerReadyToPlay = true
+        case .notReadyToPlay:
+          self.isPlayerReadyToPlay = false
         }
       }
     }
