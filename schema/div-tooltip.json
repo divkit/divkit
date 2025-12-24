@@ -101,13 +101,16 @@
       "$ref": "div.json",
       "$description": "translations.json#/div_tooltip_substrate_div",
       "platforms": [
-        "web"
+        "web",
+        "android"
       ]
     },
     "bring_to_top_id": {
       "$ref": "common.json#/id",
       "$description": "translations.json#/div_tooltip_bring_to_top_id",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     }
   },
   "required": [

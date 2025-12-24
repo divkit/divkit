@@ -3000,7 +3000,8 @@
     {
       "title": "Tooltip with substrate",
       "platforms": [
-        "web"
+        "web",
+        "android"
       ],
       "tags": [
         "Tooltips"
@@ -3015,6 +3016,25 @@
       ],
       "file": "tooltips/tooltip-with-substrate.json",
       "case_id": 486
+    },
+    {
+      "title": "Tooltip with bring to top view",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap 'Show tooltip' button",
+        "Close tooltip"
+      ],
+      "expected_results": [
+        "Tooltip is shown, substrate showed with the animation",
+        "Bring to top view above the substrate",
+        "Booth the tooltip and the substrate are hidden"
+      ],
+      "file": "tooltips/tooltip-with-bring-to-top-view.json"
     },
     {
       "title": "Persistent values storage",

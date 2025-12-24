@@ -110,7 +110,7 @@ class DivTooltipControllerTest {
     }
 
     private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
-        on { buildTooltipView(any(), any(), anyInt(), anyInt()) } doReturn tooltipWrapper
+        on { buildTooltipView(any(), any(), anyOrNull(), anyInt(), anyInt()) } doReturn tooltipWrapper
     }
 
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()

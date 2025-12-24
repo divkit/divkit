@@ -104,7 +104,27 @@ internal class DivTooltipController @VisibleForTesting constructor(
     }
 
     fun hideTooltip(id: String, div2View: Div2View) {
-        tooltips[id]?.popupWindow?.dismiss()
+        val tooltipData = tooltips[id] ?: return
+        val tooltipContainer = tooltipData.popupWindow.contentView as? DivTooltipContainer
+
+        val substrateView = tooltipContainer?.substrateView
+        val tooltipView = tooltipContainer?.tooltipView
+        if (substrateView != null && tooltipView != null) {
+            substrateView.clearAnimation()
+            tooltipView.clearAnimation()
+            animateExit(
+                divTooltip = tooltipData.divTooltip,
+                resolver = tooltipData.bindingContext.expressionResolver,
+                tooltipView = tooltipView,
+                substrateView = substrateView,
+            ) {
+                if (tooltipData.popupWindow.isShowing) {
+                    tooltipData.popupWindow.dismiss()
+                }
+            }
+        } else {
+            tooltipData.popupWindow.dismiss()
+        }
     }
 
     fun cancelTooltips(divView: Div2View) = cancelTooltips(divView as View)
@@ -148,7 +168,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 popupWindow.dismiss()
                 null
             } else {
-                stopVisibilityTracking(tooltip.bindingContext, tooltip.div)
+                stopVisibilityTracking(tooltip.bindingContext, tooltip.divTooltip.div)
                 tooltip.id
             }
         }
@@ -186,12 +206,29 @@ internal class DivTooltipController @VisibleForTesting constructor(
         }
         val resolver = context.expressionResolver
         val div = divTooltip.div
+        val hasSubstrate = divTooltip.substrateDiv != null
 
         val displayMetrics = anchor.resources.displayMetrics
-        val width = divTooltip.div.value().width.toLayoutParamsSize(displayMetrics, resolver)
-        val height = divTooltip.div.value().height.toLayoutParamsSize(displayMetrics, resolver)
+        val width = if (hasSubstrate) {
+            ViewGroup.LayoutParams.MATCH_PARENT
+        } else {
+            divTooltip.div.value().width.toLayoutParamsSize(displayMetrics, resolver)
+        }
+        val height = if (hasSubstrate) {
+            ViewGroup.LayoutParams.MATCH_PARENT
+        } else {
+            divTooltip.div.value().height.toLayoutParamsSize(displayMetrics, resolver)
+        }
 
-        val tooltipContainer = divTooltipViewBuilder.buildTooltipView(context, div, width, height)
+        val bringToTopView = divTooltip.bringToTopId?.let { findBringToTopView(it, div2View) }
+
+        val tooltipContainer = divTooltipViewBuilder.buildTooltipView(
+            context = context,
+            divTooltip = divTooltip,
+            bringToTopView = bringToTopView,
+            width = width,
+            height = height,
+        )
         val tooltipView = tooltipContainer.tooltipView ?: return
         val isModal: Boolean = divTooltip.isModal()
         val popup = createPopup(
@@ -203,8 +240,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
             touchTranslator = TouchTranslator(anchor),
             popup = popup,
         )
-        popup
-            .apply {
+        var isSubstrateSystemBars = false
+        popup.apply {
             isTouchable = true
             isOutsideTouchable = divTooltip.shouldDismissByOutsideTouch(resolver)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -216,22 +253,30 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
             setTouchInterceptor(
                 PopupWindowTouchListener(
-                    this,
-                    tooltipView,
+                    tooltipContainer,
                     isModal,
                     isOutsideTouchable,
                     divTooltip.tapOutsideActions,
                     context,
                     touchTranslationCoordinator,
-                )
+                    divTooltip.substrateDiv?.hasAction() == true
+                ) { hideTooltip(divTooltip.id, div2View) }
             )
-            setupAnimation(divTooltip, resolver)
+            if (!hasSubstrate) {
+                setupAnimation(divTooltip, resolver)
+            }
+
+            if (hasSubstrate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                isAttachedInDecor = true
+                isClippingEnabled = false
+                isSubstrateSystemBars = true
+            }
         }
         val onBackPressedCallback = createOnBackPressCallback(divTooltip, div2View)
         val tooltipData = TooltipData(
             id = divTooltip.id,
             bindingContext = context,
-            div = div,
+            divTooltip = divTooltip,
             popupWindow = popup,
             ticket = null,
             onBackPressedCallback = onBackPressedCallback
@@ -270,12 +315,51 @@ internal class DivTooltipController @VisibleForTesting constructor(
                                 .logWarning(Throwable("Tooltip height > screen size, height was changed"))
                     }
 
-                    popup.update(location.x, location.y, tooltipWidth, tooltipHeight)
+                    if (hasSubstrate) {
+                        val windowLocation = if (isSubstrateSystemBars) {
+                            Point(0, 0)
+                        } else {
+                            Point(windowFrame.left, windowFrame.top)
+                        }
+
+                        popup.update(0, 0, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                        tooltipContainer.setTooltipPosition(
+                            x = location.x - windowLocation.x,
+                            y = location.y - windowLocation.y,
+                            width = tooltipWidth,
+                            height = tooltipHeight
+                        )
+
+                        bringToTopView?.let {
+                            val locationArray = IntArray(2)
+                            bringToTopView.getLocationOnScreen(locationArray)
+                            val location = Point(locationArray[0], locationArray[1])
+
+                            tooltipContainer.setBringToTopPosition(
+                                x = location.x - windowLocation.x,
+                                y = location.y - windowLocation.y,
+                                width = it.width,
+                                height = it.height,
+                            )
+                        }
+                    } else {
+                        popup.update(location.x, location.y, tooltipWidth, tooltipHeight)
+                    }
                     startVisibilityTracking(context, div, tooltipContainer)
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
+
+                tooltipContainer.substrateView?.let { substrateView ->
+                    animateEnter(
+                        divTooltip = divTooltip,
+                        resolver = resolver,
+                        tooltipView = tooltipView,
+                        substrateView = substrateView,
+                    )
+                }
+                
                 sendAccessibilityEventUnchecked(TYPE_WINDOW_STATE_CHANGED, tooltipView, accessibilityStateProvider)
                 if (divTooltip.duration.evaluate(resolver) != 0L) {
                     mainThreadHandler.postDelayed(divTooltip.duration.evaluate(resolver)) {
@@ -328,7 +412,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 internal class TooltipData(
     val id: String,
     val bindingContext: BindingContext,
-    val div: Div,
+    val divTooltip: DivTooltip,
     val popupWindow: SafePopupWindow,
     var ticket: DivPreloader.Ticket? = null,
     val onBackPressedCallback: OnBackPressedCallback?,
@@ -336,20 +420,25 @@ internal class TooltipData(
 )
 
 private class PopupWindowTouchListener(
-    private val popupWindow: PopupWindow,
-    private val tooltipView: View,
+    private val tooltipContainer: DivTooltipContainer,
     private val isModal: Boolean,
     private val shouldDismissByOutsideTouch: Boolean,
     private val tapOutsideActions: List<DivAction>?,
     private val bindingContext: BindingContext,
     private val touchTranslationCoordinator: TouchTranslationCoordinator,
+    private val handleSubstrateClick: Boolean,
+    private val onTouchOutside: () -> Unit,
 ) : View.OnTouchListener {
 
     private val hitRect = Rect()
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
         touchTranslationCoordinator.onTooltipMotionEvent(event)
-        tooltipView.getHitRect(hitRect)
+        if (handleSubstrateClick) {
+            tooltipContainer.substrateView?.getHitRect(hitRect)
+        } else {
+            tooltipContainer.tooltipView?.getHitRect(hitRect)
+        }
         return when {
             hitRect.contains(event.x.toInt(), event.y.toInt()) -> false
 
@@ -369,7 +458,7 @@ private class PopupWindowTouchListener(
                     }
 
                     if (shouldDismissByOutsideTouch) {
-                        popupWindow.dismiss()
+                        onTouchOutside()
                     }
                 }
                 isModal
@@ -390,6 +479,20 @@ private fun findChildWithTooltip(tooltipId: String, view: View): Pair<DivTooltip
     if (view is ViewGroup) {
         view.children.forEach { child ->
             findChildWithTooltip(tooltipId, child)?.let {
+                return it
+            }
+        }
+    }
+    return null
+}
+
+private fun findBringToTopView(bringToTopId: String, view: View): View? {
+    if (view.tag == bringToTopId) {
+        return view
+    }
+    if (view is ViewGroup) {
+        view.children.forEach { child ->
+            findBringToTopView(bringToTopId, child)?.let {
                 return it
             }
         }
@@ -465,4 +568,59 @@ private fun sendAccessibilityEventUnchecked(
         AccessibilityEvent.obtain(event)
     }
     view.sendAccessibilityEventUnchecked(accessibilityEvent)
+}
+
+private fun Div.hasAction(): Boolean {
+    val divBase = value()
+    if (!divBase.selectedActions.isNullOrEmpty()) return true
+    return when (this) {
+        is Div.Container -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+                || value.items?.any { it.hasAction() } == true
+
+        is Div.Custom -> value.items?.any { it.hasAction() } == true
+        is Div.Gallery -> true
+        is Div.GifImage -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+
+        is Div.Grid -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+                || value.items?.any { it.hasAction() } == true
+
+        is Div.Image -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+
+        is Div.Indicator -> false
+        is Div.Input -> true
+        is Div.Pager -> true
+        is Div.Select -> true
+        is Div.Separator -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+
+        is Div.Slider -> true
+        is Div.State -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+                || value.states.any { state -> state.div?.hasAction() == true }
+
+        is Div.Switch -> true
+        is Div.Tabs -> true
+        is Div.Text -> value.action != null
+                || !value.actions.isNullOrEmpty()
+                || !value.doubletapActions.isNullOrEmpty()
+                || !value.longtapActions.isNullOrEmpty()
+
+        is Div.Video -> false
+    }
 }

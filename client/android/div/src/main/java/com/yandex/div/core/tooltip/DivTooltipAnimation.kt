@@ -11,6 +11,10 @@ import android.transition.TransitionValues
 import android.transition.Visibility
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import com.yandex.div.core.animation.SpringInterpolator
@@ -19,6 +23,63 @@ import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivTooltip
+import android.view.animation.TranslateAnimation as AndroidTranslateAnimation
+
+private const val DEFAULT_TRANSLATION = 10
+private const val DEFAULT_DURATION = 300L
+
+private const val DEFAULT_ALPHA_SHOW_VALUE = 1f
+private const val DEFAULT_ALPHA_HIDE_VALUE = 0f
+
+private val View.defaultTranslation
+    get() = DEFAULT_TRANSLATION.dpToPxF(resources.displayMetrics)
+
+internal fun animateEnter(
+    divTooltip: DivTooltip,
+    resolver: ExpressionResolver,
+    tooltipView: View,
+    substrateView: View,
+) {
+    val tooltipAnimation = createTooltipAnimation(
+        animation = divTooltip.animationIn,
+        position = divTooltip.position.evaluate(resolver),
+        resolver = resolver,
+        tooltipView = tooltipView,
+        incoming = true,
+    )
+
+    val substrateAnimation = createDefaultAlphaAnimation(incoming = true).apply {
+        duration = tooltipAnimation.duration
+        interpolator = tooltipAnimation.interpolator
+    }
+
+    tooltipView.startAnimation(tooltipAnimation)
+    substrateView.startAnimation(substrateAnimation)
+}
+
+internal fun animateExit(
+    divTooltip: DivTooltip,
+    resolver: ExpressionResolver,
+    tooltipView: View,
+    substrateView: View,
+    onEnd: () -> Unit,
+) {
+    val tooltipAnimation = createTooltipAnimation(
+        animation = divTooltip.animationOut,
+        position = divTooltip.position.evaluate(resolver),
+        resolver = resolver,
+        tooltipView = tooltipView,
+        incoming = false,
+    ).apply { setAnimationListener(createAnimationListener(onEnd)) }
+
+    val substrateAnimation = createDefaultAlphaAnimation(incoming = false).apply {
+        duration = tooltipAnimation.duration
+        interpolator = tooltipAnimation.interpolator
+    }
+
+    tooltipView.startAnimation(tooltipAnimation)
+    substrateView.startAnimation(substrateAnimation)
+}
 
 internal fun PopupWindow.setupAnimation(divTooltip: DivTooltip, resolver: ExpressionResolver) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -148,34 +209,6 @@ private class TranslateAnimation(
             )
         )
     }
-
-    private fun initialDirectionX(
-        position: DivTooltip.Position
-    ) = when (position) {
-        DivTooltip.Position.TOP_LEFT, DivTooltip.Position.LEFT, DivTooltip.Position.BOTTOM_LEFT ->
-            1f
-        DivTooltip.Position.TOP_RIGHT, DivTooltip.Position.RIGHT, DivTooltip.Position.BOTTOM_RIGHT ->
-            -1f
-        DivTooltip.Position.CENTER -> 0.5f
-        DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM -> 0f
-    }
-
-    private fun initialDirectionY(
-        position: DivTooltip.Position
-    ) = when (position) {
-        DivTooltip.Position.TOP_LEFT, DivTooltip.Position.TOP, DivTooltip.Position.TOP_RIGHT ->
-            1f
-        DivTooltip.Position.BOTTOM_LEFT, DivTooltip.Position.BOTTOM, DivTooltip.Position.BOTTOM_RIGHT ->
-            -1f
-        DivTooltip.Position.CENTER -> 0.5f
-        DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT -> 0f
-    }
-
-    companion object {
-        private const val DEFAULT_TRANSLATION = 10
-        private val View.defaultTranslation
-            get() = DEFAULT_TRANSLATION.dpToPxF(resources.displayMetrics)
-    }
 }
 
 private class Scale(
@@ -223,4 +256,136 @@ private class Scale(
             )
         )
     }
+}
+
+private fun createTooltipAnimation(
+    animation: DivAnimation?,
+    position: DivTooltip.Position,
+    resolver: ExpressionResolver,
+    tooltipView: View,
+    incoming: Boolean,
+) = animation?.toAnimation(
+    view = tooltipView,
+    position = position,
+    incoming = incoming,
+    resolver = resolver,
+) ?: defaultAnimation(
+    view = tooltipView,
+    position = position,
+    incoming = incoming,
+)
+
+private fun DivAnimation.toAnimation(
+    view: View,
+    position: DivTooltip.Position,
+    incoming: Boolean,
+    resolver: ExpressionResolver,
+): Animation? = when (name.evaluate(resolver)) {
+    DivAnimation.Name.FADE -> {
+        val startValue = startValue?.evaluate(resolver)?.toFloat() ?: DEFAULT_ALPHA_SHOW_VALUE
+        val endValue = endValue?.evaluate(resolver)?.toFloat() ?: DEFAULT_ALPHA_HIDE_VALUE
+        AlphaAnimation(startValue, endValue)
+    }
+
+    DivAnimation.Name.TRANSLATE -> {
+        val percentage = (if (incoming) this.startValue else this.endValue)
+            ?.evaluate(resolver)?.toFloat()
+        createTranslateAnimation(view, position, incoming, percentage)
+    }
+
+    DivAnimation.Name.SCALE -> {
+        val fromScale = startValue?.evaluate(resolver)?.toFloat() ?: 0f
+        val toScale = endValue?.evaluate(resolver)?.toFloat() ?: 1f
+        ScaleAnimation(
+            fromScale, toScale, fromScale, toScale,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+    }
+
+    DivAnimation.Name.SET -> {
+        AnimationSet(false).apply {
+            items?.forEach { divAnimation ->
+                val childAnimation =
+                    divAnimation.toAnimation(view, position, incoming, resolver)
+                addAnimation(childAnimation)
+            }
+        }
+    }
+
+    DivAnimation.Name.NATIVE,
+    DivAnimation.Name.NO_ANIMATION -> null
+}?.apply {
+    duration = this@toAnimation.duration.evaluate(resolver)
+    interpolator = this@toAnimation.interpolator.evaluate(resolver).androidInterpolator
+}
+
+private fun createTranslateAnimation(
+    view: View,
+    position: DivTooltip.Position,
+    incoming: Boolean,
+    percentage: Float?
+): AndroidTranslateAnimation {
+    val directionX = initialDirectionX(position)
+    val directionY = initialDirectionY(position)
+
+    if (incoming) {
+        // From offset to 0
+        val fromX = directionX * (percentage?.let { view.width * it } ?: view.defaultTranslation)
+        val fromY = directionY * (percentage?.let { view.height * it } ?: view.defaultTranslation)
+        return AndroidTranslateAnimation(fromX, 0f, fromY, 0f)
+    } else {
+        // From 0 to offset
+        val toX = directionX * (percentage?.let { view.width * it } ?: view.defaultTranslation)
+        val toY = directionY * (percentage?.let { view.height * it } ?: view.defaultTranslation)
+        return AndroidTranslateAnimation(0f, toX, 0f, toY)
+    }
+}
+
+private fun defaultAnimation(
+    view: View,
+    position: DivTooltip.Position,
+    incoming: Boolean
+): Animation = AnimationSet(true).apply {
+    addAnimation(createDefaultAlphaAnimation(incoming))
+    addAnimation(createTranslateAnimation(view, position, incoming, null))
+
+    duration = DEFAULT_DURATION
+    interpolator = SpringInterpolator()
+}
+
+private fun createDefaultAlphaAnimation(
+    incoming: Boolean
+) = AlphaAnimation(
+    if (incoming) DEFAULT_ALPHA_HIDE_VALUE else DEFAULT_ALPHA_SHOW_VALUE,
+    if (incoming) DEFAULT_ALPHA_SHOW_VALUE else DEFAULT_ALPHA_HIDE_VALUE,
+)
+
+private fun initialDirectionX(
+    position: DivTooltip.Position
+) = when (position) {
+    DivTooltip.Position.TOP_LEFT, DivTooltip.Position.LEFT, DivTooltip.Position.BOTTOM_LEFT -> 1f
+    DivTooltip.Position.TOP_RIGHT, DivTooltip.Position.RIGHT, DivTooltip.Position.BOTTOM_RIGHT -> -1f
+    DivTooltip.Position.CENTER -> 0.5f
+    DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM -> 0f
+}
+
+private fun initialDirectionY(
+    position: DivTooltip.Position
+) = when (position) {
+    DivTooltip.Position.TOP_LEFT, DivTooltip.Position.TOP, DivTooltip.Position.TOP_RIGHT -> 1f
+    DivTooltip.Position.BOTTOM_LEFT, DivTooltip.Position.BOTTOM, DivTooltip.Position.BOTTOM_RIGHT -> -1f
+    DivTooltip.Position.CENTER -> 0.5f
+    DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT -> 0f
+}
+
+private fun createAnimationListener(
+    onEnd: (() -> Unit)? = null,
+) = object : Animation.AnimationListener {
+    override fun onAnimationStart(animation: Animation?) {}
+    override fun onAnimationEnd(animation: Animation?) {
+        onEnd?.invoke()
+    }
+
+    override fun onAnimationRepeat(animation: Animation?) {}
 }
