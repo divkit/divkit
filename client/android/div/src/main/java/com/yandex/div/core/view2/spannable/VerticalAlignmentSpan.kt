@@ -1,72 +1,45 @@
 package com.yandex.div.core.view2.spannable
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Paint.FontMetricsInt
 import android.text.Layout
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.style.CharacterStyle
-import android.text.style.LineBackgroundSpan
+import android.text.style.MetricAffectingSpan
 import androidx.annotation.Px
-import androidx.core.util.Pools
-import java.util.LinkedList
-import java.util.Queue
 import javax.inject.Provider
 import kotlin.math.roundToInt
 
 internal class VerticalAlignmentSpan(
-    @Px private val fontSize: Int,
+    @param:Px private val fontSize: Int,
     private val alignment: TextVerticalAlignment,
     private val layoutProvider: Provider<Layout>
-) : CharacterStyle(), LineBackgroundSpan {
+) : MetricAffectingSpan() {
 
     private val fontMetrics = FontMetricsInt()
-    private val lines: Queue<IntArray> = LinkedList()
-    private var textDrawWasCalled = false
 
-    override fun drawBackground(
-        canvas: Canvas,
-        paint: Paint,
-        left: Int,
-        right: Int,
-        top: Int,
-        baseline: Int,
-        bottom: Int,
-        text: CharSequence,
-        start: Int,
-        end: Int,
-        lineNumber: Int
-    ) {
-        if (textDrawWasCalled) {
-            lines.clear()
-        }
-        textDrawWasCalled = false
-
-        val spanned = text as? Spanned ?: return
-        val spanStart = spanned.getSpanStart(this)
-        val spanEnd = spanned.getSpanEnd(this)
-
-        if (start <= spanEnd && spanStart <= end) {
-            val layout = layoutProvider.get()
-            val lineSpacing = if (lineNumber == layout.lineCount - 1) 0 else layout.spacingAdd.roundToInt()
-            val line = LINE_POOL.acquire() ?: IntArray(2)
-            line[INDEX_LINE_ASCENT] = top - baseline
-            line[INDEX_LINE_DESCENT] = bottom - baseline - lineSpacing
-            lines += line
-        }
+    override fun updateMeasureState(paint: TextPaint) {
+        updateDrawState(paint)
     }
 
     override fun updateDrawState(paint: TextPaint) {
-        textDrawWasCalled = true
-        if (lines.isEmpty()) {
-            return
-        }
+        val layout = layoutProvider.get() ?: return
 
-        val line = lines.remove()
-        val lineAscent = line[INDEX_LINE_ASCENT]
-        val lineDescent = line[INDEX_LINE_DESCENT]
-        LINE_POOL.release(line)
+        val spanned = layout.text as? Spanned ?: return
+        val spanStart = spanned.getSpanStart(this)
+        val spanEnd = spanned.getSpanEnd(this)
+
+        if (spanStart < 0 || spanEnd < 0 || spanStart >= spanEnd) return
+
+        val lineNumber = layout.getLineForOffset(spanStart)
+
+        val lineTop = layout.getLineTop(lineNumber)
+        val lineBottom = layout.getLineBottom(lineNumber)
+        val lineBaseline = layout.getLineBaseline(lineNumber)
+
+        val lineSpacing = if (lineNumber == layout.lineCount - 1) 0 else layout.spacingAdd.roundToInt()
+
+        val lineAscent = lineTop - lineBaseline
+        val lineDescent = lineBottom - lineBaseline - lineSpacing
 
         if (fontSize > 0) {
             paint.textSize = fontSize.toFloat()
@@ -78,9 +51,9 @@ internal class VerticalAlignmentSpan(
                 paint.baselineShift += lineAscent - fontMetrics.ascent
             }
 
-            TextVerticalAlignment.CENTER ->  {
-                val lineCenter =  (lineAscent + lineDescent) / 2
-                val textCenter =  (fontMetrics.ascent + fontMetrics.descent) / 2
+            TextVerticalAlignment.CENTER -> {
+                val lineCenter = (lineAscent + lineDescent) / 2
+                val textCenter = (fontMetrics.ascent + fontMetrics.descent) / 2
                 paint.baselineShift += lineCenter - textCenter
             }
 
@@ -90,13 +63,5 @@ internal class VerticalAlignmentSpan(
                 paint.baselineShift += lineDescent - fontMetrics.descent
             }
         }
-    }
-
-    private companion object {
-
-        private val LINE_POOL = Pools.SimplePool<IntArray>(16)
-
-        private const val INDEX_LINE_ASCENT = 0
-        private const val INDEX_LINE_DESCENT = 1
     }
 }
