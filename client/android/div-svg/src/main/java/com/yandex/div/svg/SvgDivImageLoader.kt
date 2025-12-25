@@ -15,7 +15,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 @InternalApi
-public class SvgDivImageLoader(private val context: Context) : DivImageLoader {
+public class SvgDivImageLoader(context: Context) : DivImageLoader {
+    private val context = context.applicationContext
     private val httpClient = OkHttpClient.Builder().build()
     private val coroutineScope = MainScope()
     private val svgDecoder = SvgDecoder()

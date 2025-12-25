@@ -29,14 +29,16 @@ import kotlin.math.max
 @InternalApi
 class DivImageLoaderWrapper @Inject constructor(
     private val providedImageLoader: DivImageLoader,
-    private val divContext: Context,
+    divContext: Context,
 ) : DivImageLoader {
+    private val appContext = divContext.applicationContext
+
     private val modifiers: List<DivImageUrlModifier> = listOf(
         DivImageAssetUrlModifier(),
     )
 
     private val svgImageLoader: SvgDivImageLoader? =
-        makeIf(!providedImageLoader.hasSvgSupport()) { SvgDivImageLoader(divContext) }
+        makeIf(!providedImageLoader.hasSvgSupport()) { SvgDivImageLoader(appContext) }
 
     private val maxDisplaySize = divContext.resources.displayMetrics.let {
         max(it.widthPixels, it.heightPixels)
@@ -88,7 +90,7 @@ class DivImageLoaderWrapper @Inject constructor(
         loader: DivImageLoader,
         callback: DivImageDownloadCallback,
     ) = if (loader.needLimitBitmapSize()) {
-        CallbackWrapper(callback, divContext)
+        CallbackWrapper(callback, appContext)
     } else {
         callback
     }
@@ -97,7 +99,6 @@ class DivImageLoaderWrapper @Inject constructor(
         private val callback: DivImageDownloadCallback,
         private val context: Context,
     ) : DivImageDownloadCallback() {
-
         override fun onSuccess(cachedBitmap: CachedBitmap) {
             if (cachedBitmap.isLargeSize) {
                 callback.onSuccess(cachedBitmap.scale())
