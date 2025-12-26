@@ -4,6 +4,7 @@
     "android"
   ],
   "unsupported_platforms": {
+    "ios": "Assets are not supported in tests",
     "web": "No assets on web"
   },
   "card": {

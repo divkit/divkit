@@ -2,6 +2,7 @@
   "description": "Background in .svg format",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {

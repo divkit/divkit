@@ -2,6 +2,7 @@
   "description": "Image in .svg format with wrap_content size",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {
