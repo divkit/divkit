@@ -321,5 +321,13 @@
                 "version_added": "31.8.0"
             }
         }
+    }, {
+        "id": "action_typed_custom",
+        "name": "<code>custom</code> typed action",
+        "compat": {
+            "web": {
+                "version_added": "32.31.0"
+            }
+        }
     }]
 }

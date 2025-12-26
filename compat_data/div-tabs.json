@@ -52,5 +52,13 @@
                 "version_added": "31.9.0"
             }
         }
+    }, {
+        "id": "tabs_font_variation_settings",
+        "name": "Tabs <code>active_font_variation_settings</code> and <code>inactive_font_variation_settings</code> properties",
+        "compat": {
+            "web": {
+                "version_added": "32.31.0"
+            }
+        }
     }]
 }
