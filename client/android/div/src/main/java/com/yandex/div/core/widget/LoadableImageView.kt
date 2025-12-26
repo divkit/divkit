@@ -10,17 +10,17 @@ import android.os.Build
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import com.yandex.div.R
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
+import com.yandex.div.core.view2.divs.wrapsContent
 import com.yandex.div.core.view2.drawable.ScaleDrawable
 import com.yandex.div.internal.widget.AspectImageView
-import com.yandex.div.internal.widget.DivLayoutParams
 import java.util.concurrent.Future
+import androidx.core.graphics.drawable.toDrawable
 
 open class LoadableImageView(
     context: Context,
@@ -28,8 +28,6 @@ open class LoadableImageView(
     defStyleAttr: Int = 0
 ) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView, Releasable {
 
-    @Deprecated("Use imageTransform instead")
-    internal var currentBitmapWithoutFilters: Bitmap? = null
     internal var loadReference: LoadReference? = null
 
     private var imageChangeCallback: (() -> Unit)? = null
@@ -127,9 +125,9 @@ open class LoadableImageView(
         if (shouldScaleAccordingToDensity()) {
             bm?.density = DisplayMetrics.DENSITY_DEFAULT
         }
-        setImageDrawable(
-            BitmapDrawable(context.resources, bm)
-        )
+        val drawable = bm?.toDrawable(context.resources)
+        drawable?.setTargetDensity(DisplayMetrics.DENSITY_DEFAULT)
+        setImageDrawable(drawable)
     }
 
     override fun invalidateDrawable(dr: Drawable) {
@@ -172,8 +170,9 @@ open class LoadableImageView(
 
         this is BitmapDrawable -> this.apply {
             bitmap?.density = DisplayMetrics.DENSITY_DEFAULT
+            // Need to reset density to recalculate bitmap size
+            setTargetDensity(DisplayMetrics.DENSITY_DEFAULT)
             setTargetDensity(context.resources.displayMetrics)
-
         }
 
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && this is AnimatedImageDrawable -> {
@@ -185,13 +184,11 @@ open class LoadableImageView(
     }
 
     private fun shouldScaleAccordingToDensity(): Boolean {
-        val wrapsContent = wrapsSize(layoutParams.width) && wrapsSize(layoutParams.height)
-        return wrapsContent || imageScale == Scale.NO_SCALE
-    }
-
-    private fun wrapsSize(size: Int) = when (size) {
-        ViewGroup.LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> true
-        else -> false
+        return when {
+            currentBitmapWithoutFilters != null -> false
+            imageScale == Scale.NO_SCALE -> true
+            else -> wrapsContent()
+        }
     }
 
     fun setImageChangeCallback(callback: (() -> Unit)? = null) {

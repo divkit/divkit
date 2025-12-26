@@ -2,7 +2,6 @@ package com.yandex.div.core.util.bitmap
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.util.DisplayMetrics
 import com.yandex.div.core.util.bitmap.blur.BlurHelper
 
 internal abstract class BitmapEffectHelper : BlurHelper {
@@ -19,7 +18,6 @@ internal abstract class BitmapEffectHelper : BlurHelper {
             /* m = */ mirrorMatrix,
             /* filter = */ false
         )
-        result.density = DisplayMetrics.DENSITY_DEFAULT
         return result
     }
 }

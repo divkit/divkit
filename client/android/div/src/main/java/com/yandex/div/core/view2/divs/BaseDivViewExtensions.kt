@@ -3,7 +3,6 @@
 
 package com.yandex.div.core.view2.divs
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +13,6 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.annotation.MainThread
-import androidx.core.graphics.scale
 import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -22,10 +20,7 @@ import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.allSightActions
-import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.evaluateGravity
-import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -55,12 +50,10 @@ import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivEdgeInsets
-import com.yandex.div2.DivFilter
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
 import com.yandex.div2.DivSizeUnit
-import kotlin.math.max
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     if (insets == null) {
@@ -338,39 +331,6 @@ private fun AspectView.applyAspectRatio(ratio: Double?) {
     aspectRatio = ratio?.toFloat() ?: AspectView.DEFAULT_ASPECT_RATIO
 }
 
-internal fun View.applyBitmapFilters(
-    context: BindingContext,
-    bitmap: Bitmap,
-    filters: List<DivFilter>?,
-    actionAfterFilters: (Bitmap) -> Unit
-) {
-    if (filters.isNullOrEmpty()) {
-        actionAfterFilters(bitmap)
-        return
-    }
-
-    val resolver = context.expressionResolver
-    val bitmapEffectHelper = context.divView.div2Component.bitmapEffectHelper
-
-    doOnActualLayout {
-        val scale = max(height / bitmap.height.toFloat(), width / bitmap.width.toFloat())
-        var result = bitmap.scale((scale * bitmap.width).toInt(), (scale * bitmap.height).toInt(), false)
-        for (filter in filters) {
-            when (filter) {
-                is DivFilter.Blur -> {
-                    val radius = filter.value.radius.evaluate(resolver).toIntSafely().dpToPx(resources.displayMetrics)
-                    result = bitmapEffectHelper.blurBitmap(result, radius.toFloat())
-                }
-
-                is DivFilter.RtlMirror -> if (isLayoutRtl()) {
-                    result = bitmapEffectHelper.mirrorBitmap(result)
-                }
-            }
-        }
-        actionAfterFilters(result)
-    }
-}
-
 internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
     if (this.isFocused || !this.isInTouchMode) return
     focusTracker.removeFocusFromFocusedInput()
@@ -427,3 +387,16 @@ private fun ViewGroup.applyClipChildren(clip: Boolean) {
         parent.clipChildren = false
     }
 }
+
+internal fun View.wrapsContent() = layoutParams?.let { wrapsSize(it.width) && wrapsSize(it.height) } ?: false
+
+private fun wrapsSize(size: Int?): Boolean {
+    return when (size) {
+        ViewGroup.LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> true
+        else -> false
+    }
+}
+
+internal val View.availableWidth get() = (width - paddingLeft - paddingRight).coerceAtLeast(0)
+
+internal val View.availableHeight get() = (height - paddingTop - paddingBottom).coerceAtLeast(0)

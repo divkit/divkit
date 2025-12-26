@@ -558,7 +558,7 @@ internal class DivTextBinder @Inject constructor(
 
     private val TextView.realTextWidth: Int
         get() = minOf(
-            width - paddingRight - paddingLeft,
+            availableWidth,
             paint.measureText(text.toString()).toInt()
         )
 

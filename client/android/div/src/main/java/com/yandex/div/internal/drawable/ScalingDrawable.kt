@@ -31,6 +31,7 @@ internal class ScalingDrawable : Drawable() {
     var customScaleType = ScaleType.NO_SCALE
     var alignmentHorizontal = AlignmentHorizontal.LEFT
     var alignmentVertical = AlignmentVertical.TOP
+    var additionalScale: Float = 1f
     private var originalBitmap: Bitmap? = null
     private var originalPicture: Picture? = null
 
@@ -107,8 +108,8 @@ internal class ScalingDrawable : Drawable() {
                     yScale = xScale
                 }
                 ScaleType.NO_SCALE -> {
-                    xScale = 1f
-                    yScale = 1f
+                    xScale = additionalScale
+                    yScale = additionalScale
                 }
                 else -> Unit
             }

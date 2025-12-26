@@ -2,8 +2,10 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
@@ -11,10 +13,12 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.toCachedBitmap
+import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.util.toPorterDuffMode
 import com.yandex.div.core.view2.BindingContext
@@ -27,6 +31,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -159,35 +164,61 @@ internal class DivImageBinder @Inject constructor(
             }
         }
 
-        applyFiltersAndSetBitmap(bindingContext, newDiv.filters)
+        applyFiltersAndSetBitmap(bindingContext, newDiv, oldDiv)
 
-        val allFiltersAreConstant = newDiv.filters?.all { filter -> filter.isConstant() }
-        if (allFiltersAreConstant != false) {
+        val filters = newDiv.filters
+        if (filters.isNullOrEmpty()) return
+
+        val allFiltersAreConstant = filters.all { filter -> filter.isConstant() }
+        if (allFiltersAreConstant && newDiv.scale.isConstant()) {
             return
         }
 
-        val callback = { _: Any -> applyFiltersAndSetBitmap(bindingContext, newDiv.filters) }
-        newDiv.filters?.forEach { filter ->
+        val callback = { _: Any ->
+            currentBitmapWithoutFilters?.let {
+                applyScaleAndFiltersAndSetBitmap(bindingContext, it, newDiv.scale, filters)
+            }
+            Unit
+        }
+        filters.forEach { filter ->
             when (filter) {
                 is DivFilter.Blur ->
                     addSubscription(filter.value.radius.observe(bindingContext.expressionResolver, callback))
                 else -> Unit
             }
         }
+        newDiv.scale.observe(bindingContext.expressionResolver, callback)
     }
 
     private fun DivImageView.applyFiltersAndSetBitmap(
         bindingContext: BindingContext,
-        filters: List<DivFilter>?
+        newDiv: DivImage,
+        oldDiv: DivImage?,
     ) {
-        val bitmap = currentBitmapWithoutFilters
-        if (bitmap == null) {
-            setImageBitmap(bindingContext.divView, null)
-        } else {
-            applyBitmapFilters(bindingContext, bitmap, filters) {
-                setImageBitmap(bindingContext.divView, it)
-            }
+        if (!(isImageLoaded && newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)) &&
+            !(isImagePreview && newDiv.preview.equalsToConstant(oldDiv?.preview))) {
+            return
         }
+
+        if (newDiv.filters.isNullOrEmpty()) {
+            currentBitmapWithoutFilters?.let {
+                setImageBitmap(bindingContext.divView, it)
+                currentBitmapWithoutFilters = null
+            }
+            return
+        }
+
+        currentBitmapWithoutFilters?.let {
+            applyScaleAndFiltersAndSetBitmap(bindingContext, it, newDiv.scale, newDiv.filters)
+            return
+        }
+
+        val bitmap = when (val drawable = drawable) {
+            null -> return
+            is BitmapDrawable -> drawable.bitmap
+            else -> drawable.run { toBitmap(intrinsicWidth, intrinsicHeight) }
+        }
+        applyScaleAndFiltersAndSetBitmap(bindingContext, bitmap, newDiv.scale, newDiv.filters)
     }
 
     //endregion
@@ -239,8 +270,7 @@ internal class DivImageBinder @Inject constructor(
                 if (!isImageLoaded) {
                     when (it) {
                         is ImageRepresentation.Bitmap -> {
-                            currentBitmapWithoutFilters = it.value
-                            applyFiltersAndSetBitmap(bindingContext, div.filters)
+                            applyScaleAndFiltersAndSetBitmap(bindingContext, it.value, div.scale, div.filters)
                             previewLoaded()
                             applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                         }
@@ -311,6 +341,7 @@ internal class DivImageBinder @Inject constructor(
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
         resetImageLoaded()
+        currentBitmapWithoutFilters = null
         clearTint()
         loadReference?.cancel()
 
@@ -322,8 +353,7 @@ internal class DivImageBinder @Inject constructor(
             object : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
-                    currentBitmapWithoutFilters = cachedBitmap.bitmap
-                    applyFiltersAndSetBitmap(bindingContext, div.filters)
+                    applyScaleAndFiltersAndSetBitmap(bindingContext, cachedBitmap.bitmap, div.scale, div.filters)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
                     applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
@@ -355,6 +385,22 @@ internal class DivImageBinder @Inject constructor(
         bindingContext.divView.addLoadReference(reference, this)
         loadReference = reference
         return true
+    }
+
+    private fun DivImageView.applyScaleAndFiltersAndSetBitmap(
+        bindingContext: BindingContext,
+        bitmap: Bitmap,
+        divScale: Expression<DivImageScale>,
+        divFilters: List<DivFilter>?,
+    ) {
+        if (divFilters.isNullOrEmpty()) return setImageBitmap(bindingContext.divView, bitmap)
+
+        val scale = divScale.evaluate(bindingContext.expressionResolver)
+        val filters = divFilters.toFilters(bindingContext.expressionResolver)
+        currentBitmapWithoutFilters = bitmap
+        bitmap.applyScaleAndFilters(bindingContext.divView, this, scale, filters) {
+            setImageBitmap(bindingContext.divView, it)
+        }
     }
 
     /**

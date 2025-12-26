@@ -16,6 +16,7 @@ import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toColormap
+import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.toRadialGradientDrawableCenter
 import com.yandex.div.core.util.toRadialGradientDrawableRadius
@@ -26,8 +27,6 @@ import com.yandex.div.internal.graphics.checkIsNotEmpty
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBackground
-import com.yandex.div2.DivFilter
-import com.yandex.div2.DivImageBackground
 import javax.inject.Inject
 
 @DivScope
@@ -295,8 +294,7 @@ internal class DivBackgroundBinder @Inject constructor(
             imageUrl = value.imageUrl.evaluate(resolver),
             preloadRequired = value.preloadRequired.evaluate(resolver),
             scale = value.scale.evaluate(resolver),
-            filters = value.filters?.map { it.toBackgroundState(resolver) },
-            isVectorCompatible = value.isVectorCompatible(resolver)
+            filters = value.filters?.toFilters(resolver),
         )
         is DivBackground.Solid -> DivBackgroundState.Solid(
             color = value.color.evaluate(resolver)
@@ -310,19 +308,6 @@ internal class DivBackgroundBinder @Inject constructor(
                     value.insets.bottom.evaluate(resolver).toIntSafely()
             )
         )
-    }
-
-    /**
-     * Vector format ImageBackground doesn't support alpha and filters.
-     * If alpha is not 1.0 or filters are specified for ImageBackground, it should be rasterized.
-     */
-    private fun DivImageBackground.isVectorCompatible(resolver: ExpressionResolver) : Boolean {
-        return alpha.evaluate(resolver) == 1.0 && filters.isNullOrEmpty()
-    }
-
-    private fun DivFilter.toBackgroundState(resolver: ExpressionResolver) = when (this) {
-        is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver).toIntSafely(), this)
-        is DivFilter.RtlMirror -> DivBackgroundState.Image.Filter.RtlMirror(this)
     }
 
     @Suppress("UNCHECKED_CAST")

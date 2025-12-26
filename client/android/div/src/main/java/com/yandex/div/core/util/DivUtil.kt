@@ -13,6 +13,7 @@ import com.yandex.div.core.animation.EaseInterpolator
 import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.animation.reversed
+import com.yandex.div.core.util.bitmap.BitmapFilter
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.toPxF
@@ -40,6 +41,7 @@ import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDrawable
+import com.yandex.div2.DivFilter
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivGrid
@@ -393,4 +395,11 @@ internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVert
     DivContentAlignmentVertical.BOTTOM -> DivAlignmentVertical.BOTTOM
     DivContentAlignmentVertical.BASELINE -> DivAlignmentVertical.BASELINE
     else -> DivAlignmentVertical.TOP
+}
+
+internal fun List<DivFilter>.toFilters(resolver: ExpressionResolver) = map {
+    when (it) {
+        is DivFilter.Blur -> BitmapFilter.Blur(it.value.radius.evaluate(resolver).toIntSafely())
+        is DivFilter.RtlMirror -> BitmapFilter.RtlMirror()
+    }
 }

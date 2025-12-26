@@ -10,6 +10,8 @@ import androidx.annotation.UiThread
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.bitmap.BitmapFilter
+import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.view2.BindingContext
@@ -21,7 +23,6 @@ import com.yandex.div.internal.drawable.ScalingDrawable
 import com.yandex.div.internal.graphics.Colormap
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImageScale
 
 internal sealed class DivBackgroundState {
@@ -45,20 +46,8 @@ internal sealed class DivBackgroundState {
         val imageUrl: Uri,
         val preloadRequired: Boolean,
         val scale: DivImageScale,
-        val filters: List<Filter>?,
-        val isVectorCompatible: Boolean,
+        val filters: List<BitmapFilter>?,
     ): DivBackgroundState() {
-
-        sealed class Filter {
-
-            data class Blur(val radius: Int, val div: DivFilter.Blur) : Filter()
-            data class RtlMirror(val div: DivFilter.RtlMirror) : Filter()
-
-            fun toDiv(): DivFilter = when (this) {
-                is Blur -> div
-                is RtlMirror -> div
-            }
-        }
 
         fun getDivImageBackground(
             context: BindingContext,
@@ -72,17 +61,25 @@ internal sealed class DivBackgroundState {
                 contentAlignmentHorizontal.toHorizontalAlignment(target.isLayoutRtl())
             scaleDrawable.alignmentVertical = contentAlignmentVertical.toVerticalAlignment()
 
+            val density = target.resources.displayMetrics.density
+            scaleDrawable.additionalScale = density
+
             val url = imageUrl.toString()
+            val divView = context.divView
             val loadReference = imageLoader.loadImage(
                 url,
-                object : DivIdLoggingImageDownloadCallback(context.divView) {
+                object : DivIdLoggingImageDownloadCallback(divView) {
                     @UiThread
                     override fun onSuccess(cachedBitmap: CachedBitmap) {
-                        target.applyBitmapFilters(
-                            context,
-                            cachedBitmap.bitmap,
-                            filters?.map { it.toDiv() },
-                        ) { scaleDrawable.setBitmap(it) }
+                        val bitmap = cachedBitmap.bitmap
+                        if (filters.isNullOrEmpty()) {
+                            scaleDrawable.setBitmap(bitmap)
+                            return
+                        }
+                        bitmap.applyScaleAndFilters(divView, target, scale, filters) {
+                            scaleDrawable.additionalScale = bitmap.width * density / it.width
+                            scaleDrawable.setBitmap(it)
+                        }
                     }
 
                     @UiThread
@@ -95,7 +92,7 @@ internal sealed class DivBackgroundState {
                     }
                 }
             )
-            context.divView.addLoadReference(loadReference, target)
+            divView.addLoadReference(loadReference, target)
 
             return scaleDrawable
         }
@@ -128,6 +125,12 @@ internal sealed class DivBackgroundState {
                 else -> ScalingDrawable.AlignmentVertical.TOP
             }
         }
+
+        /**
+         * Vector format ImageBackground doesn't support alpha and filters.
+         * If alpha is not 1.0 or filters are specified for ImageBackground, it should be rasterized.
+         */
+        private val isVectorCompatible get() = alpha == 1.0 && filters.isNullOrEmpty()
     }
 
     data class Solid(

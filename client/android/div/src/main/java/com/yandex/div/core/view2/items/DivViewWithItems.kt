@@ -6,6 +6,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.view2.divs.availableHeight
+import com.yandex.div.core.view2.divs.availableWidth
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -256,8 +258,8 @@ private fun <T : RecyclerView> T.scrollTo(value: Int, sizeUnit: DivSizeUnit, met
 }
 
 private fun <T : RecyclerView> T.scrollRange() = when (linearLayoutManager?.orientation) {
-    RecyclerView.HORIZONTAL -> computeHorizontalScrollRange() - width + paddingLeft + paddingRight
-    else -> computeVerticalScrollRange() -height + paddingTop + paddingBottom
+    RecyclerView.HORIZONTAL -> computeHorizontalScrollRange() - availableWidth
+    else -> computeVerticalScrollRange() - availableHeight
 }
 
 private fun <T : RecyclerView> T.scrollOffset() = when (linearLayoutManager?.orientation) {
