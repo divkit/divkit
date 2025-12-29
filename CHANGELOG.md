@@ -1,10 +1,11 @@
 ## 32.32.0
 
 # Android Client:
-* Fixed debug views hiding (re-add views if something covers them).
+* Bugfix: stop capturing leaking contexts at image loaders.
 * Fixed Verification in StorageStatementExecutor.
 * Fixed background and border drawing in ellipsis when text not ellipsize.
 * Fixed background and border drawing in text ranges when custom height and alignment.
+* Fixed debug views hiding (re-add views if something covers them).
 
 # iOS Client:
 * Fixed display of ShimmerImagePreviewViewProvider.
