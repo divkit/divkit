@@ -253,7 +253,6 @@ internal class DivImageBinder @Inject constructor(
         synchronous: Boolean,
         errorCollector: ErrorCollector
     ) {
-        val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
         placeholderLoader.applyPlaceholder(
             this,
@@ -269,19 +268,32 @@ internal class DivImageBinder @Inject constructor(
             onSetPreview = {
                 if (!isImageLoaded) {
                     when (it) {
-                        is ImageRepresentation.Bitmap -> {
-                            applyScaleAndFiltersAndSetBitmap(bindingContext, it.value, div.scale, div.filters)
-                            previewLoaded()
-                            applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
-                        }
+                        is ImageRepresentation.Bitmap -> setPreview(bindingContext, it.value, div)
 
                         is ImageRepresentation.PictureDrawable -> {
-                            previewLoaded()
-                            setImageDrawable(bindingContext.divView, it.value)
+                            if (div.isVectorCompatible()) {
+                                previewLoaded()
+                                setImageDrawable(bindingContext.divView, it.value)
+                            } else {
+                                setPreview(bindingContext, it.value.toBitmap(), div)
+                            }
                         }
                     }
                 }
             }
+        )
+    }
+
+    private fun DivImageView.setPreview(
+        bindingContext: BindingContext,
+        bitmap: Bitmap,
+        div: DivImage,
+    ) {
+        applyScaleAndFiltersAndSetBitmap(bindingContext, bitmap, div.scale, div.filters)
+        previewLoaded()
+        applyTint(
+            div.tintColor?.evaluate(bindingContext.expressionResolver),
+            div.tintMode.evaluate(bindingContext.expressionResolver)
         )
     }
 

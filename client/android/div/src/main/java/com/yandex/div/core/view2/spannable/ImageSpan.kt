@@ -5,17 +5,18 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import androidx.annotation.Px
 import com.yandex.div.internal.spannable.PositionAwareReplacementSpan
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal class ImageSpan (
+internal class ImageSpan(
     image: Drawable?,
-    @Px private val width: Int,
-    @Px private val height: Int,
-    @Px private val lineHeight: Int = 0,
+    @param:Px private val width: Int,
+    @param:Px private val height: Int,
+    @param:Px private val lineHeight: Int = 0,
     private val alignment: TextVerticalAlignment,
     internal val accessibility: Accessibility?
 ) : PositionAwareReplacementSpan() {
@@ -94,8 +95,21 @@ internal class ImageSpan (
         boundsInText.offset(x, imageAscent)
 
         canvas.translate(x, imageAscent)
-        image.draw(canvas)
+        canvas.drawImage(image)
         canvas.restore()
+    }
+
+    private fun Canvas.drawImage(image: Drawable) {
+        if (image !is PictureDrawable) {
+            image.draw(this)
+            return
+        }
+
+        val scaleX = image.bounds.width().toFloat() / image.intrinsicWidth
+        val scaleY = image.bounds.height().toFloat() / image.intrinsicHeight
+        val scale = min(scaleX, scaleY)
+        scale(scale, scale)
+        drawPicture(image.picture)
     }
 
     fun getBoundsInText(rect: Rect): Rect {

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import android.os.AsyncTask
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -139,6 +140,8 @@ internal class DivGifImageBinder @Inject constructor(
                     imageLoaded()
                 }
 
+                override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
+
                 override fun onError() {
                     super.onError()
                     gifUrl = null
@@ -220,6 +223,8 @@ internal class DivGifImageBinder @Inject constructor(
                         previewLoaded()
                     }
                 }
+
+                override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
 
                 override fun onError() {
                     super.onError()

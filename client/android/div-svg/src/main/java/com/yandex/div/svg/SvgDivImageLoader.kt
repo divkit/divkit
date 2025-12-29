@@ -80,9 +80,7 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
     override fun loadImageBytes(
         imageUrl: String,
         callback: DivImageDownloadCallback
-    ): LoadReference = LoadReference {
-        loadImage(imageUrl, callback)
-    }
+    ): LoadReference = loadImage(imageUrl, callback)
 
     private fun createCallOrNull(imageUrl: String) : Call? {
         if (!(imageUrl.startsWith("http://") || imageUrl.startsWith("https://"))) {

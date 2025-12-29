@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import androidx.core.graphics.withSave
 import kotlin.math.roundToInt
 
@@ -17,7 +18,11 @@ internal class ScaleDrawable(
     override fun draw(canvas: Canvas) {
         canvas.withSave {
             scale(scaleX, scaleY)
-            child.draw(canvas)
+            if (child is PictureDrawable) {
+                canvas.drawPicture(child.picture)
+            } else {
+                child.draw(canvas)
+            }
         }
     }
 

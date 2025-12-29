@@ -1,8 +1,11 @@
 package com.yandex.div.core.view2.spannable
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -12,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.text.getSpans
 import androidx.core.view.ViewCompat
@@ -723,21 +727,38 @@ internal class SpannedTextBuilder @Inject constructor(
         private val textConsumer: TextConsumer? = null
     ) : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
 
-        override fun onSuccess(cachedBitmap: CachedBitmap) {
-            super.onSuccess(cachedBitmap)
+        override fun onSuccess(cachedBitmap: CachedBitmap) = onSuccess(cachedBitmap.bitmap)
 
+        private fun onSuccess(bitmap: Bitmap) {
             val resources = bindingContext.divView.resources
             val resolver = bindingContext.expressionResolver
             val tintColor = image.tintColor?.evaluate(resolver)
             val tintMode = image.tintMode.evaluate(resolver).toPorterDuffMode()
 
-            val imageDrawable = cachedBitmap.bitmap.toDrawable(resources)
+            val imageDrawable = bitmap.toDrawable(resources)
             if (tintColor != null) {
                 imageDrawable.colorFilter = PorterDuffColorFilter(tintColor, tintMode)
             }
-            imageSpan.image = imageDrawable
+            setImage(imageDrawable)
+        }
+
+        override fun onSuccess(drawable: Drawable) {
+            if (image.isVectorCompatible) {
+                setImage(drawable)
+                return
+            }
+
+            onSuccess(drawable.toBitmap())
+        }
+
+        override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
+
+        private fun setImage(image: Drawable) {
+            imageSpan.image = image
             textConsumer?.invoke(spannedText)
         }
+
+        private val DivText.Image.isVectorCompatible get() = tintColor == null
     }
 
     private companion object {
