@@ -89,19 +89,6 @@ final class DefaultPlayer: Player {
       .dispose(in: playerObservers)
 
     player
-      .playerStatusDidChange
-      .map { status -> PlayerEvent in
-        switch status {
-        case .readyToPlay:
-          .readyToPlay
-        default:
-          .notReadyToPlay
-        }
-      }
-      .addObserver { weakSelf?.eventPipe.send($0) }
-      .dispose(in: playerObservers)
-
-    player
       .playbackDidFinish
       .addObserver { weakSelf?.eventPipe.send(.end) }
       .dispose(in: playerObservers)

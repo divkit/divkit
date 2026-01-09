@@ -18,8 +18,6 @@ public enum PlayerEvent {
   case play
   case end
   case fatal
-  case readyToPlay
-  case notReadyToPlay
 
   case currentTimeUpdate(_ ms: Int)
   case durationUpdate(_ ms: Int)
