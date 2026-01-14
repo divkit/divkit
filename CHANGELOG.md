@@ -1,3 +1,14 @@
+## 32.33.0
+
+# Android Client:
+* Add support properties `substrate_div` and `bring_to_top_id` to `div-tooltip`.
+* Fix text `alignment_vertical` in ellipsis in api < 28.
+* Fixed `.svg` images scaling.
+* Fixed background image scale.
+* Fixed image blur after `div-data` rebind.
+* Supported `.svg` images inside `text`.
+
+
 ## 32.32.0
 
 # Android Client:
