@@ -17,8 +17,9 @@
             "type": "fixed",
             "value": 256
           },
-          "aspect": {
-            "ratio": 1
+          "height": {
+            "type": "fixed",
+            "value": 256
           },
           "transform": {
             "rotation": 90

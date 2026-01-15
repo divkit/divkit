@@ -1,6 +1,8 @@
 {
   "description": "Image with wrap_content width, aspect ratio 0.5, and min_height constraint of 600",
-  "platforms": [],
+  "platforms": [
+    "web"
+  ],
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

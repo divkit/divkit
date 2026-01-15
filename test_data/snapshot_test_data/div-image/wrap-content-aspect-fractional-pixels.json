@@ -2,7 +2,8 @@
   "description": "Image with wrap_content, aspect ratio 1.333 producing fractional pixels to test rounding behavior",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

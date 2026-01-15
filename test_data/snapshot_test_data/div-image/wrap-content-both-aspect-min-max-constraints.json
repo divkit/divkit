@@ -1,7 +1,8 @@
 {
   "description": "Image with wrap_content on both dimensions, aspect ratio 1.5, min_width 80, max_width 180, min_height 60, max_height 120",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

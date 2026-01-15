@@ -2,7 +2,8 @@
   "description": "Image with wrap_content height, aspect ratio 2.0, and max_width constraint of 150",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

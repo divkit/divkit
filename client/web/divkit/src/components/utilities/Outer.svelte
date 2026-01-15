@@ -593,7 +593,7 @@
             }
         }
 
-        if (type === 'match_parent' || type === 'wrap_content') {
+        if (!heightByAspect && (type === 'match_parent' || type === 'wrap_content')) {
             const height = $jsonHeight as (WrapContentSize | MatchParentSize);
             let min;
             let max;
@@ -1223,6 +1223,6 @@
         on:wheel
     >
         <!-- eslint-disable-next-line max-len -->
-        {#if hasSeparateBg}<OuterBackground {componentContext} direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+        {#if hasSeparateBg}<OuterBackground {componentContext} direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} {widthMin} {widthMax} {heightMin} {heightMax} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

@@ -27,10 +27,12 @@
               }
             ],
             "width": {
-              "type": "match_parent"
+              "type": "fixed",
+              "value": 256
             },
-            "aspect": {
-              "ratio": 1
+            "height": {
+              "type": "fixed",
+              "value": 256
             }
           }
         }

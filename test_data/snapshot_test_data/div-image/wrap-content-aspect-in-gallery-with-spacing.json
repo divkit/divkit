@@ -2,7 +2,8 @@
   "description": "Images with wrap_content, aspect ratio, and constraints in gallery with item spacing to test pixel-perfect alignment",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

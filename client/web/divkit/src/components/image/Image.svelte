@@ -53,10 +53,9 @@
     // Exactly "none", "scale-down" would not match android
     let scale = 'none';
     let position = '50% 50%';
-    let aspectPaddingTop = '0';
-    let aspectPaddingBottom = '0';
     let aspectContent = false;
     let aspectContentVAlign = 'center';
+    let aspectRatio: number | undefined = undefined;
     let tintColor: string | undefined = undefined;
     let tintMode: TintMode = 'source_in';
     let svgFilterId = '';
@@ -73,6 +72,7 @@
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
+        aspectRatio = undefined;
         aspectContent = false;
         scale = 'none';
         position = '50% 50%';
@@ -173,29 +173,21 @@
 
     $: {
         aspectContentVAlign = 'center';
-        aspectPaddingTop = '0';
-        aspectPaddingBottom = '0';
 
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
-            const height = 100 / Number(newRatio);
+            aspectRatio = newRatio;
             aspectContent = componentContext.json.width?.type === 'wrap_content';
 
             if (aspectContent) {
                 if ($jsonPosition.content_alignment_vertical === 'top') {
-                    aspectPaddingBottom = height.toFixed(2);
                     aspectContentVAlign = 'top';
                 } else if ($jsonPosition.content_alignment_vertical === 'bottom') {
-                    aspectPaddingTop = height.toFixed(2);
                     aspectContentVAlign = 'bottom';
-                } else {
-                    aspectPaddingTop = aspectPaddingBottom = (height / 2).toFixed(2);
                 }
-            } else {
-                aspectPaddingBottom = height.toFixed(2);
             }
         } else {
-            aspectPaddingBottom = '0';
+            aspectRatio = undefined;
         }
     }
 
@@ -235,7 +227,7 @@
     }
 
     $: mods = {
-        aspect: aspectPaddingBottom !== '0' || aspectPaddingTop !== '0',
+        aspect: aspectRatio !== undefined,
         'aspect-content': aspectContent,
         'aspect-valign': aspectContentVAlign !== 'center' ? aspectContentVAlign : undefined,
         'is-width-content': isWidthContent,
@@ -253,6 +245,7 @@
         'clip-path': filterClipPath || undefined,
         'object-fit': scale,
         'object-position': position,
+        'aspect-ratio': aspectRatio,
         filter: [
             state === STATE_LOADED && svgFilterId ? `url(#${svgFilterId})` : '',
             filter
@@ -286,42 +279,35 @@
         {componentContext}
         {layoutParams}
         customDescription={true}
+        style={{
+            'aspect-ratio': aspectRatio
+        }}
+        let:widthMin
+        let:widthMax
+        let:heightMin
+        let:heightMax
+        heightByAspect={aspectRatio !== undefined}
     >
         <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
         {#key svgFilterId}
-            {#if mods.aspect}
-                <span
-                    class={css['image__aspect-wrapper']}
-                    style:padding-top="{aspectPaddingTop}%"
-                    style:padding-bottom="{aspectPaddingBottom}%"
-                >
-                    <img
-                        bind:this={img}
-                        class={css.image__image}
-                        src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                        loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
-                        decoding={highPrority ? 'sync' : 'async'}
-                        style={makeStyle(style)}
-                        {alt}
-                        aria-hidden={alt ? null : 'true'}
-                        on:load={onLoad}
-                        on:error={onError}
-                    >
-                </span>
-            {:else}
-                <img
-                    bind:this={img}
-                    class={css.image__image}
-                    src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                    loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
-                    decoding={highPrority ? 'sync' : 'async'}
-                    style={makeStyle(style)}
-                    {alt}
-                    aria-hidden={alt ? null : 'true'}
-                    on:load={onLoad}
-                    on:error={onError}
-                >
-            {/if}
+            <img
+                bind:this={img}
+                class={css.image__image}
+                src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
+                loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
+                decoding={highPrority ? 'sync' : 'async'}
+                style={makeStyle({
+                    ...style,
+                    'min-width': isWidthContent ? widthMin : undefined,
+                    'max-width': isWidthContent ? widthMax : undefined,
+                    'min-height': isHeightContent ? heightMin : undefined,
+                    'max-height': isHeightContent ? heightMax : undefined
+                })}
+                {alt}
+                aria-hidden={alt ? null : 'true'}
+                on:load={onLoad}
+                on:error={onError}
+            >
         {/key}
     </Outer>
 {:else if process.env.DEVTOOL}

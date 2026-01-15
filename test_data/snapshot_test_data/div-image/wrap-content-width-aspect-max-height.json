@@ -1,6 +1,8 @@
 {
   "description": "Image with wrap_content width, aspect ratio 2.0, and max_height constraint of 100",
-  "platforms": [],
+  "platforms": [
+    "web"
+  ],
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
@@ -32,7 +34,7 @@
             },
             {
               "type": "text",
-              "text": "Expected: Image matches reference frame (200×100)",
+              "text": "Expected: Image matches reference frame (256×128)",
               "font_size": 10,
               "text_color": "#FF666666",
               "margins": {
@@ -85,11 +87,11 @@
                   "type": "container",
                   "width": {
                     "type": "fixed",
-                    "value": 200
+                    "value": 256
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 100
+                    "value": 128
                   },
                   "border": {
                     "stroke": {
@@ -106,7 +108,7 @@
                   "items": [
                     {
                       "type": "text",
-                      "text": "200×100",
+                      "text": "256×128",
                       "font_size": 12,
                       "text_color": "#FF00AA00",
                       "text_alignment_horizontal": "center",
