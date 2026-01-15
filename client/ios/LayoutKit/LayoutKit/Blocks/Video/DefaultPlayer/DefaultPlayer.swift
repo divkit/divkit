@@ -71,7 +71,11 @@ final class DefaultPlayer: Player {
   }
 
   private func configureObservers(for player: CorePlayer) {
+    #if swift(>=6.2)
+    weak let weakSelf = self
+    #else
     weak var weakSelf = self
+    #endif
 
     player
       .playbackStatusDidChange

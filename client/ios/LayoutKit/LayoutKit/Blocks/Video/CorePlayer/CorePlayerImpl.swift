@@ -119,7 +119,11 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   private func configureObservers(for player: AVPlayer) {
+    #if swift(>=6.2)
+    weak let weakSelf = self
+    #else
     weak var weakSelf = self
+    #endif
 
     observe(player, path: \.timeControlStatus) { _, timeControlStatus in
       weakSelf?.playbackStatusDidChange(timeControlStatus.playbackStatus)
@@ -132,7 +136,11 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   private func configureObservers(for item: AVPlayerItem) {
+    #if swift(>=6.2)
+    weak let weakSelf = self
+    #else
     weak var weakSelf = self
+    #endif
 
     observe(item, path: \.status) { item, _ in
       guard let self = weakSelf, self.player.currentItem == item else { return }
