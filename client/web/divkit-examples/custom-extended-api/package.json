@@ -10,6 +10,6 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@divkitframework/divkit": "28.7.0-canary-32fbf51c54e423975fe9c58ae1e2f400b086da92",
-    "express": "4.18.2"
+    "express": "4.22.1"
   }
 }
