@@ -1,0 +1,63 @@
+{
+    "description": "Action is_enabled should be checked right before its execution.",
+    "div_data": {
+        "card": {
+            "log_id": "test_card",
+            "variables": [
+                {
+                    "name": "target_action_executed",
+                    "type": "boolean",
+                    "value": false
+                },
+                {
+                    "name": "is_enabled",
+                    "type": "boolean",
+                    "value": false
+                }
+            ],
+            "variable_triggers": [
+                {
+                    "condition": "@{!is_enabled}",
+                    "actions": [
+                        {
+                            "log_id": "enable_further_actions",
+                            "url": "div-action://set_variable?name=is_enabled&value=true"
+                        },
+                        {
+                            "log_id": "target_action",
+                            "url": "div-action://set_variable?name=target_action_executed&value=true",
+                            "is_enabled": "@{is_enabled}"
+                        }
+                    ]
+                }
+            ],
+            "states": [
+                {
+                    "state_id": 0,
+                    "div": {
+                        "type": "text",
+                        "text": "Target action executed: @{target_action_executed}"
+                    }
+                }
+            ]
+        }
+    },
+    "cases": [
+        {
+            "div_actions": [],
+            "expected": [
+                {
+                    "type": "variable",
+                    "variable_name": "target_action_executed",
+                    "value": {
+                        "type": "boolean",
+                        "value": true
+                    }
+                }
+            ],
+            "platforms": [
+                "android"
+            ]
+        }
+    ]
+}
