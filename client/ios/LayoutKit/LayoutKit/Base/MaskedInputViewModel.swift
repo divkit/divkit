@@ -83,6 +83,12 @@ public class MaskedInputViewModel {
           string: string
         )
       }
+
+      let newInputData = self.maskValidator.formatted(rawText: newString)
+      if newInputData.rawText == self.rawText {
+        return // Changes rejected
+      }
+
       self.rawText = self.maskValidator.formatted(rawText: newString).rawText
       self.rawCursorPosition = newCursorPosition
     }.dispose(in: disposePool)
