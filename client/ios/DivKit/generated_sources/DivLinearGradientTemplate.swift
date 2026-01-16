@@ -25,8 +25,8 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ColorPointTemplate?) -> DeserializationResult<DivLinearGradient.ColorPoint> {
-      let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-      let positionValue = { parent?.position?.resolveValue(context: context, validator: ResolvedValue.positionValidator) ?? .noValue }()
+      let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+      let positionValue = parent?.position?.resolveValue(context: context, validator: ResolvedValue.positionValidator) ?? .noValue
       var errors = mergeErrors(
         colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
         positionValue.errorsOrWarnings?.map { .nestedObjectError(field: "position", error: $0) }
@@ -44,8 +44,8 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivLinearGradient.ColorPoint(
-        color: { colorNonNil }(),
-        position: { positionNonNil }()
+        color: colorNonNil,
+        position: positionNonNil
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -54,35 +54,21 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
-      var positionValue: DeserializationResult<Expression<Double>> = { parent?.position?.value() ?? .noValue }()
-      _ = {
-        // Each field is parsed in its own lambda to keep the stack size managable
-        // Otherwise the compiler will allocate stack for each intermediate variable
-        // upfront even when we don't actually visit a relevant branch
-        for (key, __dictValue) in context.templateData {
-          _ = {
-            if key == "color" {
-             colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-            }
-          }()
-          _ = {
-            if key == "position" {
-             positionValue = deserialize(__dictValue, validator: ResolvedValue.positionValidator).merged(with: positionValue)
-            }
-          }()
-          _ = {
-           if key == parent?.color?.link {
-             colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-            }
-          }()
-          _ = {
-           if key == parent?.position?.link {
-             positionValue = positionValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positionValidator) })
-            }
-          }()
+      var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+      var positionValue: DeserializationResult<Expression<Double>> = parent?.position?.value() ?? .noValue
+      context.templateData.forEach { key, __dictValue in
+        switch key {
+        case "color":
+          colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+        case "position":
+          positionValue = deserialize(__dictValue, validator: ResolvedValue.positionValidator).merged(with: positionValue)
+        case parent?.color?.link:
+          colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+        case parent?.position?.link:
+          positionValue = positionValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positionValidator) })
+        default: break
         }
-      }()
+      }
       var errors = mergeErrors(
         colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
         positionValue.errorsOrWarnings?.map { .nestedObjectError(field: "position", error: $0) }
@@ -100,8 +86,8 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivLinearGradient.ColorPoint(
-        color: { colorNonNil }(),
-        position: { positionNonNil }()
+        color: colorNonNil,
+        position: positionNonNil
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -143,18 +129,18 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivLinearGradientTemplate?) -> DeserializationResult<DivLinearGradient> {
-    let angleValue = { parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue }()
-    let colorMapValue = { parent?.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) ?? .noValue }()
-    let colorsValue = { parent?.colors?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue }()
+    let angleValue = parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue
+    let colorMapValue = parent?.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) ?? .noValue
+    let colorsValue = parent?.colors?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     let errors = mergeErrors(
       angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
       colorMapValue.errorsOrWarnings?.map { .nestedObjectError(field: "color_map", error: $0) },
       colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) }
     )
     let result = DivLinearGradient(
-      angle: { angleValue.value }(),
-      colorMap: { colorMapValue.value }(),
-      colors: { colorsValue.value }()
+      angle: angleValue.value,
+      colorMap: colorMapValue.value,
+      colors: colorsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -163,48 +149,28 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var angleValue: DeserializationResult<Expression<Int>> = { parent?.angle?.value() ?? .noValue }()
+    var angleValue: DeserializationResult<Expression<Int>> = parent?.angle?.value() ?? .noValue
     var colorMapValue: DeserializationResult<[DivLinearGradient.ColorPoint]> = .noValue
-    var colorsValue: DeserializationResult<[Expression<Color>]> = { parent?.colors?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "angle" {
-           angleValue = deserialize(__dictValue, validator: ResolvedValue.angleValidator).merged(with: angleValue)
-          }
-        }()
-        _ = {
-          if key == "color_map" {
-           colorMapValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self).merged(with: colorMapValue)
-          }
-        }()
-        _ = {
-          if key == "colors" {
-           colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
-          }
-        }()
-        _ = {
-         if key == parent?.angle?.link {
-           angleValue = angleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.angleValidator) })
-          }
-        }()
-        _ = {
-         if key == parent?.colorMap?.link {
-           colorMapValue = colorMapValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.colors?.link {
-           colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
-          }
-        }()
+    var colorsValue: DeserializationResult<[Expression<Color>]> = parent?.colors?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "angle":
+        angleValue = deserialize(__dictValue, validator: ResolvedValue.angleValidator).merged(with: angleValue)
+      case "color_map":
+        colorMapValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self).merged(with: colorMapValue)
+      case "colors":
+        colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
+      case parent?.angle?.link:
+        angleValue = angleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.angleValidator) })
+      case parent?.colorMap?.link:
+        colorMapValue = colorMapValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self) })
+      case parent?.colors?.link:
+        colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { colorMapValue = colorMapValue.merged(with: { parent.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) }) }()
+      _ = colorMapValue = colorMapValue.merged(with: { parent.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
@@ -212,9 +178,9 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
       colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) }
     )
     let result = DivLinearGradient(
-      angle: { angleValue.value }(),
-      colorMap: { colorMapValue.value }(),
-      colors: { colorsValue.value }()
+      angle: angleValue.value,
+      colorMap: colorMapValue.value,
+      colors: colorsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

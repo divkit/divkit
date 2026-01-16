@@ -27,7 +27,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Senda
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientRelativeRadiusTemplate?) -> DeserializationResult<DivRadialGradientRelativeRadius> {
-    let valueValue = { parent?.value?.resolveValue(context: context) ?? .noValue }()
+    let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -40,7 +40,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Senda
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRadialGradientRelativeRadius(
-      value: { valueNonNil }()
+      value: valueNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -49,24 +49,16 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Senda
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<Expression<DivRadialGradientRelativeRadius.Value>> = { parent?.value?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "value" {
-           valueValue = deserialize(__dictValue).merged(with: valueValue)
-          }
-        }()
-        _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var valueValue: DeserializationResult<Expression<DivRadialGradientRelativeRadius.Value>> = parent?.value?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "value":
+        valueValue = deserialize(__dictValue).merged(with: valueValue)
+      case parent?.value?.link:
+        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -79,7 +71,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Senda
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRadialGradientRelativeRadius(
-      value: { valueNonNil }()
+      value: valueNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

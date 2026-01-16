@@ -28,7 +28,7 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithArrayWithTransformTemplate?) -> DeserializationResult<EntityWithArrayWithTransform> {
-    let arrayValue = { parent?.array?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) ?? .noValue }()
+    let arrayValue = parent?.array?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) ?? .noValue
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
@@ -41,7 +41,7 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArrayWithTransform(
-      array: { arrayNonNil }()
+      array: arrayNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -50,24 +50,16 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var arrayValue: DeserializationResult<[Expression<Color>]> = { parent?.array?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "array" {
-           arrayValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator).merged(with: arrayValue)
-          }
-        }()
-        _ = {
-         if key == parent?.array?.link {
-           arrayValue = arrayValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) })
-          }
-        }()
+    var arrayValue: DeserializationResult<[Expression<Color>]> = parent?.array?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "array":
+        arrayValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator).merged(with: arrayValue)
+      case parent?.array?.link:
+        arrayValue = arrayValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) })
+      default: break
       }
-    }()
+    }
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
@@ -80,7 +72,7 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArrayWithTransform(
-      array: { arrayNonNil }()
+      array: arrayNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

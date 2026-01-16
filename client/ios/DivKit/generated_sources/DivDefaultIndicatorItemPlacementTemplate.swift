@@ -25,12 +25,12 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Send
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDefaultIndicatorItemPlacementTemplate?) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
-    let spaceBetweenCentersValue = { parent?.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let spaceBetweenCentersValue = parent?.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       spaceBetweenCentersValue.errorsOrWarnings?.map { .nestedObjectError(field: "space_between_centers", error: $0) }
     )
     let result = DivDefaultIndicatorItemPlacement(
-      spaceBetweenCenters: { spaceBetweenCentersValue.value }()
+      spaceBetweenCenters: spaceBetweenCentersValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -40,31 +40,23 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Send
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var spaceBetweenCentersValue: DeserializationResult<DivFixedSize> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "space_between_centers" {
-           spaceBetweenCentersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: spaceBetweenCentersValue)
-          }
-        }()
-        _ = {
-         if key == parent?.spaceBetweenCenters?.link {
-           spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "space_between_centers":
+        spaceBetweenCentersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: spaceBetweenCentersValue)
+      case parent?.spaceBetweenCenters?.link:
+        spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: { parent.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: { parent.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       spaceBetweenCentersValue.errorsOrWarnings?.map { .nestedObjectError(field: "space_between_centers", error: $0) }
     )
     let result = DivDefaultIndicatorItemPlacement(
-      spaceBetweenCenters: { spaceBetweenCentersValue.value }()
+      spaceBetweenCenters: spaceBetweenCentersValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

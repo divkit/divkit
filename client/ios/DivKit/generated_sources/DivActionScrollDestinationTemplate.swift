@@ -46,54 +46,40 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivActionScrollDestination>!
-      result = result ?? {
-        if case let .offsetDestinationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.offsetDestination(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.offsetDestination(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .indexDestinationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.indexDestination(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.indexDestination(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .startDestinationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.startDestination(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.startDestination(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .endDestinationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.endDestination(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.endDestination(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .offsetDestinationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.offsetDestination(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.offsetDestination(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .indexDestinationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.indexDestination(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.indexDestination(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .startDestinationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.startDestination(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.startDestination(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .endDestinationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.endDestination(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.endDestination(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivActionScrollDestination> {
@@ -101,46 +87,42 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivActionScrollDestination>?
-    result = result ?? { if type == OffsetDestination.type {
-      let result = { OffsetDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case OffsetDestination.type:
+      let result = OffsetDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.offsetDestination(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.offsetDestination(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == IndexDestination.type {
-      let result = { IndexDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case IndexDestination.type:
+      let result = IndexDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.indexDestination(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.indexDestination(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == StartDestination.type {
-      let result = { StartDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case StartDestination.type:
+      let result = StartDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.startDestination(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.startDestination(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == EndDestination.type {
-      let result = { EndDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case EndDestination.type:
+      let result = EndDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.endDestination(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.endDestination(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

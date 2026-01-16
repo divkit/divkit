@@ -36,60 +36,50 @@ public enum DivPivotTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivPivot>!
-      result = result ?? {
-        if case let .divPivotFixedTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divPivotFixed(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotFixed(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divPivotPercentageTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divPivotPercentage(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotPercentage(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
-  }
-
-  private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivPivot> {
-    let type = (context.templateData["type"] as? String ?? DivPivotFixed.type)
-      .flatMap { context.templateToType[$0] ?? $0 } 
-
-    return {
-      var result: DeserializationResult<DivPivot>?
-    result = result ?? { if type == DivPivotFixed.type {
-      let result = { DivPivotFixedTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch parent {
+    case let .divPivotFixedTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPivotFixed(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotFixed(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivPivotPercentage.type {
-      let result = { DivPivotPercentageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case let .divPivotPercentageTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPivotPercentage(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotPercentage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    }
+  }
+
+  private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivPivot> {
+    let type = (context.templateData["type"] as? String ?? DivPivotFixed.type)
+      .flatMap { context.templateToType[$0] ?? $0 } 
+
+    switch type {
+    case DivPivotFixed.type:
+      let result = DivPivotFixedTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPivotFixed(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotFixed(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivPivotPercentage.type:
+      let result = DivPivotPercentageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPivotPercentage(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPivotPercentage(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

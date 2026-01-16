@@ -36,32 +36,24 @@ public enum DivTooltipModeTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivTooltipMode>!
-      result = result ?? {
-        if case let .divTooltipModeNonModalTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divTooltipModeNonModal(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeNonModal(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divTooltipModeModalTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divTooltipModeModal(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeModal(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divTooltipModeNonModalTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divTooltipModeNonModal(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeNonModal(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divTooltipModeModalTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divTooltipModeModal(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeModal(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivTooltipMode> {
@@ -69,28 +61,26 @@ public enum DivTooltipModeTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivTooltipMode>?
-    result = result ?? { if type == DivTooltipModeNonModal.type {
-      let result = { DivTooltipModeNonModalTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivTooltipModeNonModal.type:
+      let result = DivTooltipModeNonModalTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTooltipModeNonModal(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeNonModal(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivTooltipModeModal.type {
-      let result = { DivTooltipModeModalTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivTooltipModeModal.type:
+      let result = DivTooltipModeModalTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTooltipModeModal(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divTooltipModeModal(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

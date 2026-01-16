@@ -36,32 +36,24 @@ public enum DivStrokeStyleTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivStrokeStyle>!
-      result = result ?? {
-        if case let .divStrokeStyleSolidTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divStrokeStyleSolid(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleSolid(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divStrokeStyleDashedTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divStrokeStyleDashed(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleDashed(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divStrokeStyleSolidTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divStrokeStyleSolid(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleSolid(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divStrokeStyleDashedTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divStrokeStyleDashed(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleDashed(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivStrokeStyle> {
@@ -69,28 +61,26 @@ public enum DivStrokeStyleTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivStrokeStyle>?
-    result = result ?? { if type == DivStrokeStyleSolid.type {
-      let result = { DivStrokeStyleSolidTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivStrokeStyleSolid.type:
+      let result = DivStrokeStyleSolidTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divStrokeStyleSolid(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleSolid(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivStrokeStyleDashed.type {
-      let result = { DivStrokeStyleDashedTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivStrokeStyleDashed.type:
+      let result = DivStrokeStyleDashedTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divStrokeStyleDashed(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divStrokeStyleDashed(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

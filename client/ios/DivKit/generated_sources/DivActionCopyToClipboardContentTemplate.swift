@@ -36,32 +36,24 @@ public enum DivActionCopyToClipboardContentTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivActionCopyToClipboardContent>!
-      result = result ?? {
-        if case let .contentTextTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.contentText(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.contentText(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .contentUrlTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.contentUrl(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.contentUrl(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .contentTextTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.contentText(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.contentText(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .contentUrlTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.contentUrl(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.contentUrl(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivActionCopyToClipboardContent> {
@@ -69,28 +61,26 @@ public enum DivActionCopyToClipboardContentTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivActionCopyToClipboardContent>?
-    result = result ?? { if type == ContentText.type {
-      let result = { ContentTextTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case ContentText.type:
+      let result = ContentTextTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.contentText(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.contentText(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == ContentUrl.type {
-      let result = { ContentUrlTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case ContentUrl.type:
+      let result = ContentUrlTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.contentUrl(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.contentUrl(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

@@ -41,11 +41,11 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextRangeMaskParticlesTemplate?) -> DeserializationResult<DivTextRangeMaskParticles> {
-    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-    let densityValue = { parent?.density?.resolveOptionalValue(context: context, validator: ResolvedValue.densityValidator) ?? .noValue }()
-    let isAnimatedValue = { parent?.isAnimated?.resolveOptionalValue(context: context) ?? .noValue }()
-    let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
-    let particleSizeValue = { parent?.particleSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let densityValue = parent?.density?.resolveOptionalValue(context: context, validator: ResolvedValue.densityValidator) ?? .noValue
+    let isAnimatedValue = parent?.isAnimated?.resolveOptionalValue(context: context) ?? .noValue
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
+    let particleSizeValue = parent?.particleSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
       densityValue.errorsOrWarnings?.map { .nestedObjectError(field: "density", error: $0) },
@@ -62,11 +62,11 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTextRangeMaskParticles(
-      color: { colorNonNil }(),
-      density: { densityValue.value }(),
-      isAnimated: { isAnimatedValue.value }(),
-      isEnabled: { isEnabledValue.value }(),
-      particleSize: { particleSizeValue.value }()
+      color: colorNonNil,
+      density: densityValue.value,
+      isAnimated: isAnimatedValue.value,
+      isEnabled: isEnabledValue.value,
+      particleSize: particleSizeValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -75,70 +75,38 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
-    var densityValue: DeserializationResult<Expression<Double>> = { parent?.density?.value() ?? .noValue }()
-    var isAnimatedValue: DeserializationResult<Expression<Bool>> = { parent?.isAnimated?.value() ?? .noValue }()
-    var isEnabledValue: DeserializationResult<Expression<Bool>> = { parent?.isEnabled?.value() ?? .noValue }()
+    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+    var densityValue: DeserializationResult<Expression<Double>> = parent?.density?.value() ?? .noValue
+    var isAnimatedValue: DeserializationResult<Expression<Bool>> = parent?.isAnimated?.value() ?? .noValue
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
     var particleSizeValue: DeserializationResult<DivFixedSize> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "color" {
-           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-          }
-        }()
-        _ = {
-          if key == "density" {
-           densityValue = deserialize(__dictValue, validator: ResolvedValue.densityValidator).merged(with: densityValue)
-          }
-        }()
-        _ = {
-          if key == "is_animated" {
-           isAnimatedValue = deserialize(__dictValue).merged(with: isAnimatedValue)
-          }
-        }()
-        _ = {
-          if key == "is_enabled" {
-           isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
-          }
-        }()
-        _ = {
-          if key == "particle_size" {
-           particleSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: particleSizeValue)
-          }
-        }()
-        _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-          }
-        }()
-        _ = {
-         if key == parent?.density?.link {
-           densityValue = densityValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.densityValidator) })
-          }
-        }()
-        _ = {
-         if key == parent?.isAnimated?.link {
-           isAnimatedValue = isAnimatedValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.particleSize?.link {
-           particleSizeValue = particleSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "color":
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+      case "density":
+        densityValue = deserialize(__dictValue, validator: ResolvedValue.densityValidator).merged(with: densityValue)
+      case "is_animated":
+        isAnimatedValue = deserialize(__dictValue).merged(with: isAnimatedValue)
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
+      case "particle_size":
+        particleSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: particleSizeValue)
+      case parent?.color?.link:
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+      case parent?.density?.link:
+        densityValue = densityValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.densityValidator) })
+      case parent?.isAnimated?.link:
+        isAnimatedValue = isAnimatedValue.merged(with: { deserialize(__dictValue) })
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+      case parent?.particleSize?.link:
+        particleSizeValue = particleSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { particleSizeValue = particleSizeValue.merged(with: { parent.particleSize?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = particleSizeValue = particleSizeValue.merged(with: { parent.particleSize?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
@@ -156,11 +124,11 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTextRangeMaskParticles(
-      color: { colorNonNil }(),
-      density: { densityValue.value }(),
-      isAnimated: { isAnimatedValue.value }(),
-      isEnabled: { isEnabledValue.value }(),
-      particleSize: { particleSizeValue.value }()
+      color: colorNonNil,
+      density: densityValue.value,
+      isAnimated: isAnimatedValue.value,
+      isEnabled: isEnabledValue.value,
+      particleSize: particleSizeValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

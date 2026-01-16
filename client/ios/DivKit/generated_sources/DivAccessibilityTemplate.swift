@@ -48,13 +48,13 @@ public final class DivAccessibilityTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAccessibilityTemplate?) -> DeserializationResult<DivAccessibility> {
-    let descriptionValue = { parent?.description?.resolveOptionalValue(context: context) ?? .noValue }()
-    let hintValue = { parent?.hint?.resolveOptionalValue(context: context) ?? .noValue }()
-    let isCheckedValue = { parent?.isChecked?.resolveOptionalValue(context: context) ?? .noValue }()
-    let modeValue = { parent?.mode?.resolveOptionalValue(context: context) ?? .noValue }()
-    let muteAfterActionValue = { parent?.muteAfterAction?.resolveOptionalValue(context: context) ?? .noValue }()
-    let stateDescriptionValue = { parent?.stateDescription?.resolveOptionalValue(context: context) ?? .noValue }()
-    let typeValue = { parent?.type?.resolveOptionalValue(context: context) ?? .noValue }()
+    let descriptionValue = parent?.description?.resolveOptionalValue(context: context) ?? .noValue
+    let hintValue = parent?.hint?.resolveOptionalValue(context: context) ?? .noValue
+    let isCheckedValue = parent?.isChecked?.resolveOptionalValue(context: context) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
+    let muteAfterActionValue = parent?.muteAfterAction?.resolveOptionalValue(context: context) ?? .noValue
+    let stateDescriptionValue = parent?.stateDescription?.resolveOptionalValue(context: context) ?? .noValue
+    let typeValue = parent?.type?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
       hintValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint", error: $0) },
@@ -65,13 +65,13 @@ public final class DivAccessibilityTemplate: TemplateValue, Sendable {
       typeValue.errorsOrWarnings?.map { .nestedObjectError(field: "type", error: $0) }
     )
     let result = DivAccessibility(
-      description: { descriptionValue.value }(),
-      hint: { hintValue.value }(),
-      isChecked: { isCheckedValue.value }(),
-      mode: { modeValue.value }(),
-      muteAfterAction: { muteAfterActionValue.value }(),
-      stateDescription: { stateDescriptionValue.value }(),
-      type: { typeValue.value }()
+      description: descriptionValue.value,
+      hint: hintValue.value,
+      isChecked: isCheckedValue.value,
+      mode: modeValue.value,
+      muteAfterAction: muteAfterActionValue.value,
+      stateDescription: stateDescriptionValue.value,
+      type: typeValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -80,90 +80,46 @@ public final class DivAccessibilityTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var descriptionValue: DeserializationResult<Expression<String>> = { parent?.description?.value() ?? .noValue }()
-    var hintValue: DeserializationResult<Expression<String>> = { parent?.hint?.value() ?? .noValue }()
-    var isCheckedValue: DeserializationResult<Expression<Bool>> = { parent?.isChecked?.value() ?? .noValue }()
-    var modeValue: DeserializationResult<Expression<DivAccessibility.Mode>> = { parent?.mode?.value() ?? .noValue }()
-    var muteAfterActionValue: DeserializationResult<Expression<Bool>> = { parent?.muteAfterAction?.value() ?? .noValue }()
-    var stateDescriptionValue: DeserializationResult<Expression<String>> = { parent?.stateDescription?.value() ?? .noValue }()
-    var typeValue: DeserializationResult<DivAccessibility.Kind> = { parent?.type?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "description" {
-           descriptionValue = deserialize(__dictValue).merged(with: descriptionValue)
-          }
-        }()
-        _ = {
-          if key == "hint" {
-           hintValue = deserialize(__dictValue).merged(with: hintValue)
-          }
-        }()
-        _ = {
-          if key == "is_checked" {
-           isCheckedValue = deserialize(__dictValue).merged(with: isCheckedValue)
-          }
-        }()
-        _ = {
-          if key == "mode" {
-           modeValue = deserialize(__dictValue).merged(with: modeValue)
-          }
-        }()
-        _ = {
-          if key == "mute_after_action" {
-           muteAfterActionValue = deserialize(__dictValue).merged(with: muteAfterActionValue)
-          }
-        }()
-        _ = {
-          if key == "state_description" {
-           stateDescriptionValue = deserialize(__dictValue).merged(with: stateDescriptionValue)
-          }
-        }()
-        _ = {
-          if key == "type" {
-           typeValue = deserialize(__dictValue).merged(with: typeValue)
-          }
-        }()
-        _ = {
-         if key == parent?.description?.link {
-           descriptionValue = descriptionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.hint?.link {
-           hintValue = hintValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.isChecked?.link {
-           isCheckedValue = isCheckedValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.muteAfterAction?.link {
-           muteAfterActionValue = muteAfterActionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.stateDescription?.link {
-           stateDescriptionValue = stateDescriptionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.type?.link {
-           typeValue = typeValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var descriptionValue: DeserializationResult<Expression<String>> = parent?.description?.value() ?? .noValue
+    var hintValue: DeserializationResult<Expression<String>> = parent?.hint?.value() ?? .noValue
+    var isCheckedValue: DeserializationResult<Expression<Bool>> = parent?.isChecked?.value() ?? .noValue
+    var modeValue: DeserializationResult<Expression<DivAccessibility.Mode>> = parent?.mode?.value() ?? .noValue
+    var muteAfterActionValue: DeserializationResult<Expression<Bool>> = parent?.muteAfterAction?.value() ?? .noValue
+    var stateDescriptionValue: DeserializationResult<Expression<String>> = parent?.stateDescription?.value() ?? .noValue
+    var typeValue: DeserializationResult<DivAccessibility.Kind> = parent?.type?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "description":
+        descriptionValue = deserialize(__dictValue).merged(with: descriptionValue)
+      case "hint":
+        hintValue = deserialize(__dictValue).merged(with: hintValue)
+      case "is_checked":
+        isCheckedValue = deserialize(__dictValue).merged(with: isCheckedValue)
+      case "mode":
+        modeValue = deserialize(__dictValue).merged(with: modeValue)
+      case "mute_after_action":
+        muteAfterActionValue = deserialize(__dictValue).merged(with: muteAfterActionValue)
+      case "state_description":
+        stateDescriptionValue = deserialize(__dictValue).merged(with: stateDescriptionValue)
+      case "type":
+        typeValue = deserialize(__dictValue).merged(with: typeValue)
+      case parent?.description?.link:
+        descriptionValue = descriptionValue.merged(with: { deserialize(__dictValue) })
+      case parent?.hint?.link:
+        hintValue = hintValue.merged(with: { deserialize(__dictValue) })
+      case parent?.isChecked?.link:
+        isCheckedValue = isCheckedValue.merged(with: { deserialize(__dictValue) })
+      case parent?.mode?.link:
+        modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+      case parent?.muteAfterAction?.link:
+        muteAfterActionValue = muteAfterActionValue.merged(with: { deserialize(__dictValue) })
+      case parent?.stateDescription?.link:
+        stateDescriptionValue = stateDescriptionValue.merged(with: { deserialize(__dictValue) })
+      case parent?.type?.link:
+        typeValue = typeValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     let errors = mergeErrors(
       descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
       hintValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint", error: $0) },
@@ -174,13 +130,13 @@ public final class DivAccessibilityTemplate: TemplateValue, Sendable {
       typeValue.errorsOrWarnings?.map { .nestedObjectError(field: "type", error: $0) }
     )
     let result = DivAccessibility(
-      description: { descriptionValue.value }(),
-      hint: { hintValue.value }(),
-      isChecked: { isCheckedValue.value }(),
-      mode: { modeValue.value }(),
-      muteAfterAction: { muteAfterActionValue.value }(),
-      stateDescription: { stateDescriptionValue.value }(),
-      type: { typeValue.value }()
+      description: descriptionValue.value,
+      hint: hintValue.value,
+      isChecked: isCheckedValue.value,
+      mode: modeValue.value,
+      muteAfterAction: muteAfterActionValue.value,
+      stateDescription: stateDescriptionValue.value,
+      type: typeValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

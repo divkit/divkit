@@ -33,9 +33,9 @@ public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCloudBackgroundTemplate?) -> DeserializationResult<DivCloudBackground> {
-    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-    let cornerRadiusValue = { parent?.cornerRadius?.resolveValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue }()
-    let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let cornerRadiusValue = parent?.cornerRadius?.resolveValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
+    let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
@@ -54,9 +54,9 @@ public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCloudBackground(
-      color: { colorNonNil }(),
-      cornerRadius: { cornerRadiusNonNil }(),
-      paddings: { paddingsValue.value }()
+      color: colorNonNil,
+      cornerRadius: cornerRadiusNonNil,
+      paddings: paddingsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -65,48 +65,28 @@ public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
-    var cornerRadiusValue: DeserializationResult<Expression<Int>> = { parent?.cornerRadius?.value() ?? .noValue }()
+    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+    var cornerRadiusValue: DeserializationResult<Expression<Int>> = parent?.cornerRadius?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "color" {
-           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-          }
-        }()
-        _ = {
-          if key == "corner_radius" {
-           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
-          }
-        }()
-        _ = {
-          if key == "paddings" {
-           paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
-          }
-        }()
-        _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-          }
-        }()
-        _ = {
-         if key == parent?.cornerRadius?.link {
-           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
-          }
-        }()
-        _ = {
-         if key == parent?.paddings?.link {
-           paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "color":
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+      case "corner_radius":
+        cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
+      case "paddings":
+        paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case parent?.color?.link:
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+      case parent?.cornerRadius?.link:
+        cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
+      case parent?.paddings?.link:
+        paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
@@ -126,9 +106,9 @@ public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCloudBackground(
-      color: { colorNonNil }(),
-      cornerRadius: { cornerRadiusNonNil }(),
-      paddings: { paddingsValue.value }()
+      color: colorNonNil,
+      cornerRadius: cornerRadiusNonNil,
+      paddings: paddingsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

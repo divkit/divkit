@@ -36,32 +36,24 @@ public enum DivRadialGradientCenterTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivRadialGradientCenter>!
-      result = result ?? {
-        if case let .divRadialGradientFixedCenterTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divRadialGradientFixedCenter(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientFixedCenter(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divRadialGradientRelativeCenterTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divRadialGradientRelativeCenter(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeCenter(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divRadialGradientFixedCenterTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divRadialGradientFixedCenter(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientFixedCenter(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divRadialGradientRelativeCenterTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divRadialGradientRelativeCenter(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeCenter(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientCenter> {
@@ -69,28 +61,26 @@ public enum DivRadialGradientCenterTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivRadialGradientCenter>?
-    result = result ?? { if type == DivRadialGradientFixedCenter.type {
-      let result = { DivRadialGradientFixedCenterTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivRadialGradientFixedCenter.type:
+      let result = DivRadialGradientFixedCenterTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divRadialGradientFixedCenter(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientFixedCenter(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivRadialGradientRelativeCenter.type {
-      let result = { DivRadialGradientRelativeCenterTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivRadialGradientRelativeCenter.type:
+      let result = DivRadialGradientRelativeCenterTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divRadialGradientRelativeCenter(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeCenter(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

@@ -111,197 +111,144 @@ public enum DivTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<Div>!
-      result = result ?? {
-        if case let .divImageTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divImage(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divImage(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divGifImageTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divGifImage(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divGifImage(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divTextTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divText(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divText(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divSeparatorTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divSeparator(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divSeparator(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divContainerTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divContainer(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divContainer(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divGridTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divGrid(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divGrid(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divGalleryTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divGallery(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divGallery(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divPagerTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divPager(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divPager(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divTabsTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divTabs(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divTabs(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divStateTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divState(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divState(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divCustomTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divCustom(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divCustom(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divIndicatorTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divIndicator(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divIndicator(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divSliderTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divSlider(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divSwitchTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divSwitch(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divSwitch(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divInputTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divInput(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divInput(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divSelectTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divSelect(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divSelect(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divVideoTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divVideo(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divVideo(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divImageTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divImage(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divImage(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divGifImageTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divGifImage(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGifImage(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divTextTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divText(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divText(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divSeparatorTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSeparator(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSeparator(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divContainerTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divContainer(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divContainer(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divGridTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divGrid(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGrid(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divGalleryTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divGallery(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGallery(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divPagerTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPager(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPager(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divTabsTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divTabs(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTabs(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divStateTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divState(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divState(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divCustomTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divCustom(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCustom(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divIndicatorTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divIndicator(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divIndicator(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divSliderTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSlider(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divSwitchTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSwitch(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSwitch(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divInputTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divInput(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInput(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divSelectTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSelect(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSelect(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divVideoTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divVideo(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divVideo(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<Div> {
@@ -309,163 +256,146 @@ public enum DivTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<Div>?
-    result = result ?? { if type == DivImage.type {
-      let result = { DivImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivImage.type:
+      let result = DivImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divImage(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivGifImage.type {
-      let result = { DivGifImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivGifImage.type:
+      let result = DivGifImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGifImage(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divGifImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivText.type {
-      let result = { DivTextTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivText.type:
+      let result = DivTextTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divText(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divText(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivSeparator.type {
-      let result = { DivSeparatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivSeparator.type:
+      let result = DivSeparatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSeparator(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divSeparator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivContainer.type {
-      let result = { DivContainerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivContainer.type:
+      let result = DivContainerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divContainer(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divContainer(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivGrid.type {
-      let result = { DivGridTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivGrid.type:
+      let result = DivGridTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGrid(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divGrid(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivGallery.type {
-      let result = { DivGalleryTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivGallery.type:
+      let result = DivGalleryTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGallery(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divGallery(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivPager.type {
-      let result = { DivPagerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivPager.type:
+      let result = DivPagerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPager(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPager(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivTabs.type {
-      let result = { DivTabsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivTabs.type:
+      let result = DivTabsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTabs(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divTabs(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivState.type {
-      let result = { DivStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivState.type:
+      let result = DivStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divState(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divState(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivCustom.type {
-      let result = { DivCustomTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivCustom.type:
+      let result = DivCustomTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divCustom(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divCustom(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivIndicator.type {
-      let result = { DivIndicatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivIndicator.type:
+      let result = DivIndicatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divIndicator(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divIndicator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivSlider.type {
-      let result = { DivSliderTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivSlider.type:
+      let result = DivSliderTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSlider(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivSwitch.type {
-      let result = { DivSwitchTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivSwitch.type:
+      let result = DivSwitchTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSwitch(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divSwitch(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivInput.type {
-      let result = { DivInputTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivInput.type:
+      let result = DivInputTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInput(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divInput(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivSelect.type {
-      let result = { DivSelectTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivSelect.type:
+      let result = DivSelectTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSelect(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divSelect(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivVideo.type {
-      let result = { DivVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivVideo.type:
+      let result = DivVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divVideo(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divVideo(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

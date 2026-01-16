@@ -25,7 +25,7 @@ public final class UrlValueTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: UrlValueTemplate?) -> DeserializationResult<UrlValue> {
-    let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
+    let valueValue = parent?.value?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class UrlValueTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = UrlValue(
-      value: { valueNonNil }()
+      value: valueNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,24 +47,16 @@ public final class UrlValueTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<Expression<URL>> = { parent?.value?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "value" {
-           valueValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: valueValue)
-          }
-        }()
-        _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
-          }
-        }()
+    var valueValue: DeserializationResult<Expression<URL>> = parent?.value?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "value":
+        valueValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: valueValue)
+      case parent?.value?.link:
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+      default: break
       }
-    }()
+    }
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -77,7 +69,7 @@ public final class UrlValueTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = UrlValue(
-      value: { valueNonNil }()
+      value: valueNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

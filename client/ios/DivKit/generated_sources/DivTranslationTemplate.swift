@@ -36,32 +36,24 @@ public enum DivTranslationTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivTranslation>!
-      result = result ?? {
-        if case let .divFixedTranslationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divFixedTranslation(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedTranslation(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divPercentageTranslationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divPercentageTranslation(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divPercentageTranslation(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divFixedTranslationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divFixedTranslation(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedTranslation(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divPercentageTranslationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPercentageTranslation(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPercentageTranslation(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivTranslation> {
@@ -69,28 +61,26 @@ public enum DivTranslationTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivTranslation>?
-    result = result ?? { if type == DivFixedTranslation.type {
-      let result = { DivFixedTranslationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivFixedTranslation.type:
+      let result = DivFixedTranslationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedTranslation(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedTranslation(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivPercentageTranslation.type {
-      let result = { DivPercentageTranslationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivPercentageTranslation.type:
+      let result = DivPercentageTranslationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPercentageTranslation(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPercentageTranslation(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

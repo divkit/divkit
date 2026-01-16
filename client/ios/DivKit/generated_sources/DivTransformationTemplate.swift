@@ -36,32 +36,24 @@ public enum DivTransformationTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivTransformation>!
-      result = result ?? {
-        if case let .divRotationTransformationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divRotationTransformation(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divRotationTransformation(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divTranslationTransformationTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divTranslationTransformation(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divTranslationTransformation(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divRotationTransformationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divRotationTransformation(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divRotationTransformation(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divTranslationTransformationTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divTranslationTransformation(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTranslationTransformation(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivTransformation> {
@@ -69,28 +61,26 @@ public enum DivTransformationTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivTransformation>?
-    result = result ?? { if type == DivRotationTransformation.type {
-      let result = { DivRotationTransformationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivRotationTransformation.type:
+      let result = DivRotationTransformationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divRotationTransformation(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divRotationTransformation(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivTranslationTransformation.type {
-      let result = { DivTranslationTransformationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivTranslationTransformation.type:
+      let result = DivTranslationTransformationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTranslationTransformation(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divTranslationTransformation(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

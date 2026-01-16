@@ -41,11 +41,11 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: PropertyVariableTemplate?) -> DeserializationResult<PropertyVariable> {
-    let getValue = { parent?.get?.resolveValue(context: context) ?? .noValue }()
-    let nameValue = { parent?.name?.resolveValue(context: context) ?? .noValue }()
-    let newValueVariableNameValue = { parent?.newValueVariableName?.resolveOptionalValue(context: context) ?? .noValue }()
-    let setValue = { parent?.set?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let valueTypeValue = { parent?.valueType?.resolveValue(context: context) ?? .noValue }()
+    let getValue = parent?.get?.resolveValue(context: context) ?? .noValue
+    let nameValue = parent?.name?.resolveValue(context: context) ?? .noValue
+    let newValueVariableNameValue = parent?.newValueVariableName?.resolveOptionalValue(context: context) ?? .noValue
+    let setValue = parent?.set?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let valueTypeValue = parent?.valueType?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       getValue.errorsOrWarnings?.map { .nestedObjectError(field: "get", error: $0) },
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
@@ -70,11 +70,11 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = PropertyVariable(
-      get: { getNonNil }(),
-      name: { nameNonNil }(),
-      newValueVariableName: { newValueVariableNameValue.value }(),
-      set: { setValue.value }(),
-      valueType: { valueTypeNonNil }()
+      get: getNonNil,
+      name: nameNonNil,
+      newValueVariableName: newValueVariableNameValue.value,
+      set: setValue.value,
+      valueType: valueTypeNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -83,70 +83,38 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var getValue: DeserializationResult<Expression<String>> = { parent?.get?.value() ?? .noValue }()
-    var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
-    var newValueVariableNameValue: DeserializationResult<String> = { parent?.newValueVariableName?.value() ?? .noValue }()
+    var getValue: DeserializationResult<Expression<String>> = parent?.get?.value() ?? .noValue
+    var nameValue: DeserializationResult<String> = parent?.name?.value() ?? .noValue
+    var newValueVariableNameValue: DeserializationResult<String> = parent?.newValueVariableName?.value() ?? .noValue
     var setValue: DeserializationResult<[DivAction]> = .noValue
-    var valueTypeValue: DeserializationResult<DivEvaluableType> = { parent?.valueType?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "get" {
-           getValue = deserialize(__dictValue).merged(with: getValue)
-          }
-        }()
-        _ = {
-          if key == "name" {
-           nameValue = deserialize(__dictValue).merged(with: nameValue)
-          }
-        }()
-        _ = {
-          if key == "new_value_variable_name" {
-           newValueVariableNameValue = deserialize(__dictValue).merged(with: newValueVariableNameValue)
-          }
-        }()
-        _ = {
-          if key == "set" {
-           setValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: setValue)
-          }
-        }()
-        _ = {
-          if key == "value_type" {
-           valueTypeValue = deserialize(__dictValue).merged(with: valueTypeValue)
-          }
-        }()
-        _ = {
-         if key == parent?.get?.link {
-           getValue = getValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.newValueVariableName?.link {
-           newValueVariableNameValue = newValueVariableNameValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.set?.link {
-           setValue = setValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.valueType?.link {
-           valueTypeValue = valueTypeValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var valueTypeValue: DeserializationResult<DivEvaluableType> = parent?.valueType?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "get":
+        getValue = deserialize(__dictValue).merged(with: getValue)
+      case "name":
+        nameValue = deserialize(__dictValue).merged(with: nameValue)
+      case "new_value_variable_name":
+        newValueVariableNameValue = deserialize(__dictValue).merged(with: newValueVariableNameValue)
+      case "set":
+        setValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: setValue)
+      case "value_type":
+        valueTypeValue = deserialize(__dictValue).merged(with: valueTypeValue)
+      case parent?.get?.link:
+        getValue = getValue.merged(with: { deserialize(__dictValue) })
+      case parent?.name?.link:
+        nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+      case parent?.newValueVariableName?.link:
+        newValueVariableNameValue = newValueVariableNameValue.merged(with: { deserialize(__dictValue) })
+      case parent?.set?.link:
+        setValue = setValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+      case parent?.valueType?.link:
+        valueTypeValue = valueTypeValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { setValue = setValue.merged(with: { parent.set?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = setValue = setValue.merged(with: { parent.set?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       getValue.errorsOrWarnings?.map { .nestedObjectError(field: "get", error: $0) },
@@ -172,11 +140,11 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = PropertyVariable(
-      get: { getNonNil }(),
-      name: { nameNonNil }(),
-      newValueVariableName: { newValueVariableNameValue.value }(),
-      set: { setValue.value }(),
-      valueType: { valueTypeNonNil }()
+      get: getNonNil,
+      name: nameNonNil,
+      newValueVariableName: newValueVariableNameValue.value,
+      set: setValue.value,
+      valueType: valueTypeNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

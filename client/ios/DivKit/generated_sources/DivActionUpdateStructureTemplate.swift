@@ -33,9 +33,9 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionUpdateStructureTemplate?) -> DeserializationResult<DivActionUpdateStructure> {
-    let pathValue = { parent?.path?.resolveValue(context: context, validator: ResolvedValue.pathValidator) ?? .noValue }()
-    let valueValue = { parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let variableNameValue = { parent?.variableName?.resolveValue(context: context) ?? .noValue }()
+    let pathValue = parent?.path?.resolveValue(context: context, validator: ResolvedValue.pathValidator) ?? .noValue
+    let valueValue = parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       pathValue.errorsOrWarnings?.map { .nestedObjectError(field: "path", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
@@ -58,9 +58,9 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionUpdateStructure(
-      path: { pathNonNil }(),
-      value: { valueNonNil }(),
-      variableName: { variableNameNonNil }()
+      path: pathNonNil,
+      value: valueNonNil,
+      variableName: variableNameNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -69,48 +69,28 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var pathValue: DeserializationResult<Expression<String>> = { parent?.path?.value() ?? .noValue }()
+    var pathValue: DeserializationResult<Expression<String>> = parent?.path?.value() ?? .noValue
     var valueValue: DeserializationResult<DivTypedValue> = .noValue
-    var variableNameValue: DeserializationResult<Expression<String>> = { parent?.variableName?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "path" {
-           pathValue = deserialize(__dictValue, validator: ResolvedValue.pathValidator).merged(with: pathValue)
-          }
-        }()
-        _ = {
-          if key == "value" {
-           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
-          }
-        }()
-        _ = {
-          if key == "variable_name" {
-           variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
-          }
-        }()
-        _ = {
-         if key == parent?.path?.link {
-           pathValue = pathValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pathValidator) })
-          }
-        }()
-        _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.variableName?.link {
-           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var variableNameValue: DeserializationResult<Expression<String>> = parent?.variableName?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "path":
+        pathValue = deserialize(__dictValue, validator: ResolvedValue.pathValidator).merged(with: pathValue)
+      case "value":
+        valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
+      case "variable_name":
+        variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
+      case parent?.path?.link:
+        pathValue = pathValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pathValidator) })
+      case parent?.value?.link:
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+      case parent?.variableName?.link:
+        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) }) }()
+      _ = valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       pathValue.errorsOrWarnings?.map { .nestedObjectError(field: "path", error: $0) },
@@ -134,9 +114,9 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionUpdateStructure(
-      path: { pathNonNil }(),
-      value: { valueNonNil }(),
-      variableName: { variableNameNonNil }()
+      path: pathNonNil,
+      value: valueNonNil,
+      variableName: variableNameNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

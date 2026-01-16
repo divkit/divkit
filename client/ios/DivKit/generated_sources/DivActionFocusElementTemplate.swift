@@ -25,7 +25,7 @@ public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionFocusElementTemplate?) -> DeserializationResult<DivActionFocusElement> {
-    let elementIdValue = { parent?.elementId?.resolveValue(context: context) ?? .noValue }()
+    let elementIdValue = parent?.elementId?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       elementIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "element_id", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionFocusElement(
-      elementId: { elementIdNonNil }()
+      elementId: elementIdNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,24 +47,16 @@ public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var elementIdValue: DeserializationResult<Expression<String>> = { parent?.elementId?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "element_id" {
-           elementIdValue = deserialize(__dictValue).merged(with: elementIdValue)
-          }
-        }()
-        _ = {
-         if key == parent?.elementId?.link {
-           elementIdValue = elementIdValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var elementIdValue: DeserializationResult<Expression<String>> = parent?.elementId?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "element_id":
+        elementIdValue = deserialize(__dictValue).merged(with: elementIdValue)
+      case parent?.elementId?.link:
+        elementIdValue = elementIdValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     var errors = mergeErrors(
       elementIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "element_id", error: $0) }
     )
@@ -77,7 +69,7 @@ public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionFocusElement(
-      elementId: { elementIdNonNil }()
+      elementId: elementIdNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

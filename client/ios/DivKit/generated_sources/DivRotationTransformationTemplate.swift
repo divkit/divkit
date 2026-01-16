@@ -33,9 +33,9 @@ public final class DivRotationTransformationTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRotationTransformationTemplate?) -> DeserializationResult<DivRotationTransformation> {
-    let angleValue = { parent?.angle?.resolveValue(context: context) ?? .noValue }()
-    let pivotXValue = { parent?.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let pivotYValue = { parent?.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let angleValue = parent?.angle?.resolveValue(context: context) ?? .noValue
+    let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
       pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },
@@ -50,9 +50,9 @@ public final class DivRotationTransformationTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRotationTransformation(
-      angle: { angleNonNil }(),
-      pivotX: { pivotXValue.value }(),
-      pivotY: { pivotYValue.value }()
+      angle: angleNonNil,
+      pivotX: pivotXValue.value,
+      pivotY: pivotYValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -61,49 +61,29 @@ public final class DivRotationTransformationTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var angleValue: DeserializationResult<Expression<Double>> = { parent?.angle?.value() ?? .noValue }()
+    var angleValue: DeserializationResult<Expression<Double>> = parent?.angle?.value() ?? .noValue
     var pivotXValue: DeserializationResult<DivPivot> = .noValue
     var pivotYValue: DeserializationResult<DivPivot> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "angle" {
-           angleValue = deserialize(__dictValue).merged(with: angleValue)
-          }
-        }()
-        _ = {
-          if key == "pivot_x" {
-           pivotXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).merged(with: pivotXValue)
-          }
-        }()
-        _ = {
-          if key == "pivot_y" {
-           pivotYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).merged(with: pivotYValue)
-          }
-        }()
-        _ = {
-         if key == parent?.angle?.link {
-           angleValue = angleValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.pivotX?.link {
-           pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.pivotY?.link {
-           pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "angle":
+        angleValue = deserialize(__dictValue).merged(with: angleValue)
+      case "pivot_x":
+        pivotXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).merged(with: pivotXValue)
+      case "pivot_y":
+        pivotYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).merged(with: pivotYValue)
+      case parent?.angle?.link:
+        angleValue = angleValue.merged(with: { deserialize(__dictValue) })
+      case parent?.pivotX?.link:
+        pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+      case parent?.pivotY?.link:
+        pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { pivotXValue = pivotXValue.merged(with: { parent.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { pivotYValue = pivotYValue.merged(with: { parent.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = pivotXValue = pivotXValue.merged(with: { parent.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = pivotYValue = pivotYValue.merged(with: { parent.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
@@ -119,9 +99,9 @@ public final class DivRotationTransformationTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRotationTransformation(
-      angle: { angleNonNil }(),
-      pivotX: { pivotXValue.value }(),
-      pivotY: { pivotYValue.value }()
+      angle: angleNonNil,
+      pivotX: pivotXValue.value,
+      pivotY: pivotYValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

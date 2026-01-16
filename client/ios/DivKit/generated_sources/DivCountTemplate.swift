@@ -36,32 +36,24 @@ public enum DivCountTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivCount>!
-      result = result ?? {
-        if case let .divInfinityCountTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divInfinityCount(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divInfinityCount(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .divFixedCountTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.divFixedCount(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedCount(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .divInfinityCountTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divInfinityCount(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInfinityCount(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divFixedCountTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divFixedCount(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedCount(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivCount> {
@@ -69,28 +61,26 @@ public enum DivCountTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivCount>?
-    result = result ?? { if type == DivInfinityCount.type {
-      let result = { DivInfinityCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case DivInfinityCount.type:
+      let result = DivInfinityCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInfinityCount(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divInfinityCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DivFixedCount.type {
-      let result = { DivFixedCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DivFixedCount.type:
+      let result = DivFixedCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedCount(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

@@ -20,12 +20,12 @@ public final class DivTextRangeMaskBaseTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextRangeMaskBaseTemplate?) -> DeserializationResult<DivTextRangeMaskBase> {
-    let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) }
     )
     let result = DivTextRangeMaskBase(
-      isEnabled: { isEnabledValue.value }()
+      isEnabled: isEnabledValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -34,29 +34,21 @@ public final class DivTextRangeMaskBaseTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var isEnabledValue: DeserializationResult<Expression<Bool>> = { parent?.isEnabled?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "is_enabled" {
-           isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
-          }
-        }()
-        _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     let errors = mergeErrors(
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) }
     )
     let result = DivTextRangeMaskBase(
-      isEnabled: { isEnabledValue.value }()
+      isEnabled: isEnabledValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

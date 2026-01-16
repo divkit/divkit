@@ -71,109 +71,80 @@ public enum DivVariableTemplate: TemplateValue, Sendable {
       }
     }
 
-    return {
-      var result: DeserializationResult<DivVariable>!
-      result = result ?? {
-        if case let .stringVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.stringVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.stringVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .numberVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.numberVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.numberVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .integerVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.integerVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.integerVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .booleanVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.booleanVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.booleanVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .colorVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.colorVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.colorVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .urlVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.urlVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.urlVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .dictVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.dictVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.dictVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .arrayVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.arrayVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.arrayVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      result = result ?? {
-        if case let .propertyVariableTemplate(value) = parent {
-          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-          switch result {
-            case let .success(value): return .success(.propertyVariable(value))
-            case let .partialSuccess(value, warnings): return .partialSuccess(.propertyVariable(value), warnings: warnings)
-            case let .failure(errors): return .failure(errors)
-            case .noValue: return .noValue
-          }
-        } else { return nil }
-      }()
-      return result
-    }()
+    switch parent {
+    case let .stringVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.stringVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.stringVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .numberVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.numberVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.numberVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .integerVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.integerVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.integerVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .booleanVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.booleanVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.booleanVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .colorVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.colorVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.colorVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .urlVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.urlVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.urlVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .dictVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.dictVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.dictVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .arrayVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.arrayVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.arrayVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .propertyVariableTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.propertyVariable(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.propertyVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    }
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivVariable> {
@@ -181,91 +152,82 @@ public enum DivVariableTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    return {
-      var result: DeserializationResult<DivVariable>?
-    result = result ?? { if type == StringVariable.type {
-      let result = { StringVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    switch type {
+    case StringVariable.type:
+      let result = StringVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.stringVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.stringVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == NumberVariable.type {
-      let result = { NumberVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case NumberVariable.type:
+      let result = NumberVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.numberVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.numberVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == IntegerVariable.type {
-      let result = { IntegerVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case IntegerVariable.type:
+      let result = IntegerVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.integerVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.integerVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == BooleanVariable.type {
-      let result = { BooleanVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case BooleanVariable.type:
+      let result = BooleanVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.booleanVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.booleanVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == ColorVariable.type {
-      let result = { ColorVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case ColorVariable.type:
+      let result = ColorVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.colorVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.colorVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == UrlVariable.type {
-      let result = { UrlVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case UrlVariable.type:
+      let result = UrlVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.urlVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.urlVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == DictVariable.type {
-      let result = { DictVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case DictVariable.type:
+      let result = DictVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.dictVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.dictVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == ArrayVariable.type {
-      let result = { ArrayVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case ArrayVariable.type:
+      let result = ArrayVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.arrayVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.arrayVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    result = result ?? { if type == PropertyVariable.type {
-      let result = { PropertyVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+    case PropertyVariable.type:
+      let result = PropertyVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.propertyVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.propertyVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    } else { return nil } }()
-    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }()
+    default:
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
   }
 }
 

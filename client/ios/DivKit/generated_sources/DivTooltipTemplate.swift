@@ -70,19 +70,19 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTooltipTemplate?) -> DeserializationResult<DivTooltip> {
-    let animationInValue = { parent?.animationIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let animationOutValue = { parent?.animationOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let backgroundAccessibilityDescriptionValue = { parent?.backgroundAccessibilityDescription?.resolveOptionalValue(context: context) ?? .noValue }()
-    let bringToTopIdValue = { parent?.bringToTopId?.resolveOptionalValue(context: context) ?? .noValue }()
-    let closeByTapOutsideValue = { parent?.closeByTapOutside?.resolveOptionalValue(context: context) ?? .noValue }()
-    let divValue = { parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let durationValue = { parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue }()
-    let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
-    let modeValue = { parent?.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let offsetValue = { parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let positionValue = { parent?.position?.resolveValue(context: context) ?? .noValue }()
-    let substrateDivValue = { parent?.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let tapOutsideActionsValue = { parent?.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let animationInValue = parent?.animationIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let animationOutValue = parent?.animationOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let backgroundAccessibilityDescriptionValue = parent?.backgroundAccessibilityDescription?.resolveOptionalValue(context: context) ?? .noValue
+    let bringToTopIdValue = parent?.bringToTopId?.resolveOptionalValue(context: context) ?? .noValue
+    let closeByTapOutsideValue = parent?.closeByTapOutside?.resolveOptionalValue(context: context) ?? .noValue
+    let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
+    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let offsetValue = parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let positionValue = parent?.position?.resolveValue(context: context) ?? .noValue
+    let substrateDivValue = parent?.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let tapOutsideActionsValue = parent?.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       animationInValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_in", error: $0) },
       animationOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_out", error: $0) },
@@ -115,19 +115,19 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTooltip(
-      animationIn: { animationInValue.value }(),
-      animationOut: { animationOutValue.value }(),
-      backgroundAccessibilityDescription: { backgroundAccessibilityDescriptionValue.value }(),
-      bringToTopId: { bringToTopIdValue.value }(),
-      closeByTapOutside: { closeByTapOutsideValue.value }(),
-      div: { divNonNil }(),
-      duration: { durationValue.value }(),
-      id: { idNonNil }(),
-      mode: { modeValue.value }(),
-      offset: { offsetValue.value }(),
-      position: { positionNonNil }(),
-      substrateDiv: { substrateDivValue.value }(),
-      tapOutsideActions: { tapOutsideActionsValue.value }()
+      animationIn: animationInValue.value,
+      animationOut: animationOutValue.value,
+      backgroundAccessibilityDescription: backgroundAccessibilityDescriptionValue.value,
+      bringToTopId: bringToTopIdValue.value,
+      closeByTapOutside: closeByTapOutsideValue.value,
+      div: divNonNil,
+      duration: durationValue.value,
+      id: idNonNil,
+      mode: modeValue.value,
+      offset: offsetValue.value,
+      position: positionNonNil,
+      substrateDiv: substrateDivValue.value,
+      tapOutsideActions: tapOutsideActionsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -138,162 +138,82 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     }
     var animationInValue: DeserializationResult<DivAnimation> = .noValue
     var animationOutValue: DeserializationResult<DivAnimation> = .noValue
-    var backgroundAccessibilityDescriptionValue: DeserializationResult<Expression<String>> = { parent?.backgroundAccessibilityDescription?.value() ?? .noValue }()
-    var bringToTopIdValue: DeserializationResult<String> = { parent?.bringToTopId?.value() ?? .noValue }()
-    var closeByTapOutsideValue: DeserializationResult<Expression<Bool>> = { parent?.closeByTapOutside?.value() ?? .noValue }()
+    var backgroundAccessibilityDescriptionValue: DeserializationResult<Expression<String>> = parent?.backgroundAccessibilityDescription?.value() ?? .noValue
+    var bringToTopIdValue: DeserializationResult<String> = parent?.bringToTopId?.value() ?? .noValue
+    var closeByTapOutsideValue: DeserializationResult<Expression<Bool>> = parent?.closeByTapOutside?.value() ?? .noValue
     var divValue: DeserializationResult<Div> = .noValue
-    var durationValue: DeserializationResult<Expression<Int>> = { parent?.duration?.value() ?? .noValue }()
-    var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
+    var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
+    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var modeValue: DeserializationResult<DivTooltipMode> = .noValue
     var offsetValue: DeserializationResult<DivPoint> = .noValue
-    var positionValue: DeserializationResult<Expression<DivTooltip.Position>> = { parent?.position?.value() ?? .noValue }()
+    var positionValue: DeserializationResult<Expression<DivTooltip.Position>> = parent?.position?.value() ?? .noValue
     var substrateDivValue: DeserializationResult<Div> = .noValue
     var tapOutsideActionsValue: DeserializationResult<[DivAction]> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "animation_in" {
-           animationInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: animationInValue)
-          }
-        }()
-        _ = {
-          if key == "animation_out" {
-           animationOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: animationOutValue)
-          }
-        }()
-        _ = {
-          if key == "background_accessibility_description" {
-           backgroundAccessibilityDescriptionValue = deserialize(__dictValue).merged(with: backgroundAccessibilityDescriptionValue)
-          }
-        }()
-        _ = {
-          if key == "bring_to_top_id" {
-           bringToTopIdValue = deserialize(__dictValue).merged(with: bringToTopIdValue)
-          }
-        }()
-        _ = {
-          if key == "close_by_tap_outside" {
-           closeByTapOutsideValue = deserialize(__dictValue).merged(with: closeByTapOutsideValue)
-          }
-        }()
-        _ = {
-          if key == "div" {
-           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
-          }
-        }()
-        _ = {
-          if key == "duration" {
-           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
-          }
-        }()
-        _ = {
-          if key == "id" {
-           idValue = deserialize(__dictValue).merged(with: idValue)
-          }
-        }()
-        _ = {
-          if key == "mode" {
-           modeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self).merged(with: modeValue)
-          }
-        }()
-        _ = {
-          if key == "offset" {
-           offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).merged(with: offsetValue)
-          }
-        }()
-        _ = {
-          if key == "position" {
-           positionValue = deserialize(__dictValue).merged(with: positionValue)
-          }
-        }()
-        _ = {
-          if key == "substrate_div" {
-           substrateDivValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: substrateDivValue)
-          }
-        }()
-        _ = {
-          if key == "tap_outside_actions" {
-           tapOutsideActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: tapOutsideActionsValue)
-          }
-        }()
-        _ = {
-         if key == parent?.animationIn?.link {
-           animationInValue = animationInValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.animationOut?.link {
-           animationOutValue = animationOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.backgroundAccessibilityDescription?.link {
-           backgroundAccessibilityDescriptionValue = backgroundAccessibilityDescriptionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.bringToTopId?.link {
-           bringToTopIdValue = bringToTopIdValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.closeByTapOutside?.link {
-           closeByTapOutsideValue = closeByTapOutsideValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.div?.link {
-           divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
-          }
-        }()
-        _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.offset?.link {
-           offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.position?.link {
-           positionValue = positionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
-         if key == parent?.substrateDiv?.link {
-           substrateDivValue = substrateDivValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.tapOutsideActions?.link {
-           tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "animation_in":
+        animationInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: animationInValue)
+      case "animation_out":
+        animationOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: animationOutValue)
+      case "background_accessibility_description":
+        backgroundAccessibilityDescriptionValue = deserialize(__dictValue).merged(with: backgroundAccessibilityDescriptionValue)
+      case "bring_to_top_id":
+        bringToTopIdValue = deserialize(__dictValue).merged(with: bringToTopIdValue)
+      case "close_by_tap_outside":
+        closeByTapOutsideValue = deserialize(__dictValue).merged(with: closeByTapOutsideValue)
+      case "div":
+        divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
+      case "duration":
+        durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
+      case "id":
+        idValue = deserialize(__dictValue).merged(with: idValue)
+      case "mode":
+        modeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self).merged(with: modeValue)
+      case "offset":
+        offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).merged(with: offsetValue)
+      case "position":
+        positionValue = deserialize(__dictValue).merged(with: positionValue)
+      case "substrate_div":
+        substrateDivValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: substrateDivValue)
+      case "tap_outside_actions":
+        tapOutsideActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: tapOutsideActionsValue)
+      case parent?.animationIn?.link:
+        animationInValue = animationInValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
+      case parent?.animationOut?.link:
+        animationOutValue = animationOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
+      case parent?.backgroundAccessibilityDescription?.link:
+        backgroundAccessibilityDescriptionValue = backgroundAccessibilityDescriptionValue.merged(with: { deserialize(__dictValue) })
+      case parent?.bringToTopId?.link:
+        bringToTopIdValue = bringToTopIdValue.merged(with: { deserialize(__dictValue) })
+      case parent?.closeByTapOutside?.link:
+        closeByTapOutsideValue = closeByTapOutsideValue.merged(with: { deserialize(__dictValue) })
+      case parent?.div?.link:
+        divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+      case parent?.duration?.link:
+        durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+      case parent?.id?.link:
+        idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.mode?.link:
+        modeValue = modeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self) })
+      case parent?.offset?.link:
+        offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
+      case parent?.position?.link:
+        positionValue = positionValue.merged(with: { deserialize(__dictValue) })
+      case parent?.substrateDiv?.link:
+        substrateDivValue = substrateDivValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+      case parent?.tapOutsideActions?.link:
+        tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { animationInValue = animationInValue.merged(with: { parent.animationIn?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { animationOutValue = animationOutValue.merged(with: { parent.animationOut?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) }) }()
-      _ = { modeValue = modeValue.merged(with: { parent.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { offsetValue = offsetValue.merged(with: { parent.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { substrateDivValue = substrateDivValue.merged(with: { parent.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { parent.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = animationInValue = animationInValue.merged(with: { parent.animationIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = animationOutValue = animationOutValue.merged(with: { parent.animationOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = modeValue = modeValue.merged(with: { parent.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = offsetValue = offsetValue.merged(with: { parent.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = substrateDivValue = substrateDivValue.merged(with: { parent.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { parent.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       animationInValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_in", error: $0) },
@@ -327,19 +247,19 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTooltip(
-      animationIn: { animationInValue.value }(),
-      animationOut: { animationOutValue.value }(),
-      backgroundAccessibilityDescription: { backgroundAccessibilityDescriptionValue.value }(),
-      bringToTopId: { bringToTopIdValue.value }(),
-      closeByTapOutside: { closeByTapOutsideValue.value }(),
-      div: { divNonNil }(),
-      duration: { durationValue.value }(),
-      id: { idNonNil }(),
-      mode: { modeValue.value }(),
-      offset: { offsetValue.value }(),
-      position: { positionNonNil }(),
-      substrateDiv: { substrateDivValue.value }(),
-      tapOutsideActions: { tapOutsideActionsValue.value }()
+      animationIn: animationInValue.value,
+      animationOut: animationOutValue.value,
+      backgroundAccessibilityDescription: backgroundAccessibilityDescriptionValue.value,
+      bringToTopId: bringToTopIdValue.value,
+      closeByTapOutside: closeByTapOutsideValue.value,
+      div: divNonNil,
+      duration: durationValue.value,
+      id: idNonNil,
+      mode: modeValue.value,
+      offset: offsetValue.value,
+      position: positionNonNil,
+      substrateDiv: substrateDivValue.value,
+      tapOutsideActions: tapOutsideActionsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

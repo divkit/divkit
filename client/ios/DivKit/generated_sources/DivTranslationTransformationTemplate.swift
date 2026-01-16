@@ -29,15 +29,15 @@ public final class DivTranslationTransformationTemplate: TemplateValue, Sendable
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTranslationTransformationTemplate?) -> DeserializationResult<DivTranslationTransformation> {
-    let xValue = { parent?.x?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let yValue = { parent?.y?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let xValue = parent?.x?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let yValue = parent?.y?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
       yValue.errorsOrWarnings?.map { .nestedObjectError(field: "y", error: $0) }
     )
     let result = DivTranslationTransformation(
-      x: { xValue.value }(),
-      y: { yValue.value }()
+      x: xValue.value,
+      y: yValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -48,44 +48,30 @@ public final class DivTranslationTransformationTemplate: TemplateValue, Sendable
     }
     var xValue: DeserializationResult<DivTranslation> = .noValue
     var yValue: DeserializationResult<DivTranslation> = .noValue
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "x" {
-           xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self).merged(with: xValue)
-          }
-        }()
-        _ = {
-          if key == "y" {
-           yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self).merged(with: yValue)
-          }
-        }()
-        _ = {
-         if key == parent?.x?.link {
-           xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.y?.link {
-           yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self) })
-          }
-        }()
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "x":
+        xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self).merged(with: xValue)
+      case "y":
+        yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self).merged(with: yValue)
+      case parent?.x?.link:
+        xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self) })
+      case parent?.y?.link:
+        yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTranslationTemplate.self) })
+      default: break
       }
-    }()
+    }
     if let parent = parent {
-      _ = { xValue = xValue.merged(with: { parent.x?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
-      _ = { yValue = yValue.merged(with: { parent.y?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = xValue = xValue.merged(with: { parent.x?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = yValue = yValue.merged(with: { parent.y?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
       yValue.errorsOrWarnings?.map { .nestedObjectError(field: "y", error: $0) }
     )
     let result = DivTranslationTransformation(
-      x: { xValue.value }(),
-      y: { yValue.value }()
+      x: xValue.value,
+      y: yValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

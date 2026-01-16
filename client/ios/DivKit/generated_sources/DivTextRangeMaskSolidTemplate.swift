@@ -29,8 +29,8 @@ public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextRangeMaskSolidTemplate?) -> DeserializationResult<DivTextRangeMaskSolid> {
-    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-    let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
+    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) }
@@ -44,8 +44,8 @@ public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTextRangeMaskSolid(
-      color: { colorNonNil }(),
-      isEnabled: { isEnabledValue.value }()
+      color: colorNonNil,
+      isEnabled: isEnabledValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -54,35 +54,21 @@ public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
-    var isEnabledValue: DeserializationResult<Expression<Bool>> = { parent?.isEnabled?.value() ?? .noValue }()
-    _ = {
-      // Each field is parsed in its own lambda to keep the stack size managable
-      // Otherwise the compiler will allocate stack for each intermediate variable
-      // upfront even when we don't actually visit a relevant branch
-      for (key, __dictValue) in context.templateData {
-        _ = {
-          if key == "color" {
-           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-          }
-        }()
-        _ = {
-          if key == "is_enabled" {
-           isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
-          }
-        }()
-        _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-          }
-        }()
-        _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
+    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
+    context.templateData.forEach { key, __dictValue in
+      switch key {
+      case "color":
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
+      case parent?.color?.link:
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+      default: break
       }
-    }()
+    }
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) }
@@ -96,8 +82,8 @@ public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTextRangeMaskSolid(
-      color: { colorNonNil }(),
-      isEnabled: { isEnabledValue.value }()
+      color: colorNonNil,
+      isEnabled: isEnabledValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
