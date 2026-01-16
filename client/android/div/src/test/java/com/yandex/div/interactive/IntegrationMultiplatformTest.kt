@@ -46,9 +46,15 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
         val divData = runCatching {
             DivData(env, case.divData.getJSONObject("card"))
         }.getOrElse {
-            expected.forEach {
-                if (it !is IntegrationTestCase.ExpectedResult.Error) return@forEach
-                checkError(it)
+            var errorIsExpected = false
+            expected.forEach { e ->
+                if (e !is IntegrationTestCase.ExpectedResult.Error) return@forEach
+                checkError(e)
+                errorIsExpected = true
+            }
+
+            if (!errorIsExpected) {
+                throw AssertionError("Got unexpected error at data parsing!", it)
             }
             return
         }

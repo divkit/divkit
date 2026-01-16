@@ -84,13 +84,13 @@ internal class DivActionBinder @Inject constructor(
             applyDivActions(
                 context = context,
                 target = target,
-                actions = actions.onlyEnabled(resolver),
-                doubleTapActions = doubleTapActions.onlyEnabled(resolver),
-                longTapActions = longTapActions.onlyEnabled(resolver),
-                hoverStartActions = hoverStartActions.onlyEnabled(resolver),
-                hoverEndActions = hoverEndActions.onlyEnabled(resolver),
-                pressStartActions = pressStartActions.onlyEnabled(resolver),
-                pressEndActions = pressEndActions.onlyEnabled(resolver),
+                actions = actions.orEmpty(),
+                doubleTapActions = doubleTapActions.orEmpty(),
+                longTapActions = longTapActions.orEmpty(),
+                hoverStartActions = hoverStartActions.orEmpty(),
+                hoverEndActions = hoverEndActions.orEmpty(),
+                pressStartActions = pressStartActions.orEmpty(),
+                pressEndActions = pressEndActions.orEmpty(),
                 actionAnimation = actionAnimation,
                 captureFocusOnAction = captureFocusOnAction,
             )
@@ -409,7 +409,10 @@ internal class DivActionBinder @Inject constructor(
         divView.bulkActions {
             val uuid = UUID.randomUUID().toString()
 
-            actions.onlyEnabled(resolver).forEach { action ->
+            actions.forEach { action ->
+                if (!action.isEnabled.evaluate(resolver)) {
+                    return@forEach
+                }
                 when(actionLogType) {
                     LOG_CLICK -> logger.logClick(divView, resolver, target, action, uuid)
                     LOG_LONG_CLICK -> logger.logLongClick(divView, resolver, target, action, uuid)
@@ -451,7 +454,10 @@ internal class DivActionBinder @Inject constructor(
         onEachEnabledAction: ((DivAction) -> Unit)? = null
     ) {
         if (actions == null) return
-        actions.onlyEnabled(resolver).forEach {
+        actions.forEach {
+            if (!it.isEnabled.evaluate(resolver)) {
+                return@forEach
+            }
             handleActionWithoutEnableCheck(divView, resolver, it, reason)
             onEachEnabledAction?.invoke(it)
         }
@@ -493,8 +499,7 @@ internal class DivActionBinder @Inject constructor(
 
     internal fun handleTapClick(context: BindingContext, target: View, actions: List<DivAction>) {
         val resolver = context.expressionResolver
-        val enabledActions = actions.onlyEnabled(resolver)
-        val menuAction = enabledActions.firstOrNull { action -> !action.menuItems.isNullOrEmpty() }
+        val menuAction = actions.firstOrNull { action -> action.isEnabled.evaluate(resolver) && !action.menuItems.isNullOrEmpty() }
         if (menuAction != null) {
             prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
                 logger.logClick(context.divView, resolver, target, menuAction)
@@ -502,7 +507,7 @@ internal class DivActionBinder @Inject constructor(
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         } else {
-            handleBulkActions(context, target, enabledActions)
+            handleBulkActions(context, target, actions)
         }
     }
 
@@ -553,7 +558,10 @@ internal class DivActionBinder @Inject constructor(
                             KAssert.fail { "Menu item does not have any action" }
                             return@bulkActions
                         }
-                        actions.onlyEnabled(expressionResolver).forEach { action ->
+                        actions.forEach { action ->
+                            if (!action.isEnabled.evaluate(expressionResolver)) {
+                                return@forEach
+                            }
                             logger.logPopupMenuItemClick(
                                 divView,
                                 expressionResolver,
@@ -608,10 +616,6 @@ private fun View.observe(
     if (this !is ExpressionSubscriber) return
     addSubscription(captureFocusOnAction.observe(resolver, callback))
 }
-
-private fun List<DivAction>?.onlyEnabled(
-    resolver: ExpressionResolver
-) = this?.filter { it.isEnabled.evaluate(resolver) } ?: emptyList()
 
 private fun View.parentIsLongClickable(): Boolean {
     val parent = parent as? ViewGroup ?: return false
