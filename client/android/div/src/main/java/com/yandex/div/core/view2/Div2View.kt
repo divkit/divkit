@@ -636,7 +636,7 @@ class Div2View private constructor(
 
     fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext {
         val visibilityActionTracker = div2Component.visibilityActionTracker
-        viewToDivBindings.forEach { (view, div) ->
+        viewToDivBindings.toMap().forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
                 if (ViewCompat.isAttachedToWindow(view)) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
@@ -649,7 +649,7 @@ class Div2View private constructor(
 
     private fun discardChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
-        viewToDivBindings.forEach { (view, div) ->
+        viewToDivBindings.toMap().forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
                 visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
