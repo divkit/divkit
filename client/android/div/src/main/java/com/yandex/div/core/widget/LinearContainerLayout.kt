@@ -101,6 +101,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         return when {
             hasDividerBeforeChildAt(i) -> dividerWithMargins
             i == firstVisibleChildIndex -> 0
+            i > lastVisibleChildIndex -> 0
             else -> itemSpacingPx
         }
     }
@@ -299,8 +300,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         considerMatchParentChildrenInMaxWidth(widthMeasureSpec, heightSpec)
         crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightSpec) }
 
-        if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
-            totalLength += dividerHeightWithMargins
+        if (totalLength > 0) {
+            totalLength += gapBeforeChild(childCount)
         }
         totalLength += verticalPaddings
 
@@ -468,6 +469,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalLength = 0
             remeasureConstrainedHeightChildren(widthMeasureSpec, heightSpec, delta)
             remeasureMatchParentHeightChildren(widthMeasureSpec, heightSpec, initialMaxWidth, delta)
+            totalLength += gapBeforeChild(childCount)
             totalLength += verticalPaddings
         }
     }
@@ -550,7 +552,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             calculateMatchParentSizes(freeSpace, horizontal = false)
         }
 
-        forEachSignificant { child ->
+        forEachSignificantIndexed { child, index ->
             val lp = child.lp
             when {
                 lp.height != MATCH_PARENT -> Unit
@@ -564,6 +566,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
             updateMaxCrossSize(widthMeasureSpec, child.measuredWidth + lp.horizontalMargins)
             totalLength = getMaxLength(totalLength, child.measuredHeight + lp.verticalMargins)
+            totalLength += gapBeforeChild(index)
         }
         maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
 
@@ -657,8 +660,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
         forEachSignificant { considerMatchParentChildMarginsInWidth(it, widthMeasureSpec) }
 
-        if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
-            totalLength += dividerWidthWithMargins
+        if (totalLength > 0) {
+            totalLength += gapBeforeChild(childCount)
         }
         totalLength += horizontalPaddings
 
@@ -764,6 +767,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalLength = 0
             remeasureConstrainedWidthChildren(widthMeasureSpec, heightMeasureSpec, delta)
             remeasureMatchParentWidthChildren(widthMeasureSpec, heightMeasureSpec, delta)
+            totalLength += gapBeforeChild(childCount)
             totalLength += horizontalPaddings
         }
     }
@@ -808,7 +812,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (freeSpace > 0) {
             calculateMatchParentSizes(freeSpace, horizontal = true)
         }
-        forEachSignificant { child ->
+        forEachSignificantIndexed { child, index ->
             val lp = child.lp
             when {
                 lp.width != MATCH_PARENT -> Unit
@@ -821,6 +825,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
             updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
             totalLength = getMaxLength(totalLength, child.measuredWidth + lp.horizontalMargins)
+            totalLength += gapBeforeChild(index)
             updateBaselineOffset(child)
         }
     }
