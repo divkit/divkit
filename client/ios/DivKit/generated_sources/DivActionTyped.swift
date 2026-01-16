@@ -27,6 +27,7 @@ public enum DivActionTyped: Sendable {
   case divActionTimer(DivActionTimer)
   case divActionUpdateStructure(DivActionUpdateStructure)
   case divActionVideo(DivActionVideo)
+  case divActionCustom(DivActionCustom)
 
   public var value: Serializable {
     switch self {
@@ -71,6 +72,8 @@ public enum DivActionTyped: Sendable {
     case let .divActionUpdateStructure(value):
       return value
     case let .divActionVideo(value):
+      return value
+    case let .divActionCustom(value):
       return value
     }
   }
@@ -121,6 +124,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionUpdateStructure(l), .divActionUpdateStructure(r)):
       return l == r
     case let (.divActionVideo(l), .divActionVideo(r)):
+      return l == r
+    case let (.divActionCustom(l), .divActionCustom(r)):
       return l == r
     default:
       return false

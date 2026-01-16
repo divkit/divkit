@@ -31,6 +31,7 @@ public final class DivSwitch: DivBase, Sendable {
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -116,6 +117,7 @@ public final class DivSwitch: DivBase, Sendable {
     selectedActions: [DivAction]? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
+    transformations: [DivTransformation]? = nil,
     transitionChange: DivChangeTransition? = nil,
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
@@ -152,6 +154,7 @@ public final class DivSwitch: DivBase, Sendable {
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -226,26 +229,27 @@ extension DivSwitch: Equatable {
     }
     guard
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transformations == rhs.transformations,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -285,6 +289,7 @@ extension DivSwitch: Serializable {
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

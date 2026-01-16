@@ -620,13 +620,12 @@ extension Collection<DivVariable> {
       switch variable {
       case let .propertyVariable(property):
         guard !properties.keys.contains(name) else { return }
-        guard let resolvedValueType = property.resolveValueType(resolver) else { return }
         properties[name] = DivProperty(
           expressionResolver: resolver,
           actionHandler: actionHandler,
           getValue: property.get.toValidSerializationValue(),
           newValueVariableName: property.newValueVariableName,
-          valueType: resolvedValueType,
+          valueType: property.valueType,
           actions: property.set ?? []
         )
       case .stringVariable,

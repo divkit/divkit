@@ -211,10 +211,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
   public let hoverStartActions: Field<[DivActionTemplate]>?
   public let id: Field<String>?
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
+  public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<Expression<LayoutMode>>? // default value: no_wrap
   public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let lineSeparator: Field<SeparatorTemplate>?
+  public let lineSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: vertical
@@ -227,6 +229,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
   public let separator: Field<SeparatorTemplate>?
   public let tooltips: Field<[DivTooltipTemplate]>?
   public let transform: Field<DivTransformTemplate>?
+  public let transformations: Field<[DivTransformationTemplate]>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
@@ -267,10 +270,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActions: dictionary.getOptionalArray("hover_start_actions", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
+      itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       layoutMode: dictionary.getOptionalExpressionField("layout_mode"),
       layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       lineSeparator: dictionary.getOptionalField("line_separator", templateToType: templateToType),
+      lineSpacing: dictionary.getOptionalExpressionField("line_spacing"),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       orientation: dictionary.getOptionalExpressionField("orientation"),
@@ -283,6 +288,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separator: dictionary.getOptionalField("separator", templateToType: templateToType),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
       transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transformations: dictionary.getOptionalArray("transformations", templateToType: templateToType),
       transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
@@ -324,10 +330,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     hoverStartActions: Field<[DivActionTemplate]>? = nil,
     id: Field<String>? = nil,
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
+    itemSpacing: Field<Expression<Int>>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<Expression<LayoutMode>>? = nil,
     layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     lineSeparator: Field<SeparatorTemplate>? = nil,
+    lineSpacing: Field<Expression<Int>>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
@@ -340,6 +348,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     separator: Field<SeparatorTemplate>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
+    transformations: Field<[DivTransformationTemplate]>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
@@ -378,10 +387,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     self.hoverStartActions = hoverStartActions
     self.id = id
     self.itemBuilder = itemBuilder
+    self.itemSpacing = itemSpacing
     self.items = items
     self.layoutMode = layoutMode
     self.layoutProvider = layoutProvider
     self.lineSeparator = lineSeparator
+    self.lineSpacing = lineSpacing
     self.longtapActions = longtapActions
     self.margins = margins
     self.orientation = orientation
@@ -394,6 +405,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     self.separator = separator
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -433,10 +445,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
     let itemBuilderValue = { parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let itemSpacingValue = { parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue }()
     let itemsValue = { parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let layoutModeValue = { parent?.layoutMode?.resolveOptionalValue(context: context) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let lineSeparatorValue = { parent?.lineSeparator?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let lineSpacingValue = { parent?.lineSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.lineSpacingValidator) ?? .noValue }()
     let longtapActionsValue = { parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let marginsValue = { parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let orientationValue = { parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -449,6 +463,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     let separatorValue = { parent?.separator?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let tooltipsValue = { parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transformValue = { parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transformationsValue = { parent?.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionChangeValue = { parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionInValue = { parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionOutValue = { parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -486,10 +501,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
+      itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
+      lineSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_spacing", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
@@ -502,6 +519,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
@@ -540,10 +558,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
+      itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
       layoutMode: { layoutModeValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       lineSeparator: { lineSeparatorValue.value }(),
+      lineSpacing: { lineSpacingValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
       margins: { marginsValue.value }(),
       orientation: { orientationValue.value }(),
@@ -556,6 +576,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separator: { separatorValue.value }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
@@ -600,10 +621,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     var hoverStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
+    var itemSpacingValue: DeserializationResult<Expression<Int>> = { parent?.itemSpacing?.value() ?? .noValue }()
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<Expression<DivContainer.LayoutMode>> = { parent?.layoutMode?.value() ?? .noValue }()
     var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var lineSeparatorValue: DeserializationResult<DivContainer.Separator> = .noValue
+    var lineSpacingValue: DeserializationResult<Expression<Int>> = { parent?.lineSpacing?.value() ?? .noValue }()
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivContainer.Orientation>> = { parent?.orientation?.value() ?? .noValue }()
@@ -616,6 +639,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
     var separatorValue: DeserializationResult<DivContainer.Separator> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
+    var transformationsValue: DeserializationResult<[DivTransformation]> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
@@ -762,6 +786,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+          if key == "item_spacing" {
+           itemSpacingValue = deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator).merged(with: itemSpacingValue)
+          }
+        }()
+        _ = {
           if key == "items" {
            itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
           }
@@ -779,6 +808,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
         _ = {
           if key == "line_separator" {
            lineSeparatorValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivContainerTemplate.SeparatorTemplate.self).merged(with: lineSeparatorValue)
+          }
+        }()
+        _ = {
+          if key == "line_spacing" {
+           lineSpacingValue = deserialize(__dictValue, validator: ResolvedValue.lineSpacingValidator).merged(with: lineSpacingValue)
           }
         }()
         _ = {
@@ -839,6 +873,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
         _ = {
           if key == "transform" {
            transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
+          }
+        }()
+        _ = {
+          if key == "transformations" {
+           transformationsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self).merged(with: transformationsValue)
           }
         }()
         _ = {
@@ -1022,6 +1061,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.itemSpacing?.link {
+           itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator) })
+          }
+        }()
+        _ = {
          if key == parent?.items?.link {
            itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
           }
@@ -1039,6 +1083,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.lineSeparator?.link {
            lineSeparatorValue = lineSeparatorValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivContainerTemplate.SeparatorTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.lineSpacing?.link {
+           lineSpacingValue = lineSpacingValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.lineSpacingValidator) })
           }
         }()
         _ = {
@@ -1099,6 +1148,11 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.transform?.link {
            transformValue = transformValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transformations?.link {
+           transformationsValue = transformationsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self) })
           }
         }()
         _ = {
@@ -1183,6 +1237,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       _ = { separatorValue = separatorValue.merged(with: { parent.separator?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transformationsValue = transformationsValue.merged(with: { parent.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -1219,10 +1274,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
+      itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
+      lineSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_spacing", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
@@ -1235,6 +1292,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
@@ -1273,10 +1331,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
+      itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
       layoutMode: { layoutModeValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       lineSeparator: { lineSeparatorValue.value }(),
+      lineSpacing: { lineSpacingValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
       margins: { marginsValue.value }(),
       orientation: { orientationValue.value }(),
@@ -1289,6 +1349,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separator: { separatorValue.value }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
@@ -1338,10 +1399,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActions: hoverStartActions ?? mergedParent.hoverStartActions,
       id: id ?? mergedParent.id,
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
+      itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
       layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       lineSeparator: lineSeparator ?? mergedParent.lineSeparator,
+      lineSpacing: lineSpacing ?? mergedParent.lineSpacing,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
@@ -1354,6 +1417,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separator: separator ?? mergedParent.separator,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
+      transformations: transformations ?? mergedParent.transformations,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
@@ -1398,10 +1462,12 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       hoverStartActions: merged.hoverStartActions?.tryResolveParent(templates: templates),
       id: merged.id,
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
+      itemSpacing: merged.itemSpacing,
       items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: merged.layoutMode,
       layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       lineSeparator: merged.lineSeparator?.tryResolveParent(templates: templates),
+      lineSpacing: merged.lineSpacing,
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
@@ -1414,6 +1480,7 @@ public final class DivContainerTemplate: TemplateValue, Sendable {
       separator: merged.separator?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
+      transformations: merged.transformations?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),

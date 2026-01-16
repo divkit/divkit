@@ -79,10 +79,12 @@ public final class DivContainer: DivBase, Sendable {
   public let hoverStartActions: [DivAction]?
   public let id: String?
   public let itemBuilder: DivCollectionItemBuilder?
+  public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 0
   public let items: [Div]?
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
   public let layoutProvider: DivLayoutProvider?
   public let lineSeparator: Separator?
+  public let lineSpacing: Expression<Int> // constraint: number >= 0; default value: 0
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: vertical
@@ -95,6 +97,7 @@ public final class DivContainer: DivBase, Sendable {
   public let separator: Separator?
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -138,8 +141,16 @@ public final class DivContainer: DivBase, Sendable {
     resolver.resolveEnum(contentAlignmentVertical) ?? DivContentAlignmentVertical.top
   }
 
+  public func resolveItemSpacing(_ resolver: ExpressionResolver) -> Int {
+    resolver.resolveNumeric(itemSpacing) ?? 0
+  }
+
   public func resolveLayoutMode(_ resolver: ExpressionResolver) -> LayoutMode {
     resolver.resolveEnum(layoutMode) ?? LayoutMode.noWrap
+  }
+
+  public func resolveLineSpacing(_ resolver: ExpressionResolver) -> Int {
+    resolver.resolveNumeric(lineSpacing) ?? 0
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
@@ -162,6 +173,12 @@ public final class DivContainer: DivBase, Sendable {
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
   static let columnSpanValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 >= 0 })
+
+  static let itemSpacingValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 >= 0 })
+
+  static let lineSpacingValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let rowSpanValidator: AnyValueValidator<Int> =
@@ -197,10 +214,12 @@ public final class DivContainer: DivBase, Sendable {
     hoverStartActions: [DivAction]?,
     id: String?,
     itemBuilder: DivCollectionItemBuilder?,
+    itemSpacing: Expression<Int>?,
     items: [Div]?,
     layoutMode: Expression<LayoutMode>?,
     layoutProvider: DivLayoutProvider?,
     lineSeparator: Separator?,
+    lineSpacing: Expression<Int>?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
@@ -213,6 +232,7 @@ public final class DivContainer: DivBase, Sendable {
     separator: Separator?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
+    transformations: [DivTransformation]?,
     transitionChange: DivChangeTransition?,
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
@@ -250,10 +270,12 @@ public final class DivContainer: DivBase, Sendable {
     self.hoverStartActions = hoverStartActions
     self.id = id
     self.itemBuilder = itemBuilder
+    self.itemSpacing = itemSpacing ?? .value(0)
     self.items = items
     self.layoutMode = layoutMode ?? .value(.noWrap)
     self.layoutProvider = layoutProvider
     self.lineSeparator = lineSeparator
+    self.lineSpacing = lineSpacing ?? .value(0)
     self.longtapActions = longtapActions
     self.margins = margins
     self.orientation = orientation ?? .value(.vertical)
@@ -266,6 +288,7 @@ public final class DivContainer: DivBase, Sendable {
     self.separator = separator
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -341,42 +364,49 @@ extension DivContainer: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.items == rhs.items
+      lhs.itemSpacing == rhs.itemSpacing
     else {
       return false
     }
     guard
+      lhs.items == rhs.items,
       lhs.layoutMode == rhs.layoutMode,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.lineSeparator == rhs.lineSeparator
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
+      lhs.lineSeparator == rhs.lineSeparator,
+      lhs.lineSpacing == rhs.lineSpacing,
+      lhs.longtapActions == rhs.longtapActions
+    else {
+      return false
+    }
+    guard
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.orientation == rhs.orientation,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.pressEndActions == rhs.pressEndActions,
-      lhs.pressStartActions == rhs.pressStartActions
+      lhs.pressStartActions == rhs.pressStartActions,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.separator == rhs.separator
     else {
       return false
     }
     guard
-      lhs.separator == rhs.separator,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transformations == rhs.transformations
     else {
       return false
     }
@@ -441,10 +471,12 @@ extension DivContainer: Serializable {
     result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
     result["item_builder"] = itemBuilder?.toDictionary()
+    result["item_spacing"] = itemSpacing.toValidSerializationValue()
     result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toValidSerializationValue()
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["line_separator"] = lineSeparator?.toDictionary()
+    result["line_spacing"] = lineSpacing.toValidSerializationValue()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
@@ -457,6 +489,7 @@ extension DivContainer: Serializable {
     result["separator"] = separator?.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

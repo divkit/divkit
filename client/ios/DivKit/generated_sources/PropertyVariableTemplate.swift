@@ -11,7 +11,7 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
   public let name: Field<String>?
   public let newValueVariableName: Field<String>? // default value: new_value
   public let set: Field<[DivActionTemplate]>?
-  public let valueType: Field<Expression<DivEvaluableType>>?
+  public let valueType: Field<DivEvaluableType>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
@@ -20,7 +20,7 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
       name: dictionary.getOptionalField("name"),
       newValueVariableName: dictionary.getOptionalField("new_value_variable_name"),
       set: dictionary.getOptionalArray("set", templateToType: templateToType),
-      valueType: dictionary.getOptionalExpressionField("value_type")
+      valueType: dictionary.getOptionalField("value_type")
     )
   }
 
@@ -30,7 +30,7 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
     name: Field<String>? = nil,
     newValueVariableName: Field<String>? = nil,
     set: Field<[DivActionTemplate]>? = nil,
-    valueType: Field<Expression<DivEvaluableType>>? = nil
+    valueType: Field<DivEvaluableType>? = nil
   ) {
     self.parent = parent
     self.get = get
@@ -87,7 +87,7 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
     var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
     var newValueVariableNameValue: DeserializationResult<String> = { parent?.newValueVariableName?.value() ?? .noValue }()
     var setValue: DeserializationResult<[DivAction]> = .noValue
-    var valueTypeValue: DeserializationResult<Expression<DivEvaluableType>> = { parent?.valueType?.value() ?? .noValue }()
+    var valueTypeValue: DeserializationResult<DivEvaluableType> = { parent?.valueType?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable

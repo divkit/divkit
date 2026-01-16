@@ -21,6 +21,7 @@ public final class DivTooltip: Sendable {
   public let animationIn: DivAnimation?
   public let animationOut: DivAnimation?
   public let backgroundAccessibilityDescription: Expression<String>?
+  public let bringToTopId: String?
   public let closeByTapOutside: Expression<Bool> // default value: true
   public let div: Div
   public let duration: Expression<Int> // constraint: number >= 0; default value: 5000
@@ -28,6 +29,7 @@ public final class DivTooltip: Sendable {
   public let mode: DivTooltipMode // default value: .divTooltipModeModal(DivTooltipModeModal())
   public let offset: DivPoint?
   public let position: Expression<Position>
+  public let substrateDiv: Div?
   public let tapOutsideActions: [DivAction]?
 
   public func resolveBackgroundAccessibilityDescription(_ resolver: ExpressionResolver) -> String? {
@@ -53,6 +55,7 @@ public final class DivTooltip: Sendable {
     animationIn: DivAnimation? = nil,
     animationOut: DivAnimation? = nil,
     backgroundAccessibilityDescription: Expression<String>? = nil,
+    bringToTopId: String? = nil,
     closeByTapOutside: Expression<Bool>? = nil,
     div: Div,
     duration: Expression<Int>? = nil,
@@ -60,11 +63,13 @@ public final class DivTooltip: Sendable {
     mode: DivTooltipMode? = nil,
     offset: DivPoint? = nil,
     position: Expression<Position>,
+    substrateDiv: Div? = nil,
     tapOutsideActions: [DivAction]? = nil
   ) {
     self.animationIn = animationIn
     self.animationOut = animationOut
     self.backgroundAccessibilityDescription = backgroundAccessibilityDescription
+    self.bringToTopId = bringToTopId
     self.closeByTapOutside = closeByTapOutside ?? .value(true)
     self.div = div
     self.duration = duration ?? .value(5000)
@@ -72,6 +77,7 @@ public final class DivTooltip: Sendable {
     self.mode = mode ?? .divTooltipModeModal(DivTooltipModeModal())
     self.offset = offset
     self.position = position
+    self.substrateDiv = substrateDiv
     self.tapOutsideActions = tapOutsideActions
   }
 }
@@ -87,21 +93,27 @@ extension DivTooltip: Equatable {
       return false
     }
     guard
+      lhs.bringToTopId == rhs.bringToTopId,
       lhs.closeByTapOutside == rhs.closeByTapOutside,
-      lhs.div == rhs.div,
-      lhs.duration == rhs.duration
+      lhs.div == rhs.div
     else {
       return false
     }
     guard
+      lhs.duration == rhs.duration,
       lhs.id == rhs.id,
-      lhs.mode == rhs.mode,
-      lhs.offset == rhs.offset
+      lhs.mode == rhs.mode
     else {
       return false
     }
     guard
+      lhs.offset == rhs.offset,
       lhs.position == rhs.position,
+      lhs.substrateDiv == rhs.substrateDiv
+    else {
+      return false
+    }
+    guard
       lhs.tapOutsideActions == rhs.tapOutsideActions
     else {
       return false
@@ -117,6 +129,7 @@ extension DivTooltip: Serializable {
     result["animation_in"] = animationIn?.toDictionary()
     result["animation_out"] = animationOut?.toDictionary()
     result["background_accessibility_description"] = backgroundAccessibilityDescription?.toValidSerializationValue()
+    result["bring_to_top_id"] = bringToTopId
     result["close_by_tap_outside"] = closeByTapOutside.toValidSerializationValue()
     result["div"] = div.toDictionary()
     result["duration"] = duration.toValidSerializationValue()
@@ -124,6 +137,7 @@ extension DivTooltip: Serializable {
     result["mode"] = mode.toDictionary()
     result["offset"] = offset?.toDictionary()
     result["position"] = position.toValidSerializationValue()
+    result["substrate_div"] = substrateDiv?.toDictionary()
     result["tap_outside_actions"] = tapOutsideActions?.map { $0.toDictionary() }
     return result
   }

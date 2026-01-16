@@ -27,6 +27,7 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
   case divActionTimerTemplate(DivActionTimerTemplate)
   case divActionUpdateStructureTemplate(DivActionUpdateStructureTemplate)
   case divActionVideoTemplate(DivActionVideoTemplate)
+  case divActionCustomTemplate(DivActionCustomTemplate)
 
   public var value: Any {
     switch self {
@@ -71,6 +72,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
     case let .divActionUpdateStructureTemplate(value):
       return value
     case let .divActionVideoTemplate(value):
+      return value
+    case let .divActionCustomTemplate(value):
       return value
     }
   }
@@ -119,6 +122,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       return .divActionUpdateStructureTemplate(try value.resolveParent(templates: templates))
     case let .divActionVideoTemplate(value):
       return .divActionVideoTemplate(try value.resolveParent(templates: templates))
+    case let .divActionCustomTemplate(value):
+      return .divActionCustomTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -364,6 +369,17 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
           }
         } else { return nil }
       }()
+      result = result ?? {
+        if case let .divActionCustomTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionCustom(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionCustom(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
       return result
     }()
   }
@@ -564,6 +580,15 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivActionCustom.type {
+      let result = { DivActionCustomTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divActionCustom(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionCustom(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }()
   }
@@ -616,6 +641,8 @@ extension DivActionTypedTemplate {
       self = .divActionUpdateStructureTemplate(try DivActionUpdateStructureTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionVideoTemplate.type:
       self = .divActionVideoTemplate(try DivActionVideoTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionCustomTemplate.type:
+      self = .divActionCustomTemplate(try DivActionCustomTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-action-typed_template", representation: dictionary)
     }

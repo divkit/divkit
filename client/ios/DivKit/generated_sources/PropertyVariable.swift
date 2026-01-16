@@ -10,14 +10,10 @@ public final class PropertyVariable: Sendable {
   public let name: String
   public let newValueVariableName: String // default value: new_value
   public let set: [DivAction]?
-  public let valueType: Expression<DivEvaluableType>
+  public let valueType: DivEvaluableType
 
   public func resolveGet(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(get)
-  }
-
-  public func resolveValueType(_ resolver: ExpressionResolver) -> DivEvaluableType? {
-    resolver.resolveEnum(valueType)
   }
 
   init(
@@ -25,7 +21,7 @@ public final class PropertyVariable: Sendable {
     name: String,
     newValueVariableName: String? = nil,
     set: [DivAction]? = nil,
-    valueType: Expression<DivEvaluableType>
+    valueType: DivEvaluableType
   ) {
     self.get = get
     self.name = name
@@ -64,7 +60,7 @@ extension PropertyVariable: Serializable {
     result["name"] = name
     result["new_value_variable_name"] = newValueVariableName
     result["set"] = set?.map { $0.toDictionary() }
-    result["value_type"] = valueType.toValidSerializationValue()
+    result["value_type"] = valueType.rawValue
     return result
   }
 }

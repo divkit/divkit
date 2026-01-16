@@ -250,6 +250,8 @@ public final class DivActionHandler {
       updateStructureActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
+    case .divActionCustom:
+      break
     case .none:
       handleUrl(action, context: context, sender: sender)
     }

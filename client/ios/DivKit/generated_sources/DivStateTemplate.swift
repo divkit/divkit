@@ -220,6 +220,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
   public let states: Field<[StateTemplate]>? // at least 1 elements
   public let tooltips: Field<[DivTooltipTemplate]>?
   public let transform: Field<DivTransformTemplate>?
+  public let transformations: Field<[DivTransformationTemplate]>?
   public let transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? // default value: state_change
   public let transitionChange: Field<DivChangeTransitionTemplate>?
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
@@ -272,6 +273,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       states: dictionary.getOptionalArray("states", templateToType: templateToType),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
       transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transformations: dictionary.getOptionalArray("transformations", templateToType: templateToType),
       transitionAnimationSelector: dictionary.getOptionalExpressionField("transition_animation_selector"),
       transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
@@ -325,6 +327,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
     states: Field<[StateTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
+    transformations: Field<[DivTransformationTemplate]>? = nil,
     transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
@@ -375,6 +378,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
     self.states = states
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionAnimationSelector = transitionAnimationSelector
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
@@ -426,6 +430,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
     let statesValue = { parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue }()
     let tooltipsValue = { parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transformValue = { parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transformationsValue = { parent?.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionAnimationSelectorValue = { parent?.transitionAnimationSelector?.resolveOptionalValue(context: context) ?? .noValue }()
     let transitionChangeValue = { parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionInValue = { parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -475,6 +480,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionAnimationSelectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_animation_selector", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
@@ -533,6 +539,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       states: { statesNonNil }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionAnimationSelector: { transitionAnimationSelectorValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
@@ -589,6 +596,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
     var statesValue: DeserializationResult<[DivState.State]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
+    var transformationsValue: DeserializationResult<[DivTransformation]> = .noValue
     var transitionAnimationSelectorValue: DeserializationResult<Expression<DivTransitionSelector>> = { parent?.transitionAnimationSelector?.value() ?? .noValue }()
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
@@ -788,6 +796,11 @@ public final class DivStateTemplate: TemplateValue, Sendable {
         _ = {
           if key == "transform" {
            transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
+          }
+        }()
+        _ = {
+          if key == "transformations" {
+           transformationsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self).merged(with: transformationsValue)
           }
         }()
         _ = {
@@ -1031,6 +1044,11 @@ public final class DivStateTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.transformations?.link {
+           transformationsValue = transformationsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.transitionAnimationSelector?.link {
            transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: { deserialize(__dictValue) })
           }
@@ -1113,6 +1131,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       _ = { statesValue = statesValue.merged(with: { parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) }) }()
       _ = { tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transformationsValue = transformationsValue.merged(with: { parent.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -1160,6 +1179,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionAnimationSelectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_animation_selector", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
@@ -1218,6 +1238,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       states: { statesNonNil }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionAnimationSelector: { transitionAnimationSelectorValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
@@ -1279,6 +1300,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       states: states ?? mergedParent.states,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
+      transformations: transformations ?? mergedParent.transformations,
       transitionAnimationSelector: transitionAnimationSelector ?? mergedParent.transitionAnimationSelector,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
       transitionIn: transitionIn ?? mergedParent.transitionIn,
@@ -1335,6 +1357,7 @@ public final class DivStateTemplate: TemplateValue, Sendable {
       states: try merged.states?.resolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
+      transformations: merged.transformations?.tryResolveParent(templates: templates),
       transitionAnimationSelector: merged.transitionAnimationSelector,
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),

@@ -5,113 +5,11 @@ import Serialization
 import VGSL
 
 public final class DivWrapContentSizeTemplate: TemplateValue, Sendable {
-  public final class ConstraintSizeTemplate: TemplateValue, Sendable {
-    public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
-    public let value: Field<Expression<Int>>? // constraint: number >= 0
-
-    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      self.init(
-        unit: dictionary.getOptionalExpressionField("unit"),
-        value: dictionary.getOptionalExpressionField("value")
-      )
-    }
-
-    init(
-      unit: Field<Expression<DivSizeUnit>>? = nil,
-      value: Field<Expression<Int>>? = nil
-    ) {
-      self.unit = unit
-      self.value = value
-    }
-
-    private static func resolveOnlyLinks(context: TemplatesContext, parent: ConstraintSizeTemplate?) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
-      let unitValue = { parent?.unit?.resolveOptionalValue(context: context) ?? .noValue }()
-      let valueValue = { parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue }()
-      var errors = mergeErrors(
-        unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
-      )
-      if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(field: "value"))
-      }
-      guard
-        let valueNonNil = valueValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
-      let result = DivWrapContentSize.ConstraintSize(
-        unit: { unitValue.value }(),
-        value: { valueNonNil }()
-      )
-      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
-    }
-
-    public static func resolveValue(context: TemplatesContext, parent: ConstraintSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
-      if useOnlyLinks {
-        return resolveOnlyLinks(context: context, parent: parent)
-      }
-      var unitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.unit?.value() ?? .noValue }()
-      var valueValue: DeserializationResult<Expression<Int>> = { parent?.value?.value() ?? .noValue }()
-      _ = {
-        // Each field is parsed in its own lambda to keep the stack size managable
-        // Otherwise the compiler will allocate stack for each intermediate variable
-        // upfront even when we don't actually visit a relevant branch
-        for (key, __dictValue) in context.templateData {
-          _ = {
-            if key == "unit" {
-             unitValue = deserialize(__dictValue).merged(with: unitValue)
-            }
-          }()
-          _ = {
-            if key == "value" {
-             valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
-            }
-          }()
-          _ = {
-           if key == parent?.unit?.link {
-             unitValue = unitValue.merged(with: { deserialize(__dictValue) })
-            }
-          }()
-          _ = {
-           if key == parent?.value?.link {
-             valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
-            }
-          }()
-        }
-      }()
-      var errors = mergeErrors(
-        unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
-      )
-      if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(field: "value"))
-      }
-      guard
-        let valueNonNil = valueValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
-      let result = DivWrapContentSize.ConstraintSize(
-        unit: { unitValue.value }(),
-        value: { valueNonNil }()
-      )
-      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
-    }
-
-    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ConstraintSizeTemplate {
-      return self
-    }
-
-    public func resolveParent(templates: [TemplateName: Any]) throws -> ConstraintSizeTemplate {
-      return try mergedWithParent(templates: templates)
-    }
-  }
-
   public static let type: String = "wrap_content"
   public let parent: String?
   public let constrained: Field<Expression<Bool>>?
-  public let maxSize: Field<ConstraintSizeTemplate>?
-  public let minSize: Field<ConstraintSizeTemplate>?
+  public let maxSize: Field<DivSizeUnitValueTemplate>?
+  public let minSize: Field<DivSizeUnitValueTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
@@ -125,8 +23,8 @@ public final class DivWrapContentSizeTemplate: TemplateValue, Sendable {
   init(
     parent: String?,
     constrained: Field<Expression<Bool>>? = nil,
-    maxSize: Field<ConstraintSizeTemplate>? = nil,
-    minSize: Field<ConstraintSizeTemplate>? = nil
+    maxSize: Field<DivSizeUnitValueTemplate>? = nil,
+    minSize: Field<DivSizeUnitValueTemplate>? = nil
   ) {
     self.parent = parent
     self.constrained = constrained
@@ -156,8 +54,8 @@ public final class DivWrapContentSizeTemplate: TemplateValue, Sendable {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var constrainedValue: DeserializationResult<Expression<Bool>> = { parent?.constrained?.value() ?? .noValue }()
-    var maxSizeValue: DeserializationResult<DivWrapContentSize.ConstraintSize> = .noValue
-    var minSizeValue: DeserializationResult<DivWrapContentSize.ConstraintSize> = .noValue
+    var maxSizeValue: DeserializationResult<DivSizeUnitValue> = .noValue
+    var minSizeValue: DeserializationResult<DivSizeUnitValue> = .noValue
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable
@@ -170,12 +68,12 @@ public final class DivWrapContentSizeTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "max_size" {
-           maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: maxSizeValue)
+           maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self).merged(with: maxSizeValue)
           }
         }()
         _ = {
           if key == "min_size" {
-           minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: minSizeValue)
+           minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self).merged(with: minSizeValue)
           }
         }()
         _ = {
@@ -185,12 +83,12 @@ public final class DivWrapContentSizeTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.maxSize?.link {
-           maxSizeValue = maxSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
+           maxSizeValue = maxSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self) })
           }
         }()
         _ = {
          if key == parent?.minSize?.link {
-           minSizeValue = minSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
+           minSizeValue = minSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self) })
           }
         }()
       }

@@ -52,6 +52,7 @@ public final class DivPager: DivBase, Sendable {
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -164,6 +165,7 @@ public final class DivPager: DivBase, Sendable {
     selectedActions: [DivAction]?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
+    transformations: [DivTransformation]?,
     transitionChange: DivChangeTransition?,
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
@@ -208,6 +210,7 @@ public final class DivPager: DivBase, Sendable {
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -302,27 +305,28 @@ extension DivPager: Equatable {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -369,6 +373,7 @@ extension DivPager: Serializable {
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

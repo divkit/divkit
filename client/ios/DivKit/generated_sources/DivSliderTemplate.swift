@@ -444,6 +444,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
   public let trackActiveStyle: Field<DivDrawableTemplate>?
   public let trackInactiveStyle: Field<DivDrawableTemplate>?
   public let transform: Field<DivTransformTemplate>?
+  public let transformations: Field<[DivTransformationTemplate]>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
@@ -495,6 +496,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyle: dictionary.getOptionalField("track_active_style", templateToType: templateToType),
       trackInactiveStyle: dictionary.getOptionalField("track_inactive_style", templateToType: templateToType),
       transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transformations: dictionary.getOptionalArray("transformations", templateToType: templateToType),
       transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
@@ -547,6 +549,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     trackActiveStyle: Field<DivDrawableTemplate>? = nil,
     trackInactiveStyle: Field<DivDrawableTemplate>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
+    transformations: Field<[DivTransformationTemplate]>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
@@ -596,6 +599,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     self.trackActiveStyle = trackActiveStyle
     self.trackInactiveStyle = trackInactiveStyle
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -646,6 +650,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     let trackActiveStyleValue = { parent?.trackActiveStyle?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let trackInactiveStyleValue = { parent?.trackInactiveStyle?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transformValue = { parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transformationsValue = { parent?.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionChangeValue = { parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionInValue = { parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionOutValue = { parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -694,6 +699,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_active_style", error: $0) },
       trackInactiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_inactive_style", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
@@ -759,6 +765,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyle: { trackActiveStyleNonNil }(),
       trackInactiveStyle: { trackInactiveStyleNonNil }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
@@ -814,6 +821,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     var trackActiveStyleValue: DeserializationResult<DivDrawable> = .noValue
     var trackInactiveStyleValue: DeserializationResult<DivDrawable> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
+    var transformationsValue: DeserializationResult<[DivTransformation]> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
@@ -1012,6 +1020,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         _ = {
           if key == "transform" {
            transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
+          }
+        }()
+        _ = {
+          if key == "transformations" {
+           transformationsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self).merged(with: transformationsValue)
           }
         }()
         _ = {
@@ -1250,6 +1263,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.transformations?.link {
+           transformationsValue = transformationsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformationTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.transitionChange?.link {
            transitionChangeValue = transitionChangeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self) })
           }
@@ -1327,6 +1345,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       _ = { trackActiveStyleValue = trackActiveStyleValue.merged(with: { parent.trackActiveStyle?.resolveValue(context: context, useOnlyLinks: true) }) }()
       _ = { trackInactiveStyleValue = trackInactiveStyleValue.merged(with: { parent.trackInactiveStyle?.resolveValue(context: context, useOnlyLinks: true) }) }()
       _ = { transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transformationsValue = transformationsValue.merged(with: { parent.transformations?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -1374,6 +1393,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_active_style", error: $0) },
       trackInactiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_inactive_style", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transformationsValue.errorsOrWarnings?.map { .nestedObjectError(field: "transformations", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
@@ -1439,6 +1459,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyle: { trackActiveStyleNonNil }(),
       trackInactiveStyle: { trackInactiveStyleNonNil }(),
       transform: { transformValue.value }(),
+      transformations: { transformationsValue.value }(),
       transitionChange: { transitionChangeValue.value }(),
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
@@ -1499,6 +1520,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyle: trackActiveStyle ?? mergedParent.trackActiveStyle,
       trackInactiveStyle: trackInactiveStyle ?? mergedParent.trackInactiveStyle,
       transform: transform ?? mergedParent.transform,
+      transformations: transformations ?? mergedParent.transformations,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
@@ -1554,6 +1576,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       trackActiveStyle: try merged.trackActiveStyle?.resolveParent(templates: templates),
       trackInactiveStyle: try merged.trackInactiveStyle?.resolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
+      transformations: merged.transformations?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),

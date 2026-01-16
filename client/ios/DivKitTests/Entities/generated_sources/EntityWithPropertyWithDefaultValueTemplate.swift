@@ -17,7 +17,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
       self.init(
         int: dictionary.getOptionalExpressionField("int"),
         nonOptional: dictionary.getOptionalExpressionField("non_optional"),
-        url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+        url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString)
       )
     }
 
@@ -34,7 +34,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
     private static func resolveOnlyLinks(context: TemplatesContext, parent: NestedTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
       let intValue = { parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue }()
       let nonOptionalValue = { parent?.nonOptional?.resolveValue(context: context) ?? .noValue }()
-      let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue }()
+      let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) ?? .noValue }()
       var errors = mergeErrors(
         intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
         nonOptionalValue.errorsOrWarnings?.map { .nestedObjectError(field: "non_optional", error: $0) },
@@ -80,7 +80,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
           }()
           _ = {
             if key == "url" {
-             urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
+             urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator).merged(with: urlValue)
             }
           }()
           _ = {
@@ -95,7 +95,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
           }()
           _ = {
            if key == parent?.url?.link {
-             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
+             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) })
             }
           }()
         }
@@ -141,7 +141,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
       parent: dictionary["type"] as? String,
       int: dictionary.getOptionalExpressionField("int"),
       nested: dictionary.getOptionalField("nested", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+      url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString)
     )
   }
 
@@ -160,7 +160,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
     let intValue = { parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue }()
     let nestedValue = { parent?.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) ?? .noValue }()
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
       nestedValue.errorsOrWarnings?.map { .nestedObjectError(field: "nested", error: $0) },
@@ -198,7 +198,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator).merged(with: urlValue)
           }
         }()
         _ = {
@@ -213,7 +213,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) })
           }
         }()
       }

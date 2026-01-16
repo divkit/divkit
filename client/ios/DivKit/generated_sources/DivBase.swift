@@ -27,6 +27,7 @@ public protocol DivBase: DivBlockModeling {
   var selectedActions: [DivAction]? { get }
   var tooltips: [DivTooltip]? { get }
   var transform: DivTransform? { get }
+  var transformations: [DivTransformation]? { get }
   var transitionChange: DivChangeTransition? { get }
   var transitionIn: DivAppearanceTransition? { get }
   var transitionOut: DivAppearanceTransition? { get }

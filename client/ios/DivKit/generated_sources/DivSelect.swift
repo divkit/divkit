@@ -61,6 +61,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
   public let textColor: Expression<Color> // default value: #FF000000
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -204,6 +205,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
     textColor: Expression<Color>? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
+    transformations: [DivTransformation]? = nil,
     transitionChange: DivChangeTransition? = nil,
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
@@ -250,6 +252,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -346,27 +349,28 @@ extension DivSelect: Equatable {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.valueVariable == rhs.valueVariable,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.valueVariable == rhs.valueVariable
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -415,6 +419,7 @@ extension DivSelect: Serializable {
     result["text_color"] = textColor.toValidSerializationValue()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

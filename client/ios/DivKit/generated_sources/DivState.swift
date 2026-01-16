@@ -65,6 +65,7 @@ public final class DivState: DivBase, Sendable {
   public let states: [State] // at least 1 elements
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionAnimationSelector: Expression<DivTransitionSelector> // default value: state_change
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
@@ -174,6 +175,7 @@ public final class DivState: DivBase, Sendable {
     states: [State],
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
+    transformations: [DivTransformation]?,
     transitionAnimationSelector: Expression<DivTransitionSelector>?,
     transitionChange: DivChangeTransition?,
     transitionIn: DivAppearanceTransition?,
@@ -223,6 +225,7 @@ public final class DivState: DivBase, Sendable {
     self.states = states
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionAnimationSelector = transitionAnimationSelector ?? .value(.stateChange)
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
@@ -326,28 +329,33 @@ extension DivState: Equatable {
     }
     guard
       lhs.transform == rhs.transform,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transformations == rhs.transformations,
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -398,6 +406,7 @@ extension DivState: Serializable {
     result["states"] = states.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_animation_selector"] = transitionAnimationSelector.toValidSerializationValue()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()

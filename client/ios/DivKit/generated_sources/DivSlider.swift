@@ -145,6 +145,7 @@ public final class DivSlider: DivBase, Sendable {
   public let trackActiveStyle: DivDrawable
   public let trackInactiveStyle: DivDrawable
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -246,6 +247,7 @@ public final class DivSlider: DivBase, Sendable {
     trackActiveStyle: DivDrawable,
     trackInactiveStyle: DivDrawable,
     transform: DivTransform? = nil,
+    transformations: [DivTransformation]? = nil,
     transitionChange: DivChangeTransition? = nil,
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
@@ -294,6 +296,7 @@ public final class DivSlider: DivBase, Sendable {
     self.trackActiveStyle = trackActiveStyle
     self.trackInactiveStyle = trackInactiveStyle
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -396,26 +399,27 @@ extension DivSlider: Equatable {
     }
     guard
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transformations == rhs.transformations,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -467,6 +471,7 @@ extension DivSlider: Serializable {
     result["track_active_style"] = trackActiveStyle.toDictionary()
     result["track_inactive_style"] = trackInactiveStyle.toDictionary()
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

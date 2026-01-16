@@ -353,6 +353,7 @@ public final class DivText: DivBase, @unchecked Sendable {
   public let tightenWidth: Expression<Bool> // default value: false
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
+  public let transformations: [DivTransformation]?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -571,6 +572,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     tightenWidth: Expression<Bool>? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
+    transformations: [DivTransformation]? = nil,
     transitionChange: DivChangeTransition? = nil,
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
@@ -641,6 +643,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     self.tightenWidth = tightenWidth ?? .value(false)
     self.tooltips = tooltips
     self.transform = transform
+    self.transformations = transformations
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -789,32 +792,33 @@ extension DivText: Equatable {
     guard
       lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transformations == rhs.transformations
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.truncate == rhs.truncate,
-      lhs.underline == rhs.underline,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.underline == rhs.underline
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -886,6 +890,7 @@ extension DivText: Serializable {
     result["tighten_width"] = tightenWidth.toValidSerializationValue()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
+    result["transformations"] = transformations?.map { $0.toDictionary() }
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

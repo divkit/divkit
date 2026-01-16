@@ -10,6 +10,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
   public let animationIn: Field<DivAnimationTemplate>?
   public let animationOut: Field<DivAnimationTemplate>?
   public let backgroundAccessibilityDescription: Field<Expression<String>>?
+  public let bringToTopId: Field<String>?
   public let closeByTapOutside: Field<Expression<Bool>>? // default value: true
   public let div: Field<DivTemplate>?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 5000
@@ -17,6 +18,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
   public let mode: Field<DivTooltipModeTemplate>? // default value: .divTooltipModeModal(DivTooltipModeModal())
   public let offset: Field<DivPointTemplate>?
   public let position: Field<Expression<Position>>?
+  public let substrateDiv: Field<DivTemplate>?
   public let tapOutsideActions: Field<[DivActionTemplate]>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -24,6 +26,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       animationIn: dictionary.getOptionalField("animation_in", templateToType: templateToType),
       animationOut: dictionary.getOptionalField("animation_out", templateToType: templateToType),
       backgroundAccessibilityDescription: dictionary.getOptionalExpressionField("background_accessibility_description"),
+      bringToTopId: dictionary.getOptionalField("bring_to_top_id"),
       closeByTapOutside: dictionary.getOptionalExpressionField("close_by_tap_outside"),
       div: dictionary.getOptionalField("div", templateToType: templateToType),
       duration: dictionary.getOptionalExpressionField("duration"),
@@ -31,6 +34,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       mode: dictionary.getOptionalField("mode", templateToType: templateToType),
       offset: dictionary.getOptionalField("offset", templateToType: templateToType),
       position: dictionary.getOptionalExpressionField("position"),
+      substrateDiv: dictionary.getOptionalField("substrate_div", templateToType: templateToType),
       tapOutsideActions: dictionary.getOptionalArray("tap_outside_actions", templateToType: templateToType)
     )
   }
@@ -39,6 +43,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     animationIn: Field<DivAnimationTemplate>? = nil,
     animationOut: Field<DivAnimationTemplate>? = nil,
     backgroundAccessibilityDescription: Field<Expression<String>>? = nil,
+    bringToTopId: Field<String>? = nil,
     closeByTapOutside: Field<Expression<Bool>>? = nil,
     div: Field<DivTemplate>? = nil,
     duration: Field<Expression<Int>>? = nil,
@@ -46,11 +51,13 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     mode: Field<DivTooltipModeTemplate>? = nil,
     offset: Field<DivPointTemplate>? = nil,
     position: Field<Expression<Position>>? = nil,
+    substrateDiv: Field<DivTemplate>? = nil,
     tapOutsideActions: Field<[DivActionTemplate]>? = nil
   ) {
     self.animationIn = animationIn
     self.animationOut = animationOut
     self.backgroundAccessibilityDescription = backgroundAccessibilityDescription
+    self.bringToTopId = bringToTopId
     self.closeByTapOutside = closeByTapOutside
     self.div = div
     self.duration = duration
@@ -58,6 +65,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     self.mode = mode
     self.offset = offset
     self.position = position
+    self.substrateDiv = substrateDiv
     self.tapOutsideActions = tapOutsideActions
   }
 
@@ -65,6 +73,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     let animationInValue = { parent?.animationIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let animationOutValue = { parent?.animationOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundAccessibilityDescriptionValue = { parent?.backgroundAccessibilityDescription?.resolveOptionalValue(context: context) ?? .noValue }()
+    let bringToTopIdValue = { parent?.bringToTopId?.resolveOptionalValue(context: context) ?? .noValue }()
     let closeByTapOutsideValue = { parent?.closeByTapOutside?.resolveOptionalValue(context: context) ?? .noValue }()
     let divValue = { parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let durationValue = { parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue }()
@@ -72,11 +81,13 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     let modeValue = { parent?.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let offsetValue = { parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let positionValue = { parent?.position?.resolveValue(context: context) ?? .noValue }()
+    let substrateDivValue = { parent?.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let tapOutsideActionsValue = { parent?.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       animationInValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_in", error: $0) },
       animationOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_out", error: $0) },
       backgroundAccessibilityDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_accessibility_description", error: $0) },
+      bringToTopIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "bring_to_top_id", error: $0) },
       closeByTapOutsideValue.errorsOrWarnings?.map { .nestedObjectError(field: "close_by_tap_outside", error: $0) },
       divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
@@ -84,6 +95,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
       offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
       positionValue.errorsOrWarnings?.map { .nestedObjectError(field: "position", error: $0) },
+      substrateDivValue.errorsOrWarnings?.map { .nestedObjectError(field: "substrate_div", error: $0) },
       tapOutsideActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tap_outside_actions", error: $0) }
     )
     if case .noValue = divValue {
@@ -106,6 +118,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       animationIn: { animationInValue.value }(),
       animationOut: { animationOutValue.value }(),
       backgroundAccessibilityDescription: { backgroundAccessibilityDescriptionValue.value }(),
+      bringToTopId: { bringToTopIdValue.value }(),
       closeByTapOutside: { closeByTapOutsideValue.value }(),
       div: { divNonNil }(),
       duration: { durationValue.value }(),
@@ -113,6 +126,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       mode: { modeValue.value }(),
       offset: { offsetValue.value }(),
       position: { positionNonNil }(),
+      substrateDiv: { substrateDivValue.value }(),
       tapOutsideActions: { tapOutsideActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -125,6 +139,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     var animationInValue: DeserializationResult<DivAnimation> = .noValue
     var animationOutValue: DeserializationResult<DivAnimation> = .noValue
     var backgroundAccessibilityDescriptionValue: DeserializationResult<Expression<String>> = { parent?.backgroundAccessibilityDescription?.value() ?? .noValue }()
+    var bringToTopIdValue: DeserializationResult<String> = { parent?.bringToTopId?.value() ?? .noValue }()
     var closeByTapOutsideValue: DeserializationResult<Expression<Bool>> = { parent?.closeByTapOutside?.value() ?? .noValue }()
     var divValue: DeserializationResult<Div> = .noValue
     var durationValue: DeserializationResult<Expression<Int>> = { parent?.duration?.value() ?? .noValue }()
@@ -132,6 +147,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
     var modeValue: DeserializationResult<DivTooltipMode> = .noValue
     var offsetValue: DeserializationResult<DivPoint> = .noValue
     var positionValue: DeserializationResult<Expression<DivTooltip.Position>> = { parent?.position?.value() ?? .noValue }()
+    var substrateDivValue: DeserializationResult<Div> = .noValue
     var tapOutsideActionsValue: DeserializationResult<[DivAction]> = .noValue
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
@@ -151,6 +167,11 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
         _ = {
           if key == "background_accessibility_description" {
            backgroundAccessibilityDescriptionValue = deserialize(__dictValue).merged(with: backgroundAccessibilityDescriptionValue)
+          }
+        }()
+        _ = {
+          if key == "bring_to_top_id" {
+           bringToTopIdValue = deserialize(__dictValue).merged(with: bringToTopIdValue)
           }
         }()
         _ = {
@@ -189,6 +210,11 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+          if key == "substrate_div" {
+           substrateDivValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: substrateDivValue)
+          }
+        }()
+        _ = {
           if key == "tap_outside_actions" {
            tapOutsideActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: tapOutsideActionsValue)
           }
@@ -206,6 +232,11 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.backgroundAccessibilityDescription?.link {
            backgroundAccessibilityDescriptionValue = backgroundAccessibilityDescriptionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.bringToTopId?.link {
+           bringToTopIdValue = bringToTopIdValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -244,6 +275,11 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.substrateDiv?.link {
+           substrateDivValue = substrateDivValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.tapOutsideActions?.link {
            tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
           }
@@ -256,12 +292,14 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       _ = { divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) }) }()
       _ = { modeValue = modeValue.merged(with: { parent.mode?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { offsetValue = offsetValue.merged(with: { parent.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { substrateDivValue = substrateDivValue.merged(with: { parent.substrateDiv?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { parent.tapOutsideActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       animationInValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_in", error: $0) },
       animationOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_out", error: $0) },
       backgroundAccessibilityDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_accessibility_description", error: $0) },
+      bringToTopIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "bring_to_top_id", error: $0) },
       closeByTapOutsideValue.errorsOrWarnings?.map { .nestedObjectError(field: "close_by_tap_outside", error: $0) },
       divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
@@ -269,6 +307,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
       offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
       positionValue.errorsOrWarnings?.map { .nestedObjectError(field: "position", error: $0) },
+      substrateDivValue.errorsOrWarnings?.map { .nestedObjectError(field: "substrate_div", error: $0) },
       tapOutsideActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tap_outside_actions", error: $0) }
     )
     if case .noValue = divValue {
@@ -291,6 +330,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       animationIn: { animationInValue.value }(),
       animationOut: { animationOutValue.value }(),
       backgroundAccessibilityDescription: { backgroundAccessibilityDescriptionValue.value }(),
+      bringToTopId: { bringToTopIdValue.value }(),
       closeByTapOutside: { closeByTapOutsideValue.value }(),
       div: { divNonNil }(),
       duration: { durationValue.value }(),
@@ -298,6 +338,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       mode: { modeValue.value }(),
       offset: { offsetValue.value }(),
       position: { positionNonNil }(),
+      substrateDiv: { substrateDivValue.value }(),
       tapOutsideActions: { tapOutsideActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -314,6 +355,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       animationIn: merged.animationIn?.tryResolveParent(templates: templates),
       animationOut: merged.animationOut?.tryResolveParent(templates: templates),
       backgroundAccessibilityDescription: merged.backgroundAccessibilityDescription,
+      bringToTopId: merged.bringToTopId,
       closeByTapOutside: merged.closeByTapOutside,
       div: try merged.div?.resolveParent(templates: templates),
       duration: merged.duration,
@@ -321,6 +363,7 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
       mode: merged.mode?.tryResolveParent(templates: templates),
       offset: merged.offset?.tryResolveParent(templates: templates),
       position: merged.position,
+      substrateDiv: merged.substrateDiv?.tryResolveParent(templates: templates),
       tapOutsideActions: merged.tapOutsideActions?.tryResolveParent(templates: templates)
     )
   }
