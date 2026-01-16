@@ -2,7 +2,8 @@
   "description": "Currency input mask",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "div_data": {
     "card": {

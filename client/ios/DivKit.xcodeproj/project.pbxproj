@@ -283,6 +283,7 @@
 		8CF32B7E2875E12F003F799A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF32B7D2875E12F003F799A /* Utils.swift */; };
 		8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */; };
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
+		9807E2E32F17D24B00633FB7 /* CurrencyMaskFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9807E2E22F17D23200633FB7 /* CurrencyMaskFormatterTests.swift */; };
 		982A7F142C9C08F30081DE74 /* PagerViewLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */; };
 		983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */; };
 		9860E7E72D9C326E00F93B48 /* TextInputBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */; };
@@ -675,6 +676,7 @@
 		8CF8BBE92B32682700569777 /* DivBuilders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivBuilders.swift; sourceTree = "<group>"; };
 		8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
 		8CFD4C9D2B2C5B780092814C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		9807E2E22F17D23200633FB7 /* CurrencyMaskFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyMaskFormatterTests.swift; sourceTree = "<group>"; };
 		982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagerViewLayoutTests.swift; sourceTree = "<group>"; };
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
 		9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputBlockTests.swift; sourceTree = "<group>"; };
@@ -1410,6 +1412,7 @@
 				437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */,
 				65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */,
 				65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */,
+				9807E2E22F17D23200633FB7 /* CurrencyMaskFormatterTests.swift */,
 			);
 			name = ViewModels;
 			path = LayoutKit/LayoutKitTests/ViewModels;
@@ -2236,6 +2239,7 @@
 				65509D272A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift in Sources */,
 				8C97EA3C2A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift in Sources */,
 				431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */,
+				9807E2E32F17D24B00633FB7 /* CurrencyMaskFormatterTests.swift in Sources */,
 				8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */,
 				8CF3294B2875D5C8003F799A /* GenericCollectionLayoutTests.swift in Sources */,
 				8CF3294F2875D5C8003F799A /* VisibilityActionPerformersTests.swift in Sources */,

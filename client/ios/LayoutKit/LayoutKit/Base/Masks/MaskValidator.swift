@@ -19,7 +19,7 @@ public final class MaskValidator: Equatable {
   }
 
   public func formatted(rawText: String, rawCursorPosition: CursorData? = nil) -> InputData {
-    formatter.formatted(rawText: rawText, rawCursorPosition: rawCursorPosition)
+    self.formatter.formatted(rawText: rawText, rawCursorPosition: rawCursorPosition)
   }
 
   public func removeSymbols(at index: String.Index, data: InputData) -> (String, CursorData?) {
@@ -88,7 +88,7 @@ public final class MaskValidator: Equatable {
 public enum CursorPositionTag {}
 public typealias CursorPosition = Tagged<CursorPositionTag, String.Index>
 
-public struct CursorData: Equatable {
+public struct CursorData: Equatable, Hashable {
   let cursorPosition: CursorPosition
   let afterNonDecodingSymbols: Bool
 }

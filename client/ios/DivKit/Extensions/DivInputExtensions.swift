@@ -293,8 +293,12 @@ extension DivInputMask {
         patternElements: divFixedLengthInputMask.patternElements
           .map { $0.makePatternElement(resolver) }
       ))
-    case .divCurrencyInputMask:
-      nil
+    case let .divCurrencyInputMask(divCurrencyInputMask):
+      MaskValidator(
+        formatter: CurrencyMaskFormatter(
+          locale: divCurrencyInputMask.resolveLocale(resolver)
+        )
+      )
     case .divPhoneInputMask:
       MaskValidator(formatter: PhoneMaskFormatter(
         masksByCountryCode: PhoneMasks().value.typedJSON(),
@@ -310,8 +314,11 @@ extension DivInputMask {
         variableName: divFixedLengthInputMask.rawTextVariable,
         defaultValue: ""
       )
-    case .divCurrencyInputMask:
-      nil
+    case let .divCurrencyInputMask(divCurrencyInputMask):
+      context.makeBinding(
+        variableName: divCurrencyInputMask.rawTextVariable,
+        defaultValue: ""
+      )
     case let .divPhoneInputMask(divPhoneInputMask):
       context.makeBinding(
         variableName: divPhoneInputMask.rawTextVariable,
