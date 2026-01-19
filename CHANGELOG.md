@@ -2,11 +2,15 @@
 
 # Android Client:
 * Add support properties `substrate_div` and `bring_to_top_id` to `div-tooltip`.
+* Check whether action is enabled right before execution.
 * Fix text `alignment_vertical` in ellipsis in api < 28.
 * Fixed `.svg` images scaling.
 * Fixed background image scale.
 * Fixed image blur after `div-data` rebind.
 * Supported `.svg` images inside `text`.
+
+# iOS Client:
+* Implemented currency masks for the input field.
 
 
 ## 32.32.0
