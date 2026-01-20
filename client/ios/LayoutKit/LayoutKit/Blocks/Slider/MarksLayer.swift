@@ -95,25 +95,34 @@ final class MarksLayer: CALayer {
     in ctx: CGContext
   ) {
     let spaceWidth = (bounds.width - configuration.horizontalInset) / (maxValue - minValue)
-    guard startIndex <= endIndex, spaceWidth >= 0 else { return }
+    let markConfiguration = markConfiguration(for: style)
 
-    let markHeight = style == .active ? activeMark.size.height : inactiveMark.size.height
-    let xActiveOrigin = spaceWidth * startIndex
-      .floored() + (configuration.horizontalInset - activeMark.size.width) / 2
-    let xInactiveOrigin = spaceWidth * startIndex
-      .floored() + (configuration.horizontalInset - inactiveMark.size.width) / 2
+    guard markConfiguration != .empty,
+          startIndex <= endIndex,
+          spaceWidth >= 0 else {
+      return
+    }
+
+    let markHeight = markConfiguration.size.height
+    let xOrigin = spaceWidth * startIndex
+      .floored() + (configuration.horizontalInset - markConfiguration.size.width) / 2
     let yOrigin = bounds.midY - markHeight / 2
-    var activeOrigin = CGPoint(x: xActiveOrigin, y: yOrigin)
-    var inactiveOrigin = CGPoint(x: xInactiveOrigin, y: yOrigin)
+    var origin = CGPoint(x: xOrigin, y: yOrigin)
+
     for _ in Int(startIndex - minValue)...Int(endIndex - minValue) {
-      switch style {
-      case .active:
-        activeMark.render(in: ctx, with: activeOrigin)
-      case .inactive:
-        inactiveMark.render(in: ctx, with: inactiveOrigin)
-      }
-      activeOrigin.x += spaceWidth
-      inactiveOrigin.x += spaceWidth
+      markConfiguration.render(in: ctx, with: origin)
+      origin.x += spaceWidth
+    }
+  }
+
+  private func markConfiguration(
+    for style: MarkStyle
+  ) -> MarksConfigurationModel.RoundedRectangle {
+    switch style {
+    case .active:
+      activeMark
+    case .inactive:
+      inactiveMark
     }
   }
 }
