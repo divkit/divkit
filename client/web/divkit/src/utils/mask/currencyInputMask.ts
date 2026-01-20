@@ -38,7 +38,9 @@ export class CurrencyInputMask extends BaseInputMask {
                 acc[i] = this.currencyFormatter.format(i)[0];
                 return acc;
             }, {});
-            this.trimZeroRegExp = new RegExp(`^${this.localeDigits['0']}+`);
+            const nonZeroDigits = Object.keys(this.localeDigits).filter(d => d !== '0');
+            const nonZeroDigitsString = nonZeroDigits.map(it => this.localeDigits[it]).join('|');
+            this.trimZeroRegExp = new RegExp(`^${this.localeDigits['0']}+(?=${nonZeroDigitsString})`);
         } catch (err) {
             this.onException(wrapError(err as Error, {
                 level: 'error',
