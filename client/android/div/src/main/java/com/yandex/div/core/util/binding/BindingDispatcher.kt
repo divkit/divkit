@@ -1,22 +1,23 @@
 package com.yandex.div.core.util.binding
 
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import javax.inject.Inject
-import javax.inject.Named
 
 @DivViewScope
 internal class BindingDispatcher @Inject constructor(
     private val divView: Div2View,
     private val criticalSection: BindingCriticalSection,
-    @param:Named(Names.BACKGROUND_BINDING_EXECUTOR) private val executor: SingleThreadExecutor,
+    private val executor: BindingThreadExecutor,
 ) {
 
     val isBackgroundBindingInProgress: Boolean
-        get() = criticalSection.isHeldBy(executor.thread)
+        get() {
+            val bindingThread = executor.bindingThread ?: return false
+            return criticalSection.isHeldBy(bindingThread)
+        }
 
     /**
      * Use to schedule new task for background binding.
@@ -25,7 +26,14 @@ internal class BindingDispatcher @Inject constructor(
         noinline onComplete: ((T) -> Unit)? = null,
         crossinline block: () -> T
     ) {
-        criticalSection.reserveFor(executor.thread)
+        val bindingThread = try {
+            executor.ensureThreadCreated()
+        } catch (e: IllegalStateException) {
+            KAssert.fail(e) { "Failed to run operation on binding thread: binding thread is not created" }
+            return
+        }
+
+        criticalSection.reserveFor(bindingThread)
         executor.execute {
             val handle = criticalSection.enter()
             try {
