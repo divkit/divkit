@@ -33,6 +33,7 @@ public struct BlockTooltip: Equatable {
   public let position: Position
   public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
+  public let substrateViewFactory: TooltipViewFactory?
 
   public var id: String {
     params.id
@@ -44,13 +45,15 @@ public struct BlockTooltip: Equatable {
     offset: CGPoint,
     position: BlockTooltip.Position,
     useLegacyWidth: Bool = true,
-    tooltipViewFactory: TooltipViewFactory? = nil
+    tooltipViewFactory: TooltipViewFactory? = nil,
+    substrateViewFactory: TooltipViewFactory? = nil
   ) {
     self.block = block
     self.offset = offset
     self.position = position
     self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
+    self.substrateViewFactory = substrateViewFactory
     self.params = params
   }
 

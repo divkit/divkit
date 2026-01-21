@@ -18,6 +18,17 @@ extension DivTooltip {
       return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
+    let substrateViewFactory: TooltipViewFactory? = if let substrateDiv = self.substrateDiv {
+      { [weak self] in
+        guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
+          return nil
+        }
+        return await tooltipViewFactory.makeSubstrateView(div: substrateDiv, tooltipId: self.id)
+      }
+    } else {
+      nil
+    }
+
     let mode: BlockTooltip.Mode = switch mode {
     case .divTooltipModeModal:
       .modal
@@ -49,7 +60,8 @@ extension DivTooltip {
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
-      tooltipViewFactory: tooltipViewFactory
+      tooltipViewFactory: tooltipViewFactory,
+      substrateViewFactory: substrateViewFactory
     )
   }
 }

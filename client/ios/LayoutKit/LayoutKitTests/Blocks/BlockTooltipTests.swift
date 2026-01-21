@@ -47,7 +47,8 @@ final class BlockTooltipTests: XCTestCase {
           duration: 0,
           closeByTapOutside: true
         ),
-        view: TestView()
+        view: TestView(),
+        substrateView: nil
       ),
       handleAction: { _ in },
       onCloseAction: {}
@@ -75,6 +76,42 @@ final class BlockTooltipTests: XCTestCase {
 
     let expectSuperviewChange = expectation(for: predicate, evaluatedWith: nil)
     wait(for: [expectSuperviewChange], timeout: 2)
+  }
+
+  func test_TooltipWithSubstrateView() {
+    let substrateView = TestView()
+    let tooltipView = TooltipContainerView(
+      tooltip: DefaultTooltipManager.Tooltip(
+        params: BlockTooltipParams(
+          id: "tooltip_with_substrate",
+          mode: .modal,
+          duration: 0,
+          closeByTapOutside: true
+        ),
+        view: TestView(),
+        substrateView: substrateView
+      ),
+      handleAction: { _ in },
+      onCloseAction: {}
+    )
+
+    let mainView = UIView()
+    mainView.addSubview(tooltipView)
+
+    tooltipView.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0)
+    tooltipView.forceLayout()
+
+    XCTAssertEqual(
+      tooltipView.subviews.first,
+      substrateView,
+      "Substrate view should be first subview (below tooltip)"
+    )
+
+    XCTAssertEqual(
+      substrateView.frame,
+      tooltipView.bounds,
+      "Substrate view should fill the entire container"
+    )
   }
 }
 

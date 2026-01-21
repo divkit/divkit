@@ -49,6 +49,10 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       addGestureRecognizer(tapRecognizer)
     }
 
+    if let substrateView = tooltip.substrateView {
+      addSubview(substrateView)
+    }
+
     addSubview(tooltipView)
 
     if let backgroundElement {
@@ -94,6 +98,10 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       lastNonZeroBounds = bounds
     }
 
+    if let substrateView = tooltip.substrateView {
+      substrateView.frame = bounds
+    }
+
     backgroundElement?.accessibilityFrameInContainerSpace = bounds
 
     onVisibleBoundsChanged?()
@@ -108,8 +116,30 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     guard !isClosing else { return }
     isClosing = true
     tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
+    if let substrateView = tooltip.substrateView {
+      substrateView.onVisibleBoundsChanged(
+        from: substrateView.bounds,
+        to: .zero
+      )
+    }
 
     if animated {
+      if let substrateView = tooltip.substrateView {
+        let duration = tooltip.params.animationOut?.map(\.duration)
+          .max() ?? defaultAnimationDuration
+        let animation = TransitioningAnimation(
+          kind: .fade,
+          start: 1,
+          end: 0,
+          duration: duration,
+          delay: 0,
+          timingFunction: .easeInEaseOut
+        )
+        substrateView.setInitialParamsAndAnimate(animations: [animation]) {
+          substrateView.removeFromSuperview()
+        }
+      }
+
       if let animationOut = tooltip.params.animationOut {
         setInitialParamsAndAnimate(animations: animationOut) {
           self.removeFromSuperview()
@@ -127,6 +157,19 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   }
 
   func animateAppear() {
+    if let substrateView = tooltip.substrateView {
+      let duration = tooltip.params.animationIn?.map(\.duration).max() ?? defaultAnimationDuration
+      let animation = TransitioningAnimation(
+        kind: .fade,
+        start: 0,
+        end: 1,
+        duration: duration,
+        delay: 0,
+        timingFunction: .easeInEaseOut
+      )
+      substrateView.setInitialParamsAndAnimate(animations: [animation])
+    }
+
     if let animationIn = tooltip.params.animationIn {
       setInitialParamsAndAnimate(animations: animationIn)
     }
@@ -176,4 +219,6 @@ private final class ActivatableAccessibilityElement: UIAccessibilityElement {
     return true
   }
 }
+
+private let defaultAnimationDuration: CGFloat = 0.3
 #endif

@@ -3002,7 +3002,8 @@
       "title": "Tooltip with substrate",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "Tooltips"

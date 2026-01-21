@@ -66,6 +66,7 @@ public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let params: BlockTooltipParams
     public let view: VisibleBoundsTrackingView
+    public let substrateView: VisibleBoundsTrackingView?
   }
 
   public var shownTooltips: Property<Set<String>>
@@ -235,9 +236,12 @@ extension TooltipAnchorView {
       useLegacyWidth: tooltip.useLegacyWidth
     )
 
+    let substrateView = await tooltip.substrateViewFactory?()
+
     return DefaultTooltipManager.Tooltip(
       params: tooltip.params,
-      view: tooltipView
+      view: tooltipView,
+      substrateView: substrateView
     )
   }
 }
