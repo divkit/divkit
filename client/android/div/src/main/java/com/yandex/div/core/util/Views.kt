@@ -52,10 +52,7 @@ internal inline fun View.doOnHierarchyLayout(
     crossinline action: (view: View) -> Unit,
     onEnqueuedAction: () -> Unit
 ) {
-    // If view already has dimensions, we can calculate visibility immediately.
-    // This handles the case when returning to screen - view has same size but
-    // isLayoutRequested=true, so OnLayoutChangeListener wouldn't fire.
-    if (isActuallyLaidOut || (isHierarchyLaidOut && !isLayoutRequested)) {
+    if (isHierarchyLaidOut && !isLayoutRequested) {
         action(this)
     } else {
         doOnNextHierarchyLayout(action, onEnqueuedAction)
