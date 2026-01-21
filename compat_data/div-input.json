@@ -157,5 +157,19 @@
                 "version_added": "32.31.0"
             }
         }
+    }, {
+        "id": "input_currency_input_mask",
+        "name": "<code>currency</code> mask for the input",
+        "compat": {
+            "android": {
+                "version_added": "24.4.0"
+            },
+            "ios": {
+                "version_added": "32.33.0"
+            },
+            "web": {
+                "version_added": "25.0.0"
+            }
+        }
     }]
 }

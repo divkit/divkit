@@ -108,6 +108,17 @@
         "compat": {
             "web": {
                 "version_added": "32.30.0"
+            },
+            "android": {
+                "version_added": "32.33.0"
+            }
+        }
+    }, {
+        "id": "tooltip_bring_to_top_id",
+        "name": "<code>bring_to_top_id</code> property for the tooltip",
+        "compat": {
+            "android": {
+                "version_added": "32.33.0"
             }
         }
     }]
