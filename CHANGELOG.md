@@ -1,3 +1,19 @@
+## 32.34.0
+
+# Android Client:
+* **Experimantal API**: Fixed `IllegalThreadStateException` during asynchronous binding.
+* **Experimental API**: Fixed `ConcurrentModificationException` during asynchronous binding.
+* Fixed separator positioning in RTL horizontal containers.
+* Fixed visibility actions not triggering after navigating back to screen.
+
+# iOS Client:
+* The slider is optimized for working with large ranges of values.
+
+# Web Client:
+* Fixed `currency` input mask for values below "1".
+* Fixed the layout of the `image` in several conditions (especially using `aspect` and/or `min_size` / `max_size`).
+
+
 ## 32.33.0
 
 # Android Client:

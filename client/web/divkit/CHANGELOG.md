@@ -1,3 +1,9 @@
+## 32.34.0 (January 26, 2026)
+
+* Fixed `currency` input mask for values below "1".
+* Fixed the layout of the `image` in several conditions (especially using `aspect` and/or `min_size` / `max_size`).
+
+
 ## 32.32.0 (December 29, 2025)
 
 * Fixed `gallery` layout in several conditions.
