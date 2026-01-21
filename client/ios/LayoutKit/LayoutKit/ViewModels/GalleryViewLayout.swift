@@ -20,6 +20,8 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
     public let origin: CGFloat
     public let size: CGFloat
 
+    fileprivate let mappedFrameIndices: [Int]
+
     public func contains(_ offset: CGFloat) -> Bool {
       let range = origin..<origin + size
       return range.contains(offset)
@@ -31,6 +33,8 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public let blockFrames: [CGRect]
   public let blockPages: [Page]
   public let contentSize: CGSize
+
+  private let frameIndexToPage: [Int: Page]
 
   public var transformation: ElementsTransformation? {
     model.transformation
@@ -47,7 +51,17 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public init(model: GalleryViewModel, boundsSize: CGSize? = nil) {
     self.model = model
     blockFrames = model.frames(fitting: boundsSize)
-    blockPages = model.pages(for: blockFrames, fitting: boundsSize)
+    blockPages = model.pages(
+      for: blockFrames,
+      fitting: boundsSize
+    )
+
+    frameIndexToPage = blockPages.reduce(into: [Int: Page]()) { res, page in
+      for mappedFrameIndie in page.mappedFrameIndices {
+        res[mappedFrameIndie] = page
+      }
+    }
+
     let contentSize = model.contentSize(for: blockFrames, fitting: boundsSize)
     self.contentSize = contentSize
     self.boundsSize = boundsSize ?? contentSize
@@ -59,11 +73,10 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
 
   public func contentOffset(pageIndex: CGFloat) -> CGFloat {
     let integralIndex = Int(pageIndex)
-    guard blockPages.indices.contains(integralIndex) else {
+    guard let page = frameIndexToPage[integralIndex] else {
       return 0
     }
 
-    let page = blockPages[integralIndex]
     let fractionalIndex = pageIndex.truncatingRemainder(dividingBy: 1)
     let maxOffset: CGFloat = switch model.direction {
     case .horizontal:
@@ -126,24 +139,34 @@ extension GalleryViewModel {
     let lastEdge = lastFrameOrigin + lastFrameSize + lastGap(forSize: size)
     let pageSize = self.pageSize(fitting: size)
 
-    let origins = frames.map { frame -> CGFloat in
-      let frameOrigin = frame.origin.dimension(in: direction)
-      switch scrollMode {
-      case .default:
-        return frameOrigin - firstFrameOrigin
-      case .autoPaging, .fixedPaging:
-        let size = frame.size.dimension(in: direction)
-        return max(0, frameOrigin - (pageSize - size) / 2)
-      }
-    }
+    let originsWithIndex: [(CGFloat, Int)] =
+      frames.enumerated().map { index, frame in
+        let frameOrigin = frame.origin.dimension(in: direction)
 
-    return (0..<frames.count).map { index in
+        let origin: CGFloat = switch scrollMode {
+        case .default:
+          frameOrigin - firstFrameOrigin
+        case .autoPaging, .fixedPaging:
+          max(0, frameOrigin - (pageSize - frame.size.dimension(in: direction)) / 2)
+        }
+
+        return (origin, index)
+      }
+
+    let pageOriginToFrameIndex = Dictionary(
+      grouping: originsWithIndex, by: \.0
+    ).mapValues { $0.map(\.1) }
+
+    let origins = originsWithIndex.map(\.0).uniqueElements
+
+    return (0..<origins.count).map { index in
       let origin = origins[index]
       let nextOrigin = index < origins.count - 1 ? origins[index + 1] : lastEdge
       return GalleryViewLayout.Page(
         index: index,
         origin: origin,
-        size: nextOrigin - origin
+        size: nextOrigin - origin,
+        mappedFrameIndices: pageOriginToFrameIndex[origin] ?? []
       )
     }
   }

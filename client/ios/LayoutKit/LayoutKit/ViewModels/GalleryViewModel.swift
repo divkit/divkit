@@ -17,6 +17,15 @@ public struct GalleryViewModel: Equatable {
     var isDefault: Bool {
       self == .default
     }
+
+    var isPagerMode: Bool {
+      if case let .autoPaging(inertia) = self,
+         !inertia {
+        true
+      } else {
+        false
+      }
+    }
   }
 
   public struct Item: Equatable {

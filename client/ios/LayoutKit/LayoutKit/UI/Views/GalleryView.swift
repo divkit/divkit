@@ -552,7 +552,7 @@ extension GalleryView: ScrollDelegate {
   ) {
     guard let scrollView = scrollView as? UIScrollView,
           let scrollStartOffset,
-          !model.scrollMode.isDefault else {
+          model.scrollMode.isPagerMode else {
       return
     }
 
