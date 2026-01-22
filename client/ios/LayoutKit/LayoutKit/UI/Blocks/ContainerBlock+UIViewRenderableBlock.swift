@@ -80,12 +80,17 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
   private weak var observer: ElementStateObserver?
   private weak var overscrollDelegate: ScrollDelegate?
   private weak var renderingDelegate: RenderingDelegate?
+  private var willEnterForegroundNotificationObserver: Any?
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
   var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
 
   private var model: Model! {
     modelAndLastLayoutSize.model
+  }
+
+  deinit {
+    unsubscribeEnterForeground()
   }
 
   override func layoutSubviews() {
@@ -145,6 +150,12 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     return result === self ? nil : result
   }
 
+  override func willMove(toWindow newWindow: UIWindow?) {
+    if newWindow != nil {
+      restartAnimationIfNeeded()
+    }
+  }
+
   func configure(
     model: Model,
     observer: ElementStateObserver?,
@@ -181,11 +192,45 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
 
     clipsToBounds = model.clipContent
 
-    let animationKey = "contentAnimation"
     layer.removeAnimation(forKey: animationKey)
     if let animation = model.contentAnimation?.keyFrameAnimation {
       layer.add(animation, forKey: animationKey)
+      subscribeEnterForeground()
+    } else {
+      unsubscribeEnterForeground()
     }
   }
+
+  private func restartAnimationIfNeeded() {
+    guard
+      willEnterForegroundNotificationObserver != nil,
+      layer.animation(forKey: animationKey) == nil,
+      let animation = modelAndLastLayoutSize.model?.contentAnimation?.keyFrameAnimation
+    else { return }
+
+    layer.add(animation, forKey: animationKey)
+  }
+
+  private func subscribeEnterForeground() {
+    guard willEnterForegroundNotificationObserver == nil else { return }
+
+    willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(
+      forName: UIApplication.willEnterForegroundNotification,
+      object: nil,
+      queue: nil,
+      using: { [weak self] _ in
+        self?.restartAnimationIfNeeded()
+      }
+    )
+  }
+
+  private func unsubscribeEnterForeground() {
+    guard let observer = willEnterForegroundNotificationObserver else { return }
+
+    NotificationCenter.default.removeObserver(observer)
+    willEnterForegroundNotificationObserver = nil
+  }
 }
+
+private let animationKey = "contentAnimation"
 #endif
