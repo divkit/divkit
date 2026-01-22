@@ -7,6 +7,7 @@
 * Fixed visibility actions not triggering after navigating back to screen.
 
 # iOS Client:
+* Restart contentAnimation in ContainerBlock when app goes from background to foreground.
 * The slider is optimized for working with large ranges of values.
 
 # Web Client:
