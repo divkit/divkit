@@ -2,6 +2,7 @@ package com.yandex.div.histogram
 
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramUtils
+import com.yandex.div.internal.util.Clock
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.Test
@@ -19,6 +20,11 @@ class DivParsingHistogramReporterImplTest {
     private val histogramReporter = mock<HistogramReporter>()
     private val underTest =
         DivParsingHistogramReporterImpl({ histogramReporter }) { Executor(Runnable::run) }
+    private val clock = mock<Clock>()
+
+    init {
+        Clock.setForTests(clock)
+    }
 
     @Test
     fun `report data parsing histograms without component`() {

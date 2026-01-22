@@ -1,15 +1,17 @@
 package com.yandex.div.histogram
 
-import android.os.SystemClock
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.internal.util.Clock
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -21,9 +23,15 @@ class Div2ViewHistogramReporterTest {
         totalFilter = { true },
     )
     private val histogramReporter = mock<HistogramReporter>()
+    private val clock = mock<Clock>()
 
-    private val underTest = Div2ViewHistogramReporter({ histogramReporter }) { renderConfig }
-        .also { it.component = TEST_COMPONENT }
+    private val underTest = Div2ViewHistogramReporter(
+        histogramReporter = { histogramReporter },
+        renderConfig = { renderConfig },
+    ).also {
+        Clock.setForTests(clock)
+        it.component = TEST_COMPONENT
+    }
 
     @Test
     fun `report rendering on binding`() {
@@ -39,13 +47,13 @@ class Div2ViewHistogramReporterTest {
     fun `accumulate measure durations on report rendering`() {
         underTest.onRenderStarted()
 
-        SystemClock.setCurrentTimeMillis(100L)
+        whenever(clock.uptimeMicros).doReturn(100L)
         underTest.onMeasureStarted()
-        SystemClock.setCurrentTimeMillis(200L)
+        whenever(clock.uptimeMicros).doReturn(200L)
         underTest.onMeasureFinished()
 
         underTest.onMeasureStarted()
-        SystemClock.setCurrentTimeMillis(300L)
+        whenever(clock.uptimeMicros).doReturn(300L)
         underTest.onMeasureFinished()
 
         underTest.onDrawFinished()
@@ -62,13 +70,13 @@ class Div2ViewHistogramReporterTest {
     fun `accumulate layout durations on report rendering`() {
         underTest.onRenderStarted()
 
-        SystemClock.setCurrentTimeMillis(100L)
+        whenever(clock.uptimeMicros).doReturn(100L)
         underTest.onLayoutStarted()
-        SystemClock.setCurrentTimeMillis(200L)
+        whenever(clock.uptimeMicros).doReturn(200L)
         underTest.onLayoutFinished()
 
         underTest.onLayoutStarted()
-        SystemClock.setCurrentTimeMillis(300L)
+        whenever(clock.uptimeMicros).doReturn(300L)
         underTest.onLayoutFinished()
 
         underTest.onDrawFinished()
@@ -86,17 +94,17 @@ class Div2ViewHistogramReporterTest {
         verifyReportRendering(isRebinding = false)
         clearInvocations(histogramReporter)
 
-        SystemClock.setCurrentTimeMillis(2000L)
+        whenever(clock.uptimeMicros).doReturn(2000L)
         underTest.onMeasureStarted()
-        SystemClock.setCurrentTimeMillis(2100L)
+        whenever(clock.uptimeMicros).doReturn(2100L)
         underTest.onMeasureFinished()
 
         underTest.onLayoutStarted()
-        SystemClock.setCurrentTimeMillis(2300L)
+        whenever(clock.uptimeMicros).doReturn(2300L)
         underTest.onLayoutFinished()
 
         underTest.onDrawStarted()
-        SystemClock.setCurrentTimeMillis(2600L)
+        whenever(clock.uptimeMicros).doReturn(2600L)
         underTest.onDrawFinished()
 
         verify(histogramReporter, never()).reportDuration(
@@ -112,9 +120,9 @@ class Div2ViewHistogramReporterTest {
     private fun verifyReportRendering(isRebinding: Boolean) {
         underTest.onRenderStarted()
 
-        SystemClock.setCurrentTimeMillis(100L)
+        whenever(clock.uptimeMicros).doReturn(100L)
         underTest.run { if (isRebinding) onRebindingStarted() else onBindingStarted() }
-        SystemClock.setCurrentTimeMillis(200L)
+        whenever(clock.uptimeMicros).doReturn(200L)
         underTest.run {
             if (isRebinding) {
                 onRebindingFinished()
@@ -134,15 +142,15 @@ class Div2ViewHistogramReporterTest {
         }
 
         underTest.onMeasureStarted()
-        SystemClock.setCurrentTimeMillis(400L)
+        whenever(clock.uptimeMicros).doReturn(400L)
         underTest.onMeasureFinished()
 
         underTest.onLayoutStarted()
-        SystemClock.setCurrentTimeMillis(700L)
+        whenever(clock.uptimeMicros).doReturn(700L)
         underTest.onLayoutFinished()
 
         underTest.onDrawStarted()
-        SystemClock.setCurrentTimeMillis(1100L)
+        whenever(clock.uptimeMicros).doReturn(1100L)
         underTest.onDrawFinished()
 
         verify(histogramReporter).reportDuration(

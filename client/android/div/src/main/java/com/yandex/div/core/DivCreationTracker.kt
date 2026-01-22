@@ -1,11 +1,11 @@
 package com.yandex.div.core
 
-import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.DIV_CONTEXT_CREATE_HISTOGRAM
 import com.yandex.div.histogram.DIV_VIEW_CREATE_HISTOGRAM
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.histogram.util.HistogramClock
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class DivCreationTracker(private val contextCreationStarted: Long) {
@@ -46,7 +46,7 @@ internal class DivCreationTracker(private val contextCreationStarted: Long) {
         if (contextCreatedTime >= 0) {
             return
         }
-        contextCreatedTime = currentUptimeMillis
+        contextCreatedTime = currentUptime
     }
 
     /**
@@ -100,7 +100,7 @@ internal class DivCreationTracker(private val contextCreationStarted: Long) {
             isColdViewCreate.set(true)
         }
 
-        val currentUptimeMillis: Long
-            get() = SystemClock.uptimeMillis()
+        val currentUptime: Long
+            get() = HistogramClock.uptime()
     }
 }

@@ -2,7 +2,6 @@ package com.yandex.div.core
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
@@ -21,6 +20,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.tooltip.DivTooltipManager
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
@@ -87,7 +87,7 @@ class Div2Context @MainThread private constructor(
             .baseContext(baseContext)
             .configuration(configuration)
             .themeId(themeId)
-            .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
+            .divCreationTracker(DivCreationTracker(HistogramClock.uptime()))
             .divVariableController(configuration.divVariableController)
             .build(),
         lifecycleOwner

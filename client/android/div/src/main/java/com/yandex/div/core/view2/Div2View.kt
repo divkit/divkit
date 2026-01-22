@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -79,11 +78,13 @@ import com.yandex.div.core.view2.reuse.reusableList
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.internal.util.Clock
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
@@ -280,7 +281,7 @@ class Div2View private constructor(
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 
     init {
-        timeCreated = DivCreationTracker.currentUptimeMillis
+        timeCreated = DivCreationTracker.currentUptime
         div2Component.releaseManager.observeDivLifecycle(this)
     }
 
@@ -288,7 +289,7 @@ class Div2View private constructor(
     constructor(context: Div2Context,
                 attrs: AttributeSet? = null,
                 defStyleAttr: Int = 0
-    ) : this(context, attrs, defStyleAttr, SystemClock.uptimeMillis())
+    ) : this(context, attrs, defStyleAttr, HistogramClock.uptime())
 
     @ExperimentalApi
     fun isBackgroundBindingInProgress(): Boolean = bindingDispatcher.isBackgroundBindingInProgress

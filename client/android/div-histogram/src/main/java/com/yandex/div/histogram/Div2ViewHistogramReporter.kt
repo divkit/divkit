@@ -1,10 +1,11 @@
 package com.yandex.div.histogram
 
-import android.os.SystemClock
 import androidx.annotation.MainThread
 import com.yandex.div.histogram.metrics.RenderMetrics
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.util.Clock
 
 @MainThread
 class Div2ViewHistogramReporter(
@@ -27,7 +28,7 @@ class Div2ViewHistogramReporter(
     private val renderMetrics by lazy(LazyThreadSafetyMode.NONE, ::RenderMetrics)
 
     private val currentUptime: Long
-        get() = SystemClock.uptimeMillis()
+        get() = HistogramClock.uptime()
 
     fun onRenderStarted() {
         renderStarted = true
@@ -119,25 +120,25 @@ class Div2ViewHistogramReporter(
             val renderConfig = renderConfig()
             reportDuration(
                 DIV_RENDER_TOTAL,
-                renderMetrics.totalMs,
+                renderMetrics.totalDuration,
                 component,
                 filter = renderConfig.totalFilter
             )
             reportDuration(
                 DIV_RENDER_MEASURE,
-                renderMetrics.measureMs,
+                renderMetrics.measureDuration,
                 component,
                 filter = renderConfig.measureFilter
             )
             reportDuration(
                 DIV_RENDER_LAYOUT,
-                renderMetrics.layoutMs,
+                renderMetrics.layoutDuration,
                 component,
                 filter = renderConfig.layoutFilter
             )
             reportDuration(
                 DIV_RENDER_DRAW,
-                renderMetrics.drawMs,
+                renderMetrics.drawDuration,
                 component,
                 filter = renderConfig.drawFilter
             )

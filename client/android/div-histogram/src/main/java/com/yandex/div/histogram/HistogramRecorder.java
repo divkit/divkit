@@ -123,7 +123,9 @@ public class HistogramRecorder {
      * @param unit the unit of the duration argument
      */
     public void recordShortTimeHistogram(@NonNull String name, long duration, @NonNull TimeUnit unit) {
-        mBridge.recordTimeHistogram(name, unit.toMillis(duration), 1L, 10_000L, TimeUnit.MILLISECONDS, 50);
+        long min = unit.convert(1L, TimeUnit.MILLISECONDS);
+        long max = unit.convert(10L, TimeUnit.SECONDS);
+        mBridge.recordTimeHistogram(name, duration, min, max, unit, 50);
     }
 
     /**
@@ -133,7 +135,10 @@ public class HistogramRecorder {
      * @param unit the unit of the duration argument
      */
     public void recordMediumTimeHistogram(@NonNull String name, long duration, @NonNull TimeUnit unit) {
-        mBridge.recordTimeHistogram(name, unit.toMillis(duration), 1L, 180_000L, TimeUnit.MILLISECONDS, 50);
+        long min = unit.convert(1L, TimeUnit.MILLISECONDS);
+        long max = unit.convert(180L, TimeUnit.SECONDS);
+        int bucketCount = 50;
+        mBridge.recordTimeHistogram(name, duration, min, max, unit, bucketCount);
     }
 
     /**
@@ -143,7 +148,10 @@ public class HistogramRecorder {
      * @param unit the unit of the duration argument
      */
     public void recordLongTimeHistogram(@NonNull String name, long duration, @NonNull TimeUnit unit) {
-        mBridge.recordTimeHistogram(name, unit.toMillis(duration), 1L, 3_600_000L, TimeUnit.MILLISECONDS, 50);
+        long min = unit.convert(1L, TimeUnit.MILLISECONDS);
+        long max = unit.convert(1L, TimeUnit.HOURS);
+        int bucketCount = 50;
+        mBridge.recordTimeHistogram(name, duration, min, max, unit, bucketCount);
     }
 
     /**

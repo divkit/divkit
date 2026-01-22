@@ -4,45 +4,45 @@ import kotlin.math.max
 
 internal class RenderMetrics {
 
-    var bindingMs: Long = 0
+    var bindingDuration: Long = 0
         private set
-    var rebindingMs: Long = 0
+    var rebindingDuration: Long = 0
         private set
-    var measureMs: Long = 0
+    var measureDuration: Long = 0
         private set
-    var layoutMs: Long = 0
+    var layoutDuration: Long = 0
         private set
-    var drawMs: Long = 0
+    var drawDuration: Long = 0
         private set
 
-    val totalMs: Long
-        get() = max(bindingMs, rebindingMs) + measureMs + layoutMs + drawMs
+    val totalDuration: Long
+        get() = max(bindingDuration, rebindingDuration) + measureDuration + layoutDuration + drawDuration
 
     fun binding(duration: Long) {
-        bindingMs = duration
+        bindingDuration = duration
     }
 
     fun rebinding(duration: Long) {
-        rebindingMs = duration
+        rebindingDuration = duration
     }
 
     fun addMeasure(duration: Long) {
-        measureMs += duration
+        measureDuration += duration
     }
 
     fun addLayout(duration: Long) {
-        layoutMs += duration
+        layoutDuration += duration
     }
 
     fun addDraw(duration: Long) {
-        drawMs += duration
+        drawDuration += duration
     }
 
     fun reset() {
-        measureMs = 0
-        layoutMs = 0
-        drawMs = 0
-        bindingMs = 0
-        rebindingMs = 0
+        measureDuration = 0
+        layoutDuration = 0
+        drawDuration = 0
+        bindingDuration = 0
+        rebindingDuration = 0
     }
 }

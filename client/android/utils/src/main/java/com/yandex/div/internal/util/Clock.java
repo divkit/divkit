@@ -1,5 +1,6 @@
 package com.yandex.div.internal.util;
 
+import android.os.Build;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,5 +50,18 @@ public class Clock {
 
     public long getElapsedRealtimeMs() {
         return SystemClock.elapsedRealtime();
+    }
+
+    /**
+     * @return current uptime in microseconds.
+     */
+    public long getUptimeMicros() {
+        long nanoTime;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            nanoTime = System.nanoTime();
+        } else {
+            nanoTime = SystemClock.uptimeNanos();
+        }
+        return nanoTime / 1000L;
     }
 }

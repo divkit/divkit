@@ -1,8 +1,8 @@
 package com.yandex.div.storage
 
-import android.os.SystemClock
 import androidx.annotation.AnyThread
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.ParsingException
 import com.yandex.div.storage.DivDataRepositoryException.JsonParsingException
@@ -44,7 +44,7 @@ internal class DivDataRepositoryImpl(
             )
         } else emptyList()
 
-        val parseStarted = SystemClock.uptimeMillis()
+        val parseStarted = HistogramClock.uptime()
 
         val results = ArrayList<DivDataRepository.DivDataWithMeta>(payload.divs.size)
         val validPayload = ArrayList<RawDataAndMetadata>(payload.divs.size)
@@ -74,7 +74,7 @@ internal class DivDataRepositoryImpl(
         }
 
         if (UiThreadHandler.get().isMainThread()) {
-            histogramRecorder.reportDivDataLoadTime(SystemClock.uptimeMillis() - parseStarted)
+            histogramRecorder.reportDivDataLoadTime(HistogramClock.uptime() - parseStarted)
         }
 
         results.forEach { inMemoryData[it.id] = it }
@@ -177,7 +177,7 @@ internal class DivDataRepositoryImpl(
             templateContainer.getEnvironment(groupId)
         }
 
-        val parseStarted = SystemClock.uptimeMillis()
+        val parseStarted = HistogramClock.uptime()
 
         val results = ArrayList<DivDataRepository.DivDataWithMeta>(ids.size)
         rawData.forEach {
@@ -205,7 +205,7 @@ internal class DivDataRepositoryImpl(
             )
         }
 
-        histogramRecorder.reportDivDataLoadTime(SystemClock.uptimeMillis() - parseStarted)
+        histogramRecorder.reportDivDataLoadTime(HistogramClock.uptime() - parseStarted)
 
         return DivDataRepositoryResult(results, exceptions)
     }

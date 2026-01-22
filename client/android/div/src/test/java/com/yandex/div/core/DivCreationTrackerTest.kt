@@ -1,12 +1,13 @@
 package com.yandex.div.core
 
-import android.os.SystemClock
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.internal.util.Clock
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
@@ -15,133 +16,149 @@ import org.robolectric.RobolectricTestRunner
 class DivCreationTrackerTest {
 
     private val histogramReporter = mock<HistogramReporter>()
+    private var currentUptimeMicros = 0L
+
+    private val mockClock = mock<Clock> {
+        on { uptimeMicros } doAnswer { currentUptimeMicros }
+    }
+
+    @Before
+    fun setUp() {
+        Clock.setForTests(mockClock)
+    }
 
     @Before
     @After
     fun resetCreatedTimes() {
         DivCreationTracker.resetColdCreation()
+        currentUptimeMicros = 0L
+    }
+
+    @After
+    fun tearDown() {
+        Clock.setForTests(null)
     }
 
     @Test
     fun `send cold view create histogram`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(200)
+        currentUptimeMicros = 200_000L
         val callType = underTest.viewCreateCallType
 
-        underTest.sendHistograms(100, 200, histogramReporter, callType)
+        underTest.sendHistograms(100_000L, 200_000L, histogramReporter, callType)
 
         verify(histogramReporter).reportDuration(
             "Div.View.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_COLD
         )
     }
 
     @Test
     fun `send cold view create once if views created at the same time`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(200)
+        currentUptimeMicros = 200_000L
         val firstViewCreateCallType = underTest.viewCreateCallType
         val secondViewCreateCallType = underTest.viewCreateCallType
 
-        underTest.sendHistograms(100, 200, histogramReporter, firstViewCreateCallType)
-        underTest.sendHistograms(100, 200, histogramReporter, secondViewCreateCallType)
+        underTest.sendHistograms(100_000L, 200_000L, histogramReporter, firstViewCreateCallType)
+        underTest.sendHistograms(100_000L, 200_000L, histogramReporter, secondViewCreateCallType)
 
         verify(histogramReporter).reportDuration(
             "Div.View.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_COLD
         )
         verify(histogramReporter).reportDuration(
             "Div.View.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_WARM
         )
     }
 
     @Test
     fun `send cool view create histogram`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
         underTest.viewCreateCallType
 
-        SystemClock.setCurrentTimeMillis(200)
-        val newUnderTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 200_000L
+        val newUnderTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(300)
+        currentUptimeMicros = 300_000L
         val callType = newUnderTest.viewCreateCallType
 
-        newUnderTest.sendHistograms(200, 300, histogramReporter, callType)
+        newUnderTest.sendHistograms(200_000L, 300_000L, histogramReporter, callType)
 
         verify(histogramReporter).reportDuration(
             "Div.View.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_COOL
         )
     }
 
     @Test
     fun `send warm view create histogram`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(200)
+        currentUptimeMicros = 200_000L
         underTest.viewCreateCallType
 
-        SystemClock.setCurrentTimeMillis(300)
+        currentUptimeMicros = 300_000L
         val callType = underTest.viewCreateCallType
 
-        underTest.sendHistograms(300, 400, histogramReporter, callType)
+        underTest.sendHistograms(300_000L, 400_000L, histogramReporter, callType)
 
         verify(histogramReporter).reportDuration(
             "Div.View.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_WARM
         )
     }
 
     @Test
     fun `send cold context create histogram`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(200)
+        currentUptimeMicros = 200_000L
         underTest.onContextCreationFinished()
         val callType = underTest.viewCreateCallType
 
-        underTest.sendHistograms(100, 200, histogramReporter, callType)
+        underTest.sendHistograms(100_000L, 200_000L, histogramReporter, callType)
 
         verify(histogramReporter).reportDuration(
             "Div.Context.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_COLD
         )
     }
 
     @Test
     fun `send cool context create histogram`() {
-        SystemClock.setCurrentTimeMillis(100)
-        val underTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 100_000L
+        val underTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(200)
+        currentUptimeMicros = 200_000L
         underTest.onContextCreationFinished()
 
-        SystemClock.setCurrentTimeMillis(300)
-        val newUnderTest = DivCreationTracker(SystemClock.uptimeMillis())
+        currentUptimeMicros = 300_000L
+        val newUnderTest = DivCreationTracker(currentUptimeMicros)
 
-        SystemClock.setCurrentTimeMillis(400)
+        currentUptimeMicros = 400_000L
         newUnderTest.onContextCreationFinished()
         val callType = underTest.viewCreateCallType
 
-        newUnderTest.sendHistograms(300, 400, histogramReporter, callType)
+        newUnderTest.sendHistograms(300_000L, 400_000L, histogramReporter, callType)
 
         verify(histogramReporter).reportDuration(
             "Div.Context.Create",
-            100,
+            100_000L,
             forceCallType = HistogramCallType.CALL_TYPE_COOL
         )
     }

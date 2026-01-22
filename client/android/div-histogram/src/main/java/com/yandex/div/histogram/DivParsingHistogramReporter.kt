@@ -1,9 +1,10 @@
 package com.yandex.div.histogram
 
-import android.os.SystemClock
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils
+import com.yandex.div.internal.util.Clock
 import org.json.JSONObject
 import java.util.concurrent.Executor
 
@@ -64,7 +65,7 @@ class DivParsingHistogramReporterImpl(
 ) : DivParsingHistogramReporter {
 
     private val currentUptime: Long
-        get() = SystemClock.uptimeMillis()
+        get() = HistogramClock.uptime()
 
     override fun <D> measureDataParsing(
         json: JSONObject,

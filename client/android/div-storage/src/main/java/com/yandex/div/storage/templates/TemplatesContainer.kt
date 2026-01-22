@@ -1,9 +1,9 @@
 package com.yandex.div.storage.templates
 
-import android.os.SystemClock
 import androidx.annotation.WorkerThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.TemplateParsingEnvironment
@@ -23,7 +23,6 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Provider
-import kotlin.system.measureTimeMillis
 
 private typealias TemplateHash = String
 private typealias TemplateId = String
@@ -143,7 +142,7 @@ internal class TemplatesContainer(
             val parsingHistogramNames = parsingHistograms(parseHistogramBaseName, sourceType)
 
             val results: TemplateParsingEnvironment.TemplateParsingResult<DivTemplate>
-            val duration = measureTimeMillis {
+            val duration = HistogramClock.measureTime {
                 results = parsingHistogramProxy.get()
                         .parseTemplatesWithResultsAndDependencies(env, json,
                                 histogramComponentName)
@@ -278,9 +277,9 @@ private class CommonTemplatesPool(
     private fun loadFromStorage(env: DivParsingEnvironment,
                                 templateReferences: TemplateReferenceResolver,
                                 templateHashes: Set<String>) {
-        val loadingStarted = SystemClock.uptimeMillis()
+        val loadingStarted = HistogramClock.uptime()
         val loadResult = divStorage.readTemplates(templateHashes)
-        histogramRecorder.reportTemplateLoadedTime(SystemClock.uptimeMillis() - loadingStarted)
+        histogramRecorder.reportTemplateLoadedTime(HistogramClock.uptime() - loadingStarted)
         val templatesJson = JSONObject()
         loadResult.restoredData.forEach {
             val hash = it.hash

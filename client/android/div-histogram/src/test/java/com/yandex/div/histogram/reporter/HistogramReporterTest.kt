@@ -38,7 +38,7 @@ class HistogramReporterTest {
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_HISTOGRAM.Cold",
             100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
     }
 
@@ -49,12 +49,12 @@ class HistogramReporterTest {
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_HISTOGRAM.Cold",
             100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_COMPONENT.$TEST_HISTOGRAM.Cold",
             100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
     }
 
@@ -85,12 +85,12 @@ class HistogramReporterTest {
 
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_HISTOGRAM.Warm", 100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_COMPONENT.$TEST_HISTOGRAM.Cold",
             100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
     }
 
@@ -107,7 +107,7 @@ class HistogramReporterTest {
 
         verify(histogramRecorder).recordShortTimeHistogram(
             "$TEST_COMPONENT.$TEST_HISTOGRAM.Cold", 100,
-            TimeUnit.MILLISECONDS
+            TimeUnit.MICROSECONDS
         )
         verifyNoMoreInteractions(histogramRecorder)
     }

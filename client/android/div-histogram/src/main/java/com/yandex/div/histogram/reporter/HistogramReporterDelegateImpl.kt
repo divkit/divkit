@@ -5,6 +5,7 @@ import com.yandex.div.histogram.HistogramCallTypeProvider
 import com.yandex.div.histogram.HistogramRecordConfiguration
 import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.TaskExecutor
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils
 import com.yandex.div.histogram.util.MIN_DURATION_HISTOGRAM_VALUE
 import com.yandex.div.histogram.util.MIN_SIZE_HISTOGRAM_VALUE
@@ -34,7 +35,7 @@ class HistogramReporterDelegateImpl(
             histogramRecorder.get().recordShortTimeHistogram(
                 "$histogramName.$callType",
                 duration.coerceAtLeast(MIN_DURATION_HISTOGRAM_VALUE),
-                TimeUnit.MILLISECONDS
+                HistogramClock.durationUnit,
             )
         }
     }
