@@ -342,7 +342,7 @@ internal class DivInputBinder @Inject constructor(
             primaryVariable = div.textVariable
         }
 
-        val callbacks = createCallbacks(bindingContext, inputMask, inputFilters, divView, secondaryVariable)
+        val callbacks = createCallbacks(bindingContext, inputMask, inputFilters, secondaryVariable)
         addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
 
         observeValidators(div, bindingContext.expressionResolver, divView)
@@ -352,7 +352,6 @@ internal class DivInputBinder @Inject constructor(
         bindingContext: BindingContext,
         inputMask: BaseInputMask?,
         filters: InputFiltersHolder?,
-        divView: Div2View,
         secondaryVariable: String?,
     ) = object : TwoWayStringVariableBinder.Callbacks {
 
@@ -362,7 +361,7 @@ internal class DivInputBinder @Inject constructor(
             inputMask?.let {
                 it.overrideRawValue(newValue)
                 setSecondVariable(it.value)
-                setText(it.value)
+                setTextWithSelection(it.value)
                 return
             }
 
@@ -376,7 +375,14 @@ internal class DivInputBinder @Inject constructor(
             if (text?.toString() == newValue) {
                 return
             }
-            setText(newValue)
+            setTextWithSelection(newValue)
+        }
+
+        private fun setTextWithSelection(value: String) {
+            setText(value)
+            if (isFocused) {
+                setSelection(value.length)
+            }
         }
 
         override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) =
