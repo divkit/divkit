@@ -3036,7 +3036,8 @@
         "Bring to top view above the substrate",
         "Booth the tooltip and the substrate are hidden"
       ],
-      "file": "tooltips/tooltip-with-bring-to-top-view.json"
+      "file": "tooltips/tooltip-with-bring-to-top-view.json",
+      "case_id": 491
     },
     {
       "title": "Persistent values storage",
