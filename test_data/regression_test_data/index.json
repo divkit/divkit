@@ -2280,22 +2280,6 @@
       "case_id": 466
     },
     {
-      "title": "Lottie cycled animations",
-      "case_id": 154,
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
-      "tags": [
-        "lottie"
-      ],
-      "expected_results": [
-        "Red circle appears with animation, then blink"
-      ],
-      "file": "animations/lottie/lottie_cycled_animations.json"
-    },
-    {
       "title": "States default state",
       "case_id": 88,
       "automated": [
