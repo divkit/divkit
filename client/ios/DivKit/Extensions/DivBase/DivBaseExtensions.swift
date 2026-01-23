@@ -23,7 +23,10 @@ extension DivBase {
     let reuseId = resolveReuseId(expressionResolver)
 
     let visibility: DivBaseBlockBuilder.Visibility = try {
-      let visibility = resolveVisibility(expressionResolver)
+      let visibility = DivVisibility.min(
+        context.parentVisibility,
+        resolveVisibility(expressionResolver)
+      )
 
       switch visibility {
       case .gone:

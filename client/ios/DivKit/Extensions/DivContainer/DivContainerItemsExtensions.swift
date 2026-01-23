@@ -32,7 +32,9 @@ extension DivContainer {
     }
 
     return filtredItems.makeBlocks(
-      context: context,
+      context: context.modifying(
+        parentVisibility: resolveVisibility(context.expressionResolver)
+      ),
       sizeModifier: DivContainerSizeModifier(
         context: context,
         container: self,

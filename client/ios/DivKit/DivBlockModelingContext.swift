@@ -23,6 +23,7 @@ public struct DivBlockModelingContext {
   private(set) var viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
+  private(set) var parentVisibility: DivVisibility = .visible
   let stateManager: DivStateManager
   let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
@@ -234,7 +235,8 @@ public struct DivBlockModelingContext {
     parentDivStatePath: DivStatePath? = nil,
     errorsStorage: DivErrorsStorage? = nil,
     sizeModifier: DivSizeModifier? = nil,
-    prototypeParams: PrototypeParams? = nil
+    prototypeParams: PrototypeParams? = nil,
+    parentVisibility: DivVisibility? = nil
   ) -> Self {
     var context = self
     // It is important to set nil value for elementId if nothing passed.
@@ -252,7 +254,16 @@ public struct DivBlockModelingContext {
       context.sizeModifier = sizeModifier
     }
 
-    if pathSuffix == nil, errorsStorage == nil, prototypeParams == nil {
+    if let parentVisibility {
+      context.parentVisibility = DivVisibility.min(
+        self.parentVisibility,
+        parentVisibility
+      )
+    }
+
+    if pathSuffix == nil,
+       errorsStorage == nil,
+       prototypeParams == nil {
       return context
     }
 
