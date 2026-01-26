@@ -16,7 +16,7 @@ JSON → DivData → DivView
 
 - DivView - plain UIKit View.
 
-Although DivKit produces UIKit views, it can be easyly used in SwiftUI apps (see [playground application](DivKitPlayground)).
+Although DivKit produces UIKit views, it can be easily used in SwiftUI apps (see [playground application](DivKitPlayground)).
 
 ## Installing DivKit
 
