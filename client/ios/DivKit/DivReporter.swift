@@ -6,6 +6,7 @@ import LayoutKit
 public protocol DivReporter {
   func reportError(cardId: DivCardID, error: DivError)
   func reportAction(cardId: DivCardID, info: DivActionInfo)
+  func reportAction(context: DivActionHandlingContext)
 
   @_spi(Performance)
   func reportViewWasCreated(cardId: DivCardID)
@@ -26,6 +27,10 @@ extension DivReporter {
   public func reportViewWillLayout(path _: UIElementPath) {}
   public func reportViewDidLayout(path _: UIElementPath) {}
   public func reportAction(cardId _: DivCardID, info _: DivActionInfo) {}
+
+  public func reportAction(context: DivActionHandlingContext) {
+    reportAction(cardId: context.cardId, info: context.info)
+  }
 
   func asExpressionErrorTracker(cardId: DivCardID) -> ExpressionErrorTracker {
     {

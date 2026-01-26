@@ -1,14 +1,15 @@
 import LayoutKit
 
-struct DivActionHandlingContext {
-  let info: DivActionInfo
-  let expressionResolver: ExpressionResolver
-  let variablesStorage: DivVariablesStorage
-  let blockStateStorage: DivBlockStateStorage
+public struct DivActionHandlingContext {
+  public let info: DivActionInfo
+  public let expressionResolver: ExpressionResolver
+
   let actionHandler: DivActionHandler
+  let blockStateStorage: DivBlockStateStorage
+  let variablesStorage: DivVariablesStorage
   let updateCard: DivActionHandler.UpdateCardAction
 
-  var cardId: DivCardID {
+  public var cardId: DivCardID {
     info.cardId
   }
 

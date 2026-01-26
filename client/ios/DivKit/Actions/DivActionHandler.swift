@@ -201,9 +201,9 @@ public final class DivActionHandler {
     let context = DivActionHandlingContext(
       info: info,
       expressionResolver: expressionResolver,
-      variablesStorage: variablesStorage,
-      blockStateStorage: blockStateStorage,
       actionHandler: self,
+      blockStateStorage: blockStateStorage,
+      variablesStorage: variablesStorage,
       updateCard: updateCard
     )
 
@@ -256,7 +256,7 @@ public final class DivActionHandler {
       handleUrl(action, context: context, sender: sender)
     }
 
-    reporter.reportAction(cardId: cardId, info: info)
+    reporter.reportAction(context: context)
 
     if source == .visibility {
       trackVisibility(info.logId, cardId)
