@@ -85,6 +85,7 @@ extension DivVideoSource: Equatable {
 #endif
 
 extension DivVideoSource: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -111,6 +112,7 @@ extension DivVideoSource.Resolution: Equatable {
 #endif
 
 extension DivVideoSource.Resolution: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

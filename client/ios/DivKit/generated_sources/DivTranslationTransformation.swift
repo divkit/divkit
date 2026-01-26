@@ -33,6 +33,7 @@ extension DivTranslationTransformation: Equatable {
 #endif
 
 extension DivTranslationTransformation: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

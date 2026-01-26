@@ -328,6 +328,7 @@ extension DivSeparator: Equatable {
 #endif
 
 extension DivSeparator: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -394,6 +395,7 @@ extension DivSeparator.DelimiterStyle: Equatable {
 #endif
 
 extension DivSeparator.DelimiterStyle: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["color"] = color.toValidSerializationValue()

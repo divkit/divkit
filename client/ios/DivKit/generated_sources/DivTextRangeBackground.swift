@@ -35,6 +35,7 @@ extension DivTextRangeBackground: Equatable {
 #endif
 
 extension DivTextRangeBackground: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

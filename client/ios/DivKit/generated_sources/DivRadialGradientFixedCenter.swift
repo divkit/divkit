@@ -41,6 +41,7 @@ extension DivRadialGradientFixedCenter: Equatable {
 #endif
 
 extension DivRadialGradientFixedCenter: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

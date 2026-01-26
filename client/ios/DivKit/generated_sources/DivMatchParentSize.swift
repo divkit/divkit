@@ -44,6 +44,7 @@ extension DivMatchParentSize: Equatable {
 #endif
 
 extension DivMatchParentSize: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

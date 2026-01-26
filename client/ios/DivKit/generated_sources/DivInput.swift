@@ -523,6 +523,7 @@ extension DivInput: Equatable {
 #endif
 
 extension DivInput: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -604,6 +605,7 @@ extension DivInput.NativeInterface: Equatable {
 #endif
 
 extension DivInput.NativeInterface: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["color"] = color.toValidSerializationValue()

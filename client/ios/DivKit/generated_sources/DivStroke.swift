@@ -59,6 +59,7 @@ extension DivStroke: Equatable {
 #endif
 
 extension DivStroke: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["color"] = color.toValidSerializationValue()

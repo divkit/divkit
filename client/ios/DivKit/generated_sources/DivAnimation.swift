@@ -104,6 +104,7 @@ extension DivAnimation: Equatable {
 #endif
 
 extension DivAnimation: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["duration"] = duration.toValidSerializationValue()

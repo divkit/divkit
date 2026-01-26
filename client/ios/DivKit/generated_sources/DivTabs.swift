@@ -528,6 +528,7 @@ extension DivTabs: Equatable {
 #endif
 
 extension DivTabs: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -661,6 +662,7 @@ extension DivTabs.TabTitleDelimiter: Equatable {
 #endif
 
 extension DivTabs.Item: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["div"] = div.toDictionary()
@@ -671,6 +673,7 @@ extension DivTabs.Item: Serializable {
 }
 
 extension DivTabs.TabTitleDelimiter: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["height"] = height.toDictionary()
@@ -681,6 +684,7 @@ extension DivTabs.TabTitleDelimiter: Serializable {
 }
 
 extension DivTabs.TabTitleStyle: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["active_background_color"] = activeBackgroundColor.toValidSerializationValue()

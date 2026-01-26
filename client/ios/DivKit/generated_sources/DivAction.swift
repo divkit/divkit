@@ -112,6 +112,7 @@ extension DivAction: Equatable {
 #endif
 
 extension DivAction: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
@@ -144,6 +145,7 @@ extension DivAction.MenuItem: Equatable {
 #endif
 
 extension DivAction.MenuItem: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["action"] = action?.toDictionary()

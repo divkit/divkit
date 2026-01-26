@@ -377,6 +377,7 @@ extension DivGifImage: Equatable {
 #endif
 
 extension DivGifImage: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

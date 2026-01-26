@@ -117,6 +117,7 @@ extension DivVisibilityAction: Equatable {
 #endif
 
 extension DivVisibilityAction: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()

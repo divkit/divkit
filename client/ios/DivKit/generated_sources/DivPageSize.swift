@@ -29,6 +29,7 @@ extension DivPageSize: Equatable {
 #endif
 
 extension DivPageSize: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

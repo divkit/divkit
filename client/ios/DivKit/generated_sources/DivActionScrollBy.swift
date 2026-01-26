@@ -75,6 +75,7 @@ extension DivActionScrollBy: Equatable {
 #endif
 
 extension DivActionScrollBy: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

@@ -65,6 +65,7 @@ extension DivTypedValue: Equatable {
 #endif
 
 extension DivTypedValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

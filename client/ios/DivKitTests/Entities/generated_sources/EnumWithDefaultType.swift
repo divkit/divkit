@@ -38,6 +38,7 @@ extension EnumWithDefaultType: Equatable {
 #endif
 
 extension EnumWithDefaultType: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

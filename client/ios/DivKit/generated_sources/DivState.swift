@@ -366,6 +366,7 @@ extension DivState: Equatable {
 #endif
 
 extension DivState: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -444,6 +445,7 @@ extension DivState.State: Equatable {
 #endif
 
 extension DivState.State: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["animation_in"] = animationIn?.toDictionary()

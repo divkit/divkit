@@ -41,6 +41,7 @@ extension DivShapeDrawable: Equatable {
 #endif
 
 extension DivShapeDrawable: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

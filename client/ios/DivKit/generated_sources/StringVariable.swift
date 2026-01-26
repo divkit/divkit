@@ -37,6 +37,7 @@ extension StringVariable: Equatable {
 #endif
 
 extension StringVariable: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

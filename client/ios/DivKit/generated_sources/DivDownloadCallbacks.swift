@@ -32,6 +32,7 @@ extension DivDownloadCallbacks: Equatable {
 #endif
 
 extension DivDownloadCallbacks: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["on_fail_actions"] = onFailActions?.map { $0.toDictionary() }

@@ -78,6 +78,7 @@ extension DivLinearGradient: Equatable {
 #endif
 
 extension DivLinearGradient: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -103,6 +104,7 @@ extension DivLinearGradient.ColorPoint: Equatable {
 #endif
 
 extension DivLinearGradient.ColorPoint: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["color"] = color.toValidSerializationValue()

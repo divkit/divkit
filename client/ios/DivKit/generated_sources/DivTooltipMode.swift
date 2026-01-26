@@ -35,6 +35,7 @@ extension DivTooltipMode: Equatable {
 #endif
 
 extension DivTooltipMode: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

@@ -35,6 +35,7 @@ extension DivTextRangeMask: Equatable {
 #endif
 
 extension DivTextRangeMask: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

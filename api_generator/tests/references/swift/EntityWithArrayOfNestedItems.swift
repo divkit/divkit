@@ -49,6 +49,7 @@ extension EntityWithArrayOfNestedItems: Equatable {
 #endif
 
 extension EntityWithArrayOfNestedItems: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -72,6 +73,7 @@ extension EntityWithArrayOfNestedItems.Item: Equatable {
 #endif
 
 extension EntityWithArrayOfNestedItems.Item: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["entity"] = entity.toDictionary()

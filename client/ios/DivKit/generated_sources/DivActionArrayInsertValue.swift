@@ -45,6 +45,7 @@ extension DivActionArrayInsertValue: Equatable {
 #endif
 
 extension DivActionArrayInsertValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

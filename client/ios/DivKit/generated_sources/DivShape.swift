@@ -35,6 +35,7 @@ extension DivShape: Equatable {
 #endif
 
 extension DivShape: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

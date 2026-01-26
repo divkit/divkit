@@ -44,6 +44,7 @@ extension DivInputValidatorBase: Equatable {
 #endif
 
 extension DivInputValidatorBase: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["allow_empty"] = allowEmpty.toValidSerializationValue()

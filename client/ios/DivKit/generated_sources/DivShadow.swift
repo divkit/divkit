@@ -62,6 +62,7 @@ extension DivShadow: Equatable {
 #endif
 
 extension DivShadow: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["alpha"] = alpha.toValidSerializationValue()

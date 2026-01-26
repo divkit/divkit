@@ -87,6 +87,7 @@ extension DivActionAnimatorStart: Equatable {
 #endif
 
 extension DivActionAnimatorStart: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

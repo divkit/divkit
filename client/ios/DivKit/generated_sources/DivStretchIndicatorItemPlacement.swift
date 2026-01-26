@@ -40,6 +40,7 @@ extension DivStretchIndicatorItemPlacement: Equatable {
 #endif
 
 extension DivStretchIndicatorItemPlacement: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

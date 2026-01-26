@@ -72,6 +72,7 @@ extension DivAbsoluteEdgeInsets: Equatable {
 #endif
 
 extension DivAbsoluteEdgeInsets: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["bottom"] = bottom.toValidSerializationValue()

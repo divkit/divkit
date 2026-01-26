@@ -39,6 +39,7 @@ extension DivTextRangeBorder: Equatable {
 #endif
 
 extension DivTextRangeBorder: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["corner_radius"] = cornerRadius?.toValidSerializationValue()

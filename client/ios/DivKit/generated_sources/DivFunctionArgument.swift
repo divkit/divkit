@@ -32,6 +32,7 @@ extension DivFunctionArgument: Equatable {
 #endif
 
 extension DivFunctionArgument: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["name"] = name

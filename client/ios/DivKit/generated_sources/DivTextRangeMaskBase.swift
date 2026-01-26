@@ -32,6 +32,7 @@ extension DivTextRangeMaskBase: Equatable {
 #endif
 
 extension DivTextRangeMaskBase: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["is_enabled"] = isEnabled.toValidSerializationValue()

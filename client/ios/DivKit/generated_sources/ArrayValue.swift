@@ -29,6 +29,7 @@ extension ArrayValue: Equatable {
 #endif
 
 extension ArrayValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

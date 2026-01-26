@@ -32,6 +32,7 @@ extension DivLayoutProvider: Equatable {
 #endif
 
 extension DivLayoutProvider: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["height_variable_name"] = heightVariableName

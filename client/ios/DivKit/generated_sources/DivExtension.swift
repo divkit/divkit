@@ -32,6 +32,7 @@ extension DivExtension: Equatable {
 #endif
 
 extension DivExtension: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["id"] = id

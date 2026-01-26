@@ -32,6 +32,7 @@ extension DivPoint: Equatable {
 #endif
 
 extension DivPoint: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["x"] = x.toDictionary()

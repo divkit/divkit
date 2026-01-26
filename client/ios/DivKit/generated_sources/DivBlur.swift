@@ -36,6 +36,7 @@ extension DivBlur: Equatable {
 #endif
 
 extension DivBlur: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

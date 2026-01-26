@@ -830,6 +830,7 @@ extension DivText: Equatable {
 #endif
 
 extension DivText: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -1034,6 +1035,7 @@ extension DivText.Image: Equatable {
 #endif
 
 extension DivText.Ellipsis: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions?.map { $0.toDictionary() }
@@ -1045,6 +1047,7 @@ extension DivText.Ellipsis: Serializable {
 }
 
 extension DivText.Image.Accessibility: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["description"] = description?.toValidSerializationValue()
@@ -1054,6 +1057,7 @@ extension DivText.Image.Accessibility: Serializable {
 }
 
 extension DivText.Image: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["accessibility"] = accessibility?.toDictionary()
@@ -1071,6 +1075,7 @@ extension DivText.Image: Serializable {
 }
 
 extension DivText.Range: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions?.map { $0.toDictionary() }

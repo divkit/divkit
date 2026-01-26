@@ -44,6 +44,7 @@ extension DivAnimator: Equatable {
 #endif
 
 extension DivAnimator: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

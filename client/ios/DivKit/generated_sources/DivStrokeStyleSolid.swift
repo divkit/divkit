@@ -19,6 +19,7 @@ extension DivStrokeStyleSolid: Equatable {
 #endif
 
 extension DivStrokeStyleSolid: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

@@ -41,6 +41,7 @@ extension DivActionSetState: Equatable {
 #endif
 
 extension DivActionSetState: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

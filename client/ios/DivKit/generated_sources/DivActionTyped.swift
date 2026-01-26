@@ -135,6 +135,7 @@ extension DivActionTyped: Equatable {
 #endif
 
 extension DivActionTyped: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

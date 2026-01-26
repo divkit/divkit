@@ -43,6 +43,7 @@ extension DivSizeUnitValue: Equatable {
 #endif
 
 extension DivSizeUnitValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["unit"] = unit.toValidSerializationValue()

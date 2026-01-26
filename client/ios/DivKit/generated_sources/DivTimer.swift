@@ -66,6 +66,7 @@ extension DivTimer: Equatable {
 #endif
 
 extension DivTimer: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["duration"] = duration.toValidSerializationValue()

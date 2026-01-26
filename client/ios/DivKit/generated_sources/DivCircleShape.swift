@@ -41,6 +41,7 @@ extension DivCircleShape: Equatable {
 #endif
 
 extension DivCircleShape: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

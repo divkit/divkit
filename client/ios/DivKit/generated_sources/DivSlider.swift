@@ -431,6 +431,7 @@ extension DivSlider: Equatable {
 #endif
 
 extension DivSlider: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -537,6 +538,7 @@ extension DivSlider.Range: Equatable {
 #endif
 
 extension DivSlider.Range: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["end"] = end?.toValidSerializationValue()
@@ -549,6 +551,7 @@ extension DivSlider.Range: Serializable {
 }
 
 extension DivSlider.TextStyle: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["font_family"] = fontFamily?.toValidSerializationValue()

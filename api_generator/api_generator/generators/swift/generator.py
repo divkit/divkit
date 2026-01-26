@@ -128,6 +128,7 @@ class SwiftGenerator(Generator):
 
             extension_prefix = f'extension {entity.prefixed_declaration}'
             serialization = Text(f'{extension_prefix}: Serializable {{')
+            serialization += '  @_optimize(size)'
             serialization += '  public func toDictionary() -> [String: ValidSerializationValue] {'
             serialization += '    var result: [String: ValidSerializationValue] = [:]'
             if entity.has_static_type:
@@ -204,6 +205,7 @@ class SwiftGenerator(Generator):
 
         if not entity_enumeration.mode.is_template and self.generate_serialization:
             serialization_extension = Text(f'extension {entity_enumeration.prefixed_declaration}: Serializable {{')
+            serialization_extension += '  @_optimize(size)'
             serialization_extension += f'  {access_modifier}func toDictionary() -> [String: ValidSerializationValue] {{'
             serialization_extension += '    return value.toDictionary()'
             serialization_extension += '  }'

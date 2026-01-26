@@ -35,6 +35,7 @@ extension DivStrokeStyle: Equatable {
 #endif
 
 extension DivStrokeStyle: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

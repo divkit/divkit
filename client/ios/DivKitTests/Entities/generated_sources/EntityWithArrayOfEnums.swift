@@ -41,6 +41,7 @@ extension EntityWithArrayOfEnums: Equatable {
 #endif
 
 extension EntityWithArrayOfEnums: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

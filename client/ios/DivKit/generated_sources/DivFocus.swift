@@ -90,6 +90,7 @@ extension DivFocus: Equatable {
 #endif
 
 extension DivFocus: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["background"] = background?.map { $0.toDictionary() }
@@ -123,6 +124,7 @@ extension DivFocus.NextFocusIds: Equatable {
 #endif
 
 extension DivFocus.NextFocusIds: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["down"] = down?.toValidSerializationValue()

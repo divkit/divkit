@@ -70,6 +70,7 @@ extension DivPatch: Equatable {
 #endif
 
 extension DivPatch: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["changes"] = changes.map { $0.toDictionary() }
@@ -95,6 +96,7 @@ extension DivPatch.Change: Equatable {
 #endif
 
 extension DivPatch.Change: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["id"] = id

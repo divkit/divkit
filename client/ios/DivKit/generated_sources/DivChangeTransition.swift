@@ -35,6 +35,7 @@ extension DivChangeTransition: Equatable {
 #endif
 
 extension DivChangeTransition: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

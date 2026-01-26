@@ -28,6 +28,7 @@ extension DivDrawable: Equatable {
 #endif
 
 extension DivDrawable: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

@@ -40,6 +40,7 @@ extension DivInputMask: Equatable {
 #endif
 
 extension DivInputMask: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

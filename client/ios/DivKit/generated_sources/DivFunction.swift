@@ -47,6 +47,7 @@ extension DivFunction: Equatable {
 #endif
 
 extension DivFunction: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["arguments"] = arguments.map { $0.toDictionary() }

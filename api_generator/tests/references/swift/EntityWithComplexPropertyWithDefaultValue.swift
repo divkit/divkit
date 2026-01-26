@@ -43,6 +43,7 @@ extension EntityWithComplexPropertyWithDefaultValue: Equatable {
 #endif
 
 extension EntityWithComplexPropertyWithDefaultValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -65,6 +66,7 @@ extension EntityWithComplexPropertyWithDefaultValue.Property: Equatable {
 #endif
 
 extension EntityWithComplexPropertyWithDefaultValue.Property: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["value"] = value.toValidSerializationValue()

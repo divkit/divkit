@@ -32,6 +32,7 @@ extension DivChangeSetTransition: Equatable {
 #endif
 
 extension DivChangeSetTransition: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

@@ -168,6 +168,7 @@ extension Entity: Equatable {
 #endif
 
 extension Entity: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

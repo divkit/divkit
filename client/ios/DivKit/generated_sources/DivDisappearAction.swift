@@ -117,6 +117,7 @@ extension DivDisappearAction: Equatable {
 #endif
 
 extension DivDisappearAction: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["disappear_duration"] = disappearDuration.toValidSerializationValue()

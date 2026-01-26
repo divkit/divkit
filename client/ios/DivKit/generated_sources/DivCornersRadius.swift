@@ -72,6 +72,7 @@ extension DivCornersRadius: Equatable {
 #endif
 
 extension DivCornersRadius: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["bottom-left"] = bottomLeft?.toValidSerializationValue()

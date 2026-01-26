@@ -40,6 +40,7 @@ extension DivTransform: Equatable {
 #endif
 
 extension DivTransform: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["pivot_x"] = pivotX.toDictionary()

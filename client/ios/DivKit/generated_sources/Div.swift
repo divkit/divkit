@@ -149,6 +149,7 @@ extension Div: Equatable {
 #endif
 
 extension Div: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

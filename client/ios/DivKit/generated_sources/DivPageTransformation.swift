@@ -35,6 +35,7 @@ extension DivPageTransformation: Equatable {
 #endif
 
 extension DivPageTransformation: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

@@ -19,6 +19,7 @@ extension DivTooltipModeModal: Equatable {
 #endif
 
 extension DivTooltipModeModal: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

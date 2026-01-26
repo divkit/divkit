@@ -67,6 +67,7 @@ extension DivCollectionItemBuilder: Equatable {
 #endif
 
 extension DivCollectionItemBuilder: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["data"] = data.toValidSerializationValue()
@@ -92,6 +93,7 @@ extension DivCollectionItemBuilder.Prototype: Equatable {
 #endif
 
 extension DivCollectionItemBuilder.Prototype: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["div"] = div.toDictionary()

@@ -442,6 +442,7 @@ extension DivContainer: Equatable {
 #endif
 
 extension DivContainer: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -526,6 +527,7 @@ extension DivContainer.Separator: Equatable {
 #endif
 
 extension DivContainer.Separator: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["margins"] = margins?.toDictionary()

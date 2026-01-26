@@ -41,6 +41,7 @@ extension DivPivotFixed: Equatable {
 #endif
 
 extension DivPivotFixed: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

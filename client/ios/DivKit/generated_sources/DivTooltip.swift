@@ -124,6 +124,7 @@ extension DivTooltip: Equatable {
 #endif
 
 extension DivTooltip: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["animation_in"] = animationIn?.toDictionary()

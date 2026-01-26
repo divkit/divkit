@@ -53,6 +53,7 @@ extension DivTrigger: Equatable {
 #endif
 
 extension DivTrigger: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions.map { $0.toDictionary() }

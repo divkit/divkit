@@ -55,6 +55,7 @@ extension DivChangeBoundsTransition: Equatable {
 #endif
 
 extension DivChangeBoundsTransition: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

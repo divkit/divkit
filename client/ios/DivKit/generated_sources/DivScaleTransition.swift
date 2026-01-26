@@ -92,6 +92,7 @@ extension DivScaleTransition: Equatable {
 #endif
 
 extension DivScaleTransition: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

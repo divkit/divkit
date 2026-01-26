@@ -107,6 +107,7 @@ extension DivAccessibility: Equatable {
 #endif
 
 extension DivAccessibility: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["description"] = description?.toValidSerializationValue()

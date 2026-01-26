@@ -33,6 +33,7 @@ extension DivActionHideTooltip: Equatable {
 #endif
 
 extension DivActionHideTooltip: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

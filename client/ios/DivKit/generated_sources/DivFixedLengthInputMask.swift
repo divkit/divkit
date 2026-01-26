@@ -90,6 +90,7 @@ extension DivFixedLengthInputMask: Equatable {
 #endif
 
 extension DivFixedLengthInputMask: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -117,6 +118,7 @@ extension DivFixedLengthInputMask.PatternElement: Equatable {
 #endif
 
 extension DivFixedLengthInputMask.PatternElement: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["key"] = key.toValidSerializationValue()

@@ -35,6 +35,7 @@ extension DivAspect: Equatable {
 #endif
 
 extension DivAspect: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["ratio"] = ratio.toValidSerializationValue()

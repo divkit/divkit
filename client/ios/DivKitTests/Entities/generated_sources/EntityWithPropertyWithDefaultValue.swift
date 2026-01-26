@@ -88,6 +88,7 @@ extension EntityWithPropertyWithDefaultValue: Equatable {
 #endif
 
 extension EntityWithPropertyWithDefaultValue: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -114,6 +115,7 @@ extension EntityWithPropertyWithDefaultValue.Nested: Equatable {
 #endif
 
 extension EntityWithPropertyWithDefaultValue.Nested: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["int"] = int.toValidSerializationValue()

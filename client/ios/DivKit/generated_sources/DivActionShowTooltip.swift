@@ -41,6 +41,7 @@ extension DivActionShowTooltip: Equatable {
 #endif
 
 extension DivActionShowTooltip: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

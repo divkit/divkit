@@ -80,6 +80,7 @@ extension DivData: Equatable {
 #endif
 
 extension DivData: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["functions"] = functions?.map { $0.toDictionary() }
@@ -108,6 +109,7 @@ extension DivData.State: Equatable {
 #endif
 
 extension DivData.State: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["div"] = div.toDictionary()

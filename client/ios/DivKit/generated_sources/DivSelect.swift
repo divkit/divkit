@@ -382,6 +382,7 @@ extension DivSelect: Equatable {
 #endif
 
 extension DivSelect: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -450,6 +451,7 @@ extension DivSelect.Option: Equatable {
 #endif
 
 extension DivSelect.Option: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["text"] = text?.toValidSerializationValue()

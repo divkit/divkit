@@ -37,6 +37,7 @@ extension UrlVariable: Equatable {
 #endif
 
 extension UrlVariable: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

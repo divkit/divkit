@@ -35,6 +35,7 @@ extension DivTransformation: Equatable {
 #endif
 
 extension DivTransformation: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

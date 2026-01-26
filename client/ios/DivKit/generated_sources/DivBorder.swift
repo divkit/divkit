@@ -59,6 +59,7 @@ extension DivBorder: Equatable {
 #endif
 
 extension DivBorder: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["corner_radius"] = cornerRadius?.toValidSerializationValue()

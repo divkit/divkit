@@ -39,6 +39,7 @@ extension EntityWithRequiredProperty: Equatable {
 #endif
 
 extension EntityWithRequiredProperty: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

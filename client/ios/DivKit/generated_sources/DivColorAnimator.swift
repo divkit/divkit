@@ -111,6 +111,7 @@ extension DivColorAnimator: Equatable {
 #endif
 
 extension DivColorAnimator: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

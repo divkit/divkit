@@ -35,6 +35,7 @@ extension DivInputValidator: Equatable {
 #endif
 
 extension DivInputValidator: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()
   }

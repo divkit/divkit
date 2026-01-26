@@ -105,6 +105,7 @@ extension DivActionSubmit: Equatable {
 #endif
 
 extension DivActionSubmit: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
@@ -146,6 +147,7 @@ extension DivActionSubmit.Request: Equatable {
 #endif
 
 extension DivActionSubmit.Request.Header: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["name"] = name.toValidSerializationValue()
@@ -155,6 +157,7 @@ extension DivActionSubmit.Request.Header: Serializable {
 }
 
 extension DivActionSubmit.Request: Serializable {
+  @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["headers"] = headers?.map { $0.toDictionary() }
