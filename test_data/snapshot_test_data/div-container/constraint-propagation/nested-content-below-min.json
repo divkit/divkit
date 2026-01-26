@@ -1,0 +1,125 @@
+{
+  "description": "Nested containers with content below min constraints - validates min constraints propagate upward",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content",
+            "min_size": {
+              "value": 100,
+              "unit": "dp"
+            },
+            "max_size": {
+              "value": 280,
+              "unit": "dp"
+            }
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000",
+              "width": 2
+            }
+          },
+          "paddings": {
+            "top": 4,
+            "right": 4,
+            "bottom": 4,
+            "left": 4
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 80,
+                  "unit": "dp"
+                },
+                "max_size": {
+                  "value": 200,
+                  "unit": "dp"
+                }
+              },
+              "border": {
+                "stroke": {
+                  "color": "#00AA00",
+                  "width": 2
+                }
+              },
+              "paddings": {
+                "top": 4,
+                "right": 4,
+                "bottom": 4,
+                "left": 4
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 50,
+                      "unit": "dp"
+                    },
+                    "max_size": {
+                      "value": 150,
+                      "unit": "dp"
+                    }
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "#0000FF",
+                      "width": 2
+                    }
+                  },
+                  "paddings": {
+                    "top": 4,
+                    "right": 4,
+                    "bottom": 4,
+                    "left": 4
+                  },
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Min",
+                      "font_size": 14,
+                      "text_color": "#000000",
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#E0E0FF"
+                        }
+                      ],
+                      "paddings": {
+                        "top": 4,
+                        "right": 8,
+                        "bottom": 4,
+                        "left": 8
+                      },
+                      "width": {
+                        "type": "fixed",
+                        "value": 30
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

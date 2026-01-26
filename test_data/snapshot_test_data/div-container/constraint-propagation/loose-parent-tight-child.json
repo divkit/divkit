@@ -1,0 +1,98 @@
+{
+  "description": "Loose parent constraints with tight child constraints - validates child's min constraint forces parent expansion",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content",
+            "min_size": {
+              "value": 50,
+              "unit": "dp"
+            },
+            "max_size": {
+              "value": 300,
+              "unit": "dp"
+            }
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF5722",
+              "width": 2
+            }
+          },
+          "paddings": {
+            "top": 6,
+            "right": 6,
+            "bottom": 6,
+            "left": 6
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 180,
+                  "unit": "dp"
+                },
+                "max_size": {
+                  "value": 220,
+                  "unit": "dp"
+                }
+              },
+              "border": {
+                "stroke": {
+                  "color": "#4CAF50",
+                  "width": 2
+                }
+              },
+              "paddings": {
+                "top": 6,
+                "right": 6,
+                "bottom": 6,
+                "left": 6
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Content: 100dp",
+                  "font_size": 12,
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#D0D0FF"
+                    }
+                  ],
+                  "paddings": {
+                    "top": 6,
+                    "right": 10,
+                    "bottom": 6,
+                    "left": 10
+                  },
+                  "border": {
+                    "corner_radius": 4
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
