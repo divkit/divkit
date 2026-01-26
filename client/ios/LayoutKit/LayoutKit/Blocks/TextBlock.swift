@@ -357,7 +357,6 @@ extension NSAttributedString.Key {
 
 private let attachmentStringChars = NSAttributedString(attachment: TextAttachment()).string
 private let attachmentString = NSAttributedString(string: attachmentStringChars)
-private let defaultFont = Font.systemFont(ofSize: Font.systemFontSize)
 
 extension TextBlock.InlineImage {
   fileprivate var tintColorImage: Image? {

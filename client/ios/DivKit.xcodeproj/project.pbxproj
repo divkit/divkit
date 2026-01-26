@@ -685,7 +685,6 @@
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
 		988C89102E60676C00D3A925 /* GalleryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewModelTests.swift; sourceTree = "<group>"; };
-		98A8F3962F211C4700B661BE /* DivVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivVisibility.swift; sourceTree = "<group>"; };
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
 		98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipRunLoopCycles.swift; sourceTree = "<group>"; };
 		98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+VisibilityHierarchyDepth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VisibleBoundsTracking+VisibilityHierarchyDepth.swift"; sourceTree = "<group>"; };
@@ -1356,7 +1355,6 @@
 				8C4409D22864C3A900EF4175 /* Products */,
 				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
 				E99F917C2DEF01A3003A8AF3 /* Frameworks */,
-				98A8F3962F211C4700B661BE /* DivVisibility.swift */,
 			);
 			sourceTree = "<group>";
 		};
