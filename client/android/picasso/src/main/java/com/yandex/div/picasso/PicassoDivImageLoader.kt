@@ -144,7 +144,7 @@ class PicassoDivImageLoader(
             targets.removeTarget(this)
         }
 
-        override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
+        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             callback.onError()
             targets.removeTarget(this)
         }

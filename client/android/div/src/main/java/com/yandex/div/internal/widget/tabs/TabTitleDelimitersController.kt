@@ -34,7 +34,7 @@ internal class TabTitleDelimitersController(
         }
     }
 
-    fun updateTitleDelimiters(bitmap: Bitmap, width: Int, height: Int) {
+    fun updateTitleDelimiters(bitmap: Bitmap?, width: Int, height: Int) {
         tabDelimiterBitmap = bitmap
         tabDelimiterHeight = height
         tabDelimiterWidth = width

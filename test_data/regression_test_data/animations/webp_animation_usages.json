@@ -1,0 +1,240 @@
+{
+  "templates": {
+    "case_title": {
+      "type": "text",
+      "font_size": 14,
+      "font_weight": "bold",
+      "text_color": "#333333",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 8
+      }
+    },
+    "image_case": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      }
+    },
+    "gif_image_case": {
+      "type": "gif",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      }
+    },
+    "tab_item": {
+      "type": "text",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "column_count": 2,
+          "items": [
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "1. Webp in div-image"
+                },
+                {
+                  "type": "image_case",
+                  "image_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "2. Webp preview in div-image"
+                },
+                {
+                  "type": "image_case",
+                  "image_url": "empty://",
+                  "preview": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4WAoAAAACAAAA/wAA/wAAQU5JTQYAAAAAAAAAAABBTk1GRAAAAAAAAAAAAP8AAP8AAOgDAAJWUDhMKwAAAC//wD8ADzD/8z//8x94QNC2bcKftEFs+yP6/wYLqJp7oArmHvj+v+P+vwMAQU5NRkQAAAAAAAAAAAD/AAD/AADoAwAAVlA4TCsAAAAv/8A/AA8w//M///MfeEDQtm3Mn3RAbPsj+v8GC6iae6AK5h74/r/j/r8DAA=="
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "3. Webp in div-gif-image"
+                },
+                {
+                  "type": "gif_image_case",
+                  "gif_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "4. Webp preview in div-gif-image"
+                },
+                {
+                  "type": "gif_image_case",
+                  "gif_url": "empty://",
+                  "preview": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4WAoAAAACAAAA/wAA/wAAQU5JTQYAAAAAAAAAAABBTk1GRAAAAAAAAAAAAP8AAP8AAOgDAAJWUDhMKwAAAC//wD8ADzD/8z//8x94QNC2bcKftEFs+yP6/wYLqJp7oArmHvj+v+P+vwMAQU5NRkQAAAAAAAAAAAD/AAD/AADoAwAAVlA4TCsAAAAv/8A/AA8w//M///MfeEDQtm3Mn3RAbPsj+v8GC6iae6AK5h74/r/j/r8DAA=="
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "5. Webp preview by url in div-gif-image"
+                },
+                {
+                  "type": "gif_image_case",
+                  "gif_url": "empty://",
+                  "preview_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "6. Webp as embedded image in text"
+                },
+                {
+                  "type": "text",
+                  "text": "Text with embedded webp: ",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "images": [
+                    {
+                      "url": "https://yastatic.net/s3/home/divkit/animated-chess.webp",
+                      "start": 25
+                    }
+                  ],
+                  "font_size": 16,
+                  "text_alignment_horizontal": "center",
+                  "paddings": {
+                    "left": 16,
+                    "top": 8,
+                    "right": 16,
+                    "bottom": 16
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "7. Webp as background"
+                },
+                {
+                  "type": "text",
+                  "text": "",
+                  "background": [
+                    {
+                      "type": "image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
+                    }
+                  ],
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "case_title",
+                  "text": "8. Webp as tabs delimiter"
+                },
+                {
+                  "type": "tabs",
+                  "items": [
+                    {
+                      "div": {
+                        "type": "tab_item",
+                        "text": "First tab content"
+                      },
+                      "title": "Tab 1"
+                    },
+                    {
+                      "div": {
+                        "type": "tab_item",
+                        "text": "Second tab content"
+                      },
+                      "title": "Tab 2"
+                    }
+                  ],
+                  "tab_title_delimiter": {
+                    "image_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
+                  },
+                  "margins": {
+                    "left": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

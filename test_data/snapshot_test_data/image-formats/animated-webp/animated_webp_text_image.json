@@ -1,0 +1,33 @@
+{
+  "description": "Text with image in animated .webp format",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Text with image\nin animated .webp format - ",
+          "images": [
+            {
+              "url": "https://yastatic.net/s3/home/divkit/chess_animated.webp",
+              "start": 43
+            }
+          ],
+          "font_size": 24,
+          "text_alignment_horizontal": "center",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          }
+        }
+      }
+    ]
+  }
+}
