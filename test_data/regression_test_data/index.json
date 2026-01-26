@@ -4160,6 +4160,50 @@
       ],
       "file": "animations/animators/color_scheme_dependent_color_animator.json",
       "case_id": 485
+    },
+    {
+      "title": "Gif animations",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Behavior differs, there is another case for web."
+      },
+      "tags": [
+        "Animations",
+        "DivImage",
+        "DivGifImage"
+      ],
+      "steps": [
+        "Wait for animation frame to change"
+      ],
+      "expected_results": [
+        "Animation is playing only in case 3 (in div-gif-image). In other cases image is static."
+      ],
+      "file": "animations/gif_animation.json"
+    },
+    {
+      "title": "Gif animations",
+      "platforms": [
+      ],
+      "unsupported_platforms": {
+        "android": "Behavior differs, there is another case for android and ios.",
+        "ios": "Behavior differs, there is another case for android and ios."
+      },
+      "tags": [
+        "Animations",
+        "DivImage",
+        "DivGifImage"
+      ],
+      "steps": [
+        "Wait for animation frame to change"
+      ],
+      "expected_results": [
+        "Animation is playing in every case.",
+        "Warning about specific behavior on web is shown."
+      ],
+      "file": "animations/gif_animation.json"
     }
   ]
 }
