@@ -1583,19 +1583,20 @@
             opts.componentContext ?
                 opts.componentContext.getJsonWithVars(val, opts.additionalVars, true) :
                 getJsonWithVars(log, val, opts.additionalVars, true);
-        const filtered = actions.filter(action => {
-            const isEnabled = getJson(action.is_enabled);
+        const filtered: Action[] = [];
 
-            return isEnabled !== 0 && isEnabled !== false;
-        });
-
-        for (let i = 0; i < filtered.length; ++i) {
-            let action = getJson(filtered[i]);
+        for (let i = 0; i < actions.length; ++i) {
+            let action = getJson(actions[i]);
+            const isEnabled = action.is_enabled;
+            if (isEnabled === 0 || isEnabled === false) {
+                continue;
+            }
+            filtered.push(action);
 
             const actionUrl = action.url;
             const actionTyped = action.typed;
             if (actionTyped) {
-                await execActionInternal(action, filtered[i], opts.componentContext);
+                await execActionInternal(action, actions[i], opts.componentContext);
             } else if (actionUrl) {
                 const schema = getUrlSchema(actionUrl);
                 if (schema) {
@@ -1612,7 +1613,7 @@
                             }
                         }
                     } else if (schema === 'div-action') {
-                        await execActionInternal(action, filtered[i], opts.componentContext);
+                        await execActionInternal(action, actions[i], opts.componentContext);
                         await tick();
                     } else if (action.log_id) {
                         execCustomAction(action as Action & { url: string });
@@ -1627,7 +1628,7 @@
                 };
             }
         }
-        filtered.forEach(action => {
+        actions.forEach(action => {
             if (action.log_id) {
                 logStat(opts.logType || 'click', action as Action);
             }
