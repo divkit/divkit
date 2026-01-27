@@ -58,21 +58,18 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public struct Separator: Equatable {
-    public let style: Child
-    public let showAtEnd: Bool
-    public let showAtStart: Bool
-    public let showBetween: Bool
+    public let start: Child?
+    public let end: Child?
+    public let between: Child?
 
     public init(
-      style: Child,
-      showAtEnd: Bool = false,
-      showAtStart: Bool = false,
-      showBetween: Bool = false
+      start: Child? = nil,
+      end: Child? = nil,
+      between: Child? = nil
     ) {
-      self.style = style
-      self.showAtEnd = showAtEnd
-      self.showAtStart = showAtStart
-      self.showBetween = showBetween
+      self.start = start
+      self.end = end
+      self.between = between
     }
   }
 
@@ -466,16 +463,16 @@ private func makeGapsWithSeparators(
       switch index {
       case 0:
         gap
-        if separator.showAtStart {
+        if separator.start != nil {
           0
         }
       case gaps.count - 1:
-        if separator.showAtEnd {
+        if separator.end != nil {
           0
         }
         gap
       default:
-        if separator.showBetween {
+        if separator.between != nil {
           gap / 2
           gap / 2
         } else {
@@ -499,9 +496,9 @@ private func makeChildrenWithSeparators(
   var hasVisilbeItems = false
   for (index, child) in children.enumerated() {
     let isCurrentItemVisible = !child.content.isEmpty
-    if separator.showBetween, index > 0 {
+    if let beetweenSeparator = separator.between, index > 0 {
       if isCurrentItemVisible, hasVisilbeItems {
-        childrenWithSeparators.append(separator.style)
+        childrenWithSeparators.append(beetweenSeparator)
       } else {
         childrenWithSeparators.append(.empty)
       }
@@ -510,12 +507,12 @@ private func makeChildrenWithSeparators(
     hasVisilbeItems = hasVisilbeItems || isCurrentItemVisible
   }
 
-  if separator.showAtStart {
-    childrenWithSeparators.insert(hasVisilbeItems ? separator.style : .empty, at: 0)
+  if let startSeparator = separator.start {
+    childrenWithSeparators.insert(hasVisilbeItems ? startSeparator : .empty, at: 0)
   }
 
-  if separator.showAtEnd {
-    childrenWithSeparators.append(hasVisilbeItems ? separator.style : .empty)
+  if let endSeparator = separator.end {
+    childrenWithSeparators.append(hasVisilbeItems ? endSeparator : .empty)
   }
 
   return childrenWithSeparators

@@ -2,6 +2,7 @@
   "description": "Horizontal no-wrap container with item_spacing applied between items (match_parent width)",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

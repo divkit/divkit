@@ -2,6 +2,7 @@
   "description": "Vertical no-wrap container with item_spacing applied between items",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

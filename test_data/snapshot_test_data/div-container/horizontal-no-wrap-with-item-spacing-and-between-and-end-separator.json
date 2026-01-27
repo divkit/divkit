@@ -2,6 +2,7 @@
   "description": "Horizontal no-wrap container with item_spacing and a separator at the end and between items (separator overrides item_spacing)",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

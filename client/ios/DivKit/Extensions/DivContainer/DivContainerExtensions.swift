@@ -119,6 +119,8 @@ extension DivContainer: DivBlockModeling {
         )
       }
     )
+    let separator = resolveSeparator(context, orientation: params.orientation)
+    let lineSeparator = resolveLineSeparator(context, orientation: params.orientation)
 
     let paddings = params.paddings
     return try ContainerBlock(
@@ -130,11 +132,37 @@ extension DivContainer: DivBlockModeling {
       axialAlignment: axialAlignment,
       crossAlignment: crossAlignment,
       children: children,
-      separator: resolveSeparator(context),
-      lineSeparator: resolveLineSeparator(context),
+      separator: separator,
+      lineSeparator: lineSeparator,
       clipContent: params.clipToBounds && paddings == .zero,
       path: context.path
     )
+  }
+
+  private func createSpacingSeparator(
+    spacing: Int,
+    orientation: DivContainer.Orientation,
+    isLineSpacing: Bool
+  ) -> ContainerBlock.Child? {
+    guard spacing > 0 else { return nil }
+
+    let direction: SeparatorBlock.Direction
+    switch orientation {
+    case .horizontal:
+      direction = isLineSpacing ? .vertical : .horizontal
+    case .vertical:
+      direction = isLineSpacing ? .horizontal : .vertical
+    case .overlap:
+      return nil
+    }
+
+    let spacingBlock = SeparatorBlock(
+      color: .clear,
+      direction: direction,
+      size: CGFloat(spacing)
+    )
+
+    return ContainerBlock.Child(content: spacingBlock)
   }
 
   private func resolveContentHeightTrait(
@@ -148,50 +176,88 @@ extension DivContainer: DivBlockModeling {
   }
 
   private func resolveSeparator(
-    _ context: DivBlockModelingContext
-  ) throws -> ContainerBlock.Separator? {
+    _ context: DivBlockModelingContext,
+    orientation: DivContainer.Orientation
+  ) -> ContainerBlock.Separator? {
+    let expressionResolver = context.expressionResolver
+    let itemSpacing = resolveItemSpacing(expressionResolver)
+
+    let betweenSeparator = createSpacingSeparator(
+      spacing: itemSpacing,
+      orientation: orientation,
+      isLineSpacing: false
+    )
+
     guard let separator else {
-      return nil
+      return betweenSeparator.flatMap {
+        ContainerBlock.Separator(start: nil, end: nil, between: $0)
+      }
     }
+
     let separatorBlock = separator.style.makeBlock(
       context: context, corners: .all
     ).addingEdgeInsets(separator.margins.resolve(context))
-
     let style = ContainerBlock.Child(
       content: separatorBlock,
       crossAlignment: .center
     )
 
-    let expressionResolver = context.expressionResolver
+    let showBetween = separator.resolveShowBetween(expressionResolver)
+    if showBetween, betweenSeparator != nil {
+      let error = DivBlockModelingWarning(
+        "item_spacing will be ignored due to the 'separator' property.",
+        path: context.path
+      )
+      context.errorsStorage.add(error)
+    }
+
     return ContainerBlock.Separator(
-      style: style,
-      showAtEnd: separator.resolveShowAtEnd(expressionResolver),
-      showAtStart: separator.resolveShowAtStart(expressionResolver),
-      showBetween: separator.resolveShowBetween(expressionResolver)
+      start: separator.resolveShowAtStart(expressionResolver) ? style : nil,
+      end: separator.resolveShowAtEnd(expressionResolver) ? style : nil,
+      between: showBetween ? style : betweenSeparator
     )
   }
 
   private func resolveLineSeparator(
-    _ context: DivBlockModelingContext
+    _ context: DivBlockModelingContext,
+    orientation: DivContainer.Orientation
   ) -> ContainerBlock.Separator? {
+    let expressionResolver = context.expressionResolver
+
+    let lineSpacing = resolveLineSpacing(expressionResolver)
+    let betweenSeparator = createSpacingSeparator(
+      spacing: lineSpacing,
+      orientation: orientation,
+      isLineSpacing: true
+    )
+
     guard let lineSeparator else {
-      return nil
+      return betweenSeparator.flatMap {
+        ContainerBlock.Separator(start: nil, end: nil, between: $0)
+      }
     }
+
     let lineSeparatorBlock = lineSeparator.style.makeBlock(
       context: context, corners: .all
     ).addingEdgeInsets(lineSeparator.margins.resolve(context))
-
     let style = ContainerBlock.Child(
       content: lineSeparatorBlock,
       crossAlignment: .center
     )
 
-    let expressionResolver = context.expressionResolver
+    let showBetween = lineSeparator.resolveShowBetween(expressionResolver)
+    if showBetween, betweenSeparator != nil {
+      let error = DivBlockModelingWarning(
+        "line_spacing will be ignored due to the 'line_separator' property.",
+        path: context.path
+      )
+      context.errorsStorage.add(error)
+    }
+
     return ContainerBlock.Separator(
-      style: style,
-      showAtEnd: lineSeparator.resolveShowAtEnd(expressionResolver),
-      showAtStart: lineSeparator.resolveShowAtStart(expressionResolver),
-      showBetween: lineSeparator.resolveShowBetween(expressionResolver)
+      start: lineSeparator.resolveShowAtStart(expressionResolver) ? style : nil,
+      end: lineSeparator.resolveShowAtEnd(expressionResolver) ? style : nil,
+      between: lineSeparator.resolveShowBetween(expressionResolver) ? style : betweenSeparator
     )
   }
 }

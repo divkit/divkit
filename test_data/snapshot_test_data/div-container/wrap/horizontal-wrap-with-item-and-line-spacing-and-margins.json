@@ -2,6 +2,7 @@
   "description": "Horizontal wrap container with item_spacing and line_spacing applied together with item margins (to check correct combination).",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

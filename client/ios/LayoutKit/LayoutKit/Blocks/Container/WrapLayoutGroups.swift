@@ -2,6 +2,12 @@ import Foundation
 import VGSL
 
 struct WrapLayoutGroups {
+  struct SeparatorSize {
+    let start: CGSize?
+    let end: CGSize?
+    let between: CGSize?
+  }
+
   typealias ChildParametes = (child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)
 
   private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
@@ -14,25 +20,24 @@ struct WrapLayoutGroups {
   private let size: CGSize
   private let layoutDirection: ContainerBlock.LayoutDirection
   private let keyPath: WritableKeyPath<CGSize, CGFloat>
-  private let separatorSize: CGSize
-  private let lineSeparatorSize: CGSize
+  private let separatorSize: SeparatorSize
+  private let lineSeparatorSize: SeparatorSize
   private var line: [ChildParametes] = []
   private var offset: CGFloat = 0
   private var separatorAdded = false
 
   private var separatorOffset: CGFloat {
-    guard let separator else {
+    if separator == nil {
       return 0
     }
-    let separatorSize = separatorSize[keyPath: keyPath]
     var offset: CGFloat = 0
-    if line.count > 0, separator.showBetween {
-      offset = separatorSize
-    } else if separator.showAtStart {
-      offset = separatorSize
+    if line.count > 0, let between = separatorSize.between {
+      offset = between[keyPath: keyPath]
+    } else if let start = separatorSize.start {
+      offset = start[keyPath: keyPath]
     }
-    if separator.showAtEnd {
-      offset = offset + separatorSize
+    if let end = separatorSize.end {
+      offset = offset + end[keyPath: keyPath]
     }
     return offset
   }
@@ -53,8 +58,16 @@ struct WrapLayoutGroups {
     self.layoutDirection = layoutDirection
     keyPath = layoutDirection.buildingDirectionKeyPath
 
-    separatorSize = separator?.style.content.size(forResizableBlockSize: size) ?? .zero
-    lineSeparatorSize = lineSeparator?.style.content.size(forResizableBlockSize: size) ?? .zero
+    separatorSize = SeparatorSize(
+      start: separator?.start?.content.size(forResizableBlockSize: size) ?? .zero,
+      end: separator?.end?.content.size(forResizableBlockSize: size) ?? .zero,
+      between: separator?.between?.content.size(forResizableBlockSize: size) ?? .zero
+    )
+    lineSeparatorSize = SeparatorSize(
+      start: lineSeparator?.start?.content.size(forResizableBlockSize: size) ?? .zero,
+      end: lineSeparator?.end?.content.size(forResizableBlockSize: size) ?? .zero,
+      between: lineSeparator?.between?.content.size(forResizableBlockSize: size) ?? .zero
+    )
 
     makeGroups()
   }
@@ -66,15 +79,13 @@ struct WrapLayoutGroups {
       if child.isResizable(for: layoutDirection) {
         startNewLine()
         var childSize = child.content.size(forResizableBlockSize: size)
-        if let separator {
-          if separator.showAtStart {
-            childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
-              separatorSize[keyPath: keyPath]
-          }
-          if separator.showAtEnd {
-            childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
-              separatorSize[keyPath: keyPath]
-          }
+        if let start = separatorSize.start {
+          childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
+            start[keyPath: keyPath]
+        }
+        if let end = separatorSize.end {
+          childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
+            end[keyPath: keyPath]
         }
         addChild(child: child, size: childSize)
       } else {
@@ -163,61 +174,54 @@ struct WrapLayoutGroups {
   }
 
   private mutating func addStartLineSeparator() {
-    guard let lineSeparator, lineSeparator.showAtStart else {
+    guard let lineSeparator, let start = lineSeparator.start,
+          let size = lineSeparatorSize.start else {
       return
     }
-    addLineSeparator()
+    groups.append([(child: start, childSize: size, lineOffset: 0)])
   }
 
   private mutating func addBetweenLineSeparator() {
-    guard let lineSeparator, lineSeparator.showBetween else {
+    guard let lineSeparator, let between = lineSeparator.between,
+          let size = lineSeparatorSize.between else {
       return
     }
-    addLineSeparator()
+    groups.append([(child: between, childSize: size, lineOffset: 0)])
   }
 
   private mutating func addEndLineSeparator() {
-    guard let lineSeparator, lineSeparator.showAtEnd else {
+    guard let lineSeparator, let end = lineSeparator.end, let size = lineSeparatorSize.end else {
       return
     }
-    addLineSeparator()
-  }
-
-  private mutating func addLineSeparator() {
-    guard let lineSeparator else {
-      return
-    }
-    groups.append([(child: lineSeparator.style, childSize: lineSeparatorSize, lineOffset: 0)])
+    groups.append([(child: end, childSize: size, lineOffset: 0)])
   }
 
   private mutating func addStartSeparator() {
-    guard let separator, separator.showAtStart else {
+    guard let separator, let start = separator.start, let size = separatorSize.start else {
       return
     }
-    addSeparator()
+    addSeparator(start, size: size)
   }
 
   private mutating func addEndSeparator() {
-    guard let separator, separator.showAtEnd else {
+    guard let separator, let end = separator.end, let size = separatorSize.end else {
       return
     }
-    addSeparator()
+    addSeparator(end, size: size)
   }
 
   private mutating func addBetweenSeparator() {
-    guard let separator, separator.showBetween else {
+    guard let separator, let between = separator.between, let size = separatorSize.between else {
       return
     }
-    addSeparator()
+    addSeparator(between, size: size)
   }
 
-  private mutating func addSeparator() {
-    guard let separator, !separatorAdded else {
-      return
-    }
+  private mutating func addSeparator(_ separator: ContainerBlock.Child, size: CGSize) {
+    guard !separatorAdded else { return }
     separatorAdded = true
-    line.append((child: separator.style, childSize: separatorSize, lineOffset: offset))
-    offset += separatorSize[keyPath: keyPath]
+    line.append((child: separator, childSize: size, lineOffset: offset))
+    offset += size[keyPath: keyPath]
   }
 }
 

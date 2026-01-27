@@ -2,6 +2,7 @@
   "description": "Vertical wrap container with item_spacing and line_spacing set, and end separator defined (separator doesn't overrides item_spacing)",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {
