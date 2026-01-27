@@ -72,10 +72,10 @@ class LoggingHistogramBridge : HistogramBridge {
         unit: TimeUnit,
         bucketCount: Int
     ) {
-        recordHistogram(name, unit.toMillis(duration))
+        recordHistogram(name, duration)
         dispatcher?.dispatch(name)
         if (duration <= 0) return
-        PerfMetricReporter.reportTimeMetric(name, TimeUnit.MILLISECONDS, unit.toMillis(duration))
+        PerfMetricReporter.reportTimeMetric(name, unit, duration)
     }
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) {

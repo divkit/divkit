@@ -1,28 +1,24 @@
 package com.yandex.divkit.demo.benchmark
 
-import android.os.SystemClock
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.divkit.demo.perf.PerfMetricReporter
-import java.util.concurrent.TimeUnit
 
 internal class BlockMetrics<T>(
     val result: T,
     val wallTime: Long,
-    val threadTime: Long
 )
 
 internal inline fun <T> profile(block: () -> T): BlockMetrics<T> {
-    val wallStart = SystemClock.uptimeMillis()
-    val threadStart = SystemClock.currentThreadTimeMillis()
+    val wallStart = HistogramClock.uptime()
 
     val result = block()
 
-    val threadTime = SystemClock.currentThreadTimeMillis() - threadStart
-    val wallTime = SystemClock.uptimeMillis() - wallStart
+    val wallTime = HistogramClock.uptime() - wallStart
 
-    return BlockMetrics(result, wallTime, threadTime)
+    return BlockMetrics(result, wallTime)
 }
 
-internal fun reportTime(metricName: String, millis: Long) {
-    if (millis <= 0) return
-    PerfMetricReporter.reportTimeMetric(metricName, TimeUnit.MILLISECONDS, millis)
+internal fun reportTime(metricName: String, duration: Long) {
+    if (duration <= 0) return
+    PerfMetricReporter.reportTimeMetric(metricName, HistogramClock.durationUnit, duration)
 }
