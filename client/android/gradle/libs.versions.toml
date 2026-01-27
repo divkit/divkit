@@ -13,56 +13,56 @@ googleTestingPlatform = "0.0.9-alpha02"
 gson = "2.11.0"
 hamcrestJUnit = "2.0.0.0"
 hamcrestLibrary = "2.2"
-jacoco = "0.8.7"
+jacoco = "0.8.14"
 javax = "1"
 json = "20211205"
 junit = "4.13.2"
 kotlin = "2.2.10"
 kotlin-binaryCompatibilityValidator = "0.18.1"
 kotlin-coroutines = "1.10.2"
-kotlin-ksp = "2.2.10-2.0.2"
+kotlin-ksp = "2.3.4"
 kotlin-serialization = "1.9.0"
-kotlinpoet = "1.18.1"
+kotlinpoet = "2.2.0"
 lottie = "6.1.0"
 markwon = "4.6.2"
 metrica = "7.0.0"
-metricaCrashPlugin = "1.2.0"
-mockito = "5.14.1"
+metricaPlugin = "1.3.0"
+mockito = "5.21.0"
 mockitoKotlin = "4.1.0"
 okhttp = "4.12.0"
 okio = "3.9.1"
 picasso = "2.8"
-protobuf = "4.28.2"
+protobuf = "4.33.4"
 rive = "10.3.1"
-robolectric = "4.11.1"
+robolectric = "4.16.1"
 stetho = "1.6.0"
 unmock = "0.9.0"
 webp-imageio = "0.1.6"
-yatagan = "1.6.1"
+yatagan = "1.6.2"
 
-androidx-activity = "1.9.2"
-androidx-annotation = "1.8.2"
+androidx-activity = "1.10.0"
+androidx-annotation = "1.9.1"
 androidx-appcompat = "1.6.1"
 androidx-browser = "1.8.0"
-androidx-collection = "1.1.0"
+androidx-collection = "1.5.0"
 androidx-compose-bom = "2024.04.00"
-androidx-constraint = "2.1.4"
-androidx-core = "1.13.1"
-androidx-datastore = "1.0.0"
-androidx-espresso = "3.6.1"
-androidx-fragment = "1.8.4"
-androidx-lifecycle = "2.8.6"
-androidx-material = "1.12.0"
-androidx-media3 = "1.6.1"
+androidx-constraint = "2.2.1"
+androidx-core = "1.16.0"
+androidx-datastore = "1.1.7"
+androidx-espresso = "3.7.0"
+androidx-fragment = "1.8.9"
+androidx-lifecycle = "2.9.4"
+androidx-material = "1.13.0"
+androidx-media3 = "1.8.0"
 androidx-preference = "1.2.1"
 androidx-recycler = "1.3.0"
-androidx-test = "1.6.1"
-androidx-test-services = "1.5.0"
-androidx-transition = "1.4.1"
+androidx-test = "1.7.0"
+androidx-test-services = "1.6.0"
+androidx-transition = "1.6.0"
 androidx-uiautomator = "2.3.0"
 androidx-viewpager = "1.0.0"
 androidx-viewpager2 = "1.0.0"
-androidx-work = "2.9.1"
+androidx-work = "2.10.5"
 
 [libraries]
 agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -94,7 +94,6 @@ androidx-work = { module = "androidx.work:work-runtime-ktx", version.ref = "andr
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
-androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
@@ -121,7 +120,7 @@ androidx-test-services = { module = "androidx.test.services:test-services", vers
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
 
 appmetrica-lib = { module = "io.appmetrica.analytics:analytics", version.ref = "metrica" }
-appmetrica-plugin = { module = "io.appmetrica.analytics:gradle", version.ref = "metricaCrashPlugin" }
+appmetrica-plugin = { module = "io.appmetrica.analytics:gradle", version.ref = "metricaPlugin" }
 
 buildTimeTracker = { module = "com.asarkar.gradle:build-time-tracker", version.ref = "buildTimeTracker" }
 
@@ -200,7 +199,7 @@ webp-imageio = { module = "org.sejda.imageio:webp-imageio", version.ref = "webp-
 yatagan-api-compiled = { module = "com.yandex.yatagan:api-compiled", version.ref = "yatagan" }
 yatagan-processor-ksp = { module = "com.yandex.yatagan:processor-ksp", version.ref = "yatagan" }
 
-zxing-core = { module = "com.google.zxing:core", version = "3.4.1" }
+zxing-core = { module = "com.google.zxing:core", version = "3.5.4" }
 zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = "4.3.0" }
 
 [plugins]
