@@ -36,17 +36,6 @@ tasks.register('sourceJar', Jar) {
     archiveClassifier = "sources"
 }
 
-def tanker(String action, String keySet) {
-    rootProject.exec {
-        commandLine rootProject.file('buildSrc/src/scripts/tanker/tanker.py').absolutePath
-        args '--action', action, '--res-path', project.file('src/main/res/'), '--keyset', keySet
-    }.assertNormalExitValue()
-}
-
-ext {
-    tanker = this.&tanker
-}
-
 allOpen {
     annotation("com.yandex.div.core.annotations.Mockable")
 }

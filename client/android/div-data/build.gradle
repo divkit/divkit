@@ -9,10 +9,6 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
-allOpen {
-    annotation("com.yandex.div.core.annotations.Mockable")
-}
-
 android {
     namespace 'com.yandex.div.data'
 }
