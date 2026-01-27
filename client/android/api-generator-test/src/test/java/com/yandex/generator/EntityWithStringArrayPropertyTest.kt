@@ -3,9 +3,7 @@ package com.yandex.generator
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.testing.EntityWithStringArrayProperty
-import org.hamcrest.Matchers.hasSize
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -28,7 +26,7 @@ class EntityWithStringArrayPropertyTest {
 
         val entity = case.parse(LOG_ENVIRONMENT, json)
         val array = entity.array.evaluate(ExpressionResolver.EMPTY)
-        assertThat(array, hasSize(2))
+        assertEquals(2, array.size)
         assertEquals("Some text 1", array[0])
         assertEquals("Some text 2", array[1])
     }
@@ -45,7 +43,7 @@ class EntityWithStringArrayPropertyTest {
 
         val entity = case.parse(LOG_ENVIRONMENT, json)
         val array = entity.array.evaluate(ExpressionResolver.EMPTY)
-        assertThat(array, hasSize(2))
+        assertEquals(2, array.size)
         assertEquals("Some text 1", array[0])
         assertEquals("Some text 3", array[1])
     }
@@ -63,7 +61,7 @@ class EntityWithStringArrayPropertyTest {
 
         val entity = case.parse(LOG_ENVIRONMENT, json)
         val array = entity.array.evaluate(ExpressionResolver.EMPTY)
-        assertThat(array, hasSize(3))
+        assertEquals(3, array.size)
 
         val typeDefault = ""
         assertEquals(typeDefault, array[0])
@@ -84,7 +82,7 @@ class EntityWithStringArrayPropertyTest {
 
         val entity = case.parse(LOG_ENVIRONMENT, json)
         val array = entity.array.evaluate(ExpressionResolver.EMPTY)
-        assertThat(array, hasSize(3))
+        assertEquals(3, array.size)
 
         val typeDefault = ""
         assertEquals(typeDefault, array[0])

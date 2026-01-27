@@ -5,7 +5,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.testing.EntityWithArray
 import com.yandex.testing.EntityWithRequiredProperty
 import com.yandex.testing.EntityWithStringEnumPropertyWithDefaultValue
-import org.hamcrest.Matchers.hasSize
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -36,7 +35,7 @@ class EntityWithEntityArrayPropertyTest {
 
         val entity = case.parse(ASSERT_ENVIRONMENT, json)
 
-        assertThat(entity.array, hasSize(2))
+        assertEquals(2, entity.array.size)
         assertEquals("Some text 1", (entity.array[0].value() as EntityWithRequiredProperty).property.evaluate(ExpressionResolver.EMPTY))
         assertEquals("Some text 2", (entity.array[1].value() as EntityWithRequiredProperty).property.evaluate(ExpressionResolver.EMPTY))
     }
@@ -57,7 +56,7 @@ class EntityWithEntityArrayPropertyTest {
 
         val entity = case.parse(ASSERT_ENVIRONMENT, json)
 
-        assertThat(entity.array, hasSize(2))
+        assertEquals(2, entity.array.size)
         assertEquals("Some text 1", (entity.array[0].value() as EntityWithRequiredProperty).property
             .evaluate(ExpressionResolver.EMPTY))
         assertEquals(
@@ -87,11 +86,13 @@ class EntityWithEntityArrayPropertyTest {
 
         val entity = case.parse(LOG_ENVIRONMENT, json)
 
-        assertThat(entity.array, hasSize(2))
-        assertEquals("Some text 1", (entity.array[0].value() as EntityWithRequiredProperty).property
-            .evaluate(ExpressionResolver.EMPTY))
-        assertEquals("Some text 3", (entity.array[1].value() as EntityWithRequiredProperty).property
-            .evaluate(ExpressionResolver.EMPTY))
+        assertEquals(2, entity.array.size)
+
+        val item0 = entity.array[0].value() as EntityWithRequiredProperty
+        assertEquals("Some text 1", item0.property.evaluate(ExpressionResolver.EMPTY))
+
+        val item1 = entity.array[1].value() as EntityWithRequiredProperty
+        assertEquals("Some text 3", item1.property.evaluate(ExpressionResolver.EMPTY))
     }
 
     @Test(expected = ParsingException::class)

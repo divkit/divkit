@@ -6,12 +6,10 @@ buildTimeTracker = "5.0.1"
 coil = "3.0.4"
 dokka = "1.8.20"
 exoplayer = "2.18.4"
-festAndroid = "1.0.8"
 festReflect = "1.4.1"
 glide = "4.16.0"
 googleTestingPlatform = "0.0.9-alpha02"
 gson = "2.11.0"
-hamcrestJUnit = "2.0.0.0"
 hamcrestLibrary = "2.2"
 jacoco = "0.8.14"
 javax = "1"
@@ -134,7 +132,6 @@ dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dok
 
 exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 
-fest-android = { module = "com.squareup:fest-android", version.ref = "festAndroid" }
 fest-reflect = { module = "org.easytesting:fest-reflect", version.ref = "festReflect" }
 
 glide-core = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -144,7 +141,6 @@ google-testing-platform-proto = { module = "com.google.testing.platform:core-pro
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
-hamcrest-junit = { module = "org.hamcrest:hamcrest-junit", version.ref = "hamcrestJUnit" }
 hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "hamcrestLibrary" }
 
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
