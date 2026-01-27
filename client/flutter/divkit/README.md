@@ -8,7 +8,7 @@ Also, we’ve made a [sandbox](https://divkit.tech/playground) for you to experi
 
 [Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Обзор на Хабр](https://habr.com/ru/companies/yandex/articles/814187).
 
-Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
+Telegram: [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
 ## How it works
 

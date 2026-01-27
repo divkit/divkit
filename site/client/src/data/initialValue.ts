@@ -91,12 +91,6 @@ export const DEFAULT_JSON_VALUE = `{
                                 },
                                 {
                                     "type": "link",
-                                    "link_text": "News channel",
-                                    "link": "https://t.me/divkit_news",
-                                    "log": "tg_news"
-                                },
-                                {
-                                    "type": "link",
                                     "link_text": "EN Community chat",
                                     "link": "https://t.me/divkit_community_en",
                                     "log": "tg_en_chat"
@@ -205,13 +199,6 @@ export function getJson() {
                                     action: {
                                         url: 'https://divkit.tech/doc/',
                                         log_id: 'docs'
-                                    }
-                                }),
-                                thelper.link({
-                                    text: 'News channel',
-                                    action: {
-                                        url: 'https://t.me/divkit_news',
-                                        log_id: 'tg_news'
                                     }
                                 }),
                                 thelper.link({
