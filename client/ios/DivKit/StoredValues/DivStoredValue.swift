@@ -1,6 +1,6 @@
 import Foundation
 
-struct DivStoredValue {
+struct DivStoredValue: Hashable {
   enum ValueType: String, Codable {
     case string
     case number

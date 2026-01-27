@@ -1,6 +1,7 @@
 @testable @_spi(Internal) import DivKit
 import Foundation
 import LayoutKit
+import Testing
 import XCTest
 
 extension DivActionHandler {
@@ -42,6 +43,7 @@ extension DivActionHandler {
 
 private final class TestReporter: DivReporter {
   func reportError(cardId _: DivCardID, error: DivError) {
+    Issue.record(Comment(rawValue: error.message))
     XCTFail(error.message)
   }
 }

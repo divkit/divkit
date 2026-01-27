@@ -1,9 +1,11 @@
 @testable import DivKit
 import LayoutKit
+import Testing
+import UIKit
 import VGSL
-import XCTest
 
-final class DivViewSizeTests: XCTestCase {
+@Suite
+struct DivViewSizeTests {
   private final class TestBlock: BlockWithTraits {
     var widthTrait: LayoutKit.LayoutTrait
 
@@ -69,7 +71,8 @@ final class DivViewSizeTests: XCTestCase {
     func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
   }
 
-  func test_sizeForParentViewSizeForWeightedBlock() {
+  @Test
+  func sizeForParentViewSizeForWeightedBlock() {
     let weightedBlock = TestBlock(
       widthTrait: LayoutTrait.weighted(.default),
       heightTrait: LayoutTrait.fixed(200.0),
@@ -78,10 +81,11 @@ final class DivViewSizeTests: XCTestCase {
 
     let divViewSize = DivViewSize(block: weightedBlock)
     let size = divViewSize.sizeFor(parentViewSize: CGSize(width: 100.0, height: 100.0))
-    XCTAssertTrue(size == CGSize(width: 100.0, height: 0.0))
+    #expect(size == CGSize(width: 100.0, height: 0.0))
   }
 
-  func test_sizeForParentViewSizeForFixedBlock() {
+  @Test
+  func sizeForParentViewSizeForFixedBlock() {
     let fixedBlock = TestBlock(
       widthTrait: LayoutTrait.fixed(200.0),
       heightTrait: LayoutTrait.fixed(200.0),
@@ -90,10 +94,11 @@ final class DivViewSizeTests: XCTestCase {
 
     let divViewSize = DivViewSize(block: fixedBlock)
     let size = divViewSize.sizeFor(parentViewSize: CGSize(width: 100.0, height: 100.0))
-    XCTAssertTrue(size == CGSize(width: 500.0, height: 0.0))
+    #expect(size == CGSize(width: 500.0, height: 0.0))
   }
 
-  func test_sizeForParentViewSizeForIntrinsicBlock() {
+  @Test
+  func sizeForParentViewSizeForIntrinsicBlock() {
     let intrinsicBlock = TestBlock(
       widthTrait: LayoutTrait.intrinsic(
         constrained: true,
@@ -106,10 +111,11 @@ final class DivViewSizeTests: XCTestCase {
 
     let divViewSize = DivViewSize(block: intrinsicBlock)
     let size = divViewSize.sizeFor(parentViewSize: CGSize(width: 100.0, height: 100.0))
-    XCTAssertTrue(size == CGSize(width: 100.0, height: 0.0))
+    #expect(size == CGSize(width: 100.0, height: 0.0))
   }
 
-  func test_sizeForParentViewSizeForIntrinsicBlock2() {
+  @Test
+  func sizeForParentViewSizeForIntrinsicBlock2() {
     let intrinsicBlock = TestBlock(
       widthTrait: LayoutTrait.intrinsic(
         constrained: true,
@@ -122,6 +128,6 @@ final class DivViewSizeTests: XCTestCase {
 
     let divViewSize = DivViewSize(block: intrinsicBlock)
     let size = divViewSize.sizeFor(parentViewSize: CGSize(width: 600.0, height: 100.0))
-    XCTAssertTrue(size == CGSize(width: 500.0, height: 0.0))
+    #expect(size == CGSize(width: 500.0, height: 0.0))
   }
 }

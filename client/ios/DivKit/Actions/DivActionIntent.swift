@@ -1,7 +1,7 @@
 import Foundation
 import VGSL
 
-enum DivActionIntent {
+enum DivActionIntent: Hashable {
   case showTooltip(id: String, multiple: Bool)
   case hideTooltip(id: String)
   case download(patchUrl: URL)

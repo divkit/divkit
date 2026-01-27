@@ -3,7 +3,7 @@ import DivKitTestsSupport
 import Foundation
 import Testing
 
-@Suite()
+@Suite
 struct DivTimerStorageTests {
   private let scheduler = TestTimerScheduler()
   private let tickActionHandler = TickActionHandler()

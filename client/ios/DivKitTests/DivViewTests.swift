@@ -1,16 +1,21 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 import LayoutKit
-import Serialization
-import VGSL
-import XCTest
+import Testing
+import UIKit
 
-final class DivViewTests: XCTestCase {
-  lazy var components = DivKitComponents()
-  lazy var divView = DivView(divKitComponents: components)
+@MainActor
+@Suite
+struct DivViewTests {
+  private let components = DivKitComponents()
+  private let divView: DivView
 
-  @MainActor
-  func test_visibilityActions_afterZeroFrame() async {
+  init() {
+    divView = DivView(divKitComponents: components)
+  }
+
+  @Test
+  func visibilityActions_afterZeroFrame() async {
     await divView.setData(appearTestData)
 
     divView.appear()
@@ -20,11 +25,11 @@ final class DivViewTests: XCTestCase {
     let delays = divView.visibilityHierarchyDepth()
     await skipMainRunLoopCycles(delays)
 
-    XCTAssertEqual(components.visibilityCounter.visibilityCount(for: appearPath), 2)
+    #expect(components.visibilityCounter.visibilityCount(for: appearPath) == 2)
   }
 
-  @MainActor
-  func test_disappearActions_afterZeroFrame() async {
+  @Test
+  func disappearActions_afterZeroFrame() async {
     await divView.setData(disappearTestData)
 
     divView.appear()
@@ -35,7 +40,7 @@ final class DivViewTests: XCTestCase {
     let delays = divView.visibilityHierarchyDepth()
     await skipMainRunLoopCycles(delays)
 
-    XCTAssertEqual(components.visibilityCounter.visibilityCount(for: disappearPath), 2)
+    #expect(components.visibilityCounter.visibilityCount(for: disappearPath) == 2)
   }
 }
 
@@ -65,6 +70,7 @@ private func delay() {
 private let testFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
 private let appearPath = UIElementPath("card") + "0" + "text" + "appear" + "appear_action"
 private let disappearPath = UIElementPath("card") + "0" + "text" + "disappear" + "disappear_action"
+
 private let appearTestData = divData(
   divText(
     text: "Sample",

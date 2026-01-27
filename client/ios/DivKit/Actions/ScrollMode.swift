@@ -1,6 +1,6 @@
 import Foundation
 
-enum ScrollMode {
+enum ScrollMode: Hashable {
   case forward(Int, overflow: OverflowMode)
   case backward(Int, overflow: OverflowMode)
   case position(Int)

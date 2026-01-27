@@ -1,19 +1,21 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 import LayoutKit
-import XCTest
+import Testing
 
-final class DivActionURLHandlerTests: XCTestCase {
-  private var actionHandler: DivActionHandler!
+@Suite
+struct DivActionURLHandlerTests {
+  private let actionHandler: DivActionHandler
   private let blockStateStorage = DivBlockStateStorage()
 
-  override func setUp() {
+  init() {
     actionHandler = DivActionHandler(
       blockStateStorage: blockStateStorage
     )
   }
 
-  func test_setNextItemAction() {
+  @Test
+  func setNextItemAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.secondElementState,
@@ -21,7 +23,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setNextItemActionWithRingOverflow() {
+  @Test
+  func setNextItemActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.lastElementState,
       afterState: SetItemAction.firstElementState,
@@ -29,7 +32,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setNextItem_WithStep() {
+  @Test
+  func setNextItem_WithStep() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.thirdElementState,
@@ -37,7 +41,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setNextItem_WithStepAndRingOverflow() {
+  @Test
+  func setNextItem_WithStepAndRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.lastElementState,
       afterState: SetItemAction.secondElementState,
@@ -45,7 +50,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setNextItemActionWithEmptyState() {
+  @Test
+  func setNextItemActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
@@ -53,7 +59,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setPreviousItemAction() {
+  @Test
+  func setPreviousItemAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementState,
       afterState: SetItemAction.firstElementState,
@@ -61,7 +68,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setPreviousItemActionWithRingOverflow() {
+  @Test
+  func setPreviousItemActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.lastElementState,
@@ -69,7 +77,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setPreviousItem_WithStep() {
+  @Test
+  func setPreviousItem_WithStep() {
     setItemTestCases(
       beforeStates: SetItemAction.thirdElementState,
       afterState: SetItemAction.firstElementState,
@@ -77,7 +86,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setPreviousItem_WithStepAndRingOverflow() {
+  @Test
+  func setPreviousItem_WithStepAndRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.thirdElementState,
@@ -85,7 +95,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setPreviousItemActionWithEmptyState() {
+  @Test
+  func setPreviousItemActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
@@ -93,7 +104,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setCurrentItemAction() {
+  @Test
+  func setCurrentItemAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.firstElementState,
@@ -106,7 +118,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setCurrentItemActionWithOverflow() {
+  @Test
+  func setCurrentItemActionWithOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.firstElementState,
@@ -114,7 +127,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollForwardAction() {
+  @Test
+  func setScrollForwardAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
       afterState: SetItemAction.secondElementStateWithOffset,
@@ -122,7 +136,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollForwardActionWithClampOverflow() {
+  @Test
+  func setScrollForwardActionWithClampOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
       afterState: SetItemAction.endStateWithOffset,
@@ -130,7 +145,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollForwardActionWithRingOverflow() {
+  @Test
+  func setScrollForwardActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
       afterState: SetItemAction.secondElementStateWithOffset,
@@ -138,7 +154,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollForwardActionWithEmptyState() {
+  @Test
+  func setScrollForwardActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStatesWithOffset,
       afterState: SetItemAction.emptyStatesWithOffset,
@@ -146,7 +163,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollBackwardAction() {
+  @Test
+  func setScrollBackwardAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.firstElementStateWithOffset,
@@ -154,7 +172,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollBackwardActionWithClampOverflow() {
+  @Test
+  func setScrollBackwardActionWithClampOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.firstElementStateWithOffset,
@@ -162,7 +181,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollBackwardActionWithRingOverflow() {
+  @Test
+  func setScrollBackwardActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.firstElementStateWithOffset,
@@ -170,7 +190,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollBackwardActionWithEmptyState() {
+  @Test
+  func setScrollBackwardActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStatesWithOffset,
       afterState: SetItemAction.emptyStatesWithOffset,
@@ -178,7 +199,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToPositionAction() {
+  @Test
+  func setScrollToPositionAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
       afterState: SetItemAction.secondElementStateWithOffset,
@@ -186,7 +208,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToPositionActionWithOverflow() {
+  @Test
+  func setScrollToPositionActionWithOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.endStateWithOffset,
@@ -194,7 +217,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToPositionActionWithEmptyState() {
+  @Test
+  func setScrollToPositionActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStatesWithOffset,
       afterState: SetItemAction.emptyStatesWithOffset,
@@ -202,7 +226,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToStartAction() {
+  @Test
+  func setScrollToStartAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.firstElementStateWithOffset,
@@ -210,7 +235,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToStartActionWithEmptyState() {
+  @Test
+  func setScrollToStartActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStatesWithOffset,
       afterState: SetItemAction.emptyStatesWithOffset,
@@ -218,7 +244,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToEndAction() {
+  @Test
+  func setScrollToEndAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
       afterState: SetItemAction.endStateWithOffset,
@@ -226,7 +253,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
-  func test_setScrollToEndActionWithEmptyState() {
+  @Test
+  func setScrollToEndActionWithEmptyState() {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStatesWithOffset,
       afterState: SetItemAction.emptyStatesWithOffset,
@@ -248,7 +276,7 @@ final class DivActionURLHandlerTests: XCTestCase {
       case let (before as TabViewState, after as TabViewState):
         setItemTestCase(beforeState: before, afterState: after, mode: mode)
       case (_, _):
-        assertionFailure("Unsupported element state")
+        Issue.record("Unsupported element state")
       }
     }
   }
@@ -265,7 +293,7 @@ final class DivActionURLHandlerTests: XCTestCase {
       source: .tap,
       sender: nil
     )
-    XCTAssertEqual(blockStateStorage.getState(elementId, cardId: cardId), afterState)
+    #expect(blockStateStorage.getState(elementId, cardId: cardId) == afterState)
   }
 }
 

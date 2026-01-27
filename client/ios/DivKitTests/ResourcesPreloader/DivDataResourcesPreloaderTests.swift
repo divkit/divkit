@@ -1,40 +1,53 @@
 @testable import DivKit
 import DivKitTestsSupport
+import Foundation
+import Testing
 import VGSL
-import XCTest
 
-final class DivDataResourcesPreloaderTests: XCTestCase {
+@MainActor
+@Suite
+struct DivDataResourcesPreloaderTests {
   private let expressionResolver = DivBlockModelingContext.default.expressionResolver
-
   private let mockRequester = MockURLResourceRequester()
-  private lazy var preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
+  private let preloader: DivDataResourcesPreloader
 
-  func test_WhenNoURLsToDownload_CompletesSuccessfully() {
-    let divData = createEmptyDivData()
-
-    downloadResourcesAndWait(for: divData, using: preloader)
-    XCTAssertTrue(mockRequester.requestedURLs.isEmpty)
+  init() {
+    preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
   }
 
-  func test_WhenAllRequestsSucceed_CompletesSuccessfully() {
+  @Test
+  func whenNoURLsToDownload_CompletesSuccessfully() async {
+    let divData = createEmptyDivData()
+
+    await downloadResources(for: divData, using: preloader)
+
+    #expect(mockRequester.requestedURLs.isEmpty)
+  }
+
+  @Test
+  func whenAllRequestsSucceed_CompletesSuccessfully() async {
     mockRequester.shouldSucceed = true
     let preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
     let divData = createDivDataWithResources(preloadRequired: false)
 
-    downloadResourcesAndWait(for: divData, using: preloader)
-    XCTAssertEqual(mockRequester.requestedURLs.count, 4)
+    await downloadResources(for: divData, using: preloader)
+
+    #expect(mockRequester.requestedURLs.count == 4)
   }
 
-  func test_WhenAllRequestsFail_CompletesWithFailure() {
+  @Test
+  func whenAllRequestsFail_CompletesWithFailure() async {
     mockRequester.shouldSucceed = false
     let preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
     let divData = createDivDataWithResources(preloadRequired: false)
 
-    downloadResourcesAndWait(for: divData, using: preloader, expectSuccess: false)
-    XCTAssertEqual(mockRequester.requestedURLs.count, 4)
+    await downloadResources(for: divData, using: preloader, expectSuccess: false)
+
+    #expect(mockRequester.requestedURLs.count == 4)
   }
 
-  func test_WhenSomeRequestsSucceed_AndSomeFail_CompletesWithFailure() {
+  @Test
+  func whenSomeRequestsSucceed_AndSomeFail_CompletesWithFailure() async {
     let mockRequester = MockURLResourceRequester()
     let preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
     let divData = createDivDataWithResources(preloadRequired: false)
@@ -45,31 +58,35 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
       return requestCount % 2 == 1
     }
 
-    downloadResourcesAndWait(for: divData, using: preloader, expectSuccess: false)
-    XCTAssertEqual(mockRequester.requestedURLs.count, 4)
+    await downloadResources(for: divData, using: preloader, expectSuccess: false)
+
+    #expect(mockRequester.requestedURLs.count == 4)
   }
 
-  func test_FiltersURLsWithNoHost() {
+  @Test
+  func filtersURLsWithNoHost() async {
     let divData = createDivDataWithInvalidURLs()
 
-    downloadResourcesAndWait(for: divData, using: preloader)
+    await downloadResources(for: divData, using: preloader)
 
     let expectedURLs = [
       URL(string: validImageURL)!,
       URL(string: validVideoURL)!,
     ]
-    XCTAssertEqual(mockRequester.requestedURLs, expectedURLs)
+    #expect(mockRequester.requestedURLs == expectedURLs)
   }
 
-  func test_WhenFilterIsOnlyRequired_OnlyDownloadsRequiredResources() {
+  @Test
+  func whenFilterIsOnlyRequired_OnlyDownloadsRequiredResources() async {
     let divData = createDivDataWithMixedResources()
 
-    downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired)
+    await downloadResources(for: divData, using: preloader, filter: .onlyRequired)
 
-    XCTAssertEqual(mockRequester.requestedURLs, requiredURLs.map { URL(string: $0)! })
+    #expect(mockRequester.requestedURLs == requiredURLs.map { URL(string: $0)! })
   }
 
-  func test_WhenImageUrlIsInVariableStorage_PrefetchesCorrectly() {
+  @Test
+  func whenImageUrlIsInVariableStorage_PrefetchesCorrectly() async {
     let variableStorage = DivVariableStorage()
     variableStorage.put(name: "image_var", value: .url(URL(string: requiredImageURL)!))
 
@@ -87,12 +104,13 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
 
     let divData = divData(container)
 
-    downloadResourcesAndWait(for: divData, using: preloader, context: context)
+    await downloadResources(for: divData, using: preloader, context: context)
 
-    XCTAssertEqual(mockRequester.requestedURLs, [URL(string: requiredImageURL)!])
+    #expect(mockRequester.requestedURLs == [URL(string: requiredImageURL)!])
   }
 
-  func test_WhenExtensionHandlerWithURL_PrefetchesCorrectly() {
+  @Test
+  func whenExtensionHandlerWithURL_PrefetchesCorrectly() async {
     let mockRequester = MockURLResourceRequester()
     mockRequester.shouldSucceed = true
     let preloader = DivDataResourcesPreloader(
@@ -126,27 +144,29 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
 
     let divData = divData(divWithExtension)
 
-    downloadResourcesAndWait(
+    await downloadResources(
       for: divData,
       using: preloader,
       context: context
     )
 
-    XCTAssertEqual(mockRequester.requestedURLs, [mockExtensionHandler.preloadURL])
+    #expect(mockRequester.requestedURLs == [mockExtensionHandler.preloadURL])
   }
 
-  func test_WhenContainerHasNestedItemBuilders_WithAllFilter_PreloadsAllResources() {
+  @Test
+  func whenContainerHasNestedItemBuilders_WithAllFilter_PreloadsAllResources() async {
     let divData = createDivDataWithNestedItemBuilders()
 
-    downloadResourcesAndWait(for: divData, using: preloader)
+    await downloadResources(for: divData, using: preloader)
 
-    XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map(\.absoluteString)),
-      Set([requiredImageURL, optionalImageURL, validImageURL])
+    #expect(
+      Set(mockRequester.requestedURLs.map(\.absoluteString)) ==
+        Set([requiredImageURL, optionalImageURL, validImageURL])
     )
   }
 
-  func test_WhenItemBuilderUsesVariables_WithRequiredFilter_PreloadsOnlyRequiredResources() {
+  @Test
+  func whenItemBuilderUsesVariables_WithRequiredFilter_PreloadsOnlyRequiredResources() async {
     let mockRequester = MockURLResourceRequester()
     mockRequester.shouldSucceed = true
     let preloader = DivDataResourcesPreloader(resourceRequester: mockRequester)
@@ -158,49 +178,52 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     let context = DivBlockModelingContext(variableStorage: variableStorage)
     let divData = createDivDataWithVariables()
 
-    downloadResourcesAndWait(
+    await downloadResources(
       for: divData,
       using: preloader,
       filter: .onlyRequired,
       context: context
     )
 
-    XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map(\.absoluteString)),
-      Set([requiredImageURL])
+    #expect(
+      Set(mockRequester.requestedURLs.map(\.absoluteString)) ==
+        Set([requiredImageURL])
     )
   }
 
-  func test_WhenContainerHasItemBuilder_WithRequiredFilter_OnlyDownloadsRequiredResources() {
+  @Test
+  func whenContainerHasItemBuilder_WithRequiredFilter_OnlyDownloadsRequiredResources() async {
     let divData = createDivDataWithMixedItemBuilderResources()
 
-    downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired)
+    await downloadResources(for: divData, using: preloader, filter: .onlyRequired)
 
-    XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map(\.absoluteString)),
-      Set([requiredImageURL, requiredVideoURL])
+    #expect(
+      Set(mockRequester.requestedURLs.map(\.absoluteString)) ==
+        Set([requiredImageURL, requiredVideoURL])
     )
   }
 
-  func test_WhenContainerHasItemBuilder_WithAllFilter_DownloadsAllResources() {
+  @Test
+  func whenContainerHasItemBuilder_WithAllFilter_DownloadsAllResources() async {
     let divData = createDivDataWithMixedItemBuilderResources()
 
-    downloadResourcesAndWait(for: divData, using: preloader)
+    await downloadResources(for: divData, using: preloader)
 
-    XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map(\.absoluteString)),
-      Set([requiredImageURL, optionalImageURL, requiredVideoURL, optionalVideoURL])
+    #expect(
+      Set(mockRequester.requestedURLs.map(\.absoluteString)) ==
+        Set([requiredImageURL, optionalImageURL, requiredVideoURL, optionalVideoURL])
     )
   }
 
-  func test_WhenDivDataHasVariables_WithRequiredFilter_PreloadsCorrectly() {
+  @Test
+  func whenDivDataHasVariables_WithRequiredFilter_PreloadsCorrectly() async {
     let divData = createDivDataWithDivVariables()
 
-    downloadResourcesAndWait(for: divData, using: preloader, filter: .onlyRequired)
+    await downloadResources(for: divData, using: preloader, filter: .onlyRequired)
 
-    XCTAssertEqual(
-      Set(mockRequester.requestedURLs.map(\.absoluteString)),
-      Set([requiredImageURL])
+    #expect(
+      Set(mockRequester.requestedURLs.map(\.absoluteString)) ==
+        Set([requiredImageURL])
     )
   }
 
@@ -229,37 +252,45 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     )
   }
 
-  private func downloadResourcesAndWait(
+  private func downloadResources(
     for divData: DivData,
     using preloader: DivDataResourcesPreloader,
     filter: ResourcePreloadFilter = .all,
     context: DivBlockModelingContext = .default,
     expectSuccess: Bool = true
-  ) {
-    let expectation = XCTestExpectation(description: "Download completion")
-    preloader.downloadResources(
-      for: divData,
-      filter: filter,
-      context: context
-    ) { success in
-      if expectSuccess {
-        XCTAssertTrue(success)
-      } else {
-        XCTAssertFalse(success)
+  ) async {
+    await confirmation("Download completion") { confirmation in
+      preloader.downloadResources(
+        for: divData,
+        filter: filter,
+        context: context
+      ) { success in
+        #expect(success == expectSuccess)
+        confirmation()
       }
-      expectation.fulfill()
     }
-
-    wait(for: [expectation], timeout: 1.0)
   }
 
   private func createDivDataWithNestedItemBuilders() -> DivData {
     let outerData: [Any] = [
-      ["type": "container", "items": [
-        ["url": requiredImageURL, "preload_required": true],
-        ["url": optionalImageURL, "preload_required": false],
-      ]],
-      ["type": "image", "url": validImageURL, "preload_required": true],
+      [
+        "type": "container",
+        "items": [
+          [
+            "url": requiredImageURL,
+            "preload_required": true,
+          ],
+          [
+            "url": optionalImageURL,
+            "preload_required": false,
+          ],
+        ],
+      ],
+      [
+        "type": "image",
+        "url": validImageURL,
+        "preload_required": true,
+      ],
     ]
 
     let innerImagePrototype = DivCollectionItemBuilder.Prototype(
@@ -271,11 +302,13 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     )
 
     let innerItemBuilder = DivCollectionItemBuilder(
-      data: .value(outerData.flatMap { item in
-        guard let dict = item as? [String: Any],
-              let items = dict["items"] as? [[String: Any]] else { return [] }
-        return items
-      }),
+      data: .value(
+        outerData.flatMap { item in
+          guard let dict = item as? [String: Any],
+                let items = dict["items"] as? [[String: Any]] else { return [] }
+          return items
+        }
+      ),
       dataElementName: "item",
       prototypes: [innerImagePrototype]
     )

@@ -5,7 +5,7 @@ import Testing
 import UIKit
 import VGSL
 
-@Suite()
+@Suite
 struct DivBaseExtensionsAndAccessibilityElementsStorageTests {
   @Test
   func getOrderedIds_WhenForwardIdExist() {

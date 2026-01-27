@@ -1,17 +1,24 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
+import Foundation
 import LayoutKit
-import XCTest
+import Testing
 
-final class SubmitActionHandlerTests: XCTestCase {
-  private var submitter = MockSubmitter()
-  private var variablesStorage = DivVariablesStorage()
-  private lazy var handler = DivActionHandler(
-    submitter: submitter,
-    variablesStorage: variablesStorage
-  )
+@Suite
+struct SubmitActionHandlerTests {
+  private let submitter = MockSubmitter()
+  private let variablesStorage = DivVariablesStorage()
+  private let handler: DivActionHandler
 
-  func test_Submit_ContainerWithDifferentVariables() {
+  init() {
+    handler = DivActionHandler(
+      submitter: submitter,
+      variablesStorage: variablesStorage
+    )
+  }
+
+  @Test
+  func submit_ContainerWithDifferentVariables() {
     variablesStorage.initializeIfNeeded(
       path: cardId.path + containerId,
       variables: [
@@ -28,17 +35,18 @@ final class SubmitActionHandlerTests: XCTestCase {
 
     handler.handleSubmit()
 
-    XCTAssertEqual(submitter.lastData?["string_var"], "string_value")
-    XCTAssertEqual(submitter.lastData?["int_var"], "123")
-    XCTAssertEqual(submitter.lastData?["number_var"], "123.0")
-    XCTAssertEqual(submitter.lastData?["bool_var"], "true")
-    XCTAssertEqual(submitter.lastData?["color_var"], "#233223FF")
-    XCTAssertEqual(submitter.lastData?["url_var"], testUrl.absoluteString)
-    XCTAssertEqual(submitter.lastData?["dict_var"], "{\"key\":\"value\"}")
-    XCTAssertEqual(submitter.lastData?["array_var"], "[\"value_1\",\"value_2\"]")
+    #expect(submitter.lastData?["string_var"] == "string_value")
+    #expect(submitter.lastData?["int_var"] == "123")
+    #expect(submitter.lastData?["number_var"] == "123.0")
+    #expect(submitter.lastData?["bool_var"] == "true")
+    #expect(submitter.lastData?["color_var"] == "#233223FF")
+    #expect(submitter.lastData?["url_var"] == testUrl.absoluteString)
+    #expect(submitter.lastData?["dict_var"] == "{\"key\":\"value\"}")
+    #expect(submitter.lastData?["array_var"] == "[\"value_1\",\"value_2\"]")
   }
 
-  func test_Submit_ContainerWithoutVariables() {
+  @Test
+  func submit_ContainerWithoutVariables() {
     variablesStorage.initializeIfNeeded(
       path: cardId.path,
       variables: ["some_var": .string("some_value")]
@@ -50,11 +58,12 @@ final class SubmitActionHandlerTests: XCTestCase {
 
     handler.handleSubmit()
 
-    XCTAssertNotNil(submitter.lastRequest)
-    XCTAssertTrue(submitter.lastData?.isEmpty == true)
+    #expect(submitter.lastRequest != nil)
+    #expect(submitter.lastData?.isEmpty == true)
   }
 
-  func test_Submit_ContainerWithIncorrectId() {
+  @Test
+  func submit_ContainerWithIncorrectId() {
     variablesStorage.initializeIfNeeded(
       path: cardId.path + containerId,
       variables: [:]
@@ -62,11 +71,12 @@ final class SubmitActionHandlerTests: XCTestCase {
 
     handler.handleSubmit(containerId: "wrong_id")
 
-    XCTAssertNil(submitter.lastRequest)
-    XCTAssertNil(submitter.lastData)
+    #expect(submitter.lastRequest == nil)
+    #expect(submitter.lastData == nil)
   }
 
-  func test_Submit_ContainerWithDuplicatedId() {
+  @Test
+  func submit_ContainerWithDuplicatedId() {
     variablesStorage.initializeIfNeeded(
       path: cardId.path + "container_1" + containerId,
       variables: ["var_1": .string("value_1")]
@@ -78,10 +88,11 @@ final class SubmitActionHandlerTests: XCTestCase {
 
     handler.handleSubmit(containerId: containerId)
 
-    XCTAssertNil(submitter.lastData)
+    #expect(submitter.lastData == nil)
   }
 
-  func test_Submit_PassesRequestParams() {
+  @Test
+  func submit_PassesRequestParams() {
     variablesStorage.initializeIfNeeded(
       path: cardId.path + containerId,
       variables: ["var_1": .string("value_1")]
@@ -101,7 +112,7 @@ final class SubmitActionHandlerTests: XCTestCase {
       method: "GET",
       headers: ["header_1": "value_1"]
     )
-    XCTAssertEqual(submitter.lastRequest, expectedRequest)
+    #expect(submitter.lastRequest == expectedRequest)
   }
 }
 
