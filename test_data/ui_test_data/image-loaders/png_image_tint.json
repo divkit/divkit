@@ -31,7 +31,7 @@
             },
             {
               "type": "image",
-              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "image_url": "divkit-asset://test-images/local-chess.png",
               "tint_color": "#FF0000",
               "tint_mode": "multiply",
               "width": {
