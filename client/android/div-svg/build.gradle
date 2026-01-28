@@ -10,15 +10,13 @@ android {
 
 dependencies {
     implementation project(path: ':div-core')
+    implementation project(path: ':logging')
 
     implementation libs.androidsvg.aar
-
-    implementation libs.androidx.coreKtx
     implementation libs.androidx.core
-
-    implementation libs.kotlin.corountines.core
+    implementation libs.androidx.coreKtx
     implementation libs.kotlin.corountines.android
-    
+    implementation libs.kotlin.corountines.core
     implementation libs.okhttp
 }
 

@@ -6,6 +6,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.internal.KLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.IOException
 
 @InternalApi
 public class SvgDivImageLoader(context: Context) : DivImageLoader {
@@ -25,13 +27,13 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
     override fun hasSvgSupport(): Boolean = true
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
-        val call = createCallOrNull(imageUrl)
-
-        val pictureDrawable = svgCacheManager.get(imageUrl)
-        if (pictureDrawable != null) {
-            callback.onSuccess(pictureDrawable)
+        val cachedDrawable = svgCacheManager.get(imageUrl)
+        if (cachedDrawable != null) {
+            callback.onSuccess(cachedDrawable)
             return LoadReference { }
         }
+
+        val call = createCallOrNull(imageUrl)
 
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
@@ -90,15 +92,27 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
         return httpClient.newCall(request)
     }
 
-    private fun downloadImage(call: Call): ByteArray? = runCatching {
-        call.execute().body?.bytes()
-    }.getOrNull()
+    private fun downloadImage(call: Call): ByteArray? {
+        return try {
+            call.execute().body?.bytes()
+        } catch (e: Exception) {
+            KLog.e(TAG) { e.toString() }
+            null
+        }
+    }
 
     private fun getImageData(imageUrl: String): ByteArray? {
-        val assetPath = imageUrl.removePrefix("file:///android_asset/")
-        val stream = context.applicationContext?.assets?.open(assetPath) ?: return null
+        val stream = try {
+            val assetPath = imageUrl.removePrefix("file:///android_asset/")
+            context.assets.open(assetPath)
+        } catch (e: IOException) {
+            KLog.e(TAG) { e.toString() }
+            return null
+        }
         stream.use {
             return it.readBytes()
         }
     }
 }
+
+private const val TAG = "SvgDivImageLoader"

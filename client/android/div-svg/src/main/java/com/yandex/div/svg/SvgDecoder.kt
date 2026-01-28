@@ -5,6 +5,7 @@ import android.graphics.drawable.PictureDrawable
 import com.caverock.androidsvg.SVG
 import com.caverock.androidsvg.SVGParseException
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.internal.KLog
 import java.io.InputStream
 
 @InternalApi
@@ -31,8 +32,11 @@ public class SvgDecoder(
             }
 
             PictureDrawable(svg.renderToPicture())
-        } catch (ex: SVGParseException) {
+        } catch (e: Exception) {
+            KLog.e(TAG) { e.toString() }
             null
         }
     }
 }
+
+private const val TAG = "SvgDecoder"
