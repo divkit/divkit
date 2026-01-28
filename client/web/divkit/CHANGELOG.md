@@ -1,3 +1,8 @@
+## 32.35.0 (February 2, 2026)
+
+* Check whether action is enabled right before execution.
+
+
 ## 32.34.0 (January 26, 2026)
 
 * Fixed `currency` input mask for values below "1".
