@@ -40,13 +40,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.ui)
-            implementation(compose.foundation)
+            implementation(libs.runtime)
+            implementation(libs.ui)
+            implementation(libs.foundation)
         }
 
         androidMain.dependencies {
-            implementation(compose.uiTooling)
+            implementation(libs.ui.tooling)
             implementation(libs.androidx.activityCompose)
             implementation(libs.div)
             implementation(libs.div.core)
@@ -61,6 +61,6 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
     }
 }

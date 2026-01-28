@@ -1,7 +1,5 @@
 package com.yandex.divkit.multiplatform
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -49,18 +47,16 @@ internal class DivKitScopeImpl(
             divKitFacade.makeDivKitView(jsonString = jsonData, cardId = cardId)
         }
 
-        Box(modifier = modifier) {
-            UIKitView(
-                factory = {
-                    view
-                },
-                modifier = Modifier.fillMaxSize(),
-                properties = UIKitInteropProperties(
-                    isInteractive = true,
-                    isNativeAccessibilityEnabled = true
-                )
+        UIKitView(
+            factory = {
+                view
+            },
+            modifier = modifier,
+            properties = UIKitInteropProperties(
+                isInteractive = true,
+                isNativeAccessibilityEnabled = true
             )
-        }
+        )
     }
 
     @Composable

@@ -2,9 +2,9 @@ package com.yandex.divkit.multiplaform.sample
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ internal fun MainScreen() {
     DivKit(dependencies) {
         var globalVar by variable(name = "global_var", value = "<initial>")
         Column(
-            modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
+            modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DivView(

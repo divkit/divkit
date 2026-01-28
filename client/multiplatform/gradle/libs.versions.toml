@@ -1,12 +1,13 @@
 [versions]
 agp = "8.13.2"
-compose = "1.9.3"
-divkit = "32.30.0"
+compose = "1.10.0"
+divkit = "32.34.0"
 kotlin = "2.3.0"
+material3 = "1.9.0"
 
 
 [libraries]
-androidx-activityCompose = { module = "androidx.activity:activity-compose", version = "1.11.0" }
+androidx-activityCompose = { module = "androidx.activity:activity-compose", version = "1.12.2" }
 
 div = { module = "com.yandex.div:div", version.ref = "divkit" }
 div-core = { module = "com.yandex.div:div-core", version.ref = "divkit" }
@@ -14,7 +15,12 @@ div-glide = { module = "com.yandex.div:glide", version.ref = "divkit" }
 div-picasso = { module = "com.yandex.div:picasso", version.ref = "divkit" }
 div-shimmer = { module = "com.yandex.div:div-shimmer", version.ref = "divkit" }
 
+foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
+ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose" }
 
 
 [plugins]

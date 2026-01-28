@@ -27,10 +27,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.ui)
-            implementation(compose.foundation)
-            implementation(compose.material3)
+            implementation(libs.runtime)
+            implementation(libs.ui)
+            implementation(libs.foundation)
+            implementation(libs.material3)
 
             implementation(project(":divkit-multiplatform"))
         }
@@ -49,7 +49,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
 
         applicationId = "com.yandex.divkit.multiplaform.sample"
