@@ -1,3 +1,19 @@
+## 32.35.0
+
+# Android Client:
+* Use microseconds at all duration histograms.
+
+# iOS Client:
+* Added `DivReporter.reportAction(context)`.
+* Fixed an issue with visibility actions triggering on elements in an invisible container.
+* Fixed scrolling issues in paginated galleries.
+* Supported `item_spacing` and `line_spacing` in `div-container`.
+* Supported `substrate_div` in tooltips.
+
+# Web Client:
+* Check whether action is enabled right before execution.
+
+
 ## 32.34.0
 
 # Android Client:
