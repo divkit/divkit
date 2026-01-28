@@ -4,7 +4,6 @@
 * **Experimantal API**: Fixed `IllegalThreadStateException` during asynchronous binding.
 * **Experimental API**: Fixed `ConcurrentModificationException` during asynchronous binding.
 * Fixed separator positioning in RTL horizontal containers.
-* Fixed visibility actions not triggering after navigating back to screen.
 
 # iOS Client:
 * Restart contentAnimation in ContainerBlock when app goes from background to foreground.
