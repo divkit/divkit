@@ -7,10 +7,13 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private let tooltip: DefaultTooltipManager.Tooltip
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
+  private let getViewById: (BlockViewID) -> BlockView?
 
   private var isClosing = false
   private var lastNonZeroBounds: CGRect?
   private var onVisibleBoundsChanged: Action?
+
+  private var highlighted: (view: BlockView, snapshot: UIView)?
 
   private lazy var backgroundElement: UIAccessibilityElement? = {
     guard tooltip.params.closeByTapOutside else { return nil }
@@ -31,11 +34,13 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   public init(
     tooltip: DefaultTooltipManager.Tooltip,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
-    onCloseAction: @escaping Action
+    onCloseAction: @escaping Action,
+    getViewById: @escaping (BlockViewID) -> BlockView?
   ) {
     self.tooltip = tooltip
     self.handleAction = handleAction
     self.onCloseAction = onCloseAction
+    self.getViewById = getViewById
     let tooltipView = tooltip.view
     let tooltipBounds = tooltipView.bounds
     onVisibleBoundsChanged = { [weak tooltipView] in
@@ -51,6 +56,13 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
     if let substrateView = tooltip.substrateView {
       addSubview(substrateView)
+
+      if let topViewId = tooltip.bringToTopId,
+         let topView = getViewById(BlockViewID(rawValue: topViewId)),
+         let snapshot = createViewSnapshot(from: topView) {
+        highlighted = (view: topView, snapshot: snapshot)
+        addSubview(snapshot)
+      }
     }
 
     addSubview(tooltipView)
@@ -100,6 +112,11 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
     if let substrateView = tooltip.substrateView {
       substrateView.frame = bounds
+
+      if let highlighted, let window {
+        let frameInWindow = highlighted.view.convert(highlighted.view.bounds, to: window)
+        highlighted.snapshot.frame = convert(frameInWindow, from: window)
+      }
     }
 
     backgroundElement?.accessibilityFrameInContainerSpace = bounds
@@ -195,6 +212,21 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
   private func isPointInsideTooltip(_ point: CGPoint, event: UIEvent? = nil) -> Bool {
     tooltip.view.point(inside: tooltip.view.convert(point, from: self), with: event)
+  }
+
+  private func createViewSnapshot(from view: UIView) -> UIView? {
+    guard let snapshotView = view.snapshotView(afterScreenUpdates: true) else {
+      return nil
+    }
+
+    snapshotView.frame = view.bounds
+    snapshotView.isUserInteractionEnabled = false
+    snapshotView.isAccessibilityElement = view.isAccessibilityElement
+    snapshotView.accessibilityLabel = view.accessibilityLabel
+    snapshotView.accessibilityHint = view.accessibilityHint
+    snapshotView.accessibilityTraits = view.accessibilityTraits
+    snapshotView.accessibilityValue = view.accessibilityValue
+    return snapshotView
   }
 }
 

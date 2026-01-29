@@ -67,16 +67,29 @@ public class DefaultTooltipManager: TooltipManager {
     public let params: BlockTooltipParams
     public let view: VisibleBoundsTrackingView
     public let substrateView: VisibleBoundsTrackingView?
+    public let bringToTopId: String?
+  }
+
+  private struct WeakBlockView {
+    weak var view: BlockView?
+
+    init(_ view: BlockView) {
+      self.view = view
+    }
   }
 
   public var shownTooltips: Property<Set<String>>
 
   private(set) var tooltipWindowManager: TooltipWindowManager?
 
+  private var viewsById: [BlockViewID: WeakBlockView] = [:]
+
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
   private var previousOrientation = UIDevice.current.orientation
+
+  private let lock = AllocatedUnfairLock()
 
   public init(
     shownTooltips: Property<Set<String>> = Property(),
@@ -127,6 +140,9 @@ public class DefaultTooltipManager: TooltipManager {
           if !showingTooltips.contains(where: { $1.isModal }) {
             self.tooltipWindowManager?.hideModalWindow()
           }
+        },
+        getViewById: { [weak self] in
+          self?.viewsById[$0]?.view
         }
       )
 
@@ -175,7 +191,14 @@ public class DefaultTooltipManager: TooltipManager {
     existingAnchorViews.remove(anchorView)
   }
 
+  public func mapView(_ view: BlockView, to id: BlockViewID) {
+    lock.withLock {
+      viewsById[id] = WeakBlockView(view)
+    }
+  }
+
   public func reset() {
+    viewsById.removeAll()
     showingTooltips.values.forEach { $0.close(animated: false) }
     showingTooltips = [:]
     tooltipWindowManager = nil
@@ -241,7 +264,8 @@ extension TooltipAnchorView {
     return DefaultTooltipManager.Tooltip(
       params: tooltip.params,
       view: tooltipView,
-      substrateView: substrateView
+      substrateView: substrateView,
+      bringToTopId: tooltip.bringToTopId
     )
   }
 }
@@ -310,6 +334,5 @@ public final class DefaultTooltipManager: TooltipManager {
 #endif
 
 extension TooltipManager {
-  public func mapView(_: BlockView, to _: BlockViewID) {}
   public func reset() {}
 }

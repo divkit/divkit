@@ -110,7 +110,8 @@
       "$ref": "common.json#/id",
       "$description": "translations.json#/div_tooltip_bring_to_top_id",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   },

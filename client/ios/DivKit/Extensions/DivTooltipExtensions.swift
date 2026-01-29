@@ -60,6 +60,7 @@ extension DivTooltip {
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
+      bringToTopId: bringToTopId,
       tooltipViewFactory: tooltipViewFactory,
       substrateViewFactory: substrateViewFactory
     )

@@ -56,6 +56,8 @@ extension UIViewRenderable {
     renderingDelegate.reportBlockWillConfigure(path: path)
     configure()
     renderingDelegate.reportBlockDidConfigure(path: path)
+
+    renderingDelegate.mapView(view, to: BlockViewID(rawValue: path.leaf))
   }
 
   public func makeBlockView(
