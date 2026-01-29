@@ -45,7 +45,11 @@ final class CachedRemoteImageHolder: ImageHolder {
   }
 
   func equals(_ other: ImageHolder) -> Bool {
-    wrapped.equals(other)
+    guard let other = other as? Self else {
+      return false
+    }
+
+    return wrapped.equals(other.wrapped)
   }
 }
 
