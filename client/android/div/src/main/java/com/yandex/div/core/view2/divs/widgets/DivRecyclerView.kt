@@ -22,6 +22,7 @@ import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.Div
@@ -81,7 +82,13 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
         super.onMeasure(widthSpec, heightSpec)
 
-        if (considerMatchParent) {
+        val needRecalculateMatchParent = if (orientation == HORIZONTAL) {
+            needRecalculateMatchParent(heightMeasureSpec) { height }
+        } else {
+            needRecalculateMatchParent(widthMeasureSpec) { width }
+        }
+
+        if (needRecalculateMatchParent) {
             considerMatchParent = false
             widthMeasureSpec =
                 getMaxSizeSpec(orientation == VERTICAL, widthSpec, paddingLeft + paddingRight) { measuredWidth }
@@ -96,13 +103,20 @@ internal class DivRecyclerView @JvmOverloads constructor(
     }
 
     private fun needConsiderMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
-        if (!isUnspecified(spec)) return false
-        val adapter = adapter as? DivGalleryAdapter ?: return false
-
-        val items = adapter.visibleItems
-        if (items.isEmpty()) return false
-
+        val items = getItemsIfNeeded(spec) ?: return false
         return items.all { it.div.isMatchParent(size) }
+    }
+
+    private fun needRecalculateMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
+        val items = getItemsIfNeeded(spec) ?: return false
+        return items.any { it.div.isMatchParent(size) }
+    }
+
+    private fun getItemsIfNeeded(spec: Int): List<DivItemBuilderResult>? {
+        if (!isUnspecified(spec)) return null
+        val adapter = adapter as? DivGalleryAdapter ?: return null
+
+        return adapter.visibleItems.takeIf { it.isNotEmpty() }
     }
 
     private fun Div.isMatchParent(size: DivBase.() -> DivSize) = value().size() is DivSize.MatchParent

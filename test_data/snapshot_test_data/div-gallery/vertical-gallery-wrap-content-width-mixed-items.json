@@ -1,0 +1,77 @@
+{
+  "description": "Vertical gallery with wrap_content width and items with match_parent, wrap_content and fixed width",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "Item with match_parent width"
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item with width = 300",
+              "width": {
+                "type": "fixed",
+                "value": 300
+              }
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item with wrap_content width",
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

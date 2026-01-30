@@ -1,0 +1,84 @@
+{
+  "description": "Horizontal gallery with wrap_content height and items with match_parent, wrap_content and fixed height",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 90
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "margins": {
+        "left": 5,
+        "top": 10,
+        "right": 5,
+        "bottom": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "item_spacing": 0,
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "Item with match_parent height",
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item with height = 120",
+              "height": {
+                "type": "fixed",
+                "value": 120
+              }
+            },
+            {
+              "type": "gallery_item",
+              "text": "Item with wrap_content height"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

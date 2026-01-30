@@ -14,10 +14,12 @@
           "type": "gallery",
           "orientation": "vertical",
           "width": {
-            "type": "wrap_content"
+            "type": "fixed",
+            "value": 208
           },
           "height": {
-            "type": "wrap_content"
+            "type": "fixed",
+            "value": 400
           },
           "item_spacing": 8,
           "items": [

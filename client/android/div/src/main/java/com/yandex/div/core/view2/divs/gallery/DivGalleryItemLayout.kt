@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeAtMostSpec
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.core.widget.makeUnspecifiedSpec
@@ -47,7 +48,11 @@ internal class DivGalleryItemLayout(
             recyclerView.considerMatchParent,
         )
 
-        super.onMeasure(widthSpec, heightSpec)
+        if (widthSpec == null || heightSpec == null) {
+            setMeasuredDimension(0, 0)
+        } else {
+            super.onMeasure(widthSpec, heightSpec)
+        }
     }
 
     private fun setEmptySize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -68,15 +73,17 @@ internal class DivGalleryItemLayout(
         margins: Int,
         alongScrollAxis: Boolean,
         considerMatchParent: Boolean,
-    ): Int {
+    ): Int? {
         val parentSize = (MeasureSpec.getSize(parentSpec) - paddings).let {
             if (alongScrollAxis) it else ((it - crossSpacing() * (columnCount() - 1)) / columnCount()).roundToInt()
         }
         val actualMaxSize = if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) maxSize else maxSize + margins
         val actualSize = when {
             alongScrollAxis -> size
-            considerMatchParent && size == LayoutParams.MATCH_PARENT -> LayoutParams.WRAP_CONTENT
-            else -> size
+            size != LayoutParams.MATCH_PARENT -> size
+            !isUnspecified(parentSpec) -> size
+            considerMatchParent -> LayoutParams.WRAP_CONTENT
+            else -> return null
         }
 
         return when (actualSize) {
