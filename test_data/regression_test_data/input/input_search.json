@@ -1,0 +1,154 @@
+{
+  "templates": {
+    "header": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_color": "#000000"
+    },
+    "input_field": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "margins": {
+        "top": 12,
+        "bottom": 12
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "hint_text": "Hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "keyboard_type": "single_line_text",
+      "enter_key_type": "search",
+      "line_height": 22,
+      "select_all_on_focus": 1
+    },
+    "value_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "ranges": [
+        {
+          "start": 0,
+          "end": 5,
+          "text_color": "#777777"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "text_with_actions",
+        "type": "string",
+        "value": "Initial text"
+      },
+      {
+        "name": "text_without_actions",
+        "type": "string",
+        "value": "Initial text"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "left": 16,
+            "top": 20,
+            "right": 16
+          },
+          "items": [
+            {
+              "type": "header",
+              "text": "Without actions"
+            },
+            {
+              "type": "input_field",
+              "text_variable": "text_without_actions"
+            },
+            {
+              "type": "value_text",
+              "text": "Text: @{text_without_actions}"
+            },
+            {
+              "type": "separator",
+              "margins": {
+                "top": 15,
+                "bottom": 15
+              }
+            },
+            {
+              "type": "header",
+              "text": "With actions"
+            },
+            {
+              "type": "input_field",
+              "text_variable": "text_with_actions",
+              "enter_key_actions": [
+                {
+                  "log_id": "clear focus",
+                  "typed": {
+                    "type": "clear_focus"
+                  }
+                },
+                {
+                  "log_id": "search_key_tapped",
+                  "url": "div-action://set_variable?name=text_with_actions&value=Search key tapped!"
+                }
+              ]
+            },
+            {
+              "type": "value_text",
+              "text": "Text: @{text_with_actions}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

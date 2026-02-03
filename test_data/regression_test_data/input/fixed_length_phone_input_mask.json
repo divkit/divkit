@@ -1,0 +1,268 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "$text_variable": "variable",
+      "$hint_text": "hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    },
+    "pretty_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 32,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "ranges": [
+        {
+          "start": 0,
+          "end": 5,
+          "text_color": "#777777"
+        }
+      ]
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffdc60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4,
+        "has_shadow": 1
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "input",
+        "type": "string",
+        "value": "12345"
+      },
+      {
+        "name": "raw_input",
+        "type": "string",
+        "value": "12345"
+      },
+      {
+        "name": "mask",
+        "type": "string",
+        "value": "+7 (###) ###-##-##"
+      },
+      {
+        "name": "key",
+        "type": "string",
+        "value": "#"
+      },
+      {
+        "name": "filter",
+        "type": "string",
+        "value": "\\\\d"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "value": "_"
+      },
+      {
+        "name": "always_visible",
+        "type": "boolean",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "pretty_text",
+              "text": "Value: @{input}"
+            },
+            {
+              "type": "pretty_input",
+              "variable": "input",
+              "hint": "value",
+              "keyboard_type": "phone",
+              "mask": {
+                "type": "fixed_length",
+                "pattern": "@{mask}",
+                "raw_text_variable": "raw_input",
+                "pattern_elements": [
+                  {
+                    "key": "@{key}",
+                    "regex": "@{filter}",
+                    "placeholder": "@{placeholder}"
+                  }
+                ],
+                "always_visible": "@{always_visible}"
+              }
+            },
+            {
+              "type": "pretty_input",
+              "variable": "mask",
+              "keyboard_type": "single_line_text",
+              "hint": "mask"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "pretty_input",
+                  "variable": "key",
+                  "keyboard_type": "single_line_text",
+                  "hint": "key"
+                },
+                {
+                  "type": "pretty_input",
+                  "variable": "filter",
+                  "keyboard_type": "single_line_text",
+                  "hint": "filter"
+                },
+                {
+                  "type": "pretty_input",
+                  "variable": "placeholder",
+                  "keyboard_type": "single_line_text",
+                  "hint": "placeholder"
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "always_visible_button",
+              "default_state_id": "false",
+              "states": [
+                {
+                  "state_id": "false",
+                  "div": {
+                    "type": "button",
+                    "text": "Show placeholders",
+                    "actions": [
+                      {
+                        "log_id": "show_placeholders",
+                        "url": "div-action://set_variable?name=always_visible&value=true"
+                      },
+                      {
+                        "log_id": "show_placeholders_button_state",
+                        "url": "div-action://set_state?state_id=0/always_visible_button/true"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "true",
+                  "div": {
+                    "type": "button",
+                    "text": "Hide placeholders",
+                    "actions": [
+                      {
+                        "log_id": "hide_placeholders",
+                        "url": "div-action://set_variable?name=always_visible&value=false"
+                      },
+                      {
+                        "log_id": "hide_placeholders_button_state",
+                        "url": "div-action://set_state?state_id=0/always_visible_button/false"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

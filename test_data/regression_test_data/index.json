@@ -2111,7 +2111,7 @@
         "In the 'With actions' section, after pressing Enter, the text should change to 'Enter key tapped!'",
         "Keyboard is hidden"
       ],
-      "file": "input_multiline.json"
+      "file": "input/input_multiline.json"
     },
     {
       "title": "Text input (single line)",
@@ -2129,7 +2129,7 @@
         "In the 'With actions' section, after pressing Enter, the text should change to 'Done key tapped!'",
         "Keyboard is hidden"
       ],
-      "file": "input_single_line.json"
+      "file": "input/input_single_line.json"
     },
     {
       "title": "Text input max_length",
@@ -2144,7 +2144,7 @@
       "expected_results": [
         "text in the field should not be longer than 10 characters"
       ],
-      "file": "input_max_length.json"
+      "file": "input/input_max_length.json"
     },
     {
       "title": "Text input (search input)",
@@ -2167,7 +2167,7 @@
         "In the 'With actions' section, after pressing Enter, the text should change to 'Search key tapped!'",
         "Keyboard is hidden"
       ],
-      "file": "input_search.json"
+      "file": "input/input_search.json"
     },
     {
       "title": "Select",
@@ -2657,7 +2657,7 @@
         "The symbol appeared",
         "Placeholders shown/hidden"
       ],
-      "file": "fixed_length_input_mask.json"
+      "file": "input/fixed_length_input_mask.json"
     },
     {
       "title": "Fixed length phone input mask",
@@ -2670,7 +2670,7 @@
       "tags": [
         "DivInput"
       ],
-      "file": "fixed_length_phone_input_mask.json"
+      "file": "input/fixed_length_phone_input_mask.json"
     },
     {
       "title": "Phone input mask",
@@ -2693,7 +2693,7 @@
         "The symbol appeared",
         "Mask for phone number is correct"
       ],
-      "file": "phone_input_mask.json"
+      "file": "input/phone_input_mask.json"
     },
     {
       "title": "Regex input filter",
@@ -2711,7 +2711,7 @@
         "The first input cannot be empty after entering at least 1 character",
         "The second input can be emptied"
       ],
-      "file": "regex_input_filter.json"
+      "file": "input/regex_input_filter.json"
     },
     {
       "title": "Regex input validator",
@@ -2724,7 +2724,7 @@
       "tags": [
         "DivInput"
       ],
-      "file": "regex_input_validator.json"
+      "file": "input/regex_input_validator.json"
     },
     {
       "title": "Expression input filter",
@@ -2740,7 +2740,7 @@
       "expected_results": [
         "Entering in the input field should be filtered depending on whether the filter condition is enabled or disabled"
       ],
-      "file": "expression_input_filter.json"
+      "file": "input/expression_input_filter.json"
     },
     {
       "title": "Expression input validator",
@@ -2753,7 +2753,7 @@
       "tags": [
         "DivInput"
       ],
-      "file": "expression_input_validator.json"
+      "file": "input/expression_input_validator.json"
     },
     {
       "title": "Currency input mask",
@@ -2766,7 +2766,7 @@
       "tags": [
         "DivInput"
       ],
-      "file": "currency_input_mask.json"
+      "file": "input/currency_input_mask.json"
     },
     {
       "title": "Video with controls",
@@ -3579,7 +3579,7 @@
       "expected_results": [
         "The keyboard type when clicking on an input field should differ depending on the select"
       ],
-      "file": "input_keyboard_types.json"
+      "file": "input/input_keyboard_types.json"
     },
     {
       "title": "Slider vertical scroll interruption",
@@ -3813,7 +3813,7 @@
         "Password inside input shown as dots, text field below input is showing original text",
         "Text inside password input became readable"
       ],
-      "file": "input_password.json"
+      "file": "input/input_password.json"
     },
     {
       "title": "Disabled input",
@@ -3834,7 +3834,7 @@
         "Text is not editable",
         "Text became editable"
       ],
-      "file": "input_is_enabled.json"
+      "file": "input/input_is_enabled.json"
     },
     {
       "title": "Vector scale",
@@ -4005,7 +4005,7 @@
         "Cursor is at the place you tapped",
         "Cursor at the last position"
       ],
-      "file": "input_focus.json"
+      "file": "input/input_focus.json"
     },
     {
       "title": "Indicator auto-binding (no pager ids)",
@@ -4068,7 +4068,7 @@
       "expected_results": [
         "Only last tap doesn't affect input focus"
       ],
-      "file": "input_capture_focus.json"
+      "file": "input/input_capture_focus.json"
     },
     {
       "title": "Submit action test",
@@ -4116,7 +4116,7 @@
         "Spell checking: Misspelled words should appear highlighted if enabled",
         "Return key: The return key is only enabled when text is not empty, if the option is on"
       ],
-      "file": "input_properties_extension.json"
+      "file": "input/input_properties_extension.json"
     },
     {
       "title": "Input field in gallery that triggers action",
@@ -4207,6 +4207,29 @@
       ],
       "file": "animations/gif_animation.json",
       "case_id": 495
+    },
+    {
+      "title": "Input cursor position",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Click 'Change text' button.",
+        "Tap on input and set cursor to the beginning or the middle of the text.",
+        "Click 'Change text' button.",
+        "Enter some text in the beginning or the middle of the text.",
+        "Click 'Change text' button."
+      ],
+      "expected_results": [
+        "After the first change text in input is changed to 'new_text', input is not active, cursor is not visible.",
+        "After the second change text in input is 'new_text', input is active, cursor retains its position.",
+        "After the third change text in input is changed to 'new_text', input is active, cursor is in the end of the text."
+      ],
+      "file": "input/input_cursor_position.json"
     }
   ]
 }

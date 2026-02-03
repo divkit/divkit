@@ -1,0 +1,66 @@
+{
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "input",
+        "type": "string",
+        "value": "Initial text"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "left": 16,
+            "right": 16
+          },
+          "items": [
+            {
+              "type": "input",
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "margins": {
+                "top": 12,
+                "bottom": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "text_variable": "input"
+            },
+            {
+              "type": "text",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 16,
+              "text": "Change text",
+              "capture_focus_on_action": false,
+              "actions": [
+                {
+                  "log_id": "change input",
+                  "url": "div-action://set_variable?name=input&value=new_text"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
