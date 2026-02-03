@@ -2,11 +2,21 @@ import XCTest
 
 final class TooltipsUITests: XCTestCase {
   private enum TooltipTest {
-    case tooltipPosition, closeOnSwitchOrientation
+    case tooltipPosition
+    case closeOnSwitchOrientation
+    case sightActionsOnAnimatedTooltip
   }
 
   private enum Position: CaseIterable {
     case bottom, top, right
+  }
+
+  private enum Animation {
+    case enabled, disabled
+  }
+
+  private enum SightAction {
+    case visibility, disappear
   }
 
   private let app = XCUIApplication()
@@ -61,6 +71,46 @@ final class TooltipsUITests: XCTestCase {
     XCTAssertTrue(!tooltip.exists) // tooltip closed again
   }
 
+  func testTooltipSightActionsOnAnimatedTooltip() throws {
+    goTo(test: .sightActionsOnAnimatedTooltip)
+    checkSightActionsForTooltip(withAnimation: .enabled)
+  }
+
+  func testTooltipSightActionsOnNotAnimatedTooltip() throws {
+    goTo(test: .sightActionsOnAnimatedTooltip)
+    checkSightActionsForTooltip(withAnimation: .disabled)
+  }
+
+  private func checkSightActionsForTooltip(withAnimation animation: Animation) {
+    let showTooltipButton = switch animation {
+    case .enabled:
+      elementsQuery.staticTexts["animated tooltip with visibility and disappear action"]
+    case .disabled:
+      elementsQuery.staticTexts["non-animated tooltip with visibility and disappear action"]
+    }
+    showTooltipButton.tap()
+    checkSightAction(of: .visibility)
+    checkSightAction(of: .disappear)
+  }
+
+  private func checkSightAction(of type: SightAction) {
+    let rawType = switch type {
+    case .visibility:
+      "Visibility"
+    case .disappear:
+      "Disappear"
+    }
+    let visibilityNotifier = elementsQuery.staticTexts["\(rawType) action called: true"]
+    let predicate = NSPredicate(block: { evaluatedObject, _ in
+      (evaluatedObject as? XCUIElement)?.exists ?? false
+    })
+    let expectation = XCTNSPredicateExpectation(predicate: predicate, object: visibilityNotifier)
+    let result = XCTWaiter.wait(for: [expectation], timeout: 10)
+    guard result == .completed else {
+      return XCTFail("\(rawType) action was not called")
+    }
+  }
+
   private func checkTooltip(for position: Position) {
     setPosition(position)
 
@@ -86,10 +136,12 @@ final class TooltipsUITests: XCTestCase {
   }
 
   private func goTo(test: TooltipTest) {
+    app.buttons["testing"].tap()
     switch test {
     case .tooltipPosition, .closeOnSwitchOrientation:
-      app.buttons["testing"].tap()
       app.scrollViews.otherElements.staticTexts["Tooltip on different positions"].tap()
+    case .sightActionsOnAnimatedTooltip:
+      app.scrollViews.otherElements.staticTexts["Tooltips"].tap()
     }
   }
 }

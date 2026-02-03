@@ -133,6 +133,8 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     guard !isClosing else { return }
     isClosing = true
     tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
+    tooltip.view.layoutIfNeeded()
+
     if let substrateView = tooltip.substrateView {
       substrateView.onVisibleBoundsChanged(
         from: substrateView.bounds,

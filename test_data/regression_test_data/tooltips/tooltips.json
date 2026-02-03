@@ -150,7 +150,7 @@
             },
             {
               "type": "button",
-              "text": "tooltip with visibility and disappear action",
+              "text": "animated tooltip with visibility and disappear action",
               "tooltips": [
                 {
                   "id": "tooltip_with_visibility",
@@ -226,6 +226,86 @@
                 {
                   "log_id": "show_tooltip_2",
                   "url": "div-action://show_tooltip?id=tooltip_with_visibility&multiple=true"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "non-animated tooltip with visibility and disappear action",
+              "tooltips": [
+                {
+                  "id": "non_animated_tooltip_with_visibility",
+                  "position": "bottom",
+                  "duration": 3000,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "animation_in": {
+                    "name": "no_animation"
+                  },
+                  "animation_out": {
+                    "name": "no_animation"
+                  },
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "items": [
+                      {
+                        "type": "text",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
+                        },
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#799eb7"
+                          }
+                        ],
+                        "border": {
+                          "corner_radius": 6
+                        },
+                        "text_color": "#2C3E50",
+                        "text": "Title tooltip"
+                      }
+                    ],
+                    "visibility_actions": [
+                      {
+                        "log_id": "set_variable_appeared",
+                        "url": "div-action://set_variable?name=visibility_called&value=true",
+                        "log_limit": 0,
+                        "visibility_duration": 0,
+                        "visibility_percentage": 100
+                      }
+                    ],
+                    "disappear_actions": [
+                      {
+                        "log_id": "set_variable_disappeared",
+                        "log_limit": 0,
+                        "disappear_duration": 0,
+                        "visibility_percentage": 20,
+                        "url": "div-action://set_variable?name=disappear_called&value=true"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip_3",
+                  "url": "div-action://show_tooltip?id=non_animated_tooltip_with_visibility&multiple=true"
                 }
               ]
             },
