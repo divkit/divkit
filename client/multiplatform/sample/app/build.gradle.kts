@@ -2,8 +2,8 @@ import com.yandex.divkit.gradle.Version
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.multiplatform)
 
     id("divkit.convention.version")
@@ -27,16 +27,16 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.runtime)
-            implementation(libs.ui)
-            implementation(libs.foundation)
-            implementation(libs.material3)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
 
             implementation(project(":divkit-multiplatform"))
         }
 
         androidMain.dependencies {
-            implementation(libs.androidx.activityCompose)
+            implementation(libs.androidx.activity.compose)
             implementation(libs.div)
             implementation(libs.div.picasso)
             implementation(libs.div.glide)

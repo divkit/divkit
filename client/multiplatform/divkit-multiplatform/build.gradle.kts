@@ -1,16 +1,18 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.cocoapods)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.cocoapods)
+    alias(libs.plugins.kotlin.multiplatform)
 
     id("divkit.convention.android-publishing-module")
 }
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
+    androidLibrary {
+        namespace = "com.yandex.divkit.multiplatform"
+        compileSdk = 36
+        minSdk = 23
     }
 
     listOf(
@@ -40,27 +42,18 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.runtime)
-            implementation(libs.ui)
-            implementation(libs.foundation)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
         }
 
         androidMain.dependencies {
-            implementation(libs.ui.tooling)
-            implementation(libs.androidx.activityCompose)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.compose.ui.tooling)
             implementation(libs.div)
             implementation(libs.div.core)
             implementation(libs.div.picasso)
             implementation(libs.div.shimmer)
         }
-    }
-}
-
-android {
-    namespace = "com.yandex.divkit.multiplatform"
-    compileSdk = 36
-
-    defaultConfig {
-        minSdk = 23
     }
 }

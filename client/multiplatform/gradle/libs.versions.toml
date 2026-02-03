@@ -1,13 +1,12 @@
 [versions]
 agp = "8.13.2"
 compose = "1.10.0"
-divkit = "32.34.0"
+divkit = "32.35.0"
 kotlin = "2.3.0"
 material3 = "1.9.0"
 
-
 [libraries]
-androidx-activityCompose = { module = "androidx.activity:activity-compose", version = "1.12.2" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.12.3" }
 
 div = { module = "com.yandex.div:div", version.ref = "divkit" }
 div-core = { module = "com.yandex.div:div-core", version.ref = "divkit" }
@@ -15,21 +14,19 @@ div-glide = { module = "com.yandex.div:glide", version.ref = "divkit" }
 div-picasso = { module = "com.yandex.div:picasso", version.ref = "divkit" }
 div-shimmer = { module = "com.yandex.div:div-shimmer", version.ref = "divkit" }
 
-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
-nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose" }
-
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose" }
+nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library", version.ref = "agp" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
-
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

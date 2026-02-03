@@ -11,5 +11,5 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.nexusPublish)
+    implementation(libs.nexus.publish)
 }
