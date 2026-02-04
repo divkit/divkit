@@ -1,3 +1,14 @@
+## 32.36.0
+
+# Android Client:
+* Fixed unhandled exceptions in `SvgDivImageLoader`.
+* Fixed visibility actions not triggering after navigating back to screen.
+
+# iOS Client:
+* Fixed comparison of two CachedRemoteImageHolders.
+* Supported `bring_to_top_id` in tooltips.
+
+
 ## 32.35.0
 
 # Android Client:
