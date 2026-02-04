@@ -26,11 +26,11 @@ extension UIViewRenderable {
   ) {
     var view = view
     view.layoutReporter = LayoutReporter(
-      willLayoutSubviews: {
+      willLayoutSubviews: { [weak renderingDelegate] in
         guard let path else { return }
         renderingDelegate?.reportViewWillLayout(path: path)
       },
-      didLayoutSubviews: {
+      didLayoutSubviews: { [weak renderingDelegate] in
         guard let path else { return }
         renderingDelegate?.reportViewDidLayout(path: path)
       }
