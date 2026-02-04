@@ -228,7 +228,9 @@ public final class GalleryView: BlockView {
       if let newContentPosition {
         let animated = self.state.animated
         updateContentOffset(to: newContentPosition, animated: animated)
-        if !animated {
+        if animated {
+          collectionView.layoutIfNeeded()
+        } else {
           onDidEndScroll(collectionView)
         }
       } else {

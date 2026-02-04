@@ -213,7 +213,11 @@ private final class StateBlockView: BlockView {
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
     } else {
-      forceLayout()
+      if window != nil {
+        forceLayout()
+      } else {
+        setNeedsLayout()
+      }
 
       let transformedViews = subviewStorage.getViewsToTransition(newIds: ids, container: self)
       if viewsToRemove.isEmpty, transformedViews != viewsToTransition || !viewsToAdd.isEmpty {
