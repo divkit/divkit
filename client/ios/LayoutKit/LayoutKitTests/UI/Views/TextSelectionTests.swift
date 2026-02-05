@@ -37,7 +37,7 @@ final class TextSelectionTests: XCTestCase {
   private lazy var words: [String] = text.string.components(separatedBy: " ")
 
   private lazy var model: TextSelection.TextModel = {
-    let textLayout: AttributedStringLayout<ActionsAttribute> = text.drawAndGetLayout(
+    let textLayout: StringLayout = text.drawAndGetLayout(
       inContext: context,
       verticalPosition: .top,
       rect: rect,
