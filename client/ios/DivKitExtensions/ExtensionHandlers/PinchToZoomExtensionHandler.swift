@@ -6,10 +6,14 @@ import UIKit
 public final class PinchToZoomExtensionHandler: DivExtensionHandler {
   public let id = "pinch-to-zoom"
 
-  private weak var overlayView: UIView?
+  private let overlayViewProvider: () -> UIView?
 
   public init(overlayView: UIView) {
-    self.overlayView = overlayView
+    self.overlayViewProvider = { [weak overlayView] in overlayView }
+  }
+
+  public init(overlayViewProvider: @escaping () -> UIView?) {
+    self.overlayViewProvider = overlayViewProvider
   }
 
   public func applyAfterBaseProperties(
@@ -17,7 +21,7 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
     div _: DivBase,
     context: DivBlockModelingContext
   ) -> Block {
-    guard let overlayView else {
+    guard let overlayView = overlayViewProvider() else {
       context.addError(message: "PinchToZoomExtensionHandler.overlayView is nil")
       return EmptyBlock()
     }
