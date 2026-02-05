@@ -4,9 +4,11 @@ import VGSL
 public struct MarksConfiguration: Equatable {
   public static let empty = MarksConfiguration(
     modelConfiguration: .empty,
-    horizontalInset: 0
+    horizontalInset: 0,
+    marksStep: 1
   )
 
   let modelConfiguration: MarksConfigurationModel
   let horizontalInset: CGFloat
+  let marksStep: CGFloat
 }
