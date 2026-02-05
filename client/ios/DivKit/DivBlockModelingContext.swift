@@ -215,8 +215,8 @@ public struct DivBlockModelingContext {
       .getVariableValue(path: path, name: divVariableName) ?? defaultValue
     let valueProp = Property<T>(
       getter: { value },
-      setter: { [weak variablesStorage] in
-        guard let variablesStorage, let newValue = DivVariableValue($0) else { return }
+      setter: { [weak variablesStorage, path] val in
+        guard let variablesStorage, let newValue = DivVariableValue(val) else { return }
         variablesStorage.update(
           path: path,
           name: divVariableName,
