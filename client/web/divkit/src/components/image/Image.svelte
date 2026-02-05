@@ -7,6 +7,10 @@
     const STATE_LOADING = 0;
     const STATE_LOADED = 1;
     const STATE_ERROR = 2;
+
+    const GIF_RE = /\.gif($|\?)/i;
+    const GIF_BASE64 = 'data:image/gif';
+    const GIF_URL_ERROR = 'A Gif image was used for the "Image" component. The animation will be played on the web platform, but it does not match the behavior of other platforms.';
 </script>
 
 <script lang="ts">
@@ -108,12 +112,18 @@
         componentContext.getDerivedFromVars(componentContext.json.high_priority_preview_show);
 
     $: {
-        let img = componentContext.json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
+        const isGif = componentContext.json.type === 'gif';
+        let img = isGif ? $jsonGifUrl : $jsonImageUrl;
         isEmpty = img === EMPTY_IMAGE;
         if (isEmpty) {
             img = FALLBACK_IMAGE;
         }
         imageUrl = img;
+        if (!isGif && imageUrl && GIF_RE.test(imageUrl)) {
+            componentContext.logError(wrapError(new Error(GIF_URL_ERROR), {
+                level: 'warn',
+            }));
+        }
     }
 
     function updateImageUrl(_url: string | undefined): void {
@@ -139,6 +149,7 @@
     $: isHeightContent = $jsonHeight?.type === 'wrap_content';
 
     $: {
+        const isGif = componentContext.json.type === 'gif';
         const preview = $jsonPreview;
         const previewUrl = $jsonPreviewUrl;
 
@@ -148,6 +159,15 @@
         } else {
             backgroundImage = '';
             highPrority = false;
+        }
+
+        if (!isGif && (
+            previewUrl && GIF_RE.test(previewUrl) ||
+            preview && preview.startsWith(GIF_BASE64)
+        )) {
+            componentContext.logError(wrapError(new Error(GIF_URL_ERROR), {
+                level: 'warn',
+            }));
         }
     }
 

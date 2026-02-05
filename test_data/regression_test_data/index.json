@@ -57,28 +57,6 @@
       "case_id": 492
     },
     {
-      "title": "Webp animation usages",
-      "platforms": [],
-      "unsupported_platforms": {
-        "android": "Behavior differs, there is another case for android and ios.",
-        "ios": "Behavior differs, there is another case for android and ios."
-      },
-      "tags": [
-        "Animations",
-        "DivImage",
-        "DivGifImage"
-      ],
-      "steps": [
-        "Wait for animation frame to change"
-      ],
-      "expected_results": [
-        "Animation is playing in every case.",
-        "Warning about specific behavior on web is shown."
-      ],
-      "file": "animations/webp_animation_usages.json",
-      "case_id": 493
-    },
-    {
       "title": "Copy to clipboard",
       "case_id": 13,
       "tags": [
@@ -4188,7 +4166,9 @@
     },
     {
       "title": "Gif animations",
-      "platforms": [],
+      "platforms": [
+        "web"
+      ],
       "unsupported_platforms": {
         "android": "Behavior differs, there is another case for android and ios.",
         "ios": "Behavior differs, there is another case for android and ios."
