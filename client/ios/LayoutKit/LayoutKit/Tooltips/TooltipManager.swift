@@ -334,5 +334,6 @@ public final class DefaultTooltipManager: TooltipManager {
 #endif
 
 extension TooltipManager {
+  public func mapView(_: any BlockView, to _: BlockViewID) {}
   public func reset() {}
 }
