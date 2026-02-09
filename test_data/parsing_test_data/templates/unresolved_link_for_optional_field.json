@@ -1,0 +1,35 @@
+{
+  "description": "Unresolved link for optional field does not break resolution",
+  "templates": {
+    "styled_text": {
+      "type": "text",
+      "$id": "missing_id"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "styled_text",
+          "text": "Hello"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello"
+          }
+        }
+      ]
+    }
+  }
+}

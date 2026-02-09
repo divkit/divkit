@@ -1,0 +1,36 @@
+{
+  "description": "Direct value overrides link",
+  "templates": {
+    "linked_text": {
+      "type": "text",
+      "$text": "content"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "linked_text",
+          "content": "From content",
+          "text": "Direct value"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Direct value"
+          }
+        }
+      ]
+    }
+  }
+}

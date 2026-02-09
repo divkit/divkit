@@ -1,0 +1,55 @@
+{
+  "description": "Template with array link",
+  "templates": {
+    "row": {
+      "type": "container",
+      "orientation": "horizontal",
+      "$items": "children"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "row",
+          "children": [
+            {
+              "type": "text",
+              "text": "Item 1"
+            },
+            {
+              "type": "text",
+              "text": "Item 2"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "horizontal",
+            "items": [
+              {
+                "type": "text",
+                "text": "Item 1"
+              },
+              {
+                "type": "text",
+                "text": "Item 2"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

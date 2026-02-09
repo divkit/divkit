@@ -1,0 +1,43 @@
+{
+  "description": "Template with linked nested object",
+  "templates": {
+    "card_text": {
+      "type": "text",
+      "$paddings": "padding_ref"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "card_text",
+          "text": "Padded",
+          "padding_ref": {
+            "left": 16,
+            "right": 16
+          }
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Padded",
+            "paddings": {
+              "left": 16,
+              "right": 16
+            }
+          }
+        }
+      ]
+    }
+  }
+}

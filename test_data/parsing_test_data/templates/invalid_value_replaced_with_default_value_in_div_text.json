@@ -1,0 +1,32 @@
+{
+  "description": "Invalid value replaced with default value (div-text.font_size)",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Hello",
+          "font_size": -1
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello",
+            "font_size": 12
+          }
+        }
+      ]
+    }
+  }
+}

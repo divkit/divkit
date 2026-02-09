@@ -1,0 +1,41 @@
+{
+  "description": "Template chain",
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "font_size": 14
+    },
+    "bold_text": {
+      "type": "base_text",
+      "font_weight": "bold"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "bold_text",
+          "text": "Bold Text"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "font_size": 14,
+            "font_weight": "bold",
+            "text": "Bold Text"
+          }
+        }
+      ]
+    }
+  }
+}

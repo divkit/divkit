@@ -1,0 +1,37 @@
+{
+  "description": "Template with override",
+  "templates": {
+    "styled_text": {
+      "type": "text",
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "styled_text",
+          "font_size": 20,
+          "text": "Overridden"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "font_size": 20,
+            "text": "Overridden"
+          }
+        }
+      ]
+    }
+  }
+}

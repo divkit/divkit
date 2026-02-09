@@ -1,0 +1,43 @@
+{
+  "description": "Same link used in two places",
+  "templates": {
+    "spaced_text": {
+      "type": "text",
+      "paddings": {
+        "$top": "spacing",
+        "$bottom": "spacing"
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "spaced_text",
+          "text": "Hello",
+          "spacing": 24
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello",
+            "paddings": {
+              "top": 24,
+              "bottom": 24
+            }
+          }
+        }
+      ]
+    }
+  }
+}
