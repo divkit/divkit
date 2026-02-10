@@ -1,20 +1,20 @@
 PODS:
-  - DivKit (32.34.0):
-    - DivKit_LayoutKit (= 32.34.0)
-    - DivKit_Serialization (= 32.34.0)
+  - DivKit (32.35.0):
+    - DivKit_LayoutKit (= 32.35.0)
+    - DivKit_Serialization (= 32.35.0)
     - VGSL (~> 7.12)
-  - DivKit_LayoutKit (32.34.0):
-    - DivKit_LayoutKitInterface (= 32.34.0)
+  - DivKit_LayoutKit (32.35.0):
+    - DivKit_LayoutKitInterface (= 32.35.0)
     - VGSL (~> 7.12)
-  - DivKit_LayoutKitInterface (32.34.0):
+  - DivKit_LayoutKitInterface (32.35.0):
     - VGSL (~> 7.12)
-  - DivKit_Serialization (32.34.0):
+  - DivKit_Serialization (32.35.0):
     - VGSL (~> 7.12)
-  - DivKitExtensions (32.34.0):
-    - DivKit (= 32.34.0)
-  - DivKitKMP (32.34.0):
-    - DivKit (= 32.34.0)
-    - DivKitExtensions (= 32.34.0)
+  - DivKitExtensions (32.35.0):
+    - DivKit (= 32.35.0)
+  - DivKitKMP (32.35.0):
+    - DivKit (= 32.35.0)
+    - DivKitExtensions (= 32.35.0)
   - VGSL (7.17.0):
     - VGSLFundamentals (= 7.17.0)
     - VGSLNetworking (= 7.17.0)
@@ -46,12 +46,12 @@ EXTERNAL SOURCES:
     :path: "../../divkit-multiplatform/DivKitKMP"
 
 SPEC CHECKSUMS:
-  DivKit: 881278127f072c788d2c009f8999e10e07ab84bc
-  DivKit_LayoutKit: f6aff8ae9e966bbb57e0134265066aa1af0746a0
-  DivKit_LayoutKitInterface: a11f9e7499ca8e8487456e3439664c5323e3961e
-  DivKit_Serialization: be1a4b64ab16062fa0744b716c65b636f94066a4
-  DivKitExtensions: 927b102674cd105407bc07a5e8ccc01c4551079c
-  DivKitKMP: ff1b5761c7ad9406589975310d0c28da6b1f8906
+  DivKit: 3dbffa1f9b303ba9f95ea4fc2b48375440768da2
+  DivKit_LayoutKit: c5025c06af360dc2b1a539b17567bfb628bd3755
+  DivKit_LayoutKitInterface: f31972d07134bdd373823ed31c0097eff5b9837f
+  DivKit_Serialization: c15fa9eb3878dda9710a30a19a395e61a9d2e118
+  DivKitExtensions: 2dd13f295a717e0e4de3810b69c8865f90125195
+  DivKitKMP: 83316de3342542a9a6a2f49d5bcb8e46d73cdfae
   VGSL: 6696dd84229c7d3ce8ad9b940e89bbd199e2b12d
   VGSLFundamentals: 5bd45cb6e0b594902aa9f8927402b4d787460bc7
   VGSLNetworking: 4301c663201314d27357078ec8df9dccc631ec62
