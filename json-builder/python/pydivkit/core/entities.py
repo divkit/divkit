@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import enum
 import hashlib
 import json
 import uuid
@@ -9,276 +8,35 @@ from collections import defaultdict
 from functools import reduce
 from types import MappingProxyType
 from typing import (
-    Any, Dict, FrozenSet, List, Mapping, Optional, Sequence, Set, Type, Union,
-    get_args, get_origin, get_type_hints, Iterator, Tuple,
+    Any,
+    Dict,
+    FrozenSet,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+    Type,
+    Union,
+    get_args,
+    get_origin,
+    get_type_hints,
 )
 
 from .compat import classproperty
 from .fields import Expr, _Field
-from .types.union import inject_types
-
-
-TYPE_FIELD = "type"
-
-# ExcludeFieldsType: str -> ExcludeFieldsType | bool
-ExcludeFieldsType = Mapping[str, Any]
-SchemaType = Dict[str, Any]
-
-
-def _make_exclude_fields(
-    exclude_fields: Optional[Sequence[str]] = None,
-) -> ExcludeFieldsType:
-    if not exclude_fields:
-        return MappingProxyType({})
-    exclude: Dict[str, Any] = {}
-    exclude_nested: Dict[str, List[str]] = defaultdict(list)
-    for exclude_field in exclude_fields:
-        if not exclude_field:
-            raise ValueError("Field name cannot be empty")
-        field_name, *nested_fields = exclude_field.split(".")
-        if nested_fields:
-            exclude_nested[field_name].append(".".join(nested_fields))
-        else:
-            exclude[field_name] = True
-    for field_name, nested_fields in exclude_nested.items():
-        if field_name not in exclude:
-            exclude[field_name] = _make_exclude_fields(nested_fields)
-    return MappingProxyType(exclude)
-
-
-def _cast_value_type(value: Any, type_: Any) -> Any:  # noqa
-    if isinstance(value, _Field):
-        raise ValueError("Value cannot be of type _Field")
-
-    if type_ is Any:
-        return value
-
-    origin_type = get_origin(type_)
-
-    if isinstance(origin_type, type) and isinstance(origin_type, (str, bytes)):
-        return type_(value)
-
-    if isinstance(origin_type, type) and issubclass(origin_type, Sequence):
-        if not isinstance(value, Sequence):
-            raise ValueError(
-                f"Value {value} has wrong type. Expected type is {type_}.",
-            )
-        element_type, *_ = get_args(type_)
-        return [_cast_value_type(v, element_type) for v in value]
-
-    if isinstance(origin_type, type) and issubclass(origin_type, Mapping):
-        if not isinstance(value, Mapping):
-            raise ValueError(
-                f"Value {value} has wrong type. Expected type is {type_}.",
-            )
-
-        key_type, value_type = get_args(type_)
-        return {
-            _cast_value_type(k, key_type): _cast_value_type(v, value_type)
-            for k, v in value.items()
-        }
-
-    if origin_type is Union:
-        if not getattr(type_, "__injected_types__", False):
-            inject_types(type_)
-            setattr(type_, "__injected_types__", True)
-        types = getattr(type_, "__types__", None)
-        if types and isinstance(value, dict):
-            type_value = value.get(TYPE_FIELD)
-            if type_value:
-                target_type = types.get(type_value)
-                if target_type:
-                    return target_type(**value)
-                raise ValueError(
-                    f"Union {type_} does not contain type {type_value}.",
-                )
-            raise ValueError(
-                f"Value {value} does not have field {TYPE_FIELD}.",
-            )
-        for u_type in get_args(type_):
-            try:
-                return _cast_value_type(value, u_type)
-            except ValueError:
-                pass
-        raise ValueError(
-            f"Value {value} has wrong type. Expected type is {type_}.",
-        )
-
-    if isinstance(value, type_):
-        return value
-
-    if isinstance(value, BaseEntity):
-        if isinstance(value, type_):
-            return value
-        raise ValueError(
-            f"Value {value} has wrong type. Expected type is {type_}",
-        )
-
-    if issubclass(type_, BaseEntity) and isinstance(value, dict):
-        return type_(**value)
-
-    if value is not None:
-        try:
-            return type_(value)
-        except Exception:
-            pass
-
-    raise ValueError(
-        f"Value {value} has wrong type. Expected type is {type_}.",
-    )
-
-
-def dump(obj: Any) -> Any:
-    if isinstance(obj, (str, bytes)):
-        return obj
-    if isinstance(obj, Sequence):
-        return [dump(obj_item) for obj_item in obj]
-    if isinstance(obj, Mapping):
-        return {k: v for k, v in obj.items()}
-    if isinstance(obj, Expr):
-        return str(obj)
-    if isinstance(obj, BaseEntity):
-        return obj.dict()
-    if isinstance(obj, enum.Enum):
-        return obj.value
-    return obj
-
-
-def _update_related_templates(
-    value: Any,
-    related_templates: Set[Type[BaseDiv]],
-) -> None:
-    if isinstance(value, BaseEntity):
-        related_templates.update(value.related_templates())
-    elif isinstance(value, list):
-        for v_item in value:
-            _update_related_templates(v_item, related_templates)
-
-
-def _unpack_optional_type(type_: Any) -> Any:
-    if get_origin(type_) is Union:
-        inner_types = []
-        for inner_type in get_args(type_):
-            if get_origin(inner_type) or not isinstance(None, inner_type):
-                inner_types.append(inner_type)
-        return Union[tuple(inner_types)]
-    return type_
-
-
-def _merge_types(fst_type: Any, snd_type: Any) -> Any:
-    fst_type = _unpack_optional_type(fst_type)
-    snd_type = _unpack_optional_type(snd_type)
-    if fst_type == snd_type:
-        return fst_type
-    raise TypeError(f"Incompatible types: {fst_type} and {snd_type}")
-
-
-BUILTIN_TYPES_TO_SCHEMA: Mapping[type, Mapping[str, Any]] = MappingProxyType(
-    {
-        int: MappingProxyType({"type": "integer"}),
-        float: MappingProxyType({"type": "number"}),
-        bool: MappingProxyType(
-            {
-                "type": "integer",
-                "enum": [0, 1],
-                "format": "boolean",
-            },
-        ),
-        str: MappingProxyType({"type": "string"}),
-        bytes: MappingProxyType({"type": "string"}),
-        Expr: MappingProxyType({"type": "string", "pattern": "^@{.*}$"}),
-        Any: MappingProxyType({}),
-    },
+from .schema import ExcludeFieldsType, SchemaType, _field_to_schema
+from .serialization import (
+    _cast_value_type,
+    _make_exclude_fields,
+    _merge_types,
+    _update_related_templates,
+    dump,
 )
 
-
-def _type_field_to_schema(field: _Field) -> SchemaType:
-    return {
-        "type": "string",
-        "enum": [field.default],
-    }
-
-
-def _enum_to_schema(type_: Type[enum.Enum]) -> SchemaType:
-    return {
-        "type": "string",
-        "enum": [enum_el.value for enum_el in type_],
-    }
-
-
-def _list_to_schema(
-    type_: Any,
-    definitions: Dict[str, SchemaType],
-    exclude: ExcludeFieldsType,
-) -> SchemaType:
-    item_type, *_ = get_args(type_)
-    return {
-        "type": "array",
-        "items": _field_to_schema(None, item_type, exclude, definitions),
-    }
-
-
-def _dict_to_schema() -> SchemaType:
-    return {
-        "type": "object",
-        "additionalProperties": True,
-    }
-
-
-def _union_to_schema(
-    field: Optional[_Field],
-    type_: Any,
-    exclude: ExcludeFieldsType,
-    definitions: Dict[str, SchemaType],
-) -> SchemaType:
-    return {
-        "anyOf": [
-            _field_to_schema(field, arg_type, exclude, definitions)
-            for arg_type in get_args(type_)
-        ],
-    }
-
-
-def _add_field_extra_to_schema(field: _Field, schema: SchemaType) -> None:
-    if field.description:
-        schema["description"] = field.description
-    if field.default:
-        schema["default"] = field.default
-    schema.update(**field.constraints)
-
-
-def _field_to_schema(
-    field: Optional[_Field],
-    type_: Any,
-    exclude: ExcludeFieldsType,
-    definitions: Dict[str, SchemaType],
-) -> SchemaType:
-    type_ = _unpack_optional_type(type_)
-    origin = get_origin(type_)
-
-    schema: Optional[SchemaType] = None
-    if field and field.name == TYPE_FIELD and field.default:
-        schema = _type_field_to_schema(field)
-    elif type_ in BUILTIN_TYPES_TO_SCHEMA:
-        schema = {**BUILTIN_TYPES_TO_SCHEMA[type_]}
-    elif isinstance(origin, type) and issubclass(origin, Sequence):
-        schema = _list_to_schema(type_, definitions, exclude)
-    elif isinstance(origin, type) and issubclass(origin, Mapping):
-        schema = _dict_to_schema()
-    elif origin is Union:
-        schema = _union_to_schema(field, type_, exclude, definitions)
-    elif issubclass(type_, BaseEntity):
-        schema = type_.schema_as_ref(definitions, exclude)
-    elif issubclass(type_, enum.Enum):
-        schema = _enum_to_schema(type_)
-
-    if schema is None:
-        raise TypeError(f"Schema building error for unknown type {type_}")
-
-    if field:
-        _add_field_extra_to_schema(field, schema)
-
-    return schema
+TYPE_FIELD = "type"
 
 
 class BaseEntity:
@@ -286,7 +44,7 @@ class BaseEntity:
     __field_names__: Mapping[uuid.UUID, str]
     __field_types__: Mapping[str, type]
 
-    __subclasses__: Dict[str, Type[BaseEntity]] = {}
+    __subclasses_registry__: Dict[str, Type[BaseEntity]] = {}
     __related_templates__: FrozenSet[Type[BaseDiv]] = frozenset({})
     __template_name__: Optional[str] = None
 
@@ -314,13 +72,14 @@ class BaseEntity:
 
     def __init_subclass__(cls, *args: Any, **kwargs: Any) -> None:
         super().__init_subclass__()
-        if cls.template_name in cls.__subclasses__:
+        if cls.template_name in cls.__subclasses_registry__:
             warnings.warn(
                 f"Template {cls.template_name!r} already defined in "
-                f"{cls.__subclasses__[cls.template_name]!r} "
-                f"and will be replaced to {cls!r}", RuntimeWarning,
+                f"{cls.__subclasses_registry__[cls.template_name]!r} "
+                f"and will be replaced to {cls!r}",
+                RuntimeWarning,
             )
-        cls.__subclasses__[cls.template_name] = cls
+        cls.__subclasses_registry__[cls.template_name] = cls
         cls.__fields__ = cls._extract_fields()
         cls.__field_names__ = cls._extract_field_names(cls.__fields__)
         cls._remove_fields_from_cls_attrs()
@@ -333,8 +92,7 @@ class BaseEntity:
             field_type = self.__field_types__.get(key)
             if field_type is None:
                 raise KeyError(
-                    f"'{self.__class__.__name__}' object "
-                    f"has no attribute '{key}'",
+                    f"'{self.__class__.__name__}' object has no attribute '{key}'",
                 )
             if key == TYPE_FIELD:
                 self._validate_type_value(value)
@@ -392,8 +150,8 @@ class BaseEntity:
                         raise ValueError("Ref cannot point to another ref")
                     if value.default is not None:
                         raise ValueError(
-                            f"Cannot create a ref for field {key} because "
-                            f"it has a default value",
+                            f"Cannot create a ref for field {key} "
+                            f"because it has a default value",
                         )
                     value.ref_to = field_ref
                 if not value.name:
@@ -453,7 +211,8 @@ class BaseEntity:
                 base_type_hint = base_hints.get(key)
                 if base_type_hint and (cls_type_hint is not base_type_hint):
                     raise ValueError(
-                        f"Type hint mismatch. _Field {cls.__name__}.{key} "
+                        f"Type hint mismatch. _Field "
+                        f"{cls.__name__}.{key} "
                         "should match type hint of a parent class "
                         f"{base.__name__}.{key}\n"
                         f"Expected: {base_type_hint}. "
@@ -491,7 +250,9 @@ class BaseEntity:
             return cls._merge_ref_types(*ref_types_seq)
         return MappingProxyType({})
 
-    def _extract_ref_types_from_values(self) -> Mapping[uuid.UUID, Any]:
+    def _extract_ref_types_from_values(
+        self,
+    ) -> Mapping[uuid.UUID, Any]:
         ref_types: Dict[uuid.UUID, Any] = {}
         for field_name, field_type in self.__field_types__.items():
             field_value = getattr(self, field_name, None)
@@ -508,7 +269,9 @@ class BaseEntity:
                     ref_types[ref_uid] = field_type
         return MappingProxyType(ref_types)
 
-    def _extract_all_ref_types(self) -> Mapping[uuid.UUID, Any]:
+    def _extract_all_ref_types(
+        self,
+    ) -> Mapping[uuid.UUID, Any]:
         ref_types_seq = [self._extract_ref_types_from_values()]
         for field_name in self.__fields__:
             field_value = getattr(self, field_name, None)
@@ -516,7 +279,10 @@ class BaseEntity:
         return self._merge_ref_types(*ref_types_seq)
 
     def related_templates(self) -> Set[Type[BaseDiv]]:
-        return {*self.__related_templates__, *self._instance_related_templates}
+        return {
+            *self.__related_templates__,
+            *self._instance_related_templates,
+        }
 
     def dict(self) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
@@ -524,9 +290,7 @@ class BaseEntity:
             field_value = getattr(self, field_name, field.default)
             if field_value is not None:
                 if isinstance(field_value, _Field) and field_value.ref_to:
-                    result[
-                        f"${field.field_name}"
-                    ] = field_value.ref_to.field_name
+                    result[f"${field.field_name}"] = field_value.ref_to.field_name
                 else:
                     result[field.field_name] = dump(field_value)
         return result
@@ -560,7 +324,10 @@ class BaseEntity:
                 exclude=exclude.get(field_name, {}),
                 definitions=definitions,
             )
-            if field_type != Optional[field_type]:
+            is_optional = get_origin(field_type) is Union and type(None) in get_args(
+                field_type
+            )
+            if not is_optional:
                 required.append(field_name)
         schema: SchemaType = {"type": "object"}
         if properties:
@@ -672,7 +439,9 @@ class BaseDiv(BaseEntity):
         return MappingProxyType(tpl_values)
 
     @classmethod
-    def _extract_ref_types_from_tpl_values(cls) -> Mapping[uuid.UUID, Any]:
+    def _extract_ref_types_from_tpl_values(
+        cls,
+    ) -> Mapping[uuid.UUID, Any]:
         return cls._merge_ref_types(
             *(
                 cls._extract_ref_types_from_obj(tpl_value)
@@ -681,7 +450,9 @@ class BaseDiv(BaseEntity):
         )
 
     @classmethod
-    def _extract_ref_types_from_fields(cls) -> Mapping[uuid.UUID, Any]:
+    def _extract_ref_types_from_fields(
+        cls,
+    ) -> Mapping[uuid.UUID, Any]:
         ref_types: Dict[uuid.UUID, Any] = {}
         for field_name, field in cls.__fields__.items():
             if not field.ref_to:
@@ -721,14 +492,14 @@ class BaseDiv(BaseEntity):
             if origins is None:
                 return False
 
-            expect, ref = origins
+            ref_args, expect_args = origins
 
-            if get_args(expect) == get_args(ref):
+            if get_args(ref_args) == get_args(expect_args):
                 return True
 
             if not any(
-                issubclass(exp, get_args(ref))
-                for exp in get_args(expect)
+                issubclass(exp, get_args(expect_args))
+                for exp in get_args(ref_args)
                 if get_origin(exp) is not Union
             ):
                 continue
@@ -754,7 +525,8 @@ class BaseDiv(BaseEntity):
             ):
                 raise TypeError(
                     f"Type of attribute '{field_name}' does "
-                    f"not match ref type {expected_field_type} != {ref_type}",
+                    f"not match ref type "
+                    f"{expected_field_type} != {ref_type}",
                 )
 
     @classmethod

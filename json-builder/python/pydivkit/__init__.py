@@ -1,4 +1,4 @@
-# flake8: noqa: F405
+# ruff: noqa: F403, F405
 from typing import Any, Dict
 
 from pydivkit.core import Field, Ref
@@ -10,8 +10,7 @@ def make_card(log_id: str, *divs: Div) -> DivData:
     return DivData(
         log_id=log_id,
         states=[
-            DivDataState(state_id=state_id, div=div)
-            for state_id, div in enumerate(divs)
+            DivDataState(state_id=state_id, div=div) for state_id, div in enumerate(divs)
         ],
     )
 
@@ -19,8 +18,7 @@ def make_card(log_id: str, *divs: Div) -> DivData:
 def make_div(div: Div) -> Dict[str, Any]:
     return {
         "templates": {
-            tpl.template_name: tpl.template()
-            for tpl in div.related_templates()
+            tpl.template_name: tpl.template() for tpl in div.related_templates()
         },
         "card": make_card("card", div).dict(),
     }

@@ -16,11 +16,11 @@ if [[ $1 = "--no-lint" ]]; then
   exit 0
 fi
 
-echo "Install poetry"
-(cd $scriptDir && python3 -m venv env && env/bin/pip install poetry)
+echo "Install dependencies"
+(cd $scriptDir && uv sync --group dev --no-install-project)
 
-echo "Install requirements"
-(cd $scriptDir && env/bin/poetry install --no-root -n)
+echo "Check code"
+(cd $scriptDir && uv run ruff check --fix $outputDir)
 
-echo "Reformat code"
-(cd $scriptDir && env/bin/poetry run gray $outputDir)
+echo "Format code"
+(cd $scriptDir && uv run ruff format $outputDir)

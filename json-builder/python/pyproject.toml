@@ -1,16 +1,15 @@
-[tool.poetry]
+[project]
 name = "pydivkit"
 version = "32.36.0"
 description = "DivKit python library"
 readme = "README.md"
-repository = "https://github.com/divkit/divkit/tree/main/json-builder/python"
 keywords = ["divkit", "sdk"]
+requires-python = ">=3.9"
 authors = [
-    "Vladislav Bakaev <bakaev-vlad@yandex-team.ru>",
-    "Pavel Mosein <p-mosein@yandex-team.ru>",
-    "Dmitry Orlov <mosquito@yandex-team.ru>",
+    {name = "Vladislav Bakaev", email = "bakaev-vlad@yandex-team.ru"},
+    {name = "Pavel Mosein", email = "p-mosein@yandex-team.ru"},
+    {name = "Dmitry Orlov", email = "mosquito@yandex-team.ru"},
 ]
-include = ["pydivkit/div/*", "pydivkit/py.typed"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -28,18 +27,39 @@ classifiers = [
     "Topic :: Software Development :: User Interfaces",
     "Topic :: Software Development",
     "Typing :: Typed",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.8"
+[project.urls]
+Repository = "https://github.com/divkit/divkit/tree/main/json-builder/python"
 
-[tool.poetry.group.dev.dependencies]
-gray = "^0.10.2"
-mypy = "^0.931"
+[dependency-groups]
+dev = [
+    "ruff>=0.9",
+    "mypy>=1.19",
+]
+test = [
+    "pytest>=7.0.1",
+    "pytest-asyncio>=0.18.1",
+    "pytest-cov>=7.0.0",
+]
 
-[tool.poetry.group.test.dependencies]
-pytest = "^7.0.1"
-pytest-asyncio = "^0.18.1"
+[tool.ruff]
+target-version = "py39"
+line-length = 90
+extend-exclude = ["pydivkit/div"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "COM818", "COM819"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pydivkit"]
 
 [tool.mypy]
 cache_dir = "/dev/null"
@@ -53,6 +73,21 @@ implicit_reexport = true
 allow_untyped_decorators = true
 warn_return_any = false
 
+[tool.hatch.build.targets.wheel]
+packages = ["pydivkit"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "env",
+    "env*",
+    ".venv",
+    "venv",
+    ".build",
+    "*.egg-info",
+    ".coverage",
+    ".pytest_cache",
+]
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

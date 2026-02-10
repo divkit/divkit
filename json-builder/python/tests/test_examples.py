@@ -7,11 +7,13 @@ def test_container_example():
     )
 
     assert container.dict() == {
-        "type": "container", "items": [
-            {"type": "gallery", "items": [
-                {"type": "text", "text": "Hello from pydivkit"}]
-             }
-        ]
+        "type": "container",
+        "items": [
+            {
+                "type": "gallery",
+                "items": [{"type": "text", "text": "Hello from pydivkit"}],
+            }
+        ],
     }
 
 
@@ -34,60 +36,67 @@ def test_slider_example():
                         shape=dk.DivRoundedRectangleShape(
                             item_width=dk.DivFixedSize(value=32),
                             item_height=dk.DivFixedSize(value=32),
-                            corner_radius=dk.DivFixedSize(value=100)
+                            corner_radius=dk.DivFixedSize(value=100),
                         ),
                     ),
                     track_active_style=dk.DivShapeDrawable(
                         color="#00b300",
                         shape=dk.DivRoundedRectangleShape(
                             item_height=dk.DivFixedSize(value=6)
-                        )
+                        ),
                     ),
                     track_inactive_style=dk.DivShapeDrawable(
                         color="#20000000",
                         shape=dk.DivRoundedRectangleShape(
                             item_height=dk.DivFixedSize(value=6)
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
             )
-        ]
+        ],
     )
 
-    assert slider.dict() == dict(log_id="sample_card", states=[
-        dict(
-            div=dict(
-                type="slider",
-                max_value=10,
-                min_value=1,
-                thumb_style=dict(
-                    type="shape_drawable", color="#00b300",
-                    shape=dict(
-                        type="rounded_rectangle",
-                        corner_radius=dict(
-                            type="fixed", value=100
+    assert slider.dict() == dict(
+        log_id="sample_card",
+        states=[
+            dict(
+                div=dict(
+                    type="slider",
+                    max_value=10,
+                    min_value=1,
+                    thumb_style=dict(
+                        type="shape_drawable",
+                        color="#00b300",
+                        shape=dict(
+                            type="rounded_rectangle",
+                            corner_radius=dict(type="fixed", value=100),
+                            item_height=dict(type="fixed", value=32),
+                            item_width=dict(type="fixed", value=32),
                         ),
-                        item_height=dict(type="fixed", value=32),
-                        item_width=dict(type="fixed", value=32),
+                        stroke=dict(color="#ffffff", width=3),
                     ),
-                    stroke=dict(color="#ffffff", width=3)
+                    track_active_style=dict(
+                        type="shape_drawable",
+                        color="#00b300",
+                        shape=dict(
+                            type="rounded_rectangle",
+                            item_height=dict(type="fixed", value=6),
+                        ),
+                    ),
+                    track_inactive_style=dict(
+                        type="shape_drawable",
+                        color="#20000000",
+                        shape=dict(
+                            type="rounded_rectangle",
+                            item_height=dict(type="fixed", value=6),
+                        ),
+                    ),
+                    width=dict(type="match_parent"),
                 ),
-                track_active_style=dict(
-                    type="shape_drawable",
-                    color="#00b300",
-                    shape=dict(
-                        type="rounded_rectangle",
-                        item_height=dict(type="fixed", value=6))),
-                track_inactive_style=dict(
-                    type="shape_drawable", color="#20000000", shape=dict(
-                        type="rounded_rectangle",
-                        item_height=dict(type="fixed", value=6))
-                ),
-                width=dict(type="match_parent")
-            ),
-            state_id=0
-        )
-    ])
+                state_id=0,
+            )
+        ],
+    )
 
 
 def test_gallery():
@@ -112,14 +121,12 @@ def test_gallery():
                 width=dk.DivFixedSize(value=20),
                 height=dk.DivFixedSize(value=20),
                 margins=dk.DivEdgeInsets(right=6),
-
                 # Special object Ref it's a reference for Field property
                 image_url=dk.Ref(icon_url),
             ),
             dk.DivText(
                 width=dk.DivWrapContentSize(),
                 max_lines=1,
-
                 # Special object Ref it's a reference for Field property
                 text=dk.Ref(text),
             ),
@@ -133,13 +140,16 @@ def test_gallery():
     gallery = dk.DivGallery(
         items=[
             CategoriesItem(
-                text="Food", icon_url=f"{base_url}/food.png",
+                text="Food",
+                icon_url=f"{base_url}/food.png",
             ),
             CategoriesItem(
-                text="Alcohol", icon_url=f"{base_url}/alcohol.png",
+                text="Alcohol",
+                icon_url=f"{base_url}/alcohol.png",
             ),
             CategoriesItem(
-                text="Household", icon_url=f"{base_url}/household.png",
+                text="Household",
+                icon_url=f"{base_url}/household.png",
             ),
         ]
     )
@@ -147,57 +157,58 @@ def test_gallery():
     template_name = CategoriesItem.template_name
 
     assert dk.make_div(gallery) == {
-        'templates': {
+        "templates": {
             template_name: {
-                'type': 'container',
-                'background': [{'type': 'solid', 'color': '#f0f0f0'}],
-                'border': {'corner_radius': 12},
-                'content_alignment_vertical': 'center',
-                'items': [
+                "type": "container",
+                "background": [{"type": "solid", "color": "#f0f0f0"}],
+                "border": {"corner_radius": 12},
+                "content_alignment_vertical": "center",
+                "items": [
                     {
-                        'type': 'image',
-                        'height': {'type': 'fixed', 'value': 20},
-                        '$image_url': 'icon_url',
-                        'margins': {'right': 6},
-                        'width': {'type': 'fixed', 'value': 20}
-                    }, {
-                        'type': 'text',
-                        'max_lines': 1,
-                        '$text': 'text',
-                        'width': {
-                            'type': 'wrap_content'
-                        }
-                    }
+                        "type": "image",
+                        "height": {"type": "fixed", "value": 20},
+                        "$image_url": "icon_url",
+                        "margins": {"right": 6},
+                        "width": {"type": "fixed", "value": 20},
+                    },
+                    {
+                        "type": "text",
+                        "max_lines": 1,
+                        "$text": "text",
+                        "width": {"type": "wrap_content"},
+                    },
                 ],
-                'orientation': 'horizontal',
-                'paddings': {'bottom': 10, 'left': 12, 'right': 12, 'top': 10},
-                'width': {'type': 'wrap_content'}
+                "orientation": "horizontal",
+                "paddings": {"bottom": 10, "left": 12, "right": 12, "top": 10},
+                "width": {"type": "wrap_content"},
             }
         },
-        'card': {
-            'log_id': 'card',
-            'states': [
+        "card": {
+            "log_id": "card",
+            "states": [
                 {
-                    'div': {
-                        'type': 'gallery',
-                        'items': [
+                    "div": {
+                        "type": "gallery",
+                        "items": [
                             {
-                                'type': template_name,
-                                'icon_url': f'{base_url}/food.png',
-                                'text': 'Food'
-                            }, {
-                                'type': template_name,
-                                'icon_url': f'{base_url}/alcohol.png',
-                                'text': 'Alcohol'
-                            }, {
-                                'type': template_name,
-                                'icon_url': f'{base_url}/household.png',
-                                'text': 'Household'
-                            }
-                        ]
+                                "type": template_name,
+                                "icon_url": f"{base_url}/food.png",
+                                "text": "Food",
+                            },
+                            {
+                                "type": template_name,
+                                "icon_url": f"{base_url}/alcohol.png",
+                                "text": "Alcohol",
+                            },
+                            {
+                                "type": template_name,
+                                "icon_url": f"{base_url}/household.png",
+                                "text": "Household",
+                            },
+                        ],
                     },
-                    'state_id': 0
+                    "state_id": 0,
                 }
-            ]
-        }
+            ],
+        },
     }

@@ -17,8 +17,7 @@ from pydivkit import (
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 9),
-    reason="subscripting requires python3.9 or higher"
+    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
 )
 def test_sequence_collections_type():
     from collections.abc import Sequence
@@ -35,7 +34,6 @@ def test_sequence_collections_type():
     assert "card" in make_div(images)
 
 
-@pytest.mark.xfail
 def test_ref_collections_union_type():
     from collections.abc import Sequence
     from typing import Union
@@ -53,8 +51,7 @@ def test_ref_collections_union_type():
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 9),
-    reason="subscripting requires python3.9 or higher"
+    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
 )
 def test_union_type():
     from collections.abc import Sequence
@@ -95,16 +92,13 @@ def test_sequence_typing_type():
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 9),
-    reason="subscripting requires python3.9 or higher"
+    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
 )
 def test_optional_sequence():
     from collections.abc import Sequence
+
     class ButtionItem(DivContainer):
         button_actions: Sequence[DivAction] = Field(min_items=1)
         items = [
-            DivText(
-                text="test",
-                actions=Ref(button_actions)
-            ),
+            DivText(text="test", actions=Ref(button_actions)),
         ]
