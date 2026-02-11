@@ -36,12 +36,13 @@ import com.yandex.div.dsl.model.template
 import com.yandex.div.dsl.serializer.toJsonNode
 import com.yandex.div.dsl.type.BoolInt
 import com.yandex.div.dsl.type.color
-import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.net.URI
+import kotlin.test.Test
 
 class DistrictCardTest {
+
     @Test
     fun renderDistrictCard() {
         val districtButtonActionLinkRef = reference<URI>("district_button_action_link")

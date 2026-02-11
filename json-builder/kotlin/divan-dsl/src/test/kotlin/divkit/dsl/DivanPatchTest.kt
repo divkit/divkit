@@ -1,9 +1,9 @@
 package divkit.dsl
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode
+import kotlin.test.Test
 
 class DivanPatchTest {
 

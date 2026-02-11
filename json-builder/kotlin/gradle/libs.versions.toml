@@ -4,11 +4,11 @@ detekt = "1.23.8"
 jackson = "2.16.0"
 jsonAssert = "1.5.1"
 junit = "5.11.4"
-junit-platform = "1.11.4"
 
 [libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.3" }
 
@@ -21,16 +21,9 @@ jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
 jsonAssert = { module = "org.skyscreamer:jsonassert", version.ref = "jsonAssert" }
 
-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 
 nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-
-[bundles]
-junit-runtime = [ "junit-platform-launcher", "junit-jupiter-engine" ]
-junit-jupiter = [ "junit-jupiter-api", "junit-jupiter-params" ]

@@ -6,9 +6,9 @@ import divkit.dsl.core.bind
 import divkit.dsl.core.expressionArrayElement
 import divkit.dsl.core.reference
 import divkit.dsl.core.valueArrayElement
-import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
+import kotlin.test.Test
 
 class ArrayElementsTest {
 

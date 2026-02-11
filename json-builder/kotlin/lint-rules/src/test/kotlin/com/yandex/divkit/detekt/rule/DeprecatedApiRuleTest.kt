@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 @KotlinCoreEnvironmentTest
 class DeprecatedApiRuleTest(private val env: KotlinCoreEnvironment) {

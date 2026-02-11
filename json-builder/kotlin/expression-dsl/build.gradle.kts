@@ -20,6 +20,6 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    testRuntimeOnly(libs.bundles.junit.runtime)
-    testImplementation(libs.bundles.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.kotlin.test)
 }

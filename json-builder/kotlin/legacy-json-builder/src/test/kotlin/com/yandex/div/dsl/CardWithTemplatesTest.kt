@@ -19,10 +19,10 @@ import com.yandex.div.dsl.model.divWrapContentSize
 import com.yandex.div.dsl.model.state
 import com.yandex.div.dsl.model.template
 import com.yandex.div.dsl.serializer.toJsonNode
-import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.net.URI
+import kotlin.test.Test
 
 class CardWithTemplatesTest {
 

@@ -1,7 +1,7 @@
 package com.yandex.divkit.detekt
 
 import io.gitlab.arturbosch.detekt.test.FindingAssert
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 
 fun FindingAssert.hasSignature(expected: String): FindingAssert {
     val finding = actual ?: return this
