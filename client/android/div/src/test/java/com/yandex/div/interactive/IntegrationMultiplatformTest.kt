@@ -1,7 +1,6 @@
 package com.yandex.div.interactive
 
 import android.app.Activity
-import android.widget.ImageView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -13,7 +12,6 @@ import com.yandex.div.core.expression.ExpressionTestCaseUtils.createVariable
 import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.expression.name
 import com.yandex.div.core.expression.variables.wrapVariableValue
-import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.Div2View
@@ -107,11 +105,7 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
     companion object {
         private const val TEST_CASES_FILE_PATH = "integration_test_data"
         private val EMPTY_REF = LoadReference { }
-        private val IMAGE_LOADER_STUB = object : DivImageLoader {
-            override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback) = EMPTY_REF
-            override fun loadImage(imageUrl: String, imageView: ImageView) = EMPTY_REF
-            override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback) = EMPTY_REF
-        }
+        private val IMAGE_LOADER_STUB = DivImageLoader { _, _ -> EMPTY_REF }
 
         private val LOGGER = IntegrationTestLogger()
         private val CASES = getCases()

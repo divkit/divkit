@@ -1,6 +1,7 @@
 {
   "description": "Gif image in .gif format from assets",
   "platforms": [
+    "android"
   ],
   "unsupported_platforms": {
     "web": "Android-specific test"

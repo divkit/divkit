@@ -1,6 +1,7 @@
 {
   "description": "Gif image in animated .webp format from assets",
   "platforms": [
+    "android"
   ],
   "unsupported_platforms": {
     "web": "Android-specific test"

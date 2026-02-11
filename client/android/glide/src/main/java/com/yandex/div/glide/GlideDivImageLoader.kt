@@ -1,8 +1,6 @@
 package com.yandex.div.glide
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
@@ -16,7 +14,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.yandex.div.core.images.BitmapSource
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
@@ -38,15 +36,12 @@ class GlideDivImageLoader @JvmOverloads constructor(
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         // create target to be able to cancel loading
-        val target = object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) { }
-            override fun onLoadCleared(placeholder: Drawable?) { }
-        }
+        val target = createTarget<Drawable>()
 
         // load result will be handled by RequestListener to get dataSource
-        Glide.with(context).asBitmap().load(imageUri)
+        Glide.with(context).load(imageUri)
             .limitImageBitmapSizeIfNeed()
-            .listener(BitmapRequestListener(callback, imageUri))
+            .listener(ImageRequestListener(callback))
             .into(target)
 
         return LoadReference {
@@ -54,6 +49,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
         }
     }
 
+    @Deprecated("This method is not used in DivKit")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
 
@@ -64,18 +60,15 @@ class GlideDivImageLoader @JvmOverloads constructor(
         }
     }
 
-    override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         // create target to be able to cancel loading
-        val target = object : CustomTarget<GifDrawable>() {
-            override fun onResourceReady(resource: GifDrawable, transition: Transition<in GifDrawable>?) { }
-            override fun onLoadCleared(placeholder: Drawable?) { }
-        }
+        val target = createTarget<GifDrawable>()
 
         // load result will be handled by RequestListener to get dataSource
         Glide.with(context).asGif()
             .limitImageBitmapSizeIfNeed()
-            .listener(GifImageRequestListener(callback, imageUri))
+            .listener(ImageRequestListener(callback))
             .load(imageUri)
             .into(target)
 
@@ -84,45 +77,28 @@ class GlideDivImageLoader @JvmOverloads constructor(
         }
     }
 
-    private class BitmapRequestListener(
+    private class ImageRequestListener<T: Drawable>(
         private val callback: DivImageDownloadCallback,
-        private val imageUri: Uri,
-    ): RequestListener<Bitmap> {
+    ): RequestListener<T> {
+
         override fun onLoadFailed(
-            e: GlideException?, model: Any?, target: Target<Bitmap>, isFirstResource: Boolean
+            e: GlideException?,
+            model: Any?,
+            target: Target<T>,
+            isFirstResource: Boolean
         ): Boolean {
-            callback.onError()
+            callback.onError(e)
             return false
         }
 
         override fun onResourceReady(
-            resource: Bitmap, model: Any, target: Target<Bitmap>?,
-            dataSource: DataSource, isFirstResource: Boolean
+            resource: T,
+            model: Any,
+            target: Target<T>?,
+            dataSource: DataSource,
+            isFirstResource: Boolean
         ): Boolean {
-            callback.onSuccess(CachedBitmap(resource, imageUri, dataSource.toBitmapSource()))
-            return false
-        }
-    }
-
-    private class GifImageRequestListener(
-        private val callback: DivImageDownloadCallback,
-        private val imageUri: Uri,
-    ): RequestListener<GifDrawable> {
-        override fun onLoadFailed(
-            e: GlideException?, model: Any?, target: Target<GifDrawable>, isFirstResource: Boolean
-        ): Boolean {
-            callback.onError()
-            return false
-        }
-
-        override fun onResourceReady(
-            resource: GifDrawable, model: Any, target: Target<GifDrawable>?,
-            dataSource: DataSource, isFirstResource: Boolean
-        ): Boolean {
-            val imageBytes = ByteArray(resource.buffer.remaining())
-            val byteArray = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            val bitmap = CachedBitmap(byteArray, imageBytes, imageUri, dataSource.toBitmapSource())
-            callback.onSuccess(bitmap)
+            callback.onSuccess(DivCachedImage.Drawable(resource, dataSource.toBitmapSource()))
             return true
         }
     }
@@ -133,12 +109,20 @@ class GlideDivImageLoader @JvmOverloads constructor(
         } else {
             override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
         }
-}
 
-private fun DataSource.toBitmapSource(): BitmapSource {
-    return when (this) {
-        DataSource.REMOTE -> BitmapSource.NETWORK
-        DataSource.LOCAL -> BitmapSource.DISK
-        else -> BitmapSource.MEMORY // here can be DataSource.DISK_CACHE or DataSource.MEMORY_CACHE
+    private companion object {
+
+        fun <T: Drawable> createTarget() = object : CustomTarget<T>() {
+            override fun onResourceReady(resource: T, transition: Transition<in T>?) = Unit
+            override fun onLoadCleared(placeholder: Drawable?) = Unit
+        }
+
+        fun DataSource.toBitmapSource(): BitmapSource {
+            return when (this) {
+                DataSource.REMOTE -> BitmapSource.NETWORK
+                DataSource.LOCAL -> BitmapSource.DISK
+                else -> BitmapSource.MEMORY // here can be DataSource.DISK_CACHE or DataSource.MEMORY_CACHE
+            }
+        }
     }
 }

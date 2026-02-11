@@ -1,9 +1,6 @@
 package com.yandex.divkit.demo.div
 
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.PictureDrawable
-import android.widget.ImageView
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
@@ -23,11 +20,9 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
         }
     }
 
-    override fun loadImage(imageUrl: String, imageView: ImageView) = loader.loadImage(imageUrl, imageView)
-
-    override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         targets.add(callback)
-        val loadReference = loader.loadImageBytes(imageUrl, CallbackWrapper(callback))
+        val loadReference = loader.loadAnimatedImage(imageUrl, CallbackWrapper(callback))
         return LoadReference {
             loadReference.cancel()
             targets.remove(callback)
@@ -42,29 +37,14 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
 
     private inner class CallbackWrapper(private val callback: DivImageDownloadCallback) : DivImageDownloadCallback() {
 
-        override fun onSuccess(cachedBitmap: CachedBitmap) {
+        override fun onSuccess(cachedImage: DivCachedImage) {
             targets.remove(callback)
-            callback.onSuccess(cachedBitmap)
+            callback.onSuccess(cachedImage)
         }
 
-        override fun onSuccess(pictureDrawable: PictureDrawable) {
+        override fun onError(e: Throwable?) {
             targets.remove(callback)
-            callback.onSuccess(pictureDrawable)
-        }
-
-        override fun onSuccess(drawable: Drawable) {
-            targets.remove(callback)
-            callback.onSuccess(drawable)
-        }
-
-        override fun onError() {
-            targets.remove(callback)
-            callback.onError()
-        }
-
-        override fun onCancel() {
-            targets.remove(callback)
-            callback.onCancel()
+            callback.onError(e)
         }
     }
 

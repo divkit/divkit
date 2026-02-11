@@ -3,17 +3,21 @@ package com.yandex.div.picasso
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Target
+import com.yandex.div.core.image.ASSET_PREFIX
 import com.yandex.div.core.images.BitmapSource
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
@@ -23,10 +27,15 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Cache
+import okhttp3.Call
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.File
 import kotlin.math.max
 
+@Deprecated("Picasso library is deprecated. " +
+    "Use CoilDivImageLoader, GlideDivImageLoader or implement your own DivImageLoader.")
 class PicassoDivImageLoader(
     context: Context,
     httpClientBuilder: OkHttpClient.Builder?,
@@ -57,7 +66,7 @@ class PicassoDivImageLoader(
         max(it.widthPixels, it.heightPixels)
     }
 
-    @Deprecated("Was needed for internal usa")
+    @Deprecated("Was needed for internal use")
     val isIdle: Boolean
         get() = targets.size == 0
 
@@ -73,7 +82,7 @@ class PicassoDivImageLoader(
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
-        val target = DownloadCallbackAdapter(imageUri, callback)
+        val target = DownloadCallbackAdapter(callback)
         targets.addTarget(target)
 
         executeOnMainThread {
@@ -88,6 +97,7 @@ class PicassoDivImageLoader(
         }
     }
 
+    @Deprecated("This method is not used in DivKit")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val target = ImageViewAdapter(imageView)
         targets.addTarget(target)
@@ -98,54 +108,124 @@ class PicassoDivImageLoader(
         }
     }
 
-    override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+        return loadImageBytes(imageUrl, callback) { bytes, bitmapSource ->
+            when {
+                bytes.isEmpty() -> null
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
+                    DivCachedImage.Drawable(decodeAnimatedDrawable(bytes), bitmapSource)
+                else -> {
+                    BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {
+                        DivCachedImage.Bitmap(it, bitmapSource)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadImageBytes(
+        imageUrl: String,
+        callback: DivImageDownloadCallback,
+        decode: (ByteArray, BitmapSource) -> DivCachedImage?,
+    ): LoadReference {
+        targets.addTarget(targetStub)
         var loadReference: LoadReference = EMPTY_LOAD_REFERENCE
+        val call = imageUrl.toHttpUrlOrNull()?.let { url ->
+            val request = Request.Builder().url(url).build()
+            httpClient.newCall(request).also {
+                loadReference = LoadReference { it.cancel() }
+            }
+        }
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val response = runCatching {
-                    val request = Request.Builder().url(imageUrl).build()
-                    val call = httpClient.newCall(request)
-                    loadReference = LoadReference {
-                        call.cancel()
-                    }
-                    call.execute()
-                }.getOrNull() ?: return@withContext null
-                val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
-                val bytes = response.body?.bytes() ?: return@withContext null
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {
-                    CachedBitmap(it, bytes, Uri.parse(imageUrl), source)
-                }
+                val (bytes, source) = call?.let { loadFromNetwork(it) ?: return@withContext null }
+                    ?: loadFromDisk(imageUrl) ?: return@withContext null
+                decode(bytes, source)
             }?.let {
                 callback.onSuccess(it)
             } ?: callback.onError()
+            targets.removeTarget(targetStub)
         }
 
         return loadReference
     }
 
-    @Deprecated("Was needed for internal usa")
+    private fun loadFromNetwork(call: Call): Pair<ByteArray, BitmapSource>? {
+        val response = runCatching { call.execute() }.getOrNull() ?: return null
+        val bytes = response.body?.bytes() ?: return null
+        val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
+        return bytes to source
+    }
+
+    private fun loadFromDisk(url: String): Pair<ByteArray, BitmapSource>? {
+        val assetPath = url.removePrefix(ASSET_PREFIX)
+        val stream = runCatching { appContext.assets?.open(assetPath) }.getOrNull() ?: return null
+        return stream.use { it.readBytes() } to BitmapSource.DISK
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun decodeAnimatedDrawable(bytes: ByteArray): Drawable {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val source = ImageDecoder.createSource(bytes)
+            return decodeAnimatedDrawable(source)
+        }
+
+        // We use file here, instead of ByteBuffer, for creating source, because of android sdk issue:
+        // https://issuetracker.google.com/issues/139371066?pli=1
+        val tempFile = File.createTempFile(TEMP_FILE_NAME, GIF_SUFFIX, appContext.cacheDir)
+        return try {
+            tempFile.writeBytes(bytes)
+            val source = ImageDecoder.createSource(tempFile)
+            decodeAnimatedDrawable(source)
+        } finally {
+            tempFile.delete()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun decodeAnimatedDrawable(source: ImageDecoder.Source): Drawable {
+        return ImageDecoder.decodeDrawable(source) { decoder, _, _ ->
+            decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+        }
+    }
+
+    @Deprecated("Was needed for internal use")
     fun resetIdle() {
         //TODO(DIVKIT-290): Find out why picasso loses callbacks.
         targets.clean()
     }
 
     private companion object {
-        const val DISK_CACHE_SIZE = 16_777_216L
+        private const val DISK_CACHE_SIZE = 16_777_216L
+        private const val TEMP_FILE_NAME = "if_u_see_me_in_file_system_plz_report"
+        private const val GIF_SUFFIX = ".gif"
+
         val EMPTY_LOAD_REFERENCE = LoadReference { }
+
+        val targetStub = object : Target {
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) = Unit
+            override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) = Unit
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
+        }
+
+        fun Picasso.LoadedFrom.toBitmapSource(): BitmapSource {
+            return when (this) {
+                Picasso.LoadedFrom.MEMORY -> BitmapSource.MEMORY
+                Picasso.LoadedFrom.DISK -> BitmapSource.DISK
+                Picasso.LoadedFrom.NETWORK -> BitmapSource.NETWORK
+            }
+        }
     }
 
-    private inner class DownloadCallbackAdapter(
-        private val imageUri: Uri,
-        private val callback: DivImageDownloadCallback
-    ) : Target {
+    private inner class DownloadCallbackAdapter(private val callback: DivImageDownloadCallback) : Target {
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-            callback.onSuccess(CachedBitmap(bitmap, imageUri, from.toBitmapSource()))
+            callback.onSuccess(DivCachedImage.Bitmap(bitmap, from.toBitmapSource()))
             targets.removeTarget(this)
         }
 
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-            callback.onError()
+            callback.onError(e)
             targets.removeTarget(this)
         }
 
@@ -190,13 +270,5 @@ class PicassoDivImageLoader(
         if (limitImageBitmapSizeEnabled) {
             resize(maxDisplaySize, maxDisplaySize).centerInside().onlyScaleDown()
         }
-    }
-}
-
-private fun Picasso.LoadedFrom.toBitmapSource(): BitmapSource {
-    return when (this) {
-        Picasso.LoadedFrom.MEMORY -> BitmapSource.MEMORY
-        Picasso.LoadedFrom.DISK -> BitmapSource.DISK
-        Picasso.LoadedFrom.NETWORK -> BitmapSource.NETWORK
     }
 }

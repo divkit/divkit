@@ -10,6 +10,7 @@ import com.yandex.div.core.annotations.PublicApi;
  * Provides cached {@link Bitmap}.
  */
 @PublicApi
+@Deprecated
 public class CachedBitmap {
 
     @NonNull private final Bitmap mBitmap;

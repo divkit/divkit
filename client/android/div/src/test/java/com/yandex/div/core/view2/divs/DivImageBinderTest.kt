@@ -2,9 +2,11 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import com.yandex.div.core.asExpression
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.BitmapSource
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.DivPlaceholderLoader
@@ -99,7 +101,7 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `do not bind image when imageUrl did not change and bitmap was loaded`() {
+    fun `do not bind image when imageUrl did not change and image was loaded`() {
         val (view, divImage) = createTestDiv("with_action.json")
 
         binder.bindView(bindingContext, view, divImage)
@@ -150,7 +152,7 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `bind image when bitmap was loaded but imageUrl changed`() {
+    fun `bind image when image was loaded but imageUrl changed`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
@@ -169,7 +171,7 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `ignore high priority preview show when bitmap was already loaded`() {
+    fun `ignore high priority preview show when image was already loaded`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
@@ -261,10 +263,11 @@ class DivImageBinderTest : DivBinderTest() {
     private fun whenImageLoaded(imageUrl: String) {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
-        val cachedBitmap = mock<CachedBitmap> {
+        val bitmapDrawable = mock<BitmapDrawable> {
             on { bitmap } doReturn mock()
         }
-        imageDownloadCallbackCaptor.firstValue.onSuccess(cachedBitmap)
+        val cachedImage = DivCachedImage.Drawable(bitmapDrawable, BitmapSource.MEMORY)
+        imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
     }
 
     private fun whenPreviewLoaded() {

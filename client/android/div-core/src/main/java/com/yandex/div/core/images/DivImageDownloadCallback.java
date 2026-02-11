@@ -15,6 +15,15 @@ public class DivImageDownloadCallback {
      * Called when image is successfully loaded.
      */
     @UiThread
+    public void onSuccess(@NonNull DivCachedImage cachedImage) {
+        // no implementation
+    }
+
+    /**
+     * Called when image is successfully loaded.
+     */
+    @UiThread
+    @Deprecated
     public void onSuccess(@NonNull CachedBitmap cachedBitmap) {
         // no implementation
     }
@@ -25,6 +34,7 @@ public class DivImageDownloadCallback {
      * Ex.: Coil GIFs
      */
     @UiThread
+    @Deprecated
     public void onSuccess(@NonNull Drawable drawable) {
         // no implementation
     }
@@ -35,15 +45,27 @@ public class DivImageDownloadCallback {
      * Ex.: Vector images in SVG Image Loader
      */
     @UiThread
+    @Deprecated
     public void onSuccess(@NonNull PictureDrawable pictureDrawable) {
         // no implementation
+    }
+
+    /**
+     * @deprecated use {@link #onError(Throwable)}
+     * <p>
+     * Is called when image load is failed.
+     */
+    @UiThread
+    @Deprecated
+    public void onError() {
+        onError(null);
     }
 
     /**
      * Is called when image load is failed.
      */
     @UiThread
-    public void onError() {
+    public void onError(@Nullable Throwable e) {
         // no implementation
     }
 

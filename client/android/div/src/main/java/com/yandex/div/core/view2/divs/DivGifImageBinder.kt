@@ -5,12 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.PictureDrawable
 import android.os.AsyncTask
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
@@ -36,9 +36,6 @@ import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
 import javax.inject.Inject
-
-private const val TEMP_FILE_NAME = "if_u_see_me_in_file_system_plz_report"
-private const val GIF_SUFFIX = ".gif"
 
 @DivScope
 internal class DivGifImageBinder @Inject constructor(
@@ -104,10 +101,12 @@ internal class DivGifImageBinder @Inject constructor(
         gravity = evaluateGravity(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
     }
 
-    private fun DivGifImageView.applyGifImage(divView: Div2View,
-                                              resolver: ExpressionResolver,
-                                              div: DivGifImage,
-                                              errorCollector: ErrorCollector) {
+    private fun DivGifImageView.applyGifImage(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        div: DivGifImage,
+        errorCollector: ErrorCollector
+    ) {
         val newGifUrl = div.gifUrl.evaluate(resolver)
         if (newGifUrl == gifUrl) {
             return
@@ -121,29 +120,29 @@ internal class DivGifImageBinder @Inject constructor(
         gifUrl = newGifUrl
 
         // we don't reuse this because not all clients has bytes cache
-        val reference = imageLoader.loadImageBytes(
+        val reference = imageLoader.loadAnimatedImage(
             newGifUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
+
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
-                    super.onSuccess(cachedBitmap)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         loadDrawable(cachedBitmap)
                     } else {
-                        setImage(divView, cachedBitmap.bitmap)
-                        imageLoaded()
+                        onSuccess(cachedBitmap.bitmap, cachedBitmap.from)
                     }
                 }
 
-                override fun onSuccess(drawable: Drawable) {
-                    super.onSuccess(drawable)
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
+                    setImage(divView, bitmap)
+                    imageLoaded()
+                }
+
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) {
                     setImage(divView, drawable)
                     imageLoaded()
                 }
 
-                override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
-
-                override fun onError() {
-                    super.onError()
+                override fun onError(e: Throwable?) {
                     gifUrl = null
                 }
             }
@@ -208,26 +207,22 @@ internal class DivGifImageBinder @Inject constructor(
         val reference = imageLoader.loadImage(
             newPreviewUrl,
             object : DivIdLoggingImageDownloadCallback(divView) {
-                override fun onSuccess(cachedBitmap: CachedBitmap) {
-                    super.onSuccess(cachedBitmap)
+
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
                     if (!isImageLoaded) {
-                        setPreview(divView, cachedBitmap.bitmap)
+                        setPreview(divView, bitmap)
                         previewLoaded()
                     }
                 }
 
-                override fun onSuccess(drawable: Drawable) {
-                    super.onSuccess(drawable)
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) {
                     if (!isImageLoaded) {
                         setPreview(divView, drawable)
                         previewLoaded()
                     }
                 }
 
-                override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
-
-                override fun onError() {
-                    super.onError()
+                override fun onError(e: Throwable?) {
                     previewUrl = null
                 }
             }
@@ -321,6 +316,8 @@ internal class DivGifImageBinder @Inject constructor(
 
     private companion object {
         const val TAG = "DivGifImageBinder"
+        const val TEMP_FILE_NAME = "if_u_see_me_in_file_system_plz_report"
+        const val GIF_SUFFIX = ".gif"
 
         private fun DivGifImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
             divView.runBindingAction {

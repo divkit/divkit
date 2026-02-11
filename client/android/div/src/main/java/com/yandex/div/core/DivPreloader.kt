@@ -1,13 +1,13 @@
 package com.yandex.div.core
 
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
-import com.yandex.div.core.DivPreloader.Callback
-import com.yandex.div.core.DivPreloader.PreloadReference
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivPlayerPreloader
@@ -173,11 +173,22 @@ class DivPreloader internal constructor(
             downloadsLeftCount++
         }
 
+        override fun onSuccess(cachedImage: DivCachedImage) {
+            done()
+        }
+
+        @Deprecated("Use onSuccess(DivCachedImage)")
         override fun onSuccess(cachedBitmap: CachedBitmap) {
             done()
         }
 
+        @Deprecated("Use onSuccess(DivCachedImage)")
         override fun onSuccess(pictureDrawable: PictureDrawable) {
+            done()
+        }
+
+        @Deprecated("Use onSuccess(DivCachedImage)")
+        override fun onSuccess(drawable: Drawable) {
             done()
         }
 
@@ -185,9 +196,11 @@ class DivPreloader internal constructor(
             done()
         }
 
-        override fun onError() = runOnUiThread {
-            failures++
-            done()
+        override fun onError(e: Throwable?) {
+            runOnUiThread {
+                failures++
+                done()
+            }
         }
 
         private fun done() = runOnUiThread {

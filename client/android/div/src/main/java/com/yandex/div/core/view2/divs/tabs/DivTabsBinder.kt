@@ -1,8 +1,9 @@
 package com.yandex.div.core.view2.divs.tabs
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.PictureDrawable
+import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.graphics.drawable.toBitmap
@@ -15,7 +16,7 @@ import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.font.DivTypefaceType
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
@@ -346,18 +347,14 @@ internal class DivTabsBinder @Inject constructor(
         val reference = imageLoader.loadImage(
             style.imageUrl.evaluate(resolver).toString(),
             object : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
-                override fun onSuccess(cachedBitmap: CachedBitmap) {
-                    super.onSuccess(cachedBitmap)
-                    setTabDelimiter(cachedBitmap.bitmap, evaluatedWidth, evaluatedHeight)
-                }
 
-                override fun onSuccess(pictureDrawable: PictureDrawable) {
-                    super.onSuccess(pictureDrawable)
-                    setTabDelimiter(pictureDrawable.toBitmap(), evaluatedWidth, evaluatedHeight)
-                }
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) =
+                    setTabDelimiter(bitmap, evaluatedWidth, evaluatedHeight)
 
-                override fun onError() {
-                    super.onError()
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) =
+                    onSuccess(drawable.toBitmap(), source)
+
+                override fun onError(e: Throwable?) {
                     setTabDelimiter(null, 0, 0)
                 }
             }

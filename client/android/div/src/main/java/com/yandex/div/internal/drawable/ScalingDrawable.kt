@@ -34,6 +34,7 @@ internal class ScalingDrawable : Drawable() {
     var additionalScale: Float = 1f
     private var originalBitmap: Bitmap? = null
     private var originalPicture: Picture? = null
+    private var originalDrawable: Drawable? = null
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private var thumbTransformMatrix: Matrix = Matrix()
@@ -53,12 +54,21 @@ internal class ScalingDrawable : Drawable() {
     fun setBitmap(bitmap: Bitmap) {
         originalBitmap = bitmap
         originalPicture = null
+        originalDrawable = null
         reset()
     }
 
     fun setPicture(picture: Picture) {
         originalPicture = picture
         originalBitmap = null
+        originalDrawable = null
+        reset()
+    }
+
+    fun setDrawable(drawable: Drawable) {
+        originalDrawable = drawable
+        originalBitmap = null
+        originalPicture = null
         reset()
     }
 
@@ -78,8 +88,8 @@ internal class ScalingDrawable : Drawable() {
         canvas.save()
 
         // pre drawing
-        val drawableWidth = originalBitmap?.width ?: originalPicture?.width ?: 0
-        val drawableHeight = originalBitmap?.height ?: originalPicture?.height ?: 0
+        val drawableWidth = originalBitmap?.width ?: originalPicture?.width ?: originalDrawable?.intrinsicWidth ?: 0
+        val drawableHeight = originalBitmap?.height ?: originalPicture?.height ?: originalDrawable?.intrinsicHeight ?: 0
 
         if (drawableHeight <= 0 || drawableWidth <= 0) {
             originalBitmap?.let {
@@ -88,6 +98,7 @@ internal class ScalingDrawable : Drawable() {
             originalPicture?.let {
                 canvas.drawPicture(it)
             }
+            originalDrawable?.draw(canvas)
             canvas.restore()
             return
         }
@@ -140,6 +151,7 @@ internal class ScalingDrawable : Drawable() {
         originalPicture?.let {
             canvas.drawPicture(it)
         }
+        originalDrawable?.draw(canvas)
         // restore frame and other
         canvas.restore()
     }

@@ -22,7 +22,7 @@ import androidx.core.view.ViewCompat
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.toIntSafely
@@ -727,31 +727,34 @@ internal class SpannedTextBuilder @Inject constructor(
         private val textConsumer: TextConsumer? = null
     ) : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
 
-        override fun onSuccess(cachedBitmap: CachedBitmap) = onSuccess(cachedBitmap.bitmap)
-
-        private fun onSuccess(bitmap: Bitmap) {
-            val resources = bindingContext.divView.resources
-            val resolver = bindingContext.expressionResolver
-            val tintColor = image.tintColor?.evaluate(resolver)
-            val tintMode = image.tintMode.evaluate(resolver).toPorterDuffMode()
-
-            val imageDrawable = bitmap.toDrawable(resources)
-            if (tintColor != null) {
-                imageDrawable.colorFilter = PorterDuffColorFilter(tintColor, tintMode)
+        override fun dispatchDrawable(drawable: Drawable, source: BitmapSource) {
+            when (drawable) {
+                is PictureDrawable -> onSuccess(drawable, source)
+                else -> onSuccess(drawable, source)
             }
-            setImage(imageDrawable)
         }
 
-        override fun onSuccess(drawable: Drawable) {
+        override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
+            val resources = bindingContext.divView.resources
+            onSuccess(bitmap.toDrawable(resources), source)
+        }
+
+        override fun onSuccess(drawable: Drawable, source: BitmapSource) {
+            val resolver = bindingContext.expressionResolver
+            image.tintColor?.evaluate(resolver)?.let {
+                val tintMode = image.tintMode.evaluate(resolver).toPorterDuffMode()
+                drawable.colorFilter = PorterDuffColorFilter(it, tintMode)
+            }
+            setImage(drawable)
+        }
+
+        override fun onSuccess(pictureDrawable: PictureDrawable, source: BitmapSource) {
             if (image.isVectorCompatible) {
-                setImage(drawable)
+                setImage(pictureDrawable)
                 return
             }
-
-            onSuccess(drawable.toBitmap())
+            onSuccess(pictureDrawable.toBitmap(), source)
         }
-
-        override fun onSuccess(pictureDrawable: PictureDrawable) = onSuccess(pictureDrawable as Drawable)
 
         private fun setImage(image: Drawable) {
             imageSpan.image = image

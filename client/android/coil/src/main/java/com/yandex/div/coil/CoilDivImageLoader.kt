@@ -1,7 +1,6 @@
 package com.yandex.div.coil
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -25,7 +24,7 @@ import coil3.size.Precision
 import coil3.size.Scale
 import coil3.svg.SvgDecoder
 import com.yandex.div.core.images.BitmapSource
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
@@ -80,7 +79,7 @@ class CoilDivImageLoader private constructor(
                     cacheStrategy = { CacheControlCacheStrategy() }
                 )
             )
-            add(SvgDecoder.Factory())
+            add(SvgDecoder.Factory(renderToBitmap = false))
             add(gifDecoder())
         }
         .build()
@@ -97,6 +96,7 @@ class CoilDivImageLoader private constructor(
 
     override fun needLimitBitmapSize() = false
 
+    @Deprecated("This method is not used in DivKit")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
 
@@ -114,7 +114,7 @@ class CoilDivImageLoader private constructor(
             .data(imageUri)
             .allowHardware(false)
             .limitImageBitmapSizeIfNeed()
-            .listener(BitmapRequestListener(context, callback, imageUri))
+            .listener(RequestListener(context, callback))
             .build()
 
         val result = imageLoader.enqueue(request)
@@ -124,57 +124,19 @@ class CoilDivImageLoader private constructor(
         }
     }
 
-    override fun loadImageBytes(
-        imageUrl: String,
-        callback: DivImageDownloadCallback
-    ): LoadReference {
-        val imageUri = Uri.parse(imageUrl)
-
-        val request = ImageRequest.Builder(context)
-            .data(imageUri)
-            .allowHardware(false)
-            .limitImageBitmapSizeIfNeed()
-            .listener(GifRequestListener(context, callback))
-            .build()
-
-        val result = imageLoader.enqueue(request)
-
-        return LoadReference {
-            result.dispose()
-        }
-    }
-
-    private class BitmapRequestListener(
+    private class RequestListener(
         private val context: Context,
         private val callback: DivImageDownloadCallback,
-        private val imageUri: Uri,
     ): EventListener() {
+
         override fun onSuccess(request: ImageRequest, result: SuccessResult) {
-            val bitmapDrawable = result.image.asDrawable(context.resources) as BitmapDrawable
             callback.onSuccess(
-                CachedBitmap(
-                    bitmapDrawable.bitmap,
-                    imageUri,
-                    result.dataSource.toBitmapSource()
-                )
+                DivCachedImage.Drawable(result.image.asDrawable(context.resources), result.dataSource.toBitmapSource())
             )
         }
 
         override fun onError(request: ImageRequest, result: ErrorResult) {
-            callback.onError()
-        }
-    }
-
-    private class GifRequestListener(
-        private val context: Context,
-        private val callback: DivImageDownloadCallback,
-    ): EventListener() {
-        override fun onSuccess(request: ImageRequest, result: SuccessResult) {
-            callback.onSuccess(result.image.asDrawable(context.resources))
-        }
-
-        override fun onError(request: ImageRequest, result: ErrorResult) {
-            callback.onError()
+            callback.onError(result.throwable)
         }
     }
 

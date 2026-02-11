@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -7,13 +8,13 @@ import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.view.View
 import androidx.annotation.UiThread
+import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
-import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.bitmap.BitmapFilter
 import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.drawable.LinearGradientDrawable
@@ -70,8 +71,7 @@ internal sealed class DivBackgroundState {
                 url,
                 object : DivIdLoggingImageDownloadCallback(divView) {
                     @UiThread
-                    override fun onSuccess(cachedBitmap: CachedBitmap) {
-                        val bitmap = cachedBitmap.bitmap
+                    override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
                         if (filters.isNullOrEmpty()) {
                             scaleDrawable.setBitmap(bitmap)
                             return
@@ -83,13 +83,22 @@ internal sealed class DivBackgroundState {
                     }
 
                     @UiThread
-                    override fun onSuccess(pictureDrawable: PictureDrawable) {
-                        if (!isVectorCompatible) {
-                            onSuccess(pictureDrawable.toCachedBitmap(imageUrl))
-                            return
+                    override fun onSuccess(drawable: Drawable, source: BitmapSource) =
+                        scaleDrawable.setDrawable(drawable)
+
+                    @UiThread
+                    override fun onSuccess(pictureDrawable: PictureDrawable, source: BitmapSource) {
+                        if (isVectorCompatible) {
+                            return scaleDrawable.setPicture(pictureDrawable.picture)
                         }
-                        scaleDrawable.setPicture(pictureDrawable.picture)
+                        onSuccess(pictureDrawable.toBitmap(), source)
                     }
+
+                    /**
+                     * Vector format ImageBackground doesn't support alpha and filters.
+                     * If alpha is not 1.0 or filters are specified for ImageBackground, it should be rasterized.
+                     */
+                    private val isVectorCompatible get() = alpha == 1.0 && filters.isNullOrEmpty()
                 }
             )
             divView.addLoadReference(loadReference, target)
@@ -125,12 +134,6 @@ internal sealed class DivBackgroundState {
                 else -> ScalingDrawable.AlignmentVertical.TOP
             }
         }
-
-        /**
-         * Vector format ImageBackground doesn't support alpha and filters.
-         * If alpha is not 1.0 or filters are specified for ImageBackground, it should be rasterized.
-         */
-        private val isVectorCompatible get() = alpha == 1.0 && filters.isNullOrEmpty()
     }
 
     data class Solid(
@@ -152,15 +155,17 @@ internal sealed class DivBackgroundState {
             val url = imageUrl.toString()
             val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
                 @UiThread
-                override fun onSuccess(cachedBitmap: CachedBitmap) {
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
                     ninePatchDrawable.apply {
                         bottom = insets.bottom
                         left = insets.left
                         right = insets.right
                         top = insets.top
-                        bitmap = cachedBitmap.bitmap
+                        this.bitmap = bitmap
                     }
                 }
+
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) = Unit
             })
             divView.addLoadReference(loadReference, target)
 

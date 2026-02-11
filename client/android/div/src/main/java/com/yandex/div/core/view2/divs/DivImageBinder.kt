@@ -1,15 +1,14 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
-import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
@@ -17,7 +16,6 @@ import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isConstant
-import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.util.toPorterDuffMode
@@ -363,32 +361,31 @@ internal class DivImageBinder @Inject constructor(
         val reference = imageLoader.loadImage(
             imageUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
-                override fun onSuccess(cachedBitmap: CachedBitmap) {
-                    super.onSuccess(cachedBitmap)
-                    applyScaleAndFiltersAndSetBitmap(bindingContext, cachedBitmap.bitmap, div.scale, div.filters)
-                    applyLoadingFade(div, resolver, cachedBitmap.from)
+
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
+                    applyScaleAndFiltersAndSetBitmap(bindingContext, bitmap, div.scale, div.filters)
+                    applyLoadingFade(div, resolver, source)
                     imageLoaded()
                     applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                     invalidate()
                 }
 
-                override fun onSuccess(pictureDrawable: PictureDrawable) {
-                    if (!div.isVectorCompatible()) {
-                        val bitmap = pictureDrawable.toCachedBitmap(imageUrl)
-                        onSuccess(bitmap)
-                        return
-                    }
-                    super.onSuccess(pictureDrawable)
-
-                    setImageDrawable(bindingContext.divView, pictureDrawable)
-                    applyLoadingFade(div, resolver, null)
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) {
+                    setImageDrawable(bindingContext.divView, drawable)
+                    applyLoadingFade(div, resolver, source)
 
                     imageLoaded()
                     invalidate()
                 }
 
-                override fun onError() {
-                    super.onError()
+                override fun onSuccess(pictureDrawable: PictureDrawable, source: BitmapSource) {
+                    if (div.isVectorCompatible()) {
+                        return super.onSuccess(pictureDrawable, source)
+                    }
+                    onSuccess(pictureDrawable.toBitmap(), source)
+                }
+
+                override fun onError(e: Throwable?) {
                     this@applyImage.imageUrl = null
                 }
             }
