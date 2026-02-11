@@ -122,6 +122,9 @@
         "compat": {
             "android": {
                 "version_added": "32.33.0"
+            },
+            "ios": {
+                "version_added": "32.36.0"
             }
         }
     }]
