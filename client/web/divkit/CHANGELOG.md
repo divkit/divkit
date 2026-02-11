@@ -1,3 +1,8 @@
+## 32.37.0 (February 16, 2026)
+
+* Added a warning about using gifs in the `div-image` component.
+
+
 ## 32.35.0 (February 2, 2026)
 
 * Check whether action is enabled right before execution.

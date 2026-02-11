@@ -1,3 +1,19 @@
+## 32.37.0
+
+# Android Client:
+* Added `getExpressionResolver` method to `Div2Context` to access `ExpressionResolver` implementation for given `DivData`. Can be used for preloading when there is no created `Div2View`.
+* Fixed `gif` images loading by `GlideDivImageLoader`.
+* Fixed loading images from assets by provided `DivImageLoader`s.
+* Introduced `DivCachedImage` to transfer loaded images from `DivImageLoader`. `CachedBitmap` is now deprecated — please migrate to `DivCachedImage`.
+* `PicassoDivImageLoader` is now deprecated because the Picasso library is outdated. Recommended alternatives for image loading: `GlideDivImageLoader`, `CoilDivImageLoader` or custom implementation of the `DivImageLoader` interface.
+
+# iOS Client:
+* The number of ticks on the slider is limited to 1000 elements.
+
+# Web Client:
+* Added a warning about using gifs in the `div-image` component.
+
+
 ## 32.36.0
 
 # Android Client:
