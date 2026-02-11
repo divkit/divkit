@@ -4209,7 +4209,8 @@
         "After the second change text in input is 'new_text', input is active, cursor retains its position.",
         "After the third change text in input is changed to 'new_text', input is active, cursor is in the end of the text."
       ],
-      "file": "input/input_cursor_position.json"
+      "file": "input/input_cursor_position.json",
+      "case_id": 496
     }
   ]
 }
