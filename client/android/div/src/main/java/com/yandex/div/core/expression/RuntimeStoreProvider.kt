@@ -32,20 +32,20 @@ internal class RuntimeStoreProvider @Inject constructor(
     private val runtimeStores = Collections.synchronizedMap(mutableMapOf<String, RuntimeStoreImpl>())
     private val divDataTags = WeakHashMap<Div2View, MutableSet<String>>()
 
-    internal fun getOrCreate(tag: DivDataTag, data: DivData, div2View: Div2View): RuntimeStore {
+    internal fun getOrCreate(tag: DivDataTag, data: DivData, div2View: Div2View?): RuntimeStore {
         divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
 
         val errorCollector = errorCollectors.getOrCreate(tag, data)
-        runtimeStores[tag.id]?.let {
-            it.attachView(div2View)
-            ensureVariablesSynced(it.rootRuntime, data, errorCollector)
-            it.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
-            return it
+        runtimeStores[tag.id]?.let { store ->
+            div2View?.let { store.attachView(it) }
+            ensureVariablesSynced(store.rootRuntime, data, errorCollector)
+            store.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
+            return store
         }
 
-        return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also {
-            runtimeStores[tag.id] = it
-            it.attachView(div2View)
+        return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also { store ->
+            runtimeStores[tag.id] = store
+            div2View?.let { store.attachView(it) }
         }
     }
 

@@ -43,6 +43,8 @@ interface ExpressionResolver {
          * PLEASE AVOID USING EMPTY EXPRESSION RESOLVER!
          * It will throw exception on trying to resolve first non-constant expression
          * (for example with variables).
+         *
+         * Use [Div2Context.getExpressionResolver]
          */
         @JvmField
         val EMPTY = object : ExpressionResolver {

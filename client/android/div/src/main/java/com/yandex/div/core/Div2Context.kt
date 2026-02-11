@@ -24,6 +24,8 @@ import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivData
 import kotlin.jvm.internal.DefaultConstructorMarker
 
 /**
@@ -180,6 +182,15 @@ class Div2Context @MainThread private constructor(
      */
     fun childContext(baseContext: ContextThemeWrapper, lifecycleOwner: LifecycleOwner?): Div2Context {
         return Div2Context(baseContext, div2Component, lifecycleOwner)
+    }
+
+    /**
+     * Provides [ExpressionResolver] for given [DivData] without created [Div2View].
+     * This is preferred resolver for [DivData] that includes expressions instead of [ExpressionResolver.EMPTY].
+     */
+    fun getExpressionResolver(divData: DivData, tag: DivDataTag): ExpressionResolver {
+        val runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, divData, null)
+        return runtimeStore.rootRuntime.expressionResolver
     }
 
     @IntDef(
