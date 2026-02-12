@@ -1,3 +1,16 @@
+## 0.4.11
+
+* Updated Svelte 4->5 and Vite 5 -> 7
+* Updated DivKit 32.16.0 -> 32.27.0
+* Added support for expressions in `lottie` properties
+* Fixed `font_weight` in the text editor in place
+* Added support for `tabs`
+* Added support for `radial` gradients
+* Added the ability to zoom the viewport, as well as the `fitViewportOnCreate` parameter.
+* Fixed error updates when changing something (especially noticeable when manually entering json)
+* Added support for the `update_structure` action
+* XSS fix
+
 ## 0.4.10
 
 * Added timeline when previewing videos and lottie
