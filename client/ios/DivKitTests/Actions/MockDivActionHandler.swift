@@ -31,6 +31,7 @@ extension DivActionHandler {
       trackVisibility: { _, _ in },
       trackDisappear: { _, _ in },
       performTimerAction: { _, _, _ in },
+      customActionHandler: nil,
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,

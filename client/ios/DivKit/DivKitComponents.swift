@@ -91,9 +91,12 @@ public final class DivKitComponents {
   /// players.
   ///   - urlHandler: An optional ``DivUrlHandler`` object that allows you to implement custom
   /// action handling for specific URLs.
+  ///   - customActionHandler: An optional handler for custom actions (type: "custom"). Should
+  /// conform to ``DivCustomActionHandling``.
   ///   - variablesStorage: A ``DivVariablesStorage`` object that handles the storage and retrieval
   /// of variables.
   public init(
+    customActionHandler: DivCustomActionHandling? = nil,
     divCustomBlockFactory: DivCustomBlockFactory? = nil,
     extensionHandlers: [DivExtensionHandler] = [],
     flagsInfo: DivFlagsInfo = .default,
@@ -163,6 +166,7 @@ public final class DivKitComponents {
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
+      customActionHandler: customActionHandler,
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,

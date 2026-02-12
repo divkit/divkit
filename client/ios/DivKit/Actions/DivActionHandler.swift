@@ -15,6 +15,7 @@ public final class DivActionHandler {
 
   typealias UpdateCardAction = (DivCardUpdateReason) -> Void
 
+  private let customActionHandler: DivCustomActionHandling?
   private let urlHandler: DivUrlHandler
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
@@ -75,6 +76,7 @@ public final class DivActionHandler {
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { _, _, _ in },
+      customActionHandler: nil,
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter ?? DefaultDivReporter(),
@@ -97,6 +99,7 @@ public final class DivActionHandler {
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,
     performTimerAction: @escaping PerformTimerAction,
+    customActionHandler: DivCustomActionHandling?,
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter,
@@ -104,6 +107,7 @@ public final class DivActionHandler {
     animatorController: DivAnimatorController,
     flags: DivFlagsInfo
   ) {
+    self.customActionHandler = customActionHandler
     self.urlHandler = urlHandler
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
@@ -251,7 +255,7 @@ public final class DivActionHandler {
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
     case .divActionCustom:
-      break
+      customActionHandler?.handle(context: context, sender: sender)
     case .none:
       handleUrl(action, context: context, sender: sender)
     }
@@ -383,5 +387,19 @@ public final class DivActionHandler {
       type: T.self,
       from: json.makeDictionary() ?? [:]
     ).unwrap()
+  }
+}
+
+extension DivCustomActionHandling {
+  fileprivate func handle(
+    context: DivActionHandlingContext,
+    sender: AnyObject?
+  ) {
+    guard let payload = context.info.payload,
+          let payloadDict = DivDictionary.fromAny(payload) else {
+      return
+    }
+
+    handle(payload: payloadDict, context: context, sender: sender)
   }
 }

@@ -1,6 +1,7 @@
 {
   "description": "Typed custom actions",
   "platforms": [
+    "ios",
     "web"
   ],
   "div_data": {

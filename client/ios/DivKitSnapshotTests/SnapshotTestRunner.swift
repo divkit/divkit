@@ -10,6 +10,21 @@ private let mode = ProcessInfo.processInfo.arguments.contains("UPDATE_SNAPSHOTS"
   ? TestMode.update
   : TestMode.verify
 
+private var customActionHandler: DivCustomActionHandling {
+  SnapshotCustomActionHandler()
+}
+
+private struct SnapshotCustomActionHandler: DivCustomActionHandling {
+  func handle(payload: DivDictionary, context: DivActionHandlingContext, sender _: AnyObject?) {
+    guard let value = payload["value"] as? String else { return }
+    context.variablesStorage.update(
+      path: context.path,
+      name: DivVariableName(rawValue: "external_variable"),
+      value: value
+    )
+  }
+}
+
 @MainActor
 final class SnapshotTestRunner {
   private typealias CheckAction = (_ view: UIView?) async throws -> Void
@@ -28,6 +43,7 @@ final class SnapshotTestRunner {
     let jsonDict = try #require(readJson(path: file.absolutePath))
 
     let divKitComponents = DivKitComponents(
+      customActionHandler: customActionHandler,
       extensionHandlers: extensions,
       fontProvider: SnapshotFontProvider(),
       imageHolderFactory: TestImageHolderFactory(),
@@ -36,6 +52,11 @@ final class SnapshotTestRunner {
     for (id, state) in blocksState {
       divKitComponents.blockStateStorage.setState(id: id.id, cardId: id.cardId, state: state)
     }
+
+    divKitComponents.variablesStorage.append(
+      variables: [DivVariableName(rawValue: "external_variable"): .string("initial")],
+      triggerUpdate: false
+    )
 
     let view = DivView(divKitComponents: divKitComponents)
     try await view.setSource(DivViewSource(
