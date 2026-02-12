@@ -304,8 +304,25 @@ sealed class Variable {
             this is DictVariable && from is DictVariable -> this.value = from.value
             this is ArrayVariable && from is ArrayVariable -> this.value = from.value
             this is PropertyVariable && from is PropertyVariable -> this.value = from.value
-            else -> throw VariableMutationException("Setting value to $this from $from not supported!")
+            else -> throw VariableMutationException(
+                "Setting value to ${describeVariable(this)} from ${describeVariable(from)} not supported!")
         }
+    }
+
+    private fun describeVariable(variable: Variable): String {
+        val type = when (variable) {
+            is ArrayVariable -> "ArrayVariable"
+            is BooleanVariable -> "BooleanVariable"
+            is ColorVariable -> "ColorVariable"
+            is DictVariable -> "DictVariable"
+            is DoubleVariable -> "DoubleVariable"
+            is IntegerVariable -> "IntegerVariable"
+            is PropertyVariable -> "PropertyVariable"
+            is StringVariable -> "StringVariable"
+            is UrlVariable -> "UrlVariable"
+        }
+
+        return "$type(name: '${variable.name}')"
     }
 
     @InternalApi
@@ -325,7 +342,7 @@ sealed class Variable {
                 is PropertyVariable -> value = newValue
             }
         } catch (_: ClassCastException) {
-            throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to $this")
+            throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to ${describeVariable(this)}")
         }
     }
 
