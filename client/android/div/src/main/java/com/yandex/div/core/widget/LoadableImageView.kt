@@ -124,11 +124,11 @@ open class LoadableImageView(
     @CallSuper
     @MainThread
     override fun setImageBitmap(bm: Bitmap?) {
+        val drawable = bm?.toDrawable(context.resources)
         if (shouldScaleAccordingToDensity()) {
             bm?.density = DisplayMetrics.DENSITY_DEFAULT
+            drawable?.setTargetDensity(DisplayMetrics.DENSITY_DEFAULT)
         }
-        val drawable = bm?.toDrawable(context.resources)
-        drawable?.setTargetDensity(DisplayMetrics.DENSITY_DEFAULT)
         setImageDrawable(drawable)
     }
 
