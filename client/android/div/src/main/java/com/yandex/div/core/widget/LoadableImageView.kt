@@ -22,7 +22,6 @@ import com.yandex.div.core.view2.divs.wrapsContent
 import com.yandex.div.core.view2.drawable.ScaleDrawable
 import com.yandex.div.internal.widget.AspectImageView
 import java.util.concurrent.Future
-import kotlin.math.roundToInt
 
 open class LoadableImageView(
     context: Context,
@@ -126,7 +125,6 @@ open class LoadableImageView(
     override fun setImageBitmap(bm: Bitmap?) {
         val drawable = bm?.toDrawable(context.resources)
         if (shouldScaleAccordingToDensity()) {
-            bm?.density = DisplayMetrics.DENSITY_DEFAULT
             drawable?.setTargetDensity(DisplayMetrics.DENSITY_DEFAULT)
         }
         setImageDrawable(drawable)
