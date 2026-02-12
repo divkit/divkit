@@ -33,7 +33,7 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
         bitmap: Bitmap,
         radius: Float
     ): Bitmap {
-        if (!isBlurParamsValid(bitmap, radius)) return bitmap
+        if (!isBlurParamsValid(bitmap, radius)) return bitmap.immutableCopy()
 
         return blur(bitmap, radius, isShadow = false)
     }
@@ -42,7 +42,7 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
         bitmap: Bitmap,
         coercedRadius: Float
     ): Bitmap {
-        if (!isBlurParamsValid(bitmap, coercedRadius)) return bitmap
+        if (!isBlurParamsValid(bitmap, coercedRadius)) return bitmap.immutableCopy()
 
         return blur(bitmap, coercedRadius, isShadow = true)
     }
@@ -59,20 +59,8 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
         cachedHardwareRenderer = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun blur(bitmap: Bitmap, radius: Float, isShadow: Boolean): Bitmap {
-        val hardwareRenderer = getOrCreateHardwareRenderer()
-        val renderNode = getOrCreateRenderNode()
-
-        val imageReader = ImageReader.newInstance(
-            /* width = */ bitmap.width, /* height = */ bitmap.height,
-            /* format = */ PixelFormat.RGBA_8888, /* maxImages = */ MAX_BLURRED_IMAGES,
-            /* usage = */ HardwareBuffer.USAGE_GPU_SAMPLED_IMAGE or HardwareBuffer.USAGE_GPU_COLOR_OUTPUT
-        )
-
-        hardwareRenderer.setSurface(imageReader.surface)
-        hardwareRenderer.setContentRoot(renderNode)
-        renderNode.setPosition(0, 0, imageReader.width, imageReader.height)
-
         // RenderEffect makes shadows darker and images more blurred than RenderScript with
         // the same blur radius value. Here we artificially lower it in order to achieve the same
         // blur effect as in the old APIs. The value selected experimentally.
@@ -81,47 +69,62 @@ internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
         val blurRenderEffect = RenderEffect.createBlurEffect(
             /* radiusX = */ coercedRadius,
             /* radiusY = */ coercedRadius,
-            /* edgeTreatment = */ treatment)
+            /* edgeTreatment = */ treatment
+        )
 
-        renderNode.setRenderEffect(blurRenderEffect)
+        val renderNode = getOrCreateRenderNode().apply {
+            setPosition(0, 0, bitmap.width, bitmap.height)
+            setRenderEffect(blurRenderEffect)
+        }
 
-        val renderCanvas = renderNode.beginRecording()
-        renderCanvas.drawBitmap(bitmap, 0f, 0f, null)
+        renderNode.beginRecording().apply {
+            drawBitmap(bitmap, 0f, 0f, null)
+        }
         renderNode.endRecording()
+
+        val imageReader = ImageReader.newInstance(
+            /* width = */ bitmap.width,
+            /* height = */ bitmap.height,
+            /* format = */ PixelFormat.RGBA_8888,
+            /* maxImages = */ MAX_BLURRED_IMAGES,
+            /* usage = */ HardwareBuffer.USAGE_GPU_SAMPLED_IMAGE or HardwareBuffer.USAGE_GPU_COLOR_OUTPUT
+        )
+
+        val hardwareRenderer = getOrCreateHardwareRenderer().apply {
+            setContentRoot(renderNode)
+            setSurface(imageReader.surface)
+            isOpaque = false
+        }
 
         hardwareRenderer.createRenderRequest()
             .setWaitForPresent(true)
             .syncAndDraw()
 
-        val image = imageReader.acquireNextImage() ?: return bitmap
-        val hardwareBuffer = image.hardwareBuffer ?: return bitmap
+        val image = imageReader.acquireNextImage() ?: return bitmap.immutableCopy()
+        val hardwareBuffer = image.hardwareBuffer ?: return bitmap.immutableCopy()
 
-        val result = try {
-            val wrapped = Bitmap.wrapHardwareBuffer(hardwareBuffer, null) ?: return bitmap
+        return try {
+            val blurredBitmap = Bitmap.wrapHardwareBuffer(
+                hardwareBuffer,
+                bitmap.colorSpace
+            ) ?: return bitmap.immutableCopy()
 
             when {
-                isShadow && wrapped.config != Bitmap.Config.ALPHA_8 -> {
-                    wrapped.copy(Bitmap.Config.ALPHA_8, false)
-                }
-                wrapped.config != bitmap.config -> {
-                    wrapped.copy(bitmap.config ?: Bitmap.Config.ARGB_8888, false)
-                }
-                else -> {
-                    wrapped.copy(wrapped.config ?: Bitmap.Config.ARGB_8888, false)
-                }
-            }.also {
-                wrapped.recycle()
+                isShadow -> blurredBitmap.immutableCopy(Bitmap.Config.ALPHA_8)
+                else -> blurredBitmap.immutableCopy(Bitmap.Config.ARGB_8888)
             }
         } finally {
             hardwareBuffer.close()
             image.close()
         }
-
-        return result
     }
 
     private companion object {
         const val MAX_BLURRED_IMAGES = 1
         const val BLUR_COMPATIBILITY_DIVIDER = 1.5f
     }
+}
+
+private fun Bitmap.immutableCopy(config: Bitmap.Config? = getConfig()): Bitmap {
+    return copy(config ?: Bitmap.Config.ARGB_8888, false)
 }
