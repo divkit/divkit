@@ -10,7 +10,6 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 apply plugin: 'de.mobilej.unmock'
-apply plugin: 'kotlinx-serialization'
 
 def expressionApiDir = "${project.projectDir}/../../../expression-api/"
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
@@ -66,9 +65,6 @@ dependencies {
     implementation(libs.androidx.viewpager2) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-
-    implementation libs.androidx.datastore
-    implementation libs.kotlin.serialization.json
 
     testImplementation project(path: ':expression-test-common')
 

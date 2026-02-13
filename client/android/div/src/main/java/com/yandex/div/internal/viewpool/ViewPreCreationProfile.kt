@@ -1,15 +1,11 @@
 package com.yandex.div.internal.viewpool
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class PreCreationModel(
     val capacity: Int,
     val min: Int = 0,
     val max: Int = Int.MAX_VALUE
 )
 
-@Serializable
 data class ViewPreCreationProfile(
     val id: String? = null,
     val text: PreCreationModel = PreCreationModel(20),

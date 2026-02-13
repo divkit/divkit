@@ -19,7 +19,6 @@ kotlin = "2.2.10"
 kotlin-binaryCompatibilityValidator = "0.18.1"
 kotlin-coroutines = "1.10.2"
 kotlin-ksp = "2.3.4"
-kotlin-serialization = "1.9.0"
 kotlinpoet = "2.2.0"
 lottie = "6.1.0"
 markwon = "4.6.2"
@@ -46,7 +45,6 @@ androidx-collection = "1.5.0"
 androidx-compose-bom = "2024.04.00"
 androidx-constraint = "2.2.1"
 androidx-core = "1.16.0"
-androidx-datastore = "1.1.7"
 androidx-espresso = "3.7.0"
 androidx-fragment = "1.8.9"
 androidx-lifecycle = "2.9.4"
@@ -80,7 +78,6 @@ androidx-collection = { module = "androidx.collection:collection", version.ref =
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraint" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
@@ -158,9 +155,6 @@ kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.
 kotlin-corountines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-corountines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-corountines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
-
-kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
-kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 

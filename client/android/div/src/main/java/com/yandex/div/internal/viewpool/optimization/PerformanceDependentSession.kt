@@ -3,7 +3,6 @@ package com.yandex.div.internal.viewpool.optimization
 import androidx.annotation.AnyThread
 import androidx.collection.ArrayMap
 import com.yandex.div.core.view2.DivViewCreator
-import kotlinx.serialization.Serializable
 
 sealed class PerformanceDependentSession {
     sealed class ViewObtainmentStatistics {
@@ -47,7 +46,6 @@ sealed class PerformanceDependentSession {
     }
 
     class Detailed : PerformanceDependentSession() {
-        @Serializable
         data class ViewObtainment(
             val obtainmentTime: Long,
             val obtainmentDuration: Long,

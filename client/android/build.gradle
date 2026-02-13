@@ -32,7 +32,6 @@ buildscript {
         classpath libs.dokka
         classpath libs.kotlin.allopen
         classpath libs.kotlin.gradle.plugin
-        classpath libs.kotlin.serialization.plugin
         classpath libs.kotlin.binaryCompatibilityValidator
         classpath libs.unmock.plugin
     }
