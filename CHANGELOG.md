@@ -4,6 +4,7 @@
 * Added `getExpressionResolver` method to `Div2Context` to access `ExpressionResolver` implementation for given `DivData`. Can be used for preloading when there is no created `Div2View`.
 * Fixed `gif` images loading by `GlideDivImageLoader`.
 * Fixed loading images from assets by provided `DivImageLoader`s.
+* Fixed shadow blur rendering on certain devices.
 * Introduced `DivCachedImage` to transfer loaded images from `DivImageLoader`. `CachedBitmap` is now deprecated — please migrate to `DivCachedImage`.
 * `PicassoDivImageLoader` is now deprecated because the Picasso library is outdated. Recommended alternatives for image loading: `GlideDivImageLoader`, `CoilDivImageLoader` or custom implementation of the `DivImageLoader` interface.
 
