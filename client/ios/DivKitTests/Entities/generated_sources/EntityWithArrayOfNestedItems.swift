@@ -16,6 +16,13 @@ public final class EntityWithArrayOfNestedItems: Sendable {
       resolver.resolveString(property)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        entity: try dictionary.getField("entity", transform: { (dict: [String: Any]) in try Entity(dictionary: dict, context: context) }),
+        property: try dictionary.getExpressionField("property", context: context)
+      )
+    }
+
     init(
       entity: Entity,
       property: Expression<String>
@@ -30,6 +37,12 @@ public final class EntityWithArrayOfNestedItems: Sendable {
 
   static let itemsValidator: AnyArrayValueValidator<EntityWithArrayOfNestedItems.Item> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? EntityWithArrayOfNestedItems.Item(dictionary: dict, context: context) }, validator: Self.itemsValidator)
+    )
+  }
 
   init(
     items: [Item]

@@ -305,13 +305,13 @@ final class DivBlockProvider {
     cardId: DivCardID
   ) throws -> DeserializationResult<DivData> {
     let rawDivData = try RawDivData(dictionary: jsonDict)
-    let templates = try measurements.templateParsingTime.updateMeasure {
-      DivTemplates(dictionary: rawDivData.templates)
-    }
     return try measurements.divDataParsingTime.updateMeasure {
-      templates
-        .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
-        .asCardResult(cardId: cardId)
+      DivData.resolve(
+        card: rawDivData.card,
+        templates: rawDivData.templates,
+        flagsInfo: divKitComponents.flagsInfo
+      )
+      .asCardResult(cardId: cardId)
     }
   }
 
@@ -321,16 +321,17 @@ final class DivBlockProvider {
   ) async throws -> DeserializationResult<DivData> {
     let rawDivData = try RawDivData(dictionary: jsonDict)
     let measurements = measurements
-    let templates = try measurements.templateParsingTime.updateMeasure {
-      DivTemplates(dictionary: rawDivData.templates)
-    }
+    let flagsInfo = divKitComponents.flagsInfo
     let result = try await withCheckedThrowingContinuation { continuation in
       DispatchQueue.global().async { [measurements] in
         do {
           let result = try measurements.divDataParsingTime.updateMeasure {
-            templates
-              .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
-              .asCardResult(cardId: cardId)
+            DivData.resolve(
+              card: rawDivData.card,
+              templates: rawDivData.templates,
+              flagsInfo: flagsInfo
+            )
+            .asCardResult(cardId: cardId)
           }
           continuation.resume(returning: result)
         } catch {

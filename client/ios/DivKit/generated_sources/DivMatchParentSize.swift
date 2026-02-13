@@ -17,6 +17,14 @@ public final class DivMatchParentSize: Sendable {
   static let weightValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      maxSize: try dictionary.getOptionalField("max_size", transform: { (dict: [String: Any]) in try DivSizeUnitValue(dictionary: dict, context: context) }),
+      minSize: try dictionary.getOptionalField("min_size", transform: { (dict: [String: Any]) in try DivSizeUnitValue(dictionary: dict, context: context) }),
+      weight: try dictionary.getOptionalExpressionField("weight", validator: Self.weightValidator, context: context)
+    )
+  }
+
   init(
     maxSize: DivSizeUnitValue? = nil,
     minSize: DivSizeUnitValue? = nil,

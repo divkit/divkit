@@ -14,6 +14,14 @@ public final class DivRotationTransformation: Sendable {
     resolver.resolveNumeric(angle)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      angle: try dictionary.getExpressionField("angle", context: context),
+      pivotX: try dictionary.getOptionalField("pivot_x", transform: { (dict: [String: Any]) in try DivPivot(dictionary: dict, context: context) }),
+      pivotY: try dictionary.getOptionalField("pivot_y", transform: { (dict: [String: Any]) in try DivPivot(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     angle: Expression<Double>,
     pivotX: DivPivot? = nil,

@@ -15,6 +15,12 @@ public final class EntityWithRequiredProperty: Sendable {
   static let propertyValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getExpressionField("property", validator: Self.propertyValidator, context: context)
+    )
+  }
+
   init(
     property: Expression<String>
   ) {

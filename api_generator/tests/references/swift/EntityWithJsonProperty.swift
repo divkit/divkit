@@ -8,6 +8,12 @@ public final class EntityWithJsonProperty: @unchecked Sendable {
   public static let type: String = "entity_with_json_property"
   public let jsonProperty: [String: Any] // default value: { "key": "value", "items": [ "value" ] }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      jsonProperty: try dictionary.getOptionalField("json_property", context: context)
+    )
+  }
+
   init(
     jsonProperty: [String: Any]? = nil
   ) {

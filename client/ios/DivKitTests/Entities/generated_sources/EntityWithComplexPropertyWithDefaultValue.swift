@@ -15,6 +15,12 @@ public final class EntityWithComplexPropertyWithDefaultValue: Sendable {
       resolver.resolveString(value)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        value: try dictionary.getExpressionField("value", context: context)
+      )
+    }
+
     init(
       value: Expression<String>
     ) {
@@ -24,6 +30,12 @@ public final class EntityWithComplexPropertyWithDefaultValue: Sendable {
 
   public static let type: String = "entity_with_complex_property_with_default_value"
   public let property: Property // default value: EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithComplexPropertyWithDefaultValue.Property(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     property: Property? = nil

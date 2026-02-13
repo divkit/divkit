@@ -8,6 +8,13 @@ public final class DivFunctionArgument: Sendable {
   public let name: String
   public let type: DivEvaluableType
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      name: try dictionary.getField("name", context: context),
+      type: try dictionary.getField("type", context: context)
+    )
+  }
+
   init(
     name: String,
     type: DivEvaluableType

@@ -8,6 +8,12 @@ public final class DivActionCopyToClipboard: Sendable {
   public static let type: String = "copy_to_clipboard"
   public let content: DivActionCopyToClipboardContent
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      content: try dictionary.getField("content", transform: { (dict: [String: Any]) in try DivActionCopyToClipboardContent(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     content: DivActionCopyToClipboardContent
   ) {

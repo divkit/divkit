@@ -37,6 +37,19 @@ public final class DivActionAnimatorStart: Sendable {
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      animatorId: try dictionary.getField("animator_id", context: context),
+      direction: try dictionary.getOptionalExpressionField("direction", context: context),
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      endValue: try dictionary.getOptionalField("end_value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator", context: context),
+      repeatCount: try dictionary.getOptionalField("repeat_count", transform: { (dict: [String: Any]) in try DivCount(dictionary: dict, context: context) }),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay", validator: Self.startDelayValidator, context: context),
+      startValue: try dictionary.getOptionalField("start_value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     animatorId: String,
     direction: Expression<DivAnimationDirection>? = nil,

@@ -7,6 +7,8 @@ import VGSL
 public final class DivInfinityCount: Sendable {
   public static let type: String = "infinity"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

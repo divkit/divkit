@@ -19,6 +19,20 @@ public enum DivTranslation: Sendable {
   }
 }
 
+extension DivTranslation {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivFixedTranslation.type:
+      self = .divFixedTranslation(try DivFixedTranslation(dictionary: dictionary, context: context))
+    case DivPercentageTranslation.type:
+      self = .divPercentageTranslation(try DivPercentageTranslation(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-translation", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTranslation: Equatable {
   public static func ==(lhs: DivTranslation, rhs: DivTranslation) -> Bool {

@@ -15,6 +15,12 @@ public final class IndexDestination: Sendable {
   static let valueValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      value: try dictionary.getExpressionField("value", validator: Self.valueValidator, context: context)
+    )
+  }
+
   init(
     value: Expression<Int>
   ) {

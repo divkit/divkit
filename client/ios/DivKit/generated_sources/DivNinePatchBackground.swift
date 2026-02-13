@@ -13,6 +13,13 @@ public final class DivNinePatchBackground: Sendable {
     resolver.resolveUrl(imageUrl)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      imageUrl: try dictionary.getExpressionField("image_url", transform: URL.makeFromNonEncodedString, context: context),
+      insets: try dictionary.getField("insets", transform: { (dict: [String: Any]) in try DivAbsoluteEdgeInsets(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     imageUrl: Expression<URL>,
     insets: DivAbsoluteEdgeInsets

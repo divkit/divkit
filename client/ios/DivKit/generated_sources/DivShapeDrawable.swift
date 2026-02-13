@@ -14,6 +14,14 @@ public final class DivShapeDrawable: Sendable {
     resolver.resolveColor(color)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      shape: try dictionary.getField("shape", transform: { (dict: [String: Any]) in try DivShape(dictionary: dict, context: context) }),
+      stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     color: Expression<Color>,
     shape: DivShape,

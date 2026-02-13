@@ -28,6 +28,20 @@ public enum DivAnimator: Sendable {
   }
 }
 
+extension DivAnimator {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivColorAnimator.type:
+      self = .divColorAnimator(try DivColorAnimator(dictionary: dictionary, context: context))
+    case DivNumberAnimator.type:
+      self = .divNumberAnimator(try DivNumberAnimator(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-animator", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivAnimator: Equatable {
   public static func ==(lhs: DivAnimator, rhs: DivAnimator) -> Bool {

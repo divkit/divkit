@@ -5,7 +5,7 @@
 /// performance issues, crashes, or other problems. By default, only features that have testing are
 /// included in the framework.
 /// You can access the default `DivFlagsInfo` instance using the static property `default`.
-public struct DivFlagsInfo: Encodable, Equatable {
+public struct DivFlagsInfo: Encodable, Equatable, Sendable {
   /// The default instance of `DivFlagsInfo`.
   public static let `default` = DivFlagsInfo()
 
@@ -53,6 +53,14 @@ public struct DivFlagsInfo: Encodable, Equatable {
   /// `font_weight_value` is specified.
   public let variationFontWeightOverrideEnabled: Bool
 
+  /// Enables untyped template resolving pipeline for card parsing.
+  ///
+  /// `false` - typed template resolving is used (`*Template.swift` entities).
+  ///
+  /// `true` - templates are resolved by untyped resolver and then parsed with generated
+  /// non-template deserializers.
+  public let useUntypedTemplateResolver: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     useUrlHandlerForVisibilityActions: Bool = false,
@@ -62,7 +70,8 @@ public struct DivFlagsInfo: Encodable, Equatable {
     initializeTriggerOnSet: Bool = true,
     defaultTextAutoEllipsize: Bool = true,
     fontCacheEnabled: Bool = true,
-    variationFontWeightOverrideEnabled: Bool = true
+    variationFontWeightOverrideEnabled: Bool = true,
+    useUntypedTemplateResolver: Bool = false
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
     self.imageBlurPreferMetal = imageBlurPreferMetal
@@ -72,6 +81,7 @@ public struct DivFlagsInfo: Encodable, Equatable {
     self.defaultTextAutoEllipsize = defaultTextAutoEllipsize
     self.fontCacheEnabled = fontCacheEnabled
     self.variationFontWeightOverrideEnabled = variationFontWeightOverrideEnabled
+    self.useUntypedTemplateResolver = useUntypedTemplateResolver
   }
 }
 
@@ -85,6 +95,7 @@ extension DivFlagsInfo: Decodable {
     case defaultTextAutoEllipsize
     case fontCacheEnabled
     case variationFontWeightOverrideEnabled
+    case useUntypedTemplateResolver
   }
 
   public init(from decoder: Decoder) throws {
@@ -129,5 +140,10 @@ extension DivFlagsInfo: Decodable {
       Bool.self,
       forKey: .variationFontWeightOverrideEnabled
     ) ?? Self.default.variationFontWeightOverrideEnabled
+
+    self.useUntypedTemplateResolver = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .useUntypedTemplateResolver
+    ) ?? Self.default.useUntypedTemplateResolver
   }
 }

@@ -19,6 +19,20 @@ public enum DivCount: Sendable {
   }
 }
 
+extension DivCount {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivInfinityCount.type:
+      self = .divInfinityCount(try DivInfinityCount(dictionary: dictionary, context: context))
+    case DivFixedCount.type:
+      self = .divFixedCount(try DivFixedCount(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-count", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivCount: Equatable {
   public static func ==(lhs: DivCount, rhs: DivCount) -> Bool {

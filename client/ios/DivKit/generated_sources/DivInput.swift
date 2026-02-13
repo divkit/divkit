@@ -41,6 +41,12 @@ public final class DivInput: DivBase, @unchecked Sendable {
       resolver.resolveColor(color)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context)
+      )
+    }
+
     init(
       color: Expression<Color>
     ) {
@@ -248,6 +254,71 @@ public final class DivInput: DivBase, @unchecked Sendable {
 
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      accessibility: try dictionary.getOptionalField("accessibility", transform: { (dict: [String: Any]) in try DivAccessibility(dictionary: dict, context: context) }),
+      alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal", context: context),
+      alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical", context: context),
+      alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
+      animators: try dictionary.getOptionalArray("animators", transform: { (dict: [String: Any]) in try? DivAnimator(dictionary: dict, context: context) }),
+      autocapitalization: try dictionary.getOptionalExpressionField("autocapitalization", context: context),
+      background: try dictionary.getOptionalArray("background", transform: { (dict: [String: Any]) in try? DivBackground(dictionary: dict, context: context) }),
+      border: try dictionary.getOptionalField("border", transform: { (dict: [String: Any]) in try DivBorder(dictionary: dict, context: context) }),
+      columnSpan: try dictionary.getOptionalExpressionField("column_span", validator: Self.columnSpanValidator, context: context),
+      disappearActions: try dictionary.getOptionalArray("disappear_actions", transform: { (dict: [String: Any]) in try? DivDisappearAction(dictionary: dict, context: context) }),
+      enterKeyActions: try dictionary.getOptionalArray("enter_key_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      enterKeyType: try dictionary.getOptionalExpressionField("enter_key_type", context: context),
+      extensions: try dictionary.getOptionalArray("extensions", transform: { (dict: [String: Any]) in try? DivExtension(dictionary: dict, context: context) }),
+      filters: try dictionary.getOptionalArray("filters", transform: { (dict: [String: Any]) in try? DivInputFilter(dictionary: dict, context: context) }),
+      focus: try dictionary.getOptionalField("focus", transform: { (dict: [String: Any]) in try DivFocus(dictionary: dict, context: context) }),
+      fontFamily: try dictionary.getOptionalExpressionField("font_family", context: context),
+      fontSize: try dictionary.getOptionalExpressionField("font_size", validator: Self.fontSizeValidator, context: context),
+      fontSizeUnit: try dictionary.getOptionalExpressionField("font_size_unit", context: context),
+      fontVariationSettings: try dictionary.getOptionalExpressionField("font_variation_settings", context: context),
+      fontWeight: try dictionary.getOptionalExpressionField("font_weight", context: context),
+      fontWeightValue: try dictionary.getOptionalExpressionField("font_weight_value", validator: Self.fontWeightValueValidator, context: context),
+      functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
+      height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
+      highlightColor: try dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:), context: context),
+      hintColor: try dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:), context: context),
+      hintText: try dictionary.getOptionalExpressionField("hint_text", context: context),
+      id: try dictionary.getOptionalField("id", context: context),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
+      keyboardType: try dictionary.getOptionalExpressionField("keyboard_type", context: context),
+      layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
+      letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing", context: context),
+      lineHeight: try dictionary.getOptionalExpressionField("line_height", validator: Self.lineHeightValidator, context: context),
+      margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
+      mask: try dictionary.getOptionalField("mask", transform: { (dict: [String: Any]) in try DivInputMask(dictionary: dict, context: context) }),
+      maxLength: try dictionary.getOptionalExpressionField("max_length", validator: Self.maxLengthValidator, context: context),
+      maxVisibleLines: try dictionary.getOptionalExpressionField("max_visible_lines", validator: Self.maxVisibleLinesValidator, context: context),
+      nativeInterface: try dictionary.getOptionalField("native_interface", transform: { (dict: [String: Any]) in try DivInput.NativeInterface(dictionary: dict, context: context) }),
+      paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
+      reuseId: try dictionary.getOptionalExpressionField("reuse_id", context: context),
+      rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),
+      selectAllOnFocus: try dictionary.getOptionalExpressionField("select_all_on_focus", context: context),
+      selectedActions: try dictionary.getOptionalArray("selected_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      textAlignmentHorizontal: try dictionary.getOptionalExpressionField("text_alignment_horizontal", context: context),
+      textAlignmentVertical: try dictionary.getOptionalExpressionField("text_alignment_vertical", context: context),
+      textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:), context: context),
+      textVariable: try dictionary.getField("text_variable", context: context),
+      tooltips: try dictionary.getOptionalArray("tooltips", transform: { (dict: [String: Any]) in try? DivTooltip(dictionary: dict, context: context) }),
+      transform: try dictionary.getOptionalField("transform", transform: { (dict: [String: Any]) in try DivTransform(dictionary: dict, context: context) }),
+      transformations: try dictionary.getOptionalArray("transformations", transform: { (dict: [String: Any]) in try? DivTransformation(dictionary: dict, context: context) }),
+      transitionChange: try dictionary.getOptionalField("transition_change", transform: { (dict: [String: Any]) in try DivChangeTransition(dictionary: dict, context: context) }),
+      transitionIn: try dictionary.getOptionalField("transition_in", transform: { (dict: [String: Any]) in try DivAppearanceTransition(dictionary: dict, context: context) }),
+      transitionOut: try dictionary.getOptionalField("transition_out", transform: { (dict: [String: Any]) in try DivAppearanceTransition(dictionary: dict, context: context) }),
+      transitionTriggers: try dictionary.getOptionalArray("transition_triggers", validator: Self.transitionTriggersValidator, context: context),
+      validators: try dictionary.getOptionalArray("validators", transform: { (dict: [String: Any]) in try? DivInputValidator(dictionary: dict, context: context) }),
+      variableTriggers: try dictionary.getOptionalArray("variable_triggers", transform: { (dict: [String: Any]) in try? DivTrigger(dictionary: dict, context: context) }),
+      variables: try dictionary.getOptionalArray("variables", transform: { (dict: [String: Any]) in try? DivVariable(dictionary: dict, context: context) }),
+      visibility: try dictionary.getOptionalExpressionField("visibility", context: context),
+      visibilityAction: try dictionary.getOptionalField("visibility_action", transform: { (dict: [String: Any]) in try DivVisibilityAction(dictionary: dict, context: context) }),
+      visibilityActions: try dictionary.getOptionalArray("visibility_actions", transform: { (dict: [String: Any]) in try? DivVisibilityAction(dictionary: dict, context: context) }),
+      width: try dictionary.getOptionalField("width", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     accessibility: DivAccessibility? = nil,

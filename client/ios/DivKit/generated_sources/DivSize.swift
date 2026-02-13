@@ -22,6 +22,22 @@ public enum DivSize: Sendable {
   }
 }
 
+extension DivSize {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivFixedSize.type:
+      self = .divFixedSize(try DivFixedSize(dictionary: dictionary, context: context))
+    case DivMatchParentSize.type:
+      self = .divMatchParentSize(try DivMatchParentSize(dictionary: dictionary, context: context))
+    case DivWrapContentSize.type:
+      self = .divWrapContentSize(try DivWrapContentSize(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-size", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivSize: Equatable {
   public static func ==(lhs: DivSize, rhs: DivSize) -> Bool {

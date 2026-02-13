@@ -19,6 +19,20 @@ public enum DivPageTransformation: Sendable {
   }
 }
 
+extension DivPageTransformation {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivPageTransformationSlide.type:
+      self = .divPageTransformationSlide(try DivPageTransformationSlide(dictionary: dictionary, context: context))
+    case DivPageTransformationOverlap.type:
+      self = .divPageTransformationOverlap(try DivPageTransformationOverlap(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-page-transformation", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivPageTransformation: Equatable {
   public static func ==(lhs: DivPageTransformation, rhs: DivPageTransformation) -> Bool {

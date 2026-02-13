@@ -17,6 +17,13 @@ public final class DivActionShowTooltip: Sendable {
     resolver.resolveNumeric(multiple)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      id: try dictionary.getExpressionField("id", context: context),
+      multiple: try dictionary.getOptionalExpressionField("multiple", context: context)
+    )
+  }
+
   init(
     id: Expression<String>,
     multiple: Expression<Bool>? = nil

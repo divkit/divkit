@@ -19,6 +19,20 @@ public enum DivFilter: Sendable {
   }
 }
 
+extension DivFilter {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivBlur.type:
+      self = .divBlur(try DivBlur(dictionary: dictionary, context: context))
+    case DivFilterRtlMirror.type:
+      self = .divFilterRtlMirror(try DivFilterRtlMirror(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-filter", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivFilter: Equatable {
   public static func ==(lhs: DivFilter, rhs: DivFilter) -> Bool {

@@ -265,7 +265,8 @@ public final class DivKitComponents {
     let rawDivData = try RawDivData(dictionary: jsonDict)
     let result = DivData.resolve(
       card: rawDivData.card,
-      templates: rawDivData.templates
+      templates: rawDivData.templates,
+      flagsInfo: flagsInfo
     ).asCardResult(cardId: cardId)
     if let divData = result.value {
       setCardData(divData: divData, cardId: cardId)

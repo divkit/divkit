@@ -14,6 +14,14 @@ public final class DivCircleShape: Sendable {
     resolver.resolveColor(backgroundColor)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:), context: context),
+      radius: try dictionary.getOptionalField("radius", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
+      stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     backgroundColor: Expression<Color>? = nil,
     radius: DivFixedSize? = nil,

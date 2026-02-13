@@ -9,6 +9,13 @@ public final class DivTranslationTransformation: Sendable {
   public let x: DivTranslation?
   public let y: DivTranslation?
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      x: try dictionary.getOptionalField("x", transform: { (dict: [String: Any]) in try DivTranslation(dictionary: dict, context: context) }),
+      y: try dictionary.getOptionalField("y", transform: { (dict: [String: Any]) in try DivTranslation(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     x: DivTranslation? = nil,
     y: DivTranslation? = nil

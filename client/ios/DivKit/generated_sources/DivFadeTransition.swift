@@ -36,6 +36,15 @@ public final class DivFadeTransition: DivTransitionBase, Sendable {
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator", context: context),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay", validator: Self.startDelayValidator, context: context)
+    )
+  }
+
   init(
     alpha: Expression<Double>? = nil,
     duration: Expression<Int>? = nil,

@@ -26,6 +26,14 @@ public final class DivTrigger: Sendable {
   static let actionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      actions: try dictionary.getArray("actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }, validator: Self.actionsValidator),
+      condition: try dictionary.getExpressionField("condition", context: context),
+      mode: try dictionary.getOptionalExpressionField("mode", context: context)
+    )
+  }
+
   init(
     actions: [DivAction],
     condition: Expression<Bool>,

@@ -12,6 +12,12 @@ public final class DivActionFocusElement: Sendable {
     resolver.resolveString(elementId)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      elementId: try dictionary.getExpressionField("element_id", context: context)
+    )
+  }
+
   init(
     elementId: Expression<String>
   ) {

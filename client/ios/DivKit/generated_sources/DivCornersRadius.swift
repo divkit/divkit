@@ -38,6 +38,15 @@ public final class DivCornersRadius: Sendable {
   static let topRightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      bottomLeft: try dictionary.getOptionalExpressionField("bottom-left", validator: Self.bottomLeftValidator, context: context),
+      bottomRight: try dictionary.getOptionalExpressionField("bottom-right", validator: Self.bottomRightValidator, context: context),
+      topLeft: try dictionary.getOptionalExpressionField("top-left", validator: Self.topLeftValidator, context: context),
+      topRight: try dictionary.getOptionalExpressionField("top-right", validator: Self.topRightValidator, context: context)
+    )
+  }
+
   init(
     bottomLeft: Expression<Int>? = nil,
     bottomRight: Expression<Int>? = nil,

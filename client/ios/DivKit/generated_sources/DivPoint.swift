@@ -8,6 +8,13 @@ public final class DivPoint: Sendable {
   public let x: DivDimension
   public let y: DivDimension
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      x: try dictionary.getField("x", transform: { (dict: [String: Any]) in try DivDimension(dictionary: dict, context: context) }),
+      y: try dictionary.getField("y", transform: { (dict: [String: Any]) in try DivDimension(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     x: DivDimension,
     y: DivDimension

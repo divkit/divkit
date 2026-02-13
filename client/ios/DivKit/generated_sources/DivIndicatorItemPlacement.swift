@@ -19,6 +19,20 @@ public enum DivIndicatorItemPlacement: Sendable {
   }
 }
 
+extension DivIndicatorItemPlacement {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivDefaultIndicatorItemPlacement.type:
+      self = .divDefaultIndicatorItemPlacement(try DivDefaultIndicatorItemPlacement(dictionary: dictionary, context: context))
+    case DivStretchIndicatorItemPlacement.type:
+      self = .divStretchIndicatorItemPlacement(try DivStretchIndicatorItemPlacement(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-indicator-item-placement", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivIndicatorItemPlacement: Equatable {
   public static func ==(lhs: DivIndicatorItemPlacement, rhs: DivIndicatorItemPlacement) -> Bool {

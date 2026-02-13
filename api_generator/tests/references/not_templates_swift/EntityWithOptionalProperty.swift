@@ -12,6 +12,12 @@ public final class EntityWithOptionalProperty: Sendable {
     resolver.resolveString(property)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getOptionalExpressionField("property", context: context)
+    )
+  }
+
   init(
     property: Expression<String>? = nil
   ) {

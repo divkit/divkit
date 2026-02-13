@@ -8,6 +8,12 @@ public final class DivDefaultIndicatorItemPlacement: Sendable {
   public static let type: String = "default"
   public let spaceBetweenCenters: DivFixedSize // default value: DivFixedSize(value: .value(15))
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      spaceBetweenCenters: try dictionary.getOptionalField("space_between_centers", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     spaceBetweenCenters: DivFixedSize? = nil
   ) {

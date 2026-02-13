@@ -26,6 +26,17 @@ public final class DivTimer: Sendable {
   static let tickIntervalValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      endActions: try dictionary.getOptionalArray("end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      id: try dictionary.getField("id", context: context),
+      tickActions: try dictionary.getOptionalArray("tick_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      tickInterval: try dictionary.getOptionalExpressionField("tick_interval", validator: Self.tickIntervalValidator, context: context),
+      valueVariable: try dictionary.getOptionalField("value_variable", context: context)
+    )
+  }
+
   init(
     duration: Expression<Int>? = nil,
     endActions: [DivAction]? = nil,

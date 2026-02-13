@@ -31,6 +31,14 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
     static let urlValidator: AnyValueValidator<URL> =
       makeURLValidator(schemes: ["https"])
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        int: try dictionary.getOptionalExpressionField("int", validator: Self.intValidator, context: context),
+        nonOptional: try dictionary.getExpressionField("non_optional", context: context),
+        url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, validator: Self.urlValidator, context: context)
+      )
+    }
+
     init(
       int: Expression<Int>? = nil,
       nonOptional: Expression<String>,
@@ -60,6 +68,14 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
 
   static let urlValidator: AnyValueValidator<URL> =
     makeURLValidator(schemes: ["https"])
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      int: try dictionary.getOptionalExpressionField("int", validator: Self.intValidator, context: context),
+      nested: try dictionary.getOptionalField("nested", transform: { (dict: [String: Any]) in try EntityWithPropertyWithDefaultValue.Nested(dictionary: dict, context: context) }),
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, validator: Self.urlValidator, context: context)
+    )
+  }
 
   init(
     int: Expression<Int>? = nil,

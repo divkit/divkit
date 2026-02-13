@@ -18,6 +18,14 @@ public final class DivCollectionItemBuilder: @unchecked Sendable {
       resolver.resolveNumeric(selector) ?? true
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+        id: try dictionary.getOptionalExpressionField("id", context: context),
+        selector: try dictionary.getOptionalExpressionField("selector", context: context)
+      )
+    }
+
     init(
       div: Div,
       id: Expression<String>? = nil,
@@ -39,6 +47,14 @@ public final class DivCollectionItemBuilder: @unchecked Sendable {
 
   static let prototypesValidator: AnyArrayValueValidator<DivCollectionItemBuilder.Prototype> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      data: try dictionary.getExpressionField("data", context: context),
+      dataElementName: try dictionary.getOptionalField("data_element_name", context: context),
+      prototypes: try dictionary.getArray("prototypes", transform: { (dict: [String: Any]) in try? DivCollectionItemBuilder.Prototype(dictionary: dict, context: context) }, validator: Self.prototypesValidator)
+    )
+  }
 
   init(
     data: Expression<[Any]>,

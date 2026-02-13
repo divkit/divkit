@@ -8,6 +8,13 @@ public final class DivExtension: @unchecked Sendable {
   public let id: String
   public let params: [String: Any]?
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      id: try dictionary.getField("id", context: context),
+      params: try dictionary.getOptionalField("params", context: context)
+    )
+  }
+
   init(
     id: String,
     params: [String: Any]? = nil

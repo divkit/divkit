@@ -19,6 +19,20 @@ public enum DivInputValidator: Sendable {
   }
 }
 
+extension DivInputValidator {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivInputValidatorRegex.type:
+      self = .divInputValidatorRegex(try DivInputValidatorRegex(dictionary: dictionary, context: context))
+    case DivInputValidatorExpression.type:
+      self = .divInputValidatorExpression(try DivInputValidatorExpression(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-input-validator", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivInputValidator: Equatable {
   public static func ==(lhs: DivInputValidator, rhs: DivInputValidator) -> Bool {

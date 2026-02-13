@@ -20,6 +20,12 @@ public final class EntityWithArrayOfEnums: Sendable {
   static let itemsValidator: AnyArrayValueValidator<EntityWithArrayOfEnums.Item> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      items: try dictionary.getArray("items", validator: Self.itemsValidator, context: context)
+    )
+  }
+
   init(
     items: [Item]
   ) {

@@ -16,6 +16,18 @@ public enum DivDrawable: Sendable {
   }
 }
 
+extension DivDrawable {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivShapeDrawable.type:
+      self = .divShapeDrawable(try DivShapeDrawable(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-drawable", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivDrawable: Equatable {
   public static func ==(lhs: DivDrawable, rhs: DivDrawable) -> Bool {

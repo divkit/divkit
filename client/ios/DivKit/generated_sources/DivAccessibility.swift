@@ -60,6 +60,18 @@ public final class DivAccessibility: Sendable {
     resolver.resolveString(stateDescription)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      description: try dictionary.getOptionalExpressionField("description", context: context),
+      hint: try dictionary.getOptionalExpressionField("hint", context: context),
+      isChecked: try dictionary.getOptionalExpressionField("is_checked", context: context),
+      mode: try dictionary.getOptionalExpressionField("mode", context: context),
+      muteAfterAction: try dictionary.getOptionalExpressionField("mute_after_action", context: context),
+      stateDescription: try dictionary.getOptionalExpressionField("state_description", context: context),
+      type: try dictionary.getOptionalField("type", context: context)
+    )
+  }
+
   init(
     description: Expression<String>? = nil,
     hint: Expression<String>? = nil,

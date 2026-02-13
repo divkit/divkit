@@ -11,6 +11,12 @@ public final class EntityWithArray: Sendable {
   static let arrayValidator: AnyArrayValueValidator<Entity> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      array: try dictionary.getArray("array", transform: { (dict: [String: Any]) in try? Entity(dictionary: dict, context: context) }, validator: Self.arrayValidator)
+    )
+  }
+
   init(
     array: [Entity]
   ) {

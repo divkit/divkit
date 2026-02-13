@@ -23,6 +23,15 @@ public final class DivInputValidatorRegex: Sendable {
     resolver.resolveString(pattern)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      allowEmpty: try dictionary.getOptionalExpressionField("allow_empty", context: context),
+      labelId: try dictionary.getExpressionField("label_id", context: context),
+      pattern: try dictionary.getExpressionField("pattern", context: context),
+      variable: try dictionary.getField("variable", context: context)
+    )
+  }
+
   init(
     allowEmpty: Expression<Bool>? = nil,
     labelId: Expression<String>,

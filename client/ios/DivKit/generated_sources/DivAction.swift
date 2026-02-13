@@ -14,6 +14,14 @@ public final class DivAction: @unchecked Sendable {
       resolver.resolveString(text)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        action: try dictionary.getOptionalField("action", transform: { (dict: [String: Any]) in try DivAction(dictionary: dict, context: context) }),
+        actions: try dictionary.getOptionalArray("actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+        text: try dictionary.getExpressionField("text", context: context)
+      )
+    }
+
     init(
       action: DivAction? = nil,
       actions: [DivAction]? = nil,
@@ -54,6 +62,21 @@ public final class DivAction: @unchecked Sendable {
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
     resolver.resolveUrl(url)
+  }
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      downloadCallbacks: try dictionary.getOptionalField("download_callbacks", transform: { (dict: [String: Any]) in try DivDownloadCallbacks(dictionary: dict, context: context) }),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
+      logId: try dictionary.getExpressionField("log_id", context: context),
+      logUrl: try dictionary.getOptionalExpressionField("log_url", transform: URL.makeFromNonEncodedString, context: context),
+      menuItems: try dictionary.getOptionalArray("menu_items", transform: { (dict: [String: Any]) in try? DivAction.MenuItem(dictionary: dict, context: context) }),
+      payload: try dictionary.getOptionalField("payload", context: context),
+      referer: try dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString, context: context),
+      scopeId: try dictionary.getOptionalField("scope_id", context: context),
+      typed: try dictionary.getOptionalField("typed", transform: { (dict: [String: Any]) in try DivActionTyped(dictionary: dict, context: context) }),
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
+    )
   }
 
   init(

@@ -38,6 +38,16 @@ public final class DivActionScrollBy: Sendable {
     resolver.resolveEnum(overflow) ?? Overflow.clamp
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      animated: try dictionary.getOptionalExpressionField("animated", context: context),
+      id: try dictionary.getExpressionField("id", context: context),
+      itemCount: try dictionary.getOptionalExpressionField("item_count", context: context),
+      offset: try dictionary.getOptionalExpressionField("offset", context: context),
+      overflow: try dictionary.getOptionalExpressionField("overflow", context: context)
+    )
+  }
+
   init(
     animated: Expression<Bool>? = nil,
     id: Expression<String>,

@@ -15,6 +15,13 @@ public final class DivPatch: Sendable {
     public let id: String
     public let items: [Div]?
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        id: try dictionary.getField("id", context: context),
+        items: try dictionary.getOptionalArray("items", transform: { (dict: [String: Any]) in try? Div(dictionary: dict, context: context) })
+      )
+    }
+
     init(
       id: String,
       items: [Div]? = nil
@@ -35,6 +42,15 @@ public final class DivPatch: Sendable {
 
   static let changesValidator: AnyArrayValueValidator<DivPatch.Change> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      changes: try dictionary.getArray("changes", transform: { (dict: [String: Any]) in try? DivPatch.Change(dictionary: dict, context: context) }, validator: Self.changesValidator),
+      mode: try dictionary.getOptionalExpressionField("mode", context: context),
+      onAppliedActions: try dictionary.getOptionalArray("on_applied_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      onFailedActions: try dictionary.getOptionalArray("on_failed_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     changes: [Change],

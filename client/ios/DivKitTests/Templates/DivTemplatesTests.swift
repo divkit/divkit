@@ -230,4 +230,53 @@ final class DivTemplatesTests: XCTestCase {
       XCTFail("Can't get template `text` property")
     }
   }
+
+  func test_untypedResolver_matchesTypedResolver() {
+    let templates: [String: Any] = [
+      "base_text": [
+        "type": "text",
+        "font_size": 14,
+        "$text": "text_value",
+      ],
+      "list_item": [
+        "type": "container",
+        "orientation": "vertical",
+        "items": [
+          [
+            "type": "base_text",
+            "$text_value": "title",
+          ],
+        ],
+      ],
+    ]
+    let card: [String: Any] = [
+      "log_id": "test",
+      "states": [
+        [
+          "state_id": 0,
+          "div": [
+            "type": "list_item",
+            "title": "Resolved through chain",
+          ],
+        ],
+      ],
+    ]
+
+    let typedResult = DivData.resolve(
+      card: card,
+      templates: templates,
+      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
+    )
+    let untypedResult = DivData.resolve(
+      card: card,
+      templates: templates,
+      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+    )
+
+    XCTAssertEqual(typedResult.value, untypedResult.value)
+    XCTAssertEqual(
+      typedResult.errorsOrWarnings?.count ?? 0,
+      untypedResult.errorsOrWarnings?.count ?? 0
+    )
+  }
 }

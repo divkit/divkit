@@ -17,6 +17,13 @@ public final class DivTextRangeMaskSolid: Sendable {
     resolver.resolveNumeric(isEnabled) ?? true
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context)
+    )
+  }
+
   init(
     color: Expression<Color>,
     isEnabled: Expression<Bool>? = nil

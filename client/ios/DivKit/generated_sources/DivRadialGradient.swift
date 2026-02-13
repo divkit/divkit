@@ -20,6 +20,13 @@ public final class DivRadialGradient: Sendable {
     static let positionValidator: AnyValueValidator<Double> =
       makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+        position: try dictionary.getExpressionField("position", validator: Self.positionValidator, context: context)
+      )
+    }
+
     init(
       color: Expression<Color>,
       position: Expression<Double>
@@ -45,6 +52,16 @@ public final class DivRadialGradient: Sendable {
 
   static let colorsValidator: AnyArrayValueValidator<Expression<Color>> =
     makeArrayValidator(minItems: 2)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      centerX: try dictionary.getOptionalField("center_x", transform: { (dict: [String: Any]) in try DivRadialGradientCenter(dictionary: dict, context: context) }),
+      centerY: try dictionary.getOptionalField("center_y", transform: { (dict: [String: Any]) in try DivRadialGradientCenter(dictionary: dict, context: context) }),
+      colorMap: try dictionary.getOptionalArray("color_map", transform: { (dict: [String: Any]) in try? DivRadialGradient.ColorPoint(dictionary: dict, context: context) }, validator: Self.colorMapValidator),
+      colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:), validator: Self.colorsValidator, context: context),
+      radius: try dictionary.getOptionalField("radius", transform: { (dict: [String: Any]) in try DivRadialGradientRadius(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     centerX: DivRadialGradientCenter? = nil,

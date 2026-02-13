@@ -10,6 +10,8 @@ import enum DivKit.Expression
 public final class EntityWithoutProperties: Sendable {
   public static let type: String = "entity_without_properties"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

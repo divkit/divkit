@@ -122,16 +122,21 @@ class SwiftEntity(Entity):
     def deserializing_constructor_declaration(self) -> Text:
         props = self.instance_properties_swift
         args_decl = swift_template_deserializable_args_decl(self.generation_mode)
+        context_arg = '' if self.generation_mode.is_template else ', context: ParsingContext'
         if not props:
-            return Text(f'public init(dictionary: [String: Any]{args_decl}) throws {{}}')
-        result = Text(f'public convenience init(dictionary: [String: Any]{args_decl}) throws {{')
+            return Text(f'public init(dictionary: [String: Any]{args_decl}{context_arg}) throws {{}}')
+        result = Text(f'public convenience init(dictionary: [String: Any]{args_decl}{context_arg}) throws {{')
         lines = Text('self.init(')
         for prop in props:
             tail = '' if prop == props[-1] else ','
             if prop.name == PARENT_PROPERTY.name:
                 lines += f'  {prop.declaration_name}: dictionary["type"] as? String{tail}'
             else:
-                lines += f'  {prop.declaration_name}: dictionary.{prop.deserialization_expression}{tail}'
+                throw_prefix = '' if self.generation_mode.is_template else 'try '
+                lines += (
+                    f'  {prop.declaration_name}: '
+                    f'{throw_prefix}dictionary.{prop.deserialization_expression_for_mode(self.generation_mode)}{tail}'
+                )
         lines += ')'
         result += lines.indented()
         result += '}'
@@ -587,19 +592,54 @@ class SwiftProperty(Property):
 
     @property
     def deserialization_expression(self) -> str:
+        return self.deserialization_expression_for_mode(self.mode)
+
+    def deserialization_expression_for_mode(self, mode: GenerationMode) -> str:
+        is_normal_mode = mode in [
+            GenerationMode.NORMAL_WITH_TEMPLATES,
+            GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+        ]
+        if is_normal_mode and self.property_type.can_be_templated:
+            validator_arg_string = self.validator_arg(entity_name='Self', mode=mode)
+            declaration_mode = SwiftProperty.SwiftMode(value=mode, use_expressions=False)
+
+            if isinstance(self.property_type, Array):
+                item_type = cast(SwiftPropertyType, self.property_type.property_type).prefixed_declaration(
+                    declaration_mode
+                )
+                optional_suffix = 'Optional' if self.parsed_value_is_optional else ''
+                expr = (
+                    f'"{self.dict_field}", transform: '
+                    f'{{ (dict: [String: Any]) in try? {item_type}(dictionary: dict, context: context) }}'
+                    f'{validator_arg_string}'
+                )
+                return f'get{optional_suffix}Array({expr})'
+
+            value_type = cast(SwiftPropertyType, self.property_type).prefixed_declaration(
+                declaration_mode
+            )
+            optional_suffix = 'Optional' if self.parsed_value_is_optional else ''
+            expr = (
+                f'"{self.dict_field}", transform: '
+                f'{{ (dict: [String: Any]) in try {value_type}(dictionary: dict, context: context) }}'
+                f'{validator_arg_string}'
+            )
+            return f'get{optional_suffix}Field({expr})'
+
         if isinstance(self.property_type, Array):
             type_suffix = 'Array'
         else:
             type_suffix = 'Field'
         if self.property_type.can_be_templated:
-            template_to_type_arg = swift_template_deserializable_args(self.mode)
+            template_to_type_arg = swift_template_deserializable_args(mode)
         else:
             template_to_type_arg = ''
-        optional_suffix = 'Optional' if self.parsed_value_is_optional or self.mode.is_template else ''
+        optional_suffix = 'Optional' if self.parsed_value_is_optional or mode.is_template else ''
         expression_suffix = 'Expression' if self.supports_expressions else ''
-        validator_arg_string = self.validator_arg(entity_name='Self', mode=self.mode)
+        validator_arg_string = self.validator_arg(entity_name='Self', mode=mode)
         transformed = cast(SwiftPropertyType, self.property_type).transform_arg
-        expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}'
+        context_arg = ', context: context' if is_normal_mode else ''
+        expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}{context_arg}'
         return f'get{optional_suffix}{expression_suffix}{type_suffix}({expr})'
 
     def add_default_value_to(self, declaration: str, public_default_value: bool = False) -> str:

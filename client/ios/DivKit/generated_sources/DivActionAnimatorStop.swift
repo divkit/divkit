@@ -8,6 +8,12 @@ public final class DivActionAnimatorStop: Sendable {
   public static let type: String = "animator_stop"
   public let animatorId: String
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      animatorId: try dictionary.getField("animator_id", context: context)
+    )
+  }
+
   init(
     animatorId: String
   ) {

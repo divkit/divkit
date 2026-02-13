@@ -69,8 +69,11 @@ extension Field {
     case let .link(link):
       return context.templateData.getArray(
         link,
-        transform: { (value: U) in
-          expressionTransform(value, transform: transform)
+        transform: { (value: U) -> DeserializationResult<Expression<E>> in
+          guard let transformed = expressionTransform(value, transform: transform) else {
+            return .noValue
+          }
+          return .success(transformed)
         },
         validator: validator
       )

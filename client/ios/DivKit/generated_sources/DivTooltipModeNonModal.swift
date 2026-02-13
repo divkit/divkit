@@ -7,6 +7,8 @@ import VGSL
 public final class DivTooltipModeNonModal: Sendable {
   public static let type: String = "non_modal"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

@@ -59,6 +59,18 @@ public final class DivEdgeInsets: Sendable {
   static let topValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      bottom: try dictionary.getOptionalExpressionField("bottom", validator: Self.bottomValidator, context: context),
+      end: try dictionary.getOptionalExpressionField("end", validator: Self.endValidator, context: context),
+      left: try dictionary.getOptionalExpressionField("left", validator: Self.leftValidator, context: context),
+      right: try dictionary.getOptionalExpressionField("right", validator: Self.rightValidator, context: context),
+      start: try dictionary.getOptionalExpressionField("start", validator: Self.startValidator, context: context),
+      top: try dictionary.getOptionalExpressionField("top", validator: Self.topValidator, context: context),
+      unit: try dictionary.getOptionalExpressionField("unit", context: context)
+    )
+  }
+
   init(
     bottom: Expression<Int>? = nil,
     end: Expression<Int>? = nil,

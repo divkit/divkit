@@ -103,6 +103,50 @@ public enum Div: Sendable {
   }
 }
 
+extension Div {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivImage.type:
+      self = .divImage(try DivImage(dictionary: dictionary, context: context))
+    case DivGifImage.type:
+      self = .divGifImage(try DivGifImage(dictionary: dictionary, context: context))
+    case DivText.type:
+      self = .divText(try DivText(dictionary: dictionary, context: context))
+    case DivSeparator.type:
+      self = .divSeparator(try DivSeparator(dictionary: dictionary, context: context))
+    case DivContainer.type:
+      self = .divContainer(try DivContainer(dictionary: dictionary, context: context))
+    case DivGrid.type:
+      self = .divGrid(try DivGrid(dictionary: dictionary, context: context))
+    case DivGallery.type:
+      self = .divGallery(try DivGallery(dictionary: dictionary, context: context))
+    case DivPager.type:
+      self = .divPager(try DivPager(dictionary: dictionary, context: context))
+    case DivTabs.type:
+      self = .divTabs(try DivTabs(dictionary: dictionary, context: context))
+    case DivState.type:
+      self = .divState(try DivState(dictionary: dictionary, context: context))
+    case DivCustom.type:
+      self = .divCustom(try DivCustom(dictionary: dictionary, context: context))
+    case DivIndicator.type:
+      self = .divIndicator(try DivIndicator(dictionary: dictionary, context: context))
+    case DivSlider.type:
+      self = .divSlider(try DivSlider(dictionary: dictionary, context: context))
+    case DivSwitch.type:
+      self = .divSwitch(try DivSwitch(dictionary: dictionary, context: context))
+    case DivInput.type:
+      self = .divInput(try DivInput(dictionary: dictionary, context: context))
+    case DivSelect.type:
+      self = .divSelect(try DivSelect(dictionary: dictionary, context: context))
+    case DivVideo.type:
+      self = .divVideo(try DivVideo(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension Div: Equatable {
   public static func ==(lhs: Div, rhs: Div) -> Bool {

@@ -52,6 +52,17 @@ public final class DivScaleTransition: DivTransitionBase, Sendable {
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator", context: context),
+      pivotX: try dictionary.getOptionalExpressionField("pivot_x", validator: Self.pivotXValidator, context: context),
+      pivotY: try dictionary.getOptionalExpressionField("pivot_y", validator: Self.pivotYValidator, context: context),
+      scale: try dictionary.getOptionalExpressionField("scale", validator: Self.scaleValidator, context: context),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay", validator: Self.startDelayValidator, context: context)
+    )
+  }
+
   init(
     duration: Expression<Int>? = nil,
     interpolator: Expression<DivAnimationInterpolator>? = nil,

@@ -7,7 +7,7 @@ import Serialization
 public final class WithoutDefault: Sendable {
   public static let type: String = "non_default"
 
-  public init(dictionary: [String: Any]) throws {}
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
 
   init() {}
 }

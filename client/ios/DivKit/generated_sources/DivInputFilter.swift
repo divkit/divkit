@@ -19,6 +19,20 @@ public enum DivInputFilter: Sendable {
   }
 }
 
+extension DivInputFilter {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivInputFilterRegex.type:
+      self = .divInputFilterRegex(try DivInputFilterRegex(dictionary: dictionary, context: context))
+    case DivInputFilterExpression.type:
+      self = .divInputFilterExpression(try DivInputFilterExpression(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-input-filter", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivInputFilter: Equatable {
   public static func ==(lhs: DivInputFilter, rhs: DivInputFilter) -> Bool {

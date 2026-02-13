@@ -25,6 +25,24 @@ public enum DivActionScrollDestination: Sendable {
   }
 }
 
+extension DivActionScrollDestination {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case OffsetDestination.type:
+      self = .offsetDestination(try OffsetDestination(dictionary: dictionary, context: context))
+    case IndexDestination.type:
+      self = .indexDestination(try IndexDestination(dictionary: dictionary, context: context))
+    case StartDestination.type:
+      self = .startDestination(try StartDestination(dictionary: dictionary, context: context))
+    case EndDestination.type:
+      self = .endDestination(try EndDestination(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-action-scroll-destination", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivActionScrollDestination: Equatable {
   public static func ==(lhs: DivActionScrollDestination, rhs: DivActionScrollDestination) -> Bool {

@@ -21,6 +21,14 @@ public final class DivActionUpdateStructure: Sendable {
   static let pathValidator: AnyValueValidator<String> =
     makeStringValidator(regex: "^(?!/)(.+)(?<!/)$")
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      path: try dictionary.getExpressionField("path", validator: Self.pathValidator, context: context),
+      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }),
+      variableName: try dictionary.getExpressionField("variable_name", context: context)
+    )
+  }
+
   init(
     path: Expression<String>,
     value: DivTypedValue,

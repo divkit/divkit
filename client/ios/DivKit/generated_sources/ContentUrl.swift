@@ -12,6 +12,12 @@ public final class ContentUrl: Sendable {
     resolver.resolveUrl(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      value: try dictionary.getExpressionField("value", transform: URL.makeFromNonEncodedString, context: context)
+    )
+  }
+
   init(
     value: Expression<URL>
   ) {

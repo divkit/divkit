@@ -12,6 +12,12 @@ public final class EntityWithOptionalComplexProperty: Sendable {
       resolver.resolveUrl(value)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        value: try dictionary.getExpressionField("value", transform: URL.makeFromNonEncodedString, context: context)
+      )
+    }
+
     init(
       value: Expression<URL>
     ) {
@@ -21,6 +27,12 @@ public final class EntityWithOptionalComplexProperty: Sendable {
 
   public static let type: String = "entity_with_optional_complex_property"
   public let property: Property?
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithOptionalComplexProperty.Property(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     property: Property? = nil

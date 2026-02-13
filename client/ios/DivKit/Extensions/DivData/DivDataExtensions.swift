@@ -95,8 +95,59 @@ extension DivData: DivBlockModeling {
 extension DivData {
   public static func resolve(
     card cardDict: [String: Any],
-    templates templatesDict: [String: Any]?
+    templates templatesDict: [String: Any]?,
+    flagsInfo: DivFlagsInfo = .default
   ) -> DeserializationResult<DivData> {
+    if flagsInfo.useUntypedTemplateResolver {
+      var resolver = UntypedDivTemplateResolver(templates: templatesDict)
+      let resolvedCardResult = resolver.resolve(card: cardDict)
+      let parsingContext = ParsingContext()
+
+      guard let resolvedCard = resolvedCardResult.value else {
+        return .failure(resolvedCardResult.errorsOrWarnings ?? NonEmptyArray(.generic))
+      }
+
+      let divDataResult: DeserializationResult<DivData>
+      do {
+        divDataResult = try .success(DivData(dictionary: resolvedCard, context: parsingContext))
+      } catch let error as DeserializationError {
+        divDataResult = .failure(NonEmptyArray(error))
+      } catch {
+        divDataResult =
+          .failure(NonEmptyArray(.unexpectedError(message: String(describing: error))))
+      }
+
+      let contextWarnings: NonEmptyArray<DeserializationError>? = NonEmptyArray(parsingContext
+        .warnings
+      )
+      let contextErrors: NonEmptyArray<DeserializationError>? = NonEmptyArray(parsingContext.errors)
+      let resolverWarnings = resolvedCardResult.warnings
+
+      let allIssues: NonEmptyArray<DeserializationError>? = NonEmptyArray(
+        mergeErrors(contextWarnings, contextErrors, resolverWarnings)
+      )
+
+      switch divDataResult {
+      case let .success(value):
+        if let warnings = allIssues {
+          return .partialSuccess(value, warnings: warnings)
+        }
+        return .success(value)
+      case let .partialSuccess(value, warnings):
+        if let mergedWarnings = NonEmptyArray(mergeErrors(warnings, allIssues)) {
+          return .partialSuccess(value, warnings: mergedWarnings)
+        }
+        return .success(value)
+      case let .failure(errors):
+        return .failure(NonEmptyArray(mergeErrors(errors, allIssues))!)
+      case .noValue:
+        if let warnings = allIssues {
+          return .failure(warnings)
+        }
+        return .failure(NonEmptyArray(.generic))
+      }
+    }
+
     let divTemplates = templatesDict.map(DivTemplates.init) ?? .empty
     return divTemplates.parseValue(type: DivDataTemplate.self, from: cardDict)
   }

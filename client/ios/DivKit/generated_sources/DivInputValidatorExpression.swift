@@ -23,6 +23,15 @@ public final class DivInputValidatorExpression: Sendable {
     resolver.resolveString(labelId)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      allowEmpty: try dictionary.getOptionalExpressionField("allow_empty", context: context),
+      condition: try dictionary.getExpressionField("condition", context: context),
+      labelId: try dictionary.getExpressionField("label_id", context: context),
+      variable: try dictionary.getField("variable", context: context)
+    )
+  }
+
   init(
     allowEmpty: Expression<Bool>? = nil,
     condition: Expression<Bool>,

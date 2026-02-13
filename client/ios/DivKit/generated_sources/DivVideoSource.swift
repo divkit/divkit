@@ -24,6 +24,13 @@ public final class DivVideoSource: Sendable {
     static let widthValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 > 0 })
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        height: try dictionary.getExpressionField("height", validator: Self.heightValidator, context: context),
+        width: try dictionary.getExpressionField("width", validator: Self.widthValidator, context: context)
+      )
+    }
+
     init(
       height: Expression<Int>,
       width: Expression<Int>
@@ -49,6 +56,15 @@ public final class DivVideoSource: Sendable {
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
     resolver.resolveUrl(url)
+  }
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      bitrate: try dictionary.getOptionalExpressionField("bitrate", context: context),
+      mimeType: try dictionary.getExpressionField("mime_type", context: context),
+      resolution: try dictionary.getOptionalField("resolution", transform: { (dict: [String: Any]) in try DivVideoSource.Resolution(dictionary: dict, context: context) }),
+      url: try dictionary.getExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
+    )
   }
 
   init(

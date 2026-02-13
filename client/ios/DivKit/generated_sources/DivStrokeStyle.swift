@@ -19,6 +19,20 @@ public enum DivStrokeStyle: Sendable {
   }
 }
 
+extension DivStrokeStyle {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivStrokeStyleSolid.type:
+      self = .divStrokeStyleSolid(try DivStrokeStyleSolid(dictionary: dictionary, context: context))
+    case DivStrokeStyleDashed.type:
+      self = .divStrokeStyleDashed(try DivStrokeStyleDashed(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-stroke-style", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivStrokeStyle: Equatable {
   public static func ==(lhs: DivStrokeStyle, rhs: DivStrokeStyle) -> Bool {

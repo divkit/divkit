@@ -54,6 +54,22 @@ public final class DivDisappearAction: DivSightAction, @unchecked Sendable {
   static let visibilityPercentageValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 && $0 < 100 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      disappearDuration: try dictionary.getOptionalExpressionField("disappear_duration", validator: Self.disappearDurationValidator, context: context),
+      downloadCallbacks: try dictionary.getOptionalField("download_callbacks", transform: { (dict: [String: Any]) in try DivDownloadCallbacks(dictionary: dict, context: context) }),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
+      logId: try dictionary.getExpressionField("log_id", context: context),
+      logLimit: try dictionary.getOptionalExpressionField("log_limit", validator: Self.logLimitValidator, context: context),
+      payload: try dictionary.getOptionalField("payload", context: context),
+      referer: try dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString, context: context),
+      scopeId: try dictionary.getOptionalField("scope_id", context: context),
+      typed: try dictionary.getOptionalField("typed", transform: { (dict: [String: Any]) in try DivActionTyped(dictionary: dict, context: context) }),
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, context: context),
+      visibilityPercentage: try dictionary.getOptionalExpressionField("visibility_percentage", validator: Self.visibilityPercentageValidator, context: context)
+    )
+  }
+
   init(
     disappearDuration: Expression<Int>? = nil,
     downloadCallbacks: DivDownloadCallbacks? = nil,

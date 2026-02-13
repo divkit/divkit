@@ -51,6 +51,24 @@ public final class DivTooltip: Sendable {
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      animationIn: try dictionary.getOptionalField("animation_in", transform: { (dict: [String: Any]) in try DivAnimation(dictionary: dict, context: context) }),
+      animationOut: try dictionary.getOptionalField("animation_out", transform: { (dict: [String: Any]) in try DivAnimation(dictionary: dict, context: context) }),
+      backgroundAccessibilityDescription: try dictionary.getOptionalExpressionField("background_accessibility_description", context: context),
+      bringToTopId: try dictionary.getOptionalField("bring_to_top_id", context: context),
+      closeByTapOutside: try dictionary.getOptionalExpressionField("close_by_tap_outside", context: context),
+      div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      id: try dictionary.getField("id", context: context),
+      mode: try dictionary.getOptionalField("mode", transform: { (dict: [String: Any]) in try DivTooltipMode(dictionary: dict, context: context) }),
+      offset: try dictionary.getOptionalField("offset", transform: { (dict: [String: Any]) in try DivPoint(dictionary: dict, context: context) }),
+      position: try dictionary.getExpressionField("position", context: context),
+      substrateDiv: try dictionary.getOptionalField("substrate_div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+      tapOutsideActions: try dictionary.getOptionalArray("tap_outside_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     animationIn: DivAnimation? = nil,
     animationOut: DivAnimation? = nil,

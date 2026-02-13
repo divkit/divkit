@@ -18,6 +18,14 @@ public final class DivActionDictSetValue: Sendable {
     resolver.resolveString(variableName)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      key: try dictionary.getExpressionField("key", context: context),
+      value: try dictionary.getOptionalField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }),
+      variableName: try dictionary.getExpressionField("variable_name", context: context)
+    )
+  }
+
   init(
     key: Expression<String>,
     value: DivTypedValue? = nil,

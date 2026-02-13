@@ -19,6 +19,20 @@ public enum DivShape: Sendable {
   }
 }
 
+extension DivShape {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivRoundedRectangleShape.type:
+      self = .divRoundedRectangleShape(try DivRoundedRectangleShape(dictionary: dictionary, context: context))
+    case DivCircleShape.type:
+      self = .divCircleShape(try DivCircleShape(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-shape", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivShape: Equatable {
   public static func ==(lhs: DivShape, rhs: DivShape) -> Bool {

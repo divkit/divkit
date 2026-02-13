@@ -11,6 +11,12 @@ public final class DivAppearanceSetTransition: Sendable {
   static let itemsValidator: AnyArrayValueValidator<DivAppearanceTransition> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivAppearanceTransition(dictionary: dict, context: context) }, validator: Self.itemsValidator)
+    )
+  }
+
   init(
     items: [DivAppearanceTransition]
   ) {
