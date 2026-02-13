@@ -14,6 +14,14 @@ public final class DivWrapContentSize: Sendable {
     resolver.resolveNumeric(constrained)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      constrained: try dictionary.getOptionalExpressionField("constrained", context: context),
+      maxSize: try dictionary.getOptionalField("max_size", transform: { (dict: [String: Any]) in try DivSizeUnitValue(dictionary: dict, context: context) }),
+      minSize: try dictionary.getOptionalField("min_size", transform: { (dict: [String: Any]) in try DivSizeUnitValue(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     constrained: Expression<Bool>? = nil,
     maxSize: DivSizeUnitValue? = nil,

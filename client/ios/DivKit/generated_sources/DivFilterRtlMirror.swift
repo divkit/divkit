@@ -7,6 +7,8 @@ import VGSL
 public final class DivFilterRtlMirror: Sendable {
   public static let type: String = "rtl_mirror"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

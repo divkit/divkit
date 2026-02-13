@@ -54,6 +54,20 @@ public final class EntityWithSimpleProperties: EntityProtocol, Sendable {
   static let positiveIntegerValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      boolean: try dictionary.getOptionalExpressionField("boolean", context: context),
+      booleanInt: try dictionary.getOptionalExpressionField("boolean_int", context: context),
+      color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:), context: context),
+      double: try dictionary.getOptionalExpressionField("double", context: context),
+      id: try dictionary.getOptionalField("id", context: context),
+      integer: try dictionary.getOptionalExpressionField("integer", context: context),
+      positiveInteger: try dictionary.getOptionalExpressionField("positive_integer", validator: Self.positiveIntegerValidator, context: context),
+      string: try dictionary.getOptionalExpressionField("string", context: context),
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
+    )
+  }
+
   init(
     boolean: Expression<Bool>? = nil,
     booleanInt: Expression<Bool>? = nil,

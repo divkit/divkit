@@ -37,6 +37,32 @@ public enum DivTypedValue: Sendable {
   }
 }
 
+extension DivTypedValue {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case StringValue.type:
+      self = .stringValue(try StringValue(dictionary: dictionary, context: context))
+    case IntegerValue.type:
+      self = .integerValue(try IntegerValue(dictionary: dictionary, context: context))
+    case NumberValue.type:
+      self = .numberValue(try NumberValue(dictionary: dictionary, context: context))
+    case ColorValue.type:
+      self = .colorValue(try ColorValue(dictionary: dictionary, context: context))
+    case BooleanValue.type:
+      self = .booleanValue(try BooleanValue(dictionary: dictionary, context: context))
+    case UrlValue.type:
+      self = .urlValue(try UrlValue(dictionary: dictionary, context: context))
+    case DictValue.type:
+      self = .dictValue(try DictValue(dictionary: dictionary, context: context))
+    case ArrayValue.type:
+      self = .arrayValue(try ArrayValue(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-typed-value", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTypedValue: Equatable {
   public static func ==(lhs: DivTypedValue, rhs: DivTypedValue) -> Bool {

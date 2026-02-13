@@ -28,6 +28,14 @@ public final class DivFixedLengthInputMask: DivInputMaskBase, Sendable {
     static let placeholderValidator: AnyValueValidator<String> =
       makeStringValidator(minLength: 1)
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        key: try dictionary.getExpressionField("key", validator: Self.keyValidator, context: context),
+        placeholder: try dictionary.getOptionalExpressionField("placeholder", validator: Self.placeholderValidator, context: context),
+        regex: try dictionary.getOptionalExpressionField("regex", context: context)
+      )
+    }
+
     init(
       key: Expression<String>,
       placeholder: Expression<String>? = nil,
@@ -55,6 +63,15 @@ public final class DivFixedLengthInputMask: DivInputMaskBase, Sendable {
 
   static let patternElementsValidator: AnyArrayValueValidator<DivFixedLengthInputMask.PatternElement> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      alwaysVisible: try dictionary.getOptionalExpressionField("always_visible", context: context),
+      pattern: try dictionary.getExpressionField("pattern", context: context),
+      patternElements: try dictionary.getArray("pattern_elements", transform: { (dict: [String: Any]) in try? DivFixedLengthInputMask.PatternElement(dictionary: dict, context: context) }, validator: Self.patternElementsValidator),
+      rawTextVariable: try dictionary.getField("raw_text_variable", context: context)
+    )
+  }
 
   init(
     alwaysVisible: Expression<Bool>? = nil,

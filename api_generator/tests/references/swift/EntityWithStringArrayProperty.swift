@@ -15,6 +15,12 @@ public final class EntityWithStringArrayProperty: Sendable {
   static let arrayValidator: AnyArrayValueValidator<Expression<String>> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      array: try dictionary.getExpressionArray("array", validator: Self.arrayValidator, context: context)
+    )
+  }
+
   init(
     array: [Expression<String>]
   ) {

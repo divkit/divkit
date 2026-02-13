@@ -9,6 +9,13 @@ public final class DivData: Sendable {
     public let div: Div
     public let stateId: Int
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+        stateId: try dictionary.getField("state_id", context: context)
+      )
+    }
+
     init(
       div: Div,
       stateId: Int
@@ -32,6 +39,18 @@ public final class DivData: Sendable {
 
   static let statesValidator: AnyArrayValueValidator<DivData.State> =
     makeArrayValidator(minItems: 1)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
+      logId: try dictionary.getField("log_id", context: context),
+      states: try dictionary.getArray("states", transform: { (dict: [String: Any]) in try? DivData.State(dictionary: dict, context: context) }, validator: Self.statesValidator),
+      timers: try dictionary.getOptionalArray("timers", transform: { (dict: [String: Any]) in try? DivTimer(dictionary: dict, context: context) }),
+      transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector", context: context),
+      variableTriggers: try dictionary.getOptionalArray("variable_triggers", transform: { (dict: [String: Any]) in try? DivTrigger(dictionary: dict, context: context) }),
+      variables: try dictionary.getOptionalArray("variables", transform: { (dict: [String: Any]) in try? DivVariable(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     functions: [DivFunction]?,

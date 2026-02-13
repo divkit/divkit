@@ -19,6 +19,20 @@ public enum DivTooltipMode: Sendable {
   }
 }
 
+extension DivTooltipMode {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivTooltipModeNonModal.type:
+      self = .divTooltipModeNonModal(try DivTooltipModeNonModal(dictionary: dictionary, context: context))
+    case DivTooltipModeModal.type:
+      self = .divTooltipModeModal(try DivTooltipModeModal(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-tooltip-mode", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTooltipMode: Equatable {
   public static func ==(lhs: DivTooltipMode, rhs: DivTooltipMode) -> Bool {

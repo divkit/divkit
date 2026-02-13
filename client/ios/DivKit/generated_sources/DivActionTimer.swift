@@ -27,6 +27,13 @@ public final class DivActionTimer: Sendable {
     resolver.resolveString(id)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      action: try dictionary.getExpressionField("action", context: context),
+      id: try dictionary.getExpressionField("id", context: context)
+    )
+  }
+
   init(
     action: Expression<Action>,
     id: Expression<String>

@@ -7,6 +7,8 @@ import VGSL
 public final class DivPageContentSize: Sendable {
   public static let type: String = "wrap_content"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

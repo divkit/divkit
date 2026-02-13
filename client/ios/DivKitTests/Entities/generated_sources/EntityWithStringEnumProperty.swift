@@ -21,6 +21,12 @@ public final class EntityWithStringEnumProperty: Sendable {
     resolver.resolveEnum(property)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getExpressionField("property", context: context)
+    )
+  }
+
   init(
     property: Expression<Property>
   ) {

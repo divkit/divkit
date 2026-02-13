@@ -7,7 +7,7 @@ import Serialization
 public final class WithDefault: Sendable {
   public static let type: String = "default"
 
-  public init(dictionary: [String: Any]) throws {}
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
 
   init() {}
 }

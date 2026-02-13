@@ -7,6 +7,8 @@ import VGSL
 public final class DivStrokeStyleSolid: Sendable {
   public static let type: String = "solid"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

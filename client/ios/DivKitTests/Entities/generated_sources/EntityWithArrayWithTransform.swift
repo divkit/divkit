@@ -18,6 +18,12 @@ public final class EntityWithArrayWithTransform: Sendable {
   static let arrayValidator: AnyArrayValueValidator<Expression<Color>> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      array: try dictionary.getExpressionArray("array", transform: Color.color(withHexString:), validator: Self.arrayValidator, context: context)
+    )
+  }
+
   init(
     array: [Expression<Color>]
   ) {

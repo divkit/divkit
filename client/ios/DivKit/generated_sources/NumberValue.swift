@@ -12,6 +12,12 @@ public final class NumberValue: Sendable {
     resolver.resolveNumeric(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      value: try dictionary.getExpressionField("value", context: context)
+    )
+  }
+
   init(
     value: Expression<Double>
   ) {

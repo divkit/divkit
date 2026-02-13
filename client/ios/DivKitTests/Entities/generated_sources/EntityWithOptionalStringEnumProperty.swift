@@ -21,6 +21,12 @@ public final class EntityWithOptionalStringEnumProperty: Sendable {
     resolver.resolveEnum(property)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      property: try dictionary.getOptionalExpressionField("property", context: context)
+    )
+  }
+
   init(
     property: Expression<Property>? = nil
   ) {

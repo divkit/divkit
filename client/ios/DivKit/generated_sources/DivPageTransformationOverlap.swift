@@ -49,6 +49,17 @@ public final class DivPageTransformationOverlap: Sendable {
   static let previousPageScaleValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      interpolator: try dictionary.getOptionalExpressionField("interpolator", context: context),
+      nextPageAlpha: try dictionary.getOptionalExpressionField("next_page_alpha", validator: Self.nextPageAlphaValidator, context: context),
+      nextPageScale: try dictionary.getOptionalExpressionField("next_page_scale", validator: Self.nextPageScaleValidator, context: context),
+      previousPageAlpha: try dictionary.getOptionalExpressionField("previous_page_alpha", validator: Self.previousPageAlphaValidator, context: context),
+      previousPageScale: try dictionary.getOptionalExpressionField("previous_page_scale", validator: Self.previousPageScaleValidator, context: context),
+      reversedStackingOrder: try dictionary.getOptionalExpressionField("reversed_stacking_order", context: context)
+    )
+  }
+
   init(
     interpolator: Expression<DivAnimationInterpolator>? = nil,
     nextPageAlpha: Expression<Double>? = nil,

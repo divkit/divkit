@@ -17,6 +17,13 @@ public final class DivActionArrayRemoveValue: Sendable {
     resolver.resolveString(variableName)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      index: try dictionary.getExpressionField("index", context: context),
+      variableName: try dictionary.getExpressionField("variable_name", context: context)
+    )
+  }
+
   init(
     index: Expression<Int>,
     variableName: Expression<String>

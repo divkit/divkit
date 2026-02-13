@@ -29,6 +29,40 @@ func getResult<U>(_ block: () throws -> U) -> DeserializationResult<U> {
   }
 }
 
+@usableFromInline
+func unwrapOptionalTransformedValue<T, U>(
+  _ value: T,
+  key: [some Any],
+  transform: (T) -> U?
+) throws -> U {
+  guard let transformed = transform(value) else {
+    throw invalidFieldErrorForKey(key, representation: value)
+  }
+  return transformed
+}
+
+@usableFromInline
+func rawRepresentableValue<T: RawRepresentable>(
+  _ raw: T.RawValue,
+  key: [some Any]
+) throws -> T {
+  guard let value = T(rawValue: raw) else {
+    throw invalidFieldErrorForKey(key, representation: raw)
+  }
+  return value
+}
+
+@usableFromInline
+func castValidSerializationValue<T: ValidSerializationValue>(
+  _ value: Any,
+  key: [some Any]
+) throws -> T {
+  guard let transformed = value as? T else {
+    throw invalidFieldErrorForKey(key, representation: value)
+  }
+  return transformed
+}
+
 extension Dictionary where Key == String {
   @usableFromInline
   func enclosedDictForKeySequence(_ keys: [Key]) throws -> Self {
@@ -151,18 +185,80 @@ extension Dictionary where Key == String {
 
 extension Dictionary where Key == String {
   @usableFromInline
-  func getOptionalField<T, U>(
+  func getOptionalFieldCore<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
-    validator: AnyValueValidator<U>?
+    validator: AnyValueValidator<U>?,
+    invalidValueHandler: ((Any) -> Void)?
   ) throws -> U? {
     guard let dict = try? enclosedDictForKeySequence(key), let value = dict[key.last!] else {
       return nil
     }
 
-    guard let valueBeforeConversion = value as? T,
-          let result = try? transform(valueBeforeConversion),
+    guard let valueBeforeConversion = value as? T else {
+      invalidValueHandler?(value)
+      return nil
+    }
+
+    guard let result = try? transform(valueBeforeConversion),
           validator?.isValid(result) != false else {
+      invalidValueHandler?(valueBeforeConversion)
+      return nil
+    }
+
+    return result
+  }
+
+  @usableFromInline
+  func getOptionalField<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>?
+  ) throws -> U? {
+    try getOptionalFieldCore(
+      key,
+      transform: transform,
+      validator: validator,
+      invalidValueHandler: nil
+    )
+  }
+
+  @usableFromInline
+  func getOptionalArrayCore<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyArrayValueValidator<U>?,
+    invalidContainerHandler: ((Any) -> Void)?,
+    invalidElementHandler: ((Int, Any) throws -> Void)?,
+    invalidTransformedElementHandler: ((Int, Any) -> Void)?
+  ) throws -> [U]? {
+    guard let dict = try? enclosedDictForKeySequence(key), let value = dict[key.last!] else {
+      return nil
+    }
+
+    guard let valueBeforeConversion = value as? NSArray else {
+      invalidContainerHandler?(value)
+      return nil
+    }
+
+    var result: [U] = []
+    result.reserveCapacity(valueBeforeConversion.count)
+    for (index, element) in valueBeforeConversion.enumerated() {
+      guard let typedElement = element as? T else {
+        try invalidElementHandler?(index, element)
+        continue
+      }
+
+      guard let transformed = try? transform(typedElement) else {
+        invalidTransformedElementHandler?(index, element)
+        continue
+      }
+
+      result.append(transformed)
+    }
+
+    if validator?.isValid(result) == false {
+      invalidContainerHandler?(valueBeforeConversion)
       return nil
     }
 
@@ -175,30 +271,16 @@ extension Dictionary where Key == String {
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>?
   ) throws -> [U]? {
-    guard let dict = try? enclosedDictForKeySequence(key), let value = dict[key.last!] else {
-      return nil
-    }
-
-    guard let valueBeforeConversion = value as? NSArray else {
-      return nil
-    }
-
-    let result: [U] = try valueBeforeConversion.enumerated().compactMap {
-      guard let element = $0.element as? T else {
-        throw invalidFieldErrorForKey(
-          key,
-          element: $0.offset,
-          representation: $0.element
-        )
-      }
-      return try? transform(element)
-    }
-
-    if validator?.isValid(result) == false {
-      return nil
-    }
-
-    return result
+    try getOptionalArrayCore(
+      key,
+      transform: transform,
+      validator: validator,
+      invalidContainerHandler: nil,
+      invalidElementHandler: { index, element in
+        throw invalidFieldErrorForKey(key, element: index, representation: element)
+      },
+      invalidTransformedElementHandler: nil
+    )
   }
 }
 
@@ -213,11 +295,8 @@ extension Dictionary where Key == String {
   ) throws -> U {
     try getField(
       key,
-      transform: { (value: T) throws -> U in
-        guard let result = transform(value) else {
-          throw invalidFieldErrorForKey(key, representation: value)
-        }
-        return result
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
       },
       validator: validator
     )
@@ -256,12 +335,13 @@ extension Dictionary where Key == String {
     transform: (T) -> U?,
     validator: AnyValueValidator<U>?
   ) throws -> U? {
-    try getOptionalField(key, transform: { (value: T) throws -> U in
-      guard let result = transform(value) else {
-        throw invalidFieldErrorForKey(key, representation: value)
-      }
-      return result
-    }, validator: validator)
+    try getOptionalField(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator
+    )
   }
 
   @usableFromInline
@@ -270,18 +350,87 @@ extension Dictionary where Key == String {
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>?
   ) throws -> [U]? {
-    try getOptionalArray(key, transform: { (value: T) throws -> U in
-      guard let result = transform(value) else {
-        throw invalidFieldErrorForKey(key, representation: value)
-      }
-      return result
-    }, validator: validator)
+    try getOptionalArray(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator
+    )
   }
 }
 
 // MARK: Required values (public interface)
 
 extension Dictionary where Key == String {
+  @usableFromInline
+  func getFieldWithContext<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U {
+    let result: DeserializationResult<U> = getResult {
+      try getField(key, transform: transform, validator: validator)
+    }
+    context.append(result: result)
+    return try result.unwrap()
+  }
+
+  @usableFromInline
+  func getArrayWithContext<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U] {
+    let result: DeserializationResult<[U]> = getResult {
+      try getArray(key, transform: transform, validator: validator)
+    }
+    context.append(result: result)
+    return try result.unwrap()
+  }
+
+  @usableFromInline
+  func getOptionalFieldWithContext<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U? {
+    try getOptionalFieldCore(
+      key,
+      transform: transform,
+      validator: validator,
+      invalidValueHandler: { value in
+        context.appendWarning(invalidFieldErrorForKey(key, representation: value))
+      }
+    )
+  }
+
+  @usableFromInline
+  func getOptionalArrayWithContext<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U]? {
+    try getOptionalArrayCore(
+      key,
+      transform: transform,
+      validator: validator,
+      invalidContainerHandler: { value in
+        context.appendWarning(invalidFieldErrorForKey(key, representation: value))
+      },
+      invalidElementHandler: { index, element in
+        context.appendWarning(invalidFieldErrorForKey(key, element: index, representation: element))
+      },
+      invalidTransformedElementHandler: { index, element in
+        context.appendWarning(invalidFieldErrorForKey(key, element: index, representation: element))
+      }
+    )
+  }
+
   @inlinable
   public func getField<T: ValidSerializationValue>(
     _ key: Key...,
@@ -295,7 +444,13 @@ extension Dictionary where Key == String {
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
   ) throws -> T {
-    try getField(key, transform: T.init(rawValue:), validator: validator)
+    try getField(
+      key,
+      transform: { raw in
+        try rawRepresentableValue(raw, key: key)
+      },
+      validator: validator
+    )
   }
 
   @inlinable
@@ -319,14 +474,6 @@ extension Dictionary where Key == String {
   }
 
   @inlinable
-  public func getArray(
-    _ key: Key...,
-    validator: AnyArrayValueValidator<Any>? = nil
-  ) -> DeserializationResult<[Any]> {
-    getArray(key, transform: { .success($0) }, validator: validator)
-  }
-
-  @inlinable
   public func getArray<T: ValidSerializationValue, U>(
     _ key: Key...,
     transform: (T) -> DeserializationResult<U>,
@@ -345,33 +492,15 @@ extension Dictionary where Key == String {
   }
 
   @inlinable
-  public func getArray<T: ValidSerializationValue, U>(
-    _ key: Key...,
-    transform: (T) -> U?,
-    validator: AnyArrayValueValidator<U>? = nil
-  ) -> DeserializationResult<[U]> {
-    getArray(key, transform: transform, validator: validator)
-  }
-
-  @inlinable
   public func getArray<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
   ) throws -> [T] {
     try getArray(
       key,
-      transform: { (obj: Any) -> T? in obj as? T },
-      validator: validator
-    )
-  }
-
-  @inlinable
-  public func getArray<T: ValidSerializationValue>(
-    _ key: Key...,
-    validator: AnyArrayValueValidator<T>? = nil
-  ) -> DeserializationResult<[T]> {
-    getArray(
-      key, transform: { (obj: Any) -> T? in obj as? T },
+      transform: { (obj: Any) -> T? in
+        try? castValidSerializationValue(obj, key: key)
+      },
       validator: validator
     )
   }
@@ -382,18 +511,6 @@ extension Dictionary where Key == String {
     validator: AnyArrayValueValidator<T>? = nil
   ) throws -> [T] {
     try getArray(
-      key,
-      transform: { (dict: Self) in try T(dictionary: dict) },
-      validator: validator
-    )
-  }
-
-  @inlinable
-  public func getArray<T: Deserializable>(
-    _ key: Key...,
-    validator: AnyArrayValueValidator<T>? = nil
-  ) -> DeserializationResult<[T]> {
-    getArray(
       key,
       transform: { (dict: Self) in try T(dictionary: dict) },
       validator: validator
@@ -451,7 +568,13 @@ extension Dictionary where Key == String {
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
   ) throws -> T? {
-    try getOptionalField(key, transform: T.init(rawValue:), validator: validator)
+    try getOptionalField(
+      key,
+      transform: { raw in
+        try rawRepresentableValue(raw, key: key)
+      },
+      validator: validator
+    )
   }
 
   @inlinable
@@ -503,7 +626,9 @@ extension Dictionary where Key == String {
   ) throws -> [T]? {
     try getOptionalArray(
       key,
-      transform: { (obj: Any) -> T? in (obj as? T.RawValue).flatMap { T(rawValue: $0) } },
+      transform: { (obj: Any) -> T? in
+        (obj as? T.RawValue).flatMap { try? rawRepresentableValue($0, key: key) }
+      },
       validator: validator
     )
   }
@@ -534,6 +659,262 @@ extension Dictionary where Key == String {
     try getOptionalArray(
       key, transform: { (dict: Self) in try T(dictionary: dict) },
       validator: validator
+    )
+  }
+}
+
+// MARK: Context-aware values (public interface)
+
+extension Dictionary where Key == String {
+  @inlinable
+  public func getField<T: ValidSerializationValue>(
+    _ key: Key...,
+    validator: AnyValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> T {
+    try getFieldWithContext(
+      key,
+      transform: { value in
+        try castValidSerializationValue(value, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getField<T: RawRepresentable>(
+    _ key: Key...,
+    validator: AnyValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> T {
+    try getFieldWithContext(
+      key,
+      transform: { raw in
+        try rawRepresentableValue(raw, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getField<T, U>(
+    _ key: Key...,
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U {
+    try getFieldWithContext(key, transform: transform, validator: validator, context: context)
+  }
+
+  @inlinable
+  public func getField<T, U>(
+    _ key: Key...,
+    transform: (T) -> U?,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U {
+    try getFieldWithContext(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getArray<T: ValidSerializationValue>(
+    _ key: Key...,
+    validator: AnyArrayValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> [T] {
+    try getArrayWithContext(
+      key,
+      transform: { value in
+        try castValidSerializationValue(value, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getArray<T: RawRepresentable>(
+    _ key: Key...,
+    validator: AnyArrayValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> [T] {
+    try getArrayWithContext(
+      key,
+      transform: { (obj: Any) throws -> T in
+        guard let rawValue = obj as? T.RawValue else {
+          throw invalidFieldErrorForKey(key, representation: obj)
+        }
+        return try rawRepresentableValue(rawValue, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getArray<T, U>(
+    _ key: Key...,
+    transform: (T) throws -> U,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U] {
+    try getArrayWithContext(key, transform: transform, validator: validator, context: context)
+  }
+
+  @inlinable
+  public func getArray<T, U>(
+    _ key: Key...,
+    transform: (T) -> U?,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U] {
+    try getArrayWithContext(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalField<T: ValidSerializationValue>(
+    _ key: Key...,
+    validator: AnyValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> T? {
+    try getOptionalFieldWithContext(
+      key,
+      transform: { value in
+        try castValidSerializationValue(value, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalField<T: RawRepresentable>(
+    _ key: Key...,
+    validator: AnyValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> T? {
+    try getOptionalFieldWithContext(
+      key,
+      transform: { raw in
+        try rawRepresentableValue(raw, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalField<T, U>(
+    _ key: Key...,
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U? {
+    try getOptionalFieldWithContext(
+      key,
+      transform: transform,
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalField<T, U>(
+    _ key: Key...,
+    transform: (T) -> U?,
+    validator: AnyValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> U? {
+    try getOptionalFieldWithContext(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalArray<T: ValidSerializationValue>(
+    _ key: Key...,
+    validator: AnyArrayValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> [T]? {
+    try getOptionalArrayWithContext(
+      key,
+      transform: { value in
+        try castValidSerializationValue(value, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalArray<T: RawRepresentable>(
+    _ key: Key...,
+    validator: AnyArrayValueValidator<T>? = nil,
+    context: ParsingContext
+  ) throws -> [T]? {
+    try getOptionalArrayWithContext(
+      key,
+      transform: { (obj: Any) throws -> T in
+        guard let rawValue = obj as? T.RawValue else {
+          throw invalidFieldErrorForKey(key, representation: obj)
+        }
+        return try rawRepresentableValue(rawValue, key: key)
+      },
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalArray<T, U>(
+    _ key: Key...,
+    transform: (T) throws -> U,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U]? {
+    try getOptionalArrayWithContext(
+      key,
+      transform: transform,
+      validator: validator,
+      context: context
+    )
+  }
+
+  @inlinable
+  public func getOptionalArray<T, U>(
+    _ key: Key...,
+    transform: (T) -> U?,
+    validator: AnyArrayValueValidator<U>? = nil,
+    context: ParsingContext
+  ) throws -> [U]? {
+    try getOptionalArrayWithContext(
+      key,
+      transform: { value in
+        try unwrapOptionalTransformedValue(value, key: key, transform: transform)
+      },
+      validator: validator,
+      context: context
     )
   }
 }

@@ -19,6 +19,20 @@ public enum DivRadialGradientCenter: Sendable {
   }
 }
 
+extension DivRadialGradientCenter {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivRadialGradientFixedCenter.type:
+      self = .divRadialGradientFixedCenter(try DivRadialGradientFixedCenter(dictionary: dictionary, context: context))
+    case DivRadialGradientRelativeCenter.type:
+      self = .divRadialGradientRelativeCenter(try DivRadialGradientRelativeCenter(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-center", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivRadialGradientCenter: Equatable {
   public static func ==(lhs: DivRadialGradientCenter, rhs: DivRadialGradientCenter) -> Bool {

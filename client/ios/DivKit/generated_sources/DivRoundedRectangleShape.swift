@@ -16,6 +16,16 @@ public final class DivRoundedRectangleShape: Sendable {
     resolver.resolveColor(backgroundColor)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:), context: context),
+      cornerRadius: try dictionary.getOptionalField("corner_radius", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
+      itemHeight: try dictionary.getOptionalField("item_height", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
+      itemWidth: try dictionary.getOptionalField("item_width", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
+      stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     backgroundColor: Expression<Color>? = nil,
     cornerRadius: DivFixedSize? = nil,

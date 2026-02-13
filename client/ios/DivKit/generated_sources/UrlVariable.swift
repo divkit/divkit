@@ -13,6 +13,13 @@ public final class UrlVariable: Sendable {
     resolver.resolveUrl(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      name: try dictionary.getField("name", context: context),
+      value: try dictionary.getExpressionField("value", transform: URL.makeFromNonEncodedString, context: context)
+    )
+  }
+
   init(
     name: String,
     value: Expression<URL>

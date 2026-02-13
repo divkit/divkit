@@ -19,6 +19,20 @@ public enum DivTextGradient: Sendable {
   }
 }
 
+extension DivTextGradient {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivLinearGradient.type:
+      self = .divLinearGradient(try DivLinearGradient(dictionary: dictionary, context: context))
+    case DivRadialGradient.type:
+      self = .divRadialGradient(try DivRadialGradient(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-text-gradient", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTextGradient: Equatable {
   public static func ==(lhs: DivTextGradient, rhs: DivTextGradient) -> Bool {

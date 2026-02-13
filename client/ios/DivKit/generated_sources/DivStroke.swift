@@ -25,6 +25,15 @@ public final class DivStroke: Sendable {
   static let widthValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      style: try dictionary.getOptionalField("style", transform: { (dict: [String: Any]) in try DivStrokeStyle(dictionary: dict, context: context) }),
+      unit: try dictionary.getOptionalExpressionField("unit", context: context),
+      width: try dictionary.getOptionalExpressionField("width", validator: Self.widthValidator, context: context)
+    )
+  }
+
   init(
     color: Expression<Color>,
     style: DivStrokeStyle? = nil,

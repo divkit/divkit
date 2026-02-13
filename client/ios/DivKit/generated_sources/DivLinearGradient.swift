@@ -20,6 +20,13 @@ public final class DivLinearGradient: Sendable {
     static let positionValidator: AnyValueValidator<Double> =
       makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+        position: try dictionary.getExpressionField("position", validator: Self.positionValidator, context: context)
+      )
+    }
+
     init(
       color: Expression<Color>,
       position: Expression<Double>
@@ -50,6 +57,14 @@ public final class DivLinearGradient: Sendable {
 
   static let colorsValidator: AnyArrayValueValidator<Expression<Color>> =
     makeArrayValidator(minItems: 2)
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      angle: try dictionary.getOptionalExpressionField("angle", validator: Self.angleValidator, context: context),
+      colorMap: try dictionary.getOptionalArray("color_map", transform: { (dict: [String: Any]) in try? DivLinearGradient.ColorPoint(dictionary: dict, context: context) }, validator: Self.colorMapValidator),
+      colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:), validator: Self.colorsValidator, context: context)
+    )
+  }
 
   init(
     angle: Expression<Int>? = nil,

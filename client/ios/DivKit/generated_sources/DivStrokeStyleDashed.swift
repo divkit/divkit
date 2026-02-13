@@ -7,6 +7,8 @@ import VGSL
 public final class DivStrokeStyleDashed: Sendable {
   public static let type: String = "dashed"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

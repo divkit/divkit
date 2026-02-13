@@ -19,6 +19,20 @@ public enum DivActionCopyToClipboardContent: Sendable {
   }
 }
 
+extension DivActionCopyToClipboardContent {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case ContentText.type:
+      self = .contentText(try ContentText(dictionary: dictionary, context: context))
+    case ContentUrl.type:
+      self = .contentUrl(try ContentUrl(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-action-copy-to-clipboard-content", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivActionCopyToClipboardContent: Equatable {
   public static func ==(lhs: DivActionCopyToClipboardContent, rhs: DivActionCopyToClipboardContent) -> Bool {

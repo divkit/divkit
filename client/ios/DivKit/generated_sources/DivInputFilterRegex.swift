@@ -12,6 +12,12 @@ public final class DivInputFilterRegex: Sendable {
     resolver.resolveString(pattern)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      pattern: try dictionary.getExpressionField("pattern", context: context)
+    )
+  }
+
   init(
     pattern: Expression<String>
   ) {

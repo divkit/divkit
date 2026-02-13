@@ -16,6 +16,16 @@ public final class PropertyVariable: Sendable {
     resolver.resolveString(get)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      get: try dictionary.getExpressionField("get", context: context),
+      name: try dictionary.getField("name", context: context),
+      newValueVariableName: try dictionary.getOptionalField("new_value_variable_name", context: context),
+      set: try dictionary.getOptionalArray("set", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      valueType: try dictionary.getField("value_type", context: context)
+    )
+  }
+
   init(
     get: Expression<String>,
     name: String,

@@ -8,6 +8,13 @@ public final class DivLayoutProvider: Sendable {
   public let heightVariableName: String?
   public let widthVariableName: String?
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      heightVariableName: try dictionary.getOptionalField("height_variable_name", context: context),
+      widthVariableName: try dictionary.getOptionalField("width_variable_name", context: context)
+    )
+  }
+
   init(
     heightVariableName: String? = nil,
     widthVariableName: String? = nil

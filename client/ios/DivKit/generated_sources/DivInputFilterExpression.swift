@@ -12,6 +12,12 @@ public final class DivInputFilterExpression: Sendable {
     resolver.resolveNumeric(condition)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      condition: try dictionary.getExpressionField("condition", context: context)
+    )
+  }
+
   init(
     condition: Expression<Bool>
   ) {

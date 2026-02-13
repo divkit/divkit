@@ -15,6 +15,12 @@ public final class EntityWithRawArray: @unchecked Sendable {
     resolver.resolveArray(array)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      array: try dictionary.getExpressionField("array", context: context)
+    )
+  }
+
   init(
     array: Expression<[Any]>
   ) {

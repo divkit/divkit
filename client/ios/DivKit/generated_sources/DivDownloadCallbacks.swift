@@ -8,6 +8,13 @@ public final class DivDownloadCallbacks: Sendable {
   public let onFailActions: [DivAction]?
   public let onSuccessActions: [DivAction]?
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      onFailActions: try dictionary.getOptionalArray("on_fail_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      onSuccessActions: try dictionary.getOptionalArray("on_success_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     onFailActions: [DivAction]? = nil,
     onSuccessActions: [DivAction]? = nil

@@ -13,6 +13,13 @@ public final class BooleanVariable: Sendable {
     resolver.resolveNumeric(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      name: try dictionary.getField("name", context: context),
+      value: try dictionary.getExpressionField("value", context: context)
+    )
+  }
+
   init(
     name: String,
     value: Expression<Bool>

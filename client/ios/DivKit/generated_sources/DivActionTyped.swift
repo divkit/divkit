@@ -79,6 +79,60 @@ public enum DivActionTyped: Sendable {
   }
 }
 
+extension DivActionTyped {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivActionAnimatorStart.type:
+      self = .divActionAnimatorStart(try DivActionAnimatorStart(dictionary: dictionary, context: context))
+    case DivActionAnimatorStop.type:
+      self = .divActionAnimatorStop(try DivActionAnimatorStop(dictionary: dictionary, context: context))
+    case DivActionArrayInsertValue.type:
+      self = .divActionArrayInsertValue(try DivActionArrayInsertValue(dictionary: dictionary, context: context))
+    case DivActionArrayRemoveValue.type:
+      self = .divActionArrayRemoveValue(try DivActionArrayRemoveValue(dictionary: dictionary, context: context))
+    case DivActionArraySetValue.type:
+      self = .divActionArraySetValue(try DivActionArraySetValue(dictionary: dictionary, context: context))
+    case DivActionClearFocus.type:
+      self = .divActionClearFocus(try DivActionClearFocus(dictionary: dictionary, context: context))
+    case DivActionCopyToClipboard.type:
+      self = .divActionCopyToClipboard(try DivActionCopyToClipboard(dictionary: dictionary, context: context))
+    case DivActionDictSetValue.type:
+      self = .divActionDictSetValue(try DivActionDictSetValue(dictionary: dictionary, context: context))
+    case DivActionDownload.type:
+      self = .divActionDownload(try DivActionDownload(dictionary: dictionary, context: context))
+    case DivActionFocusElement.type:
+      self = .divActionFocusElement(try DivActionFocusElement(dictionary: dictionary, context: context))
+    case DivActionHideTooltip.type:
+      self = .divActionHideTooltip(try DivActionHideTooltip(dictionary: dictionary, context: context))
+    case DivActionScrollBy.type:
+      self = .divActionScrollBy(try DivActionScrollBy(dictionary: dictionary, context: context))
+    case DivActionScrollTo.type:
+      self = .divActionScrollTo(try DivActionScrollTo(dictionary: dictionary, context: context))
+    case DivActionSetState.type:
+      self = .divActionSetState(try DivActionSetState(dictionary: dictionary, context: context))
+    case DivActionSetStoredValue.type:
+      self = .divActionSetStoredValue(try DivActionSetStoredValue(dictionary: dictionary, context: context))
+    case DivActionSetVariable.type:
+      self = .divActionSetVariable(try DivActionSetVariable(dictionary: dictionary, context: context))
+    case DivActionShowTooltip.type:
+      self = .divActionShowTooltip(try DivActionShowTooltip(dictionary: dictionary, context: context))
+    case DivActionSubmit.type:
+      self = .divActionSubmit(try DivActionSubmit(dictionary: dictionary, context: context))
+    case DivActionTimer.type:
+      self = .divActionTimer(try DivActionTimer(dictionary: dictionary, context: context))
+    case DivActionUpdateStructure.type:
+      self = .divActionUpdateStructure(try DivActionUpdateStructure(dictionary: dictionary, context: context))
+    case DivActionVideo.type:
+      self = .divActionVideo(try DivActionVideo(dictionary: dictionary, context: context))
+    case DivActionCustom.type:
+      self = .divActionCustom(try DivActionCustom(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-action-typed", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivActionTyped: Equatable {
   public static func ==(lhs: DivActionTyped, rhs: DivActionTyped) -> Bool {

@@ -21,6 +21,14 @@ public final class DivCloudBackground: Sendable {
   static let cornerRadiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      cornerRadius: try dictionary.getExpressionField("corner_radius", validator: Self.cornerRadiusValidator, context: context),
+      paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     color: Expression<Color>,
     cornerRadius: Expression<Int>,

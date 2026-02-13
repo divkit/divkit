@@ -8,6 +8,12 @@ public final class DivPhoneInputMask: DivInputMaskBase, Sendable {
   public static let type: String = "phone"
   public let rawTextVariable: String
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      rawTextVariable: try dictionary.getField("raw_text_variable", context: context)
+    )
+  }
+
   init(
     rawTextVariable: String
   ) {

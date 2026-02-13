@@ -17,6 +17,13 @@ public final class DivPivotFixed: Sendable {
     resolver.resolveNumeric(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      unit: try dictionary.getOptionalExpressionField("unit", context: context),
+      value: try dictionary.getOptionalExpressionField("value", context: context)
+    )
+  }
+
   init(
     unit: Expression<DivSizeUnit>? = nil,
     value: Expression<Int>? = nil

@@ -19,6 +19,13 @@ public final class DivSizeUnitValue: Sendable {
   static let valueValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      unit: try dictionary.getOptionalExpressionField("unit", context: context),
+      value: try dictionary.getExpressionField("value", validator: Self.valueValidator, context: context)
+    )
+  }
+
   init(
     unit: Expression<DivSizeUnit>? = nil,
     value: Expression<Int>

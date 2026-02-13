@@ -7,6 +7,8 @@ import VGSL
 public final class EndDestination: Sendable {
   public static let type: String = "end"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

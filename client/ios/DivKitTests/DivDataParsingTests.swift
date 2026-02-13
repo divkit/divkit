@@ -9,7 +9,16 @@ final class DivDataParsingTests: XCTestCase {
 }
 
 private func runTest(_ data: TestData) {
-  let result = DivData.resolve(card: data.card, templates: data.templates)
+  let typedResult = DivData.resolve(
+    card: data.card,
+    templates: data.templates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
+  )
+  let untypedResult = DivData.resolve(
+    card: data.card,
+    templates: data.templates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+  )
   let expectedResult = DivData.resolve(card: data.expectedCard, templates: [:])
 
   XCTAssertNil(
@@ -17,12 +26,18 @@ private func runTest(_ data: TestData) {
     "Test data corrupted: expected result contains errors"
   )
 
-  assertEqual(result.value, expectedResult.value)
+  assertEqual(typedResult.value, expectedResult.value)
+  assertEqual(untypedResult.value, expectedResult.value)
 
   XCTAssertEqual(
-    result.errorsOrWarnings?.count ?? 0,
+    typedResult.errorsOrWarnings?.count ?? 0,
     data.expectedErrorCount,
     "Expected error count does not match actual result"
+  )
+  XCTAssertEqual(
+    untypedResult.errorsOrWarnings?.count ?? 0,
+    typedResult.errorsOrWarnings?.count ?? 0,
+    "Untyped pipeline should produce same number of warnings/errors as typed"
   )
 }
 

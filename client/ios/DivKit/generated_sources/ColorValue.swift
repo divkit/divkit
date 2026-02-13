@@ -12,6 +12,12 @@ public final class ColorValue: Sendable {
     resolver.resolveColor(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      value: try dictionary.getExpressionField("value", transform: Color.color(withHexString:), context: context)
+    )
+  }
+
   init(
     value: Expression<Color>
   ) {

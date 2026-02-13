@@ -41,6 +41,18 @@ public final class DivImageBackground: Sendable {
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
+      contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal", context: context),
+      contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical", context: context),
+      filters: try dictionary.getOptionalArray("filters", transform: { (dict: [String: Any]) in try? DivFilter(dictionary: dict, context: context) }),
+      imageUrl: try dictionary.getExpressionField("image_url", transform: URL.makeFromNonEncodedString, context: context),
+      preloadRequired: try dictionary.getOptionalExpressionField("preload_required", context: context),
+      scale: try dictionary.getOptionalExpressionField("scale", context: context)
+    )
+  }
+
   init(
     alpha: Expression<Double>? = nil,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,

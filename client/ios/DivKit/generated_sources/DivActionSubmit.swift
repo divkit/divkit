@@ -29,6 +29,13 @@ public final class DivActionSubmit: Sendable {
         resolver.resolveString(value)
       }
 
+      public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+        self.init(
+          name: try dictionary.getExpressionField("name", context: context),
+          value: try dictionary.getExpressionField("value", context: context)
+        )
+      }
+
       init(
         name: Expression<String>,
         value: Expression<String>
@@ -50,6 +57,14 @@ public final class DivActionSubmit: Sendable {
       resolver.resolveUrl(url)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        headers: try dictionary.getOptionalArray("headers", transform: { (dict: [String: Any]) in try? DivActionSubmit.Request.Header(dictionary: dict, context: context) }),
+        method: try dictionary.getOptionalExpressionField("method", context: context),
+        url: try dictionary.getExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
+      )
+    }
+
     init(
       headers: [Header]? = nil,
       method: Expression<Method>? = nil,
@@ -69,6 +84,15 @@ public final class DivActionSubmit: Sendable {
 
   public func resolveContainerId(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(containerId)
+  }
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      containerId: try dictionary.getExpressionField("container_id", context: context),
+      onFailActions: try dictionary.getOptionalArray("on_fail_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      onSuccessActions: try dictionary.getOptionalArray("on_success_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      request: try dictionary.getField("request", transform: { (dict: [String: Any]) in try DivActionSubmit.Request(dictionary: dict, context: context) })
+    )
   }
 
   init(

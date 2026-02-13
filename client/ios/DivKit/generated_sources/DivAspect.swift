@@ -14,6 +14,12 @@ public final class DivAspect: Sendable {
   static let ratioValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      ratio: try dictionary.getExpressionField("ratio", validator: Self.ratioValidator, context: context)
+    )
+  }
+
   init(
     ratio: Expression<Double>
   ) {

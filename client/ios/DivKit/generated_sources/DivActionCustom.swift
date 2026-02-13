@@ -7,6 +7,8 @@ import VGSL
 public final class DivActionCustom: Sendable {
   public static let type: String = "custom"
 
+  public init(dictionary: [String: Any], context: ParsingContext) throws {}
+
   init() {}
 }
 

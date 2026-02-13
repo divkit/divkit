@@ -19,6 +19,20 @@ public enum DivTextRangeBackground: Sendable {
   }
 }
 
+extension DivTextRangeBackground {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivSolidBackground.type:
+      self = .divSolidBackground(try DivSolidBackground(dictionary: dictionary, context: context))
+    case DivCloudBackground.type:
+      self = .divCloudBackground(try DivCloudBackground(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-text-range-background", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTextRangeBackground: Equatable {
   public static func ==(lhs: DivTextRangeBackground, rhs: DivTextRangeBackground) -> Bool {

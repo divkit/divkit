@@ -151,10 +151,25 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     let templates = divDataJson["templates"] as? [String: Any] ?? [:]
     self.description = json["description"] as! String
 
-    let result = DivData.resolve(card: card, templates: templates)
-    let errors = result.errorsOrWarnings?.asArray() ?? []
+    let typedResult = DivData.resolve(
+      card: card,
+      templates: templates,
+      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
+    )
+    let untypedResult = DivData.resolve(
+      card: card,
+      templates: templates,
+      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+    )
+    XCTAssertEqual(typedResult.value, untypedResult.value)
+    XCTAssertEqual(
+      typedResult.errorsOrWarnings?.count ?? 0,
+      untypedResult.errorsOrWarnings?.count ?? 0
+    )
+
+    let errors = typedResult.errorsOrWarnings?.asArray() ?? []
     self.deserializationErrorMessages = errors.map(\.errorMessage)
-    self.divData = try? DivData.resolve(card: card, templates: templates).unwrap()
+    self.divData = try? typedResult.unwrap()
     self.cases = try! JSONDecoder().decode(
       [IntegrationTestCase].self,
       from: try JSONSerialization.data(withJSONObject: casesJson)

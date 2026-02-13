@@ -28,6 +28,15 @@ public final class DivShadow: Sendable {
   static let blurValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
+      blur: try dictionary.getOptionalExpressionField("blur", validator: Self.blurValidator, context: context),
+      color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:), context: context),
+      offset: try dictionary.getField("offset", transform: { (dict: [String: Any]) in try DivPoint(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     alpha: Expression<Double>? = nil,
     blur: Expression<Int>? = nil,

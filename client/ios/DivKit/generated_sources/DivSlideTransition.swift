@@ -42,6 +42,16 @@ public final class DivSlideTransition: DivTransitionBase, Sendable {
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      distance: try dictionary.getOptionalField("distance", transform: { (dict: [String: Any]) in try DivDimension(dictionary: dict, context: context) }),
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
+      edge: try dictionary.getOptionalExpressionField("edge", context: context),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator", context: context),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay", validator: Self.startDelayValidator, context: context)
+    )
+  }
+
   init(
     distance: DivDimension? = nil,
     duration: Expression<Int>? = nil,

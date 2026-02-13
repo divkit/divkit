@@ -31,6 +31,16 @@ public final class DivTextRangeMaskParticles: Sendable {
   static let densityValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0.0 && $0 <= 1.0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      density: try dictionary.getOptionalExpressionField("density", validator: Self.densityValidator, context: context),
+      isAnimated: try dictionary.getOptionalExpressionField("is_animated", context: context),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
+      particleSize: try dictionary.getOptionalField("particle_size", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     color: Expression<Color>,
     density: Expression<Double>? = nil,

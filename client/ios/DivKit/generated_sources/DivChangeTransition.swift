@@ -19,6 +19,20 @@ public enum DivChangeTransition: Sendable {
   }
 }
 
+extension DivChangeTransition {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivChangeSetTransition.type:
+      self = .divChangeSetTransition(try DivChangeSetTransition(dictionary: dictionary, context: context))
+    case DivChangeBoundsTransition.type:
+      self = .divChangeBoundsTransition(try DivChangeBoundsTransition(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-change-transition", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivChangeTransition: Equatable {
   public static func ==(lhs: DivChangeTransition, rhs: DivChangeTransition) -> Bool {

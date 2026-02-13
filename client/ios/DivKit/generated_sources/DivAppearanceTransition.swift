@@ -25,6 +25,24 @@ public enum DivAppearanceTransition: Sendable {
   }
 }
 
+extension DivAppearanceTransition {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivAppearanceSetTransition.type:
+      self = .divAppearanceSetTransition(try DivAppearanceSetTransition(dictionary: dictionary, context: context))
+    case DivFadeTransition.type:
+      self = .divFadeTransition(try DivFadeTransition(dictionary: dictionary, context: context))
+    case DivScaleTransition.type:
+      self = .divScaleTransition(try DivScaleTransition(dictionary: dictionary, context: context))
+    case DivSlideTransition.type:
+      self = .divSlideTransition(try DivSlideTransition(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-appearance-transition", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivAppearanceTransition: Equatable {
   public static func ==(lhs: DivAppearanceTransition, rhs: DivAppearanceTransition) -> Bool {

@@ -12,6 +12,12 @@ public final class DivSolidBackground: Sendable {
     resolver.resolveColor(color)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context)
+    )
+  }
+
   init(
     color: Expression<Color>
   ) {

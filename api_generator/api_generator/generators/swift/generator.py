@@ -150,8 +150,11 @@ class SwiftGenerator(Generator):
     def __entity_enumeration_extensions_declaration(self, entity_enumeration: EntityEnumeration) -> List[str]:
         access_modifier = self._access_level.value
         args_decl = swift_template_deserializable_args_decl(entity_enumeration.mode)
+        context_arg = '' if entity_enumeration.mode.is_template else ', context: ParsingContext'
         deserializable_extension = Text(f'extension {entity_enumeration.prefixed_declaration} {{')
-        deserializable_extension += f'  {access_modifier}init(dictionary: [String: Any]{args_decl}) throws {{'
+        deserializable_extension += (
+            f'  {access_modifier}init(dictionary: [String: Any]{args_decl}{context_arg}) throws {{'
+        )
         body = Text()
         if entity_enumeration.mode.is_template:
             body += 'let receivedType = try dictionary.getField("type") as String'
@@ -164,8 +167,9 @@ class SwiftGenerator(Generator):
             obj_t = entity[1].prefixed_declaration if entity[1] is not None else utils.capitalize_camel_case(entity[0])
             low_name = utils.lower_camel_case(name)
             args = swift_template_deserializable_args(entity_enumeration.mode)
+            context_param = '' if entity_enumeration.mode.is_template else ', context: context'
             body += f'case {obj_t}.type:'
-            body += f'  self = .{low_name}(try {obj_t}(dictionary: dictionary{args}))'
+            body += f'  self = .{low_name}(try {obj_t}(dictionary: dictionary{args}{context_param}))'
         body += 'default:'
         args = f'field: "{entity_enumeration.name}", representation: dictionary'
         body += f'  throw DeserializationError.invalidFieldRepresentation({args})'
@@ -194,7 +198,10 @@ class SwiftGenerator(Generator):
         equatable_extension = str(equatable_extension)
 
         if self.generate_serialization:
-            if entity_enumeration.mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES:
+            if entity_enumeration.mode in [
+                GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+                GenerationMode.NORMAL_WITH_TEMPLATES,
+            ]:
                 result = [deserializable_extension, equatable_extension]
             elif entity_enumeration.mode.is_template:
                 result = [deserializable_extension]
@@ -252,8 +259,12 @@ class SwiftGenerator(Generator):
                 result += validator_decl.indented()
                 result += EMPTY
 
-        if self.generate_serialization and (entity.generation_mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES or
-                                            entity.generation_mode.is_template):
+        if self.generate_serialization and (
+            entity.generation_mode in [
+                GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+                GenerationMode.NORMAL_WITH_TEMPLATES,
+            ] or entity.generation_mode.is_template
+        ):
             result += entity.deserializing_constructor_declaration.indented()
             result += EMPTY
 

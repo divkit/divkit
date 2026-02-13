@@ -12,6 +12,12 @@ public final class DictValue: @unchecked Sendable {
     resolver.resolveDict(value)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      value: try dictionary.getExpressionField("value", context: context)
+    )
+  }
+
   init(
     value: Expression<[String: Any]>
   ) {

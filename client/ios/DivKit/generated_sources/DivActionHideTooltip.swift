@@ -12,6 +12,12 @@ public final class DivActionHideTooltip: Sendable {
     resolver.resolveString(id)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      id: try dictionary.getExpressionField("id", context: context)
+    )
+  }
+
   init(
     id: Expression<String>
   ) {

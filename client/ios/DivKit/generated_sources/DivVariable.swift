@@ -40,6 +40,34 @@ public enum DivVariable: Sendable {
   }
 }
 
+extension DivVariable {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case StringVariable.type:
+      self = .stringVariable(try StringVariable(dictionary: dictionary, context: context))
+    case NumberVariable.type:
+      self = .numberVariable(try NumberVariable(dictionary: dictionary, context: context))
+    case IntegerVariable.type:
+      self = .integerVariable(try IntegerVariable(dictionary: dictionary, context: context))
+    case BooleanVariable.type:
+      self = .booleanVariable(try BooleanVariable(dictionary: dictionary, context: context))
+    case ColorVariable.type:
+      self = .colorVariable(try ColorVariable(dictionary: dictionary, context: context))
+    case UrlVariable.type:
+      self = .urlVariable(try UrlVariable(dictionary: dictionary, context: context))
+    case DictVariable.type:
+      self = .dictVariable(try DictVariable(dictionary: dictionary, context: context))
+    case ArrayVariable.type:
+      self = .arrayVariable(try ArrayVariable(dictionary: dictionary, context: context))
+    case PropertyVariable.type:
+      self = .propertyVariable(try PropertyVariable(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-variable", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivVariable: Equatable {
   public static func ==(lhs: DivVariable, rhs: DivVariable) -> Bool {

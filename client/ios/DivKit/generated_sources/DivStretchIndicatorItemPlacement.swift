@@ -16,6 +16,13 @@ public final class DivStretchIndicatorItemPlacement: Sendable {
   static let maxVisibleItemsValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      itemSpacing: try dictionary.getOptionalField("item_spacing", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
+      maxVisibleItems: try dictionary.getOptionalExpressionField("max_visible_items", validator: Self.maxVisibleItemsValidator, context: context)
+    )
+  }
+
   init(
     itemSpacing: DivFixedSize? = nil,
     maxVisibleItems: Expression<Int>? = nil

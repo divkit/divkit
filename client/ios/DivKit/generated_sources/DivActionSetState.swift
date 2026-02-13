@@ -17,6 +17,13 @@ public final class DivActionSetState: Sendable {
     resolver.resolveNumeric(temporary) ?? true
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      stateId: try dictionary.getExpressionField("state_id", context: context),
+      temporary: try dictionary.getOptionalExpressionField("temporary", context: context)
+    )
+  }
+
   init(
     stateId: Expression<String>,
     temporary: Expression<Bool>? = nil

@@ -22,6 +22,16 @@ public final class DivBorder: Sendable {
   static let cornerRadiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      cornerRadius: try dictionary.getOptionalExpressionField("corner_radius", validator: Self.cornerRadiusValidator, context: context),
+      cornersRadius: try dictionary.getOptionalField("corners_radius", transform: { (dict: [String: Any]) in try DivCornersRadius(dictionary: dict, context: context) }),
+      hasShadow: try dictionary.getOptionalExpressionField("has_shadow", context: context),
+      shadow: try dictionary.getOptionalField("shadow", transform: { (dict: [String: Any]) in try DivShadow(dictionary: dict, context: context) }),
+      stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     cornerRadius: Expression<Int>? = nil,
     cornersRadius: DivCornersRadius? = nil,

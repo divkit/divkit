@@ -8,6 +8,12 @@ public final class DivNeighbourPageSize: Sendable {
   public static let type: String = "fixed"
   public let neighbourPageWidth: DivFixedSize
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      neighbourPageWidth: try dictionary.getField("neighbour_page_width", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     neighbourPageWidth: DivFixedSize
   ) {

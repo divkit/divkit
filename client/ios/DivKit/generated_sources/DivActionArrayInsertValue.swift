@@ -18,6 +18,14 @@ public final class DivActionArrayInsertValue: Sendable {
     resolver.resolveString(variableName)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      index: try dictionary.getOptionalExpressionField("index", context: context),
+      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }),
+      variableName: try dictionary.getExpressionField("variable_name", context: context)
+    )
+  }
+
   init(
     index: Expression<Int>? = nil,
     value: DivTypedValue,

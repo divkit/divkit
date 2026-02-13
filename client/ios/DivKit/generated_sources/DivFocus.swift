@@ -32,6 +32,16 @@ public final class DivFocus: Sendable {
       resolver.resolveString(up)
     }
 
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        down: try dictionary.getOptionalExpressionField("down", context: context),
+        forward: try dictionary.getOptionalExpressionField("forward", context: context),
+        left: try dictionary.getOptionalExpressionField("left", context: context),
+        right: try dictionary.getOptionalExpressionField("right", context: context),
+        up: try dictionary.getOptionalExpressionField("up", context: context)
+      )
+    }
+
     init(
       down: Expression<String>? = nil,
       forward: Expression<String>? = nil,
@@ -52,6 +62,16 @@ public final class DivFocus: Sendable {
   public let nextFocusIds: NextFocusIds?
   public let onBlur: [DivAction]?
   public let onFocus: [DivAction]?
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      background: try dictionary.getOptionalArray("background", transform: { (dict: [String: Any]) in try? DivBackground(dictionary: dict, context: context) }),
+      border: try dictionary.getOptionalField("border", transform: { (dict: [String: Any]) in try DivBorder(dictionary: dict, context: context) }),
+      nextFocusIds: try dictionary.getOptionalField("next_focus_ids", transform: { (dict: [String: Any]) in try DivFocus.NextFocusIds(dictionary: dict, context: context) }),
+      onBlur: try dictionary.getOptionalArray("on_blur", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      onFocus: try dictionary.getOptionalArray("on_focus", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) })
+    )
+  }
 
   init(
     background: [DivBackground]? = nil,

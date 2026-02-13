@@ -11,6 +11,12 @@ public final class EntityWithEntityProperty: Sendable {
   public static let type: String = "entity_with_entity_property"
   public let entity: Entity // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      entity: try dictionary.getOptionalField("entity", transform: { (dict: [String: Any]) in try Entity(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     entity: Entity? = nil
   ) {

@@ -9,7 +9,7 @@ public struct RawDivData: Deserializable, @unchecked Sendable {
     templates = try dictionary.getOptionalField("templates") ?? [:]
   }
 
-  public func resolve() -> DeserializationResult<DivData> {
-    DivData.resolve(card: card, templates: templates)
+  public func resolve(flagsInfo: DivFlagsInfo = .default) -> DeserializationResult<DivData> {
+    DivData.resolve(card: card, templates: templates, flagsInfo: flagsInfo)
   }
 }

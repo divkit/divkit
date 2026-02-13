@@ -14,6 +14,14 @@ public final class DivActionDownload: Sendable {
     resolver.resolveUrl(url)
   }
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      onFailActions: try dictionary.getOptionalArray("on_fail_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      onSuccessActions: try dictionary.getOptionalArray("on_success_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      url: try dictionary.getExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
+    )
+  }
+
   init(
     onFailActions: [DivAction]? = nil,
     onSuccessActions: [DivAction]? = nil,

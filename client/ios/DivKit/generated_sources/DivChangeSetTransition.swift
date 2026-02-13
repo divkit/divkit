@@ -11,6 +11,12 @@ public final class DivChangeSetTransition: Sendable {
   static let itemsValidator: AnyArrayValueValidator<DivChangeTransition> =
     makeArrayValidator(minItems: 1)
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivChangeTransition(dictionary: dict, context: context) }, validator: Self.itemsValidator)
+    )
+  }
+
   init(
     items: [DivChangeTransition]
   ) {

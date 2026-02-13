@@ -15,6 +15,12 @@ public final class DivBlur: Sendable {
   static let radiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      radius: try dictionary.getExpressionField("radius", validator: Self.radiusValidator, context: context)
+    )
+  }
+
   init(
     radius: Expression<Int>
   ) {

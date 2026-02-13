@@ -22,6 +22,22 @@ public enum DivPagerLayoutMode: Sendable {
   }
 }
 
+extension DivPagerLayoutMode {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivPageSize.type:
+      self = .divPageSize(try DivPageSize(dictionary: dictionary, context: context))
+    case DivNeighbourPageSize.type:
+      self = .divNeighbourPageSize(try DivNeighbourPageSize(dictionary: dictionary, context: context))
+    case DivPageContentSize.type:
+      self = .divPageContentSize(try DivPageContentSize(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivPagerLayoutMode: Equatable {
   public static func ==(lhs: DivPagerLayoutMode, rhs: DivPagerLayoutMode) -> Bool {

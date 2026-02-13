@@ -28,6 +28,26 @@ public enum DivBackground: Sendable {
   }
 }
 
+extension DivBackground {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivLinearGradient.type:
+      self = .divLinearGradient(try DivLinearGradient(dictionary: dictionary, context: context))
+    case DivRadialGradient.type:
+      self = .divRadialGradient(try DivRadialGradient(dictionary: dictionary, context: context))
+    case DivImageBackground.type:
+      self = .divImageBackground(try DivImageBackground(dictionary: dictionary, context: context))
+    case DivSolidBackground.type:
+      self = .divSolidBackground(try DivSolidBackground(dictionary: dictionary, context: context))
+    case DivNinePatchBackground.type:
+      self = .divNinePatchBackground(try DivNinePatchBackground(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-background", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivBackground: Equatable {
   public static func ==(lhs: DivBackground, rhs: DivBackground) -> Bool {

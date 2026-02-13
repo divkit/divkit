@@ -15,6 +15,13 @@ public final class DivTextRangeBorder: Sendable {
   static let cornerRadiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      cornerRadius: try dictionary.getOptionalExpressionField("corner_radius", validator: Self.cornerRadiusValidator, context: context),
+      stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
+    )
+  }
+
   init(
     cornerRadius: Expression<Int>? = nil,
     stroke: DivStroke? = nil

@@ -19,6 +19,20 @@ public enum DivTransformation: Sendable {
   }
 }
 
+extension DivTransformation {
+  public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case DivRotationTransformation.type:
+      self = .divRotationTransformation(try DivRotationTransformation(dictionary: dictionary, context: context))
+    case DivTranslationTransformation.type:
+      self = .divTranslationTransformation(try DivTranslationTransformation(dictionary: dictionary, context: context))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "div-transformation", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension DivTransformation: Equatable {
   public static func ==(lhs: DivTransformation, rhs: DivTransformation) -> Bool {
