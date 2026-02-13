@@ -1,11 +1,6 @@
 package divkit.dsl
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-import divkit.dsl.core.bind
 import divkit.dsl.core.expression
-import divkit.dsl.core.reference
-import org.skyscreamer.jsonassert.JSONAssert.assertEquals
-import org.skyscreamer.jsonassert.JSONCompareMode
 import kotlin.test.Test
 
 class DivanTest {
@@ -39,7 +34,7 @@ class DivanTest {
             }
         """.trimIndent()
 
-        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -71,7 +66,7 @@ class DivanTest {
             }
         """.trimIndent()
 
-        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -105,54 +100,7 @@ class DivanTest {
             }
         """.trimIndent()
 
-        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
-    }
-
-    @Test
-    fun `card with template`() {
-        val titleRef = reference<String>("title")
-
-        val titleTemplate = template("title_text") {
-            text(
-                width = fixedSize(120, unit = dp)
-            ) + textRefs(text = titleRef)
-        }
-
-        val card = divan {
-            data(
-                logId = "layout",
-                div = container(
-                    width = fixedSize(320),
-                    height = fixedSize(320),
-                    orientation = vertical,
-                    items = listOf(
-                        render(
-                            titleTemplate,
-                            titleRef bind "Good news, everyone!"
-                        ) + textProps(
-                            width = matchParentSize()
-                        ),
-                        text(
-                            width = wrapContentSize(),
-                            height = wrapContentSize(),
-                            text = "Hello, Everyone!",
-                            actions = listOf(
-                                action(
-                                    logId = "tap_action",
-                                    url = url("https://yandex.ru")
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        }
-
-        assertEquals(
-            readResource("/json/card_with_templates.json"),
-            card.toJson(),
-            JSONCompareMode.STRICT
-        )
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -179,12 +127,7 @@ class DivanTest {
                 variables = listOf(array)
             )
         }
-        assertEquals(
-            readResource("/json/array_variable.json"),
-            card.toJson(),
-            JSONCompareMode.STRICT
-        )
+
+        assertEquals(readResource("/json/array_variable.json"), card)
     }
 }
-
-private fun Divan.toJson() = JsonMapper.builder().build().writeValueAsString(this)

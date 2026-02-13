@@ -1,13 +1,10 @@
 package divkit.dsl
 
-import com.fasterxml.jackson.databind.json.JsonMapper
 import divkit.dsl.core.ArrayElement
 import divkit.dsl.core.bind
 import divkit.dsl.core.expressionArrayElement
 import divkit.dsl.core.reference
 import divkit.dsl.core.valueArrayElement
-import org.skyscreamer.jsonassert.JSONAssert
-import org.skyscreamer.jsonassert.JSONCompareMode
 import kotlin.test.Test
 
 class ArrayElementsTest {
@@ -56,7 +53,7 @@ class ArrayElementsTest {
             }
         """.trimIndent()
 
-        JSONAssert.assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -103,7 +100,7 @@ class ArrayElementsTest {
             }
         """.trimIndent()
 
-        JSONAssert.assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -150,7 +147,7 @@ class ArrayElementsTest {
             }
         """.trimIndent()
 
-        JSONAssert.assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 
     @Test
@@ -208,8 +205,6 @@ class ArrayElementsTest {
             }
         """.trimIndent()
 
-        JSONAssert.assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+        assertEquals(expectedJson, card)
     }
 }
-
-private fun Divan.toJson() = JsonMapper.builder().build().writeValueAsString(this)
