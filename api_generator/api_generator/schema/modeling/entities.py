@@ -252,6 +252,7 @@ def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any])
         GeneratedLanguage.KOTLIN: 'kotlin_interfaces',
         GeneratedLanguage.KOTLIN_DSL: 'kotlin_interfaces',
         GeneratedLanguage.PYTHON: 'python_classes',
+        GeneratedLanguage.RUST: 'rust_traits',
         GeneratedLanguage.SWIFT: 'swift_protocols',
         GeneratedLanguage.TYPE_SCRIPT: 'typescript_interfaces',
     }
@@ -782,6 +783,8 @@ def default_value(lang: GeneratedLanguage,
         specific_prefix = 'typescript_'
     elif lang is GeneratedLanguage.PYTHON:
         specific_prefix = 'python_'
+    elif lang is GeneratedLanguage.RUST:
+        specific_prefix = 'rust_'
     elif lang is GeneratedLanguage.DART:
         specific_prefix = 'dart_'
     specific_key = specific_prefix + generic_key

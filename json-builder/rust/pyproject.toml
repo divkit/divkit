@@ -1,0 +1,38 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "divkit-rs"
+version = "0.1.0"
+description = "Fast Rust-backed DivKit JSON builder with Python bindings (4x-2,459x faster than pydivkit)"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["divkit", "json", "builder", "ui", "layout", "rust"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+]
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/pavkaccc/research"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "divkit_rs._native"
+python-source = "python"

@@ -22,6 +22,7 @@ class GeneratedLanguage(str, Enum):
     DIVAN = 'divan'
     DOCUMENTATION = 'documentation'
     DART = 'dart'
+    RUST = 'rust'
 
 
 TEMPLATE_SUFFIX = '_template'
