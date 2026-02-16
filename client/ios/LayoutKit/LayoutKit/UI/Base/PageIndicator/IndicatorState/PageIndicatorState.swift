@@ -27,7 +27,8 @@ struct IndicatorState {
       return
     }
 
-    if params.visiblePageCount == 3, params.head > 0, params.tail < numberOfPages - 1 {
+    let isBoundaryPage = currentPosition <= 0 || currentPosition >= CGFloat(numberOfPages - 1)
+    if params.visiblePageCount == 3, !isBoundaryPage {
       progress = 1
       kind = .normal
       return
