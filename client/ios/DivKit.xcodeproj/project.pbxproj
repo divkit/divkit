@@ -636,7 +636,6 @@
 				ViewModels/PageIndicatorStateTests.swift,
 				ViewModels/PagerViewLayoutTests.swift,
 				ViewModels/PhoneMaskFormatterTests.swift,
-				ViewModels/SliderModelTests.swift,
 				ViewModels/TabbedPages/TabContentsViewModelTests.swift,
 				ViewModels/TabbedPages/TabInterimItemExtensionsTests.swift,
 				ViewModels/VisibilityActionPerformer/VisibilityActionPerformersTests.swift,

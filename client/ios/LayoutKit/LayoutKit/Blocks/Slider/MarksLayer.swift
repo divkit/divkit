@@ -22,10 +22,6 @@ final class MarksLayer: CALayer {
     configuration.modelConfiguration.inactiveMark
   }
 
-  private var marksStep: CGFloat {
-    configuration.marksStep
-  }
-
   override init() {
     super.init()
     setProperties()
@@ -73,7 +69,7 @@ final class MarksLayer: CALayer {
     } else {
       makeMarks(
         from: 0,
-        to: leftThumb - marksStep - minValue,
+        to: leftThumb - 1 - minValue,
         style: .inactive,
         in: ctx
       )
@@ -85,7 +81,7 @@ final class MarksLayer: CALayer {
       )
     }
     makeMarks(
-      from: rightThumb + marksStep - minValue,
+      from: rightThumb + 1 - minValue,
       to: maxValue - minValue,
       style: .inactive,
       in: ctx
@@ -98,9 +94,7 @@ final class MarksLayer: CALayer {
     style: MarkStyle,
     in ctx: CGContext
   ) {
-    let range = maxValue - minValue
-    let maxWidth = bounds.width - configuration.horizontalInset
-    let spaceWidth = maxWidth / range * marksStep
+    let spaceWidth = (bounds.width - configuration.horizontalInset) / (maxValue - minValue)
     let markConfiguration = markConfiguration(for: style)
 
     guard markConfiguration != .empty,
@@ -109,23 +103,15 @@ final class MarksLayer: CALayer {
       return
     }
 
-    let startIndex = startIndex / marksStep
-    let endIndex = endIndex / marksStep
-
     let markHeight = markConfiguration.size.height
     let xOrigin = spaceWidth * startIndex
       .floored() + (configuration.horizontalInset - markConfiguration.size.width) / 2
     let yOrigin = bounds.midY - markHeight / 2
     var origin = CGPoint(x: xOrigin, y: yOrigin)
 
-    let steps = Int(ceil(endIndex - startIndex))
-
-    for _ in 0...steps {
+    for _ in Int(startIndex - minValue)...Int(endIndex - minValue) {
       markConfiguration.render(in: ctx, with: origin)
-      origin.x = min(
-        origin.x + spaceWidth,
-        maxWidth + (configuration.horizontalInset - markConfiguration.size.width) / 2
-      )
+      origin.x += spaceWidth
     }
   }
 
