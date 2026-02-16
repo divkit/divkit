@@ -2,6 +2,7 @@
 
 # Android Client:
 * Added `getExpressionResolver` method to `Div2Context` to access `ExpressionResolver` implementation for given `DivData`. Can be used for preloading when there is no created `Div2View`.
+* Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * Fixed `gif` images loading by `GlideDivImageLoader`.
 * Fixed loading images from assets by provided `DivImageLoader`s.
 * Fixed shadow blur rendering on certain devices.
