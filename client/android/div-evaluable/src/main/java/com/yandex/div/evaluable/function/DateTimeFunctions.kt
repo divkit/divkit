@@ -647,5 +647,5 @@ internal fun DateTime.toCalendar(): Calendar {
 }
 
 internal fun DateTime.toDate(): Date {
-    return Date(timestampMillis - timezone.rawOffset)
+    return Date(timestampMillis)
 }
