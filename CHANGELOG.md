@@ -9,6 +9,7 @@
 * `PicassoDivImageLoader` is now deprecated because the Picasso library is outdated. Recommended alternatives for image loading: `GlideDivImageLoader`, `CoilDivImageLoader` or custom implementation of the `DivImageLoader` interface.
 
 # iOS Client:
+* Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * The number of ticks on the slider is limited to 1000 elements.
 
 # Web Client:
