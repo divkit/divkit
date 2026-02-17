@@ -258,23 +258,24 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                 this.loadData(url).then(json => {
                     this.animItem?.destroy();
 
+                    const loop = repeatCount !== 0;
                     const animItem = this.animItem = loadAnimation({
                         container: wrapper,
                         animationData: json,
                         renderer: 'svg',
-                        loop: true,
+                        loop,
                         rendererSettings: {
                             preserveAspectRatio: scale.attribute
                         }
                     });
                     this.setSvgScale(scale);
                     this.animItem.addEventListener('data_failed', onError);
-                    if (repeatMode === 'reverse' || repeatCount !== -1) {
+                    if (loop && (repeatMode === 'reverse' || repeatCount !== -1)) {
                         let direction = 1;
                         let count = 0;
                         animItem.addEventListener('loopComplete', () => {
                             ++count;
-                            if (repeatCount !== -1 && count === repeatCount) {
+                            if (repeatCount !== -1 && count === repeatCount + 1) {
                                 animItem.stop();
                                 animItem.goToAndStop(animItem.totalFrames, true);
                             } else {
