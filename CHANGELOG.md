@@ -1,3 +1,17 @@
+## 32.38.0
+
+# Android Client:
+* Add variable description to VariableMutationException.
+* Removed dependencies to `androidx.datastore:datastore` and `org.jetbrains.kotlin:kotlin-serialization`.
+
+# iOS Client:
+* Fixed Lottie animation repeat_count semantics: repeat_count now means the number of additional plays (repeat_count=0 plays once, repeat_count=1 plays twice, repeat_count=-1 plays infinitely).
+* The custom action function has been implemented.
+
+# Web Client:
+* Changed `lottie`s `repeat_count` logic (to better align with other platforms).
+
+
 ## 32.37.0
 
 # Android Client:
