@@ -3,7 +3,7 @@
     "lottie_gif": {
       "type": "gif",
       "aspect": {
-        "ratio": 0.8
+        "ratio": 1
       },
       "content_alignment_horizontal": "center",
       "content_alignment_vertical": "center"
@@ -12,11 +12,11 @@
       "type": "container",
       "width": {
         "type": "fixed",
-        "value": 150
+        "value": 200
       },
       "height": {
         "type": "fixed",
-        "value": 250
+        "value": 200
       },
       "margins": {
         "left": 4,
@@ -25,7 +25,6 @@
         "top": 4
       },
       "paddings": {
-        "top": 4,
         "right": 2,
         "left": 2
       },
@@ -70,17 +69,17 @@
             {
               "type": "lottie_gif_card",
               "lottie_params": {
-                "lottie_url": "divkit-asset://divkit/banana_lottie.json",
-                "repeat_count": 3,
-                "repeat_mode": "reverse"
+                "lottie_url": "divkit-asset://divkit/wave_lottie.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
               }
             },
             {
               "type": "lottie_gif_card",
               "lottie_params": {
-                "lottie_url": "divkit-asset://banana_lottie.json",
-                "repeat_count": 3,
-                "repeat_mode": "reverse"
+                "lottie_url": "divkit-asset://wave_lottie.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
               }
             }
           ]
