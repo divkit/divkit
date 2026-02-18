@@ -144,7 +144,13 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       superview: self
     )
 
+    var isSecondThumbAppeared = false
+
     if let model = sliderModel.secondThumb {
+      if secondThumb == nil {
+        isSecondThumbAppeared = true
+      }
+
       secondThumb = model.block.reuse(
         secondThumb,
         observer: observer,
@@ -175,6 +181,14 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     if recognizer.state != .began, recognizer.state != .changed {
       firstThumbProgress = CGFloat(clampedFirstThumbValue)
       secondThumbProgress = CGFloat(clampedSecondThumbValue)
+    }
+
+    if isSecondThumbAppeared {
+      configureThumb(
+        thumbView: secondThumb,
+        progress: secondThumbProgress,
+        thumbModel: sliderModel.secondThumb
+      )
     }
 
     isUserInteractionEnabled = sliderModel.isEnabled
