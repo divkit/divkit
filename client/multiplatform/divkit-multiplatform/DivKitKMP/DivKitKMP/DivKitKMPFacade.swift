@@ -63,14 +63,16 @@ extension [String: Any] {
   fileprivate var divVariables: [DivVariableName: DivVariableValue] {
     compactMapValues {
       switch $0 {
+      case let value as Bool:
+        DivVariableValue.bool(value)
+      case let value as NSNumber where CFGetTypeID(value) == CFBooleanGetTypeID():
+        DivVariableValue.bool(value.boolValue)
       case let value as String:
         DivVariableValue.string(value)
       case let value as Double:
         DivVariableValue.number(value)
       case let value as Int:
         DivVariableValue.integer(value)
-      case let value as Bool:
-        DivVariableValue.bool(value)
       case let value as Color:
         DivVariableValue.color(value)
       case let value as URL:
