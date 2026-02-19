@@ -50,7 +50,7 @@ internal class DataStorage<T> private constructor(
         return when (state) {
             is DataState.Initial -> null
             is DataState.WithData<T> -> state.value
-            is DataState.WithException<T> -> throw state.exception
+            is DataState.WithException<T> -> null
             is DataState.Finalized -> error("Cannot read from closed storage")
         }
     }
