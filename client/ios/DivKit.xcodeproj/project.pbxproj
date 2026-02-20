@@ -646,6 +646,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AnchorBlockTests.swift,
+				DecoratingBlockTests.swift,
 				LayoutKitSnapshotTest.swift,
 				ReferenceSet.swift,
 				SnapshotTestKit/Diff.swift,

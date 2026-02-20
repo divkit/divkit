@@ -59,7 +59,9 @@ extension Block {
     let shouldWrapAlpha = hasAlpha
       && selfBackgroundColor != nil
       && selfBackgroundColor != DecoratingBlock.defaultBackgroundColor
-    if !forceWrapping, !shouldWrapAlpha, let block = decoratingSelf {
+    let shouldWrapForBoundary = boundary == .noClip
+      && decoratingSelf.map(\.boundary).shouldApplyBoundary
+    if !forceWrapping, !shouldWrapAlpha, !shouldWrapForBoundary, let block = decoratingSelf {
       guard (boundary != nil && boundary != block.boundary) || anythingToApplyExceptBoundary
       else {
         return self
@@ -90,7 +92,10 @@ extension Block {
       )
     }
 
-    guard boundary.shouldApplyBoundary || anythingToApplyExceptBoundary else {
+    guard boundary.shouldApplyBoundary
+      || anythingToApplyExceptBoundary
+      || shouldWrapForBoundary
+    else {
       return self
     }
 
