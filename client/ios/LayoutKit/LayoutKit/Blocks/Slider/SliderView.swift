@@ -6,6 +6,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   var layoutReporter: LayoutReporter?
 
   private var sliderModel: SliderModel = .empty
+  private var configuredPath: UIElementPath?
   private var thumbAnimator: UIViewPropertyAnimator?
   private var firstThumbProgress: CGFloat = .zero {
     didSet {
@@ -41,10 +42,10 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       abs(sliderModel.firstThumb.offsetX),
       abs(sliderModel.secondThumb?.offsetX ?? 0)
     )
-    if sliderModel.valueRange == 0 {
-      return width
+    return if sliderModel.valueRange == 0 {
+      width
     } else {
-      return CGFloat(width) / CGFloat(sliderModel.valueRange)
+      CGFloat(width) / CGFloat(sliderModel.valueRange)
     }
   }
 
@@ -175,8 +176,16 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
         sliderModel: sliderModel
       ))
 
-    self.sliderModel.firstThumb.value.value = clampedFirstThumbValue
-    self.sliderModel.secondThumb?.value.value = clampedSecondThumbValue
+    if configuredPath != sliderModel.path {
+      self.sliderModel.firstThumb.value
+        .value = Int(sliderModel.nearestValue(CGFloat(clampedFirstThumbValue)))
+      self.sliderModel.secondThumb?.value
+        .value = Int(sliderModel.nearestValue(CGFloat(clampedSecondThumbValue)))
+      configuredPath = sliderModel.path
+    } else {
+      self.sliderModel.firstThumb.value.value = clampedFirstThumbValue
+      self.sliderModel.secondThumb?.value.value = clampedSecondThumbValue
+    }
 
     if recognizer.state != .began, recognizer.state != .changed {
       firstThumbProgress = CGFloat(clampedFirstThumbValue)
@@ -200,7 +209,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     if let thumbValue = updatedThumbsValue(
       oldValue: firstThumbProgress,
       newValue: value,
-      thumbPosition: value < secondThumbProgress ? .left : .right
+      thumbPosition: value < secondThumbProgress ? .left : .right,
+      model: sliderModel
     ) {
       sliderModel.firstThumb.value.value = thumbValue
       setNeedsLayout()
@@ -213,7 +223,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
        let thumbValue = updatedThumbsValue(
          oldValue: secondThumbProgress,
          newValue: value,
-         thumbPosition: value < firstThumbProgress ? .left : .right
+         thumbPosition: value < firstThumbProgress ? .left : .right,
+         model: sliderModel
        ) {
       sliderModel.secondThumb?.value.value = thumbValue
       setNeedsLayout()
@@ -276,10 +287,13 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     case .cancelled, .ended, .failed, .possible:
       thumbAnimator?.stopAnimation(true)
       animateActiveThumb(
-        to: currentValue.rounded(.toNearestOrAwayFromZero),
+        to: sliderModel.nearestValue(currentValue),
         from: currentValue
       )
-      updateProgress(currentValue.rounded(.toNearestOrAwayFromZero))
+
+      updateProgress(
+        sliderModel.nearestValue(currentValue)
+      )
       layoutIfNeeded()
     @unknown default: break
     }
@@ -289,8 +303,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     to newValue: Double,
     from oldValue: Double
   ) {
+    let normalizedDelta = abs(newValue - oldValue) / Double(max(1, sliderModel.valueRange))
     thumbAnimator = .runningPropertyAnimator(
-      withDuration: animationDuration * 2 * abs(newValue - oldValue),
+      withDuration: animationDuration * 2 * normalizedDelta,
       delay: 0,
       options: [.allowUserInteraction, .curveEaseIn],
       animations: { [self] in
@@ -440,17 +455,21 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
 private func updatedThumbsValue(
   oldValue: CGFloat,
   newValue: CGFloat,
-  thumbPosition: ThumbPosition
+  thumbPosition: ThumbPosition,
+  model: SliderModel
 ) -> Int? {
   guard oldValue != newValue else {
     return nil
   }
-  let newValueIntegerPart = Int(newValue.rounded(.down))
-  if newValue.isApproximatelyEqualTo(newValue.rounded(.toNearestOrAwayFromZero)) {
-    return Int(newValue.rounded(.toNearestOrAwayFromZero))
+
+  let nearestValue = model.nearestValue(newValue)
+  if newValue.isApproximatelyEqualTo(nearestValue) {
+    return Int(nearestValue)
   }
 
-  return thumbPosition == .right ? newValueIntegerPart : newValueIntegerPart + 1
+  let nearestMinValue = model.nearestMinValue(newValue)
+
+  return thumbPosition == .right ? Int(nearestMinValue) : Int(nearestMinValue + model.stepSize)
 }
 
 private enum ThumbPosition {
@@ -489,4 +508,5 @@ extension UIView {
     layer.mask = shapeLayer
   }
 }
+
 #endif

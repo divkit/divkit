@@ -92,6 +92,8 @@ public struct SliderModel: Equatable {
     }
   }
 
+  static let marksCountLimit: CGFloat = 1000
+
   static var empty: Self {
     SliderModel(
       firstThumb: .empty,
@@ -120,7 +122,8 @@ public struct SliderModel: Equatable {
   public var marksConfiguration: MarksConfiguration {
     MarksConfiguration(
       modelConfiguration: marksModelConfiguration,
-      horizontalInset: horizontalInset
+      horizontalInset: horizontalInset,
+      marksStep: stepSize
     )
   }
 
@@ -167,6 +170,10 @@ public struct SliderModel: Equatable {
     )
   }
 
+  var stepSize: CGFloat {
+    ceil((CGFloat(valueRange) + 1) / Self.marksCountLimit)
+  }
+
   public init(
     firstThumb: ThumbModel,
     secondThumb: ThumbModel? = nil,
@@ -198,5 +205,22 @@ public struct SliderModel: Equatable {
       lhs.ranges == rhs.ranges &&
       lhs.path == rhs.path &&
       lhs.isEnabled == rhs.isEnabled
+  }
+
+  func nearestValue(_ currentValue: CGFloat) -> CGFloat {
+    if stepSize == 1 {
+      return currentValue.rounded(.toNearestOrAwayFromZero)
+    } else {
+      let minValue = nearestMinValue(currentValue)
+      let maxValue = min(minValue + stepSize, CGFloat(maxValue))
+
+      return (currentValue - minValue) > (maxValue - currentValue) ? maxValue : minValue
+    }
+  }
+
+  func nearestMinValue(_ currentValue: CGFloat) -> CGFloat {
+    let offset = currentValue - CGFloat(minValue)
+    let stepFloor = CGFloat(Int(offset / stepSize)) * stepSize
+    return min(CGFloat(maxValue), CGFloat(minValue) + stepFloor)
   }
 }
