@@ -54,7 +54,7 @@ struct UntypedDivTemplateResolver {
         origin: .template
       )
     } else {
-      values = dictionary.mapValues { OriginValue(value: $0, origin: .instance) }
+      values = dictionary.mapValues { OriginValue(value: $0, origin: origin) }
     }
 
     let currentLinkSource = origin == .instance ? dictionary : linkSource
