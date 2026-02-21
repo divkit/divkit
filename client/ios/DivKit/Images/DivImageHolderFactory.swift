@@ -122,10 +122,14 @@ private struct AssetsImageProvider: DivImageHolderFactory {
 
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
     var localImage: ImageHolder?
-    if url?.scheme == "divkit-asset", let name = url?.host {
+    if let url, url.scheme == "divkit-asset", let name = url.host {
+      let bundle = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+        .queryItems?.first { $0.name == "bundle" }?.value
+        .flatMap { Bundle(identifier: $0) }
+
       // To restrict access to resources, all divkit asset images must start with the 'divkit.'
       // prefix.
-      localImage = Image(named: "divkit.\(name)")
+      localImage = Image(named: "divkit.\(name)", in: bundle)
     }
     return localImage ?? imageHolderFactory.make(url, placeholder)
   }

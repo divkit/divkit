@@ -14,6 +14,20 @@
             }
         }
     }, {
+        "id": "asset_bundle_support",
+        "name": "<code>bundle</code> query parameter in <code>divkit-asset://</code> URLs",
+        "compat": {
+            "ios": {
+                "version_added": "33.0.0"
+            },
+            "android": {
+                "notes": "Not applicable, all resources are combined"
+            },
+            "web": {
+                "notes": "Web support is not planned"
+            }
+        }
+    }, {
         "id": "asset_support_lottie",
         "name": "<code>divkit-asset://</code> support in <code>lottie</code> extension",
         "compat": {
