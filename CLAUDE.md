@@ -90,17 +90,23 @@ Generates type-safe platform code from JSON schemas. Supports these target langu
 
 Generator configs are `generator_config.json` files found in each platform's source directory. The generator uses hash checking for incremental builds.
 
-Generated source files are typically placed in `generated_sources/` directories and should not be edited manually. On iOS, generated sources are excluded from SwiftFormat/SwiftLint.
+**Running the generator (example for iOS):**
+```bash
+cd api_generator
+python3 -m api_generator -c ../client/ios/DivKit/generator_config.json -s ../schema -o ../client/ios/DivKit/generated_sources
+```
+
+Generated source files are typically placed in `generated_sources/` directories and should not be edited manually. On iOS, generated sources are excluded from SwiftFormat/SwiftLint. On Android, the `api-generator-plugin` integrates generation into the Gradle build.
 
 ## Platform Clients
 
 ### Android
 
 **Location:** `client/android/`
-**Language:** Kotlin
-**Build System:** Gradle 9.1.0 with Groovy DSL
+**Language:** Kotlin (version 2.2.10, language level 1.8, JVM target 1.8)
+**Build System:** Gradle 9.1.0 with Groovy DSL, AGP 8.12.3
 **Min SDK:** 21 | **Compile/Target SDK:** 35
-**Kotlin:** Language version 1.8, JVM target 1.8
+**Code style:** See `client/android/CODESTYLE.md` (120-char lines, English-only names, no wildcard imports)
 
 **Key modules** (34+ modules):
 | Module | Purpose |
@@ -153,6 +159,10 @@ cd client/android
 - `api-generator-plugin` - Integrates the Python API generator into Gradle builds
 - `screenshot-test-plugin` - Screenshot/snapshot testing support
 
+**Gradle properties** (`gradle.properties`): Parallel builds enabled, Gradle daemon on, configuration cache enabled, 8GB max JVM heap.
+
+**Key dependencies:** AndroidX, Glide/Picasso/Coil (image loading), Lottie/Rive (animation), OkHttp, Gson, Yatagan (DI), ExoPlayer/Media3 (video).
+
 ### iOS
 
 **Location:** `client/ios/`
@@ -186,9 +196,15 @@ cd client/android
 - **SwiftLint** (`.swiftlint.yml`): Whitelist-based rules, custom rules for safety checks
 - Both exclude `generated_sources/` and `shared_data_generated_sources/`
 
+**Code generation scripts:**
+- `codegen_DivKit.sh` - Generates main DivKit framework code from schema
+- `codegen_Tests.sh` - Generates test entity code from test schema
+
 **Playground apps:**
 - `DivKitPlayground/` - Interactive DivKit testing app
 - `LayoutKitPlayground/` - Layout engine testing app
+
+**Sample projects** (`Samples/`): UIKitIntegration, SwiftUIIntegration, CollectionViewSample.
 
 ### Web
 
@@ -323,7 +339,7 @@ For state switching: `div-action://set_state?state_id=0/nested_state/selected`
 
 | Platform | Indent | Max Line | Notes |
 |----------|--------|----------|-------|
-| Android (Kotlin) | 4 spaces | - | Kotlin 1.8 language level, allOpen for `@Mockable` |
+| Android (Kotlin) | 4 spaces | 120 | Kotlin 2.2.10 (lang 1.8), `CODESTYLE.md`, allOpen for `@Mockable` |
 | iOS (Swift) | 2 spaces | 100 | SwiftFormat + SwiftLint, warnings-as-errors |
 | Web (TypeScript) | 4 spaces | 120 | ESLint only (no Prettier), single quotes |
 | Flutter (Dart) | 2 spaces | - | flutter_lints |
@@ -351,3 +367,8 @@ External contributions require adopting the Yandex CLA (see `CONTRIBUTING.md`). 
 | `.piglet-meta.json` | Internal repo metadata |
 | `.mapping.json` | Arcadia path mapping |
 | `expression-api/translations.json` | Localized function documentation |
+| `client/android/CODESTYLE.md` | Android Kotlin coding conventions |
+| `client/android/CODESTYLE.resources.md` | Android resource naming conventions |
+| `client/ios/.swiftformat` | iOS SwiftFormat configuration |
+| `client/ios/.swiftlint.yml` | iOS SwiftLint rules |
+| `client/web/divkit/.eslintrc.base.js` | Web ESLint base configuration |
