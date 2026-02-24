@@ -303,9 +303,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     to newValue: Double,
     from oldValue: Double
   ) {
-    let normalizedDelta = abs(newValue - oldValue) / Double(max(1, sliderModel.valueRange))
+    let animationDuration = animationDuration * 2 * abs(newValue - oldValue) / sliderModel.stepSize
     thumbAnimator = .runningPropertyAnimator(
-      withDuration: animationDuration * 2 * normalizedDelta,
+      withDuration: animationDuration,
       delay: 0,
       options: [.allowUserInteraction, .curveEaseIn],
       animations: { [self] in
