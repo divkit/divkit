@@ -122,12 +122,6 @@ buildTimeTracker {
     showBars = false
 }
 
-wrapper {
-    gradleVersion "9.1.0"
-    distributionType = Wrapper.DistributionType.ALL
-    distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
-}
-
 apiValidation {
     ignoredProjects += [
         "api-generator-test",
