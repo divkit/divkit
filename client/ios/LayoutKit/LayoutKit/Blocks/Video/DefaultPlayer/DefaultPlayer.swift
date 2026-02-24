@@ -23,7 +23,11 @@ final class DefaultPlayer: Player {
   func set(data: VideoData, config: PlaybackConfig) {
     context = SourceContext(videoData: data, playbackConfig: config)
     guard let source = data.getSupportedVideo(player.staticScope.isMIMETypeSupported) else {
-      eventPipe.send(.fatal)
+      eventPipe.send(
+        .fatal(
+          CustomPlayerError(errorDescription: "Unsupported MIME Type") as PlayerError
+        )
+      )
       return
     }
 
@@ -99,7 +103,7 @@ final class DefaultPlayer: Player {
 
     player
       .playbackDidFail
-      .addObserver { _ in weakSelf?.eventPipe.send(.fatal) }
+      .addObserver { error in weakSelf?.eventPipe.send(.fatal(error)) }
       .dispose(in: playerObservers)
 
     player

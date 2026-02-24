@@ -46,7 +46,8 @@ extension VideoBlockViewModel {
       endActions: endActions,
       fatalActions: fatalActions,
       path: path,
-      scale: scale
+      scale: scale,
+      errorReporter: errorReporter
     )
   }
 }

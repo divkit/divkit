@@ -17,7 +17,7 @@ public enum PlayerEvent {
   case buffering
   case play
   case end
-  case fatal
+  case fatal(PlayerError)
 
   case currentTimeUpdate(_ ms: Int)
   case durationUpdate(_ ms: Int)

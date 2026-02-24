@@ -166,7 +166,7 @@ final class CorePlayerImpl: CorePlayer {
         guard let self = weakSelf, self.player.currentItem == item else { return }
 
         let nserror = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? NSError
-        self.playbackDidFail(nserror.map(BasePlayerError.init) ?? UnknownPlayerError())
+        self.playbackDidFail(nserror.map(BasePlayerError.init) ?? CustomPlayerError())
       }.dispose(in: itemObservers)
   }
 
@@ -181,7 +181,7 @@ final class CorePlayerImpl: CorePlayer {
       let playerError = (player.error as? NSError).map(BasePlayerError.init)
       let itemError = (player.currentItem?.error as? NSError).map(BasePlayerError.init)
 
-      playbackDidFail((playerError ?? itemError) ?? UnknownPlayerError())
+      playbackDidFail((playerError ?? itemError) ?? CustomPlayerError())
     }
   }
 
