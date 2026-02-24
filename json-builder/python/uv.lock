@@ -459,7 +459,7 @@ wheels = [
 
 [[package]]
 name = "pydivkit"
-version = "32.36.0"
+version = "32.38.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
