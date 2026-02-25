@@ -99,12 +99,6 @@ subprojects {
     }
 
     afterEvaluate {
-        if (plugins.hasPlugin("jacoco")) {
-            project.tasks.named("jacocoTestReport").get().configure { task ->
-                unitTests.dependsOn(task)
-            }
-        }
-
         if (project.tasks.names.contains("lint")) {
             project.tasks.named("lint").get().configure { task ->
                 unitTests.dependsOn(task)
