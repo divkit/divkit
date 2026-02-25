@@ -327,6 +327,9 @@
         "compat": {
             "web": {
                 "version_added": "32.31.0"
+            },
+            "ios": {
+                "version_added": "32.38.0"
             }
         }
     }]
