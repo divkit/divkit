@@ -151,12 +151,12 @@ internal class DivTransitionBuilder @Inject constructor(
         return when (this) {
             is DivAppearanceTransition.Set -> {
                 TransitionSet().apply {
-                    value.items.forEach { transition ->
-                        val androidTransaction = transition.toAndroidTransition(transitionMode, resolver)
-
-                        duration = max(duration, androidTransaction.startDelay + androidTransaction.duration)
-
-                        addTransition(androidTransaction)
+                    value.items.map { transition ->
+                        transition.toAndroidTransition(transitionMode, resolver)
+                    }.sortedByDescending {
+                        it.startDelay + it.duration
+                    }.forEach {
+                        addTransition(it)
                     }
                 }
             }
