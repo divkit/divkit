@@ -4,15 +4,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-apply from: "$projectDir/version.gradle"
-
-ext {
-    minSdkVersion = 21
-    compileSdkVersion = 35
-    targetSdkVersion = 35
-    buildToolsVersion = "35.0.0"
-}
-
 buildscript {
     FileExtensions.ifExists("${project.projectDir}/bootstrap.internal.gradle") {
         apply from: it
@@ -37,8 +28,22 @@ buildscript {
     }
 }
 
+plugins {
+    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+}
+
 apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
 apply plugin: "com.asarkar.gradle.build-time-tracker"
+
+apply from: "$projectDir/version.gradle"
+
+ext {
+    minSdkVersion = 21
+    compileSdkVersion = 35
+    targetSdkVersion = 35
+    buildToolsVersion = "35.0.0"
+}
 
 allprojects {
     repositories {

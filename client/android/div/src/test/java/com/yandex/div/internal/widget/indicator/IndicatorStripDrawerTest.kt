@@ -1,9 +1,9 @@
 package com.yandex.div.internal.widget.indicator
 
 import com.yandex.div.core.view2.divs.DivIndicatorBinder.Companion.createRoundedRectangle
-import com.yandex.div.internal.KAssert.assertEquals
 import com.yandex.div.internal.widget.indicator.animations.ScaleIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.RoundedRect
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock

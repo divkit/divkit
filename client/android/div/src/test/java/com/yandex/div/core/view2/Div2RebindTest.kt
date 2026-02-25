@@ -12,8 +12,8 @@ import com.yandex.div.core.view2.divs.CONTAINER_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.viewEquals
-import com.yandex.div.internal.Assert
 import com.yandex.div2.DivData
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull

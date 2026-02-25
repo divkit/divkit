@@ -10,7 +10,7 @@ internal class BindingEventReporterProvider(
     private val div2View: Div2View,
 ) {
     fun get(oldData: DivData?, newData: DivData?): BindingEventReporter {
-        return if (Log.isEnabled()) {
+        return if (Log.isEnabled) {
             BindingEventReporterImpl(div2View, oldData, newData)
         } else {
             BindingEventReporter.STUB

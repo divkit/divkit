@@ -6,11 +6,11 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.internal.Assert
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import org.json.JSONObject
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -23,7 +23,7 @@ class DivPatchApplyItemsTest {
     private val controller = Robolectric.buildActivity(Activity::class.java)
     private val activity = controller.get()
     private val env = DivParsingEnvironment(
-        logger = { Assert.fail("Unepected parsing error!", it) }
+        logger = { Assert.fail("Parsing error: $it") }
     )
 
     private val div2Context = Div2Context(
@@ -58,9 +58,7 @@ class DivPatchApplyItemsTest {
         val initialData = DivData(env, JSONObject(createInitialDataWith(containerType)))
         div2View.setData(initialData, tag)
         Assert.assertNull(div2View.rootDivContainerItems())
-
         Assert.assertTrue(div2View.applyPatch(DivPatch(env, JSONObject(DIV_PATCH))))
-
         Assert.assertNull(div2View.rootDivContainerItems())
     }
 }

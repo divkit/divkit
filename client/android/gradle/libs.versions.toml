@@ -194,7 +194,10 @@ zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = 
 
 [plugins]
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 screenshotTestPlugin = { id = "com.yandex.test.screenshot-test-plugin", version = "unspecified" }

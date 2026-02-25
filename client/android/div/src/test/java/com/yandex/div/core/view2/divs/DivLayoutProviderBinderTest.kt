@@ -8,11 +8,11 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivLayoutProvider
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any

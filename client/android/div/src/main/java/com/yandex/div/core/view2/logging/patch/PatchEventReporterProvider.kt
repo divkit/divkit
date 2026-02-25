@@ -10,7 +10,7 @@ internal class PatchEventReporterProvider(
     private val div2View: Div2View,
 ) {
     fun get(patch: DivPatch): PatchEventReporter {
-        return if (Log.isEnabled()) {
+        return if (Log.isEnabled) {
             PatchEventReporterImpl(div2View, patch)
         } else {
             PatchEventReporter.STUB
