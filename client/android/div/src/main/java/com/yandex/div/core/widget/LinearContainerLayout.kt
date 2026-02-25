@@ -298,6 +298,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
         }
         considerMatchParentChildrenInMaxWidth(widthMeasureSpec, heightSpec)
+        maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
         crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightSpec) }
 
         if (totalLength > 0) {
@@ -305,7 +306,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         totalLength += verticalPaddings
 
-        maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
         var heightSize = MeasureSpec.getSize(heightSpec)
         when {
             aspectRatio != DEFAULT_ASPECT_RATIO && !exactWidth -> {
