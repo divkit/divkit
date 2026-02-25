@@ -1,3 +1,18 @@
+## 32.39.0
+
+# Android Client:
+* Fixed incorrect transition duration inside a transition set.
+* Fixed match_parent width child size inside a wrap_content parent with min size.
+
+# iOS Client:
+* Added logging of video player fatal errors to `DivKitLogger`.
+* Eliminated redundant animation triggers caused by isHighlighted oscillation during touch tracking.
+* Fixed action_animation not returning to its original state, causing elements to remain visually stuck in the pressed (scaled down) state.
+* Fixed animation playback in previews.
+* Fixed the second slider thumb rendering with zero size when it first appears during an active snap animation.
+* The number of ticks on the slider is limited to 1000 elements.
+
+
 ## 32.38.0
 
 # Android Client:
