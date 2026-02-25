@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import com.yandex.div.core.uri.UriHandler
 import com.yandex.div.internal.KLog
 import com.yandex.div.video.custom.VideoCustomUriHandler
 import com.yandex.divkit.demo.Container
@@ -15,8 +14,7 @@ import java.lang.ref.WeakReference
 
 private const val TAG = "UriHandler"
 
-open class DivkitDemoUriHandler(context: Context) :
-    UriHandler {
+open class DivkitDemoUriHandler(context: Context) {
 
     private val defaultUriHandler = DefaultUriHandler(context)
     private val browserUriHandler = BrowserUriHandler(context)
@@ -51,13 +49,9 @@ open class DivkitDemoUriHandler(context: Context) :
 
         return isHandled || defaultUriHandler.handle(uri)
     }
-
-    override fun handleUri(uri: Uri): Boolean {
-        return handle(uri)
-    }
 }
 
-class DefaultUriHandler(private val context: Context) {
+private class DefaultUriHandler(private val context: Context) {
 
     fun handle(uri: Uri): Boolean {
         val url = uri.toString()
@@ -74,7 +68,7 @@ class DefaultUriHandler(private val context: Context) {
     }
 }
 
-class BrowserUriHandler(private val context: Context) {
+private class BrowserUriHandler(private val context: Context) {
 
     fun handle(uri: Uri, returnIntent: Intent?): Boolean {
         val innerUrl = uri.getQueryParameter("url")
@@ -88,7 +82,7 @@ class BrowserUriHandler(private val context: Context) {
     }
 }
 
-class HttpUriHandler(private val context: Context) {
+private class HttpUriHandler(private val context: Context) {
 
     fun handle(uri: Uri, returnIntent: Intent?): Boolean {
         context.startBrowserActivity(uri, returnIntent)
@@ -96,7 +90,7 @@ class HttpUriHandler(private val context: Context) {
     }
 }
 
-class ViewportUriHandler(private val uriHandler: DivkitDemoUriHandler) {
+private class ViewportUriHandler(private val uriHandler: DivkitDemoUriHandler) {
 
     fun handle(uri: Uri, returnIntent: Intent?): Boolean {
         val text = uri.getQueryParameterSafe("text")
@@ -111,7 +105,7 @@ class ViewportUriHandler(private val uriHandler: DivkitDemoUriHandler) {
     private fun Uri.getQueryParameterSafe(key: String) = if (isOpaque) null else getQueryParameter(key)
 }
 
-class YellowSkinUriHandler(private val context: Context) {
+private class YellowSkinUriHandler(private val context: Context) {
 
     fun handle(uri: Uri, returnIntent: Intent?): Boolean {
         val innerUrl = uri.getQueryParameterSafe("url")

@@ -8,6 +8,7 @@ import com.yandex.div.core.annotations.PublicApi;
  * Basic interface for handling {@link Uri}'s.
  */
 @PublicApi
+@Deprecated
 public interface UriHandler {
 
     /**
