@@ -63,12 +63,10 @@ extension [String: Any] {
   fileprivate var divVariables: [DivVariableName: DivVariableValue] {
     compactMapValues {
       switch $0 {
-      case let value as Bool:
-        DivVariableValue.bool(value)
-      case let value as NSNumber where CFGetTypeID(value) == CFBooleanGetTypeID():
-        DivVariableValue.bool(value.boolValue)
       case let value as String:
         DivVariableValue.string(value)
+      case let number as NSNumber where number.isBool:
+        DivVariableValue.bool(number.boolValue)
       case let value as Double:
         DivVariableValue.number(value)
       case let value as Int:
@@ -85,6 +83,13 @@ extension [String: Any] {
         nil
       }
     }.map(key: { DivVariableName(rawValue: $0) }, value: { $0 })
+  }
+}
+
+extension NSNumber {
+  fileprivate var isBool: Bool {
+    let type = String(cString: objCType)
+    return type == "B" || type == "c"
   }
 }
 #endif
