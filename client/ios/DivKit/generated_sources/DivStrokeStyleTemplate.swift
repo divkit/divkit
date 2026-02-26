@@ -94,7 +94,7 @@ extension DivStrokeStyleTemplate {
     case DivStrokeStyleDashedTemplate.type:
       self = .divStrokeStyleDashedTemplate(try DivStrokeStyleDashedTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-stroke-style_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

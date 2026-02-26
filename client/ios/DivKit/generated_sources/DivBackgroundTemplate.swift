@@ -163,7 +163,7 @@ extension DivBackgroundTemplate {
     case DivNinePatchBackgroundTemplate.type:
       self = .divNinePatchBackgroundTemplate(try DivNinePatchBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-background_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

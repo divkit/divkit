@@ -21,6 +21,7 @@ public enum DivCount: Sendable {
 
 extension DivCount {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivInfinityCount.type:
@@ -28,7 +29,7 @@ extension DivCount {
     case DivFixedCount.type:
       self = .divFixedCount(try DivFixedCount(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-count", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

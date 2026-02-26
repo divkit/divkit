@@ -30,6 +30,7 @@ public enum DivAnimator: Sendable {
 
 extension DivAnimator {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivColorAnimator.type:
@@ -37,7 +38,7 @@ extension DivAnimator {
     case DivNumberAnimator.type:
       self = .divNumberAnimator(try DivNumberAnimator(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-animator", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -94,7 +94,7 @@ extension DivAnimatorTemplate {
     case DivNumberAnimatorTemplate.type:
       self = .divNumberAnimatorTemplate(try DivNumberAnimatorTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-animator_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

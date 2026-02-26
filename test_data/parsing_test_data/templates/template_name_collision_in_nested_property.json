@@ -1,0 +1,40 @@
+{
+  "description": "Template name collides with 'type' value in nested property (e.g. accessibility). The resolver must not try to expand templates inside nested objects where 'type' has a different semantic meaning.",
+  "templates": {
+    "button": {
+      "type": "text",
+      "accessibility": {
+        "type": "button"
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "button",
+          "text": "Click me"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Click me",
+            "accessibility": {
+              "type": "button"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

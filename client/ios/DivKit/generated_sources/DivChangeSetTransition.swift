@@ -13,7 +13,7 @@ public final class DivChangeSetTransition: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivChangeTransition(dictionary: dict, context: context) }, validator: Self.itemsValidator)
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivChangeTransition(dictionary: dict, context: context) }, validator: Self.itemsValidator, context: context)
     )
   }
 

@@ -21,6 +21,7 @@ public enum DivTextGradient: Sendable {
 
 extension DivTextGradient {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivLinearGradient.type:
@@ -28,7 +29,7 @@ extension DivTextGradient {
     case DivRadialGradient.type:
       self = .divRadialGradient(try DivRadialGradient(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-text-gradient", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

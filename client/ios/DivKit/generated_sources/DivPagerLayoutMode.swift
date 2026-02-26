@@ -24,6 +24,7 @@ public enum DivPagerLayoutMode: Sendable {
 
 extension DivPagerLayoutMode {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivPageSize.type:
@@ -33,7 +34,7 @@ extension DivPagerLayoutMode {
     case DivPageContentSize.type:
       self = .divPageContentSize(try DivPageContentSize(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -91,7 +91,7 @@ public final class DivActionSubmit: Sendable {
       containerId: try dictionary.getExpressionField("container_id", context: context),
       onFailActions: try dictionary.getOptionalArray("on_fail_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       onSuccessActions: try dictionary.getOptionalArray("on_success_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
-      request: try dictionary.getField("request", transform: { (dict: [String: Any]) in try DivActionSubmit.Request(dictionary: dict, context: context) })
+      request: try dictionary.getField("request", transform: { (dict: [String: Any]) in try DivActionSubmit.Request(dictionary: dict, context: context) }, context: context)
     )
   }
 

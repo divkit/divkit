@@ -21,6 +21,7 @@ public enum DivShape: Sendable {
 
 extension DivShape {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivRoundedRectangleShape.type:
@@ -28,7 +29,7 @@ extension DivShape {
     case DivCircleShape.type:
       self = .divCircleShape(try DivCircleShape(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-shape", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -45,7 +45,7 @@ public final class DivPatch: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      changes: try dictionary.getArray("changes", transform: { (dict: [String: Any]) in try? DivPatch.Change(dictionary: dict, context: context) }, validator: Self.changesValidator),
+      changes: try dictionary.getArray("changes", transform: { (dict: [String: Any]) in try? DivPatch.Change(dictionary: dict, context: context) }, validator: Self.changesValidator, context: context),
       mode: try dictionary.getOptionalExpressionField("mode", context: context),
       onAppliedActions: try dictionary.getOptionalArray("on_applied_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       onFailedActions: try dictionary.getOptionalArray("on_failed_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) })

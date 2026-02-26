@@ -21,6 +21,7 @@ public enum DivRadialGradientCenter: Sendable {
 
 extension DivRadialGradientCenter {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivRadialGradientFixedCenter.type:
@@ -28,7 +29,7 @@ extension DivRadialGradientCenter {
     case DivRadialGradientRelativeCenter.type:
       self = .divRadialGradientRelativeCenter(try DivRadialGradientRelativeCenter(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-center", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -94,7 +94,7 @@ extension DivRadialGradientRadiusTemplate {
     case DivRadialGradientRelativeRadiusTemplate.type:
       self = .divRadialGradientRelativeRadiusTemplate(try DivRadialGradientRelativeRadiusTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-radius_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

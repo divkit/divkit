@@ -1,0 +1,52 @@
+{
+  "description": "Single-level link resolution in nested template instance",
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "font_size": 14
+    },
+    "list_item": {
+      "type": "container",
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "base_text",
+          "$text": "title"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "list_item",
+          "title": "Resolved directly"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "font_size": 14,
+                "text": "Resolved directly"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

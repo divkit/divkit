@@ -94,7 +94,7 @@ extension DivChangeTransitionTemplate {
     case DivChangeBoundsTransitionTemplate.type:
       self = .divChangeBoundsTransitionTemplate(try DivChangeBoundsTransitionTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-change-transition_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

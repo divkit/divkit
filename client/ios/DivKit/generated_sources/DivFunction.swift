@@ -15,7 +15,7 @@ public final class DivFunction: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      arguments: try dictionary.getArray("arguments", transform: { (dict: [String: Any]) in try? DivFunctionArgument(dictionary: dict, context: context) }),
+      arguments: try dictionary.getArray("arguments", transform: { (dict: [String: Any]) in try? DivFunctionArgument(dictionary: dict, context: context) }, context: context),
       body: try dictionary.getField("body", context: context),
       name: try dictionary.getField("name", validator: Self.nameValidator, context: context),
       returnType: try dictionary.getField("return_type", context: context)

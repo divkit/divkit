@@ -94,7 +94,7 @@ extension DivTransformationTemplate {
     case DivTranslationTransformationTemplate.type:
       self = .divTranslationTransformationTemplate(try DivTranslationTransformationTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-transformation_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

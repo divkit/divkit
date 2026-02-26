@@ -21,6 +21,7 @@ public enum DivTranslation: Sendable {
 
 extension DivTranslation {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivFixedTranslation.type:
@@ -28,7 +29,7 @@ extension DivTranslation {
     case DivPercentageTranslation.type:
       self = .divPercentageTranslation(try DivPercentageTranslation(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-translation", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

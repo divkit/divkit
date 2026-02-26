@@ -94,7 +94,7 @@ extension DivTextRangeBackgroundTemplate {
     case DivCloudBackgroundTemplate.type:
       self = .divCloudBackgroundTemplate(try DivCloudBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-text-range-background_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

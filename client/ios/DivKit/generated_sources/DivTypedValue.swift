@@ -39,6 +39,7 @@ public enum DivTypedValue: Sendable {
 
 extension DivTypedValue {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case StringValue.type:
@@ -58,7 +59,7 @@ extension DivTypedValue {
     case ArrayValue.type:
       self = .arrayValue(try ArrayValue(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-typed-value", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

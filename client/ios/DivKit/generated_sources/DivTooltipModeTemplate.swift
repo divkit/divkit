@@ -94,7 +94,7 @@ extension DivTooltipModeTemplate {
     case DivTooltipModeModalTemplate.type:
       self = .divTooltipModeModalTemplate(try DivTooltipModeModalTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-tooltip-mode_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -28,7 +28,7 @@ public final class DivTrigger: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      actions: try dictionary.getArray("actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }, validator: Self.actionsValidator),
+      actions: try dictionary.getArray("actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }, validator: Self.actionsValidator, context: context),
       condition: try dictionary.getExpressionField("condition", context: context),
       mode: try dictionary.getOptionalExpressionField("mode", context: context)
     )
