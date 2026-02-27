@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.screenshotTestPlugin)
 }
 
-apply from: "${project.projectDir}/../div-application.gradle"
+apply from: "${project.projectDir}/../div-common.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "ui-tests.gradle"
 
