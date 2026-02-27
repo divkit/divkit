@@ -7,18 +7,13 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
 }
 
+apply(from = "../kmp-library.gradle")
 apply(from = "../publish-common.gradle")
 
 kotlin {
     androidLibrary {
         namespace = "com.yandex.div.logging"
-        compileSdk = rootProject.extra["compileSdkVersion"] as Int
-        minSdk = rootProject.extra["minSdkVersion"] as Int
     }
-}
-
-dependencies {
-    lintChecks(project(":lint-rules"))
 }
 
 buildkonfig {
