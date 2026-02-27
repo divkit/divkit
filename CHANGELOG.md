@@ -1,6 +1,7 @@
 ## 32.39.0
 
 # Android Client:
+* Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
 * Fixed incorrect transition duration inside a transition set.
 * Fixed match_parent width child size inside a wrap_content parent with min size.
 
