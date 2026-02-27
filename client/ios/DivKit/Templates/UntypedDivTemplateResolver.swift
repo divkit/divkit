@@ -136,6 +136,13 @@ final class UntypedDivTemplateResolver {
       guard !key.hasPrefix("$") else { continue }
       result[key] = value
     }
+
+    for paramName in parameterNames {
+      if result[paramName] == nil, let value = linkSource[paramName] {
+        result[paramName] = value
+      }
+    }
+
     return result
   }
 
