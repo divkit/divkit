@@ -17,7 +17,6 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
 import com.yandex.div.internal.widget.tabs.HeightCalculatorFactory
-import com.yandex.div.internal.widget.tabs.ScrollableViewPager
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -61,12 +60,19 @@ internal class DivTabsAdapter(
             childStates.clear()
         }
 
-    fun setData(data: Input<DivSimpleTab>, selectedTab: Int) {
+    var selectedTab = NO_POS
+        get() = mPager.currentItem
+        set(value) {
+            if (field != value) {
+                mPager.setCurrentItem(value, true)
+            }
+        }
+
+    fun setData(data: Input<DivSimpleTab>) {
         // Need to update childIds before set data to use right ids while setting.
         childIds = data.tabs.getIds({ item.div })
         super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
         tabModels.clear()
-        mPager.setCurrentItem(selectedTab, true)
     }
 
     override fun bindTabData(
@@ -77,7 +83,7 @@ internal class DivTabsAdapter(
         tabView.releaseAndRemoveChildren(bindingContext.divView)
 
         val itemDiv = tab.item.div
-        val itemView = createItemView(itemDiv, bindingContext.expressionResolver, tabNumber)
+        val itemView = createItemView(tab, tabNumber)
         tabModels[tabView] = TabModel(tabNumber, itemDiv, itemView)
         tabView.addView(itemView)
 
@@ -91,12 +97,13 @@ internal class DivTabsAdapter(
 
     override fun fillMeasuringTab(tabView: ViewGroup, tab: DivSimpleTab, tabNumber: Int) {
         tabView.releaseAndRemoveChildren(bindingContext.divView)
-        val itemView = createItemView(tab.item.div, bindingContext.expressionResolver, tabNumber)
+        val itemView = createItemView(tab, tabNumber)
         tabView.addView(itemView)
     }
 
-    private fun createItemView(div: Div, resolver: ExpressionResolver, tabNumber: Int): View {
-        val itemView = viewCreator.create(div, resolver).apply {
+    private fun createItemView(tab: DivSimpleTab, tabNumber: Int): View {
+        val div = tab.item.div
+        val itemView = viewCreator.create(div, tab.resolver).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -125,25 +132,15 @@ internal class DivTabsAdapter(
         val newTabs = DivPatchApply(patchMap) { divView.logError(it) }.applyPatchForDiv(div, resolver)[0] as Div.Tabs
         val displayMetrics = bindingContext.divView.resources.displayMetrics
         val list = newTabs.value.items.map { DivSimpleTab(it, displayMetrics, resolver) }
-        setData ({ list }, mPager.currentItem)
+        setData { list }
         return newTabs
     }
-
-    val pager = PagerController(mPager)
-}
-
-internal class PagerController(private val scrollableViewPager: ScrollableViewPager) {
-    fun smoothScrollTo(itemIndex: Int) {
-        scrollableViewPager.setCurrentItem(itemIndex, true)
-    }
-
-    val currentItemIndex get() = scrollableViewPager.currentItem
 }
 
 internal class DivSimpleTab(
     private val item: DivTabs.Item,
     private val displayMetrics: DisplayMetrics,
-    private val resolver: ExpressionResolver
+    val resolver: ExpressionResolver
 ) : BaseDivTabbedCardUi.Input.SimpleTab<DivTabs.Item, DivAction> {
 
     override fun getTitle(): String {
