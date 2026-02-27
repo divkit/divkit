@@ -30,6 +30,7 @@ buildscript {
 
 plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
+    alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
@@ -124,6 +125,7 @@ buildTimeTracker {
 apiValidation {
     ignoredProjects += [
         "api-generator-test",
+        "compose",
         "divkit-demo-app",
         "divkit-perftests",
         "divkit-regression-testing",

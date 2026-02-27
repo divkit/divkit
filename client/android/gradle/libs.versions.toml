@@ -88,6 +88,7 @@ androidx-work = { module = "androidx.work:work-runtime-ktx", version.ref = "andr
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
@@ -119,6 +120,7 @@ appmetrica-plugin = { module = "io.appmetrica.analytics:gradle", version.ref = "
 buildTimeTracker = { module = "com.asarkar.gradle:build-time-tracker", version.ref = "buildTimeTracker" }
 
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil-network-cachecontrol = { module = "io.coil-kt.coil3:coil-network-cache-control", version.ref = "coil" }
@@ -194,8 +196,9 @@ zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = 
 [plugins]
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
