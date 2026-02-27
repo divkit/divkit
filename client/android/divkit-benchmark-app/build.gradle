@@ -1,0 +1,140 @@
+import com.yandex.div.gradle.FileExtensions
+import groovy.json.JsonOutput
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-parcelize'
+    alias(libs.plugins.screenshotTestPlugin)
+}
+
+apply from: "${project.projectDir}/../div-common.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+
+repositories {
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+}
+
+android {
+    namespace 'com.yandex.divkit.benchmark'
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
+    defaultConfig {
+        applicationId 'com.yandex.divkit.benchmark'
+        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
+        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
+        buildConfigField "boolean", "THROW_ASSERTS", "${!providers.gradleProperty("screenshot-tests").isPresent()}"
+        buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments useTestStorageService: 'true'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs += "../../../test_data/perf_test_data"
+        }
+
+        debug {
+            java.srcDirs = ['src/public/java']
+        }
+
+        release {
+            java.srcDirs = ['src/public/java']
+        }
+    }
+
+    lint {
+        baseline file("lint-baseline.xml")
+    }
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':div-gesture')
+    implementation project(path: ':div-json')
+    implementation project(path: ':div-lottie')
+    implementation project(path: ':div-markdown')
+    implementation project(path: ':div-network')
+    implementation project(path: ':div-pinch-to-zoom')
+    implementation project(path: ':div-rive')
+    implementation project(path: ':div-shimmer')
+    implementation project(path: ':div-shine')
+    implementation project(path: ':div-size-provider')
+    implementation project(path: ':divkit-regression-testing')
+    implementation project(path: ':fonts')
+    implementation project(path: ':logging')
+    implementation project(path: ':screenshot-test-runtime')
+    implementation project(path: ':ui-test-common')
+    implementation project(path: ':utils')
+    implementation project(path: ':video-custom')
+    implementation project(path: ':div-storage')
+    implementation project(path: ':div-video-m3')
+    implementation project(path: ':picasso')
+    implementation project(path: ':glide')
+    implementation project(path: ':coil')
+
+    implementation libs.androidx.preference
+    implementation libs.kotlin.reflect
+    implementation libs.okhttp
+
+    implementation libs.markwon
+
+    // ============================================================ \\
+    // HELLO, USERNAME!                                             \\
+    // PLEASE DO NOT ADD THIRD-PARTY LIBRARIES HERE!                \\
+    // BENCHMARK APP ALSO TRACKS THE SIZE OF THE DIV-KIT LIBRARY.   \\
+    // EVERY NEW DEPENDENCY HERE MAY MAKE THE                       \\
+    // LIBRARY SIZE LOOK BIGGER THAN IT REALLY IS.                  \\
+    // WHAT'S EVEN WORSE! APPEARANCE OF SAME DEPENDENCY             \\
+    // IN DIV-KIT LIBRARY WON'T BE NOTICED!                         \\
+    // ============================================================ \\
+
+    androidTestUtil libs.androidx.test.services
+    androidTestImplementation libs.hamcrest.library
+    androidTestImplementation libs.androidx.lifecycle.viewmodel
+    androidTestImplementation libs.androidx.viewpager2
+}
+
+screenshotTests {
+    def isInIde = providers.systemProperty("idea.active").map(Boolean::parseBoolean).getOrElse(false)
+    enabled = providers.gradleProperty("screenshot-tests").isPresent() || isInIde
+    enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
+    strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
+    testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
+    referencesDir = "src/screenshotTest/screenshots"
+    providers.gradleProperty("screenshot-dir").orNull?.with { dir ->
+        screenshotDir = dir
+    }
+}
+
+android.applicationVariants.configureEach { variant ->
+
+    variant.outputs.configureEach {
+        boolean isPerf = variant.baseName.contains("perf")
+
+        if (!isPerf) {
+            outputFileName = divkitVersion.buildNumber != 0 ?
+                    "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
+                    "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
+        }
+    }
+}
+
+FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
+    apply from: it
+}

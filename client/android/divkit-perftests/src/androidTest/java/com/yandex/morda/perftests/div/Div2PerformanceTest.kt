@@ -48,7 +48,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "perf_test_data/with_templates.json"
+                        assetName = "with_templates.json"
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -102,7 +102,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "perf_test_data/without_templates.json"
+                        assetName = "without_templates.json"
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
