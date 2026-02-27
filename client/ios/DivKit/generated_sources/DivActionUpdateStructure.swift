@@ -24,7 +24,7 @@ public final class DivActionUpdateStructure: Sendable {
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       path: try dictionary.getExpressionField("path", validator: Self.pathValidator, context: context),
-      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }),
+      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }, context: context),
       variableName: try dictionary.getExpressionField("variable_name", context: context)
     )
   }

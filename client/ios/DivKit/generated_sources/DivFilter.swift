@@ -21,6 +21,7 @@ public enum DivFilter: Sendable {
 
 extension DivFilter {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivBlur.type:
@@ -28,7 +29,7 @@ extension DivFilter {
     case DivFilterRtlMirror.type:
       self = .divFilterRtlMirror(try DivFilterRtlMirror(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-filter", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

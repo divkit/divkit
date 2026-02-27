@@ -232,7 +232,7 @@ extension DivTypedValueTemplate {
     case ArrayValueTemplate.type:
       self = .arrayValueTemplate(try ArrayValueTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-typed-value_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

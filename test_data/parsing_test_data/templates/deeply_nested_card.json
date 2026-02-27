@@ -1,0 +1,48 @@
+{
+  "description": "Parameter values are forwarded through a 2-level template chain (container → image) via $-link indirection",
+  "templates": {
+    "inner_template": {
+      "type": "image",
+      "$image_url": "image"
+    },
+    "outer_template": {
+      "type": "container",
+      "items": [
+        {
+          "type": "inner_template"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "outer_template",
+          "image": "https://image.url"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://image.url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

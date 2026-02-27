@@ -30,7 +30,7 @@ public final class EntityWithComplexProperty: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      property: try dictionary.getField("property", transform: { (dict: [String: Any]) in try EntityWithComplexProperty.Property(dictionary: dict, context: context) })
+      property: try dictionary.getField("property", transform: { (dict: [String: Any]) in try EntityWithComplexProperty.Property(dictionary: dict, context: context) }, context: context)
     )
   }
 

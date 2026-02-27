@@ -21,6 +21,7 @@ public enum DivActionCopyToClipboardContent: Sendable {
 
 extension DivActionCopyToClipboardContent {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case ContentText.type:
@@ -28,7 +29,7 @@ extension DivActionCopyToClipboardContent {
     case ContentUrl.type:
       self = .contentUrl(try ContentUrl(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-copy-to-clipboard-content", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

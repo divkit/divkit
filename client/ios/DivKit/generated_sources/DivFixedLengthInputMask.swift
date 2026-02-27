@@ -68,7 +68,7 @@ public final class DivFixedLengthInputMask: DivInputMaskBase, Sendable {
     self.init(
       alwaysVisible: try dictionary.getOptionalExpressionField("always_visible", context: context),
       pattern: try dictionary.getExpressionField("pattern", context: context),
-      patternElements: try dictionary.getArray("pattern_elements", transform: { (dict: [String: Any]) in try? DivFixedLengthInputMask.PatternElement(dictionary: dict, context: context) }, validator: Self.patternElementsValidator),
+      patternElements: try dictionary.getArray("pattern_elements", transform: { (dict: [String: Any]) in try? DivFixedLengthInputMask.PatternElement(dictionary: dict, context: context) }, validator: Self.patternElementsValidator, context: context),
       rawTextVariable: try dictionary.getField("raw_text_variable", context: context)
     )
   }

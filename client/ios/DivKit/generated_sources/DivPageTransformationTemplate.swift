@@ -94,7 +94,7 @@ extension DivPageTransformationTemplate {
     case DivPageTransformationOverlapTemplate.type:
       self = .divPageTransformationOverlapTemplate(try DivPageTransformationOverlapTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-page-transformation_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

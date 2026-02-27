@@ -94,7 +94,7 @@ extension DivIndicatorItemPlacementTemplate {
     case DivStretchIndicatorItemPlacementTemplate.type:
       self = .divStretchIndicatorItemPlacementTemplate(try DivStretchIndicatorItemPlacementTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-indicator-item-placement_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

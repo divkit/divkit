@@ -58,7 +58,7 @@ public final class DivTooltip: Sendable {
       backgroundAccessibilityDescription: try dictionary.getOptionalExpressionField("background_accessibility_description", context: context),
       bringToTopId: try dictionary.getOptionalField("bring_to_top_id", context: context),
       closeByTapOutside: try dictionary.getOptionalExpressionField("close_by_tap_outside", context: context),
-      div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+      div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }, context: context),
       duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
       id: try dictionary.getField("id", context: context),
       mode: try dictionary.getOptionalField("mode", transform: { (dict: [String: Any]) in try DivTooltipMode(dictionary: dict, context: context) }),

@@ -71,7 +71,7 @@ extension DivDrawableTemplate {
     case DivShapeDrawableTemplate.type:
       self = .divShapeDrawableTemplate(try DivShapeDrawableTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-drawable_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

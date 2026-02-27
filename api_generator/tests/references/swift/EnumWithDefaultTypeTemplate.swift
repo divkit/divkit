@@ -93,7 +93,7 @@ extension EnumWithDefaultTypeTemplate {
     case WithoutDefaultTemplate.type:
       self = .withoutDefaultTemplate(try WithoutDefaultTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "enum_with_default_type_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -159,8 +159,11 @@ class SwiftGenerator(Generator):
         if entity_enumeration.mode.is_template:
             body += 'let receivedType = try dictionary.getField("type") as String'
             body += 'let blockType = templateToType[receivedType] ?? receivedType'
+            dict_var = 'dictionary'
         else:
+            body += 'let dictionary = context.templateResolver?(dictionary) ?? dictionary'
             body += 'let blockType = try dictionary.getField("type") as String'
+            dict_var = 'dictionary'
         body += 'switch blockType {'
         entity_names = entity_enumeration.entity_names
         for entity, name in zip(entity_enumeration.entities, entity_names):
@@ -169,10 +172,9 @@ class SwiftGenerator(Generator):
             args = swift_template_deserializable_args(entity_enumeration.mode)
             context_param = '' if entity_enumeration.mode.is_template else ', context: context'
             body += f'case {obj_t}.type:'
-            body += f'  self = .{low_name}(try {obj_t}(dictionary: dictionary{args}{context_param}))'
+            body += f'  self = .{low_name}(try {obj_t}(dictionary: {dict_var}{args}{context_param}))'
         body += 'default:'
-        args = f'field: "{entity_enumeration.name}", representation: dictionary'
-        body += f'  throw DeserializationError.invalidFieldRepresentation({args})'
+        body += '  throw DeserializationError.requiredFieldIsMissing(field: "type")'
         body += '}'
         deserializable_extension += body.indented(level=2)
         deserializable_extension += '  }'

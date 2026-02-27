@@ -117,7 +117,7 @@ extension DivPagerLayoutModeTemplate {
     case DivPageContentSizeTemplate.type:
       self = .divPageContentSizeTemplate(try DivPageContentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

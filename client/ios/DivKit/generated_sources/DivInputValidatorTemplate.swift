@@ -94,7 +94,7 @@ extension DivInputValidatorTemplate {
     case DivInputValidatorExpressionTemplate.type:
       self = .divInputValidatorExpressionTemplate(try DivInputValidatorExpressionTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-input-validator_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

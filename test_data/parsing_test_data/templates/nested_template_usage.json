@@ -1,0 +1,54 @@
+{
+  "description": "Template 'list' (container) uses template 'item' (text) in its items. Verifies that templates referenced inside other templates' items are resolved correctly.",
+  "templates": {
+    "item": {
+      "type": "text",
+      "text": "ITEM"
+    },
+    "list": {
+      "type": "container",
+      "items": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "list"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "ITEM"
+              },
+              {
+                "type": "text",
+                "text": "ITEM"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

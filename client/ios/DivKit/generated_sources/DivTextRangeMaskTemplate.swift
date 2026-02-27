@@ -94,7 +94,7 @@ extension DivTextRangeMaskTemplate {
     case DivTextRangeMaskSolidTemplate.type:
       self = .divTextRangeMaskSolidTemplate(try DivTextRangeMaskSolidTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-text-range-mask_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

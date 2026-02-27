@@ -21,6 +21,7 @@ public enum DivIndicatorItemPlacement: Sendable {
 
 extension DivIndicatorItemPlacement {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivDefaultIndicatorItemPlacement.type:
@@ -28,7 +29,7 @@ extension DivIndicatorItemPlacement {
     case DivStretchIndicatorItemPlacement.type:
       self = .divStretchIndicatorItemPlacement(try DivStretchIndicatorItemPlacement(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-indicator-item-placement", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }
