@@ -1,3 +1,10 @@
+## 32.36.1
+
+# Android Client:
+* Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
+* Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
+
+
 ## 32.36.0
 
 # Android Client:
