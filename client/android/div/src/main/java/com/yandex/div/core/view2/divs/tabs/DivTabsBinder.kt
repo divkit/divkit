@@ -144,28 +144,9 @@ internal class DivTabsBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val list = div.items.map { DivSimpleTab(it, view.resources.displayMetrics, resolver) }
 
-        fun setupNewAdapter(selectedTab: Int) {
-            val divTabsUi = createAdapter(bindingContext, div, view, divBinder, path)
-            divTabsUi.setData({ list }, selectedTab)
-            view.divTabsAdapter = divTabsUi
-        }
-
-        val reusableAdapter = view.divTabsAdapter.tryReuse(div, resolver)
-
-        if (reusableAdapter != null) {
-            reusableAdapter.bindingContext = bindingContext
-            reusableAdapter.statePath = path
-            reusableAdapter.divTabsEventManager.div = div
-            reusableAdapter.activeStateTracker.div = div
-            if (oldDiv === div) {
-                // rebind tabs only
-                reusableAdapter.notifyStateChanged()
-            } else {
-                reusableAdapter.setData({ list }, resolver, subscriber)
-            }
-        } else {
-            setupNewAdapter(div.selectedTab.evaluate(resolver).toIntSafely())
-        }
+        view.divTabsAdapter?.takeIf { it.isDynamicHeight == div.dynamicHeight.evaluate(resolver) }
+            ?.reuse(path, bindingContext, oldDiv, div, list)
+            ?: view.setupNewAdapter(bindingContext, div, divBinder, path, list)
 
         div.items.observeFixedHeightChange(resolver, subscriber) {
             view.divTabsAdapter?.notifyStateChanged()
@@ -173,13 +154,7 @@ internal class DivTabsBinder @Inject constructor(
 
         val selectTab = { selectedTab: Long ->
             oldDivSelectedTab = selectedTab
-            view.divTabsAdapter?.pager?.let {
-                val selectedTabInt = selectedTab.toIntSafely()
-                if (it.currentItemIndex != selectedTabInt) {
-                    it.smoothScrollTo(selectedTabInt)
-                }
-            }
-            Unit
+            view.divTabsAdapter?.selectedTab = selectedTab.toIntSafely()
         }
 
         subscriber.addSubscription(div.dynamicHeight.observe(resolver) { dynamicHeight ->
@@ -187,10 +162,7 @@ internal class DivTabsBinder @Inject constructor(
                 return@observe
             }
 
-            setupNewAdapter(
-                view.divTabsAdapter?.pager?.currentItemIndex
-                    ?: div.selectedTab.evaluate(resolver).toIntSafely()
-            )
+            view.setupNewAdapter(bindingContext, div, divBinder, path, list, view.divTabsAdapter?.selectedTab)
         })
 
         subscriber.addSubscription(div.selectedTab.observe(resolver, selectTab))
@@ -216,23 +188,43 @@ internal class DivTabsBinder @Inject constructor(
         })
     }
 
-    private fun createAdapter(
+    private fun DivTabsAdapter.reuse(
+        path: DivStatePath,
+        context: BindingContext,
+        oldDiv: DivTabs?,
+        div: DivTabs,
+        list: List<DivSimpleTab>,
+    ) {
+        bindingContext = context
+        statePath = path
+        divTabsEventManager.div = div
+        activeStateTracker.div = div
+        if (oldDiv === div) {
+            // rebind tabs only
+            notifyStateChanged()
+        } else {
+            setData { list }
+        }
+    }
+
+    private fun DivTabsLayout.setupNewAdapter(
         bindingContext: BindingContext,
         div: DivTabs,
-        view: DivTabsLayout,
         divBinder: DivBinder,
         path: DivStatePath,
-    ): DivTabsAdapter {
+        list: List<DivSimpleTab>,
+        tabToSelect: Int? = null,
+    ) {
         val eventManager =
-            DivTabsEventManager(bindingContext, actionBinder, div2Logger, visibilityActionTracker, view, div)
+            DivTabsEventManager(bindingContext, actionBinder, div2Logger, visibilityActionTracker, this, div)
         val isDynamicHeight = div.dynamicHeight.evaluate(bindingContext.expressionResolver)
         val heightCalculatorFactory = if (isDynamicHeight) {
             HeightCalculatorFactory(::DynamicCardHeightCalculator)
         } else {
             HeightCalculatorFactory(::MaxCardHeightCalculator)
         }
-        val selectedTab = view.viewPager.currentItem
-        val currentTab = view.viewPager.currentItem
+        val selectedTab = viewPager.currentItem
+        val currentTab = viewPager.currentItem
         if (currentTab == selectedTab) {
             // Tab view could be not laid out at this point, so post display event
             UiThreadHandler.postOnMainThread {
@@ -241,11 +233,14 @@ internal class DivTabsBinder @Inject constructor(
         }
         val activeStateTracker = DivTabsActiveStateTracker(
             bindingContext, path, div2Logger, tabsStateCache, runtimeVisitor, div)
-        return DivTabsAdapter(
-            viewPool, view, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
+        val adapter = DivTabsAdapter(
+            viewPool, this, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
             bindingContext, textStyleProvider, viewCreator, divBinder,
             eventManager, activeStateTracker, path, divPatchCache
         )
+        adapter.setData { list }
+        adapter.selectedTab = tabToSelect ?: div.selectedTab.evaluate(bindingContext.expressionResolver).toIntSafely()
+        divTabsAdapter = adapter
     }
 
     private fun getDisabledScrollPages(lastPageNumber: Int, isSwipeEnabled: Boolean): MutableSet<Int> {
@@ -260,7 +255,8 @@ internal class DivTabsBinder @Inject constructor(
             val lineHeight = tabTitleStyle.lineHeight?.evaluate(resolver)
                 ?: (tabTitleStyle.fontSize.evaluate(resolver) * DEFAULT_LINE_HEIGHT_COEFFICIENT).toLong()
 
-            val height = lineHeight + textPaddings.top.evaluate(resolver) + textPaddings.bottom.evaluate(resolver) + layoutPaddings.top.evaluate(resolver) + layoutPaddings.bottom.evaluate(resolver)
+            val height = lineHeight + textPaddings.top.evaluate(resolver) + textPaddings.bottom.evaluate(resolver) +
+                layoutPaddings.top.evaluate(resolver) + layoutPaddings.bottom.evaluate(resolver)
             val metrics = resources.displayMetrics
             layoutParams.height = height.spToPx(metrics)
         }
@@ -404,18 +400,6 @@ internal class DivTabsBinder @Inject constructor(
 
         private val DEFAULT_TAB_TITLE_STYLE = DivTabs.TabTitleStyle()
     }
-}
-
-private fun DivTabsAdapter?.tryReuse(div: DivTabs, resolver: ExpressionResolver): DivTabsAdapter? {
-    if (this == null) {
-        return null
-    }
-
-    if (this.isDynamicHeight != div.dynamicHeight.evaluate(resolver)) {
-        return null
-    }
-
-    return this
 }
 
 private fun List<DivTabs.Item>.observeFixedHeightChange(
