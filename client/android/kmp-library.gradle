@@ -1,0 +1,15 @@
+apply plugin: "com.android.kotlin.multiplatform.library"
+apply plugin: "org.jetbrains.kotlin.multiplatform"
+
+version = divkitVersion.baseVersionName
+
+kotlin {
+    androidLibrary {
+        compileSdk = rootProject.ext.compileSdkVersion
+        minSdk = rootProject.ext.minSdkVersion
+    }
+}
+
+dependencies {
+    lintChecks project(path: ':lint-rules')
+}
