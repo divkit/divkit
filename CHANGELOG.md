@@ -2,6 +2,7 @@
 
 # Android Client:
 * Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
+* Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
 * Fixed incorrect transition duration inside a transition set.
 * Fixed match_parent width child size inside a wrap_content parent with min size.
 
