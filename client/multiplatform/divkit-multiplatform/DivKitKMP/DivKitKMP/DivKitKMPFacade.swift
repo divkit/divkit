@@ -35,7 +35,7 @@ internal import DivKitExtensions
         cardId: DivCardID(rawValue: cardId)
       )
     )
-    return divView
+    return DivKitKMPView(divView: divView)
   }
 
   @objc public func getVariableValue(_ name: String) -> Any? {

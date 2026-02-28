@@ -1,30 +1,30 @@
 PODS:
-  - DivKit (32.35.0):
-    - DivKit_LayoutKit (= 32.35.0)
-    - DivKit_Serialization (= 32.35.0)
+  - DivKit (32.38.0):
+    - DivKit_LayoutKit (= 32.38.0)
+    - DivKit_Serialization (= 32.38.0)
     - VGSL (~> 7.12)
-  - DivKit_LayoutKit (32.35.0):
-    - DivKit_LayoutKitInterface (= 32.35.0)
+  - DivKit_LayoutKit (32.38.0):
+    - DivKit_LayoutKitInterface (= 32.38.0)
     - VGSL (~> 7.12)
-  - DivKit_LayoutKitInterface (32.35.0):
+  - DivKit_LayoutKitInterface (32.38.0):
     - VGSL (~> 7.12)
-  - DivKit_Serialization (32.35.0):
+  - DivKit_Serialization (32.38.0):
     - VGSL (~> 7.12)
-  - DivKitExtensions (32.35.0):
-    - DivKit (= 32.35.0)
-  - DivKitKMP (32.35.0):
-    - DivKit (= 32.35.0)
-    - DivKitExtensions (= 32.35.0)
-  - VGSL (7.17.0):
-    - VGSLFundamentals (= 7.17.0)
-    - VGSLNetworking (= 7.17.0)
-    - VGSLUI (= 7.17.0)
-  - VGSLFundamentals (7.17.0)
-  - VGSLNetworking (7.17.0):
-    - VGSLFundamentals (= 7.17.0)
-    - VGSLUI (= 7.17.0)
-  - VGSLUI (7.17.0):
-    - VGSLFundamentals (= 7.17.0)
+  - DivKitExtensions (32.38.0):
+    - DivKit (= 32.38.0)
+  - DivKitKMP (32.38.0):
+    - DivKit (= 32.38.0)
+    - DivKitExtensions (= 32.38.0)
+  - VGSL (7.19.1):
+    - VGSLFundamentals (= 7.19.1)
+    - VGSLNetworking (= 7.19.1)
+    - VGSLUI (= 7.19.1)
+  - VGSLFundamentals (7.19.1)
+  - VGSLNetworking (7.19.1):
+    - VGSLFundamentals (= 7.19.1)
+    - VGSLUI (= 7.19.1)
+  - VGSLUI (7.19.1):
+    - VGSLFundamentals (= 7.19.1)
 
 DEPENDENCIES:
   - DivKitKMP (from `../`)
@@ -46,16 +46,16 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  DivKit: 3dbffa1f9b303ba9f95ea4fc2b48375440768da2
-  DivKit_LayoutKit: c5025c06af360dc2b1a539b17567bfb628bd3755
-  DivKit_LayoutKitInterface: f31972d07134bdd373823ed31c0097eff5b9837f
-  DivKit_Serialization: c15fa9eb3878dda9710a30a19a395e61a9d2e118
-  DivKitExtensions: 2dd13f295a717e0e4de3810b69c8865f90125195
-  DivKitKMP: 83316de3342542a9a6a2f49d5bcb8e46d73cdfae
-  VGSL: 6696dd84229c7d3ce8ad9b940e89bbd199e2b12d
-  VGSLFundamentals: 5bd45cb6e0b594902aa9f8927402b4d787460bc7
-  VGSLNetworking: 4301c663201314d27357078ec8df9dccc631ec62
-  VGSLUI: 6cf73663cc3e9fcc808c095f065eb84555a5cd52
+  DivKit: 87422c6265ee9f81f483b3ceb63b6bf8f7012c8d
+  DivKit_LayoutKit: 1b4ea711f425245cfc50ff86d319731458cac19f
+  DivKit_LayoutKitInterface: 0e9be197ea22efed67c663a609d2f690b6731469
+  DivKit_Serialization: c2fab65288397ea29bd91d3966c07d2d12ee608d
+  DivKitExtensions: 08d57b3cab5ca255ae88f812168380a44b405fc1
+  DivKitKMP: 28fa257455a5ea2815cc5f930831bb89d89679ac
+  VGSL: 11fa7ce04704742563023605ebae5f1f07650402
+  VGSLFundamentals: 06fafc043931efd4023be34bd98bec6df05a0080
+  VGSLNetworking: dfc9d7a2244def8272afc0ca1af6fd417ecbf7c6
+  VGSLUI: e4809e668479fb6c151970d1097a086b6c7c176b
 
 PODFILE CHECKSUM: 4009ac52a15ffdedf1dc6002da52adfc1f079b30
 
