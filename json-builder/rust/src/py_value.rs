@@ -1,6 +1,6 @@
 use pyo3::prelude::*;
 use pyo3::conversion::IntoPyObject;
-use pyo3::types::{PyBool, PyDict, PyFloat, PyInt, PyList, PyString};
+use pyo3::types::{PyBool, PyDict, PyFloat, PyInt, PyList, PyString, PyTuple};
 
 use crate::entity::Entity;
 use crate::expr::Expr;
@@ -49,12 +49,20 @@ pub fn py_to_divvalue(obj: &Bound<'_, PyAny>) -> PyResult<DivValue> {
         return Ok(DivValue::String(v));
     }
 
-    // List
-    if obj.is_instance_of::<PyList>() {
-        let list = obj.cast::<PyList>()?;
-        let mut items = Vec::with_capacity(list.len());
-        for item in list.iter() {
-            items.push(py_to_divvalue(&item)?);
+    // List / tuple
+    if obj.is_instance_of::<PyList>() || obj.is_instance_of::<PyTuple>() {
+        let mut items = Vec::new();
+        if let Ok(list) = obj.cast::<PyList>() {
+            items.reserve(list.len());
+            for item in list.iter() {
+                items.push(py_to_divvalue(&item)?);
+            }
+        } else {
+            let tuple = obj.cast::<PyTuple>()?;
+            items.reserve(tuple.len());
+            for item in tuple.iter() {
+                items.push(py_to_divvalue(&item)?);
+            }
         }
         return Ok(DivValue::Array(items));
     }

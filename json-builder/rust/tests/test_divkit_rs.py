@@ -8,6 +8,7 @@ import enum
 import divkit_rs
 import pytest
 from divkit_rs import (
+    BaseDiv,
     DivAction,
     DivActionClearFocus,
     DivActionCopyToClipboard,
@@ -32,14 +33,20 @@ from divkit_rs import (
     DivLinearGradient,
     DivMatchParentSize,
     DivSolidBackground,
+    DivState,
+    DivStateState,
+    DivTabs,
+    DivTabsItem,
     DivText,
     DivTextRange,
     DivVideo,
     DivVideoSource,
     DivVisibility,
     DivWrapContentSize,
+    Field,
     IndexDestination,
     PyDivEntity,
+    Ref,
     RequestHeader,
     StringValue,
 )
@@ -896,3 +903,134 @@ class TestSubclassing:
         assert d["items"][0]["font_size"] == 20
         assert d["items"][1]["text"] == "Hello world"
         assert d["paddings"]["left"] == 16
+
+
+class TestPydivkitCompatibilityLayer:
+    def test_core_exports_exist(self):
+        assert hasattr(divkit_rs, "Field")
+        assert hasattr(divkit_rs, "Ref")
+        assert hasattr(divkit_rs, "Expr")
+        assert hasattr(divkit_rs, "BaseEntity")
+        assert hasattr(divkit_rs, "BaseDiv")
+
+    def test_class_level_schema_call(self):
+        schema = DivText.schema()
+        assert "properties" in schema
+        assert "text" in schema["properties"]
+
+    def test_template_style_field_ref(self):
+        class Header(DivContainer):
+            title: str = Field()
+            title_color: str = Field()
+            items = [DivText(text=Ref(title), text_color=Ref(title_color))]
+
+        header = Header(title="Hello", title_color="#ffffff")
+        rendered = header.dict()
+        assert rendered["type"] == Header.template_name
+        assert rendered["title"] == "Hello"
+        assert rendered["title_color"] == "#ffffff"
+
+        templates = {tpl.template_name: tpl.template() for tpl in header.related_templates()}
+        assert Header.template_name in templates
+        template = templates[Header.template_name]
+        assert template["type"] == "container"
+        assert template["items"][0]["$text"] == "title"
+        assert template["items"][0]["$text_color"] == "title_color"
+
+    def test_template_schema_contains_declared_fields(self):
+        class Header(DivContainer):
+            title: str = Field(description="Header title")
+            tags: list[str] = Field(default=["a"], min_items=1)
+            items = [DivText(text=Ref(title))]
+
+        schema = Header.schema()
+        props = schema["properties"]
+
+        assert props["title"]["type"] == "string"
+        assert props["title"]["description"] == "Header title"
+        assert "title" not in schema.get("required", [])
+        assert props["tags"]["type"] == "array"
+        assert props["tags"]["minItems"] == 1
+        assert props["tags"]["default"] == ["a"]
+        assert "tags" not in schema.get("required", [])
+
+        schema_without_tags = Header.schema(exclude_fields=["tags"])
+        assert "tags" not in schema_without_tags["properties"]
+
+    def test_make_div_collects_templates(self):
+        class Header(DivContainer):
+            title: str = Field()
+            items = [DivText(text=Ref(title))]
+
+        header = Header(title="Hello")
+        result = divkit_rs.make_div(header)
+        assert Header.template_name in result["templates"]
+        assert result["card"]["states"][0]["div"]["type"] == Header.template_name
+
+    def test_make_card_accepts_multiple_divs(self):
+        card = divkit_rs.make_card(
+            "card",
+            DivText(text="first"),
+            DivText(text="second"),
+        ).dict()
+
+        assert card["log_id"] == "card"
+        assert card["states"][0]["state_id"] == 0
+        assert card["states"][0]["div"]["text"] == "first"
+        assert card["states"][1]["state_id"] == 1
+        assert card["states"][1]["div"]["text"] == "second"
+
+    def test_tuple_background_serializes_as_list(self):
+        container = DivContainer(
+            items=[],
+            background=(DivSolidBackground(color="#ffffff"),),
+        )
+
+        rendered = container.dict()
+        assert isinstance(rendered["background"], list)
+        assert rendered["background"][0] == {"type": "solid", "color": "#ffffff"}
+
+    def test_make_div_collects_nested_templates_from_tuple_states(self):
+        class TransparentCard(DivContainer):
+            items = []
+
+        class SkeletonTabs(DivTabs):
+            items = [
+                DivTabsItem(
+                    title="tab",
+                    div=DivState(
+                        states=(
+                            DivStateState(
+                                state_id="default",
+                                div=TransparentCard(),
+                            ),
+                        ),
+                    ),
+                )
+            ]
+
+        root = DivContainer(items=[SkeletonTabs()])
+        result = divkit_rs.make_div(root)
+        assert TransparentCard.template_name in result["templates"]
+        skeleton_div = result["card"]["states"][0]["div"]["items"][0]
+        assert skeleton_div["type"] == SkeletonTabs.template_name
+
+    def test_div_module_namespaces(self):
+        import divkit_rs.div as div
+
+        assert div.div_timer.DivTimer is divkit_rs.DivTimer
+        assert div.div_trigger.DivTrigger is divkit_rs.DivTrigger
+        assert div.div_variable.DivVariable is divkit_rs.DivVariable
+        assert div.div_variable.StringVariable is divkit_rs.StringVariable
+
+    def test_base_div_alias(self):
+        assert issubclass(DivContainer, BaseDiv)
+
+    def test_custom_base_div_inheritance(self):
+        class DivVarData(BaseDiv):
+            timers: list[str] | None = Field(description="List of timers")
+
+        assert issubclass(DivVarData, BaseDiv)
+        schema = DivVarData.schema()
+        assert "timers" in schema["properties"]
+        assert schema["properties"]["timers"]["description"] == "List of timers"
