@@ -333,6 +333,27 @@ def _collect_parent_template_classes(
         current_base_type = getattr(base_template_cls, "__dk_base_type__", None)
 
 
+def _is_template_field_value(value: Any) -> bool:
+    if isinstance(value, type) and issubclass(value, PyDivEntity):
+        return True
+    if isinstance(value, PyDivEntity):
+        return True
+    if isinstance(value, Mapping):
+        return True
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        return True
+    return False
+
+
+def _collect_inherited_class_defaults(
+    cls: type[PyDivEntity],
+) -> dict[str, Any]:
+    merged: dict[str, Any] = {}
+    for base in reversed(cls.__mro__[1:]):
+        merged.update(getattr(base, "__dk_defaults__", {}))
+    return merged
+
+
 def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
     try:
         _ORIG_INIT_SUBCLASS(**kwargs)
@@ -355,6 +376,7 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
     cls.__dk_fields__ = MappingProxyType(declared_fields)
     cls.__field_names__ = _legacy_field_names_for_class(cls)
     cls.__dk_tpl_values__ = MappingProxyType({})
+    cls.__dk_defaults__ = MappingProxyType({})
     cls.__dk_template__ = None
     cls.__dk_is_template__ = False
     cls.__dk_base_type__ = getattr(cls, "_type_name", None)
@@ -367,20 +389,36 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
     for base in cls.__mro__[1:]:
         inherited_dk_field_names.update(getattr(base, "__dk_fields__", {}).keys())
 
-    tpl_values: dict[str, Any] = {}
+    class_field_values: dict[str, Any] = {}
     for name, value in list(cls.__dict__.items()):
         if name in native_field_names or name in inherited_dk_field_names:
-            tpl_values[name] = value
+            class_field_values[name] = value
             delattr(cls, name)
 
-    cls.__dk_tpl_values__ = MappingProxyType(tpl_values)
-    cls.__dk_is_template__ = True
-    template_name = _template_name_for_class(cls)
-    _TEMPLATE_REGISTRY[template_name] = cls
+    inherited_defaults = _collect_inherited_class_defaults(cls)
+    template_like_values = {
+        name: value
+        for name, value in class_field_values.items()
+        if _is_template_field_value(value)
+    }
 
-    # Keep template type in nested native serialization.
-    # The original base type is preserved in __dk_base_type__ and used by template().
-    cls._type_name = template_name
+    class_defined_locally = "<locals>" in getattr(cls, "__qualname__", "")
+    module_level_template = not class_defined_locally
+
+    if declared_fields or template_like_values or module_level_template:
+        cls.__dk_tpl_values__ = MappingProxyType(class_field_values)
+        cls.__dk_is_template__ = True
+        cls.__dk_defaults__ = MappingProxyType({})
+        template_name = _template_name_for_class(cls)
+        _TEMPLATE_REGISTRY[template_name] = cls
+
+        # Keep template type in nested native serialization.
+        # The original base type is preserved in __dk_base_type__ and used by template().
+        cls._type_name = template_name
+        return
+
+    inherited_defaults.update(class_field_values)
+    cls.__dk_defaults__ = MappingProxyType(inherited_defaults)
 
 
 def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
@@ -394,6 +432,12 @@ def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
     for field_name, value in kwargs.items():
         if value is not None:
             setattr(self, field_name, value)
+
+    for field_name, default in getattr(type(self), "__dk_defaults__", {}).items():
+        if field_name in kwargs:
+            continue
+        if default is not None:
+            setattr(self, field_name, default)
 
     for field_name, field in getattr(type(self), "__dk_fields__", {}).items():
         if field_name not in kwargs:
@@ -492,6 +536,10 @@ def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
             dumped_raw = _dump(raw_value)
             if dumped_raw != current:
                 result[field_name] = dumped_raw
+    for field_name, default in getattr(cls, "__dk_defaults__", {}).items():
+        if field_name in result or default is None:
+            continue
+        result[field_name] = _dump(default)
     if getattr(cls, "__dk_is_template__", False):
         result["type"] = _template_name_for_class(cls)
     return result
