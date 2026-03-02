@@ -8,7 +8,7 @@ plugins {
 }
 
 apply(from = "../kmp-library.gradle")
-apply(from = "../publish-common.gradle")
+apply(from = "../publish-kmp.gradle")
 
 kotlin {
     androidLibrary {
