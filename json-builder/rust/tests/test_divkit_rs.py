@@ -1044,3 +1044,35 @@ class TestPydivkitCompatibilityLayer:
         schema = DivVarData.schema()
         assert "timers" in schema["properties"]
         assert schema["properties"]["timers"]["description"] == "List of timers"
+
+    def test_custom_base_div_super_init_accepts_kwargs(self):
+        class DivVarData(BaseDiv):
+            timers: list[str] | None = Field(default=None)
+            variable_triggers: list[str] | None = Field(default=None)
+            variables: list[str] | None = Field(default=None)
+
+            def __init__(
+                self,
+                *,
+                timers: list[str] | None = None,
+                variable_triggers: list[str] | None = None,
+                variables: list[str] | None = None,
+                **kwargs,
+            ):
+                super().__init__(
+                    timers=timers,
+                    variable_triggers=variable_triggers,
+                    variables=variables,
+                    **kwargs,
+                )
+
+        data = DivVarData(
+            timers=["timer"],
+            variable_triggers=["trigger"],
+            variables=["var"],
+            custom="x",
+        )
+        assert data.timers == ["timer"]
+        assert data.variable_triggers == ["trigger"]
+        assert data.variables == ["var"]
+        assert data.custom == "x"

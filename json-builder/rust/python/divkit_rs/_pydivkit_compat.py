@@ -255,6 +255,7 @@ class _DualMethod:
 
 
 _ORIG_DICT = PyDivEntity.dict
+_ORIG_INIT = PyDivEntity.__init__
 _ORIG_SCHEMA = PyDivEntity.schema
 _ORIG_RELATED_TEMPLATES = getattr(PyDivEntity, "related_templates", lambda self: [])
 _ORIG_INIT_SUBCLASS = PyDivEntity.__init_subclass__
@@ -371,6 +372,23 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
     # Keep template type in nested native serialization.
     # The original base type is preserved in __dk_base_type__ and used by template().
     cls._type_name = template_name
+
+
+def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
+    # Generated native entities define their own __init__, so this initializer
+    # primarily serves lightweight user subclasses of BaseDiv/BaseEntity.
+    try:
+        _ORIG_INIT(self)
+    except TypeError:
+        pass
+
+    for field_name, value in kwargs.items():
+        if value is not None:
+            setattr(self, field_name, value)
+
+    for field_name, field in getattr(type(self), "__dk_fields__", {}).items():
+        if field_name not in kwargs:
+            setattr(self, field_name, field.default)
 
 
 def _compat_related_templates(self: PyDivEntity) -> set[type[PyDivEntity]]:
@@ -557,6 +575,7 @@ def _normalize_pydivkit_json(value: Any, parent_key: str | None = None) -> Any:
 def install_pydivkit_compat() -> None:
     _install_constructor_compat()
     _install_field_names_compat()
+    PyDivEntity.__init__ = _compat_entity_init
     PyDivEntity.__init_subclass__ = classmethod(_compat_init_subclass)
     PyDivEntity.dict = _compat_dict
     PyDivEntity.related_templates = _compat_related_templates
