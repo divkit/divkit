@@ -875,6 +875,32 @@ class TestSubclassing:
         assert Card._type_name == "container"
         assert "items" in Card._field_names
 
+    def test_module_like_pass_subclass_stays_template(self):
+        ModuleLikeCard = type(
+            "ModuleLikeCard",
+            (DivContainer,),
+            {"__module__": "module_like.templates"},
+        )
+
+        card = ModuleLikeCard(items=[])
+        assert card.dict()["type"] == ModuleLikeCard.template_name
+        assert ModuleLikeCard.template()["type"] == "container"
+
+    def test_module_like_scalar_defaults_stay_template(self):
+        ModuleLikeText = type(
+            "ModuleLikeText",
+            (DivText,),
+            {"__module__": "module_like.templates", "font_size": 16},
+        )
+
+        text = ModuleLikeText(text="hello")
+        rendered = text.dict()
+
+        assert rendered["type"] == ModuleLikeText.template_name
+        template = ModuleLikeText.template()
+        assert template["type"] == "text"
+        assert template["font_size"] == 16
+
     # --- Complex template pattern ---
 
     def test_template_with_nested_defaults(self):
