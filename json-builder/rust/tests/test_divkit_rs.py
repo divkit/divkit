@@ -1003,6 +1003,33 @@ class TestPydivkitCompatibilityLayer:
         assert Header.template_name in result["templates"]
         assert result["card"]["states"][0]["div"]["type"] == Header.template_name
 
+    def test_make_div_collects_module_like_pass_template(self):
+        ModuleLikeCard = type(
+            "ModuleLikeCard",
+            (DivContainer,),
+            {"__module__": "module_like.templates"},
+        )
+
+        root = DivContainer(items=[ModuleLikeCard(items=[])])
+        result = divkit_rs.make_div(root)
+
+        assert ModuleLikeCard.template_name in result["templates"]
+        assert result["templates"][ModuleLikeCard.template_name]["type"] == "container"
+
+    def test_make_div_collects_module_like_scalar_template(self):
+        ModuleLikeText = type(
+            "ModuleLikeText",
+            (DivText,),
+            {"__module__": "module_like.templates", "font_size": 16},
+        )
+
+        root = DivContainer(items=[ModuleLikeText(text="hello")])
+        result = divkit_rs.make_div(root)
+
+        assert ModuleLikeText.template_name in result["templates"]
+        assert result["templates"][ModuleLikeText.template_name]["type"] == "text"
+        assert result["templates"][ModuleLikeText.template_name]["font_size"] == 16
+
     def test_make_card_accepts_multiple_divs(self):
         card = divkit_rs.make_card(
             "card",
