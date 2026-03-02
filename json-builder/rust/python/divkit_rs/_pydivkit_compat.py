@@ -4,6 +4,7 @@ from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import Any, get_args, get_origin
 from weakref import WeakKeyDictionary
+import uuid
 
 from divkit_rs._native import PyDivEntity
 
@@ -280,6 +281,33 @@ def _template_name_for_class(cls: type[PyDivEntity]) -> str:
     return f"{cls.__module__}.{cls.__name__}"
 
 
+def _legacy_field_uid(cls: type[PyDivEntity], field_name: str) -> uuid.UUID:
+    return uuid.uuid5(
+        uuid.NAMESPACE_URL,
+        f"{cls.__module__}.{cls.__qualname__}:{field_name}",
+    )
+
+
+def _legacy_field_names_for_class(cls: type[PyDivEntity]) -> Mapping[uuid.UUID, str]:
+    names: dict[uuid.UUID, str] = {}
+
+    for field_name in getattr(cls, "_field_names", []) or []:
+        names[_legacy_field_uid(cls, field_name)] = field_name
+
+    for field_name, field in getattr(cls, "__dk_fields__", {}).items():
+        uid = getattr(field, "uid", None)
+        if not isinstance(uid, uuid.UUID):
+            uid = _legacy_field_uid(cls, field_name)
+        names[uid] = field_name
+
+    return MappingProxyType(names)
+
+
+def _install_field_names_compat() -> None:
+    for cls in _iter_entity_classes(PyDivEntity):
+        cls.__field_names__ = _legacy_field_names_for_class(cls)
+
+
 def _collect_parent_template_classes(
     cls: type[PyDivEntity],
     out: set[type[PyDivEntity]],
@@ -315,6 +343,7 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
             delattr(cls, name)
 
     cls.__dk_fields__ = MappingProxyType(declared_fields)
+    cls.__field_names__ = _legacy_field_names_for_class(cls)
     cls.__dk_tpl_values__ = MappingProxyType({})
     cls.__dk_template__ = None
     cls.__dk_is_template__ = False
@@ -527,6 +556,7 @@ def _normalize_pydivkit_json(value: Any, parent_key: str | None = None) -> Any:
 
 def install_pydivkit_compat() -> None:
     _install_constructor_compat()
+    _install_field_names_compat()
     PyDivEntity.__init_subclass__ = classmethod(_compat_init_subclass)
     PyDivEntity.dict = _compat_dict
     PyDivEntity.related_templates = _compat_related_templates
