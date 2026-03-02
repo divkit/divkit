@@ -990,6 +990,35 @@ class TestPydivkitCompatibilityLayer:
         assert card["states"][1]["state_id"] == 1
         assert card["states"][1]["div"]["text"] == "second"
 
+    def test_make_card_accepts_divs_keyword_and_variables_container(self):
+        class DivVarDataStub:
+            variables = [{"name": "x", "type": "string", "value": "1"}]
+            variable_triggers = [{"actions": [{"log_id": "trigger"}]}]
+            timers = [{"id": "timer"}]
+
+        card = divkit_rs.make_card(
+            "card",
+            divs=[DivText(text="first")],
+            variables=DivVarDataStub(),
+        ).dict()
+
+        assert card["states"][0]["div"]["text"] == "first"
+        assert card["variables"] == [{"name": "x", "type": "string", "value": "1"}]
+        assert card["variable_triggers"] == [{"actions": [{"log_id": "trigger"}]}]
+        assert card["timers"] == [{"id": "timer"}]
+
+    def test_actions_getattr_returns_entities(self):
+        text = DivText(
+            text="hello",
+            actions=[DivAction(log_id="log", url="div-action://set_state?state_id=0")],
+        )
+
+        actions = getattr(text, "actions")
+
+        assert len(actions) == 1
+        assert isinstance(actions[0], DivAction)
+        assert actions[0].dict()["log_id"] == "log"
+
     def test_tuple_background_serializes_as_list(self):
         container = DivContainer(
             items=[],
@@ -1076,3 +1105,24 @@ class TestPydivkitCompatibilityLayer:
         assert data.variable_triggers == ["trigger"]
         assert data.variables == ["var"]
         assert data.custom == "x"
+
+    def test_none_list_kwargs_behave_as_unset_fields(self):
+        container = DivContainer(items=[], actions=None)
+
+        assert getattr(container, "actions", []) == []
+        assert "actions" not in container.dict()
+
+    def test_nested_entity_attr_mutation_after_constructor(self):
+        container = DivContainer(items=[], margins=DivEdgeInsets(right=8))
+
+        container.margins.top = 4
+
+        assert container.dict()["margins"] == {"right": 8, "top": 4}
+
+    def test_nested_entity_attr_mutation_after_dict_setattr(self):
+        container = DivContainer(items=[])
+        container.margins = {"right": 6}
+
+        container.margins.top = 2
+
+        assert container.dict()["margins"] == {"right": 6, "top": 2}
