@@ -601,7 +601,8 @@ def _compat_make_card(
         and variable_triggers is None
         and timers is None
         and (
-            hasattr(variables, "variables")
+            isinstance(variables, PyDivEntity)
+            or hasattr(variables, "variables")
             or hasattr(variables, "variable_triggers")
             or hasattr(variables, "timers")
         )

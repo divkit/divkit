@@ -1007,6 +1007,22 @@ class TestPydivkitCompatibilityLayer:
         assert card["variable_triggers"] == [{"actions": [{"log_id": "trigger"}]}]
         assert card["timers"] == [{"id": "timer"}]
 
+    def test_make_card_accepts_pydiventity_variables_container(self):
+        class DivVarDataStub(BaseDiv):
+            pass
+
+        data = DivVarDataStub()
+        card = divkit_rs.make_card(
+            "card",
+            divs=[DivText(text="first")],
+            variables=data,
+        ).dict()
+
+        assert card["states"][0]["div"]["text"] == "first"
+        assert card["variables"] == []
+        assert card["variable_triggers"] == []
+        assert card["timers"] == []
+
     def test_actions_getattr_returns_entities(self):
         text = DivText(
             text="hello",
