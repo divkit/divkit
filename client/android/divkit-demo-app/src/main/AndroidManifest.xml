@@ -72,6 +72,11 @@
             android:theme="@style/DivScreenshotTheme" />
 
         <activity
+            android:name=".screenshot.DivComposeScreenshotActivity"
+            android:exported="true"
+            android:theme="@style/DivScreenshotTheme" />
+
+        <activity
             android:name=".DummyActivity"
             android:configChanges="orientation|screenSize" />
 

@@ -6,7 +6,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivContainer
@@ -21,10 +20,8 @@ import com.yandex.div2.DivText
 @Preview
 @Composable
 private fun DivViewPreview() {
-    val divContext = DivContext(
-        baseContext = LocalContext.current,
-        expressionResolver = ExpressionResolver.EMPTY
-    )
+    val divContext = DivComposeConfiguration()
+        .createContext(baseContext = LocalContext.current)
     CompositionLocalProvider(LocalContext provides divContext) {
         DivView(data = testData)
     }
