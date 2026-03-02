@@ -932,6 +932,13 @@ class TestSubclassing:
 
 
 class TestPydivkitCompatibilityLayer:
+    def test_pydivkit_namespace_alias_imports(self):
+        import pydivkit as dk
+        from pydivkit.core import Expr
+
+        assert dk.DivText is divkit_rs.DivText
+        assert str(Expr("@{value}")) == "@{value}"
+
     def test_core_exports_exist(self):
         assert hasattr(divkit_rs, "Field")
         assert hasattr(divkit_rs, "Ref")
