@@ -10,6 +10,7 @@ from divkit_rs._native import (
     DivAction as NativeDivAction,
     DivEdgeInsets as NativeDivEdgeInsets,
     PyDivEntity,
+    compat_dump as _compat_dump_native,
 )
 
 from .core.compat import classproperty
@@ -49,6 +50,10 @@ def _normalize_constructor_value(value: Any) -> Any:
     return value
 
 
+def _is_tracked_constructor_value(value: Any) -> bool:
+    return isinstance(value, PyDivEntity)
+
+
 def _iter_entity_classes(root: type[PyDivEntity]) -> list[type[PyDivEntity]]:
     out: list[type[PyDivEntity]] = []
     queue = [root]
@@ -77,10 +82,15 @@ def _install_constructor_compat() -> None:
                 for key, value in kwargs.items()
             }
             instance = __orig_new(entity_cls, *args, **kwargs)
-            if normalized_kwargs:
-                _CONSTRUCTOR_VALUES[instance] = normalized_kwargs
+            tracked_constructor_values = {
+                key: value
+                for key, value in normalized_kwargs.items()
+                if _is_tracked_constructor_value(value)
+            }
+            if tracked_constructor_values:
+                _CONSTRUCTOR_VALUES[instance] = tracked_constructor_values
                 _CONSTRUCTOR_BASELINE_DUMPS[instance] = {
-                    key: _dump(value) for key, value in normalized_kwargs.items()
+                    key: _dump(value) for key, value in tracked_constructor_values.items()
                 }
             return instance
 
@@ -89,27 +99,18 @@ def _install_constructor_compat() -> None:
 
 
 def _dump(value: Any) -> Any:
+    if value is None or type(value) in (int, float, bool):
+        return value
     if isinstance(value, (str, bytes)):
         return value
     if isinstance(value, Expr):
         return str(value)
+    if isinstance(value, (PyDivEntity, list, tuple, dict)):
+        return _compat_dump_native(value)
+    if isinstance(value, Mapping):
+        return _compat_dump_native(dict(value))
     if isinstance(value, Sequence):
         return [_dump(v) for v in value]
-    if isinstance(value, Mapping):
-        return {k: _dump(v) for k, v in value.items()}
-    if isinstance(value, PyDivEntity):
-        # pydivkit keeps separator delimiter style subclasses with class defaults
-        # as empty objects in template declarations.
-        cls = type(value)
-        raw_dumped = _ORIG_DICT(value)
-        if (
-            cls.__name__ != "DivSeparatorDelimiterStyle"
-            and any(base.__name__ == "DivSeparatorDelimiterStyle" for base in cls.__mro__[1:])
-            and isinstance(raw_dumped, dict)
-            and set(raw_dumped).issubset({"color"})
-        ):
-            return {}
-        return value.dict()
     return value
 
 
@@ -443,7 +444,6 @@ def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
         if field_name not in kwargs:
             setattr(self, field_name, field.default)
 
-
 def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
     # Keep mutable references for constructor-assigned nested entities, so
     # patterns like `obj.margins.top = ...` behave like in pydivkit.
@@ -505,37 +505,42 @@ def _compat_related_templates(self: PyDivEntity) -> set[type[PyDivEntity]]:
 def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
     result = _ORIG_DICT(self)
     cls = type(self)
-    constructor_values = _CONSTRUCTOR_VALUES.get(self, {})
-    constructor_baseline = _CONSTRUCTOR_BASELINE_DUMPS.get(self, {})
-    for field_name in getattr(cls, "_field_names", []):
-        if field_name not in result:
-            continue
-        current = result[field_name]
-        try:
-            raw_value = getattr(self, field_name)
-        except Exception:
-            continue
-        constructor_value = constructor_values.get(field_name)
-        if (
-            isinstance(raw_value, (str, bytes))
-            and isinstance(constructor_value, (Sequence, Mapping, PyDivEntity))
-            and not isinstance(constructor_value, (str, bytes))
-        ):
-            # Rust serializer stringifies tuple-like inputs in some fields.
-            # If runtime value is a string repr, reuse normalized constructor input.
-            raw_value = constructor_value
-        if isinstance(raw_value, PyDivEntity):
-            dumped_raw = _dump(raw_value)
+    constructor_values = _CONSTRUCTOR_VALUES.get(self)
+    if constructor_values:
+        constructor_baseline = _CONSTRUCTOR_BASELINE_DUMPS.get(self, {})
+        for field_name, constructor_value in constructor_values.items():
+            if field_name not in result:
+                continue
+            current = result[field_name]
             baseline_dump = constructor_baseline.get(field_name)
-            if dumped_raw != baseline_dump and dumped_raw != current:
-                result[field_name] = dumped_raw
-            continue
-        if isinstance(raw_value, (str, bytes)):
-            continue
-        if isinstance(raw_value, (Sequence, Mapping, PyDivEntity)):
-            dumped_raw = _dump(raw_value)
-            if dumped_raw != current:
-                result[field_name] = dumped_raw
+            if isinstance(constructor_value, PyDivEntity):
+                raw_value = constructor_value
+            else:
+                try:
+                    # Avoid compat __getattribute__ overhead on hot dict() path.
+                    # Constructor-backed mutable values are still taken from cache above.
+                    raw_value = _ORIG_GETATTRIBUTE(self, field_name)
+                except Exception:
+                    continue
+            if (
+                isinstance(raw_value, (str, bytes))
+                and isinstance(constructor_value, (Sequence, Mapping, PyDivEntity))
+                and not isinstance(constructor_value, (str, bytes))
+            ):
+                # Rust serializer stringifies tuple-like inputs in some fields.
+                # If runtime value is a string repr, reuse normalized constructor input.
+                raw_value = constructor_value
+            if isinstance(raw_value, PyDivEntity):
+                dumped_raw = _dump(raw_value)
+                if dumped_raw != baseline_dump and dumped_raw != current:
+                    result[field_name] = dumped_raw
+                continue
+            if isinstance(raw_value, (str, bytes)):
+                continue
+            if isinstance(raw_value, (Sequence, Mapping, PyDivEntity)):
+                dumped_raw = _dump(raw_value)
+                if dumped_raw != current:
+                    result[field_name] = dumped_raw
     for field_name, default in getattr(cls, "__dk_defaults__", {}).items():
         if field_name in result or default is None:
             continue
