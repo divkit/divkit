@@ -918,6 +918,16 @@ class TestPydivkitCompatibilityLayer:
         assert "properties" in schema
         assert "text" in schema["properties"]
 
+    def test_legacy_field_names_mapping_exists(self):
+        class StyledContainer(DivContainer):
+            extra: str | None = Field(default=None)
+
+        field_names = StyledContainer.__field_names__
+        assert hasattr(field_names, "values")
+        values = set(field_names.values())
+        assert "items" in values
+        assert "extra" in values
+
     def test_template_style_field_ref(self):
         class Header(DivContainer):
             title: str = Field()
