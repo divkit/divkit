@@ -145,7 +145,11 @@ impl PyDivEntity {
         let mut fields = HashMap::with_capacity(fields_dict.len());
         for (k, v) in fields_dict.iter() {
             let key: String = k.extract()?;
-            fields.insert(key, py_to_divvalue(&v)?);
+            let value = py_to_divvalue(&v)?;
+            // Preserve pydivkit semantics: None-valued kwargs behave as unset fields.
+            if !value.is_null() {
+                fields.insert(key, value);
+            }
         }
         self.fields = fields;
         Ok(())

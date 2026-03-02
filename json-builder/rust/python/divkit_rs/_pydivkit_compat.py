@@ -6,7 +6,11 @@ from typing import Any, get_args, get_origin
 from weakref import WeakKeyDictionary
 import uuid
 
-from divkit_rs._native import PyDivEntity
+from divkit_rs._native import (
+    DivAction as NativeDivAction,
+    DivEdgeInsets as NativeDivEdgeInsets,
+    PyDivEntity,
+)
 
 from .core.compat import classproperty
 from .core.fields import REF_MARKER_PREFIX, Expr, _Field
@@ -75,6 +79,9 @@ def _install_constructor_compat() -> None:
             instance = __orig_new(entity_cls, *args, **kwargs)
             if normalized_kwargs:
                 _CONSTRUCTOR_VALUES[instance] = normalized_kwargs
+                _CONSTRUCTOR_BASELINE_DUMPS[instance] = {
+                    key: _dump(value) for key, value in normalized_kwargs.items()
+                }
             return instance
 
         cls.__new__ = staticmethod(_wrapped_new)
@@ -259,9 +266,11 @@ _ORIG_INIT = PyDivEntity.__init__
 _ORIG_SCHEMA = PyDivEntity.schema
 _ORIG_RELATED_TEMPLATES = getattr(PyDivEntity, "related_templates", lambda self: [])
 _ORIG_INIT_SUBCLASS = PyDivEntity.__init_subclass__
+_ORIG_GETATTRIBUTE = PyDivEntity.__getattribute__
 
 _TEMPLATE_REGISTRY: dict[str, type[PyDivEntity]] = {}
 _CONSTRUCTOR_VALUES: "WeakKeyDictionary[PyDivEntity, dict[str, Any]]" = WeakKeyDictionary()
+_CONSTRUCTOR_BASELINE_DUMPS: "WeakKeyDictionary[PyDivEntity, dict[str, Any]]" = WeakKeyDictionary()
 _CORNERS_RADIUS_KEY_ALIASES = {
     "top_left": "top-left",
     "top_right": "top-right",
@@ -391,6 +400,38 @@ def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
             setattr(self, field_name, field.default)
 
 
+def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
+    # Keep mutable references for constructor-assigned nested entities, so
+    # patterns like `obj.margins.top = ...` behave like in pydivkit.
+    if not name.startswith("__"):
+        constructor_values = _CONSTRUCTOR_VALUES.get(self)
+        if constructor_values:
+            value = constructor_values.get(name)
+            if isinstance(value, PyDivEntity):
+                return value
+    value = _ORIG_GETATTRIBUTE(self, name)
+    if name == "margins" and isinstance(value, dict):
+        entity_value = NativeDivEdgeInsets(**value)
+        constructor_values = _CONSTRUCTOR_VALUES.get(self)
+        if constructor_values is None:
+            constructor_values = {}
+            _CONSTRUCTOR_VALUES[self] = constructor_values
+        constructor_values[name] = entity_value
+        constructor_baseline = _CONSTRUCTOR_BASELINE_DUMPS.get(self)
+        if constructor_baseline is None:
+            constructor_baseline = {}
+            _CONSTRUCTOR_BASELINE_DUMPS[self] = constructor_baseline
+        constructor_baseline.setdefault(name, _dump(entity_value))
+        return entity_value
+    if name == "actions" and isinstance(value, list):
+        if all(isinstance(item, dict) for item in value):
+            try:
+                return [NativeDivAction(**item) for item in value]
+            except Exception:
+                return value
+    return value
+
+
 def _compat_related_templates(self: PyDivEntity) -> set[type[PyDivEntity]]:
     cls = type(self)
     related: set[type[PyDivEntity]] = set()
@@ -421,6 +462,7 @@ def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
     result = _ORIG_DICT(self)
     cls = type(self)
     constructor_values = _CONSTRUCTOR_VALUES.get(self, {})
+    constructor_baseline = _CONSTRUCTOR_BASELINE_DUMPS.get(self, {})
     for field_name in getattr(cls, "_field_names", []):
         if field_name not in result:
             continue
@@ -438,6 +480,12 @@ def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
             # Rust serializer stringifies tuple-like inputs in some fields.
             # If runtime value is a string repr, reuse normalized constructor input.
             raw_value = constructor_value
+        if isinstance(raw_value, PyDivEntity):
+            dumped_raw = _dump(raw_value)
+            baseline_dump = constructor_baseline.get(field_name)
+            if dumped_raw != baseline_dump and dumped_raw != current:
+                result[field_name] = dumped_raw
+            continue
         if isinstance(raw_value, (str, bytes)):
             continue
         if isinstance(raw_value, (Sequence, Mapping, PyDivEntity)):
@@ -484,25 +532,93 @@ def _compat_template(cls: type[PyDivEntity]) -> dict[str, Any]:
 
 
 class _CompatDivData:
-    def __init__(self, log_id: str, divs: tuple[PyDivEntity, ...]) -> None:
+    def __init__(
+        self,
+        log_id: str,
+        divs: tuple[PyDivEntity, ...],
+        *,
+        variables: Any = None,
+        variable_triggers: Any = None,
+        timers: Any = None,
+        include_var_data: bool = False,
+    ) -> None:
         self.log_id = log_id
         self.divs = divs
+        self.variables = variables
+        self.variable_triggers = variable_triggers
+        self.timers = timers
+        self.include_var_data = include_var_data
+
+    @staticmethod
+    def _dump_entities(items: Any) -> list[Any]:
+        dumped: list[Any] = []
+        for item in items or []:
+            dumped.append(item if isinstance(item, dict) else item.dict())
+        return dumped
 
     def dict(self) -> dict[str, Any]:
-        return {
+        result = {
             "log_id": self.log_id,
             "states": [
                 {"state_id": index, "div": div.dict()}
                 for index, div in enumerate(self.divs)
             ],
         }
+        if self.include_var_data:
+            result["variables"] = self._dump_entities(self.variables)
+            result["variable_triggers"] = self._dump_entities(self.variable_triggers)
+            result["timers"] = self._dump_entities(self.timers)
+        return result
 
     def build(self) -> dict[str, Any]:
         return self.dict()
 
 
-def _compat_make_card(log_id: str, *divs: PyDivEntity) -> _CompatDivData:
-    return _CompatDivData(log_id=log_id, divs=divs)
+def _compat_make_card(
+    log_id: str,
+    *card_divs: PyDivEntity,
+    divs: Sequence[PyDivEntity] | None = None,
+    variables: Any = None,
+    variable_triggers: Any = None,
+    timers: Any = None,
+) -> _CompatDivData:
+    if divs is not None and card_divs:
+        raise TypeError("Provide either positional divs or `divs=` keyword, not both")
+
+    selected_divs: tuple[PyDivEntity, ...]
+    if divs is not None:
+        selected_divs = tuple(divs)
+    else:
+        selected_divs = tuple(card_divs)
+
+    include_var_data = (
+        variables is not None
+        or variable_triggers is not None
+        or timers is not None
+    )
+    if (
+        variables is not None
+        and variable_triggers is None
+        and timers is None
+        and (
+            hasattr(variables, "variables")
+            or hasattr(variables, "variable_triggers")
+            or hasattr(variables, "timers")
+        )
+    ):
+        variable_triggers = getattr(variables, "variable_triggers", None)
+        timers = getattr(variables, "timers", None)
+        variables = getattr(variables, "variables", None)
+        include_var_data = True
+
+    return _CompatDivData(
+        log_id=log_id,
+        divs=selected_divs,
+        variables=variables,
+        variable_triggers=variable_triggers,
+        timers=timers,
+        include_var_data=include_var_data,
+    )
 
 
 def _compat_make_div(div: PyDivEntity) -> dict[str, Any]:
@@ -576,6 +692,7 @@ def install_pydivkit_compat() -> None:
     _install_constructor_compat()
     _install_field_names_compat()
     PyDivEntity.__init__ = _compat_entity_init
+    PyDivEntity.__getattribute__ = _compat_getattribute
     PyDivEntity.__init_subclass__ = classmethod(_compat_init_subclass)
     PyDivEntity.dict = _compat_dict
     PyDivEntity.related_templates = _compat_related_templates

@@ -1,13 +1,15 @@
 """divkit_rs — Fast Rust-backed DivKit JSON builder."""
 
+from types import SimpleNamespace
+
 from divkit_rs._native import (
     # Base class
     PyDivEntity,
     # Top-level helpers
     PyDivData as DivData,
     PyDivDataState as DivDataState,
-    make_div,
-    make_card,
+    make_div as _native_make_div,
+    make_card as _native_make_card,
     # ----------------------------------------------------------------
     # Size types
     # ----------------------------------------------------------------
@@ -337,17 +339,59 @@ from divkit_rs._native import (
     DivTypedValue,
     DivVariable,
 )
+from divkit_rs.core import BaseDiv, BaseEntity, Expr, Field, Ref
+from divkit_rs._pydivkit_compat import (
+    install_pydivkit_compat,
+    make_card as _compat_make_card,
+    make_div as _compat_make_div,
+)
 
 # Backward-compatible alias: pydivkit used DivGradientBackground,
 # the schema now calls it DivLinearGradient.
 DivGradientBackground = DivLinearGradient
 
+install_pydivkit_compat()
+
+# pydivkit-compatible helpers (Python-side, with template support).
+make_div = _compat_make_div
+make_card = _compat_make_card
+
+# Keep native helpers available for explicit low-level usage.
+native_make_div = _native_make_div
+native_make_card = _native_make_card
+
+# Compatibility namespaces for imports like `from pydivkit.div import div_timer`.
+div_timer = SimpleNamespace(DivTimer=DivTimer)
+div_trigger = SimpleNamespace(DivTrigger=DivTrigger)
+div_variable = SimpleNamespace(
+    DivVariable=DivVariable,
+    ArrayVariable=ArrayVariable,
+    BooleanVariable=BooleanVariable,
+    ColorVariable=ColorVariable,
+    DictVariable=DictVariable,
+    IntegerVariable=IntegerVariable,
+    NumberVariable=NumberVariable,
+    PropertyVariable=PropertyVariable,
+    StringVariable=StringVariable,
+    UrlVariable=UrlVariable,
+)
+
 __all__ = [
     "PyDivEntity",
+    "BaseEntity",
+    "BaseDiv",
+    "Field",
+    "Ref",
+    "Expr",
     "DivData",
     "DivDataState",
     "make_div",
     "make_card",
+    "native_make_div",
+    "native_make_card",
+    "div_timer",
+    "div_trigger",
+    "div_variable",
     # Size types
     "DivFixedSize",
     "DivMatchParentSize",
