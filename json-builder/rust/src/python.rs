@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList, PyString, PyTuple};
 
-use super::py_entity::{PyDivData, PyDivDataState, PyDivEntity};
+use super::py_entity::{self, PyDivData, PyDivDataState, PyDivEntity};
 use super::py_value::json_to_py;
 use crate::entity::{self, Entity};
 use crate::generated::python_generated;
@@ -115,6 +115,21 @@ pub fn _native(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(make_div, m)?)?;
     m.add_function(wrap_pyfunction!(make_card, m)?)?;
     m.add_function(wrap_pyfunction!(compat_dump, m)?)?;
+    m.add_function(wrap_pyfunction!(register_type_meta, m)?)?;
 
     Ok(())
 }
+
+/// Register type metadata for a user-defined subclass so that _configure()
+/// can do a fast cache lookup instead of accepting Vec<String> args.
+#[pyfunction]
+#[pyo3(signature = (class_name, type_name, field_names, required_fields))]
+fn register_type_meta(
+    class_name: String,
+    type_name: Option<String>,
+    field_names: Vec<String>,
+    required_fields: Vec<String>,
+) {
+    py_entity::cache_type_meta(class_name, type_name, field_names, required_fields);
+}
+

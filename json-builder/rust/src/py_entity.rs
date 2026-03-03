@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::Mutex;
 
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList};
@@ -8,6 +9,9 @@ use crate::field::FieldDescriptor;
 use crate::value::DivValue;
 
 use super::py_value::{divvalue_to_py, json_to_py, py_to_divvalue};
+
+// ── Cached type metadata registry (avoids per-instance Vec<String> alloc) ──
+static TYPE_META_CACHE: Mutex<Option<HashMap<String, EntityTypeMeta>>> = Mutex::new(None);
 
 /// Metadata for a registered entity type.
 #[derive(Clone)]
@@ -43,13 +47,10 @@ impl PyDivEntity {
     #[new]
     #[pyo3(signature = (**kwargs))]
     fn new_py(kwargs: Option<&Bound<'_, PyDict>>) -> PyResult<Self> {
-        let mut fields = HashMap::new();
-        if let Some(kw) = kwargs {
-            for (k, v) in kw.iter() {
-                let key: String = k.extract()?;
-                fields.insert(key, py_to_divvalue(&v)?);
-            }
-        }
+        let _ = kwargs;
+        // Generated entity __init__ always calls _set_fields() with merged
+        // defaults+kwargs, replacing whatever __new__ stored. Keep __new__
+        // allocation-only to avoid duplicate py_to_divvalue conversion.
         Ok(PyDivEntity {
             type_meta: EntityTypeMeta {
                 type_name: None,
@@ -57,8 +58,16 @@ impl PyDivEntity {
                 field_names: vec![],
                 required_fields: vec![],
             },
-            fields,
+            fields: HashMap::new(),
         })
+    }
+
+    #[pyo3(signature = (**kwargs))]
+    fn __init__(&mut self, kwargs: Option<&Bound<'_, PyDict>>) -> PyResult<()> {
+        if let Some(kw) = kwargs {
+            self._set_fields(kw)?;
+        }
+        Ok(())
     }
 
     fn dict(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
@@ -118,22 +127,24 @@ impl PyDivEntity {
         Ok(())
     }
 
-    /// Internal: configure type metadata (called from dynamically created subclasses).
-    #[pyo3(signature = (class_name, type_name, field_names, required_fields))]
-    fn _configure(
-        &mut self,
-        class_name: String,
-        type_name: Option<String>,
-        field_names: Vec<String>,
-        required_fields: Vec<String>,
-    ) {
-        self.type_meta = EntityTypeMeta {
-            type_name,
-            class_name,
-            field_names,
-            required_fields,
-        };
+    /// Internal: configure type metadata from pre-populated cache.
+    ///
+    /// The cache is populated at class registration time by `register_entity_class`.
+    /// This avoids per-instance Vec<String> allocation from Python→Rust conversion.
+    #[pyo3(signature = (class_name))]
+    fn _configure(&mut self, class_name: &str) {
+        let guard = TYPE_META_CACHE.lock().unwrap();
+        if let Some(cache) = guard.as_ref() {
+            if let Some(cached) = cache.get(class_name) {
+                self.type_meta = cached.clone();
+                return;
+            }
+        }
+        drop(guard);
+        // Fallback for user-defined subclasses not in the registry
+        self.type_meta.class_name = class_name.to_string();
     }
+
 
     /// Internal: replace all fields from a Python dict.
     ///
@@ -250,19 +261,26 @@ pub fn register_entity_class(
             .join(", ")
     );
 
+    // Pre-populate the type_meta cache for this class.
+    // Use "divkit_rs._native.ClassName" as key to match cls.__module__ + cls.__name__.
+    cache_type_meta(
+        format!("divkit_rs._native.{}", class_name),
+        type_name.map(|s| s.to_string()),
+        field_names.iter().map(|s| s.to_string()).collect(),
+        required_fields.iter().map(|s| s.to_string()).collect(),
+    );
+
     // Create a real Python class that inherits from PyDivEntity.
     //
     // Design for subclassability:
     //  - _type_name, _field_names, _required_fields are class attrs so
     //    subclasses can introspect them.
-    //  - __init__ collects class-level field defaults from the MRO, merges
-    //    with explicit kwargs (kwargs win), then calls _set_fields to replace
-    //    whatever __new__ stored. This means:
-    //      class Card(DivContainer):
-    //          orientation = "vertical"
-    //      Card(items=[]).dict()  →  includes orientation="vertical"
-    //  - Subclasses can override __init__ and call super().__init__(**kwargs)
-    //    and the kwargs will be properly captured.
+    //  - __init__ uses fast _configure(class_name) which looks up pre-cached
+    //    type metadata instead of converting Python lists to Rust Vecs on
+    //    every instance.
+    //  - __init__ caches class-level field defaults from the MRO once per
+    //    class, merges with explicit kwargs (kwargs win), then calls
+    //    _set_fields.
     let code = format!(
         concat!(
             "class {cls}(_Base):\n",
@@ -270,20 +288,23 @@ pub fn register_entity_class(
             "    _type_name = {tn}\n",
             "    _field_names = {fns}\n",
             "    _required_fields = {rfs}\n",
+            "    _cached_defaults = None\n",
             "    def __init__(self, **kwargs):\n",
             "        cls = type(self)\n",
-            "        tn = cls._type_name\n",
-            "        fns = cls._field_names\n",
-            "        rfs = cls._required_fields\n",
-            "        self._configure(cls.__name__, tn, list(fns), list(rfs))\n",
-            "        defaults = {{}}\n",
-            "        field_set = set(fns)\n",
-            "        for klass in reversed(cls.__mro__):\n",
-            "            for key, val in vars(klass).items():\n",
-            "                if key in field_set:\n",
-            "                    defaults[key] = val\n",
-            "        defaults.update(kwargs)\n",
-            "        self._set_fields(defaults)\n",
+            "        self._configure(f'{{cls.__module__}}.{{cls.__name__}}')\n",
+            "        cached = cls.__dict__.get('_cached_defaults')\n",
+            "        if cached is None:\n",
+            "            defaults = {{}}\n",
+            "            field_set = set(cls._field_names)\n",
+            "            for klass in reversed(cls.__mro__):\n",
+            "                for key, val in vars(klass).items():\n",
+            "                    if key in field_set:\n",
+            "                        defaults[key] = val\n",
+            "            cls._cached_defaults = defaults\n",
+            "            cached = defaults\n",
+            "        merged = dict(cached)\n",
+            "        merged.update(kwargs)\n",
+            "        self._set_fields(merged)\n",
         ),
         cls = class_name,
         tn = type_name_py,
@@ -314,6 +335,24 @@ pub fn register_entity_class(
 
     module.setattr(class_name, &cls)?;
     Ok(())
+}
+
+/// Cache type metadata for a class (called from register_entity_class and Python compat layer).
+pub fn cache_type_meta(
+    class_name: String,
+    type_name: Option<String>,
+    field_names: Vec<String>,
+    required_fields: Vec<String>,
+) {
+    let meta = EntityTypeMeta {
+        type_name,
+        class_name: class_name.clone(),
+        field_names,
+        required_fields,
+    };
+    let mut guard = TYPE_META_CACHE.lock().unwrap();
+    let cache = guard.get_or_insert_with(HashMap::new);
+    cache.insert(class_name, meta);
 }
 
 /// Python wrapper for DivData.

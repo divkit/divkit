@@ -1050,6 +1050,12 @@ class TestPydivkitCompatibilityLayer:
         assert card["states"][1]["state_id"] == 1
         assert card["states"][1]["div"]["text"] == "second"
 
+    def test_make_card_returns_divdata_instance(self):
+        card = divkit_rs.make_card("card", DivText(text="first"))
+
+        assert isinstance(card, divkit_rs.DivData)
+        assert card.dict()["states"][0]["div"]["text"] == "first"
+
     def test_make_card_accepts_divs_keyword_and_variables_container(self):
         class DivVarDataStub:
             variables = [{"name": "x", "type": "string", "value": "1"}]
@@ -1130,6 +1136,41 @@ class TestPydivkitCompatibilityLayer:
         skeleton_div = result["card"]["states"][0]["div"]["items"][0]
         assert skeleton_div["type"] == SkeletonTabs.template_name
 
+    def test_make_div_updates_dependencies_after_late_template_registration(self):
+        Root = type(
+            "Root",
+            (DivContainer,),
+            {
+                "__module__": "late.module",
+                "items": [{"type": "late.module.LateTpl"}],
+            },
+        )
+
+        result_before = divkit_rs.make_div(Root())
+        assert "late.module.LateTpl" not in result_before["templates"]
+
+        LateTpl = type(
+            "LateTpl",
+            (DivText,),
+            {"__module__": "late.module"},
+        )
+
+        result_after = divkit_rs.make_div(Root())
+        assert LateTpl.template_name in result_after["templates"]
+        assert result_after["templates"][LateTpl.template_name]["type"] == "text"
+
+    def test_related_templates_cached_result_is_not_mutated_by_caller(self):
+        class Header(DivContainer):
+            items = []
+
+        root = DivContainer(items=[Header(items=[])])
+        related = root.related_templates()
+        assert Header in related
+
+        # Cache returns an isolated set, so caller mutation does not leak.
+        related.add(DivText)
+        assert DivText not in root.related_templates()
+
     def test_div_module_namespaces(self):
         import divkit_rs.div as div
 
@@ -1187,6 +1228,14 @@ class TestPydivkitCompatibilityLayer:
 
         assert getattr(container, "actions", []) == []
         assert "actions" not in container.dict()
+
+    def test_base_pydiventity_kwargs_and_getattr_do_not_fail(self):
+        base = PyDivEntity(foo="bar", n=3)
+
+        assert base.foo == "bar"
+        assert base.n == 3
+        assert base.dict()["foo"] == "bar"
+        assert base.related_templates() == set()
 
     def test_nested_entity_attr_mutation_after_constructor(self):
         container = DivContainer(items=[], margins=DivEdgeInsets(right=8))
