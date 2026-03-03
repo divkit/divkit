@@ -211,6 +211,10 @@ extension GalleryViewModel {
       let leadingMargin = gaps.first ?? 0.0
       let trailingMargin = gaps.last ?? 0.0
 
+      if gaps.count == 2 {
+        return availableSize - neighbourPageSize * 2 - trailingMargin
+      }
+
       let spacing = gaps.dropFirst().dropLast().first ?? 0.0
 
       return availableSize - max(
