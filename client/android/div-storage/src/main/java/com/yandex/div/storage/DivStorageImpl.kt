@@ -8,7 +8,6 @@ import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.database.getBlobOrNull
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.DivDataRepository.ActionOnError
 import com.yandex.div.storage.DivStorage.LoadDataResult
@@ -99,7 +98,7 @@ internal class DivStorageImpl(
 
     @VisibleForTesting
     fun onUpgrade(db: DatabaseOpenHelper.Database, oldVersion: Int, newVersion: Int) {
-        Assert.assertEquals(newVersion, DB_VERSION)
+        KAssert.assertEquals(newVersion, DB_VERSION)
         if (oldVersion == DB_VERSION) return
 
         val migration = migrations[oldVersion to newVersion] ?: defaultDropAllMigration

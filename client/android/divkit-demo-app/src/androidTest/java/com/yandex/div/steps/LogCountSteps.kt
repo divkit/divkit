@@ -25,7 +25,7 @@ class LogCountSteps(
     }
 
     init {
-        KLog.addListener(logListener)
+        KLog.listeners.add(logListener)
     }
 
     fun assert(f: LogCountAssertions.() -> Unit) = f(LogCountAssertions(logCount, logListener))
@@ -38,13 +38,13 @@ class LogCountAssertions(
 ) {
 
     fun logCountLessOrEquals(max: Int) {
-        KLog.removeListener(logListener)
+        KLog.listeners.remove(logListener)
 
         assert(logCount <= max) { "$MESSAGE_TOO_MANY_FAILS: $logCount" }
     }
 
     fun logCountEquals(expected: Int) {
-        KLog.removeListener(logListener)
+        KLog.listeners.remove(logListener)
 
         assert(logCount == expected) { "$MESSAGE_TOO_MANY_FAILS: $logCount" }
     }

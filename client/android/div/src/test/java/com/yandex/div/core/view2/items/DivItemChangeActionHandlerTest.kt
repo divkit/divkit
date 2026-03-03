@@ -37,14 +37,14 @@ class DivItemChangeActionHandlerTest {
 
     @Before
     fun `setup mock`() {
-        DivKitAssert.isEnabled = false
+        DivKitAssert.setEnabled(false)
         DivViewWithItems.viewForTests = divItemsView
     }
 
     @After
     fun `cleanup mock`() {
         DivViewWithItems.viewForTests = null
-        DivKitAssert.isEnabled = true
+        DivKitAssert.setEnabled(true)
     }
 
     @Test

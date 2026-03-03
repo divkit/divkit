@@ -12,6 +12,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -19,7 +20,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import org.json.JSONObject
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -136,7 +136,6 @@ class LocalVariablesTest {
         Assert.assertEquals(expected, view.textString)
     }
 }
-
 private val testJsonWithTwoStates = """
 {
   "log_id": "local_variables",
