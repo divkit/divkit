@@ -46,6 +46,7 @@ android {
     sourceSets {
         main {
             assets.srcDirs += "../../../test_data/perf_test_data"
+            assets.srcDirs += "$buildDir/generated/assets"
         }
 
         debug {

@@ -8,6 +8,7 @@ const val DIV_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.Div2BenchmarkActivity"
 const val DIV_STATE_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.Div2StateBenchmarkActivity"
 const val DIV_FEED_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.Div2FeedBenchmarkActivity"
 const val DIV_STORAGE_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.DivStorageBenchmarkActivity"
+const val DIV_SIZE_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.DivSizeBenchmarkActivity"
 
 private const val EXTRA_ASSET_NAME = "asset_name"
 private const val EXTRA_ASSET_NAMES = "asset_names"
@@ -15,10 +16,13 @@ private const val EXTRA_STATE_PATHS = "state_paths"
 private const val EXTRA_REBIND_ASSET_NAME = "rebind_asset_name"
 private const val EXTRA_PROHIBITED_HISTOGRAMS = "prohibited_histograms"
 private const val EXTRA_FORCE_DISABLE_LOGS = "force_disable_logs"
+private const val EXTRA_REPORT_SIZE = "report_library_size"
 
-fun divBenchmarkActivityExtras(assetName: String): Bundle {
+fun divBenchmarkActivityExtras(assetName: String,
+                               reportSize: Boolean = false): Bundle {
     return bundleOf(
         EXTRA_ASSET_NAME to assetName,
+        EXTRA_REPORT_SIZE to reportSize,
     )
 }
 
