@@ -13,12 +13,14 @@ import com.yandex.div.core.animation.EaseInterpolator
 import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.animation.reversed
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.util.bitmap.BitmapFilter
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.unitToPxF
 import com.yandex.div.core.widget.AspectView
+import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.drawable.CircleDrawable
@@ -66,28 +68,34 @@ import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVisibilityAction
 import java.util.Collections.min
 
-internal val Div.type: String
-    get() {
-        return when (this) {
-            is Div.Text -> DivText.TYPE
-            is Div.Image -> DivImage.TYPE
-            is Div.GifImage -> DivGifImage.TYPE
-            is Div.Separator -> DivSeparator.TYPE
-            is Div.Indicator -> DivIndicator.TYPE
-            is Div.Slider -> DivSlider.TYPE
-            is Div.Input -> DivInput.TYPE
-            is Div.Video -> DivVideo.TYPE
-            is Div.Container -> DivContainer.TYPE
-            is Div.Grid -> DivGrid.TYPE
-            is Div.State -> DivState.TYPE
-            is Div.Gallery -> DivGallery.TYPE
-            is Div.Pager -> DivPager.TYPE
-            is Div.Tabs -> DivTabs.TYPE
-            is Div.Custom -> DivCustom.TYPE
-            is Div.Select -> DivSelect.TYPE
-            is Div.Switch -> DivSwitch.TYPE
+internal val Div.type: String get() = value().type
+
+@InternalApi
+val DivBase.type: String get() {
+    return when (this) {
+        is DivText -> DivText.TYPE
+        is DivImage -> DivImage.TYPE
+        is DivGifImage -> DivGifImage.TYPE
+        is DivSeparator -> DivSeparator.TYPE
+        is DivIndicator -> DivIndicator.TYPE
+        is DivSlider -> DivSlider.TYPE
+        is DivInput -> DivInput.TYPE
+        is DivVideo -> DivVideo.TYPE
+        is DivContainer -> DivContainer.TYPE
+        is DivGrid -> DivGrid.TYPE
+        is DivState -> DivState.TYPE
+        is DivGallery -> DivGallery.TYPE
+        is DivPager -> DivPager.TYPE
+        is DivTabs -> DivTabs.TYPE
+        is DivCustom -> DivCustom.TYPE
+        is DivSelect -> DivSelect.TYPE
+        is DivSwitch -> DivSwitch.TYPE
+        else -> {
+            KAssert.fail { "Unknown div type." }
+            ""
         }
     }
+}
 
 internal fun Div.canBeReused(other: Div, resolver: ExpressionResolver): Boolean {
     if (this.type != other.type) {
