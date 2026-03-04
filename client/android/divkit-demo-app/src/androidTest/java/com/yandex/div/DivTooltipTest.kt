@@ -1,10 +1,10 @@
 package com.yandex.div
 
-import com.yandex.div.rule.ActivityParamsTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.tooltipDiv
 import com.yandex.div2.DivTooltip.Position
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.util.Report.step
 import org.junit.Rule
 import org.junit.Test

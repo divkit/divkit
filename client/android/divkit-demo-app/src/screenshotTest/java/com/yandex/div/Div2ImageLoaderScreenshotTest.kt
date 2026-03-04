@@ -15,14 +15,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import java.io.File
 
 @RunWith(Parameterized::class)
 class Div2ImageLoaderScreenshotTest(private val case: String) {
-
-    private val caseName = case
-        .substringAfterLast(File.separator)
-        .substringBeforeLast(CASE_EXTENSION)
 
     private val activityRule = ActivityParamsTestRule(
         activityClass = DivScreenshotActivity::class.java,
@@ -30,7 +25,7 @@ class Div2ImageLoaderScreenshotTest(private val case: String) {
     )
 
     @get:Rule
-    val rule = screenshotRule(name = caseName, casePath = case) { activityRule }
+    val rule = screenshotRule(case, activityRule)
 
     @Test
     @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = IMAGE_LOADER_PICASSO)
@@ -60,7 +55,6 @@ class Div2ImageLoaderScreenshotTest(private val case: String) {
     companion object {
 
         private const val TEST_CASES_PATH = "ui_test_data/image-loaders"
-        private const val CASE_EXTENSION = ".json"
 
         private val context: Context = ApplicationProvider.getApplicationContext()
 

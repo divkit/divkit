@@ -7,15 +7,9 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.rule.ImageLoadingIdlingResource
 import com.yandex.div2.DivAction
-import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.test.idling.waitForIdlingResource
-import com.yandex.test.screenshot.ReferenceFileWriter
-import com.yandex.test.screenshot.ScreenshotCaptor
-import com.yandex.test.screenshot.TestCaseReferencesFileWriter
-import com.yandex.test.screenshot.TestFile
+import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.json.JSONArray
@@ -30,9 +24,9 @@ internal fun interactiveScreenshot(f: InteractiveScreenshotSteps.() -> Unit) =
 internal class InteractiveScreenshotSteps {
 
     fun runSteps(
-            activity: DivScreenshotActivity,
-            casePath: String,
-            artifactsRelativePath: String
+        activity: DivScreenshotActivity,
+        casePath: String,
+        artifactsRelativePath: String
     ) = step("Run interactive screenshot steps") {
         val steps = parseSteps(activity.getTestCaseJson().optJSONArray("steps"))
         runSteps(activity, artifactsRelativePath, casePath, steps)
@@ -63,27 +57,21 @@ internal class InteractiveScreenshotSteps {
             casePath: String,
             steps: List<TestStep>
     ) {
-        val artifactsCaptor = ScreenshotCaptor()
         steps.forEachIndexed { i, step ->
-            instrumentation.runOnMainSync {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync {
                 handleStepActions(activity.divView, step)
             }
 
             waitForConditions(step.delay)
 
-            instrumentation.runOnMainSync {
-                val screenshots = captureScreenshots(
-                        activity.divView,
-                        artifactsCaptor,
-                        artifactsRelativePath,
-                        i,
-                        step.expectedScreenshot
-                )
-                TestCaseReferencesFileWriter.append(casePath, screenshots)
-            }
+            captureScreenshots(
+                activity.divView,
+                artifactsRelativePath,
+                casePath,
+                stepId = i,
+                expectedScreenshot = step.expectedScreenshot
+            )
         }
-
-        artifactsCaptor.saveDeviceProperties(activity)
     }
 
     private fun handleStepActions(view: Div2View, step: TestStep) {
@@ -98,62 +86,14 @@ internal class InteractiveScreenshotSteps {
     }
 
     private fun waitForConditions(delay: Long) {
-        try {
-            waitForIdlingResource(ImageLoadingIdlingResource(Container.imageLoader))
-        } catch (e: Exception) {
-            Container.imageLoader.resetIdle()
-            throw e
-        }
-
+        waitForImages()
         Espresso.onIdle()
         Thread.sleep(delay)
     }
-
-    /**
-     * @return list of paths to screenshot files
-     */
-    private fun captureScreenshots(
-            view: Div2View,
-            artifactsCaptor: ScreenshotCaptor,
-            artifactsRelativePath: String,
-            stepId: Int,
-            expectedScreenshot: String): List<String> {
-        val result = mutableListOf<String>()
-        val actualScreenshot = "step${stepId}.png"
-
-        val categories = listOf(
-            ScreenshotCategory("viewPixelCopy") { artifactsCaptor.takeViewPixelCopy(view, it) },
-            ScreenshotCategory("viewRender") { artifactsCaptor.takeViewRender(view, it) },
-        )
-
-        categories.forEach { category ->
-            val actualScreenshotRelativePath = "${category.name}/$artifactsRelativePath/$actualScreenshot"
-
-            val actualScreenshotFile = TestFile(actualScreenshotRelativePath)
-
-            category.captureScreenshot(actualScreenshotFile)
-            result.add(actualScreenshotRelativePath)
-
-            if (expectedScreenshot.isNotEmpty() && expectedScreenshot != actualScreenshot) {
-                val expectedScreenshotRelativePath = "${category.name}/$artifactsRelativePath/$expectedScreenshot"
-                ReferenceFileWriter.append(targetFile = actualScreenshotRelativePath,
-                    compareWith = expectedScreenshotRelativePath)
-            }
-        }
-
-        return result
-    }
-
-    private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
 }
 
 private class TestStep(
     val actions: List<DivAction>,
     val expectedScreenshot: String,
     val delay: Long,
-)
-
-private class ScreenshotCategory(
-        val name: String,
-        val captureScreenshot: (TestFile) -> Unit
 )

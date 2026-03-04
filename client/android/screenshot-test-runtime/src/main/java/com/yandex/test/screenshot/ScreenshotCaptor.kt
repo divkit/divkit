@@ -11,7 +11,12 @@ import androidx.annotation.MainThread
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 
-class ScreenshotCaptor {
+object ScreenshotCaptor {
+
+    private const val TAG = "ScreenshotCapture"
+
+    private val propertiesSaved = AtomicBoolean(false)
+
     /**
      * @return collection of relative screenshot paths
      */
@@ -35,8 +40,7 @@ class ScreenshotCaptor {
         )
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun saveDeviceProperties(context: Context) {
+    private fun saveDeviceProperties(context: Context) {
         val specs = DeviceSpecs(context)
         val properties = Properties().apply {
             put("apiLevel", Build.VERSION.SDK_INT.toString())
@@ -51,16 +55,14 @@ class ScreenshotCaptor {
         }
     }
 
-    @MainThread
-    fun takeViewRender(view: View, outputFile: TestFile) {
+    private fun takeViewRender(view: View, outputFile: TestFile) {
         val bitmap = ViewRasterizer.rasterize(view)
         Log.i(TAG, "saving view render to ${outputFile.path}")
 
         bitmap.save(outputFile)
     }
 
-    @MainThread
-    fun takeViewPixelCopy(view: View, outputFile: TestFile) {
+    private fun takeViewPixelCopy(view: View, outputFile: TestFile) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val window = view.context.asActivity().window
@@ -78,25 +80,19 @@ class ScreenshotCaptor {
         }
     }
 
-    companion object {
-        private const val TAG = "ScreenshotCapture"
+    private fun ScreenshotType.asFile(suiteName: String, fileName: String): TestFile {
+        return TestFile(relativeScreenshotPath(suiteName, fileName))
+    }
 
-        private fun ScreenshotType.asFile(suiteName: String, fileName: String): TestFile {
-            return TestFile(relativeScreenshotPath(suiteName, fileName))
+    private fun Bitmap.save(outputFile: TestFile) {
+        val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Bitmap.CompressFormat.WEBP_LOSSLESS
+        } else {
+            Bitmap.CompressFormat.PNG
         }
 
-        private val propertiesSaved = AtomicBoolean(false)
-
-        private fun Bitmap.save(outputFile: TestFile) {
-            val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                Bitmap.CompressFormat.WEBP_LOSSLESS
-            } else {
-                Bitmap.CompressFormat.PNG
-            }
-
-            outputFile.open().use {
-                compress(format, 100, it)
-            }
+        outputFile.open().use {
+            compress(format, 100, it)
         }
     }
 }

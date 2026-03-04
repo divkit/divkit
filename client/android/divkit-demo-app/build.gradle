@@ -34,9 +34,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments useTestStorageService: 'true'
 
-        if (!providers.gradleProperty("include-regression-tests").isPresent()) {
-            testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
-        }
         providers.gradleProperty("shardIndex").orNull?.with { index ->
             testInstrumentationRunnerArguments.shardIndex = index
         }

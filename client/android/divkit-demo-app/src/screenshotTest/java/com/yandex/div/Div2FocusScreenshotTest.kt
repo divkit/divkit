@@ -12,14 +12,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import java.io.File
 
 @RunWith(Parameterized::class)
 class Div2FocusScreenshotTest(case: String, escapedCase: String) {
-
-    private val caseName = case
-        .substringAfterLast(File.separator)
-        .substringBeforeLast(CASE_EXTENSION)
 
     private val activityRule = ActivityParamsTestRule(
         DivScreenshotActivity::class.java,
@@ -27,7 +22,7 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
     )
 
     @get:Rule
-    val rule = screenshotRule(name = caseName, casePath = case) { activityRule }
+    val rule = screenshotRule(case, activityRule)
 
     @Test
     @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "not_focused")

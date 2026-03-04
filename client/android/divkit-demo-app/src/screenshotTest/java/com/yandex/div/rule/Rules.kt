@@ -2,39 +2,29 @@
 
 package com.yandex.div.rule
 
-import com.yandex.divkit.demo.Container
-import com.yandex.test.idling.waitForIdlingResource
+import android.app.Activity
+import com.yandex.div.steps.waitForImages
+import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
 import com.yandex.test.screenshot.ScreenshotRule
 import com.yandex.test.util.chain
 import org.junit.rules.TestRule
 
-fun screenshotRule(
-    relativePath: String = "",
-    name: String = "",
-    casePath: String,
-    skipScreenshotCapture: Boolean = false,
-    innerRule: () -> TestRule,
-): TestRule {
+fun baseRule(casePath: String, innerRule: TestRule): TestRule {
     return CheckCaseRule(casePath)
         .chain(NoAnimationsRule())
         .chain(ClosePopupsRule())
-        .chain(innerRule())
-        .run {
-            if (skipScreenshotCapture) {
-                this
-            } else {
-                chain(ScreenshotRule(relativePath, name, casePath).apply {
-                    beforeScreenshotTaken {
-                        try {
-                            waitForIdlingResource(ImageLoadingIdlingResource(Container.imageLoader))
-                        } catch (e: Exception) {
-                            Container.imageLoader.resetIdle()
-                            throw e
-                        }
-                    }
-                })
-            }
-        }
+        .chain(innerRule)
+}
+
+fun screenshotRule(
+    casePath: String,
+    activityRule: ActivityParamsTestRule<out Activity>,
+    relativePath: String = "",
+): TestRule {
+    val screenshotRule = ScreenshotRule(relativePath, casePath)
+    screenshotRule.beforeScreenshotTaken { waitForImages() }
+    return baseRule(casePath, activityRule)
+        .chain(screenshotRule)
 }

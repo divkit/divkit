@@ -1,9 +1,9 @@
 package com.yandex.div
 
-import com.yandex.div.rule.ActivityParamsTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.divFocus
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.test.rules.ActivityParamsTestRule
 import org.junit.Rule
 import org.junit.Test
 

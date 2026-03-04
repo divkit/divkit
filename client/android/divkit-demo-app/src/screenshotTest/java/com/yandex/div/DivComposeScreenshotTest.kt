@@ -1,5 +1,6 @@
 package com.yandex.div
 
+import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
@@ -10,7 +11,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
-import java.io.File
 
 @RunWith(Parameterized::class)
 class DivComposeScreenshotTest(case: String, escapedCase: String) {
@@ -22,17 +22,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
 
     @Rule
     @JvmField
-    val rule = screenshotRule(
-        relativePath = case
-            .substringAfter("snapshot_test_data${File.separator}")
-            .substringBeforeLast(File.separator),
-        name = case
-            .substringAfterLast(File.separator)
-            .substringBeforeLast(".json"),
-        casePath = case
-    ) {
-        activityRule
-    }
+    val rule = screenshotRule(case, activityRule, case.relativePath)
 
     @Screenshot(viewId = R.id.morda_screenshot_div)
     @Test

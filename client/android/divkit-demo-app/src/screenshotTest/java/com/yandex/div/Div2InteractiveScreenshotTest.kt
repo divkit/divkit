@@ -2,7 +2,7 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.yandex.div.rule.screenshotRule
+import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.interactiveScreenshot
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
@@ -14,6 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
+import java.io.File
 
 @RunWith(Parameterized::class)
 class Div2InteractiveScreenshotTest(private val case: String, escapedCase: String) {
@@ -25,7 +26,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
 
     @Rule
     @JvmField
-    val rule = screenshotRule(skipScreenshotCapture = true, casePath = case) { activityRule }
+    val rule = baseRule(case, activityRule)
 
     @Screenshot(viewId = R.id.morda_screenshot_div)
     @Test
@@ -46,7 +47,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
          * "com.yandex.div.Div2InteractiveScreenshotTest/div-text/smoke"
          */
         fun artifactsDir(case: String) = Div2InteractiveScreenshotTest::class.qualifiedName +
-                case.removePrefix(TEST_CASES_PATH).removeSuffix(CASE_EXTENSION)
+                case.removePrefix(TEST_CASES_PATH).substringBeforeLast(File.separator)
 
         @JvmStatic
         @Parameters(name = "{1}")

@@ -18,7 +18,7 @@ enum class ScreenshotType(private val path: String) {
     }
 
     companion object {
-        private const val SCREENSHOT_EXTENSION = ".png"
+        internal const val SCREENSHOT_EXTENSION = ".png"
     }
 }
 
