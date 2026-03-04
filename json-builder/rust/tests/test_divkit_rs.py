@@ -953,7 +953,7 @@ class TestPydivkitCompatibilityLayer:
 
     def test_legacy_field_names_mapping_exists(self):
         class StyledContainer(DivContainer):
-            extra: str | None = Field(default=None)
+            extra: Optional[str] = Field(default=None)
 
         field_names = StyledContainer.__field_names__
         assert hasattr(field_names, "values")
@@ -973,7 +973,9 @@ class TestPydivkitCompatibilityLayer:
         assert rendered["title"] == "Hello"
         assert rendered["title_color"] == "#ffffff"
 
-        templates = {tpl.template_name: tpl.template() for tpl in header.related_templates()}
+        templates = {
+            tpl.template_name: tpl.template() for tpl in header.related_templates()
+        }
         assert Header.template_name in templates
         template = templates[Header.template_name]
         assert template["type"] == "container"
@@ -1184,7 +1186,7 @@ class TestPydivkitCompatibilityLayer:
 
     def test_custom_base_div_inheritance(self):
         class DivVarData(BaseDiv):
-            timers: list[str] | None = Field(description="List of timers")
+            timers: Optional[List[str]] = Field(description="List of timers")
 
         assert issubclass(DivVarData, BaseDiv)
         schema = DivVarData.schema()
@@ -1193,16 +1195,16 @@ class TestPydivkitCompatibilityLayer:
 
     def test_custom_base_div_super_init_accepts_kwargs(self):
         class DivVarData(BaseDiv):
-            timers: list[str] | None = Field(default=None)
-            variable_triggers: list[str] | None = Field(default=None)
-            variables: list[str] | None = Field(default=None)
+            timers: Optional[List[str]] = Field(default=None)
+            variable_triggers: Optional[List[str]] = Field(default=None)
+            variables: Optional[List[str]] = Field(default=None)
 
             def __init__(
                 self,
                 *,
-                timers: list[str] | None = None,
-                variable_triggers: list[str] | None = None,
-                variables: list[str] | None = None,
+                timers: Optional[List[str]] = None,
+                variable_triggers: Optional[List[str]] = None,
+                variables: Optional[List[str]] = None,
                 **kwargs,
             ):
                 super().__init__(
