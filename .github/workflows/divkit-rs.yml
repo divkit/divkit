@@ -97,6 +97,40 @@ jobs:
         working-directory: json-builder/rust
         run: cargo clippy -- -D warnings
 
+  lint-python:
+    name: Lint Python
+    needs: codegen
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "json-builder/rust -> target"
+          shared-key: lint-python
+      - name: Install dev dependencies and build
+        working-directory: json-builder/rust
+        run: |
+          uv sync --group dev
+          uv run maturin develop --release
+      - name: Ruff check
+        working-directory: json-builder/rust
+        run: uv run ruff check python/ tests/
+      - name: Ruff format
+        working-directory: json-builder/rust
+        run: uv run ruff format --check python/ tests/
+      - name: Mypy
+        working-directory: json-builder/rust
+        run: uv run mypy python/ tests/
+
   test-rust:
     name: Test Rust
     needs: codegen
@@ -153,7 +187,7 @@ jobs:
 
   version:
     name: Check if release needed
-    needs: [test-rust, test-python, lint, check-versions]
+    needs: [test-rust, test-python, lint, lint-python, check-versions]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:

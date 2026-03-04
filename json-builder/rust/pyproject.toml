@@ -20,9 +20,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
 ]
 readme = "README.md"
+
+[dependency-groups]
+dev = ["ruff", "mypy", "pytest"]
 
 [project.urls]
 Repository = "https://github.com/Pavkazzz/divkit"
@@ -30,6 +34,25 @@ Issues = "https://github.com/Pavkazzz/divkit/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"python/divkit_rs/div.py" = ["F405"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "divkit_rs._pydivkit_compat"
+disable_error_code = ["assignment", "arg-type", "var-annotated", "no-any-return", "index"]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]

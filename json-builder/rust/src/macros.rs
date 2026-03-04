@@ -52,6 +52,7 @@ macro_rules! div_entity {
 
             // Generate builder methods for each field
             $(
+                #[allow(clippy::should_implement_trait)]
                 pub fn $field_name<V: Into<$crate::value::DivValue>>(mut self, v: V) -> Self {
                     self.$field_name = Some(v.into());
                     self
@@ -149,6 +150,7 @@ macro_rules! div_entity {
             }
 
             $(
+                #[allow(clippy::should_implement_trait)]
                 pub fn $field_name<V: Into<$crate::value::DivValue>>(mut self, v: V) -> Self {
                     self.$field_name = Some(v.into());
                     self

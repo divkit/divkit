@@ -43,7 +43,7 @@ pub fn py_to_divvalue(obj: &Bound<'_, PyAny>) -> PyResult<DivValue> {
         let v: String = obj.extract()?;
         if v.starts_with("@{") && v.ends_with('}') {
             return Ok(DivValue::Expr(
-                Expr::new(&v).map_err(|e| pyo3::exceptions::PyValueError::new_err(e))?,
+                Expr::new(&v).map_err(pyo3::exceptions::PyValueError::new_err)?,
             ));
         }
         return Ok(DivValue::String(v));

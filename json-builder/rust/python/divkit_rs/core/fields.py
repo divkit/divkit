@@ -4,7 +4,6 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any, Dict, Mapping, Optional
 
-
 REF_MARKER_PREFIX = "__divkit_ref__:"
 
 
