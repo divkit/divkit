@@ -18,7 +18,7 @@
         "name": "<code>bundle</code> query parameter in <code>divkit-asset://</code> URLs",
         "compat": {
             "ios": {
-                "version_added": "33.0.0"
+                "version_added": "32.39.0"
             },
             "android": {
                 "notes": "Not applicable, all resources are combined"
