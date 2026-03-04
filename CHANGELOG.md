@@ -1,3 +1,10 @@
+## 32.40.0
+
+# Android Client:
+* Deprecated `UriHandler` interface.
+* Fix invalid timezone offsets during datetime formatting.
+
+
 ## 32.39.0
 
 # Android Client:
