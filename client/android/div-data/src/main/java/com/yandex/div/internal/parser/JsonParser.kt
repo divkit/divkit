@@ -47,8 +47,11 @@ inline fun <reified R, reified T : Any> JSONObject.read(
     val value = optSafe(key) ?: throw missingValue(this, key)
     val intermediate = value as? R ?: throw typeMismatch(this, key, value)
 
-    val result = converter.tryConvert(intermediate)
-        ?: throw invalidValue(this, key, intermediate)
+    val result = try {
+        converter.invoke(value)!!
+    } catch (e: Exception) {
+        throw invalidValue(this, key, intermediate)
+    }
 
     return if (validator.isValid(result)) {
         result

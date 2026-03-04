@@ -21,6 +21,7 @@ public enum DivStrokeStyle: Sendable {
 
 extension DivStrokeStyle {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivStrokeStyleSolid.type:
@@ -28,7 +29,7 @@ extension DivStrokeStyle {
     case DivStrokeStyleDashed.type:
       self = .divStrokeStyleDashed(try DivStrokeStyleDashed(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-stroke-style", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

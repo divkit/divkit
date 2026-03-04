@@ -105,6 +105,7 @@ public enum Div: Sendable {
 
 extension Div {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivImage.type:
@@ -142,7 +143,7 @@ extension Div {
     case DivVideo.type:
       self = .divVideo(try DivVideo(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

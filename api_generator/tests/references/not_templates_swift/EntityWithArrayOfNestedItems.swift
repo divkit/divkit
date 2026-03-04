@@ -15,7 +15,7 @@ public final class EntityWithArrayOfNestedItems: Sendable {
 
     public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
       self.init(
-        entity: try dictionary.getField("entity", transform: { (dict: [String: Any]) in try Entity(dictionary: dict, context: context) }),
+        entity: try dictionary.getField("entity", transform: { (dict: [String: Any]) in try Entity(dictionary: dict, context: context) }, context: context),
         property: try dictionary.getExpressionField("property", context: context)
       )
     }
@@ -37,7 +37,7 @@ public final class EntityWithArrayOfNestedItems: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? EntityWithArrayOfNestedItems.Item(dictionary: dict, context: context) }, validator: Self.itemsValidator)
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? EntityWithArrayOfNestedItems.Item(dictionary: dict, context: context) }, validator: Self.itemsValidator, context: context)
     )
   }
 

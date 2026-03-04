@@ -18,7 +18,7 @@ import com.yandex.div.core.util.getIndices
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
-import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_MAX_SIZE
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
@@ -298,6 +298,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
         }
         considerMatchParentChildrenInMaxWidth(widthMeasureSpec, heightSpec)
+        maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
         crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightSpec) }
 
         if (totalLength > 0) {
@@ -305,7 +306,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         totalLength += verticalPaddings
 
-        maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
         var heightSize = MeasureSpec.getSize(heightSpec)
         when {
             aspectRatio != DEFAULT_ASPECT_RATIO && !exactWidth -> {
@@ -570,7 +570,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         maxCrossSize = max(initialMaxWidth, maxCrossSize + horizontalPaddings)
 
-        KAssert.assertEquals(oldMaxWidth, maxCrossSize) { "Width of vertical container changed after remeasuring" }
+        Assert.assertEquals("Width of vertical container changed after remeasuring", oldMaxWidth, maxCrossSize)
     }
 
     private fun getFreeSpace(delta: Int, spec: Int) = when {

@@ -3,12 +3,12 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivVariable
 import com.yandex.div2.IntegerVariable
+import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
@@ -82,7 +82,6 @@ class RuntimeStoreImplTest {
         val runtime = underTest.getOrCreateRuntime(path, div, mock<ExpressionResolverImpl>())
 
         Assert.assertEquals(rootRuntime, runtime)
-        Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
     }
 
     @Test

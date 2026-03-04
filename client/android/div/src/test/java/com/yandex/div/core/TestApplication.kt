@@ -6,6 +6,6 @@ import com.yandex.div.internal.Assert
 class TestApplication : Application() {
 
     init {
-        Assert.setEnabled(true)
+        Assert.isEnabled = true
     }
 }

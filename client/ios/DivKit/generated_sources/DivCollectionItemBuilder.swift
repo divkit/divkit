@@ -20,7 +20,7 @@ public final class DivCollectionItemBuilder: @unchecked Sendable {
 
     public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
       self.init(
-        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }, context: context),
         id: try dictionary.getOptionalExpressionField("id", context: context),
         selector: try dictionary.getOptionalExpressionField("selector", context: context)
       )
@@ -52,7 +52,7 @@ public final class DivCollectionItemBuilder: @unchecked Sendable {
     self.init(
       data: try dictionary.getExpressionField("data", context: context),
       dataElementName: try dictionary.getOptionalField("data_element_name", context: context),
-      prototypes: try dictionary.getArray("prototypes", transform: { (dict: [String: Any]) in try? DivCollectionItemBuilder.Prototype(dictionary: dict, context: context) }, validator: Self.prototypesValidator)
+      prototypes: try dictionary.getArray("prototypes", transform: { (dict: [String: Any]) in try? DivCollectionItemBuilder.Prototype(dictionary: dict, context: context) }, validator: Self.prototypesValidator, context: context)
     )
   }
 

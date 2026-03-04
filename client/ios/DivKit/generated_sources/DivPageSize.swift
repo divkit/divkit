@@ -10,7 +10,7 @@ public final class DivPageSize: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      pageWidth: try dictionary.getField("page_width", transform: { (dict: [String: Any]) in try DivPercentageSize(dictionary: dict, context: context) })
+      pageWidth: try dictionary.getField("page_width", transform: { (dict: [String: Any]) in try DivPercentageSize(dictionary: dict, context: context) }, context: context)
     )
   }
 

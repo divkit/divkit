@@ -94,7 +94,7 @@ extension DivCountTemplate {
     case DivFixedCountTemplate.type:
       self = .divFixedCountTemplate(try DivFixedCountTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-count_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

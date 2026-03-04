@@ -1,0 +1,39 @@
+{
+  "description": "Verify runtime video playback errors in the player",
+  "div_data": {
+    "card": {
+      "log_id": "test_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "video",
+            "id": "video",
+            "autostart": true,
+            "video_sources": [
+              {
+                "type": "video_source",
+                "mime_type": "video/unsupported",
+                "url": "https://example.com/video.unsupported"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Playback encountered an error: \"Unsupported MIME Type\""
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

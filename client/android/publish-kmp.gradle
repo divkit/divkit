@@ -1,0 +1,9 @@
+apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
+
+afterEvaluate {
+    kotlin {
+        publishing {
+            version = divkitVersion.releaseLibraryVersion
+        }
+    }
+}

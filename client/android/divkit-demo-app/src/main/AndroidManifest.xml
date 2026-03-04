@@ -72,28 +72,9 @@
             android:theme="@style/DivScreenshotTheme" />
 
         <activity
-            android:name=".benchmark.Div2BenchmarkActivity"
+            android:name=".screenshot.DivComposeScreenshotActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".benchmark.Div2StateBenchmarkActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".benchmark.Div2FeedBenchmarkActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".benchmark.DivStorageBenchmarkActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/DivScreenshotTheme" />
 
         <activity
             android:name=".DummyActivity"

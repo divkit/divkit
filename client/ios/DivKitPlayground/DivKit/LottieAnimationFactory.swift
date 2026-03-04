@@ -8,11 +8,12 @@ final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
     repeatCount count: Float
   ) -> AsyncSourceAnimatableView {
     let animationView = LottieAnimationView()
+    let playCount = count + 1
     switch mode {
     case .restart:
-      animationView.loopMode = count == -1 ? .loop : .repeat(count)
+      animationView.loopMode = count == -1 ? .loop : .repeat(playCount)
     case .reverse:
-      animationView.loopMode = count == -1 ? .autoReverse : .repeatBackwards(count / 2)
+      animationView.loopMode = count == -1 ? .autoReverse : .repeatBackwards(playCount / 2)
     }
     return animationView
   }

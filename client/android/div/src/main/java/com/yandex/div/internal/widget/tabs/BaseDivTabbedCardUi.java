@@ -42,7 +42,7 @@ import java.util.Set;
 public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.Input.TabBase<ACTION>, TAB_VIEW, ACTION> {
 
     private static final String TAG = "BaseDivTabbedCardUi";
-    private static final int NO_POS = -1;
+    protected static final int NO_POS = -1;
 
     @NonNull
     private final ViewPool mViewPool;
@@ -255,7 +255,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         mViewPagerFixedSizeLayout.setHeightCalculator(mViewPagerHeightCalculator);
     }
 
-    public void setData(@Nullable Input<TAB_DATA> data, @NonNull ExpressionResolver resolver, @NonNull ExpressionSubscriber subscriber) {
+    protected void setData(@Nullable Input<TAB_DATA> data, @NonNull ExpressionResolver resolver, @NonNull ExpressionSubscriber subscriber) {
         final int newPos = findCorrespondingTab(mPager.getCurrentItem(), data);
 
         mBindingByPosition.clear();

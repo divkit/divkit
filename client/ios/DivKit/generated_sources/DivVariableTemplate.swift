@@ -255,7 +255,7 @@ extension DivVariableTemplate {
     case PropertyVariableTemplate.type:
       self = .propertyVariableTemplate(try PropertyVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-variable_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

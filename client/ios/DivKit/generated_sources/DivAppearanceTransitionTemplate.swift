@@ -140,7 +140,7 @@ extension DivAppearanceTransitionTemplate {
     case DivSlideTransitionTemplate.type:
       self = .divSlideTransitionTemplate(try DivSlideTransitionTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-appearance-transition_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

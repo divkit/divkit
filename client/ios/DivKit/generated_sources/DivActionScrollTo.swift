@@ -21,7 +21,7 @@ public final class DivActionScrollTo: Sendable {
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       animated: try dictionary.getOptionalExpressionField("animated", context: context),
-      destination: try dictionary.getField("destination", transform: { (dict: [String: Any]) in try DivActionScrollDestination(dictionary: dict, context: context) }),
+      destination: try dictionary.getField("destination", transform: { (dict: [String: Any]) in try DivActionScrollDestination(dictionary: dict, context: context) }, context: context),
       id: try dictionary.getExpressionField("id", context: context)
     )
   }

@@ -244,12 +244,19 @@ internal class IndicatorsStripDrawer(
 
         private fun downscaleAndDisperse(viewportItems: MutableList<Indicator>) {
             // Downscale items on sides when there are more items behind them.
-            replaceAll(viewportItems) {
-                val scaleFactor = calcScaleFraction(it.centerOffset)
-                if (it.position == 0 || it.position == itemsCount - 1 || it.active) {
-                    it.copy(scaleFactor = scaleFactor)
+            if (viewportItems.isEmpty()) return
+
+            val isBoundaryPage = selectedItemFraction == 0f &&
+                (selectedItemPosition == 0 || selectedItemPosition == itemsCount - 1)
+            val preserveVisibleEdges = maxVisibleCount == 3 && !isBoundaryPage
+            viewportItems.forEachIndexed { index, item ->
+                if (preserveVisibleEdges && (index == 0 || index == viewportItems.lastIndex)) return@forEachIndexed
+
+                val scaleFactor = calcScaleFraction(item.centerOffset)
+                viewportItems[index] = if (item.position == 0 || item.position == itemsCount - 1 || item.active) {
+                    item.copy(scaleFactor = scaleFactor)
                 } else {
-                    scaleItem(it, scaleFactor)
+                    scaleItem(item, scaleFactor)
                 }
             }
 

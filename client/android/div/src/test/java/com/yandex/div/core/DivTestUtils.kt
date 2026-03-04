@@ -13,30 +13,9 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
-
-internal fun runAsync(action: () -> Unit) {
-    val executor = Executors.newSingleThreadExecutor()
-    var error: Throwable? = null
-    executor.execute {
-        try {
-            action.invoke()
-        } catch (e: Throwable) {
-            error = e
-        }
-    }
-
-    executor.shutdown()
-    val finished = executor.awaitTermination(10, TimeUnit.SECONDS)
-    if (!finished) throw TimeoutException("Test execution takes more than 10 seconds.")
-
-    error?.let { throw it }
-}
+import org.junit.Assert
 
 internal fun View.viewEquals(other: View): Boolean {
     if (this::class.java != other::class.java) return false

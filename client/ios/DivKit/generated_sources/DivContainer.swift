@@ -43,7 +43,7 @@ public final class DivContainer: DivBase, Sendable {
         showAtEnd: try dictionary.getOptionalExpressionField("show_at_end", context: context),
         showAtStart: try dictionary.getOptionalExpressionField("show_at_start", context: context),
         showBetween: try dictionary.getOptionalExpressionField("show_between", context: context),
-        style: try dictionary.getField("style", transform: { (dict: [String: Any]) in try DivDrawable(dictionary: dict, context: context) })
+        style: try dictionary.getField("style", transform: { (dict: [String: Any]) in try DivDrawable(dictionary: dict, context: context) }, context: context)
       )
     }
 

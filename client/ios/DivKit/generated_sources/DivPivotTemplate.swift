@@ -93,7 +93,7 @@ extension DivPivotTemplate {
     case DivPivotPercentageTemplate.type:
       self = .divPivotPercentageTemplate(try DivPivotPercentageTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-pivot_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

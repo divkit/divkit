@@ -5,7 +5,7 @@ final class ImageWithPreviewHolder: ImageHolder {
   private let mainHolder: ImageHolder
   private let previewHolder: ImageHolder
 
-  var image: Image? { mainHolder.image ?? previewHolder.image }
+  var image: Image? { mainHolder.image ?? previewHolder.image?.firstFrame }
   var placeholder: ImagePlaceholder? { mainHolder.placeholder }
 
   var debugDescription: String {
@@ -23,7 +23,7 @@ final class ImageWithPreviewHolder: ImageHolder {
 
     let previewCancellable = previewHolder.requestImageWithCompletion { image in
       if !mainLoaded, let image {
-        completion(image)
+        completion(image.firstFrame)
       }
     }
 
@@ -45,6 +45,18 @@ final class ImageWithPreviewHolder: ImageHolder {
     return mainHolder.equals(other.mainHolder) && previewHolder.equals(other.previewHolder)
   }
 }
+
+#if os(iOS)
+extension Image {
+  fileprivate var firstFrame: Image {
+    images?.first ?? self
+  }
+}
+#else
+extension Image {
+  fileprivate var firstFrame: Image { self }
+}
+#endif
 
 private final class CompositeCancellable: Cancellable {
   private let cancellables: [Cancellable]

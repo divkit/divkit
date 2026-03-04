@@ -157,3 +157,16 @@ struct DivUnknownError: Error, DivError {
     DivKitLogger.error(description)
   }
 }
+
+struct DivUnknownWarning: DivError {
+  let kind = DivErrorKind.unknown
+  let message: String
+  let path: UIElementPath
+  let level: DivErrorLevel = .warning
+
+  init(_ message: String, path: UIElementPath) {
+    self.message = message
+    self.path = path
+    DivKitLogger.warning(description)
+  }
+}

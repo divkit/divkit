@@ -5,15 +5,11 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.yandex.divkit.demo.databinding.Div2ViewBinding
-import com.yandex.divkit.demo.permissions.ActivityPermissionManager
 import com.yandex.divkit.demo.ui.UIDiv2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
 
-private const val PERMISSION_REQUEST_CODE = 9001
-
 class LauncherActivity : AppCompatActivity() {
 
-    private val permissionManager = ActivityPermissionManager(this)
     private lateinit var binding: Div2ViewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -6,6 +6,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   var layoutReporter: LayoutReporter?
 
   private var sliderModel: SliderModel = .empty
+  private var configuredPath: UIElementPath?
   private var thumbAnimator: UIViewPropertyAnimator?
   private var firstThumbProgress: CGFloat = .zero {
     didSet {
@@ -144,7 +145,13 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       superview: self
     )
 
+    var isSecondThumbAppeared = false
+
     if let model = sliderModel.secondThumb {
+      if secondThumb == nil {
+        isSecondThumbAppeared = true
+      }
+
       secondThumb = model.block.reuse(
         secondThumb,
         observer: observer,
@@ -169,14 +176,28 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
         sliderModel: sliderModel
       ))
 
-    self.sliderModel.firstThumb.value
-      .value = Int(sliderModel.nearestValue(CGFloat(clampedFirstThumbValue)))
-    self.sliderModel.secondThumb?.value
-      .value = Int(sliderModel.nearestValue(CGFloat(clampedSecondThumbValue)))
+    if configuredPath != sliderModel.path {
+      self.sliderModel.firstThumb.value
+        .value = Int(sliderModel.nearestValue(CGFloat(clampedFirstThumbValue)))
+      self.sliderModel.secondThumb?.value
+        .value = Int(sliderModel.nearestValue(CGFloat(clampedSecondThumbValue)))
+      configuredPath = sliderModel.path
+    } else {
+      self.sliderModel.firstThumb.value.value = clampedFirstThumbValue
+      self.sliderModel.secondThumb?.value.value = clampedSecondThumbValue
+    }
 
     if recognizer.state != .began, recognizer.state != .changed {
       firstThumbProgress = CGFloat(clampedFirstThumbValue)
       secondThumbProgress = CGFloat(clampedSecondThumbValue)
+    }
+
+    if isSecondThumbAppeared {
+      configureThumb(
+        thumbView: secondThumb,
+        progress: secondThumbProgress,
+        thumbModel: sliderModel.secondThumb
+      )
     }
 
     isUserInteractionEnabled = sliderModel.isEnabled
@@ -282,8 +303,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     to newValue: Double,
     from oldValue: Double
   ) {
+    let animationDuration = animationDuration * 2 * abs(newValue - oldValue) / sliderModel.stepSize
     thumbAnimator = .runningPropertyAnimator(
-      withDuration: animationDuration * 2 * abs(newValue - oldValue),
+      withDuration: animationDuration,
       delay: 0,
       options: [.allowUserInteraction, .curveEaseIn],
       animations: { [self] in
@@ -486,4 +508,5 @@ extension UIView {
     layer.mask = shapeLayer
   }
 }
+
 #endif

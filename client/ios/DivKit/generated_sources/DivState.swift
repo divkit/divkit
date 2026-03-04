@@ -183,7 +183,7 @@ public final class DivState: DivBase, Sendable {
       rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),
       selectedActions: try dictionary.getOptionalArray("selected_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       stateIdVariable: try dictionary.getOptionalField("state_id_variable", context: context),
-      states: try dictionary.getArray("states", transform: { (dict: [String: Any]) in try? DivState.State(dictionary: dict, context: context) }, validator: Self.statesValidator),
+      states: try dictionary.getArray("states", transform: { (dict: [String: Any]) in try? DivState.State(dictionary: dict, context: context) }, validator: Self.statesValidator, context: context),
       tooltips: try dictionary.getOptionalArray("tooltips", transform: { (dict: [String: Any]) in try? DivTooltip(dictionary: dict, context: context) }),
       transform: try dictionary.getOptionalField("transform", transform: { (dict: [String: Any]) in try DivTransform(dictionary: dict, context: context) }),
       transformations: try dictionary.getOptionalArray("transformations", transform: { (dict: [String: Any]) in try? DivTransformation(dictionary: dict, context: context) }),

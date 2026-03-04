@@ -76,7 +76,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
             forPath: self.model.path
           )
           self.model.pauseActions.perform(sendingFrom: self)
-        case .fatal:
+        case let .fatal(error):
+          self.model.errorReporter?(error)
           self.model.fatalActions.perform(sendingFrom: self)
         case .play:
           self.observer?.elementStateChanged(

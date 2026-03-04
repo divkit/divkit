@@ -485,7 +485,7 @@ extension EntityTemplate {
     case EntityWithoutPropertiesTemplate.type:
       self = .entityWithoutPropertiesTemplate(try EntityWithoutPropertiesTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

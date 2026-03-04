@@ -94,7 +94,7 @@ extension DivFilterTemplate {
     case DivFilterRtlMirrorTemplate.type:
       self = .divFilterRtlMirrorTemplate(try DivFilterRtlMirrorTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-filter_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

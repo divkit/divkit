@@ -153,7 +153,7 @@ public final class DivPager: DivBase, Sendable {
       itemBuilder: try dictionary.getOptionalField("item_builder", transform: { (dict: [String: Any]) in try DivCollectionItemBuilder(dictionary: dict, context: context) }),
       itemSpacing: try dictionary.getOptionalField("item_spacing", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
       items: try dictionary.getOptionalArray("items", transform: { (dict: [String: Any]) in try? Div(dictionary: dict, context: context) }),
-      layoutMode: try dictionary.getField("layout_mode", transform: { (dict: [String: Any]) in try DivPagerLayoutMode(dictionary: dict, context: context) }),
+      layoutMode: try dictionary.getField("layout_mode", transform: { (dict: [String: Any]) in try DivPagerLayoutMode(dictionary: dict, context: context) }, context: context),
       layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
       margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       orientation: try dictionary.getOptionalExpressionField("orientation", context: context),

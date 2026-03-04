@@ -39,7 +39,7 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
-                        assetNames = arrayOf("perf_test_data/with_templates.json",
+                        assetNames = arrayOf("with_templates.json",
                             "div2-perf/state-benchmark-multiple-change.json"),
                         prohibitedHistograms = arrayOf("Storage.Templates.Load",
                             "com.yandex.divkit.demo.Storage.Templates.Parsing",
@@ -70,7 +70,7 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
-                        assetNames = arrayOf("perf_test_data/without_templates.json",
+                        assetNames = arrayOf("without_templates.json",
                             "div2-perf/state-benchmark-multiple-change.json"),
                         prohibitedHistograms = arrayOf("Storage.Templates.Load",
                             "Storage.Templates.Parsing",

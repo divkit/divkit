@@ -16,7 +16,7 @@ public final class DivTabs: DivBase, Sendable {
 
     public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
       self.init(
-        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }),
+        div: try dictionary.getField("div", transform: { (dict: [String: Any]) in try Div(dictionary: dict, context: context) }, context: context),
         title: try dictionary.getExpressionField("title", context: context),
         titleClickAction: try dictionary.getOptionalField("title_click_action", transform: { (dict: [String: Any]) in try DivAction(dictionary: dict, context: context) })
       )
@@ -381,7 +381,7 @@ public final class DivTabs: DivBase, Sendable {
       hasSeparator: try dictionary.getOptionalExpressionField("has_separator", context: context),
       height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
       id: try dictionary.getOptionalField("id", context: context),
-      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivTabs.Item(dictionary: dict, context: context) }, validator: Self.itemsValidator),
+      items: try dictionary.getArray("items", transform: { (dict: [String: Any]) in try? DivTabs.Item(dictionary: dict, context: context) }, validator: Self.itemsValidator, context: context),
       layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
       margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),

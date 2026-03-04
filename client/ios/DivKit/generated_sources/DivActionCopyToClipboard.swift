@@ -10,7 +10,7 @@ public final class DivActionCopyToClipboard: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      content: try dictionary.getField("content", transform: { (dict: [String: Any]) in try DivActionCopyToClipboardContent(dictionary: dict, context: context) })
+      content: try dictionary.getField("content", transform: { (dict: [String: Any]) in try DivActionCopyToClipboardContent(dictionary: dict, context: context) }, context: context)
     )
   }
 

@@ -1,6 +1,7 @@
 package com.yandex.divkit.multiplaform.sample
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBars
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.divkit.multiplatform.DivKit
@@ -18,7 +20,12 @@ import com.yandex.divkit.multiplatform.dependencies.ErrorReporter
 @Composable
 internal fun MainScreen() {
     DivKit(dependencies) {
+        val isDarkTheme = isSystemInDarkTheme()
         var globalVar by variable(name = "global_var", value = "<initial>")
+        var isDarkThemeVar by variable(name = "is_dark_theme", value = isDarkTheme)
+        LaunchedEffect(isDarkTheme) {
+            isDarkThemeVar = isDarkTheme
+        }
         Column(
             modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -77,7 +84,7 @@ private val jsonString = """
       "background": [
         {
           "type": "solid",
-          "color": "@{color.background}"
+          "color": "@{is_dark_theme ? '#000' : '#FFF'}"
         }
       ],
       "border": {
@@ -121,6 +128,7 @@ private val jsonString = """
             {
               "type": "text",
               "${'$'}text": "author",
+              "text_color": "@{is_dark_theme ? '#FFF' : '#000'}",
               "font_size": 18,
               "ranges": [
                 {
@@ -214,14 +222,14 @@ private val jsonString = """
                     "top": 20
                 },
                 "font_size": 20,
-                "text_color": "#FFF",
+                "text_color": "@{is_dark_theme ? '#000' : '#FFF'}",
                 "border": {
                     "corner_radius": 12
                 },
                 "background": [
                     {
                         "type": "solid",
-                        "color": "#4267B2"
+                        "color": "@{is_dark_theme ? '#FFF' : '#000'}"
                     }
                 ],
                 "actions": [
@@ -250,14 +258,14 @@ private val jsonString = """
                     "top": 20
                 },
                 "font_size": 20,
-                "text_color": "#FFF",
+                "text_color": "@{is_dark_theme ? '#000' : '#FFF'}",
                 "border": {
                     "corner_radius": 12
                 },
                 "background": [
                     {
                         "type": "solid",
-                        "color": "#4267B2"
+                        "color": "@{is_dark_theme ? '#FFF' : '#000'}"
                     }
                 ]
             },
@@ -329,7 +337,7 @@ private val jsonString = """
               "background": [
                 {
                   "type": "solid",
-                  "color": "@{color.background}"
+                  "color": "@{is_dark_theme ? '#000' : '#FFF'}"
                 }
               ],
               "border": {
@@ -365,6 +373,7 @@ private val jsonString = """
                     {
                       "type": "text",
                       "text": "by @rive_app",
+                      "text_color": "@{is_dark_theme ? '#FFF' : '#000'}",
                       "font_size": 18,
                       "ranges": [
                         {

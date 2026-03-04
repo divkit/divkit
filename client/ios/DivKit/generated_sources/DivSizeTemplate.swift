@@ -117,7 +117,7 @@ extension DivSizeTemplate {
     case DivWrapContentSizeTemplate.type:
       self = .divWrapContentSizeTemplate(try DivWrapContentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-size_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

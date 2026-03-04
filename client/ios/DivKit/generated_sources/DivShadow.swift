@@ -33,7 +33,7 @@ public final class DivShadow: Sendable {
       alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
       blur: try dictionary.getOptionalExpressionField("blur", validator: Self.blurValidator, context: context),
       color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:), context: context),
-      offset: try dictionary.getField("offset", transform: { (dict: [String: Any]) in try DivPoint(dictionary: dict, context: context) })
+      offset: try dictionary.getField("offset", transform: { (dict: [String: Any]) in try DivPoint(dictionary: dict, context: context) }, context: context)
     )
   }
 

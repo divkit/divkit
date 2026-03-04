@@ -466,18 +466,18 @@
                 },
                 {
                   "type": "presets_button",
-                  "text": "5 @{item_height.unit}",
+                  "text": "2 @{item_height.unit}",
                   "action": {
-                    "url": "div-action://set_variable?name=corner_radius.value&value=10",
-                    "log_id": "corner_radius.value=5"
+                    "url": "div-action://set_variable?name=corner_radius.value&value=2",
+                    "log_id": "corner_radius.value=2"
                   }
                 },
                 {
                   "type": "presets_button",
-                  "text": "8 @{item_height.unit}",
+                  "text": "4 @{item_height.unit}",
                   "action": {
-                    "url": "div-action://set_variable?name=corner_radius.value&value=15",
-                    "log_id": "corner_radius=8"
+                    "url": "div-action://set_variable?name=corner_radius.value&value=4",
+                    "log_id": "corner_radius.value=4"
                   }
                 }
               ]
@@ -614,7 +614,7 @@
                 },
                 {
                   "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=corner_radius.value&value=5"
+                  "url": "div-action://set_variable?name=corner_radius.value&value=4"
                 },
                 {
                   "log_id": "button_log_id",
@@ -701,7 +701,7 @@
       {
         "name": "corner_radius.value",
         "type": "integer",
-        "value": 5
+        "value": 4
       },
       {
         "name": "corner_radius.unit",

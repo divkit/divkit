@@ -1,7 +1,6 @@
 {
   "description": "Background in .svg format with scale",
   "platforms": [
-    "android",
     "ios",
     "web"
   ],

@@ -94,7 +94,7 @@ extension DivActionCopyToClipboardContentTemplate {
     case ContentUrlTemplate.type:
       self = .contentUrlTemplate(try ContentUrlTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-copy-to-clipboard-content_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

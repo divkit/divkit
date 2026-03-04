@@ -142,7 +142,7 @@ fun divContext(
     return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo, lifecycleOwner)
 }
 
-open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {
+open class DemoDivActionHandler(private val uriHandler: DivkitDemoUriHandler) : DivActionHandler() {
     override fun handleActionUrl(uri: Uri?, view: DivViewFacade): Boolean {
         if (super.handleActionUrl(uri, view)) {
             return true
@@ -152,7 +152,7 @@ open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandl
         return if (uri == null) {
             false
         } else {
-            uriHandlerDivkit.handleUri(uri)
+            uriHandler.handle(uri)
         }
     }
 
@@ -165,8 +165,6 @@ open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandl
         private const val TAG = "DemoDivActionHandler"
     }
 }
-
-fun JSONObject.isDiv2() = optJSONArray("states")?.optJSONObject(0)?.optJSONObject("div") != null
 
 fun JSONObject.parseToDiv2(errorLogger: ParsingErrorLogger? = null): DivData {
     return if (isDiv2Data()) {

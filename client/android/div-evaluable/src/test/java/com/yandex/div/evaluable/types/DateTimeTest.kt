@@ -11,10 +11,9 @@ import java.util.TimeZone
 class DateTimeTest {
     @Test
     fun `dates compared by timestamp in UTC timezone`() {
-        Assert.assertTrue(
-            DateTime(timestampMillis = 0, TimeZone.getTimeZone("GMT+2")) >
-                    DateTime(timestampMillis = 0, TimeZone.getTimeZone("GMT+1"))
-        )
+        val utcPlus2 = DateTime(timestampMillis = 0, TimeZone.getTimeZone("GMT+2"))
+        val utcPlus1 = DateTime(timestampMillis = 0, TimeZone.getTimeZone("GMT+1"))
+        Assert.assertEquals(0, utcPlus2.compareTo(utcPlus1))
     }
 
     @Test

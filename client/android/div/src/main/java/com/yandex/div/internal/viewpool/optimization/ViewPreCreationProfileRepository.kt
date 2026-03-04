@@ -57,7 +57,7 @@ class ViewPreCreationProfileRepository @Inject constructor(
             stores.getOrPut(id) {
                 DataStorage.create(
                     context = context,
-                    fileName = STORE_PATH,
+                    fileName = STORE_PATH.format(id),
                     editor = ViewPreCreationProfileEditor
                 )
             }

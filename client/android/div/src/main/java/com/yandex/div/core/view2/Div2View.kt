@@ -84,7 +84,6 @@ import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.VariableMutationHandler
-import com.yandex.div.internal.util.Clock
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
@@ -98,7 +97,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
-import java.util.Collections
 import java.util.UUID
 import java.util.WeakHashMap
 
@@ -125,7 +123,7 @@ class Div2View private constructor(
     private val overflowMenuListeners = mutableListOf<OverflowMenuSubscriber.Listener>()
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
-    private val viewToDivBindings = Collections.synchronizedMap(WeakHashMap<View, Div>())
+    private val viewToDivBindings = WeakHashMap<View, Div>()
     private val bulkActionsHandler = BulkActionHandler()
     private val divVideoActionHandler: DivVideoActionHandler
         get() = div2Component.divVideoActionHandler
@@ -637,7 +635,10 @@ class Div2View private constructor(
 
     fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext {
         val visibilityActionTracker = div2Component.visibilityActionTracker
-        viewToDivBindings.toMap().forEach { (view, div) ->
+        val bindingsSnapshot = synchronized(viewToDivBindings) {
+            viewToDivBindings.toMap()
+        }
+        bindingsSnapshot.forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
                 if (ViewCompat.isAttachedToWindow(view)) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
@@ -650,7 +651,10 @@ class Div2View private constructor(
 
     private fun discardChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
-        viewToDivBindings.toMap().forEach { (view, div) ->
+        val bindingsSnapshot = synchronized(viewToDivBindings) {
+            viewToDivBindings.toMap()
+        }
+        bindingsSnapshot.forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
                 visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
@@ -795,7 +799,9 @@ class Div2View private constructor(
     }
 
     private fun stopLoadAndSubscriptions() {
-        viewToDivBindings.clear()
+        synchronized(viewToDivBindings) {
+            viewToDivBindings.clear()
+        }
         cancelTooltips() // Depends on children, should be called before removing them
         clearSubscriptions()
         divDataChangedObservers.clear()
@@ -1250,10 +1256,14 @@ class Div2View private constructor(
     }
 
     internal fun bindViewToDiv(view: View, div: Div) {
-        viewToDivBindings[view] = div
+        synchronized(viewToDivBindings) {
+            viewToDivBindings[view] = div
+        }
     }
 
-    internal fun takeBindingDiv(view: View) = viewToDivBindings[view]
+    internal fun takeBindingDiv(view: View) = synchronized(viewToDivBindings) {
+        viewToDivBindings[view]
+    }
 
     /**
      * @return exception if setting variable failed, null otherwise.
@@ -1281,7 +1291,9 @@ class Div2View private constructor(
         return divVideoActionHandler.handleAction(this, divId, command, expressionResolver)
     }
 
-    internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
+    internal fun unbindViewFromDiv(view: View): Div? = synchronized(viewToDivBindings) {
+        viewToDivBindings.remove(view)
+    }
 
     private fun rebind(newData: DivData, isAutoanimations: Boolean, reporter: SimpleRebindReporter) {
         try {

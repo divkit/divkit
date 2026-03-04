@@ -48,7 +48,7 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "perf_test_data/with_templates.json"
+                        assetName = "with_templates.json"
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -92,6 +92,11 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Total.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
+
+            // Size-related metrics are reported inside existing test
+            // in order to save time of perf-agents.
+            // See: https://st.yandex-team.ru/DIVKIT-8868
+            "Library.Size.BenchmarkApp.Size",
         ]
     )
     @Test
@@ -102,7 +107,8 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
-                        assetName = "perf_test_data/without_templates.json"
+                        assetName = "without_templates.json",
+                        reportSize = true,
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -126,6 +132,8 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
                 "Div.Render.Draw.Warm",
                 "Div.Render.Total.Cold",
                 "Div.Render.Total.Warm",
+
+                "Library.Size.BenchmarkApp.Size",
             )
         }
     }

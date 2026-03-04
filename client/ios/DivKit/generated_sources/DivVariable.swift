@@ -42,6 +42,7 @@ public enum DivVariable: Sendable {
 
 extension DivVariable {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case StringVariable.type:
@@ -63,7 +64,7 @@ extension DivVariable {
     case PropertyVariable.type:
       self = .propertyVariable(try PropertyVariable(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-variable", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

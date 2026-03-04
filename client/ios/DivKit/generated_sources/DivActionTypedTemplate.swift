@@ -554,7 +554,7 @@ extension DivActionTypedTemplate {
     case DivActionCustomTemplate.type:
       self = .divActionCustomTemplate(try DivActionCustomTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-typed_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

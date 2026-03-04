@@ -94,7 +94,7 @@ extension DivRadialGradientCenterTemplate {
     case DivRadialGradientRelativeCenterTemplate.type:
       self = .divRadialGradientRelativeCenterTemplate(try DivRadialGradientRelativeCenterTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-center_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

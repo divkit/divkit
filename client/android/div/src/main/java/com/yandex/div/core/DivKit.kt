@@ -86,33 +86,32 @@ class DivKit private constructor(
 
         @JvmStatic
         @AnyThread
-        fun isLoggingEnabled(): Boolean = Log.isEnabled()
+        fun isLoggingEnabled(): Boolean = Log.isEnabled
 
         @JvmStatic
         @AnyThread
         fun enableLogging(enabled: Boolean) {
-            Log.setEnabled(enabled)
+            Log.isEnabled = enabled
         }
 
         @JvmStatic
         @AnyThread
-        fun getLoggingSeverity(): Severity = Log.getSeverity()
+        fun getLoggingSeverity(): Severity = Log.severity
 
         @JvmStatic
         @AnyThread
         fun setLoggingSeverity(severity: Severity) {
-            Log.setSeverity(severity)
+            Log.severity = severity
         }
 
         @JvmStatic
         @AnyThread
-        fun isAssertionsEnabled(): Boolean = Assert.isEnabled()
+        fun isAssertionsEnabled(): Boolean = Assert.isEnabled
 
         @JvmStatic
         @AnyThread
         fun enableAssertions(enabled: Boolean) {
-            Assert.setEnabled(enabled)
+            Assert.isEnabled = enabled
         }
     }
-
 }

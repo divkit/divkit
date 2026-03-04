@@ -94,7 +94,7 @@ extension DivTranslationTemplate {
     case DivPercentageTranslationTemplate.type:
       self = .divPercentageTranslationTemplate(try DivPercentageTranslationTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-translation_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

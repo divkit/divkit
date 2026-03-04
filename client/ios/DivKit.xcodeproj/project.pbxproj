@@ -636,7 +636,6 @@
 				ViewModels/PageIndicatorStateTests.swift,
 				ViewModels/PagerViewLayoutTests.swift,
 				ViewModels/PhoneMaskFormatterTests.swift,
-				ViewModels/SliderModelTests.swift,
 				ViewModels/TabbedPages/TabContentsViewModelTests.swift,
 				ViewModels/TabbedPages/TabInterimItemExtensionsTests.swift,
 				ViewModels/VisibilityActionPerformer/VisibilityActionPerformersTests.swift,
@@ -647,6 +646,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AnchorBlockTests.swift,
+				DecoratingBlockTests.swift,
 				LayoutKitSnapshotTest.swift,
 				ReferenceSet.swift,
 				SnapshotTestKit/Diff.swift,

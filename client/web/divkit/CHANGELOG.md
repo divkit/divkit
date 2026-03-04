@@ -1,3 +1,8 @@
+## 32.38.0 (February 23, 2026)
+
+* Changed `lottie`s `repeat_count` logic (to better align with other platforms).
+
+
 ## 32.37.0 (February 16, 2026)
 
 * Added a warning about using gifs in the `div-image` component.

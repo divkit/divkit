@@ -117,7 +117,7 @@ extension DivInputMaskTemplate {
     case DivPhoneInputMaskTemplate.type:
       self = .divPhoneInputMaskTemplate(try DivPhoneInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-input-mask_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

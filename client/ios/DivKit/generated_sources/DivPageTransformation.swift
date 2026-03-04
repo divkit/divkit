@@ -21,6 +21,7 @@ public enum DivPageTransformation: Sendable {
 
 extension DivPageTransformation {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivPageTransformationSlide.type:
@@ -28,7 +29,7 @@ extension DivPageTransformation {
     case DivPageTransformationOverlap.type:
       self = .divPageTransformationOverlap(try DivPageTransformationOverlap(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-page-transformation", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

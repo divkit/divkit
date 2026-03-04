@@ -4,17 +4,14 @@ import java.util.Calendar
 import java.util.SimpleTimeZone
 import java.util.TimeZone
 
-private const val TO_MILLIS = 60 * 1000
-
 class DateTime(
     internal val timestampMillis: Long,
     internal val timezone: TimeZone,
 ) : Comparable<DateTime> {
     private val calendar by lazy(LazyThreadSafetyMode.NONE) {
-        Calendar.getInstance(utcTimezone).apply { timeInMillis = timestampMillis }
+        Calendar.getInstance(timezone).apply { timeInMillis = timestampMillis }
     }
     internal val timezoneMinutes = timezone.rawOffset / 60
-    private val timestampUtc = timestampMillis - (timezoneMinutes * TO_MILLIS)
 
     override fun toString(): String {
         return formatDate(calendar)
@@ -29,16 +26,14 @@ class DateTime(
             return false
         }
 
-        return timestampUtc == other.timestampUtc
+        return timestampMillis == other.timestampMillis
     }
 
     override fun hashCode(): Int {
-        return timestampUtc.hashCode()
+        return timestampMillis.hashCode()
     }
 
     companion object {
-        private val utcTimezone = SimpleTimeZone(0, "UTC")
-
         internal fun formatDate(c: Calendar): String {
             val yyyy = c.get(Calendar.YEAR).toString()
             val MM = (c.get(Calendar.MONTH) + 1).toString().padStart(2, '0')
@@ -51,6 +46,6 @@ class DateTime(
     }
 
     override fun compareTo(other: DateTime): Int {
-        return timestampUtc.compareTo(other.timestampUtc)
+        return timestampMillis.compareTo(other.timestampMillis)
     }
 }

@@ -13,7 +13,7 @@ public final class EntityWithArray: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      array: try dictionary.getArray("array", transform: { (dict: [String: Any]) in try? Entity(dictionary: dict, context: context) }, validator: Self.arrayValidator)
+      array: try dictionary.getArray("array", transform: { (dict: [String: Any]) in try? Entity(dictionary: dict, context: context) }, validator: Self.arrayValidator, context: context)
     )
   }
 

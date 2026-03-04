@@ -1,11 +1,16 @@
 import Foundation
 
+public typealias TemplateResolver = ([String: Any]) -> [String: Any]
+
 public final class ParsingContext: @unchecked Sendable {
   public private(set) var warnings: [DeserializationError] = []
   public private(set) var errors: [DeserializationError] = []
   public private(set) var path: [String] = []
+  public let templateResolver: TemplateResolver?
 
-  public init() {}
+  public init(templateResolver: TemplateResolver? = nil) {
+    self.templateResolver = templateResolver
+  }
 
   public func appendWarning(_ warning: DeserializationError) {
     warnings.append(warning)
@@ -30,6 +35,14 @@ public final class ParsingContext: @unchecked Sendable {
     if let errors = result.errors {
       appendErrors(Array(errors))
     }
+  }
+
+  public func captureErrors(_ body: () -> Void) -> [DeserializationError] {
+    let countBefore = errors.count
+    body()
+    let captured = Array(errors[countBefore...])
+    errors.removeSubrange(countBefore...)
+    return captured
   }
 
   @discardableResult

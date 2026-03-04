@@ -239,6 +239,9 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
     steps:
+      - name: Support long paths on Windows
+        if: runner.os == 'Windows'
+        run: git config --system core.longpaths true
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:

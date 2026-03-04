@@ -205,7 +205,7 @@ public final class DivSelect: DivBase, @unchecked Sendable {
       letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing", context: context),
       lineHeight: try dictionary.getOptionalExpressionField("line_height", validator: Self.lineHeightValidator, context: context),
       margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
-      options: try dictionary.getArray("options", transform: { (dict: [String: Any]) in try? DivSelect.Option(dictionary: dict, context: context) }, validator: Self.optionsValidator),
+      options: try dictionary.getArray("options", transform: { (dict: [String: Any]) in try? DivSelect.Option(dictionary: dict, context: context) }, validator: Self.optionsValidator, context: context),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       reuseId: try dictionary.getOptionalExpressionField("reuse_id", context: context),
       rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),

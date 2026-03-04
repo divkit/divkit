@@ -12,8 +12,8 @@ import com.yandex.div.core.view2.divs.CONTAINER_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.viewEquals
-import com.yandex.div.internal.Assert
 import com.yandex.div2.DivData
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -131,9 +131,9 @@ class Div2RebindTest {
         val errorCollectors = div2View.viewComponent.errorCollectors
         
         div2View.setData(oldData, tag)
-        assertEquals(1, Iterators.size(errorCollectors.getOrCreate(tag, oldData).getWarnings()))
+        assertEquals(1, Iterators.size(errorCollectors.getOrCreate(tag, oldData).getWarnings().iterator()))
 
         div2View.setData(newData, oldData, tag)
-        assertEquals(0, Iterators.size(errorCollectors.getOrCreate(tag, newData).getWarnings()))
+        assertEquals(0, Iterators.size(errorCollectors.getOrCreate(tag, newData).getWarnings().iterator()))
     }
 }

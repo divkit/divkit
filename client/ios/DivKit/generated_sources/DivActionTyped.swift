@@ -81,6 +81,7 @@ public enum DivActionTyped: Sendable {
 
 extension DivActionTyped {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivActionAnimatorStart.type:
@@ -128,7 +129,7 @@ extension DivActionTyped {
     case DivActionCustom.type:
       self = .divActionCustom(try DivActionCustom(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-typed", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -3,8 +3,8 @@ package com.yandex.div.core.view2.items
 import androidx.viewpager.widget.PagerAdapter
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.tabs.ScrollableViewPager
+import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn

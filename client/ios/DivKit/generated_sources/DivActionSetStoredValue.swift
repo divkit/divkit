@@ -22,7 +22,7 @@ public final class DivActionSetStoredValue: Sendable {
     self.init(
       lifetime: try dictionary.getExpressionField("lifetime", context: context),
       name: try dictionary.getExpressionField("name", context: context),
-      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) })
+      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }, context: context)
     )
   }
 

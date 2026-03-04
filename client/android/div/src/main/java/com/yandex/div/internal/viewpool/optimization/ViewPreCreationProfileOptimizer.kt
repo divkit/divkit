@@ -26,7 +26,7 @@ object ViewPreCreationProfileOptimizer {
     ): ViewPreCreationProfile = withContext(Dispatchers.Default) {
         val newProfile = profile.optimize(session.viewObtainmentStatistics, convergenceRate)
 
-        if (Log.isEnabled()) {
+        if (Log.isEnabled) {
             session.log(oldProfile = profile, newProfile = newProfile)
         }
 

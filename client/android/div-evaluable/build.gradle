@@ -5,7 +5,6 @@ plugins {
 }
 
 apply from: "${project.projectDir}/../publish-java.gradle"
-apply from: "${project.projectDir}/../div-tests-coverage.gradle"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

@@ -167,7 +167,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
       transitionTriggers: try dictionary.getOptionalArray("transition_triggers", validator: Self.transitionTriggersValidator, context: context),
       variableTriggers: try dictionary.getOptionalArray("variable_triggers", transform: { (dict: [String: Any]) in try? DivTrigger(dictionary: dict, context: context) }),
       variables: try dictionary.getOptionalArray("variables", transform: { (dict: [String: Any]) in try? DivVariable(dictionary: dict, context: context) }),
-      videoSources: try dictionary.getArray("video_sources", transform: { (dict: [String: Any]) in try? DivVideoSource(dictionary: dict, context: context) }, validator: Self.videoSourcesValidator),
+      videoSources: try dictionary.getArray("video_sources", transform: { (dict: [String: Any]) in try? DivVideoSource(dictionary: dict, context: context) }, validator: Self.videoSourcesValidator, context: context),
       visibility: try dictionary.getOptionalExpressionField("visibility", context: context),
       visibilityAction: try dictionary.getOptionalField("visibility_action", transform: { (dict: [String: Any]) in try DivVisibilityAction(dictionary: dict, context: context) }),
       visibilityActions: try dictionary.getOptionalArray("visibility_actions", transform: { (dict: [String: Any]) in try? DivVisibilityAction(dictionary: dict, context: context) }),

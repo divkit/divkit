@@ -24,6 +24,7 @@ public enum DivSize: Sendable {
 
 extension DivSize {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
+    let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
     switch blockType {
     case DivFixedSize.type:
@@ -33,7 +34,7 @@ extension DivSize {
     case DivWrapContentSize.type:
       self = .divWrapContentSize(try DivWrapContentSize(dictionary: dictionary, context: context))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-size", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

@@ -1,7 +1,39 @@
+## 32.39.0
+
+# Android Client:
+* Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
+* Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
+* Fixed incorrect transition duration inside a transition set.
+* Fixed match_parent width child size inside a wrap_content parent with min size.
+
+# iOS Client:
+* Added logging of video player fatal errors to `DivKitLogger`.
+* Eliminated redundant animation triggers caused by isHighlighted oscillation during touch tracking.
+* Fixed action_animation not returning to its original state, causing elements to remain visually stuck in the pressed (scaled down) state.
+* Fixed animation playback in previews.
+* Fixed the second slider thumb rendering with zero size when it first appears during an active snap animation.
+* The number of ticks on the slider is limited to 1000 elements.
+
+
+## 32.38.0
+
+# Android Client:
+* Add variable description to VariableMutationException.
+* Removed dependencies to `androidx.datastore:datastore` and `org.jetbrains.kotlin:kotlin-serialization`.
+
+# iOS Client:
+* Fixed Lottie animation repeat_count semantics: repeat_count now means the number of additional plays (repeat_count=0 plays once, repeat_count=1 plays twice, repeat_count=-1 plays infinitely).
+* The custom action function has been implemented.
+
+# Web Client:
+* Changed `lottie`s `repeat_count` logic (to better align with other platforms).
+
+
 ## 32.37.0
 
 # Android Client:
 * Added `getExpressionResolver` method to `Div2Context` to access `ExpressionResolver` implementation for given `DivData`. Can be used for preloading when there is no created `Div2View`.
+* Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * Fixed `gif` images loading by `GlideDivImageLoader`.
 * Fixed loading images from assets by provided `DivImageLoader`s.
 * Fixed shadow blur rendering on certain devices.
@@ -9,6 +41,7 @@
 * `PicassoDivImageLoader` is now deprecated because the Picasso library is outdated. Recommended alternatives for image loading: `GlideDivImageLoader`, `CoilDivImageLoader` or custom implementation of the `DivImageLoader` interface.
 
 # iOS Client:
+* Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * The number of ticks on the slider is limited to 1000 elements.
 
 # Web Client:

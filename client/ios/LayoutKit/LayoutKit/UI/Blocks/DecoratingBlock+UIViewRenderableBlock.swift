@@ -199,6 +199,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   private var animationStartTime: Date?
   private let animationMinimalDuration: TimeInterval = 0.125
+  private var pendingAnimationWorkItem: DispatchWorkItem?
 
   private var visibilityActionPerformers: VisibilityActionPerformers?
   private var hasFocused = false
@@ -343,16 +344,19 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
+    applyActionAnimation(state: .highlighted)
     model.pressStartActions?.asArray().perform(sendingFrom: self)
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
+    applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
+    applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
@@ -529,17 +533,24 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   private func updateHighlightState(animated: Bool) {
     updateContentBackgroundColor(animated: animated)
+  }
 
-    guard let actionAnimation = model.actionAnimation(for: highlightState) else {
+  private func applyActionAnimation(state: HighlightState) {
+    let animated = true
+    guard let actionAnimation = model.actionAnimation(for: state) else {
       return updateContentAlpha(animated: animated)
     }
+
+    pendingAnimationWorkItem?.cancel()
 
     let startAnimation = DispatchWorkItem { [weak self] in
       self?.perform(actionAnimation, animated: animated) {
         self?.animationStartTime = nil
+        self?.pendingAnimationWorkItem = nil
       }
       self?.animationStartTime = Date()
     }
+    pendingAnimationWorkItem = startAnimation
 
     if let animationStartTime {
       let remainingTime: TimeInterval = max(

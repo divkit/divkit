@@ -19,9 +19,6 @@ import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
-import java.io.File
-
-private const val TAG = "DivScreenshotActivity"
 
 /**
  * Run:
@@ -35,10 +32,8 @@ class DivScreenshotActivity : AppCompatActivity() {
     private lateinit var divContext: Div2Context
 
     private val cardAssetName: String
-        get() = intent.extras?.getString(EXTRA_DIV_ASSET_NAME) ?: throw IllegalArgumentException("Missing div asset name")
-
-    private val templatesAssetName: String
-        get() = cardAssetName.substringBeforeLast(File.separator) + "${File.separator}templates.json"
+        get() = intent.extras?.getString(EXTRA_DIV_ASSET_NAME)
+            ?: throw IllegalArgumentException("Missing div asset name")
 
     private val imageLoaderName: String?
         get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
@@ -69,11 +64,17 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
 
         val onBound: (Div2View) -> Unit = { divView ->
-            this.divView = divView
-            divView.apply {
-                val divViewHeight = if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT)
-                    ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
-                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
+            this.divView = divView.apply {
+                val height =
+                    if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    } else {
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    height
+                )
                 id = R.id.morda_screenshot_div
                 removeAutofocusForOldApis()
                 hideCursor()
@@ -82,13 +83,24 @@ class DivScreenshotActivity : AppCompatActivity() {
             setContentView(divView)
         }
 
-        if (divJson.has("card")) {
-            val templateJson = divJson.optJSONObject("templates")
-            val cardJson = divJson.getJSONObject("card")
-            Div2ViewFactory(divContext, templateJson).createViewByConfig(cardJson, onBound)
-        } else {
-            Div2ViewFactory(divContext, assetReader.tryRead(templatesAssetName)).createViewByConfig(divJson, onBound)
-        }
+        val templatesJson = divJson.optJSONObject("templates")
+        val cardJson = divJson.getJSONObject("card")
+        Div2ViewFactory(divContext, templatesJson).createViewByConfig(cardJson, onBound)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ContextCompat.registerReceiver(
+            this,
+            broadcastReceiver,
+            receiverIntentFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(broadcastReceiver)
     }
 
     private fun setImageLoader() {
@@ -135,16 +147,6 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        ContextCompat.registerReceiver(
-            this,
-            broadcastReceiver,
-            receiverIntentFilter,
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-    }
-
     private fun rebindDivWithSameData() {
         when (val view = findViewById<View>(R.id.morda_screenshot_div)) {
             is Div2View -> {
@@ -153,13 +155,9 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(broadcastReceiver)
-    }
-
     companion object {
-        const val REBIND_DIV_WITH_SAME_DATA_ACTION = "DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA"
+        const val REBIND_DIV_WITH_SAME_DATA_ACTION =
+            "DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA"
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
 

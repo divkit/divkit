@@ -439,7 +439,7 @@ extension DivTemplate {
     case DivVideoTemplate.type:
       self = .divVideoTemplate(try DivVideoTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

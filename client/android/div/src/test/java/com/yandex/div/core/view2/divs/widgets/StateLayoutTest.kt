@@ -5,7 +5,7 @@ import android.os.Looper.getMainLooper
 import android.view.MotionEvent
 import android.view.View
 import androidx.test.core.view.MotionEventBuilder
-import com.yandex.div.internal.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock

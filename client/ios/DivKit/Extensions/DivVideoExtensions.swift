@@ -15,7 +15,7 @@ extension DivVideo: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     guard let playerFactory = context.playerFactory else {
-      DivKitLogger.error("There is no player factory in the context")
+      context.addWarning(message: "There is no player factory in the context")
       return EmptyBlock()
     }
 
@@ -57,7 +57,15 @@ extension DivVideo: DivBlockModeling {
       endActions: endActions,
       fatalActions: fatalActions,
       path: context.path,
-      scale: resolveScale(resolver).scale
+      scale: resolveScale(resolver).scale,
+      errorReporter: { [weak errorsStorage = context.errorsStorage, path = context.path] error in
+        errorsStorage?.add(
+          DivUnknownWarning(
+            "Playback encountered an error: \"\(error.errorDescription)\"",
+            path: path
+          )
+        )
+      }
     )
 
     let videoBlock = VideoBlock(

@@ -603,6 +603,8 @@ class SwiftProperty(Property):
             validator_arg_string = self.validator_arg(entity_name='Self', mode=mode)
             declaration_mode = SwiftProperty.SwiftMode(value=mode, use_expressions=False)
 
+            context_suffix = ', context: context' if not self.parsed_value_is_optional else ''
+
             if isinstance(self.property_type, Array):
                 item_type = cast(SwiftPropertyType, self.property_type.property_type).prefixed_declaration(
                     declaration_mode
@@ -611,7 +613,7 @@ class SwiftProperty(Property):
                 expr = (
                     f'"{self.dict_field}", transform: '
                     f'{{ (dict: [String: Any]) in try? {item_type}(dictionary: dict, context: context) }}'
-                    f'{validator_arg_string}'
+                    f'{validator_arg_string}{context_suffix}'
                 )
                 return f'get{optional_suffix}Array({expr})'
 
@@ -622,7 +624,7 @@ class SwiftProperty(Property):
             expr = (
                 f'"{self.dict_field}", transform: '
                 f'{{ (dict: [String: Any]) in try {value_type}(dictionary: dict, context: context) }}'
-                f'{validator_arg_string}'
+                f'{validator_arg_string}{context_suffix}'
             )
             return f'get{optional_suffix}Field({expr})'
 

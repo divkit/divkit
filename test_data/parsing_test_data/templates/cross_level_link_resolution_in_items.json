@@ -1,0 +1,57 @@
+{
+  "description": "Parameters passed via $-links from instance to nested template items",
+  "templates": {
+    "header": {
+      "type": "text",
+      "$text": "header_text"
+    },
+    "card": {
+      "type": "container",
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "header",
+          "$header_text": "title"
+        },
+        {
+          "type": "text",
+          "$text": "subtitle"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "card",
+          "title": "Card Title",
+          "subtitle": "Card Subtitle"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Card Subtitle"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

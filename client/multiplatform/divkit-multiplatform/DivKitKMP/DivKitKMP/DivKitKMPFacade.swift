@@ -35,7 +35,7 @@ internal import DivKitExtensions
         cardId: DivCardID(rawValue: cardId)
       )
     )
-    return divView
+    return DivKitKMPView(divView: divView)
   }
 
   @objc public func getVariableValue(_ name: String) -> Any? {
@@ -65,12 +65,12 @@ extension [String: Any] {
       switch $0 {
       case let value as String:
         DivVariableValue.string(value)
+      case let number as NSNumber where number.isBool:
+        DivVariableValue.bool(number.boolValue)
       case let value as Double:
         DivVariableValue.number(value)
       case let value as Int:
         DivVariableValue.integer(value)
-      case let value as Bool:
-        DivVariableValue.bool(value)
       case let value as Color:
         DivVariableValue.color(value)
       case let value as URL:
@@ -83,6 +83,13 @@ extension [String: Any] {
         nil
       }
     }.map(key: { DivVariableName(rawValue: $0) }, value: { $0 })
+  }
+}
+
+extension NSNumber {
+  fileprivate var isBool: Bool {
+    let type = String(cString: objCType)
+    return type == "B" || type == "c"
   }
 }
 #endif

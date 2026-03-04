@@ -94,7 +94,7 @@ extension DivShapeTemplate {
     case DivCircleShapeTemplate.type:
       self = .divCircleShapeTemplate(try DivCircleShapeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-shape_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

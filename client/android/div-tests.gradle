@@ -1,4 +1,3 @@
-apply from: "${project.projectDir}/../div-tests-coverage.gradle"
 apply plugin: 'kotlin-android'
 
 android {
@@ -8,19 +7,6 @@ android {
 
     testOptions {
         unitTests {
-            //noinspection ConfigurationAvoidance
-            all {
-                jacoco {
-                    includeNoLocationClasses = true
-                    excludes = ['jdk.internal.*']
-                }
-
-                jvmArgs '-noverify'
-
-                testLogging {
-                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
-                }
-            }
             includeAndroidResources = true
         }
     }

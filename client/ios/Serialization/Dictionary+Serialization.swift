@@ -55,10 +55,13 @@ func rawRepresentableValue<T: RawRepresentable>(
 @usableFromInline
 func castValidSerializationValue<T: ValidSerializationValue>(
   _ value: Any,
-  key: [some Any]
+  key _: [some Any]
 ) throws -> T {
   guard let transformed = value as? T else {
-    throw invalidFieldErrorForKey(key, representation: value)
+    throw DeserializationError.typeMismatch(
+      expected: String(describing: T.self),
+      representation: value
+    )
   }
   return transformed
 }
@@ -86,6 +89,29 @@ extension Dictionary where Key == String {
 // MARK: Required values (private interface)
 
 extension Dictionary where Key == String {
+  @usableFromInline
+  func getFieldPreservingError<T, U>(
+    _ key: [Key],
+    transform: (T) throws -> U,
+    validator: AnyValueValidator<U>?
+  ) throws -> U {
+    let dict = try enclosedDictForKeySequence(key)
+    guard let valueBeforeConversion = dict[key.last!] else {
+      throw DeserializationError.noData
+    }
+    guard let typedValue = valueBeforeConversion as? T else {
+      throw DeserializationError.typeMismatch(
+        expected: String(describing: T.self),
+        representation: valueBeforeConversion
+      )
+    }
+    let transformed = try transform(typedValue)
+    guard validator?.isValid(transformed) != false else {
+      throw DeserializationError.invalidValue(result: transformed, value: valueBeforeConversion)
+    }
+    return transformed
+  }
+
   @usableFromInline
   func getField<T, U>(
     _ key: [Key],
@@ -370,11 +396,27 @@ extension Dictionary where Key == String {
     validator: AnyValueValidator<U>? = nil,
     context: ParsingContext
   ) throws -> U {
-    let result: DeserializationResult<U> = getResult {
-      try getField(key, transform: transform, validator: validator)
+    let fieldName = key.last!
+    do {
+      return try getFieldPreservingError(key, transform: transform, validator: validator)
+    } catch let error as DeserializationError {
+      let wrappedError: DeserializationError = switch error {
+      case .noData:
+        .requiredFieldIsMissing(field: fieldName)
+      case .typeMismatch, .invalidFieldRepresentation:
+        .nestedObjectError(field: fieldName, error: error)
+      default:
+        .nestedObjectError(
+          field: fieldName,
+          error: .composite(
+            error: .invalidValue(result: nil, from: nil),
+            causes: NonEmptyArray(error)
+          )
+        )
+      }
+      context.appendError(wrappedError)
+      throw wrappedError
     }
-    context.append(result: result)
-    return try result.unwrap()
   }
 
   @usableFromInline
@@ -384,11 +426,79 @@ extension Dictionary where Key == String {
     validator: AnyArrayValueValidator<U>? = nil,
     context: ParsingContext
   ) throws -> [U] {
-    let result: DeserializationResult<[U]> = getResult {
-      try getArray(key, transform: transform, validator: validator)
+    let fieldName = key.last!
+
+    let dict: [String: Any]
+    do {
+      dict = try enclosedDictForKeySequence(key)
+    } catch {
+      let err = DeserializationError.requiredFieldIsMissing(field: fieldName)
+      context.appendError(err)
+      throw err
     }
-    context.append(result: result)
-    return try result.unwrap()
+
+    guard let value = dict[fieldName] else {
+      let err = DeserializationError.requiredFieldIsMissing(field: fieldName)
+      context.appendError(err)
+      throw err
+    }
+
+    guard let array = value as? NSArray else {
+      let err = DeserializationError.nestedObjectError(
+        field: fieldName,
+        error: .typeMismatch(expected: "NSArray", representation: value)
+      )
+      context.appendError(err)
+      throw err
+    }
+
+    var result: [U] = []
+    var elementCauses: [DeserializationError] = []
+    result.reserveCapacity(array.count)
+
+    for index in 0..<array.count {
+      var elementSucceeded = false
+      let capturedErrors = context.captureErrors {
+        guard let element = array[index] as? T else { return }
+        guard let transformed = try? transform(element) else { return }
+        result.append(transformed)
+        elementSucceeded = true
+      }
+
+      if !elementSucceeded {
+        let innerError = capturedErrors.last
+          ?? .invalidValue(result: nil, value: array[index])
+        elementCauses.append(
+          .nestedObjectError(field: "\(index)", error: innerError)
+        )
+      } else {
+        for error in capturedErrors {
+          elementCauses.append(
+            .nestedObjectError(field: "\(index)", error: error)
+          )
+        }
+      }
+    }
+
+    guard validator?.isValid(result) != false else {
+      let inner: DeserializationError = if let causes = NonEmptyArray(elementCauses) {
+        .composite(
+          error: .invalidValue(result: result, from: value),
+          causes: causes
+        )
+      } else {
+        .invalidValue(result: result, value: value)
+      }
+      let err = DeserializationError.nestedObjectError(field: fieldName, error: inner)
+      context.appendError(err)
+      throw err
+    }
+
+    for cause in elementCauses {
+      context.appendWarning(.nestedObjectError(field: fieldName, error: cause))
+    }
+
+    return result
   }
 
   @usableFromInline
@@ -403,7 +513,10 @@ extension Dictionary where Key == String {
       transform: transform,
       validator: validator,
       invalidValueHandler: { value in
-        context.appendWarning(invalidFieldErrorForKey(key, representation: value))
+        context.appendWarning(.nestedObjectError(
+          field: key.last!,
+          error: .typeMismatch(expected: String(describing: U.self), representation: value)
+        ))
       }
     )
   }
@@ -420,13 +533,28 @@ extension Dictionary where Key == String {
       transform: transform,
       validator: validator,
       invalidContainerHandler: { value in
-        context.appendWarning(invalidFieldErrorForKey(key, representation: value))
+        context.appendWarning(.nestedObjectError(
+          field: key.last!,
+          error: .typeMismatch(expected: "NSArray", representation: value)
+        ))
       },
       invalidElementHandler: { index, element in
-        context.appendWarning(invalidFieldErrorForKey(key, element: index, representation: element))
+        context.appendWarning(.nestedObjectError(
+          field: key.last!,
+          error: .nestedObjectError(
+            field: "\(index)",
+            error: .typeMismatch(expected: String(describing: T.self), representation: element)
+          )
+        ))
       },
       invalidTransformedElementHandler: { index, element in
-        context.appendWarning(invalidFieldErrorForKey(key, element: index, representation: element))
+        context.appendWarning(.nestedObjectError(
+          field: key.last!,
+          error: .nestedObjectError(
+            field: "\(index)",
+            error: .typeMismatch(expected: String(describing: U.self), representation: element)
+          )
+        ))
       }
     )
   }

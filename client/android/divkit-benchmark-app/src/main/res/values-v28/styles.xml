@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ActivitySubtitleStyle">
+        <item name="android:textColor">#b0000000</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/toolbar_desctiption_text_size</item>
+        <item name="android:lineHeight">@dimen/toolbar_desctiption_line_height</item>
+    </style>
+
+    <style name="ActivityExpandedTitleStyle">
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:lineHeight">32sp</item>
+    </style>
+</resources>

@@ -140,7 +140,7 @@ extension DivActionScrollDestinationTemplate {
     case EndDestinationTemplate.type:
       self = .endDestinationTemplate(try EndDestinationTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-scroll-destination_template", representation: dictionary)
+      throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
   }
 }

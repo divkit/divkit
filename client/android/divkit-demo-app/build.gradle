@@ -4,10 +4,11 @@ import groovy.json.JsonOutput
 plugins {
     id 'com.android.application'
     id 'kotlin-parcelize'
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.screenshotTestPlugin)
 }
 
-apply from: "${project.projectDir}/../div-application.gradle"
+apply from: "${project.projectDir}/../div-common.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "ui-tests.gradle"
 
@@ -83,9 +84,11 @@ android {
 
 dependencies {
     implementation project(path: ':assertion')
+    implementation project(path: ':coil')
+    implementation project(path: ':compose')
     implementation project(path: ':div')
+    implementation project(path: ':div-data')
     implementation project(path: ':div-gesture')
-    implementation project(path: ':div-json')
     implementation project(path: ':div-lottie')
     implementation project(path: ':div-markdown')
     implementation project(path: ':div-network')
@@ -94,43 +97,37 @@ dependencies {
     implementation project(path: ':div-shimmer')
     implementation project(path: ':div-shine')
     implementation project(path: ':div-size-provider')
+    implementation project(path: ':div-storage')
+    implementation project(path: ':div-video-m3')
     implementation project(path: ':divkit-regression-testing')
     implementation project(path: ':fonts')
+    implementation project(path: ':glide')
     implementation project(path: ':logging')
+    implementation project(path: ':picasso')
     implementation project(path: ':screenshot-test-runtime')
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
     implementation project(path: ':video-custom')
-    implementation project(path: ':div-storage')
-    implementation project(path: ':div-video-m3')
-    implementation project(path: ':picasso')
-    implementation project(path: ':glide')
-    implementation project(path: ':coil')
 
     implementation libs.androidx.browser
     implementation libs.androidx.constraintlayout
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
     implementation libs.androidx.preference
+    implementation libs.androidx.test.uiautomator
     implementation libs.androidx.work
-
-    implementation libs.javax
-
-    implementation libs.kotlin.reflect
-
-    implementation libs.okhttp
-
-    implementation libs.markwon
 
     implementation(libs.appmetrica.lib) {
         exclude group: 'io.appmetrica.analytics', module: 'analytics-identifiers'
     }
 
+    implementation libs.javax
+    implementation libs.kotlin.reflect
+    implementation libs.markwon
+    implementation libs.nvWebsocket
+    implementation libs.okhttp
     implementation libs.stetho.core
     implementation libs.stetho.okhttp3
-
-    implementation libs.nvWebsocket
-    implementation libs.androidx.test.uiautomator
-
-    // QR code stuff
     implementation libs.zxing.embedded
     implementation libs.zxing.core
 

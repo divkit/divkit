@@ -1,0 +1,4784 @@
+[
+  {
+    "card": {
+      "log_id": "welcome_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1565C0"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 24,
+              "bottom": 24
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 16,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Welcome to DivKit",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "type": "text",
+                "text": "This sample shows DivViews displayed inside a UICollectionView. Each cell is an independent DivKit card.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#BBDEFB",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "image_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#33000000"
+              },
+              "has_shadow": true
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+                "aspect": {
+                  "ratio": 1.5
+                },
+                "content_alignment_vertical": "top",
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Adorable Wombat",
+                "font_size": 20,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "DivKit makes it easy to display images with text overlays and rich formatting.",
+                "font_size": 14,
+                "line_height": 20,
+                "text_color": "#757575",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 16
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "stats_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_horizontal": "space-evenly",
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#F5F5F5"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "128",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#1565C0",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Cards",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "3.2K",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#2E7D32",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Views",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "42",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#E65100",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Actions",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "quote_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#6A1B9A",
+                  "#AD1457"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“The best way to predict the future is to invent it.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#FFFFFF",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- Alan Kay",
+                "font_size": 16,
+                "text_color": "#CE93D8",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "features_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#33000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "DivKit Features",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Server-driven UI rendering",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Cross-platform support",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Rich layout capabilities",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Dynamic content updates",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "image_card_2",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#263238"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg",
+                "aspect": {
+                  "ratio": 1.5
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Rubber Ducks",
+                "font_size": 20,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Each card in this collection is fully independent and powered by DivKit's server-driven UI engine.",
+                "font_size": 14,
+                "line_height": 20,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 16
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "cta_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#00897B",
+                  "#00ACC1"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 16
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Ready to build?",
+                "font_size": 24,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Start creating beautiful server-driven layouts with DivKit today.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#B2DFDB",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "Learn More",
+                "font_size": 16,
+                "font_weight": "bold",
+                "text_color": "#00897B",
+                "text_alignment_horizontal": "center",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 24
+                },
+                "paddings": {
+                  "left": 32,
+                  "right": 32,
+                  "top": 12,
+                  "bottom": 12
+                },
+                "margins": {
+                  "top": 20
+                },
+                "width": {
+                  "type": "wrap_content"
+                },
+                "actions": [
+                  {
+                    "log_id": "learn_more",
+                    "url": "https://divkit.tech"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_1",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFF3E0"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #1",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#E65100"
+              },
+              {
+                "type": "text",
+                "text": "DivKit layouts are described in JSON, making them easy to update from the server without an app release.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#BF360C",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "profile_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+                "width": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "border": {
+                  "corner_radius": 28
+                }
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "margins": {
+                  "left": 12
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Wombat Dev",
+                    "font_size": 18,
+                    "font_weight": "bold",
+                    "text_color": "#212121"
+                  },
+                  {
+                    "type": "text",
+                    "text": "iOS Engineer",
+                    "font_size": 14,
+                    "text_color": "#757575",
+                    "margins": {
+                      "top": 2
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "gradient_banner_1",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#FF6F00",
+                  "#FF8F00",
+                  "#FFA000"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Autumn Collection",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Warm tones and cozy designs",
+                "font_size": 16,
+                "text_color": "#FFF8E1",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "metric_row_1",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_horizontal": "space-evenly",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E8EAF6"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "99.9%",
+                    "font_size": 28,
+                    "font_weight": "bold",
+                    "text_color": "#283593",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Uptime",
+                    "font_size": 13,
+                    "text_color": "#5C6BC0",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "12ms",
+                    "font_size": 28,
+                    "font_weight": "bold",
+                    "text_color": "#283593",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Latency",
+                    "font_size": 13,
+                    "text_color": "#5C6BC0",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "50K",
+                    "font_size": 28,
+                    "font_weight": "bold",
+                    "text_color": "#283593",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "RPS",
+                    "font_size": 13,
+                    "text_color": "#5C6BC0",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "dark_quote",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1B1B1B"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“Simplicity is the ultimate sophistication.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#E0E0E0",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- Leonardo da Vinci",
+                "font_size": 16,
+                "text_color": "#757575",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "image_card_3",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg",
+                "aspect": {
+                  "ratio": 1.5
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Puppy & Duck",
+                "font_size": 20,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Unlikely friendships make the best stories. DivKit supports rich image layouts with rounded corners.",
+                "font_size": 14,
+                "line_height": 20,
+                "text_color": "#757575",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 16
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_2",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E8F5E9"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #2",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#2E7D32"
+              },
+              {
+                "type": "text",
+                "text": "Use DivViewPreloader to pre-calculate layout sizes before displaying cards in a UICollectionView.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#1B5E20",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "blue_banner",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#0D47A1",
+                  "#1565C0",
+                  "#1976D2"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Deep Blue",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Gradients bring depth and visual interest to your layouts.",
+                "font_size": 16,
+                "text_color": "#BBDEFB",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "checklist_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Getting Started",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "✅  Add DivKit via SPM",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 6,
+                  "bottom": 6
+                }
+              },
+              {
+                "type": "text",
+                "text": "✅  Create DivKitComponents",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 6,
+                  "bottom": 6
+                }
+              },
+              {
+                "type": "text",
+                "text": "✅  Add DivView to your layout",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 6,
+                  "bottom": 6
+                }
+              },
+              {
+                "type": "text",
+                "text": "⬜  Ship to production",
+                "font_size": 16,
+                "text_color": "#9E9E9E",
+                "paddings": {
+                  "top": 6,
+                  "bottom": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "sunset_gradient",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#F57F17",
+                  "#E65100",
+                  "#BF360C"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 36,
+              "bottom": 36
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Sunset Palette",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "profile_card_2",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#F3E5F5"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg",
+                "width": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "border": {
+                  "corner_radius": 28
+                }
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "margins": {
+                  "left": 12
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Rubber Team",
+                    "font_size": 18,
+                    "font_weight": "bold",
+                    "text_color": "#4A148C"
+                  },
+                  {
+                    "type": "text",
+                    "text": "QA Engineers",
+                    "font_size": 14,
+                    "text_color": "#7B1FA2",
+                    "margins": {
+                      "top": 2
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "numbered_list",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Why DivKit?",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "1. Instant layout updates without app releases",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "2. Consistent UI across iOS, Android, and Web",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "3. Battle-tested at Yandex scale",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "4. Rich component library out of the box",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "mint_banner",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#00695C",
+                  "#00897B",
+                  "#26A69A"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Fresh Mint",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Clean and refreshing UI patterns",
+                "font_size": 16,
+                "text_color": "#B2DFDB",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_3",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E3F2FD"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #3",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#1565C0"
+              },
+              {
+                "type": "text",
+                "text": "DivView supports intrinsicContentSize, making it compatible with Auto Layout in UIKit.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#0D47A1",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "dark_stats",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_horizontal": "space-evenly",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#212121"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 24,
+              "bottom": 24
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "4.9",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#FFD54F",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Rating",
+                    "font_size": 13,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "1.2M",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#69F0AE",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Downloads",
+                    "font_size": 13,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "500+",
+                    "font_size": 32,
+                    "font_weight": "bold",
+                    "text_color": "#80D8FF",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Stars",
+                    "font_size": 13,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "quote_green",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#1B5E20",
+                  "#2E7D32"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“Talk is cheap. Show me the code.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#FFFFFF",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- Linus Torvalds",
+                "font_size": 16,
+                "text_color": "#A5D6A7",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "wombat_dark_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#37474F"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+                "aspect": {
+                  "ratio": 1.0
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Square Crop",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_color": "#ECEFF1",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Images can use any aspect ratio.",
+                "font_size": 14,
+                "text_color": "#90A4AE",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 16
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "pink_banner",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#880E4F",
+                  "#AD1457",
+                  "#C2185B"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Rose Garden",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Bold colors for bold ideas",
+                "font_size": 16,
+                "text_color": "#F8BBD0",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_4",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FCE4EC"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #4",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#C2185B"
+              },
+              {
+                "type": "text",
+                "text": "Templates let you define reusable components. Define once, use everywhere in your card JSON.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#880E4F",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "progress_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Project Progress",
+                "font_size": 20,
+                "font_weight": "bold",
+                "text_color": "#212121"
+              },
+              {
+                "type": "text",
+                "text": "Design",
+                "font_size": 14,
+                "text_color": "#757575",
+                "margins": {
+                  "top": 16
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#E0E0E0"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 4
+                },
+                "margins": {
+                  "top": 4
+                },
+                "items": [
+                  {
+                    "type": "container",
+                    "width": {
+                      "type": "fixed",
+                      "value": 280
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#4CAF50"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 4
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "Development",
+                "font_size": 14,
+                "text_color": "#757575",
+                "margins": {
+                  "top": 12
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#E0E0E0"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 4
+                },
+                "margins": {
+                  "top": 4
+                },
+                "items": [
+                  {
+                    "type": "container",
+                    "width": {
+                      "type": "fixed",
+                      "value": 200
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#2196F3"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 4
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "Testing",
+                "font_size": 14,
+                "text_color": "#757575",
+                "margins": {
+                  "top": 12
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#E0E0E0"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 4
+                },
+                "margins": {
+                  "top": 4
+                },
+                "items": [
+                  {
+                    "type": "container",
+                    "width": {
+                      "type": "fixed",
+                      "value": 100
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#FF9800"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 4
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "ocean_gradient",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#006064",
+                  "#00838F",
+                  "#0097A7"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 36,
+              "bottom": 36
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Ocean Breeze",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "info_card_1",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFDE7"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "⚠️  Important Note",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_color": "#F57F17"
+              },
+              {
+                "type": "text",
+                "text": "Cards can be updated in real-time from your backend without requiring users to update the app.",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#827717",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "two_col_images",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent",
+                  "weight": 1
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 16,
+                  "shadow": {
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 2
+                      }
+                    },
+                    "color": "#22000000"
+                  },
+                  "has_shadow": true
+                },
+                "margins": {
+                  "right": 4
+                },
+                "items": [
+                  {
+                    "type": "image",
+                    "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+                    "aspect": {
+                      "ratio": 1.0
+                    },
+                    "border": {
+                      "corners_radius": {
+                        "top-left": 16,
+                        "top-right": 16,
+                        "bottom-left": 0,
+                        "bottom-right": 0
+                      }
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "text": "Wombat",
+                    "font_size": 14,
+                    "font_weight": "bold",
+                    "text_color": "#212121",
+                    "paddings": {
+                      "left": 12,
+                      "right": 12,
+                      "top": 8,
+                      "bottom": 10
+                    },
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent",
+                  "weight": 1
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 16,
+                  "shadow": {
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 2
+                      }
+                    },
+                    "color": "#22000000"
+                  },
+                  "has_shadow": true
+                },
+                "margins": {
+                  "left": 4
+                },
+                "items": [
+                  {
+                    "type": "image",
+                    "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg",
+                    "aspect": {
+                      "ratio": 1.0
+                    },
+                    "border": {
+                      "corners_radius": {
+                        "top-left": 16,
+                        "top-right": 16,
+                        "bottom-left": 0,
+                        "bottom-right": 0
+                      }
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "text": "Ducks",
+                    "font_size": 14,
+                    "font_weight": "bold",
+                    "text_color": "#212121",
+                    "paddings": {
+                      "left": 12,
+                      "right": 12,
+                      "top": 8,
+                      "bottom": 10
+                    },
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "quote_blue",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#0D47A1",
+                  "#1A237E"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“First, solve the problem. Then, write the code.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#FFFFFF",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- John Johnson",
+                "font_size": 16,
+                "text_color": "#90CAF9",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_5",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#EDE7F6"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #5",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#4527A0"
+              },
+              {
+                "type": "text",
+                "text": "Use actions to handle taps, set variables, change states, and trigger timers — all from JSON.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#311B92",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "metric_row_2",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_horizontal": "space-evenly",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FBE9E7"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "7",
+                    "font_size": 36,
+                    "font_weight": "bold",
+                    "text_color": "#D84315",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Cards",
+                    "font_size": 13,
+                    "text_color": "#BF360C",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "57",
+                    "font_size": 36,
+                    "font_weight": "bold",
+                    "text_color": "#D84315",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Total",
+                    "font_size": 13,
+                    "text_color": "#BF360C",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "∞",
+                    "font_size": 36,
+                    "font_weight": "bold",
+                    "text_color": "#D84315",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Possible",
+                    "font_size": 13,
+                    "text_color": "#BF360C",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "purple_cta",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#4A148C",
+                  "#6A1B9A"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Explore Templates",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Reduce JSON size by 80% with reusable templates.",
+                "font_size": 15,
+                "text_color": "#CE93D8",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "View Docs",
+                "font_size": 15,
+                "font_weight": "bold",
+                "text_color": "#4A148C",
+                "text_alignment_horizontal": "center",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 20
+                },
+                "paddings": {
+                  "left": 28,
+                  "right": 28,
+                  "top": 10,
+                  "bottom": 10
+                },
+                "margins": {
+                  "top": 16
+                },
+                "width": {
+                  "type": "wrap_content"
+                },
+                "actions": [
+                  {
+                    "log_id": "view_docs",
+                    "url": "https://divkit.tech/doc"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "ducks_wide",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFF8E1"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg",
+                "aspect": {
+                  "ratio": 2.0
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Panoramic View",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_color": "#F57F17",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Wide aspect ratio for cinematic layouts.",
+                "font_size": 14,
+                "text_color": "#FF8F00",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 14
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_6",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E0F2F1"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #6",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#00695C"
+              },
+              {
+                "type": "text",
+                "text": "Variables let you store state within cards. Update them with actions to build interactive experiences.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#004D40",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "charcoal_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#263238"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 24,
+              "bottom": 24
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Dark Mode Ready",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#ECEFF1"
+              },
+              {
+                "type": "text",
+                "text": "Cards work beautifully in both light and dark color schemes. Design your cards to match your app theme.",
+                "font_size": 15,
+                "line_height": 22,
+                "text_color": "#90A4AE",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "coral_gradient",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#FF5252",
+                  "#FF1744",
+                  "#D50000"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Coral Reef",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Vibrant and eye-catching designs",
+                "font_size": 16,
+                "text_color": "#FFCDD2",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "platform_list",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Supported Platforms",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "📱  iOS (UIKit & SwiftUI)",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "🤖  Android (Compose & Views)",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "🌐  Web (TypeScript)",
+                "font_size": 16,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "quote_orange",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#E65100",
+                  "#F57C00"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“The only way to do great work is to love what you do.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#FFFFFF",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- Steve Jobs",
+                "font_size": 16,
+                "text_color": "#FFCC80",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "profile_card_3",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E8F5E9"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg",
+                "width": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 56
+                },
+                "border": {
+                  "corner_radius": 28
+                }
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "margins": {
+                  "left": 12
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Best Friends",
+                    "font_size": 18,
+                    "font_weight": "bold",
+                    "text_color": "#1B5E20"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Pup & Duck Duo",
+                    "font_size": 14,
+                    "text_color": "#388E3C",
+                    "margins": {
+                      "top": 2
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "indigo_banner",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#1A237E",
+                  "#283593",
+                  "#303F9F"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 36,
+              "bottom": 36
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Midnight Indigo",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Deep hues for elegant interfaces",
+                "font_size": 16,
+                "text_color": "#9FA8DA",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_7",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#F1F8E9"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #7",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#33691E"
+              },
+              {
+                "type": "text",
+                "text": "Visibility actions trigger when elements scroll into view. Great for analytics and lazy loading.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#1B5E20",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "wombat_wide",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#EFEBE9"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+                "aspect": {
+                  "ratio": 2.0
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Wide Wombat",
+                "font_size": 18,
+                "font_weight": "bold",
+                "text_color": "#3E2723",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Same image, different aspect ratio. DivKit handles it all.",
+                "font_size": 14,
+                "text_color": "#6D4C41",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 14
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "lime_banner",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#827717",
+                  "#9E9D24",
+                  "#AFB42B"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Electric Lime",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Energetic and lively palettes",
+                "font_size": 16,
+                "text_color": "#F0F4C3",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "dark_feature_list",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1B1B1B"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Layout Components",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  container — vertical & horizontal stacks",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  gallery — scrollable lists",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  grid — row and column grids",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  pager — swipeable pages",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  tabs — tabbed navigation",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              },
+              {
+                "type": "text",
+                "text": "•  state — conditional rendering",
+                "font_size": 15,
+                "text_color": "#B0BEC5",
+                "paddings": {
+                  "top": 4,
+                  "bottom": 4
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_8",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFF3E0"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #8",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#E65100"
+              },
+              {
+                "type": "text",
+                "text": "DivKit supports expressions: use @{variable_name} in any string property to make it dynamic.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#BF360C",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "gray_stats",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "content_alignment_horizontal": "space-evenly",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FAFAFA"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "stroke": {
+                "color": "#E0E0E0"
+              }
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "iOS",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "15.0+",
+                    "font_size": 24,
+                    "font_weight": "bold",
+                    "text_color": "#424242",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Android",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "7.0+",
+                    "font_size": 24,
+                    "font_weight": "bold",
+                    "text_color": "#424242",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Web",
+                    "font_size": 14,
+                    "text_color": "#9E9E9E",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "ES6+",
+                    "font_size": 24,
+                    "font_weight": "bold",
+                    "text_color": "#424242",
+                    "text_alignment_horizontal": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "forest_gradient",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#2E7D32",
+                  "#388E3C",
+                  "#43A047"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 36,
+              "bottom": 36
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Evergreen Forest",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_9",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#E8EAF6"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #9",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#283593"
+              },
+              {
+                "type": "text",
+                "text": "Patches let you update parts of a card without re-sending the entire JSON. Great for live updates.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#1A237E",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "pupduck_square",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg",
+                "aspect": {
+                  "ratio": 1.0
+                },
+                "border": {
+                  "corners_radius": {
+                    "top-left": 16,
+                    "top-right": 16,
+                    "bottom-left": 0,
+                    "bottom-right": 0
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "text": "Best Buddies",
+                "font_size": 20,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                }
+              },
+              {
+                "type": "text",
+                "text": "Square crop shows off the details of this adorable duo.",
+                "font_size": 14,
+                "line_height": 20,
+                "text_color": "#757575",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 4,
+                  "bottom": 16
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "quote_dark_red",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#B71C1C",
+                  "#C62828"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "“Make it work, make it right, make it fast.”",
+                "font_size": 22,
+                "font_weight": "medium",
+                "text_color": "#FFFFFF",
+                "line_height": 30
+              },
+              {
+                "type": "text",
+                "text": "- Kent Beck",
+                "font_size": 16,
+                "text_color": "#EF9A9A",
+                "margins": {
+                  "top": 12
+                },
+                "text_alignment_horizontal": "right"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "tip_card_10",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FCE4EC"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Tip #10",
+                "font_size": 14,
+                "font_weight": "bold",
+                "text_color": "#C2185B"
+              },
+              {
+                "type": "text",
+                "text": "Timers can drive periodic updates within a card — perfect for countdowns, auto-advancing, or polling.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#880E4F",
+                "margins": {
+                  "top": 6
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "steel_gradient",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#37474F",
+                  "#455A64",
+                  "#546E7A"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 32,
+              "bottom": 32
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Brushed Steel",
+                "font_size": 28,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Industrial strength UI framework",
+                "font_size": 16,
+                "text_color": "#B0BEC5",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "action_types_list",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "corner_radius": 16,
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 2
+                  }
+                },
+                "color": "#22000000"
+              },
+              "has_shadow": true
+            },
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Built-in Actions",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#212121",
+                "margins": {
+                  "bottom": 12
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "set_variable — update card state",
+                "font_size": 15,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 10,
+                  "bottom": 10
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "set_state — switch UI states",
+                "font_size": 15,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 10,
+                  "bottom": 10
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "timer — start/stop/reset timers",
+                "font_size": 15,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 10,
+                  "bottom": 10
+                }
+              },
+              {
+                "type": "separator",
+                "delimiter_style": {
+                  "color": "#E0E0E0"
+                }
+              },
+              {
+                "type": "text",
+                "text": "download — fetch & apply patches",
+                "font_size": 15,
+                "text_color": "#424242",
+                "paddings": {
+                  "top": 10,
+                  "bottom": 10
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "amber_cta",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#FF6F00",
+                  "#FF8F00"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 28,
+              "bottom": 28
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "Join the Community",
+                "font_size": 22,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Connect with other DivKit developers and share your creations.",
+                "font_size": 15,
+                "text_color": "#FFF8E1",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "GitHub",
+                "font_size": 15,
+                "font_weight": "bold",
+                "text_color": "#E65100",
+                "text_alignment_horizontal": "center",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 20
+                },
+                "paddings": {
+                  "left": 28,
+                  "right": 28,
+                  "top": 10,
+                  "bottom": 10
+                },
+                "margins": {
+                  "top": 16
+                },
+                "width": {
+                  "type": "wrap_content"
+                },
+                "actions": [
+                  {
+                    "log_id": "github",
+                    "url": "https://github.com/divkit/divkit"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "two_col_stats",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "orientation": "horizontal",
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent",
+                  "weight": 1
+                },
+                "content_alignment_horizontal": "center",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#E3F2FD"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 16
+                },
+                "paddings": {
+                  "top": 20,
+                  "bottom": 20
+                },
+                "margins": {
+                  "right": 4
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "24/7",
+                    "font_size": 28,
+                    "font_weight": "bold",
+                    "text_color": "#1565C0",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Support",
+                    "font_size": 13,
+                    "text_color": "#64B5F6",
+                    "text_alignment_horizontal": "center",
+                    "margins": {
+                      "top": 4
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent",
+                  "weight": 1
+                },
+                "content_alignment_horizontal": "center",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#F3E5F5"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 16
+                },
+                "paddings": {
+                  "top": 20,
+                  "bottom": 20
+                },
+                "margins": {
+                  "left": 4
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "100%",
+                    "font_size": 28,
+                    "font_weight": "bold",
+                    "text_color": "#7B1FA2",
+                    "text_alignment_horizontal": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Free",
+                    "font_size": 13,
+                    "text_color": "#BA68C8",
+                    "text_alignment_horizontal": "center",
+                    "margins": {
+                      "top": 4
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "card": {
+      "log_id": "final_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "content_alignment_horizontal": "center",
+            "background": [
+              {
+                "type": "gradient",
+                "colors": [
+                  "#1565C0",
+                  "#0D47A1",
+                  "#1A237E"
+                ]
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            },
+            "paddings": {
+              "left": 24,
+              "right": 24,
+              "top": 40,
+              "bottom": 40
+            },
+            "margins": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 16
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "That’s all 58 cards!",
+                "font_size": 26,
+                "font_weight": "bold",
+                "text_color": "#FFFFFF",
+                "text_alignment_horizontal": "center"
+              },
+              {
+                "type": "text",
+                "text": "Each one rendered by DivKit inside a UICollectionView cell. Scroll back up to see them all.",
+                "font_size": 16,
+                "line_height": 22,
+                "text_color": "#BBDEFB",
+                "text_alignment_horizontal": "center",
+                "margins": {
+                  "top": 12
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]
