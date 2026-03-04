@@ -128,7 +128,7 @@ jobs:
 
   version:
     name: Check if release needed
-    needs: [test, check-versions]
+    needs: [test, lint, check-versions]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
