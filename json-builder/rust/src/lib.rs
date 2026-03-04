@@ -26,10 +26,10 @@
 #[macro_use]
 pub mod macros;
 
-pub mod generated;
 pub mod entity;
 pub mod expr;
 pub mod field;
+pub mod generated;
 pub mod schema;
 pub mod value;
 
@@ -46,9 +46,9 @@ pub use value::DivValue;
 
 #[cfg(test)]
 mod tests {
-    use super::generated::*;
     use super::entity::Entity;
     use super::expr::Expr;
+    use super::generated::*;
     use super::value::DivValue;
     use serde_json::{json, Value};
 
@@ -89,11 +89,7 @@ mod tests {
 
     #[test]
     fn test_div_edge_insets() {
-        let insets = DivEdgeInsets::new()
-            .left(12)
-            .right(12)
-            .top(10)
-            .bottom(10);
+        let insets = DivEdgeInsets::new().left(12).right(12).top(10).bottom(10);
         assert_eq!(
             insets.dict(),
             json!({"left": 12, "right": 12, "top": 10, "bottom": 10})
@@ -154,37 +150,28 @@ mod tests {
 
     #[test]
     fn test_slider_example() {
-        let slider = DivSlider::new()
-            .width(DivMatchParentSize::new())
-            .max_value(10)
-            .min_value(1)
-            .thumb_style(
-                DivShapeDrawable::new()
-                    .color("#00b300")
-                    .stroke(DivStroke::new().color("#ffffff").width(3))
-                    .shape(
-                        DivRoundedRectangleShape::new()
-                            .item_width(DivFixedSize::new().value(32))
-                            .item_height(DivFixedSize::new().value(32))
-                            .corner_radius(DivFixedSize::new().value(100)),
-                    ),
-            )
-            .track_active_style(
-                DivShapeDrawable::new()
-                    .color("#00b300")
-                    .shape(
-                        DivRoundedRectangleShape::new()
-                            .item_height(DivFixedSize::new().value(6)),
-                    ),
-            )
-            .track_inactive_style(
-                DivShapeDrawable::new()
-                    .color("#20000000")
-                    .shape(
-                        DivRoundedRectangleShape::new()
-                            .item_height(DivFixedSize::new().value(6)),
-                    ),
-            );
+        let slider =
+            DivSlider::new()
+                .width(DivMatchParentSize::new())
+                .max_value(10)
+                .min_value(1)
+                .thumb_style(
+                    DivShapeDrawable::new()
+                        .color("#00b300")
+                        .stroke(DivStroke::new().color("#ffffff").width(3))
+                        .shape(
+                            DivRoundedRectangleShape::new()
+                                .item_width(DivFixedSize::new().value(32))
+                                .item_height(DivFixedSize::new().value(32))
+                                .corner_radius(DivFixedSize::new().value(100)),
+                        ),
+                )
+                .track_active_style(DivShapeDrawable::new().color("#00b300").shape(
+                    DivRoundedRectangleShape::new().item_height(DivFixedSize::new().value(6)),
+                ))
+                .track_inactive_style(DivShapeDrawable::new().color("#20000000").shape(
+                    DivRoundedRectangleShape::new().item_height(DivFixedSize::new().value(6)),
+                ));
 
         let result = slider.dict();
 
@@ -196,11 +183,11 @@ mod tests {
         assert_eq!(result["thumb_style"]["color"], "#00b300");
         assert_eq!(result["thumb_style"]["stroke"]["color"], "#ffffff");
         assert_eq!(result["thumb_style"]["stroke"]["width"], 3);
+        assert_eq!(result["thumb_style"]["shape"]["type"], "rounded_rectangle");
         assert_eq!(
-            result["thumb_style"]["shape"]["type"],
-            "rounded_rectangle"
+            result["thumb_style"]["shape"]["corner_radius"]["value"],
+            100
         );
-        assert_eq!(result["thumb_style"]["shape"]["corner_radius"]["value"], 100);
         assert_eq!(result["thumb_style"]["shape"]["item_width"]["value"], 32);
         assert_eq!(result["thumb_style"]["shape"]["item_height"]["value"], 32);
         assert_eq!(result["track_active_style"]["color"], "#00b300");
@@ -270,25 +257,25 @@ mod tests {
     fn test_nested_entity_composition() {
         let container = DivContainer::new()
             .width(DivWrapContentSize::new())
-            .background(vec![DivValue::from(DivSolidBackground::new().color("#f0f0f0"))])
+            .background(vec![DivValue::from(
+                DivSolidBackground::new().color("#f0f0f0"),
+            )])
             .border(DivBorder::new().corner_radius(12))
-            .paddings(
-                DivEdgeInsets::new()
-                    .left(12)
-                    .right(12)
-                    .top(10)
-                    .bottom(10),
-            )
+            .paddings(DivEdgeInsets::new().left(12).right(12).top(10).bottom(10))
             .items(vec![
-                DivValue::from(DivImage::new()
-                    .width(DivFixedSize::new().value(20))
-                    .height(DivFixedSize::new().value(20))
-                    .margins(DivEdgeInsets::new().right(6))
-                    .image_url("https://example.com/icon.png")),
-                DivValue::from(DivText::new()
-                    .width(DivWrapContentSize::new())
-                    .max_lines(1)
-                    .text("Category")),
+                DivValue::from(
+                    DivImage::new()
+                        .width(DivFixedSize::new().value(20))
+                        .height(DivFixedSize::new().value(20))
+                        .margins(DivEdgeInsets::new().right(6))
+                        .image_url("https://example.com/icon.png"),
+                ),
+                DivValue::from(
+                    DivText::new()
+                        .width(DivWrapContentSize::new())
+                        .max_lines(1)
+                        .text("Category"),
+                ),
             ]);
 
         let result = container.dict();
@@ -495,8 +482,7 @@ mod tests {
                 DivValue::from(DivText::new().text("Page 2")),
             ])
             .layout_mode(
-                DivNeighbourPageSize::new()
-                    .neighbour_page_width(DivFixedSize::new().value(20)),
+                DivNeighbourPageSize::new().neighbour_page_width(DivFixedSize::new().value(20)),
             )
             .orientation("horizontal");
         let result = pager.dict();
@@ -592,9 +578,11 @@ mod tests {
             .active_item_color("#ff0000")
             .inactive_item_color("#cccccc")
             .space_between_centers(DivFixedSize::new().value(12))
-            .shape(DivRoundedRectangleShape::new()
-                .item_width(DivFixedSize::new().value(8))
-                .item_height(DivFixedSize::new().value(8)));
+            .shape(
+                DivRoundedRectangleShape::new()
+                    .item_width(DivFixedSize::new().value(8))
+                    .item_height(DivFixedSize::new().value(8)),
+            );
         let result = indicator.dict();
         assert_eq!(result["type"], "indicator");
         assert_eq!(result["pager_id"], "pager1");
@@ -670,9 +658,11 @@ mod tests {
             .div(DivText::new().text("Tooltip text"))
             .position("top")
             .duration(3000)
-            .offset(DivPoint::new()
-                .x(DivDimension::new().value(0.0))
-                .y(DivDimension::new().value(-8.0)));
+            .offset(
+                DivPoint::new()
+                    .x(DivDimension::new().value(0.0))
+                    .y(DivDimension::new().value(-8.0)),
+            );
         let result = tooltip.dict();
         assert_eq!(result["id"], "tooltip_1");
         assert_eq!(result["div"]["type"], "text");
@@ -804,8 +794,7 @@ mod tests {
 
     #[test]
     fn test_div_page_size() {
-        let ps = DivPageSize::new()
-            .page_width(DivPercentageSize::new().value(80.0));
+        let ps = DivPageSize::new().page_width(DivPercentageSize::new().value(80.0));
         let result = ps.dict();
         assert_eq!(result["type"], "percentage");
         assert_eq!(result["page_width"]["type"], "percentage");
@@ -826,7 +815,9 @@ mod tests {
                 DivAction::new().log_id("fail_log").url("div-action://fail"),
             )])
             .on_success_actions(vec![DivValue::from(
-                DivAction::new().log_id("success_log").url("div-action://ok"),
+                DivAction::new()
+                    .log_id("success_log")
+                    .url("div-action://ok"),
             )]);
         let result = cb.dict();
         assert_eq!(result["on_fail_actions"].as_array().unwrap().len(), 1);
@@ -862,7 +853,9 @@ mod tests {
             .condition("@{count > 5}")
             .mode("on_condition")
             .actions(vec![DivValue::from(
-                DivAction::new().log_id("trigger_action").url("div-action://trigger"),
+                DivAction::new()
+                    .log_id("trigger_action")
+                    .url("div-action://trigger"),
             )]);
         let result = trigger.dict();
         assert_eq!(result["condition"], "@{count > 5}");
@@ -877,12 +870,8 @@ mod tests {
             .duration(5000)
             .tick_interval(1000)
             .value_variable("elapsed")
-            .tick_actions(vec![DivValue::from(
-                DivAction::new().log_id("tick"),
-            )])
-            .end_actions(vec![DivValue::from(
-                DivAction::new().log_id("end"),
-            )]);
+            .tick_actions(vec![DivValue::from(DivAction::new().log_id("tick"))])
+            .end_actions(vec![DivValue::from(DivAction::new().log_id("end"))]);
         let result = timer.dict();
         assert_eq!(result["id"], "timer_1");
         assert_eq!(result["duration"], 5000);
@@ -937,9 +926,11 @@ mod tests {
             .alpha(0.5)
             .blur(10)
             .color("#000000")
-            .offset(DivPoint::new()
-                .x(DivDimension::new().value(2.0))
-                .y(DivDimension::new().value(4.0)));
+            .offset(
+                DivPoint::new()
+                    .x(DivDimension::new().value(2.0))
+                    .y(DivDimension::new().value(4.0)),
+            );
         let result = shadow.dict();
         assert_eq!(result["alpha"], 0.5);
         assert_eq!(result["blur"], 10);
@@ -1074,16 +1065,28 @@ mod tests {
     #[test]
     fn test_div_content_alignment_horizontal_enum() {
         assert_eq!(DivContentAlignmentHorizontal::Center.value(), "center");
-        assert_eq!(DivContentAlignmentHorizontal::SpaceAround.value(), "space-around");
-        assert_eq!(DivContentAlignmentHorizontal::SpaceBetween.value(), "space-between");
-        assert_eq!(DivContentAlignmentHorizontal::SpaceEvenly.value(), "space-evenly");
+        assert_eq!(
+            DivContentAlignmentHorizontal::SpaceAround.value(),
+            "space-around"
+        );
+        assert_eq!(
+            DivContentAlignmentHorizontal::SpaceBetween.value(),
+            "space-between"
+        );
+        assert_eq!(
+            DivContentAlignmentHorizontal::SpaceEvenly.value(),
+            "space-evenly"
+        );
     }
 
     #[test]
     fn test_div_content_alignment_vertical_enum() {
         assert_eq!(DivContentAlignmentVertical::Baseline.value(), "baseline");
         assert_eq!(DivContentAlignmentVertical::Bottom.value(), "bottom");
-        assert_eq!(DivContentAlignmentVertical::SpaceAround.value(), "space-around");
+        assert_eq!(
+            DivContentAlignmentVertical::SpaceAround.value(),
+            "space-around"
+        );
         assert_eq!(DivContentAlignmentVertical::Top.value(), "top");
     }
 
@@ -1204,11 +1207,7 @@ mod tests {
 
     #[test]
     fn test_divvalue_to_json_array() {
-        let val = DivValue::Array(vec![
-            DivValue::Int(1),
-            DivValue::Int(2),
-            DivValue::Int(3),
-        ]);
+        let val = DivValue::Array(vec![DivValue::Int(1), DivValue::Int(2), DivValue::Int(3)]);
         assert_eq!(val.to_json(), json!([1, 2, 3]));
     }
 
@@ -1452,10 +1451,7 @@ mod tests {
 
     #[test]
     fn test_collect_templates_from_array() {
-        let arr = DivValue::Array(vec![
-            DivValue::String("a".into()),
-            DivValue::Int(1),
-        ]);
+        let arr = DivValue::Array(vec![DivValue::String("a".into()), DivValue::Int(1)]);
         let templates = super::entity::collect_templates(&arr);
         assert!(templates.is_empty());
     }
@@ -1560,16 +1556,14 @@ mod tests {
 
     #[test]
     fn test_field_descriptor_with_default() {
-        let fd = super::FieldDescriptor::new("color")
-            .with_default(json!("#000000"));
+        let fd = super::FieldDescriptor::new("color").with_default(json!("#000000"));
         assert_eq!(fd.name, "color");
         assert_eq!(fd.default, Some(json!("#000000")));
     }
 
     #[test]
     fn test_field_descriptor_with_description() {
-        let fd = super::FieldDescriptor::new("width")
-            .with_description("The width in pixels");
+        let fd = super::FieldDescriptor::new("width").with_description("The width in pixels");
         assert_eq!(fd.description, Some("The width in pixels".to_string()));
     }
 
@@ -1577,8 +1571,7 @@ mod tests {
     fn test_field_descriptor_with_constraints() {
         let mut c = super::Constraints::default();
         c.minimum = Some(0.0);
-        let fd = super::FieldDescriptor::new("value")
-            .with_constraints(c);
+        let fd = super::FieldDescriptor::new("value").with_constraints(c);
         assert_eq!(fd.constraints.minimum, Some(0.0));
     }
 
@@ -1627,8 +1620,7 @@ mod tests {
 
     #[test]
     fn test_field_builder_name_fallback() {
-        let fb = super::FieldBuilder::new()
-            .description("no explicit name");
+        let fb = super::FieldBuilder::new().description("no explicit name");
         let desc = fb.build("fallback");
         assert_eq!(desc.name, "fallback");
     }
@@ -1724,10 +1716,7 @@ mod tests {
             SchemaFieldType::Object.to_json(&mut defs),
             json!({"type": "object", "additionalProperties": true})
         );
-        assert_eq!(
-            SchemaFieldType::Any.to_json(&mut defs),
-            json!({})
-        );
+        assert_eq!(SchemaFieldType::Any.to_json(&mut defs), json!({}));
     }
 
     #[test]
@@ -1754,10 +1743,8 @@ mod tests {
     fn test_schema_field_type_anyof() {
         use super::schema::SchemaFieldType;
         let mut defs = std::collections::HashMap::new();
-        let anyof_type = SchemaFieldType::AnyOf(vec![
-            SchemaFieldType::Integer,
-            SchemaFieldType::String,
-        ]);
+        let anyof_type =
+            SchemaFieldType::AnyOf(vec![SchemaFieldType::Integer, SchemaFieldType::String]);
         let result = anyof_type.to_json(&mut defs);
         let any_of = result["anyOf"].as_array().unwrap();
         assert_eq!(any_of.len(), 2);
@@ -1778,11 +1765,9 @@ mod tests {
     fn test_schema_with_description_and_default() {
         use super::schema::SchemaGenerator;
 
-        let descriptors = vec![
-            super::FieldDescriptor::new("color")
-                .with_description("The background color")
-                .with_default(json!("#ffffff")),
-        ];
+        let descriptors = vec![super::FieldDescriptor::new("color")
+            .with_description("The background color")
+            .with_default(json!("#ffffff"))];
 
         let mut gen = SchemaGenerator::new();
         let schema = gen.build_entity_schema(&descriptors, None);
@@ -1799,10 +1784,7 @@ mod tests {
         constraints.minimum = Some(0.0);
         constraints.maximum = Some(100.0);
 
-        let descriptors = vec![
-            super::FieldDescriptor::new("value")
-                .with_constraints(constraints),
-        ];
+        let descriptors = vec![super::FieldDescriptor::new("value").with_constraints(constraints)];
 
         let mut gen = SchemaGenerator::new();
         let schema = gen.build_entity_schema(&descriptors, None);
@@ -1920,11 +1902,15 @@ mod tests {
             .visibility(DivVisibility::Visible)
             .paddings(DivEdgeInsets::new().left(8).right(8).top(4).bottom(4))
             .margins(DivEdgeInsets::new().top(16))
-            .border(DivBorder::new()
-                .corner_radius(12)
-                .has_shadow(true)
-                .stroke(DivStroke::new().color("#ddd").width(1)))
-            .background(vec![DivValue::from(DivSolidBackground::new().color("#fff"))])
+            .border(
+                DivBorder::new()
+                    .corner_radius(12)
+                    .has_shadow(true)
+                    .stroke(DivStroke::new().color("#ddd").width(1)),
+            )
+            .background(vec![DivValue::from(
+                DivSolidBackground::new().color("#fff"),
+            )])
             .id("main_container")
             .items(vec![DivValue::from(DivText::new().text("content"))]);
 
@@ -1954,23 +1940,19 @@ mod tests {
 
     #[test]
     fn test_pager_with_indicator() {
-        let pager = DivPager::new()
-            .items(vec![
-                DivValue::from(DivText::new().text("Page 1")),
-                DivValue::from(DivText::new().text("Page 2")),
-                DivValue::from(DivText::new().text("Page 3")),
-            ]);
+        let pager = DivPager::new().items(vec![
+            DivValue::from(DivText::new().text("Page 1")),
+            DivValue::from(DivText::new().text("Page 2")),
+            DivValue::from(DivText::new().text("Page 3")),
+        ]);
 
         let indicator = DivIndicator::new()
             .pager_id("my_pager")
             .active_item_color("#0000ff")
             .inactive_item_color("#cccccc");
 
-        let container = DivContainer::new()
-            .items(vec![
-                DivValue::from(pager),
-                DivValue::from(indicator),
-            ]);
+        let container =
+            DivContainer::new().items(vec![DivValue::from(pager), DivValue::from(indicator)]);
 
         let result = container.dict();
         assert_eq!(result["items"][0]["type"], "pager");
@@ -2143,15 +2125,9 @@ mod tests {
         let container = DivContainer::new();
         let schema = container.schema(None);
         // orientation default should be "vertical"
-        assert_eq!(
-            schema["properties"]["orientation"]["default"],
-            "vertical"
-        );
+        assert_eq!(schema["properties"]["orientation"]["default"], "vertical");
         // visibility default should be "visible"
-        assert_eq!(
-            schema["properties"]["visibility"]["default"],
-            "visible"
-        );
+        assert_eq!(schema["properties"]["visibility"]["default"], "visible");
     }
 
     #[test]

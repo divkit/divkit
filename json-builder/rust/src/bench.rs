@@ -1,7 +1,7 @@
 use std::time::Instant;
 
-use divkit_json_builder::generated::*;
 use divkit_json_builder::entity::Entity;
+use divkit_json_builder::generated::*;
 use divkit_json_builder::value::DivValue;
 use divkit_json_builder::{DivData, DivDataState};
 
@@ -31,18 +31,12 @@ fn build_slider() -> serde_json::Value {
                                     .corner_radius(DivFixedSize::new().value(100)),
                             ),
                     )
-                    .track_active_style(
-                        DivShapeDrawable::new().color("#00b300").shape(
-                            DivRoundedRectangleShape::new()
-                                .item_height(DivFixedSize::new().value(6)),
-                        ),
-                    )
-                    .track_inactive_style(
-                        DivShapeDrawable::new().color("#20000000").shape(
-                            DivRoundedRectangleShape::new()
-                                .item_height(DivFixedSize::new().value(6)),
-                        ),
-                    ),
+                    .track_active_style(DivShapeDrawable::new().color("#00b300").shape(
+                        DivRoundedRectangleShape::new().item_height(DivFixedSize::new().value(6)),
+                    ))
+                    .track_inactive_style(DivShapeDrawable::new().color("#20000000").shape(
+                        DivRoundedRectangleShape::new().item_height(DivFixedSize::new().value(6)),
+                    )),
             ),
         }],
     };
@@ -182,18 +176,81 @@ fn main() {
 
     let mut results = Vec::new();
 
-    results.push(bench("1. Simple DivText", || { build_simple_text(); }, 1000, 100));
-    results.push(bench("2. Nested Slider", || { build_slider(); }, 1000, 100));
-    results.push(bench("3. Gallery 100 items", || { build_gallery_n(100); }, 500, 100));
-    results.push(bench("4. Gallery 1000 items", || { build_gallery_n(1000); }, 100, 10));
-    results.push(bench("5. Nested containers (depth=20)", || { build_nested_containers(20); }, 1000, 100));
-    results.push(bench("6. Nested containers (depth=50)", || { build_nested_containers(50); }, 500, 100));
-    results.push(bench("7. Complex layout (20 cards)", || { build_complex_layout(); }, 500, 100));
-    results.push(bench("8. Schema generation", || { build_schema(); }, 1000, 100));
+    results.push(bench(
+        "1. Simple DivText",
+        || {
+            build_simple_text();
+        },
+        1000,
+        100,
+    ));
+    results.push(bench(
+        "2. Nested Slider",
+        || {
+            build_slider();
+        },
+        1000,
+        100,
+    ));
+    results.push(bench(
+        "3. Gallery 100 items",
+        || {
+            build_gallery_n(100);
+        },
+        500,
+        100,
+    ));
+    results.push(bench(
+        "4. Gallery 1000 items",
+        || {
+            build_gallery_n(1000);
+        },
+        100,
+        10,
+    ));
+    results.push(bench(
+        "5. Nested containers (depth=20)",
+        || {
+            build_nested_containers(20);
+        },
+        1000,
+        100,
+    ));
+    results.push(bench(
+        "6. Nested containers (depth=50)",
+        || {
+            build_nested_containers(50);
+        },
+        500,
+        100,
+    ));
+    results.push(bench(
+        "7. Complex layout (20 cards)",
+        || {
+            build_complex_layout();
+        },
+        500,
+        100,
+    ));
+    results.push(bench(
+        "8. Schema generation",
+        || {
+            build_schema();
+        },
+        1000,
+        100,
+    ));
 
     // JSON serialization
     let data = build_complex_layout();
-    results.push(bench("9. json_serialize(complex)", || { serde_json::to_string(&data).unwrap(); }, 1000, 100));
+    results.push(bench(
+        "9. json_serialize(complex)",
+        || {
+            serde_json::to_string(&data).unwrap();
+        },
+        1000,
+        100,
+    ));
 
     println!();
     println!("--- Summary (avg us) ---");

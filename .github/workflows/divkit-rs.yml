@@ -27,6 +27,7 @@ jobs:
   codegen:
     name: Generate Rust code from schema
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -36,6 +37,9 @@ jobs:
         run: uv python install 3.12
       - name: Run codegen
         run: bash json-builder/rust/codegen.sh
+      - name: Verify codegen is up-to-date
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- json-builder/rust/src/generated/
       - name: Upload generated sources
         uses: actions/upload-artifact@v4
         with:
@@ -72,6 +76,7 @@ jobs:
     name: Lint Rust
     needs: codegen
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -84,6 +89,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: "json-builder/rust -> target"
+          shared-key: lint
       - name: Check formatting
         working-directory: json-builder/rust
         run: cargo fmt --check
@@ -91,10 +97,31 @@ jobs:
         working-directory: json-builder/rust
         run: cargo clippy -- -D warnings
 
-  test:
-    name: Test (Python ${{ matrix.python-version }})
+  test-rust:
+    name: Test Rust
     needs: codegen
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "json-builder/rust -> target"
+          shared-key: test
+      - name: Run Rust tests
+        working-directory: json-builder/rust
+        run: cargo test
+
+  test-python:
+    name: Test Python ${{ matrix.python-version }}
+    needs: codegen
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -113,9 +140,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: "json-builder/rust -> target"
-      - name: Run Rust tests
-        working-directory: json-builder/rust
-        run: cargo test
+          shared-key: test
       - name: Build and install (dev)
         working-directory: json-builder/rust
         run: |
@@ -128,7 +153,7 @@ jobs:
 
   version:
     name: Check if release needed
-    needs: [test, lint, check-versions]
+    needs: [test-rust, test-python, lint, check-versions]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -164,6 +189,7 @@ jobs:
     needs: [version, codegen]
     if: needs.version.outputs.should_publish == 'true'
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:

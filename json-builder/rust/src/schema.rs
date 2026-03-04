@@ -50,16 +50,14 @@ impl SchemaGenerator {
                 });
             }
             if let Some(ref default) = desc.default {
-                field_schema.as_object_mut().map(|m| {
-                    m.insert("default".to_string(), default.clone())
-                });
+                field_schema
+                    .as_object_mut()
+                    .map(|m| m.insert("default".to_string(), default.clone()));
             }
 
             // Add constraints
             for (k, v) in desc.constraints.to_json_map() {
-                field_schema
-                    .as_object_mut()
-                    .map(|m| m.insert(k, v));
+                field_schema.as_object_mut().map(|m| m.insert(k, v));
             }
 
             properties.insert(desc.name.clone(), field_schema);

@@ -1,4 +1,4 @@
 {
     "lang": "rust",
-    "header": "// Generated code. Do not modify.\n\n#[allow(unused_imports)]\nuse crate::{div_entity, div_enum};\n#[allow(unused_imports)]\nuse crate::value::DivValue;\n#[allow(unused_imports)]\nuse crate::field::{FieldSchemaInfo, Constraints, SchemaFieldType};\n"
+    "header": "// Generated code. Do not modify.\n\n#[allow(unused_imports)]\nuse crate::field::{Constraints, FieldSchemaInfo, SchemaFieldType};\n#[allow(unused_imports)]\nuse crate::value::DivValue;\n#[allow(unused_imports)]\nuse crate::{div_entity, div_enum};\n"
 }

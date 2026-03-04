@@ -14,5 +14,10 @@ PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
     -s "$REPO_ROOT/schema" \
     -o src/generated
 
+# Format generated code to match rustfmt expectations
+if command -v cargo >/dev/null 2>&1; then
+    cargo fmt -- src/generated/*.rs
+fi
+
 echo "Rust code generation complete."
 echo "Generated files in src/generated/"
