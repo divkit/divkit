@@ -1,0 +1,150 @@
+name: divkit-rs
+
+on:
+  push:
+    branches: [feature/rust, main]
+    paths:
+      - "json-builder/rust/**"
+      - "api_generator/**"
+      - "schema/**"
+      - ".github/workflows/divkit-rs.yml"
+    tags:
+      - "v*"
+  pull_request:
+    paths:
+      - "json-builder/rust/**"
+      - "api_generator/**"
+      - "schema/**"
+      - ".github/workflows/divkit-rs.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  codegen:
+    name: Generate Rust code from schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - name: Run codegen
+        run: bash json-builder/rust/codegen.sh
+      - name: Upload generated sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    needs: codegen
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "json-builder/rust -> target"
+      - name: Build and install (dev)
+        working-directory: json-builder/rust
+        run: |
+          uv venv --python ${{ matrix.python-version }}
+          uv pip install maturin pytest
+          uv run maturin develop --release
+      - name: Run tests
+        working-directory: json-builder/rust
+        run: uv run pytest tests/ -v
+
+  build:
+    name: Build (${{ matrix.target }})
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+          - os: macos-13
+            target: x86_64-apple-darwin
+          - os: macos-14
+            target: aarch64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
+          manylinux: auto
+          working-directory: json-builder/rust
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.target }}
+          path: json-builder/rust/dist
+
+  sdist:
+    name: Build sdist
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+          working-directory: json-builder/rust
+      - name: Upload sdist
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-sdist
+          path: json-builder/rust/dist
+
+  publish:
+    name: Publish to PyPI
+    needs: [build, sdist]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/divkit-rs
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          merge-multiple: true
+          path: dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
