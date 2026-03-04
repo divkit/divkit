@@ -1,5 +1,5 @@
 /target
 /dist
 /uv.lock
-/python/divkit_rs/_native.cpython-312-darwin.so
-/python/divkit_rs/_native.cpython-313-darwin.so
+/src/generated/
+/python/divkit_rs/_native.cpython-*.so

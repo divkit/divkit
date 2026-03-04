@@ -2,14 +2,16 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 # Ensure output directory exists
 mkdir -p src/generated
 
-python3 -m api_generator \
+PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
+    python -m api_generator \
     -c codegen_config.json \
-    -s ../../schema \
+    -s "$REPO_ROOT/schema" \
     -o src/generated
 
 echo "Rust code generation complete."
