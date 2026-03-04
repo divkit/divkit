@@ -1,5 +1,5 @@
-use pyo3::prelude::*;
 use pyo3::conversion::IntoPyObject;
+use pyo3::prelude::*;
 use pyo3::types::{PyBool, PyDict, PyFloat, PyInt, PyList, PyString, PyTuple};
 
 use crate::entity::Entity;

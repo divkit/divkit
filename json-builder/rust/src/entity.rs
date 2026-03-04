@@ -138,9 +138,7 @@ impl Entity for DivData {
             ("log_id".into(), DivValue::String(self.log_id.clone())),
             (
                 "states".into(),
-                DivValue::Array(
-                    self.states.iter().map(|s| s.to_div_value()).collect(),
-                ),
+                DivValue::Array(self.states.iter().map(|s| s.to_div_value()).collect()),
             ),
         ]
     }

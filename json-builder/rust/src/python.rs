@@ -14,11 +14,7 @@ fn make_div(py: Python<'_>, div: PyRef<'_, PyDivEntity>) -> PyResult<Py<PyAny>> 
 }
 
 #[pyfunction]
-fn make_card(
-    py: Python<'_>,
-    log_id: &str,
-    div: PyRef<'_, PyDivEntity>,
-) -> PyResult<Py<PyAny>> {
+fn make_card(py: Python<'_>, log_id: &str, div: PyRef<'_, PyDivEntity>) -> PyResult<Py<PyAny>> {
     let rust_entity = div.to_rust_entity();
     let data = entity::make_card(log_id, rust_entity.as_ref());
     let json_val = <entity::DivData as Entity>::dict(&data);
@@ -56,10 +52,11 @@ fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<Py
             let raw_dumped = value.call_method0("dict")?;
             if let Ok(raw_dict) = raw_dumped.cast::<PyDict>() {
                 let is_empty_or_color_only = raw_dict.is_empty()
-                    || raw_dict
-                        .keys()
-                        .iter()
-                        .all(|k| k.extract::<String>().map(|name| name == "color").unwrap_or(false));
+                    || raw_dict.keys().iter().all(|k| {
+                        k.extract::<String>()
+                            .map(|name| name == "color")
+                            .unwrap_or(false)
+                    });
                 if is_empty_or_color_only {
                     return Ok(PyDict::new(py).into_any().unbind());
                 }
@@ -132,4 +129,3 @@ fn register_type_meta(
 ) {
     py_entity::cache_type_meta(class_name, type_name, field_names, required_fields);
 }
-

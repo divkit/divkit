@@ -47,10 +47,7 @@ impl SchemaFieldType {
                 })
             }
             SchemaFieldType::AnyOf(types) => {
-                let any_of: Vec<Value> = types
-                    .iter()
-                    .map(|t| t.to_json(definitions))
-                    .collect();
+                let any_of: Vec<Value> = types.iter().map(|t| t.to_json(definitions)).collect();
                 serde_json::json!({"anyOf": any_of})
             }
             SchemaFieldType::Ref(name) => {
@@ -60,7 +57,9 @@ impl SchemaFieldType {
                 if !definitions.contains_key(name.as_str()) {
                     definitions.insert(name.clone(), Value::Null);
 
-                    if let Some(descriptors) = crate::generated::schema_registry::entity_field_descriptors(name) {
+                    if let Some(descriptors) =
+                        crate::generated::schema_registry::entity_field_descriptors(name)
+                    {
                         // Build the entity schema, sharing our definitions map
                         // to avoid infinite recursion on circular refs.
                         let entity_schema = Self::build_ref_schema(&descriptors, definitions);
@@ -97,7 +96,10 @@ impl SchemaFieldType {
 
             if let Some(ref description) = desc.description {
                 if let Some(m) = field_schema.as_object_mut() {
-                    m.insert("description".to_string(), Value::String(description.clone()));
+                    m.insert(
+                        "description".to_string(),
+                        Value::String(description.clone()),
+                    );
                 }
             }
             if let Some(ref default) = desc.default {

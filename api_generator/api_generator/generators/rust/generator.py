@@ -53,17 +53,19 @@ class RustGenerator(Generator):
             if mod_name not in self.EXCLUDED_MODULES:
                 module_names.add(mod_name)
 
-        for mod_name in sorted(module_names):
-            result += f'mod {mod_name};'
+        # Extra public modules that are not generated from schema objects
+        extra_pub_modules = ['python_generated', 'schema_registry']
 
-        # Python registration module
-        result += 'pub mod python_generated;'
-        # Schema registry module
-        result += 'pub mod schema_registry;'
+        all_modules = sorted(module_names | set(extra_pub_modules))
+        for mod_name in all_modules:
+            if mod_name in extra_pub_modules:
+                result += f'pub mod {mod_name};'
+            else:
+                result += f'mod {mod_name};'
 
         result += EMPTY
 
-        # Re-export all public items
+        # Re-export all public items (exclude extra pub modules)
         for mod_name in sorted(module_names):
             result += f'pub use {mod_name}::*;'
 
@@ -103,8 +105,7 @@ class RustGenerator(Generator):
             required_str = ', '.join(f'"{f}"' for f in required_fields)
 
             result += Text(
-                f'register_entity_class(py, m, "{class_name}", {type_name_str},\n'
-                f'    &[{fields_str}], &[{required_str}])?;'
+                f'register_entity_class(py, m, "{class_name}", {type_name_str}, &[{fields_str}], &[{required_str}])?;'
             ).indented(indent_width=4)
 
             # Also register inner entities

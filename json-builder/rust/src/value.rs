@@ -32,7 +32,11 @@ impl DivValue {
             DivValue::Int(n) => Value::from(*n),
             DivValue::Float(f) => {
                 // Whole-number floats serialize as integers to match DivKit spec
-                if f.fract() == 0.0 && f.is_finite() && *f >= i64::MIN as f64 && *f <= i64::MAX as f64 {
+                if f.fract() == 0.0
+                    && f.is_finite()
+                    && *f >= i64::MIN as f64
+                    && *f <= i64::MAX as f64
+                {
                     Value::from(*f as i64)
                 } else {
                     serde_json::json!(*f)
@@ -42,9 +46,7 @@ impl DivValue {
             DivValue::Expr(e) => Value::String(e.to_string()),
             DivValue::Enum(s) => Value::String(s.clone()),
             DivValue::Entity(e) => e.dict(),
-            DivValue::Array(arr) => {
-                Value::Array(arr.iter().map(|v| v.to_json()).collect())
-            }
+            DivValue::Array(arr) => Value::Array(arr.iter().map(|v| v.to_json()).collect()),
             DivValue::Map(entries) => {
                 let map: serde_json::Map<String, Value> = entries
                     .iter()

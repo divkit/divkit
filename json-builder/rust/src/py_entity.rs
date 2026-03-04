@@ -93,8 +93,9 @@ impl PyDivEntity {
     #[pyo3(signature = (exclude_fields=None))]
     fn schema(&self, py: Python<'_>, exclude_fields: Option<Vec<String>>) -> PyResult<Py<PyAny>> {
         let entity = self.to_rust_entity();
-        let exclude_refs: Option<Vec<&str>> =
-            exclude_fields.as_ref().map(|v| v.iter().map(|s| s.as_str()).collect());
+        let exclude_refs: Option<Vec<&str>> = exclude_fields
+            .as_ref()
+            .map(|v| v.iter().map(|s| s.as_str()).collect());
         let json_val = entity.schema(exclude_refs.as_deref());
         json_to_py(py, &json_val)
     }
@@ -144,7 +145,6 @@ impl PyDivEntity {
         // Fallback for user-defined subclasses not in the registry
         self.type_meta.class_name = class_name.to_string();
     }
-
 
     /// Internal: replace all fields from a Python dict.
     ///
@@ -324,14 +324,9 @@ pub fn register_entity_class(
 
     py.run(&code_cstr, Some(&ns), Some(&ns))?;
 
-    let cls = ns
-        .get_item(class_name)?
-        .ok_or_else(|| {
-            pyo3::exceptions::PyRuntimeError::new_err(format!(
-                "Failed to create class {}",
-                class_name
-            ))
-        })?;
+    let cls = ns.get_item(class_name)?.ok_or_else(|| {
+        pyo3::exceptions::PyRuntimeError::new_err(format!("Failed to create class {}", class_name))
+    })?;
 
     module.setattr(class_name, &cls)?;
     Ok(())
