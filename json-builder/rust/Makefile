@@ -1,4 +1,4 @@
-.PHONY: fmt clippy lint fmt-py lint-py mypy lint-all
+.PHONY: fmt clippy lint-py lint
 
 fmt:
 	cargo fmt
@@ -13,8 +13,3 @@ lint-py:
 	uv run ruff check python/ tests/
 
 lint: fmt clippy lint-py
-
-mypy:
-	uv run mypy python/ tests/
-
-lint-all: lint lint-py mypy
