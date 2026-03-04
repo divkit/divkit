@@ -1,0 +1,4 @@
+/target
+/dist
+/src/generated/
+/python/divkit_rs/_native.cpython-*.so
