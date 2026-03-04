@@ -2,12 +2,6 @@ name: divkit-rs
 
 on:
   push:
-    branches: [feature/rust, main]
-    paths:
-      - "json-builder/rust/**"
-      - "api_generator/**"
-      - "schema/**"
-      - ".github/workflows/divkit-rs.yml"
     tags:
       - "v*"
   pull_request:
