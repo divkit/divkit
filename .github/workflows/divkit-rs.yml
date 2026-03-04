@@ -2,14 +2,23 @@ name: divkit-rs
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+    paths:
+      - "json-builder/rust/**"
+      - "api_generator/**"
+      - "schema/**"
+      - ".github/workflows/divkit-rs.yml"
   pull_request:
     paths:
       - "json-builder/rust/**"
       - "api_generator/**"
       - "schema/**"
       - ".github/workflows/divkit-rs.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -23,6 +32,8 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+      - name: Pin Python version for codegen
+        run: uv python install 3.12
       - name: Run codegen
         run: bash json-builder/rust/codegen.sh
       - name: Upload generated sources
@@ -30,6 +41,55 @@ jobs:
         with:
           name: generated-sources
           path: json-builder/rust/src/generated/
+          retention-days: 7
+
+  check-versions:
+    name: Check version consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pyproject.toml and Cargo.toml versions match
+        run: |
+          PYPROJECT_VER=$(python3 -c "
+          import tomllib, pathlib
+          data = tomllib.loads(pathlib.Path('json-builder/rust/pyproject.toml').read_text())
+          print(data['project']['version'])
+          ")
+          CARGO_VER=$(python3 -c "
+          import tomllib, pathlib
+          data = tomllib.loads(pathlib.Path('json-builder/rust/Cargo.toml').read_text())
+          print(data['package']['version'])
+          ")
+          echo "pyproject.toml version: $PYPROJECT_VER"
+          echo "Cargo.toml version:     $CARGO_VER"
+          if [ "$PYPROJECT_VER" != "$CARGO_VER" ]; then
+            echo "::error::Version mismatch! pyproject.toml=$PYPROJECT_VER, Cargo.toml=$CARGO_VER"
+            exit 1
+          fi
+          echo "Versions match: $PYPROJECT_VER"
+
+  lint:
+    name: Lint Rust
+    needs: codegen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+          path: json-builder/rust/src/generated/
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "json-builder/rust -> target"
+      - name: Check formatting
+        working-directory: json-builder/rust
+        run: cargo fmt --check
+      - name: Run clippy
+        working-directory: json-builder/rust
+        run: cargo clippy -- -D warnings
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -53,20 +113,56 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: "json-builder/rust -> target"
+      - name: Run Rust tests
+        working-directory: json-builder/rust
+        run: cargo test
       - name: Build and install (dev)
         working-directory: json-builder/rust
         run: |
           uv venv --python ${{ matrix.python-version }}
           uv pip install maturin pytest
           uv run maturin develop --release
-      - name: Run tests
+      - name: Run Python tests
         working-directory: json-builder/rust
         run: uv run pytest tests/ -v
 
+  version:
+    name: Check if release needed
+    needs: [test, check-versions]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      should_publish: ${{ steps.check_tag.outputs.should_publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(python3 -c "
+          import tomllib, pathlib
+          data = tomllib.loads(pathlib.Path('json-builder/rust/pyproject.toml').read_text())
+          print(data['project']['version'])
+          ")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+      - name: Check if tag already exists
+        id: check_tag
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "Tag v${{ steps.get_version.outputs.version }} already exists — skipping publish"
+          else
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "Tag v${{ steps.get_version.outputs.version }} does not exist — will publish"
+          fi
+
   build:
     name: Build (${{ matrix.target }})
-    needs: test
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [version, codegen]
+    if: needs.version.outputs.should_publish == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -103,8 +199,8 @@ jobs:
 
   sdist:
     name: Build sdist
-    needs: test
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [version, codegen]
+    if: needs.version.outputs.should_publish == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -126,19 +222,37 @@ jobs:
 
   publish:
     name: Publish to PyPI
-    needs: [build, sdist]
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, sdist, version]
+    if: needs.version.outputs.should_publish == 'true'
     runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/divkit-rs
     permissions:
       id-token: write
+      contents: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           pattern: wheels-*
           merge-multiple: true
           path: dist
+      - name: List dist contents
+        run: ls -lh dist/
+      - name: Create git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ needs.version.outputs.version }}"
+          git push origin "v${{ needs.version.outputs.version }}"
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ needs.version.outputs.version }}"
+          name: "v${{ needs.version.outputs.version }}"
+          generate_release_notes: true
