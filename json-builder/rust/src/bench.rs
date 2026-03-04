@@ -119,6 +119,7 @@ fn build_schema() -> serde_json::Value {
     t.schema(None)
 }
 
+#[allow(dead_code)]
 struct BenchResult {
     name: String,
     avg_ns: f64,

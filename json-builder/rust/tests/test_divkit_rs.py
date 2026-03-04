@@ -473,9 +473,7 @@ class TestNewlyExportedTypes:
         assert d["state_id"] == "0/my_state/active"
 
     def test_action_set_variable(self):
-        a = DivActionSetVariable(
-            variable_name="my_var", value=StringValue(value="hello")
-        )
+        a = DivActionSetVariable(variable_name="my_var", value=StringValue(value="hello"))
         d = a.dict()
         assert d["type"] == "set_variable"
         assert d["variable_name"] == "my_var"
@@ -973,9 +971,7 @@ class TestPydivkitCompatibilityLayer:
         assert rendered["title"] == "Hello"
         assert rendered["title_color"] == "#ffffff"
 
-        templates = {
-            tpl.template_name: tpl.template() for tpl in header.related_templates()
-        }
+        templates = {tpl.template_name: tpl.template() for tpl in header.related_templates()}
         assert Header.template_name in templates
         template = templates[Header.template_name]
         assert template["type"] == "container"

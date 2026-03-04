@@ -1,20 +1,36 @@
 from __future__ import annotations
 
+import uuid
 from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import Any, get_args, get_origin
 from weakref import WeakKeyDictionary
-import uuid
 
 from divkit_rs._native import (
     DivAction as NativeDivAction,
+)
+from divkit_rs._native import (
     DivData as NativeDivData,
+)
+from divkit_rs._native import (
     DivDataState as NativeDivDataState,
+)
+from divkit_rs._native import (
     DivEdgeInsets as NativeDivEdgeInsets,
+)
+from divkit_rs._native import (
     PyDivData as NativePyDivData,
+)
+from divkit_rs._native import (
     PyDivDataState as NativePyDivDataState,
+)
+from divkit_rs._native import (
     PyDivEntity,
+)
+from divkit_rs._native import (
     compat_dump as _compat_dump_native,
+)
+from divkit_rs._native import (
     register_type_meta as _register_type_meta,
 )
 
@@ -74,9 +90,7 @@ def _install_constructor_compat() -> None:
         def _wrapped_new(entity_cls, *args, __orig_new=original_new, **kwargs):
             instance = __orig_new(entity_cls, *args, **kwargs)
             tracked_constructor_values = {
-                key: value
-                for key, value in kwargs.items()
-                if _is_tracked_constructor_value(value)
+                key: value for key, value in kwargs.items() if _is_tracked_constructor_value(value)
             }
             if tracked_constructor_values:
                 _constructor_values_set(instance, tracked_constructor_values)
@@ -290,7 +304,9 @@ def _constructor_values_set(entity: PyDivEntity, values: dict[str, Any]) -> None
         pass
 
 
-def _related_templates_cache_get(entity: PyDivEntity) -> frozenset[type[PyDivEntity]] | None:
+def _related_templates_cache_get(
+    entity: PyDivEntity,
+) -> frozenset[type[PyDivEntity]] | None:
     try:
         return _RELATED_TEMPLATES_CACHE.get(entity)
     except TypeError:
@@ -464,9 +480,7 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
 
     inherited_defaults = _collect_inherited_class_defaults(cls)
     template_like_values = {
-        name: value
-        for name, value in class_field_values.items()
-        if _is_template_field_value(value)
+        name: value for name, value in class_field_values.items() if _is_template_field_value(value)
     }
 
     class_defined_locally = "<locals>" in getattr(cls, "__qualname__", "")
@@ -527,6 +541,7 @@ def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
     for field_name, field in getattr(type(self), "__dk_fields__", {}).items():
         if field_name not in kwargs:
             setattr(self, field_name, field.default)
+
 
 def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
     # Keep mutable references for constructor-assigned nested entities, so
@@ -708,11 +723,7 @@ def _compat_make_card(
     else:
         selected_divs = tuple(card_divs)
 
-    include_var_data = (
-        variables is not None
-        or variable_triggers is not None
-        or timers is not None
-    )
+    include_var_data = variables is not None or variable_triggers is not None or timers is not None
     if (
         variables is not None
         and variable_triggers is None
@@ -741,8 +752,7 @@ def _compat_make_card(
     card = NativeDivData(
         log_id=log_id,
         states=[
-            NativeDivDataState(state_id=index, div=div)
-            for index, div in enumerate(selected_divs)
+            NativeDivDataState(state_id=index, div=div) for index, div in enumerate(selected_divs)
         ],
     )
     if include_var_data:
@@ -758,10 +768,7 @@ def _compat_make_div(div: PyDivEntity) -> dict[str, Any]:
         templates.update(_template_dependency_closure(template_cls))
 
     result = {
-        "templates": {
-            template.template_name: template.template()
-            for template in templates
-        },
+        "templates": {template.template_name: template.template() for template in templates},
         "card": _compat_make_card("card", div).dict(),
     }
     return _normalize_pydivkit_json(result)
