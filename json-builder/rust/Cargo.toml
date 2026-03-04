@@ -1,0 +1,21 @@
+[package]
+name = "divkit-json-builder"
+version = "0.0.1"
+edition = "2021"
+description = "Fast Rust-backed DivKit JSON builder with Python bindings"
+license = "Apache-2.0"
+repository = "https://github.com/Pavkazzz/divkit"
+
+[lib]
+name = "divkit_json_builder"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+md-5 = "0.10"
+pyo3 = { version = "0.28", features = ["extension-module"] }
+
+[[bin]]
+name = "bench"
+path = "src/bench.rs"
