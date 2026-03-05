@@ -16,6 +16,7 @@
 
     export let leaf: TreeLeaf;
     export let level = 0;
+    export let parentHover = false;
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, showErrors, contextMenu } = getContext<AppContext>(APP_CTX);
@@ -109,6 +110,13 @@
 
     $: expanded = !$collapsedStore[leaf.id];
 
+    function calcTotalCount(leaf: TreeLeaf): number {
+        return leaf.childs.reduce((acc, child) => acc + 1 + calcTotalCount(child), leaf.props.json.count || 0);
+    }
+
+    $: totalCount = calcTotalCount(leaf);
+    let hovered = false;
+
     let errorType: 'errors' | 'warnings' | '' = '';
     $: {
         const errorsList = $totalErrors[leaf.id];
@@ -134,10 +142,12 @@
 
     function onOver(): void {
         dispatch('hovered', { leaf, node });
+        hovered = true;
     }
 
     function onOut(): void {
         dispatch('hovered', { leaf: null });
+        hovered = false;
     }
 
     function onDragStart(event: DragEvent): void {
@@ -195,6 +205,7 @@
     class:tree-leaf_container-child={!isSimpleElement(leaf.parent?.props.json.type)}
     class:tree-leaf_errors={errorType === 'errors'}
     class:tree-leaf_warnings={errorType === 'warnings'}
+    class:tree-leaf_parent-hover={parentHover}
     data-level={level}
     style="--level: {level}"
     draggable="true"
@@ -213,6 +224,7 @@
         {#key expanded}
             <div
                 class="tree-leaf__icon"
+                class:tree-leaf__icon_parent-hover={parentHover}
                 on:click|stopPropagation={onIconClick}
                 aria-label={title}
                 data-custom-tooltip={title}
@@ -262,11 +274,19 @@
 {/if}
 
 {#if expanded}
+    <div
+        class="tree-leaf__line"
+        class:tree-leaf__line_hovered={hovered || parentHover}
+        style:--level={level + 1}
+        style:--count={totalCount}
+    ></div>
+
     <div class="tree-leaf__children" transition:slide|local>
         {#each leaf.childs as child (child.id)}
             <svelte:self
                 leaf={child}
                 level={level + 1}
+                parentHover={hovered || parentHover}
                 on:selected
                 on:hovered
                 on:action
@@ -322,6 +342,10 @@
 
     .tree-leaf_empty_no .tree-leaf__icon {
         opacity: .3;
+    }
+
+    .tree-leaf__icon_parent-hover.tree-leaf__icon_parent-hover {
+        opacity: 0;
     }
 
     .tree-leaf_empty_no.tree-leaf_expanded_no .tree-leaf__icon {
@@ -422,6 +446,11 @@
         transition: background-color .15s ease-in-out, color .15s  ease-in-out;
     }
 
+    .tree-leaf_parent-hover {
+        background-color: transparent;
+        transition: background-color .15s ease-in-out, color .15s  ease-in-out;
+    }
+
     .tree-leaf_empty_no .tree-leaf__icon:hover {
         opacity: .7;
     }
@@ -493,5 +522,19 @@
     .tree-leaf__children {
         will-change: transform;
         overflow: clip;
+    }
+
+    .tree-leaf__line {
+        position: absolute;
+        left: calc(20px + var(--level) * 24px);
+        width: 3px;
+        height: calc(34px * var(--count));
+        background: var(--fill-transparent-2);
+        opacity: 0;
+        transition: opacity .15s ease-in-out;
+    }
+
+    .tree-leaf__line_hovered {
+        opacity: 1;
     }
 </style>

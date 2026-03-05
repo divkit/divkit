@@ -411,7 +411,7 @@ const editor = window.editor = DivProEditor.init({
             // items: ['custom-variables'],
             // items: ['timers'],
             items: ['new-component', 'component-tree', 'palette'],
-            minWidth: 400
+            minWidth: 300
         },
         {
             items: ['preview'],

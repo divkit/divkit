@@ -63,7 +63,12 @@
 </script>
 
 {#if isShown && target}
-    <ContextDialog {target} on:close={onClose} canMove={true}>
+    <ContextDialog
+        {target}
+        on:close={onClose}
+        canMove
+        width="350px"
+    >
         <div class="video-sources-dialog__content">
             <div>
                 <UnknownPropWithLabel

@@ -158,9 +158,10 @@
     .new-component__items {
         display: grid;
         /*grid-template-columns: repeat(4, 1fr);*/
-        grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-        gap: 20px 6px;
-        padding: 0 16px 16px;
+        grid-template-columns: repeat(auto-fill, 60px);
+        justify-content: space-between;
+        gap: 12px 6px;
+        padding: 0 8px 16px;
     }
 
     .new-component__item {
@@ -168,7 +169,8 @@
         flex-direction: column;
         gap: 8px;
         align-items: center;
-        border-radius: 12px;
+        padding-top: 4px;
+        border-radius: 8px;
         cursor: pointer;
         text-align: center;
         transition: background-color .15s ease-in-out;
@@ -200,10 +202,10 @@
     .new-component__text {
         box-sizing: border-box;
         max-width: 100%;
-        padding: 0 8px;
+        padding: 0 2px;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 12px;
+        line-height: 14px;
     }
 </style>

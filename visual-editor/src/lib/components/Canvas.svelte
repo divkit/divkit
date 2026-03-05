@@ -76,7 +76,7 @@
     }
 
     function fitToWindow(): void {
-        const TOP_MARGIN = 28 + 4;
+        const TOP_MARGIN = 4;
         const RIGHT_MARGIN = 16;
         const BOTTOM_MARGIN = 16 + 24;
 
@@ -221,11 +221,16 @@
         z-index: 1;
         top: 0;
         left: 0;
+        box-sizing: border-box;
         display: flex;
+        flex: 0 0 auto;
         gap: 12px;
-        height: 32px;
+        height: 72px;
         padding: 20px 20px;
         background: var(--background-overflow-transparent);
+        overflow-x: auto;
+        overflow-y: hidden;
+        overflow-y: clip;
     }
 
     .canvas__renderer-wrapper {

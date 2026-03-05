@@ -52,7 +52,9 @@
     let popupDirection = 'down';
     let node: HTMLElement;
     let control: HTMLElement;
-    let popup: HTMLElement;
+    let popup: HTMLDialogElement;
+    let popupLeft = 0;
+    let popupTop = 0;
 
     function onWindowKeydown(event: KeyboardEvent): void {
         if (popupClose.isPressed(event)) {
@@ -125,6 +127,14 @@
 
     afterUpdate(() => {
         calcDirection();
+
+        if (toggled) {
+            const bbox = control.getBoundingClientRect();
+
+            popup.showModal();
+            popupLeft = bbox.left + window.pageXOffset;
+            popupTop = bbox.bottom + 4 + window.pageYOffset;
+        }
     });
 </script>
 
@@ -159,7 +169,7 @@
         <div class="viewport-control__arrow"></div>
 
         {#if toggled}
-            <div
+            <dialog
                 bind:this={popup}
                 class="viewport-control__popup viewport-control__popup_direction_{popupDirection}"
                 id="popup_{id}"
@@ -167,6 +177,8 @@
                     duration: 200,
                     y: 10
                 }}
+                style:left="{popupLeft}px"
+                style:top="{popupTop}px"
             >
                 <div class="viewport-control__label">
                     {$l10nString('previewViewport')}
@@ -287,7 +299,7 @@
                         />
                     </div>
                 {/if}
-            </div>
+            </dialog>
         {/if}
     </div>
 
@@ -385,17 +397,21 @@
 
     .viewport-control__popup {
         position: absolute;
-        z-index: 1;
-        top: calc(100% + 4px);
-        left: 0;
         box-sizing: border-box;
         min-width: 250px;
         max-height: calc(80vh - 50px);
+        max-height: none;
+        margin: 0;
         padding: 4px 0 12px;
         border-radius: 8px;
+        border: none;
         box-shadow: var(--shadow-16);
         background: var(--background-tertiary);
         overflow: auto;
+    }
+
+    .viewport-control__popup::backdrop {
+        display: none;
     }
 
     .viewport-control__popup_direction_up {

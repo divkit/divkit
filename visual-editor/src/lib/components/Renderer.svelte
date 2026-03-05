@@ -3657,7 +3657,7 @@
 
     .renderer__container {
         display: grid;
-        margin: 28px auto 0;
+        margin: 0 auto;
         width: min-content;
         grid-template-columns: calc(var(--width) * var(--scale)) var(--resizer-size);
         grid-template-rows: calc(var(--height) * var(--scale)) var(--resizer-size);
