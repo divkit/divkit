@@ -31,6 +31,9 @@ from divkit_rs._native import (
     compat_dump as _compat_dump_native,
 )
 from divkit_rs._native import (
+    normalize_pydivkit_json as _normalize_pydivkit_json,
+)
+from divkit_rs._native import (
     register_type_meta as _register_type_meta,
 )
 
@@ -759,41 +762,6 @@ def _compat_make_div(div: PyDivEntity) -> dict[str, Any]:
         "card": _compat_make_card("card", div).dict(),
     }
     return _normalize_pydivkit_json(result)
-
-
-def _normalize_pydivkit_json(value: Any, parent_key: str | None = None) -> Any:
-    if isinstance(value, list):
-        return [_normalize_pydivkit_json(item, parent_key=parent_key) for item in value]
-    if isinstance(value, dict):
-        result: dict[str, Any] = {}
-        for key, item in value.items():
-            normalized_key = _CORNERS_RADIUS_KEY_ALIASES.get(key, key)
-            normalized_value = _normalize_pydivkit_json(item, parent_key=normalized_key)
-            if (
-                normalized_key in _PYDIVKIT_FLOAT_KEYS
-                and isinstance(normalized_value, int)
-                and not isinstance(normalized_value, bool)
-            ):
-                normalized_value = float(normalized_value)
-            if (
-                normalized_key == "value"
-                and parent_key in {"x", "y"}
-                and isinstance(normalized_value, int)
-                and not isinstance(normalized_value, bool)
-            ):
-                normalized_value = float(normalized_value)
-            if (
-                normalized_key == "width"
-                and parent_key == "stroke"
-                and isinstance(normalized_value, int)
-                and not isinstance(normalized_value, bool)
-            ):
-                normalized_value = float(normalized_value)
-            if normalized_key == "color" and isinstance(normalized_value, int):
-                normalized_value = str(normalized_value)
-            result[normalized_key] = normalized_value
-        return result
-    return value
 
 
 def install_pydivkit_compat() -> None:
