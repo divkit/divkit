@@ -761,6 +761,11 @@ export class State {
                     value: 200
                 }
             };
+        } else if (type === 'grid') {
+            json = {
+                type,
+                column_count: 2
+            };
         } else if (type === 'gallery') {
             json = {
                 type,

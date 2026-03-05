@@ -37,6 +37,7 @@
     disabled={$readOnly}
     {generateFromVideo}
     {generateFromLottie}
+    required={item.required}
     bind:value={value}
     on:change={onChange}
 />

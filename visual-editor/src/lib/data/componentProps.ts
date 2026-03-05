@@ -50,6 +50,7 @@ export interface BaseProperty {
     enabled?: ConditionObject | false;
     enableSources?: boolean;
     enablePerTheme?: boolean;
+    required?: boolean;
 }
 
 export interface RadioProperty extends BaseProperty {
@@ -495,7 +496,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             type: 'file',
             subtype: 'image',
             enableSources: true,
-            enablePerTheme: true
+            enablePerTheme: true,
+            required: true
         }, {
             name: 'props.preview',
             prop: 'preview',
@@ -544,7 +546,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             type: 'file',
             subtype: 'image',
             enableSources: true,
-            enablePerTheme: true
+            enablePerTheme: true,
+            required: true
         }, {
             name: 'props.preview',
             prop: 'preview',
@@ -585,7 +588,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         list: [{
             name: 'props.video_sources',
             prop: 'video_sources',
-            type: 'video_sources'
+            type: 'video_sources',
+            required: true
         }, {
             name: 'props.preview',
             prop: 'preview',
@@ -664,7 +668,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             type: 'integer',
             min: 1,
             max: 1000,
-            enableSources: true
+            enableSources: true,
+            required: true
         }, {
             name: 'props.content_alignment',
             type: 'alignment',

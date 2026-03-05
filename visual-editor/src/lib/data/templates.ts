@@ -34,7 +34,8 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                 type: 'file',
                 subtype: 'lottie',
                 enableSources: true,
-                enablePerTheme: true
+                enablePerTheme: true,
+                required: true
             }, {
                 name: 'props.preview',
                 prop: 'preview',

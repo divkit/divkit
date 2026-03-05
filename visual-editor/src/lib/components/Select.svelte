@@ -259,6 +259,10 @@
         appearance: none;
     }
 
+    .select__select:focus-visible {
+        outline: none;
+    }
+
     .select_empty .select__select {
         color: var(--fill-transparent-4);
     }
@@ -305,7 +309,7 @@
         transition: background-color .15s ease-in-out;
     }
 
-    .select_theme_normal:not(.select_disabled) .select__select:hover {
+    .select_theme_normal:not(.select_disabled):not(.select_error) .select__select:hover {
         border-color: var(--fill-transparent-4);
     }
 
@@ -356,9 +360,8 @@
         background-color: var(--accent-purple-active);
     }
 
-    .select_theme_normal .select__select:focus-visible,
-    .select_theme_normal .select__select:focus-visible:hover {
-        outline: none;
+    .select_theme_normal:not(.select_error) .select__select:focus-visible,
+    .select_theme_normal:not(.select_error) .select__select:focus-visible:hover {
         border-color: var(--accent-purple);
     }
 

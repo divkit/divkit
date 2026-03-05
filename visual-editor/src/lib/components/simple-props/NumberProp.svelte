@@ -83,6 +83,7 @@
         spellcheck="false"
         {id}
         readonly={disabled}
+        required={item.required}
         bind:value={internalValue}
         on:input={onChange}
     >
@@ -138,19 +139,22 @@
     }
 
     .number-prop__input:invalid {
-        background: indianred;
+        border-color: var(--accent-red);
     }
 
-    .number-prop:not(.number-prop_disabled) .number-prop__input:not(:focus-visible):hover {
+    .number-prop:not(.number-prop_disabled) .number-prop__input:not(:invalid):not(:focus-visible):hover {
         border-color: var(--fill-transparent-4);
     }
 
     .number-prop__input:focus-visible {
         outline: none;
+    }
+
+    .number-prop__input:not(:invalid):focus-visible {
         border-color: var(--accent-purple);
     }
 
-    .number-prop__input:focus-visible:hover {
+    .number-prop__input:not(:invalid):focus-visible:hover {
         border-color: var(--accent-purple-hover);
     }
 
