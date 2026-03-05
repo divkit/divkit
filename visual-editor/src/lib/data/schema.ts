@@ -490,7 +490,7 @@ export function getPropsElement(name: string, prop: Schema, componentJson: any, 
 
         if (componentJson?.type) {
             const selected = resolvedAnyOf.find(it2 =>
-                it2?.properties?.type?.enum?.[0] === componentJson.type
+                resolveAllOf(it2)?.properties?.type?.enum?.[0] === componentJson.type
             );
 
             if (selected) {

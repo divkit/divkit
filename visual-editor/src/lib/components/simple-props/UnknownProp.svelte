@@ -61,7 +61,7 @@
         value={value === undefined ? item.default : value}
         {processedJson}
         {parentProcessedJson}
-        hasEmpty={!item.default}
+        hasEmpty={!item.default && item.hasEmpty !== false}
         on:change
         options={item.options}
     />

@@ -49,7 +49,13 @@
                     />
                 </li>
             {:else if item.type === 'split'}
-                <li class="simple-props-group__item simple-props-group__item_raw">
+                <li
+                    class="simple-props-group__item simple-props-group__item_raw"
+                    class:simple-props-group__item_labelled={item.name}
+                >
+                    {#if item.name}
+                        <div class="simple-props-group__split-title">{$l10nString(item.name)}</div>
+                    {/if}
                     <div class="simple-props-group__split">
                         <div class="simple-props-group__split-item">
                             <svelte:self
@@ -75,6 +81,20 @@
                                 on:change
                             />
                         </div>
+                        {#if item.list[2]}
+                            <div class="simple-props-group__split-item">
+                                <svelte:self
+                                    propsList={[item.list[2]]}
+                                    {processedJson}
+                                    {parentProcessedJson}
+                                    {parentEvalJson}
+                                    {evalJson}
+                                    {selectedElemProps}
+                                    hasMargins={false}
+                                    on:change
+                                />
+                            </div>
+                        {/if}
                     </div>
                 </li>
             {:else}
@@ -93,6 +113,7 @@
                         class="simple-props-group__item"
                         class:simple-props-group__item_raw={hasMargins}
                         class:simple-props-group__item_disabled={!enabled}
+                        class:simple-props-group__item_labelled={item.name || item.rawName}
                         inert={!enabled}
                     >
                         <UnknownPropWithLabel
@@ -117,17 +138,62 @@
                                         ('prop' in sibling && sibling.prop && getProp(evalJson, sibling.prop, sibling.default))
                                     }
 
-                                    <div class="simple-props-group__sibling" transition:slide|local>
-                                        <UnknownPropWithLabel
-                                            item={sibling}
-                                            {value}
-                                            {evalValue}
-                                            {processedJson}
-                                            {parentProcessedJson}
-                                            {parentEvalJson}
-                                            on:change
-                                        />
-                                    </div>
+                                    {#if sibling.type === 'split'}
+                                        <div class="simple-props-group__sibling" transition:slide|local>
+                                            <div class="simple-props-group__split">
+                                                <div class="simple-props-group__split-item">
+                                                    <svelte:self
+                                                        propsList={[sibling.list[0]]}
+                                                        {processedJson}
+                                                        {parentProcessedJson}
+                                                        {parentEvalJson}
+                                                        {evalJson}
+                                                        {selectedElemProps}
+                                                        hasMargins={false}
+                                                        on:change
+                                                    />
+                                                </div>
+                                                <div class="simple-props-group__split-item">
+                                                    <svelte:self
+                                                        propsList={[sibling.list[1]]}
+                                                        {processedJson}
+                                                        {parentProcessedJson}
+                                                        {parentEvalJson}
+                                                        {evalJson}
+                                                        {selectedElemProps}
+                                                        hasMargins={false}
+                                                        on:change
+                                                    />
+                                                </div>
+                                                {#if sibling.list[2]}
+                                                    <div class="simple-props-group__split-item">
+                                                        <svelte:self
+                                                            propsList={[sibling.list[2]]}
+                                                            {processedJson}
+                                                            {parentProcessedJson}
+                                                            {parentEvalJson}
+                                                            {evalJson}
+                                                            {selectedElemProps}
+                                                            hasMargins={false}
+                                                            on:change
+                                                        />
+                                                    </div>
+                                                {/if}
+                                            </div>
+                                        </div>
+                                    {:else}
+                                        <div class="simple-props-group__sibling" transition:slide|local>
+                                            <UnknownPropWithLabel
+                                                item={sibling}
+                                                {value}
+                                                {evalValue}
+                                                {processedJson}
+                                                {parentProcessedJson}
+                                                {parentEvalJson}
+                                                on:change
+                                            />
+                                        </div>
+                                    {/if}
                                 {/if}
                             {/each}
                         {/if}
@@ -162,6 +228,10 @@
     }
 
     .simple-props-group__item + .simple-props-group__item {
+        margin-top: 12px;
+    }
+
+    .simple-props-group__item + .simple-props-group__item_labelled {
         margin-top: 24px;
     }
 
@@ -181,5 +251,12 @@
     .simple-props-group__split-item {
         flex: 1 0 0;
         min-width: 0;
+    }
+
+    .simple-props-group__split-title {
+        margin-bottom: 6px;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--text-secondary);
     }
 </style>

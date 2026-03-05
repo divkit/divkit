@@ -187,7 +187,7 @@
                 {/if}
             </div>
 
-            {#if perThemeProps && item.enablePerTheme}
+            {#if perThemeProps && 'enablePerTheme' in item && item.enablePerTheme}
                 <label class="unknown-prop__tanker">
                     {$l10n('perThemeProps')}
 

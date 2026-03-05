@@ -5,6 +5,8 @@ import wrapContentHorizontal from '../../assets/wrapContentHorizontal.svg?url';
 import fixedVertical from '../../assets/fixedVertical.svg?url';
 import matchParentVertical from '../../assets/matchParentVertical.svg?url';
 import wrapContentVertical from '../../assets/wrapContentVertical.svg?url';
+import circle from '../../assets/circle.svg?url';
+import roundedRectangle from '../../assets/roundedRectangle.svg?url';
 
 export const supportedComponents = new Set([
     'image',
@@ -81,6 +83,7 @@ export interface BooleanProperty extends BaseProperty {
 
 export interface SelectProperty extends BaseProperty {
     type: 'select';
+    hasEmpty?: boolean;
     options: {
         rawName?: string;
         name?: string;
@@ -158,7 +161,9 @@ export interface GroupProperty {
 
 export interface SplitProperty {
     type: 'split';
-    list: [ComponentProperty, ComponentProperty];
+    name?: string;
+    list: [ComponentProperty, ComponentProperty] | [ComponentProperty, ComponentProperty, ComponentProperty];
+    show?: ConditionObject;
 }
 
 export interface VariableNameProperty extends BaseProperty {
@@ -981,7 +986,157 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             type: 'color',
             enableSources: true
         }]
-    }]
+    }],
+    slider: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'a11yProps.title',
+        list: [{
+            name: 'props.a11y_description',
+            prop: 'accessibility.description',
+            type: 'string',
+            enableSources: true
+        }]
+    }, {
+        type: 'group',
+        title: 'sliderProps.title',
+        list: [{
+            name: 'props.text_variable',
+            prop: 'thumb_value_variable',
+            type: 'variable-name',
+            required: true
+        }, {
+            name: 'props.is_enabled',
+            prop: 'is_enabled',
+            type: 'boolean',
+            default: true,
+            enableSources: true
+        }, {
+            type: 'split',
+            list: [{
+                name: 'props.min',
+                prop: 'min_value',
+                type: 'integer',
+                min: -Infinity,
+                max: Infinity,
+                default: 0,
+                enableSources: true
+            }, {
+                name: 'props.max',
+                prop: 'max_value',
+                type: 'integer',
+                min: -Infinity,
+                max: Infinity,
+                default: 100,
+                enableSources: true
+            }]
+        }, {
+            name: 'props.thumb_style',
+            prop: 'thumb_style.shape.type',
+            type: 'select',
+            hasEmpty: false,
+            options: [{
+                name: 'props.shape_circle',
+                value: 'circle',
+                icon: circle
+            }, {
+                name: 'props.shape_rounded_rectangle',
+                value: 'rounded_rectangle',
+                icon: roundedRectangle
+            }],
+            siblings: [{
+                prop: 'thumb_style.shape.radius.value',
+                type: 'integer',
+                min: 0,
+                max: 999,
+                inlineLabel: 'R',
+                show: {
+                    prop: 'thumb_style.shape.type',
+                    equal: 'circle'
+                }
+            }, {
+                type: 'split',
+                list: [{
+                    prop: 'thumb_style.shape.item_width.value',
+                    type: 'integer',
+                    min: 0,
+                    max: 999,
+                    inlineLabel: 'W',
+                }, {
+                    prop: 'thumb_style.shape.item_height.value',
+                    type: 'integer',
+                    min: 0,
+                    max: 999,
+                    inlineLabel: 'H'
+                }, {
+                    prop: 'thumb_style.shape.corner_radius.value',
+                    type: 'integer',
+                    min: 0,
+                    max: 999,
+                    inlineLabel: 'R'
+                }],
+                show: {
+                    prop: 'thumb_style.shape.type',
+                    equal: 'rounded_rectangle'
+                }
+            }]
+        }, {
+            prop: 'thumb_style.color',
+            type: 'color',
+            enableSources: true
+        }, {
+            type: 'split',
+            name: 'props.track_active_style',
+            list: [{
+                prop: 'track_active_style.shape.item_height.value',
+                type: 'integer',
+                min: 0,
+                max: 999,
+                inlineLabel: 'H'
+            }, {
+                prop: 'track_active_style.shape.corner_radius.value',
+                type: 'integer',
+                min: 0,
+                max: 999,
+                inlineLabel: 'R'
+            }]
+        }, {
+            prop: 'track_active_style.color',
+            type: 'color',
+            enableSources: true
+        }, {
+            type: 'split',
+            name: 'props.track_inactive_style',
+            list: [{
+                prop: 'track_inactive_style.shape.item_height.value',
+                type: 'integer',
+                min: 0,
+                max: 999,
+                inlineLabel: 'H'
+            }, {
+                prop: 'track_inactive_style.shape.corner_radius.value',
+                type: 'integer',
+                min: 0,
+                max: 999,
+                inlineLabel: 'R'
+            }]
+        }, {
+            prop: 'track_inactive_style.color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.font_size',
+            prop: 'thumb_text_style.font_size',
+            type: 'integer',
+            min: 1,
+            max: 1000,
+            enableSources: true
+        }, {
+            name: 'props.text_color',
+            prop: 'thumb_text_style.text_color',
+            type: 'color',
+            enableSources: true
+        }]
+    }],
 };
 
 export const ROOT_PROPS: ComponentProperty[] = [{

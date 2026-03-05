@@ -772,6 +772,35 @@ export class State {
                     value: 200
                 }
             };
+        } else if (type === 'slider') {
+            json = {
+                type,
+                thumb_style: {
+                    type: 'shape_drawable',
+                    shape: {
+                        type: 'circle',
+                        radius: {
+                            type: 'fixed',
+                            value: 14
+                        }
+                    },
+                    color: '#fc0'
+                },
+                track_active_style: {
+                    type: 'shape_drawable',
+                    shape: {
+                        type: 'rounded_rectangle'
+                    },
+                    color: '#fc0'
+                },
+                track_inactive_style: {
+                    type: 'shape_drawable',
+                    shape: {
+                        type: 'rounded_rectangle'
+                    },
+                    color: '#fff'
+                }
+            };
         } else if (type in namedTemplates && namedTemplates[type].newNode) {
             json = { ...namedTemplates[type].newNode, type };
         } else {
