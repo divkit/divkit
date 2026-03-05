@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList, PyString, PyTuple};
+use pyo3::sync::PyOnceLock;
+use pyo3::types::{PyBool, PyBytes, PyDict, PyFloat, PyInt, PyList, PyString, PyTuple, PyType};
 
 use super::py_entity::{self, PyDivData, PyDivDataState, PyDivEntity};
 use super::py_value::json_to_py;
@@ -39,18 +40,46 @@ fn is_separator_style_subclass(obj: &Bound<'_, PyAny>) -> PyResult<bool> {
     Ok(false)
 }
 
-fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> {
+static MAPPING_TYPE: PyOnceLock<Py<PyType>> = PyOnceLock::new();
+static SEQUENCE_TYPE: PyOnceLock<Py<PyType>> = PyOnceLock::new();
+static EXPR_TYPE: PyOnceLock<Py<PyType>> = PyOnceLock::new();
+
+fn get_mapping_type<'py>(py: Python<'py>) -> PyResult<&'py Bound<'py, PyType>> {
+    MAPPING_TYPE.import(py, "collections.abc", "Mapping")
+}
+
+fn get_sequence_type<'py>(py: Python<'py>) -> PyResult<&'py Bound<'py, PyType>> {
+    SEQUENCE_TYPE.import(py, "collections.abc", "Sequence")
+}
+
+fn get_expr_type<'py>(py: Python<'py>) -> PyResult<&'py Bound<'py, PyType>> {
+    EXPR_TYPE.import(py, "divkit_rs.core.fields", "Expr")
+}
+
+pub(crate) fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> {
     if value.is_none() {
         return Ok(py.None());
     }
-    if value.is_instance_of::<PyString>() {
+    if value.is_instance_of::<PyString>() || value.is_instance_of::<PyBytes>() {
         return Ok(value.clone().unbind());
     }
+    if value.is_instance_of::<PyBool>()
+        || value.is_instance_of::<PyInt>()
+        || value.is_instance_of::<PyFloat>()
+    {
+        return Ok(value.clone().unbind());
+    }
+    if value.is_instance(get_expr_type(py)?.as_any())? {
+        return Ok(value.str()?.into_any().unbind());
+    }
 
-    if value.is_instance_of::<PyDivEntity>() {
+    if let Ok(entity) = value.extract::<PyRef<PyDivEntity>>() {
+        // Call Rust dict() directly to avoid Python-level compat trampolines.
+        // Safe because _compat_dict is currently a passthrough to native dict().
+        let raw_dumped = entity.dict(py)?;
+        let raw_dumped_bound = raw_dumped.bind(py);
         if is_separator_style_subclass(value)? {
-            let raw_dumped = value.call_method0("dict")?;
-            if let Ok(raw_dict) = raw_dumped.cast::<PyDict>() {
+            if let Ok(raw_dict) = raw_dumped_bound.cast::<PyDict>() {
                 let is_empty_or_color_only = raw_dict.is_empty()
                     || raw_dict.keys().iter().all(|k| {
                         k.extract::<String>()
@@ -62,7 +91,7 @@ fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<Py
                 }
             }
         }
-        return Ok(value.call_method0("dict")?.unbind());
+        return Ok(raw_dumped);
     }
 
     if let Ok(list) = value.cast::<PyList>() {
@@ -86,6 +115,25 @@ fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<Py
         for (k, v) in dict.iter() {
             let key: String = k.extract()?;
             out.set_item(key, compat_dump_bound(py, &v)?)?;
+        }
+        return Ok(out.into_any().unbind());
+    }
+
+    if value.is_instance(get_mapping_type(py)?.as_any())? {
+        let items = value.call_method0("items")?;
+        let dict = PyDict::from_sequence(&items)?;
+        let out = PyDict::new(py);
+        for (k, v) in dict.iter() {
+            let key: String = k.extract()?;
+            out.set_item(key, compat_dump_bound(py, &v)?)?;
+        }
+        return Ok(out.into_any().unbind());
+    }
+
+    if value.is_instance(get_sequence_type(py)?.as_any())? {
+        let out = PyList::empty(py);
+        for item in value.try_iter()? {
+            out.append(compat_dump_bound(py, &item?)?)?;
         }
         return Ok(out.into_any().unbind());
     }

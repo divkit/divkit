@@ -103,6 +103,24 @@ def build_schema():
     return dk.DivText().schema()
 
 
+def bench_dump_expr():
+    from divkit_rs.core.fields import Expr
+    from divkit_rs._native import compat_dump
+
+    expr = Expr("@{my_var}")
+    return compat_dump(expr)
+
+
+def bench_dump_nested():
+    from divkit_rs._native import compat_dump
+
+    container = dk.DivContainer(
+        items=[dk.DivText(text=f"Item {i}") for i in range(10)],
+        paddings=dk.DivEdgeInsets(left=4, right=4, top=4, bottom=4),
+    )
+    return compat_dump(container)
+
+
 def bench(name, func, iterations=1000, warmup=100):
     for _ in range(warmup):
         func()
@@ -143,6 +161,8 @@ def main():
 
     data = build_complex_layout()
     results["json_serialize"] = bench("9. json.dumps(complex)", lambda: json.dumps(data))
+    results["dump_expr"] = bench("10. compat_dump(Expr)", bench_dump_expr)
+    results["dump_nested"] = bench("11. compat_dump(nested)", bench_dump_nested, iterations=500)
 
     print()
     print("--- Summary (avg us) ---")
