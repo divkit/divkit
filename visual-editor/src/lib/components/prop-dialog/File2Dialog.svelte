@@ -44,7 +44,7 @@
     } = getContext<AppContext>(APP_CTX);
 
     const FILE_FILTER = {
-        image: 'image/png, image/jpeg',
+        image: 'image/png, image/jpeg, image/webp, image/avif, image/svg+xml',
         gif: 'image/gif',
         lottie: 'text/json, application/json',
         video: 'video/mp4, video/mpeg, video/ogg, video/quicktime, video/webm'
