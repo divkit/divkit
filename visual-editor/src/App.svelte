@@ -5,7 +5,7 @@
     import type { LanguageContext } from './lib/ctx/languageContext';
     import { LANGUAGE_CTX } from './lib/ctx/languageContext';
     import ContextMenu from './lib/components/ContextMenu.svelte';
-    import type { CardLocale, EditorInstance, EditorOptions, FileDialogApi, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout } from './lib';
+    import type { CardLocale, EditorInstance, EditorOptions, FileDialogApi, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, ImageConversion, Layout } from './lib';
     import LayoutColumn from './lib/components/LayoutColumn.svelte';
     import { APP_CTX, type AppContext, type ContextMenuApi, type RendererApi, type ShowErrors } from './lib/ctx/appContext';
     import { editorFabric as editorFabricInternal } from './lib/data/editorWrapper';
@@ -61,6 +61,8 @@
     export let directionSelector = false;
 
     export let perThemeProps = get(state.paletteEnabled);
+
+    export let imageConversion: ImageConversion | undefined;
 
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
@@ -157,6 +159,7 @@
         customFontFaces,
         directionSelector,
         perThemeProps,
+        imageConversion,
 
         rendererApi() {
             return rendererApi;

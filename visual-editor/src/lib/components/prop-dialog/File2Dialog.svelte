@@ -11,6 +11,7 @@
 
 <script lang="ts">
     import { getContext, onDestroy } from 'svelte';
+    import { slide } from 'svelte/transition';
 
     import type { AnimationItem } from 'lottie-web';
     import type { VideoSource } from '@divkitframework/divkit/typings/common';
@@ -26,6 +27,10 @@
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
     import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
     import { hasRequestVideoFrame } from '../../utils/hasRequestVideoFrame';
+    import Select from '../Select.svelte';
+    import { formatFileSize } from '../../utils/formatFileSize';
+    import { Truthy } from '../../utils/truthy';
+    import { convertedFileName } from '../../utils/convertedFileName';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const {
@@ -34,7 +39,8 @@
         previewErrorFileLimit,
         warnFileLimit,
         errorFileLimit,
-        fileLimits
+        fileLimits,
+        imageConversion
     } = getContext<AppContext>(APP_CTX);
 
     const FILE_FILTER = {
@@ -133,6 +139,10 @@
             current: 0,
             duration: 0
         };
+        convertTo = '';
+        originalSize = 0;
+        convertedFile = undefined;
+
         loadFileSize();
     }
 
@@ -175,6 +185,9 @@
     let playbackToggle = true;
     let playbackInput: HTMLInputElement;
     let videoElem: HTMLVideoElement;
+    let convertTo = '';
+    let originalSize = 0;
+    let convertedFile: File | undefined;
 
     $: showFileSelect = !value.url;
 
@@ -209,6 +222,9 @@
 
         loading = true;
         showError = false;
+        convertedFile = undefined;
+        convertTo = '';
+        originalSize = 0;
 
         const func = subtype === 'image_preview' ? loadFileAsBase64 : uploadFile;
 
@@ -316,6 +332,8 @@
         showError = false;
 
         getFileSize(String(value.url), subtype).then(size => {
+            originalSize = size;
+
             if (fileLimits) {
                 const sizeMod = calcFileSizeMod(size, SUBTYPE_TO_LIMIT[subtype], Infinity, Infinity, fileLimits);
 
@@ -466,6 +484,60 @@
         playbackInfo.current = videoElem.currentTime;
     }
 
+    function onConvertChange(): void {
+        if (!convertTo) {
+            return;
+        }
+
+        const origUrl = value.url;
+        if (!origUrl) {
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+            if (!convertTo) {
+                return;
+            }
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const mime = {
+                png: 'image/png',
+                jpg: 'image/jpeg',
+                webp: 'image/webp',
+                avif: 'image/avif'
+            }[convertTo];
+
+            canvas.toBlob(blob => {
+                if (blob) {
+                    convertedFile = new File([blob], convertedFileName(origUrl, convertTo), {
+                        type: mime
+                    });
+                }
+            }, mime, imageConversion?.quality);
+        };
+        img.onerror = () => {
+            // todo
+        };
+        img.crossOrigin = 'anonymous';
+        img.src = origUrl;
+    }
+
+    function onConvertSave(): void {
+        if (convertedFile) {
+            upload(convertedFile);
+        }
+    }
+
     onDestroy(() => {
         if (lottieItem) {
             lottieItem.destroy();
@@ -487,6 +559,7 @@
         hasClose={true}
         {direction}
         canMove={true}
+        overflow="visible"
         on:close={onClose}
     >
         <div class="file2-dialog__title">
@@ -608,6 +681,55 @@
                         {/if}
                     </div>
                 </Text>
+
+                {#if subtype === 'image' && imageConversion}
+                    <div class="file2-dialog__conversion">
+                        <div class="file2-dialog__label">
+                            {$l10nString('file.convert')}
+                        </div>
+                        <Select
+                            theme="normal"
+                            size="medium"
+                            bind:value={convertTo}
+                            items={[{
+                                text: $l10nString('file.convert_orig'),
+                                value: '',
+                                isEmpty: true
+                            }, imageConversion.formats.png && {
+                                text: 'png',
+                                value: 'png'
+                            }, imageConversion.formats.jpg && {
+                                text: 'jpg',
+                                value: 'jpg'
+                            }, imageConversion.formats.webp && {
+                                text: 'webp',
+                                value: 'webp'
+                            }, imageConversion.formats.avif && {
+                                text: 'avif',
+                                value: 'avif'
+                            }].filter(Truthy)}
+                            on:change={onConvertChange}
+                        />
+
+                        {#if convertTo && originalSize && convertedFile}
+                            <div transition:slide>
+                                <div class="file2-dialog__size-label">
+                                    {$l10nString('file.convert_orig_size')}: {formatFileSize(originalSize)}
+                                    <br>
+                                    {$l10nString('file.convert_converted_size')}: {formatFileSize(convertedFile.size)}
+                                </div>
+
+                                <Button2
+                                    theme="normal"
+                                    size="medium"
+                                    on:click={onConvertSave}
+                                >
+                                    {$l10nString('file.convert_save')}
+                                </Button2>
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
             </div>
 
             <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -902,6 +1024,16 @@
 
     .file2-dialog__playback-toggle-icon_toggle {
         background-image: url(../../../assets/pause.svg);
+    }
+
+    .file2-dialog__conversion {
+        margin-top: 12px;
+    }
+
+    .file2-dialog__size-label {
+        padding: 6px 0;
+        font-size: 14px;
+        line-height: 20px;
     }
 
     @keyframes file2-dialog__rotate {

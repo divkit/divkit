@@ -63,6 +63,15 @@ const editor = window.editor = DivProEditor.init({
             error: 1000000
         }
     },
+    imageConversion: {
+        quality: .75,
+        formats: {
+            png: true,
+            jpg: true,
+            webp: true,
+            // avif: true
+        }
+    },
     customFontFaces: [{
         value: 'monospace',
         text: {

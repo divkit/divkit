@@ -162,6 +162,11 @@ export type SafeAreaEmulation = Record<'top' | 'right' | 'bottom' | 'left', {
     value: number;
 }>;
 
+export interface ImageConversion {
+    quality?: number; // [0, 1]
+    formats: Partial<Record<'png' | 'jpg' | 'webp' | 'avif', boolean>>;
+}
+
 export interface DivProEditorOptions {
     renderTo: HTMLElement;
     shadowRoot?: ShadowRoot;
@@ -194,6 +199,7 @@ export interface DivProEditorOptions {
     perThemeProps?: boolean;
     safeAreaEmulation?: SafeAreaEmulation;
     fitViewportOnCreate?: boolean;
+    imageConversion?: ImageConversion;
 }
 
 export interface EditorError {
@@ -288,6 +294,7 @@ export const DivProEditor = {
                 customFontFaces: opts.customFontFaces,
                 directionSelector: opts.directionSelector,
                 perThemeProps: opts.perThemeProps,
+                imageConversion: opts.imageConversion,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

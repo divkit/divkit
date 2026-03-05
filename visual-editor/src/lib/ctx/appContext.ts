@@ -1,5 +1,5 @@
 import type { Action, VideoSource } from '@divkitframework/divkit/typings/common';
-import type { CardLocale, EditorInstance, EditorOptions, FileDialogShowProps, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest } from '../../lib';
+import type { CardLocale, EditorInstance, EditorOptions, FileDialogShowProps, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, ImageConversion } from '../../lib';
 import type { State } from '../data/state';
 import type { TreeLeaf } from './tree';
 import type { Background } from '../data/background';
@@ -231,6 +231,7 @@ export interface AppContext {
     customFontFaces: FontFaceDesc[];
     directionSelector: boolean;
     perThemeProps: boolean;
+    imageConversion: ImageConversion | undefined;
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;
