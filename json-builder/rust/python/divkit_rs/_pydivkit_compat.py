@@ -4,7 +4,6 @@ import uuid
 from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import Any, get_args, get_origin
-from weakref import WeakKeyDictionary
 
 from divkit_rs._native import (
     DivAction as NativeDivAction,
@@ -262,61 +261,6 @@ _ORIG_GETATTRIBUTE = PyDivEntity.__getattribute__
 
 _TEMPLATE_REGISTRY: dict[str, type[PyDivEntity]] = {}
 _TEMPLATE_DEPENDENCY_CACHE: dict[type[PyDivEntity], frozenset[type[PyDivEntity]]] = {}
-_CONSTRUCTOR_VALUES: "WeakKeyDictionary[PyDivEntity, dict[str, Any]]" = WeakKeyDictionary()
-_RELATED_TEMPLATES_CACHE: "WeakKeyDictionary[PyDivEntity, frozenset[type[PyDivEntity]]]" = (
-    WeakKeyDictionary()
-)
-_CORNERS_RADIUS_KEY_ALIASES = {
-    "top_left": "top-left",
-    "top_right": "top-right",
-    "bottom_left": "bottom-left",
-    "bottom_right": "bottom-right",
-    "$top_left": "$top-left",
-    "$top_right": "$top-right",
-    "$bottom_left": "$bottom-left",
-    "$bottom_right": "$bottom-right",
-}
-_PYDIVKIT_FLOAT_KEYS = {"alpha", "ratio", "weight", "letter_spacing"}
-
-
-def _constructor_values_get(entity: PyDivEntity) -> dict[str, Any] | None:
-    try:
-        return _CONSTRUCTOR_VALUES.get(entity)
-    except TypeError:
-        return None
-
-
-def _constructor_values_set(entity: PyDivEntity, values: dict[str, Any]) -> None:
-    try:
-        _CONSTRUCTOR_VALUES[entity] = values
-    except TypeError:
-        pass
-
-
-def _related_templates_cache_get(
-    entity: PyDivEntity,
-) -> frozenset[type[PyDivEntity]] | None:
-    try:
-        return _RELATED_TEMPLATES_CACHE.get(entity)
-    except TypeError:
-        return None
-
-
-def _related_templates_cache_set(
-    entity: PyDivEntity,
-    value: frozenset[type[PyDivEntity]],
-) -> None:
-    try:
-        _RELATED_TEMPLATES_CACHE[entity] = value
-    except TypeError:
-        pass
-
-
-def _invalidate_related_templates_cache(entity: PyDivEntity) -> None:
-    try:
-        _RELATED_TEMPLATES_CACHE.pop(entity, None)
-    except TypeError:
-        pass
 
 
 def _template_name_for_class(cls: type[PyDivEntity]) -> str:
