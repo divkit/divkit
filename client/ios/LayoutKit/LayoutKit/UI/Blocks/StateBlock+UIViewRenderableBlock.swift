@@ -239,9 +239,6 @@ private final class StateBlockView: BlockView {
     for (id, frame) in views {
       if let view = subviewStorage.getView(id) {
         view.changeBoundsWithAnimation(in: self, startFrame: frame)
-        if view.transitionChangeAnimationContainer != nil {
-          view.removeChildView()
-        }
       }
     }
   }
