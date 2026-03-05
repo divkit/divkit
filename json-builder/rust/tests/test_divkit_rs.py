@@ -4,6 +4,7 @@ Run with: pytest tests/ (after `maturin develop`)
 """
 
 import enum
+from collections.abc import Mapping, Sequence
 
 import divkit_rs
 import pytest
@@ -50,6 +51,32 @@ from divkit_rs import (
     RequestHeader,
     StringValue,
 )
+
+
+class _CustomMapping(Mapping):
+    def __init__(self, data):
+        self._data = data
+
+    def __getitem__(self, key):
+        return self._data[key]
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __len__(self):
+        return len(self._data)
+
+
+class _CustomSequence(Sequence):
+    def __init__(self, items):
+        self._items = list(items)
+
+    def __getitem__(self, index):
+        return self._items[index]
+
+    def __len__(self):
+        return len(self._items)
+
 
 # ================================================================
 # Fix #3 — Boolean serialization
@@ -943,6 +970,68 @@ class TestPydivkitCompatibilityLayer:
         assert hasattr(divkit_rs, "Expr")
         assert hasattr(divkit_rs, "BaseEntity")
         assert hasattr(divkit_rs, "BaseDiv")
+
+    def test_native_compat_dump_expr(self):
+        from divkit_rs._native import compat_dump
+
+        dumped = compat_dump(divkit_rs.Expr("@{value}"))
+        assert dumped == "@{value}"
+
+    def test_native_compat_dump_custom_mapping(self):
+        from divkit_rs._native import compat_dump
+
+        dumped = compat_dump(_CustomMapping({"text": divkit_rs.Expr("@{value}"), "n": 1}))
+        assert dumped == {"text": "@{value}", "n": 1}
+
+    def test_native_compat_dump_custom_sequence(self):
+        from divkit_rs._native import compat_dump
+
+        dumped = compat_dump(
+            _CustomSequence([divkit_rs.Expr("@{value}"), {"value": divkit_rs.Expr("@{x}")}, 2])
+        )
+        assert dumped == ["@{value}", {"value": "@{x}"}, 2]
+
+    def test_native_compat_dump_bytes_passthrough(self):
+        from divkit_rs._native import compat_dump
+
+        dumped = compat_dump(b"abc")
+        assert dumped == b"abc"
+
+    def test_native_normalize_pydivkit_json_rules(self):
+        from divkit_rs._native import normalize_pydivkit_json
+
+        normalized = normalize_pydivkit_json(
+            {
+                "top_left": 1,
+                "$bottom_right": "x",
+                "alpha": 1,
+                "ratio": 2,
+                "weight": 3,
+                "letter_spacing": 4,
+                "x": {"value": 5},
+                "y": {"value": 6},
+                "stroke": {"width": 7},
+                "color": 123,
+            }
+        )
+
+        assert normalized["top-left"] == 1
+        assert normalized["$bottom-right"] == "x"
+        assert normalized["alpha"] == 1.0
+        assert normalized["ratio"] == 2.0
+        assert normalized["weight"] == 3.0
+        assert normalized["letter_spacing"] == 4.0
+        assert normalized["x"]["value"] == 5.0
+        assert normalized["y"]["value"] == 6.0
+        assert normalized["stroke"]["width"] == 7.0
+        assert normalized["color"] == "123"
+
+    def test_native_normalize_pydivkit_json_keeps_bools(self):
+        from divkit_rs._native import normalize_pydivkit_json
+
+        normalized = normalize_pydivkit_json({"alpha": True, "x": {"value": True}})
+        assert normalized["alpha"] is True
+        assert normalized["x"]["value"] is True
 
     def test_class_level_schema_call(self):
         schema = DivText.schema()

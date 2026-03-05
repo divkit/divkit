@@ -35,7 +35,7 @@ from divkit_rs._native import (
 )
 
 from .core.compat import classproperty
-from .core.fields import REF_MARKER_PREFIX, Expr, _Field
+from .core.fields import REF_MARKER_PREFIX, _Field
 
 
 def _is_ref_marker(value: Any) -> bool:
@@ -100,20 +100,7 @@ def _install_constructor_compat() -> None:
         cls.__dk_constructor_compat__ = True
 
 
-def _dump(value: Any) -> Any:
-    if value is None or type(value) in (int, float, bool):
-        return value
-    if isinstance(value, (str, bytes)):
-        return value
-    if isinstance(value, Expr):
-        return str(value)
-    if isinstance(value, (PyDivEntity, list, tuple, dict)):
-        return _compat_dump_native(value)
-    if isinstance(value, Mapping):
-        return _compat_dump_native(dict(value))
-    if isinstance(value, Sequence):
-        return [_dump(v) for v in value]
-    return value
+_dump = _compat_dump_native
 
 
 def _collect_template_names_from_json(value: Any, out: set[str]) -> None:
