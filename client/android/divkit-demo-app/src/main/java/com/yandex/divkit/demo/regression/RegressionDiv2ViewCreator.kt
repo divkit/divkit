@@ -49,9 +49,9 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
             divJson.has("card") -> {
                 val templateJson = parseTemplates(divJson)
                 val cardJson = parseCard(divJson)
-                Div2ViewFactory(divContext, templateJson).createViewByConfig(cardJson, onBound)
+                Div2ViewFactory(divContext, templateJson).createAndBindViewByConfig(cardJson, onBound)
             }
-            else -> Div2ViewFactory(divContext).createViewByConfig(divJson, onBound)
+            else -> Div2ViewFactory(divContext).createAndBindViewByConfig(divJson, onBound)
         }
     }
 
@@ -68,9 +68,9 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
             divJson.has("card") -> {
                 val templateJson = parseTemplates(divJson)
                 val cardJson = parseCard(divJson)
-                Div2ViewFactory(divContext, templateJson).createViewSync(cardJson)
+                Div2ViewFactory(divContext, templateJson).createAndBindViewSync(cardJson)
             }
-            else -> Div2ViewFactory(divContext).createViewSync(divJson)
+            else -> Div2ViewFactory(divContext).createAndBindViewSync(divJson)
         }
     }
 

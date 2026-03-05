@@ -43,7 +43,7 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
         val templateJson = parseTemplates(divJson)
         val cardJson = parseCard(divJson)
 
-        Div2ViewFactory(divContext, templateJson).createViewByConfig(cardJson, onBound)
+        Div2ViewFactory(divContext, templateJson).createAndBindViewByConfig(cardJson, onBound)
     }
 
     override fun createDiv2ViewSync(
@@ -57,7 +57,7 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
         val templateJson = parseTemplates(divJson)
         val cardJson = parseCard(divJson)
 
-        return Div2ViewFactory(divContext, templateJson).createViewSync(cardJson)
+        return Div2ViewFactory(divContext, templateJson).createAndBindViewSync(cardJson)
     }
 
     private fun createContext(

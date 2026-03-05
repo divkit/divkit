@@ -9,34 +9,31 @@ import com.yandex.div2.DivData
 import com.yandex.divkit.demo.utils.setDataByConfig
 import org.json.JSONObject
 
-internal sealed class DivViewFactory {
-
-    abstract fun createViewSync(cardJson: JSONObject): Div2View
-
-    abstract fun createViewByConfig(cardJson: JSONObject, onBound: (Div2View) -> Unit)
-}
-
 internal class Div2ViewFactory(
     private val context: Div2Context,
     private val templatesJson: JSONObject? = null
-) : DivViewFactory() {
+) {
 
     private val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
         if (templatesJson != null) parseTemplates(templatesJson)
     }
 
-    override fun createViewSync(cardJson: JSONObject): Div2View {
+    fun createAndBindViewSync(cardJson: JSONObject): Div2View {
         val divData = DivData(environment, cardJson)
         val div2View = Div2View(context)
         div2View.setData(divData, DivDataTag("div2"))
         return div2View
     }
 
-    override fun createViewByConfig(cardJson: JSONObject, onBound: (Div2View) -> Unit) {
-        val divData = DivData(environment, cardJson)
+    fun createAndBindViewByConfig(cardJson: JSONObject, onBound: (Div2View) -> Unit) {
         val div2View = Div2View(context)
-        div2View.setDataByConfig(divData, DivDataTag("div2")) {
-            onBound(div2View)
+        bindViewByConfig(div2View, cardJson, onBound)
+    }
+
+    fun bindViewByConfig(divView: Div2View, cardJson: JSONObject, onBound: (Div2View) -> Unit) {
+        val divData = DivData(environment, cardJson)
+        divView.setDataByConfig(divData, DivDataTag("div2")) {
+            onBound(divView)
         }
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,9 +32,7 @@ class DivScreenshotActivity : AppCompatActivity() {
     private val assetReader = DivAssetReader(this)
     private lateinit var divContext: Div2Context
 
-    private val cardAssetName: String
-        get() = intent.extras?.getString(EXTRA_DIV_ASSET_NAME)
-            ?: throw IllegalArgumentException("Missing div asset name")
+    private var cardAssetName: String? = null
 
     private val imageLoaderName: String?
         get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
@@ -58,34 +57,23 @@ class DivScreenshotActivity : AppCompatActivity() {
         divContext = divContext(activity = this)
         super.onCreate(savedInstanceState)
 
+        divView = Div2View(divContext)
+        setContentView(divView)
+        intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
+            setDivData(it)
+        }
+    }
+
+    fun setDivData(card: String) {
+        cardAssetName = card
         var divJson = getTestCaseJson()
         if (divJson.has("div_data")) {
             divJson = divJson.getJSONObject("div_data")
         }
 
-        val onBound: (Div2View) -> Unit = { divView ->
-            this.divView = divView.apply {
-                val height =
-                    if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    } else {
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    }
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    height
-                )
-                id = R.id.morda_screenshot_div
-                removeAutofocusForOldApis()
-                hideCursor()
-            }
-            applyConfiguration(divView)
-            setContentView(divView)
-        }
-
         val templatesJson = divJson.optJSONObject("templates")
         val cardJson = divJson.getJSONObject("card")
-        Div2ViewFactory(divContext, templatesJson).createViewByConfig(cardJson, onBound)
+        Div2ViewFactory(divContext, templatesJson).bindViewByConfig(divView, cardJson) { it.onBound() }
     }
 
     override fun onResume() {
@@ -113,7 +101,19 @@ class DivScreenshotActivity : AppCompatActivity() {
         Container.preferences.imageLoader = loader
     }
 
-    fun getTestCaseJson() = assetReader.read(cardAssetName)
+    fun getTestCaseJson() = cardAssetName?.let { assetReader.read(it) }
+        ?: throw IllegalArgumentException("Missing div asset name")
+
+    private fun Div2View.onBound() {
+        val matchParentHeight = getChildAt(0)?.layoutParams?.height == LayoutParams.MATCH_PARENT
+        val divViewHeight = if (matchParentHeight) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT
+        layoutParams?.height = divViewHeight
+        id = R.id.morda_screenshot_div
+        removeAutofocusForOldApis()
+        hideCursor()
+        requestLayout()
+        applyConfiguration()
+    }
 
     private fun View.removeAutofocusForOldApis() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
@@ -132,7 +132,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyConfiguration(view: View) {
+    private fun View.applyConfiguration() {
         val divJson = getTestCaseJson()
         val configuration = if (divJson.has("configuration")) {
             divJson.getJSONObject("configuration")
@@ -142,7 +142,7 @@ class DivScreenshotActivity : AppCompatActivity() {
 
         if (configuration.has("layout_direction")) {
             if (configuration.getString("layout_direction") == "rtl") {
-                view.layoutDirection = View.LAYOUT_DIRECTION_RTL
+                layoutDirection = View.LAYOUT_DIRECTION_RTL
             }
         }
     }

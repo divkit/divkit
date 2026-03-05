@@ -1,9 +1,9 @@
 package com.yandex.div
 
 import android.content.Context
-import android.os.Bundle
 import androidx.test.core.app.ApplicationProvider
-import com.yandex.div.rule.screenshotRule
+import com.yandex.div.rule.baseRule
+import com.yandex.div.steps.imageLoaderScreenshot
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_COIL
@@ -25,31 +25,28 @@ class Div2ImageLoaderScreenshotTest(private val case: String) {
     )
 
     @get:Rule
-    val rule = screenshotRule(case, activityRule)
+    val rule = baseRule(case, activityRule)
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = IMAGE_LOADER_PICASSO)
+    @Screenshot(viewId = R.id.morda_screenshot_div)
     fun divScreenshotPicasso() {
         launchActivityWith(IMAGE_LOADER_PICASSO)
     }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = IMAGE_LOADER_GLIDE)
+    @Screenshot(viewId = R.id.morda_screenshot_div)
     fun divScreenshotGlide() {
         launchActivityWith(IMAGE_LOADER_GLIDE)
     }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = IMAGE_LOADER_COIL)
+    @Screenshot(viewId = R.id.morda_screenshot_div)
     fun divScreenshotCoil() {
         launchActivityWith(IMAGE_LOADER_COIL)
     }
 
     private fun launchActivityWith(loaderName: String) {
-        val params = Bundle()
-        params.putString(DivScreenshotActivity.EXTRA_DIV_ASSET_NAME, case)
-        params.putString(DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME, loaderName)
-        activityRule.launchActivity(params)
+        imageLoaderScreenshot { runTest(activityRule, case, loaderName) }
     }
 
     companion object {
