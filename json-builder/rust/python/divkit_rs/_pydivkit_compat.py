@@ -257,7 +257,6 @@ class _DualMethod:
 _ORIG_DICT = PyDivEntity.dict
 _ORIG_INIT = PyDivEntity.__init__
 _ORIG_SCHEMA = PyDivEntity.schema
-_ORIG_RELATED_TEMPLATES = getattr(PyDivEntity, "related_templates", lambda self: [])
 _ORIG_INIT_SUBCLASS = PyDivEntity.__init_subclass__
 _ORIG_GETATTRIBUTE = PyDivEntity.__getattribute__
 
@@ -483,7 +482,7 @@ def _compat_init_subclass(cls: type[PyDivEntity], **kwargs: Any) -> None:
         template_name = _template_name_for_class(cls)
         _TEMPLATE_REGISTRY[template_name] = cls
         _TEMPLATE_DEPENDENCY_CACHE.clear()
-        _RELATED_TEMPLATES_CACHE.clear()
+        PyDivEntity._bump_related_templates_cache_epoch()
 
         # Keep template type in nested native serialization.
         # The original base type is preserved in __dk_base_type__ and used by template().
@@ -566,50 +565,6 @@ def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
             except Exception:
                 return value
     return value
-
-
-def _compat_related_templates(self: PyDivEntity) -> set[type[PyDivEntity]]:
-    cached = _related_templates_cache_get(self)
-    if cached is not None:
-        return set(cached)
-
-    cls = type(self)
-    related: set[type[PyDivEntity]] = set()
-
-    if getattr(cls, "__dk_is_template__", False):
-        related.update(_template_dependency_closure(cls))
-
-    native_related = _ORIG_RELATED_TEMPLATES(self)
-    if native_related:
-        for template_cls in native_related:
-            related.update(_template_dependency_closure(template_cls))
-
-    # Fast path for template discovery in instance payload:
-    # prefer native dict serialization and supplement with constructor-cached
-    # mutable entities (for post-init nested attribute updates).
-    try:
-        payload = _ORIG_DICT(self)
-    except Exception:
-        payload = None
-    if payload is not None:
-        template_names: set[str] = set()
-        _collect_template_names_from_json(payload, template_names)
-        for template_name in template_names:
-            template_cls = _TEMPLATE_REGISTRY.get(template_name)
-            if template_cls is not None:
-                related.update(_template_dependency_closure(template_cls))
-
-    constructor_values = _constructor_values_get(self)
-    if constructor_values:
-        constructor_related: set[type[PyDivEntity]] = set()
-        for constructor_value in constructor_values.values():
-            _collect_related_templates_from_value(constructor_value, constructor_related)
-        for template_cls in constructor_related:
-            related.update(_template_dependency_closure(template_cls))
-
-    frozen = frozenset(related)
-    _related_templates_cache_set(self, frozen)
-    return set(frozen)
 
 
 def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
@@ -714,9 +669,7 @@ def _compat_make_card(
 
 
 def _compat_make_div(div: PyDivEntity) -> dict[str, Any]:
-    templates: set[type[PyDivEntity]] = set()
-    for template_cls in div.related_templates():
-        templates.update(_template_dependency_closure(template_cls))
+    templates: set[type[PyDivEntity]] = set(div.related_templates())
 
     result = {
         "templates": {template.template_name: template.template() for template in templates},
@@ -732,7 +685,6 @@ def install_pydivkit_compat() -> None:
     PyDivEntity.__getattribute__ = _compat_getattribute
     PyDivEntity.__init_subclass__ = classmethod(_compat_init_subclass)
     PyDivEntity.dict = _compat_dict
-    PyDivEntity.related_templates = _compat_related_templates
     PyDivEntity.schema = _DualMethod(_compat_schema)
     PyDivEntity.update_forward_refs = classmethod(lambda cls: None)
     PyDivEntity.template_name = classproperty(lambda cls: _template_name_for_class(cls))
