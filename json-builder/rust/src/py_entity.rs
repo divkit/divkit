@@ -3,7 +3,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList};
+use pyo3::types::{PyDict, PySet};
 
 use crate::entity::{DivData, DivDataState, Entity};
 use crate::field::FieldDescriptor;
@@ -14,6 +14,7 @@ use super::python::compat_dump_bound;
 
 // ── Cached type metadata registry (avoids per-instance Vec<String> alloc) ──
 static TYPE_META_CACHE: Mutex<Option<HashMap<String, EntityTypeMeta>>> = Mutex::new(None);
+static RELATED_TEMPLATES_CACHE_EPOCH: AtomicU64 = AtomicU64::new(1);
 
 /// Metadata for a registered entity type.
 #[derive(Clone)]
@@ -132,12 +133,77 @@ impl PyDivEntity {
 
     /// Return related templates collected from this entity's field tree.
     ///
-    /// Mirrors pydivkit's `related_templates()` which returns an iterable of
-    /// template-like objects.  Currently `DynamicEntity` has no template
-    /// mechanism so this always returns an empty list, but exposing the method
-    /// prevents `AttributeError` in code that probes for it.
-    fn related_templates<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyList>> {
-        Ok(PyList::empty(py))
+    /// This mirrors `_compat_related_templates` logic in Rust and reuses
+    /// template registry/cache helpers from `_pydivkit_compat`.
+    fn related_templates<'py>(
+        slf: &Bound<'py, Self>,
+        py: Python<'py>,
+    ) -> PyResult<Bound<'py, PySet>> {
+        let compat = py.import("divkit_rs._pydivkit_compat")?;
+        let builtins = py.import("builtins")?;
+        let make_set = builtins.getattr("set")?;
+        let make_frozenset = builtins.getattr("frozenset")?;
+
+        let epoch = RELATED_TEMPLATES_CACHE_EPOCH.load(Ordering::Relaxed);
+        {
+            let this = slf.borrow();
+            if this.related_templates_cache_epoch == epoch {
+                if let Some(cached) = &this.related_templates_cache {
+                    return Ok(make_set.call1((cached.as_ref().bind(py),))?.cast_into()?);
+                }
+            }
+        }
+
+        let collect_template_names = compat.getattr("_collect_template_names_from_json")?;
+        let collect_related_from_value = compat.getattr("_collect_related_templates_from_value")?;
+        let template_dependency_closure = compat.getattr("_template_dependency_closure")?;
+        let template_registry = compat
+            .getattr("_TEMPLATE_REGISTRY")?
+            .cast_into::<PyDict>()?;
+        let related = PySet::empty(py)?;
+
+        let cls = slf.get_type();
+        let is_template = cls
+            .getattr("__dk_is_template__")
+            .ok()
+            .and_then(|v| v.extract::<bool>().ok())
+            .unwrap_or(false);
+        if is_template {
+            let closure = template_dependency_closure.call1((cls,))?;
+            related.call_method1("update", (closure,))?;
+        }
+
+        let payload = slf.borrow().dict(py)?;
+        let template_names = PySet::empty(py)?;
+        collect_template_names.call1((payload.bind(py), &template_names))?;
+        for name in template_names.iter() {
+            let template_name: String = name.extract()?;
+            if let Some(template_cls) = template_registry.get_item(template_name)? {
+                let closure = template_dependency_closure.call1((template_cls,))?;
+                related.call_method1("update", (closure,))?;
+            }
+        }
+
+        let constructor_values = slf.borrow().constructor_values.clone();
+        if let Some(values) = constructor_values {
+            let constructor_related = PySet::empty(py)?;
+            for value in values.values() {
+                collect_related_from_value
+                    .call1((value.as_ref().bind(py), &constructor_related))?;
+            }
+            for template_cls in constructor_related.iter() {
+                let closure = template_dependency_closure.call1((template_cls,))?;
+                related.call_method1("update", (closure,))?;
+            }
+        }
+
+        let frozen = make_frozenset.call1((&related,))?;
+        {
+            let mut this = slf.borrow_mut();
+            this.related_templates_cache = Some(Arc::new(frozen.clone().unbind()));
+            this.related_templates_cache_epoch = epoch;
+        }
+        Ok(make_set.call1((frozen,))?.cast_into()?)
     }
 
     #[pyo3(signature = (exclude_fields=None))]
