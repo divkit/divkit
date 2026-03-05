@@ -126,6 +126,7 @@ apiValidation {
     ignoredProjects += [
         "api-generator-test",
         "compose",
+        "divkit-benchmark-app",
         "divkit-demo-app",
         "divkit-perftests",
         "divkit-regression-testing",
