@@ -35,6 +35,8 @@ export interface FixedSize {
     value: number;
 }
 
+export type TextVerticalAlignment = 'top' | 'center' | 'bottom' | 'baseline';
+
 export interface TextImage {
     start: number;
     url: string;
@@ -42,6 +44,7 @@ export interface TextImage {
     height?: FixedSize;
     tint_color?: string;
     // tint_mode?: TintMode;
+    alignment_vertical?: TextVerticalAlignment;
 }
 
 export function rangeStyle(range: TextRange): Omit<TextRange, 'start' | 'end'> {

@@ -2956,7 +2956,7 @@
         const style = {
             left: `${startBbox.left + paddingLeft * scale}px`,
             top: `${startBbox.top + paddingTop * scale}px`,
-            width: `${Math.ceil((offsetWidth - paddingLeft - paddingRight) * scale)}px`,
+            width: `${Math.ceil(offsetWidth - paddingLeft - paddingRight)}px`,
             maxWidth: `${parentBbox.right - startBbox.left - (paddingLeft + paddingRight) * scale}px`,
             fontSize: computedStyle.fontSize
         };

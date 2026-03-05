@@ -100,10 +100,13 @@ export type GetTranslationSuggest = (query: string, locale: string) => Promise<T
 
 export type GetTranslationKey = (key: string) => Promise<Record<string, string> | undefined>;
 
+export type FileDialogAlign = 'top' | 'center' | 'bottom' | 'baseline';
+
 export interface FileDialogValue {
     url: string;
     width?: number;
     height?: number;
+    align?: FileDialogAlign;
 }
 
 export type FileDialogCallback = (opts: FileDialogValue) => void;
@@ -114,6 +117,7 @@ export interface FileDialogShowProps {
     subtype: 'image' | 'gif' | 'lottie' | 'video' | 'image_preview';
     direction?: 'left' | 'right';
     hasSize?: boolean;
+    hasAlign?: boolean;
     hasDelete?: boolean;
     target: HTMLElement;
     disabled?: boolean;

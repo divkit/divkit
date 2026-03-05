@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    const ALLOWED_VERTICAL_ALIGN = new Set(['top', 'middle', 'bottom', 'baseline']);
+</script>
+
 <script lang="ts">
     import { createEventDispatcher, getContext, onMount, tick } from 'svelte';
     import { fade, fly } from 'svelte/transition';
@@ -7,7 +11,7 @@
     import { htmlFilter } from '../utils/htmlFilter';
     import { calcSelectionOffset, getInnerText, setSelectionOffset } from '../utils/contenteditable';
     import { isEqual } from '../utils/isEqual';
-    import { rangeStyle, type FontWeight, type TextImage, type TextRange, type TextStyles } from '../utils/range';
+    import { rangeStyle, type FontWeight, type TextImage, type TextRange, type TextStyles, type TextVerticalAlignment } from '../utils/range';
     import { LANGUAGE_CTX, type LanguageContext } from '../ctx/languageContext';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
     import { copyValue } from '../utils/copyValue';
@@ -76,6 +80,7 @@
             height: string;
             wrapperStyle: Style;
             svgFilterId?: string;
+            verticalAlign: TextVerticalAlignment | undefined;
         };
     }
 
@@ -227,6 +232,7 @@
     let weight = '';
     let underline = false;
     let strike = false;
+
     let historyIndex = 0;
     let historyStack: State[] = [{
         text,
@@ -427,6 +433,7 @@
                         height: imageHeight,
                         wrapperStyle,
                         // svgFilterId
+                        verticalAlign: item.image.alignment_vertical
                     }
                 });
             }
@@ -461,17 +468,38 @@
                     html = `<span ${item.actions?.length ? `class="inplace-editor__link" data-actions="${htmlFilter(JSON.stringify(item.actions))}"` : ''} data-range-index="${htmlFilter(String(item.index))}" data-range="${htmlFilter(JSON.stringify(item.textStyles))}" style="${htmlFilter(calcTextStyle(item.textStyles) || '')}">${htmlFilter(item.text)}</span>`;
                 }
             } else {
-                html = `<span data-image="${htmlFilter(JSON.stringify(images[item.index]))}" data-image-index="${htmlFilter(String(item.index))}" class="inplace-editor__image-wrapper" style="${htmlFilter(makeStyle(item.image.wrapperStyle) || '')}">` +
-                    `<img class="inplace-editor__image" src="${htmlFilter(item.image.url)}" loading="lazy" decoding="async" ` +
-                    `aria-hidden="true" alt="" style="${htmlFilter(makeStyle({
-                        width: item.image.width,
-                        height: item.image.height,
-                        // Normalizes line-height for the containing text line
-                        'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
-                        'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
-                        filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
-                    }) || '')}` +
-                    '></span>';
+                let align = 'default';
+                if (item.image.verticalAlign && ALLOWED_VERTICAL_ALIGN.has(item.image.verticalAlign)) {
+                    align = item.image.verticalAlign;
+                }
+
+                html = '<span ' +
+                        `data-image="${htmlFilter(JSON.stringify(images[item.index]))}" ` +
+                        `data-image-index="${htmlFilter(String(item.index))}" ` +
+                        'class="inplace-editor__image-wrapper" ' +
+                        `style="${htmlFilter(makeStyle(item.image.wrapperStyle) || '')}"` +
+                    '>' +
+                    '<span ' +
+                        `class="inplace-editor__image-inner inplace-editor__image-inner_align_${align}${customLineHeight ? ' inplace-editor__image-inner_crop' : ''}"` +
+                        `style="${htmlFilter(makeStyle({
+                            width: item.image.width,
+                            height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? lineHeight + 'em' : undefined
+                        }) || '')}"` +
+                    '>' +
+                    '<img ' +
+                        'class="inplace-editor__image" ' +
+                        `src="${htmlFilter(item.image.url)}" ` +
+                        'loading="lazy" ' +
+                        'decoding="async" ' +
+                        'aria-hidden="true" ' +
+                        'alt="" ' +
+                        `style="${htmlFilter(makeStyle({
+                            height: item.image.height,
+                            filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
+                        }) || '')}"` +
+                    '>' +
+                    '</span>' +
+                    '</span>';
             }
 
             return acc + html;
@@ -495,7 +523,7 @@
         }
 
         // rotated height - non-rotated height
-        additionalHeight = elem.getBoundingClientRect().height - elem.offsetHeight;
+        additionalHeight = elem.getBoundingClientRect().height / scale - elem.offsetHeight;
         tick().then(() => {
             dispatch('resize');
         });
@@ -506,7 +534,7 @@
     }
 
     $: style = {
-        'font-size': pxToEm(fontSize * scale),
+        'font-size': pxToEm(fontSize),
         'line-height': lineHeight,
         // 'max-height': maxHeight,
         // '-webkit-line-clamp': lineClamp,
@@ -572,12 +600,14 @@
             direction: 'right',
             subtype: 'image',
             hasSize: true,
+            hasAlign: true,
             hasDelete: true,
             disabled: disabled || textDisabled,
             value: {
                 url: image.url,
                 width: image.width?.value,
-                height: image.height?.value
+                height: image.height?.value,
+                align: image.alignment_vertical || 'center'
             },
             callback(val) {
                 images = [...images];
@@ -593,7 +623,8 @@
                         height: {
                             type: 'fixed',
                             value: val.height || 24
-                        }
+                        },
+                        alignment_vertical: val.align
                     } as const;
                     images[index] = img;
                 } else {
@@ -1012,7 +1043,7 @@
 >
     <div
         class="inplace-editor__toolbar"
-        style:transform="translateY({-additionalHeight / 2}px)"
+        style:transform="scale({1 / scale}) translateY({-additionalHeight / 2}px)"
         transition:fade={{ duration: 150 }}
     >
         <div class="inplace-editor__toolbar-inner" bind:this={toolbarElem}>
@@ -1127,6 +1158,7 @@
     {#if showTextDisabledAlert}
         <div
             class="inplace-editor__disabled-alert-wrapper"
+            style:transform="scale({1 / scale})"
             transition:fly={{ y: 20, duration: 150 }}
         >
             <div class="inplace-editor__disabled-alert">
@@ -1162,6 +1194,7 @@
         width: 0;
         display: flex;
         justify-content: center;
+        transform-origin: 50% 100%;
     }
 
     .inplace-editor__toolbar-inner {
@@ -1281,9 +1314,55 @@
         outline-color: #00a2ff;
     }
 
-    :global(.inplace-editor__image) {
-        display: inline-block;
+    :global(.inplace-editor__image-inner) {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
         vertical-align: middle;
+    }
+
+    :global(.inplace-editor__image-inner_crop) {
+        height: 0;
+    }
+
+    :global(.inplace-editor__image-inner_align_top) {
+        vertical-align: top;
+    }
+
+    :global(.inplace-editor__image-inner_align_center) {
+        vertical-align: middle;
+    }
+
+    :global(.inplace-editor__image-inner_align_bottom) {
+        vertical-align: bottom;
+    }
+
+    :global(.inplace-editor__image-inner_align_baseline) {
+        vertical-align: baseline;
+    }
+
+    :global(.inplace-editor__image) {
+        display: block;
+        width: 100%;
+    }
+
+    :global(.inplace-editor__image-inner_crop .inplace-editor__image) {
+        position: absolute;
+    }
+
+    :global(.inplace-editor__image-inner_align_top .inplace-editor__image) {
+        top: 0;
+        left: 0;
+    }
+
+    :global(.inplace-editor__image-inner_align_bottom .inplace-editor__image) {
+        bottom: 0;
+        left: 0;
+    }
+
+    :global(.inplace-editor__image-inner_align_baseline .inplace-editor__image) {
+        bottom: 0;
+        left: 0;
     }
 
     :global(.inplace-editor__image_hidden) {
@@ -1383,6 +1462,7 @@
         z-index: 1;
         top: calc(100% + 14px);
         left: 50%;
+        transform-origin: 50% 0;
     }
 
     .inplace-editor__disabled-alert {

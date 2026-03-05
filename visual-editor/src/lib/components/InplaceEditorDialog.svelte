@@ -64,6 +64,7 @@
         style:width={currentProps.style.width}
         style:max-width={currentProps.style.maxWidth}
         style:font-size={currentProps.style.fontSize}
+        style:transform="scale({currentProps.scale})"
         bind:this={dialog}
         on:close={onClose}
         on:click={onDialogClick}
@@ -91,6 +92,7 @@
         border: none;
         background: none;
         overflow: visible;
+        transform-origin: 0 0;
     }
 
     .inplace-editor-dialog::backdrop {

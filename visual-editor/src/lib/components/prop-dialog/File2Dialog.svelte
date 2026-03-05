@@ -123,6 +123,7 @@
         value = props.value;
         title = props.title;
         hasSize = props.hasSize;
+        hasAlign = props.hasAlign;
         hasDelete = props.hasDelete;
         subtype = props.subtype;
         commonSubtype = subtype === 'image_preview' ? 'image' : subtype;
@@ -153,6 +154,7 @@
     let target: HTMLElement;
     let isShown = false;
     let hasSize: boolean | undefined = false;
+    let hasAlign: boolean | undefined = false;
     let hasDelete: boolean | undefined = false;
     let value: FileDialogValue = {
         url: '',
@@ -776,6 +778,23 @@
                 </label>
             </div>
         {/if}
+        {#if hasAlign}
+            <label class="file2-dialog__align">
+                <div class="file2-dialog__label">{$l10nString('props.alignment')}</div>
+                <Select
+                    theme="normal"
+                    size="medium"
+                    {disabled}
+                    bind:value={value.align}
+                    items={[
+                        { value: 'top', text: $l10nString('props.align_top') },
+                        { value: 'center', text: $l10nString('props.align_center') },
+                        { value: 'bottom', text: $l10nString('props.align_bottom') },
+                        { value: 'baseline', text: $l10nString('props.align_baseline') },
+                    ]}
+                />
+            </label>
+        {/if}
     </ContextDialog>
 {/if}
 
@@ -1034,6 +1053,10 @@
         padding: 6px 0;
         font-size: 14px;
         line-height: 20px;
+    }
+
+    .file2-dialog__align {
+        margin: 0 20px 20px;
     }
 
     @keyframes file2-dialog__rotate {

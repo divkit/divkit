@@ -17,7 +17,7 @@
     }
 
     export let items: Item[];
-    export let value: string;
+    export let value: string | undefined;
     export let theme: 'normal' | 'canvas' | 'transparent' | 'preview';
     export let size: 'small' | 'medium' = 'small';
     export let iconTheme: 'normal' | 'transparent' = 'normal';
