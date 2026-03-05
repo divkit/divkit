@@ -3771,7 +3771,7 @@
 
     .renderer__overlay-root {
         position: absolute;
-        top: -72px;
+        top: -100px;
         right: 0;
         bottom: 0;
         left: 0;

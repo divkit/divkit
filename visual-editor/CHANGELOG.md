@@ -1,3 +1,16 @@
+## 0.4.12
+
+* Updated DivKit 32.27.0 -> 32.32.0
+* Added basic `slider` support
+* Improved parsing of complex properties in some cases
+* Added the display of empty "required" properties in components
+* Added the ability to convert images to another format directly in the editor (this is not a professional tool, but an opportunity that was not expensive to make)
+* The editor now additionally accepts images in `webp`, `avif`, `svg` formats
+* Added vertical lines to the component tree when hovering over the mouse
+* More compact panel display for adding a new component
+* Other interface improvements
+* Updated the display of images in the double-click text editor and added a choice of vertical orientation for images
+
 ## 0.4.11
 
 * Updated Svelte 4->5 and Vite 5 -> 7
