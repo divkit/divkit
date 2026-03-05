@@ -142,6 +142,88 @@ pub(crate) fn compat_dump_bound(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyR
 }
 
 #[pyfunction]
+fn normalize_pydivkit_json(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> {
+    normalize_json_bound(py, value, None)
+}
+
+fn normalize_json_bound(
+    py: Python<'_>,
+    value: &Bound<'_, PyAny>,
+    parent_key: Option<&str>,
+) -> PyResult<Py<PyAny>> {
+    if let Ok(list) = value.cast::<PyList>() {
+        let out = PyList::empty(py);
+        for item in list.iter() {
+            out.append(normalize_json_bound(py, &item, parent_key)?)?;
+        }
+        return Ok(out.into_any().unbind());
+    }
+
+    if let Ok(dict) = value.cast::<PyDict>() {
+        let out = PyDict::new(py);
+        for (k, v) in dict.iter() {
+            let key: String = k.extract()?;
+            let normalized_key = normalize_key(&key);
+            let normalized_value = normalize_json_bound(py, &v, Some(normalized_key))?;
+            let final_value =
+                coerce_normalized_value(py, normalized_key, parent_key, normalized_value)?;
+            out.set_item(normalized_key, final_value.bind(py))?;
+        }
+        return Ok(out.into_any().unbind());
+    }
+
+    Ok(value.clone().unbind())
+}
+
+fn normalize_key(key: &str) -> &str {
+    match key {
+        "top_left" => "top-left",
+        "top_right" => "top-right",
+        "bottom_left" => "bottom-left",
+        "bottom_right" => "bottom-right",
+        "$top_left" => "$top-left",
+        "$top_right" => "$top-right",
+        "$bottom_left" => "$bottom-left",
+        "$bottom_right" => "$bottom-right",
+        other => other,
+    }
+}
+
+fn coerce_normalized_value(
+    py: Python<'_>,
+    normalized_key: &str,
+    parent_key: Option<&str>,
+    normalized_value: Py<PyAny>,
+) -> PyResult<Py<PyAny>> {
+    let value = normalized_value.bind(py);
+    let is_non_bool_int = value.is_instance_of::<PyInt>() && !value.is_instance_of::<PyBool>();
+    if !is_non_bool_int {
+        return Ok(normalized_value);
+    }
+
+    let should_coerce_to_float = matches!(
+        normalized_key,
+        "alpha" | "ratio" | "weight" | "letter_spacing"
+    ) || (normalized_key == "value"
+        && matches!(parent_key, Some("x" | "y")))
+        || (normalized_key == "width" && parent_key == Some("stroke"));
+
+    if should_coerce_to_float {
+        if let Ok(v) = value.extract::<i64>() {
+            return Ok(PyFloat::new(py, v as f64).into_any().unbind());
+        }
+        return Ok(normalized_value);
+    }
+
+    if normalized_key == "color" {
+        let text: String = value.str()?.extract()?;
+        return Ok(PyString::new(py, &text).into_any().unbind());
+    }
+
+    Ok(normalized_value)
+}
+
+#[pyfunction]
 fn compat_dump(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> {
     compat_dump_bound(py, value)
 }
@@ -160,6 +242,7 @@ pub fn _native(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(make_div, m)?)?;
     m.add_function(wrap_pyfunction!(make_card, m)?)?;
     m.add_function(wrap_pyfunction!(compat_dump, m)?)?;
+    m.add_function(wrap_pyfunction!(normalize_pydivkit_json, m)?)?;
     m.add_function(wrap_pyfunction!(register_type_meta, m)?)?;
 
     Ok(())
