@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use std::sync::Mutex;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, Mutex};
 
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList};
@@ -9,6 +10,7 @@ use crate::field::FieldDescriptor;
 use crate::value::DivValue;
 
 use super::py_value::{divvalue_to_py, json_to_py, py_to_divvalue};
+use super::python::compat_dump_bound;
 
 // ── Cached type metadata registry (avoids per-instance Vec<String> alloc) ──
 static TYPE_META_CACHE: Mutex<Option<HashMap<String, EntityTypeMeta>>> = Mutex::new(None);
@@ -28,6 +30,12 @@ pub struct EntityTypeMeta {
 pub struct PyDivEntity {
     pub type_meta: EntityTypeMeta,
     pub fields: HashMap<String, DivValue>,
+    pub constructor_values: Option<HashMap<String, Arc<Py<PyAny>>>>,
+    pub constructor_dirty: bool,
+    pub defaults: Option<HashMap<String, Arc<Py<PyAny>>>>,
+    pub forced_type_name: Option<String>,
+    pub related_templates_cache: Option<Arc<Py<PyAny>>>,
+    pub related_templates_cache_epoch: u64,
 }
 
 impl PyDivEntity {
@@ -59,6 +67,12 @@ impl PyDivEntity {
                 required_fields: vec![],
             },
             fields: HashMap::new(),
+            constructor_values: None,
+            constructor_dirty: false,
+            defaults: None,
+            forced_type_name: None,
+            related_templates_cache: None,
+            related_templates_cache_epoch: 0,
         })
     }
 
@@ -70,10 +84,46 @@ impl PyDivEntity {
         Ok(())
     }
 
-    fn dict(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+    pub(crate) fn dict(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
         let entity = self.to_rust_entity();
         let json_val = entity.dict();
-        json_to_py(py, &json_val)
+        let result_any = json_to_py(py, &json_val)?;
+        let result = result_any.bind(py).cast::<PyDict>()?;
+
+        if self.constructor_dirty {
+            if let Some(constructor_values) = &self.constructor_values {
+                for (field_name, constructor_value) in constructor_values {
+                    let Some(current_value) = result.get_item(field_name)? else {
+                        continue;
+                    };
+                    let dumped_raw =
+                        compat_dump_bound(py, constructor_value.as_ref().bind(py).as_any())?;
+                    if !dumped_raw.bind(py).eq(&current_value)? {
+                        result.set_item(field_name, dumped_raw.bind(py))?;
+                    }
+                }
+            }
+        }
+
+        if let Some(defaults) = &self.defaults {
+            for (field_name, default_value) in defaults {
+                if result.get_item(field_name)?.is_some() {
+                    continue;
+                }
+                let dumped_default =
+                    compat_dump_bound(py, default_value.as_ref().bind(py).as_any())?;
+                if dumped_default.bind(py).is_none() {
+                    continue;
+                }
+                result.set_item(field_name, dumped_default.bind(py))?;
+            }
+        }
+
+        if let Some(type_name) = &self.forced_type_name {
+            result.set_item("type", type_name)?;
+        }
+
+        Ok(result.clone().into_any().unbind())
     }
 
     fn build(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
@@ -124,6 +174,12 @@ impl PyDivEntity {
 
     fn __setattr__(&mut self, name: String, value: &Bound<'_, PyAny>) -> PyResult<()> {
         let dv = py_to_divvalue(value)?;
+        self.constructor_dirty = true;
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
+        if let Some(constructor_values) = self.constructor_values.as_mut() {
+            constructor_values.remove(&name);
+        }
         self.fields.insert(name, dv);
         Ok(())
     }
@@ -138,12 +194,25 @@ impl PyDivEntity {
         if let Some(cache) = guard.as_ref() {
             if let Some(cached) = cache.get(class_name) {
                 self.type_meta = cached.clone();
+                self.forced_type_name = self
+                    .type_meta
+                    .type_name
+                    .as_ref()
+                    .filter(|type_name| type_name.as_str() == class_name)
+                    .cloned();
+                self.constructor_dirty = false;
+                self.related_templates_cache = None;
+                self.related_templates_cache_epoch = 0;
                 return;
             }
         }
         drop(guard);
         // Fallback for user-defined subclasses not in the registry
         self.type_meta.class_name = class_name.to_string();
+        self.forced_type_name = None;
+        self.constructor_dirty = false;
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
     }
 
     /// Internal: replace all fields from a Python dict.
@@ -163,8 +232,98 @@ impl PyDivEntity {
             }
         }
         self.fields = fields;
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
         Ok(())
     }
+
+    #[pyo3(signature = (values))]
+    fn _set_constructor_values(&mut self, values: &Bound<'_, PyAny>) -> PyResult<()> {
+        self.constructor_values = py_mapping_to_pyany_map(values)?;
+        self.constructor_dirty = false;
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
+        Ok(())
+    }
+
+    #[pyo3(signature = (name, value))]
+    fn _set_constructor_value(&mut self, name: String, value: &Bound<'_, PyAny>) {
+        let constructor_values = self.constructor_values.get_or_insert_with(HashMap::new);
+        constructor_values.insert(name, Arc::new(value.clone().unbind()));
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
+    }
+
+    #[pyo3(signature = (name))]
+    fn _get_constructor_value(&self, py: Python<'_>, name: &str) -> PyResult<Py<PyAny>> {
+        if let Some(constructor_values) = &self.constructor_values {
+            if let Some(value) = constructor_values.get(name) {
+                return Ok(value.as_ref().clone_ref(py));
+            }
+        }
+        Ok(py.None())
+    }
+
+    fn _get_constructor_values(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        let out = PyDict::new(py);
+        if let Some(constructor_values) = &self.constructor_values {
+            for (k, v) in constructor_values {
+                out.set_item(k, v.as_ref().bind(py))?;
+            }
+        }
+        Ok(out.into_any().unbind())
+    }
+
+    #[pyo3(signature = (defaults=None))]
+    fn _set_defaults(&mut self, defaults: Option<&Bound<'_, PyAny>>) -> PyResult<()> {
+        self.defaults = match defaults {
+            Some(value) => py_mapping_to_pyany_map(value)?,
+            None => None,
+        };
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
+        Ok(())
+    }
+
+    fn _mark_constructor_dirty(&mut self) {
+        self.constructor_dirty = true;
+        self.related_templates_cache = None;
+        self.related_templates_cache_epoch = 0;
+    }
+
+    #[staticmethod]
+    fn _bump_related_templates_cache_epoch() {
+        RELATED_TEMPLATES_CACHE_EPOCH.fetch_add(1, Ordering::Relaxed);
+    }
+}
+
+fn py_dict_to_pyany_map(values: &Bound<'_, PyDict>) -> PyResult<HashMap<String, Arc<Py<PyAny>>>> {
+    let mut out = HashMap::with_capacity(values.len());
+    for (k, v) in values.iter() {
+        let key: String = k.extract()?;
+        if v.is_none() {
+            continue;
+        }
+        out.insert(key, Arc::new(v.clone().unbind()));
+    }
+    Ok(out)
+}
+
+fn py_mapping_to_pyany_map(
+    value: &Bound<'_, PyAny>,
+) -> PyResult<Option<HashMap<String, Arc<Py<PyAny>>>>> {
+    if value.is_none() {
+        return Ok(None);
+    }
+    if let Ok(dict) = value.cast::<PyDict>() {
+        return Ok(Some(py_dict_to_pyany_map(dict)?));
+    }
+    if let Ok(items) = value.call_method0("items") {
+        if let Ok(dict) = PyDict::from_sequence(&items) {
+            return Ok(Some(py_dict_to_pyany_map(&dict)?));
+        }
+    }
+    Ok(None)
 }
 
 /// A dynamic Entity constructed from a HashMap at runtime.
@@ -304,6 +463,9 @@ pub fn register_entity_class(
             "            cached = defaults\n",
             "        merged = dict(cached)\n",
             "        merged.update(kwargs)\n",
+            "        dk_defaults = cls.__dict__.get('__dk_defaults__')\n",
+            "        if dk_defaults:\n",
+            "            self._set_defaults(dk_defaults)\n",
             "        self._set_fields(merged)\n",
         ),
         cls = class_name,

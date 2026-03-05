@@ -96,7 +96,7 @@ def _install_constructor_compat() -> None:
                 key: value for key, value in kwargs.items() if _is_tracked_constructor_value(value)
             }
             if tracked_constructor_values:
-                _constructor_values_set(instance, tracked_constructor_values)
+                instance._set_constructor_values(tracked_constructor_values)
             return instance
 
         cls.__new__ = staticmethod(_wrapped_new)
@@ -531,26 +531,33 @@ def _compat_entity_init(self: PyDivEntity, **kwargs: Any) -> None:
     for field_name, field in getattr(type(self), "__dk_fields__", {}).items():
         if field_name not in kwargs:
             setattr(self, field_name, field.default)
+    defaults = type(self).__dict__.get("__dk_defaults__")
+    if defaults:
+        try:
+            self._set_defaults(defaults)
+        except Exception:
+            pass
 
 
 def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
     # Keep mutable references for constructor-assigned nested entities, so
     # patterns like `obj.margins.top = ...` behave like in pydivkit.
-    if not name.startswith("__"):
-        constructor_values = _constructor_values_get(self)
-        if constructor_values:
-            value = constructor_values.get(name)
-            if isinstance(value, PyDivEntity):
-                return value
+    if not name.startswith("_"):
+        value = self._get_constructor_value(name)
+        if isinstance(value, PyDivEntity):
+            try:
+                self._mark_constructor_dirty()
+            except Exception:
+                pass
+            return value
     value = _ORIG_GETATTRIBUTE(self, name)
     if name == "margins" and isinstance(value, dict):
         entity_value = NativeDivEdgeInsets(**value)
-        constructor_values = _constructor_values_get(self)
-        if constructor_values is None:
-            constructor_values = {}
-            _constructor_values_set(self, constructor_values)
-        constructor_values[name] = entity_value
-        _invalidate_related_templates_cache(self)
+        self._set_constructor_value(name, entity_value)
+        try:
+            self._mark_constructor_dirty()
+        except Exception:
+            pass
         return entity_value
     if name == "actions" and isinstance(value, list):
         if all(isinstance(item, dict) for item in value):
@@ -606,53 +613,7 @@ def _compat_related_templates(self: PyDivEntity) -> set[type[PyDivEntity]]:
 
 
 def _compat_dict(self: PyDivEntity) -> dict[str, Any]:
-    result = _ORIG_DICT(self)
-    cls = type(self)
-    constructor_values = _constructor_values_get(self)
-    defaults = getattr(cls, "__dk_defaults__", {})
-    is_template = getattr(cls, "__dk_is_template__", False)
-    if not constructor_values and not defaults and not is_template:
-        return result
-    if constructor_values:
-        for field_name, constructor_value in constructor_values.items():
-            if field_name not in result:
-                continue
-            current = result[field_name]
-            if isinstance(constructor_value, PyDivEntity):
-                raw_value = constructor_value
-            else:
-                try:
-                    # Avoid compat __getattribute__ overhead on hot dict() path.
-                    # Constructor-backed mutable values are still taken from cache above.
-                    raw_value = _ORIG_GETATTRIBUTE(self, field_name)
-                except Exception:
-                    continue
-            if (
-                isinstance(raw_value, (str, bytes))
-                and isinstance(constructor_value, (Sequence, Mapping, PyDivEntity))
-                and not isinstance(constructor_value, (str, bytes))
-            ):
-                # Rust serializer stringifies tuple-like inputs in some fields.
-                # If runtime value is a string repr, reuse normalized constructor input.
-                raw_value = constructor_value
-            if isinstance(raw_value, PyDivEntity):
-                dumped_raw = _dump(raw_value)
-                if dumped_raw != current:
-                    result[field_name] = dumped_raw
-                continue
-            if isinstance(raw_value, (str, bytes)):
-                continue
-            if isinstance(raw_value, (Sequence, Mapping, PyDivEntity)):
-                dumped_raw = _dump(raw_value)
-                if dumped_raw != current:
-                    result[field_name] = dumped_raw
-    for field_name, default in defaults.items():
-        if field_name in result or default is None:
-            continue
-        result[field_name] = _dump(default)
-    if is_template:
-        result["type"] = _template_name_for_class(cls)
-    return result
+    return _ORIG_DICT(self)
 
 
 def _compat_schema(target: Any, exclude_fields: list[str] | None = None) -> dict[str, Any]:
