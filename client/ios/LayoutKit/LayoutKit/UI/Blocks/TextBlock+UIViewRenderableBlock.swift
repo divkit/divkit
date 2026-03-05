@@ -125,6 +125,8 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
 private class GradientContainerView: UIView {
   let gradientView: UIView
 
+  private var maskingView: UIView?
+
   private let model: TextBlock.GradientModel
   private let rangedTextWithColorTextBlockView: TextBlockView
 
@@ -133,8 +135,8 @@ private class GradientContainerView: UIView {
       return nil
     }
     self.model = model
+    self.maskingView = mask
     gradientView = model.gradient.uiView
-    gradientView.mask = mask
 
     rangedTextWithColorTextBlockView = TextBlockView()
 
@@ -152,6 +154,10 @@ private class GradientContainerView: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
     gradientView.frame = bounds
+    if let maskingView {
+      gradientView.mask = maskingView
+      self.maskingView = nil
+    }
     rangedTextWithColorTextBlockView.frame = bounds
   }
 
