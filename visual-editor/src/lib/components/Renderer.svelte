@@ -3745,7 +3745,9 @@
         width: 100%;
         height: 100%;
         background: 0 0 repeat url(../../assets/alpha.png);
+        background-size: 16px 16px;
         opacity: .3;
+        image-rendering: pixelated;
     }
 
     .renderer__content-inner {
