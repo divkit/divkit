@@ -4,6 +4,9 @@
 * Deprecated `UriHandler` interface.
 * Fix invalid timezone offsets during datetime formatting.
 
+# iOS Client:
+* Fix text gradient rendering when reusing text view with non-zero frame.
+
 
 ## 32.39.0
 
