@@ -87,6 +87,16 @@
                 sources: [],
                 layout: getEditorLayoutByPanel(selectedPanel),
                 paletteEnabled: true,
+                fitViewportOnCreate: true,
+                imageConversion: {
+                    quality: .75,
+                    formats: {
+                        png: true,
+                        jpg: true,
+                        webp: true,
+                        // avif: true
+                    }
+                },
                 api: {
                     onChange() {
                         valueStore.set(instance.getValue());
@@ -227,6 +237,7 @@
 
     .design__editor {
         flex: 1 1 auto;
+        min-width: 0;
     }
 
     :global(.design__code-highlight) {
