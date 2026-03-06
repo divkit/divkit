@@ -479,6 +479,18 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "expression": "@{getTimestamp(parseUnixTime(259200))}",
+      "expected": {
+        "type": "integer",
+        "value": 259200000
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     }
   ]
 }

@@ -25,6 +25,7 @@ extension [String: Function] {
     addFunction("getMinutes", getMinutes)
     addFunction("getSeconds", getSeconds)
     addFunction("getMillis", getMillis)
+    addFunction("getTimestamp", getTimestamp)
 
     addFunction("formatDateAsLocal", formatDateAsLocal)
     addFunction("formatDateAsLocalWithLocale", formatDateAsLocalWithLocale)
@@ -185,6 +186,10 @@ private let getSeconds = FunctionUnary<Date, Int> {
 
 private let getMillis = FunctionUnary<Date, Int> {
   Int($0.timeIntervalSince1970.truncatingRemainder(dividingBy: 1) * 1000)
+}
+
+private let getTimestamp = FunctionUnary<Date, Int> {
+  Int($0.timeIntervalSince1970 * 1000)
 }
 
 private let formatDateAsLocal = FunctionBinary<Date, String, String> {

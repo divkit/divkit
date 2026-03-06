@@ -442,6 +442,26 @@
       ]
     },
     {
+      "name": "getTimestamp",
+      "description": {
+        "$ref": "translations.json#/gettimestamp_datetime"
+      },
+      "arguments": [
+        {
+          "type": "datetime",
+          "description": {
+            "$ref": "translations.json#/gettimestamp_datetime_arg0"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
       "name": "formatDateAsLocal",
       "description": {
         "$ref": "translations.json#/formatdateaslocal_datetime_string"
