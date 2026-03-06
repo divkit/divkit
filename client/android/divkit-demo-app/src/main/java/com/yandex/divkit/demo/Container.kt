@@ -83,14 +83,20 @@ internal object Container {
             }
     }
 
-    val imageLoader by lazy {
-        val loader = when (preferences.imageLoader) {
+    val imageLoader get() = imageLoaderOverride ?: defaultImageLoader
+
+    private val defaultImageLoader by lazy { createImageLoader(preferences.imageLoader) }
+
+    fun createImageLoader(loader: Preferences.ImageLoaderOption): DemoDivImageLoaderWrapper {
+        val loader = when (loader) {
             Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
             Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context, preferences.limitImageBitmapSizeEnabled)
             Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
         }
-        DemoDivImageLoaderWrapper(loader)
+        return DemoDivImageLoaderWrapper(loader)
     }
+
+    var imageLoaderOverride: DemoDivImageLoaderWrapper? = null
 
     val uriHandler by lazy { DivkitDemoUriHandler(context) }
 

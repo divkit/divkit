@@ -93,6 +93,11 @@ class DivScreenshotActivity : AppCompatActivity() {
         unregisterReceiver(broadcastReceiver)
     }
 
+    override fun onDestroy() {
+        Container.imageLoaderOverride = null
+        super.onDestroy()
+    }
+
     private fun setImageLoader() {
         val loader = when (imageLoaderName) {
             IMAGE_LOADER_PICASSO -> Preferences.ImageLoaderOption.PICASSO
@@ -100,7 +105,7 @@ class DivScreenshotActivity : AppCompatActivity() {
             IMAGE_LOADER_COIL -> Preferences.ImageLoaderOption.COIL
             else -> return
         }
-        Container.preferences.imageLoader = loader
+        Container.imageLoaderOverride = Container.createImageLoader(loader)
     }
 
     fun getTestCaseJson() = cardAssetName?.let { assetReader.read(it) }

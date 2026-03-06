@@ -9,6 +9,8 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
 
     private val targets = TargetList()
 
+    override fun hasSvgSupport() = loader.hasSvgSupport()
+
     override fun needLimitBitmapSize(): Boolean = loader.needLimitBitmapSize()
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
