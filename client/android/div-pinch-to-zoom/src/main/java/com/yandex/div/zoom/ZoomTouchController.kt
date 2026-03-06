@@ -25,10 +25,8 @@ internal class ZoomTouchController(
     private val tempPoint = PointF()
     private val tempIntArray = IntArray(2)
 
-    fun startZoomTouch(sourceView: View, event: MotionEvent): Boolean {
-        if (isInZoom) {
-            return false
-        }
+    fun startZoomTouch(sourceView: View, event: MotionEvent) {
+        if (isInZoom) return
 
         gestureDetector.onTouchEvent(event)
         event.focalPoint(initialFocalPoint)
@@ -46,8 +44,6 @@ internal class ZoomTouchController(
 
         sourceView.parent?.requestDisallowInterceptTouchEvent(true)
         sourceView.visibility = View.INVISIBLE
-
-        return true
     }
 
     fun updateZoomTouch(event: MotionEvent) {
