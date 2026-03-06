@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "divkit-rs"
-version = "32.39.0"
+version = "32.39.0.post1"
 description = "Fast Rust-backed DivKit JSON builder with Python bindings"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
