@@ -62,7 +62,7 @@ internal class InteractiveScreenshotSteps {
                 handleStepActions(activity.divView, step)
             }
 
-            waitForConditions(step.delay)
+            waitForConditions(activity, step.delay)
 
             captureScreenshots(
                 activity.divView,
@@ -85,8 +85,8 @@ internal class InteractiveScreenshotSteps {
         }
     }
 
-    private fun waitForConditions(delay: Long) {
-        waitForImages()
+    private fun waitForConditions(activity: DivScreenshotActivity, delay: Long) {
+        waitForImages { activity }
         Espresso.onIdle()
         Thread.sleep(delay)
     }

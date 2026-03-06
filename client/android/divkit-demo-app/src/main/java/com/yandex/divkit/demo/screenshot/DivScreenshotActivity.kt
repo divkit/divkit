@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.divContext
@@ -151,6 +153,17 @@ class DivScreenshotActivity : AppCompatActivity() {
         when (val view = findViewById<View>(R.id.morda_screenshot_div)) {
             is Div2View -> {
                 view.setData(view.divData, view.dataTag)
+            }
+        }
+    }
+
+    fun stopAnimations() = divView.stopAnimations()
+
+    private fun ViewGroup.stopAnimations() {
+        for (child in children) {
+            when (child) {
+                is LoadableImageView -> (child.drawable as? Animatable)?.stop()
+                is ViewGroup -> child.stopAnimations()
             }
         }
     }

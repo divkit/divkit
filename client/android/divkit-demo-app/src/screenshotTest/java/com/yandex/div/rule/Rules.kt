@@ -4,6 +4,7 @@ package com.yandex.div.rule
 
 import android.app.Activity
 import com.yandex.div.steps.waitForImages
+import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
@@ -24,7 +25,9 @@ fun screenshotRule(
     relativePath: String = "",
 ): TestRule {
     val screenshotRule = ScreenshotRule(relativePath, casePath)
-    screenshotRule.beforeScreenshotTaken { waitForImages() }
+    screenshotRule.beforeScreenshotTaken {
+        waitForImages { activityRule.activity as? DivScreenshotActivity }
+    }
     return baseRule(casePath, activityRule)
         .chain(screenshotRule)
 }
