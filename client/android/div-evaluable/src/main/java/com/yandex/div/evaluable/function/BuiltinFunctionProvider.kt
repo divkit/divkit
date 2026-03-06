@@ -119,6 +119,7 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetMinutes)
         registry.register(GetSeconds)
         registry.register(GetMillis)
+        registry.register(GetTimestamp)
         registry.register(FormatDateAsLocal)
         registry.register(FormatDateAsUTC)
         registry.register(FormatDateAsLocalWithLocale)

@@ -530,6 +530,26 @@ internal object GetMillis : Function() {
     }
 }
 
+internal object GetTimestamp : Function() {
+
+    override val name = "getTimestamp"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val datetime = args[0] as DateTime
+        return datetime.timestampMillis
+    }
+}
+
 internal object FormatDateAsLocal : Function() {
     override val name = "formatDateAsLocal"
 

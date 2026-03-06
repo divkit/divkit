@@ -752,6 +752,14 @@
     "en": "Datetime value, date to get milliseconds.",
     "ru": "Значение даты и времени, дата для получения миллисекунд."
   },
+  "gettimestamp_datetime": {
+    "en": "Returns the datetime value as timestamp in milliseconds.",
+    "ru": "Возвращает значение даты и времени в миллисекундах."
+  },
+  "gettimestamp_datetime_arg0": {
+    "en": "Datetime value to convert to timestamp in milliseconds.",
+    "ru": "Значение даты и времени для преобразования в миллисекунды."
+  },
   "getminutes_datetime": {
     "en": "Returns minutes number of original date.",
     "ru": "Возвращает значение минут исходной даты."

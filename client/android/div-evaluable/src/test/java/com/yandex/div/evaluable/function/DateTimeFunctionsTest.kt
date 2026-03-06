@@ -97,4 +97,21 @@ class DateTimeFunctionsTest {
 
         Assert.assertEquals(dateTime.toString(), formattedDateTime)
     }
+
+    @Test
+    fun getTimestampReturnsDateTimeInMilliseconds() {
+        val timestampMillis = 1772107200000L
+        val dateTime = DateTime(
+            timestampMillis,
+            TimeZone.getTimeZone("GMT+1")
+        )
+
+        val result = GetTimestamp.invoke(
+            evaluationContext,
+            expressionContext,
+            args = listOf(dateTime)
+        )
+
+        Assert.assertEquals(timestampMillis, result)
+    }
 }
