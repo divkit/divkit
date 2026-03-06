@@ -14,13 +14,13 @@
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { correctColor, correctColorWithAlpha, parseColor } from '../../utils/correctColor';
-    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { getBackground } from '../../utils/background';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { shadowToCssFilter } from '../../utils/shadow';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
     import { variationSettingsToString } from '../../utils/variationSettings';
+    import { isNumber } from '../../utils/isNumber';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let text: string;
@@ -104,7 +104,7 @@
     }
 
     $: {
-        if (isNonNegativeNumber(textStyles.letter_spacing)) {
+        if (isNumber(textStyles.letter_spacing)) {
             letterSpacing = pxToEm(textStyles.letter_spacing);
         }
     }

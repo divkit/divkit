@@ -15,6 +15,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { WrapContentSize } from '../../types/sizes';
     import { correctTabDelimiterStyle, type TabsDelimiter } from '../../utils/correctTabDelimiterStyle';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
@@ -37,12 +38,12 @@
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
     import { Truthy } from '../../utils/truthy';
+    import { variationSettingsToString } from '../../utils/variationSettings';
+    import { isNumber } from '../../utils/isNumber';
     import Outer from '../utilities/Outer.svelte';
     import Actionable from '../utilities/Actionable.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
     import EnabledContext from '../utilities/EnabledContext.svelte';
-    import type { WrapContentSize } from '../../types/sizes';
-  import { variationSettingsToString } from '../../utils/variationSettings';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -298,7 +299,7 @@
 
     $: {
         const letterSpacing = tabStyle.letter_spacing;
-        if (letterSpacing !== undefined && isNonNegativeNumber(letterSpacing)) {
+        if (letterSpacing !== undefined && isNumber(letterSpacing)) {
             tabLetterSpacing = pxToEm(letterSpacing / tabFontSize * 10);
         }
     }

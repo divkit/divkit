@@ -252,6 +252,33 @@
     {
       "div_actions": [
         {
+          "url": "div-action://set_variable?name=text&value=9-negative%20letter%20spacing",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=letter_spacing&value=-1",
+          "log_id": "letter_spacing"
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=text",
+          "log_id": "restore: font_family"
+        },
+        {
+          "log_id": "restore: font_variations",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "font_variations",
+            "value": {
+              "type": "dict",
+              "value": {}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
           "url": "div-action://set_variable?name=text&value=initial_text",
           "log_id": "restore: text"
         },
