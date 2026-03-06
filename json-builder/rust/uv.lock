@@ -13,7 +13,7 @@ wheels = [
 
 [[package]]
 name = "divkit-rs"
-version = "32.39.0+rs.1"
+version = "32.39.0.post1"
 source = { editable = "." }
 
 [package.dev-dependencies]
