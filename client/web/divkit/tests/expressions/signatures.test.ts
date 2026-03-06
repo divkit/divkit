@@ -12,7 +12,7 @@ const fs = require('fs');
 
 const dir = path.resolve(__filename, '../../../../../../expression-api');
 
-const tests = fs.readdirSync(dir);
+const tests = fs.readdirSync(dir).filter((it: string) => it.endsWith('.json'));
 
 register();
 
@@ -41,7 +41,7 @@ function runCase(item: any) {
         }
     }
 
-    expect(func).not.toBeNull();
+    expect(func, `Missing func ${item.name}`).not.toBeNull();
 }
 
 describe('signatures', () => {

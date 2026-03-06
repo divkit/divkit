@@ -202,6 +202,13 @@ const getMillis = getter('getUTCMilliseconds');
 const formatAsLocal = makeFormat(false);
 const formatAsUTC = makeFormat(true);
 
+function getTimestamp(_ctx: EvalContext, datetime: DatetimeValue): IntegerValue {
+    return {
+        type: INTEGER,
+        value: toBigInt(datetime.value.getTime())
+    };
+}
+
 export function registerDatetime(): void {
     registerFunc('parseUnixTime', [INTEGER], parseUnixTime);
     registerFunc('parseUnixTimeAsLocal', [INTEGER], parseUnixTimeAsLocal);
@@ -229,4 +236,6 @@ export function registerDatetime(): void {
     registerFunc('formatDateAsUTC', [DATETIME, STRING], formatAsUTC);
     registerFunc('formatDateAsLocalWithLocale', [DATETIME, STRING, STRING], formatAsLocal);
     registerFunc('formatDateAsUTCWithLocale', [DATETIME, STRING, STRING], formatAsUTC);
+
+    registerFunc('getTimestamp', [DATETIME], getTimestamp);
 }

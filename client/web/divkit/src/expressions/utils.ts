@@ -8,6 +8,7 @@ import { MAX_INT, MIN_INT, toBigInt } from './bigint';
 import { BOOLEAN, NUMBER } from './const';
 import type { TypedValue } from '../../typings/common';
 import type { MaybeMissing } from './json';
+import type { FuncMatchError } from './funcs/funcs';
 
 export class FuncError extends Error {
 }
@@ -268,4 +269,42 @@ export function convertTypedValue(value: MaybeMissing<TypedValue>) {
     return convertDivKitValueToJson(
         convertJsValueToDivKit(undefined, value.value, value.type as EvalTypesWithoutDatetime)
     );
+}
+
+export function argsToStr(args: EvalValue[]): string {
+    return args.map(valToPreview).join(', ');
+}
+
+export function logFunctionMatchError(
+    funcName: string,
+    args: EvalValue[],
+    findRes: FuncMatchError,
+    isOuterFunc = false
+): never {
+    const argsType = args.map(arg => typeToString(arg.type)).join(', ');
+    const prefix = `${funcName}(${argsToStr(args)})`;
+    const makeError: (msg: string, details: string) => never =
+        isOuterFunc ? evalOuterError : evalError;
+
+    if (findRes.type === 'few' && args.length === 0 && findRes.hasOverloads) {
+        makeError(prefix, 'Function requires non empty argument list.');
+    } else if (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch') {
+        if (findRes.hasOverloads) {
+            makeError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
+        } else {
+            // eslint-disable-next-line no-lonely-if
+            if (findRes.type === 'many' || findRes.type === 'few') {
+                if (findRes.def.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
+                    makeError(prefix, `At least ${findRes.def.args.length} argument(s) expected.`);
+                } else {
+                    makeError(prefix, `Exactly ${findRes.def.args.length} argument(s) expected.`);
+                }
+            } else {
+                const expectedArgs = findRes.def.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
+                makeError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
+            }
+        }
+    } else {
+        makeError(prefix, `Unknown function name: ${funcName}.`);
+    }
 }

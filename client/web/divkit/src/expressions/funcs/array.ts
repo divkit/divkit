@@ -1,8 +1,8 @@
 import { parseColor } from '../../utils/correctColor';
 import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, FUNCTION, INTEGER, NUMBER, STRING, URL } from '../const';
-import { logFunctionMatchError, type ArrayValue, type BooleanValue, type ColorValue, type EvalContext, type EvalTypes, type EvalValue, type FuncValue, type IntegerValue, type NumberValue, type StringValue, type UrlValue } from '../eval';
-import { checkIntegerOverflow, checkUrl, convertJsValueToDivKit, safeCheckUrl, transformColorValue, typeToString } from '../utils';
+import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, FuncValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
+import { checkIntegerOverflow, checkUrl, convertJsValueToDivKit, logFunctionMatchError, safeCheckUrl, transformColorValue, typeToString } from '../utils';
 import { findBestMatchedFuncList, registerFunc, registerMethod, type Func, type FuncMatch } from './funcs';
 
 function arrayGetter(jsType: string, runtimeType: string) {

@@ -12,13 +12,14 @@ import type {
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { convertArgs, findBestMatchedFunc, type Func, funcByArgs, type FuncMatch, type FuncMatchError, funcs, methodByArgs, methods } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, type Func, funcByArgs, type FuncMatch, funcs, methodByArgs, methods } from './funcs/funcs';
 import {
+    argsToStr,
     checkIntegerOverflow,
     evalError,
-    evalOuterError,
     FuncError,
     integerToNumber,
+    logFunctionMatchError,
     roundInteger,
     typeToString,
     valToInternal,
@@ -443,10 +444,6 @@ function evalBinaryExpression(ctx: EvalContext, expr: BinaryExpression): EvalVal
     throw new Error(`Unsupported operation ${operator}`);
 }
 
-function argsToStr(args: EvalValue[]): string {
-    return args.map(valToPreview).join(', ');
-}
-
 function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     const funcName = expr.callee.name;
 
@@ -500,40 +497,6 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
 
         const prefix = `${funcName}(${argsToStr(args)})`;
         evalError(prefix, err.message);
-    }
-}
-
-export function logFunctionMatchError(
-    funcName: string,
-    args: EvalValue[],
-    findRes: FuncMatchError,
-    isOuterFunc = false
-): never {
-    const argsType = args.map(arg => typeToString(arg.type)).join(', ');
-    const prefix = `${funcName}(${argsToStr(args)})`;
-    const makeError: (msg: string, details: string) => never =
-        isOuterFunc ? evalOuterError : evalError;
-
-    if (findRes.type === 'few' && args.length === 0 && findRes.hasOverloads) {
-        makeError(prefix, 'Function requires non empty argument list.');
-    } else if (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch') {
-        if (findRes.hasOverloads) {
-            makeError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
-        } else {
-            // eslint-disable-next-line no-lonely-if
-            if (findRes.type === 'many' || findRes.type === 'few') {
-                if (findRes.def.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
-                    makeError(prefix, `At least ${findRes.def.args.length} argument(s) expected.`);
-                } else {
-                    makeError(prefix, `Exactly ${findRes.def.args.length} argument(s) expected.`);
-                }
-            } else {
-                const expectedArgs = findRes.def.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
-                makeError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
-            }
-        }
-    } else {
-        makeError(prefix, `Unknown function name: ${funcName}.`);
     }
 }
 
