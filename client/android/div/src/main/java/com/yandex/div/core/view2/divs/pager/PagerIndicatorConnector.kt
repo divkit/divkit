@@ -13,19 +13,20 @@ internal class PagerIndicatorConnector @Inject constructor() {
         val pagerDiv: DivPager,
     )
 
+    private val mutex = Any()
     private val pagers = mutableMapOf<DivPager, DivPagerView>()
     private val indicators = mutableListOf<IndicatorData>()
 
-    internal fun submitPager(pagerView: DivPagerView, pagerDiv: DivPager) {
+    internal fun submitPager(pagerView: DivPagerView, pagerDiv: DivPager): Unit = synchronized(mutex) {
         pagers[pagerDiv] = pagerView
     }
 
-    internal fun submitIndicator(indicatorView: DivPagerIndicatorView, pagerDiv: DivPager) {
+    internal fun submitIndicator(indicatorView: DivPagerIndicatorView, pagerDiv: DivPager): Unit = synchronized(mutex) {
         val indicatorData = IndicatorData(indicatorView, pagerDiv)
         indicators.add(indicatorData)
     }
 
-    internal fun attach() {
+    internal fun attach(): Unit = synchronized(mutex) {
         pagers.forEach {
             it.value.clearChangePageCallbackForIndicators()
         }
