@@ -30,7 +30,9 @@ describe('correctTabDelimiterStyle', () => {
         }, {
             url: 'a'
         })).toEqual({
-            url: 'b'
+            url: 'b',
+            width: 12,
+            height: 12
         });
 
         expect(correctTabDelimiterStyle({
@@ -43,7 +45,8 @@ describe('correctTabDelimiterStyle', () => {
             url: 'a'
         })).toEqual({
             url: 'b',
-            width: 10
+            width: 10,
+            height: 12
         });
 
         expect(correctTabDelimiterStyle({

@@ -62,7 +62,7 @@
     },
     "scripts": {
         "test:unit": "vitest",
-        "test:unit:ci": "vitest; sed -i 's/\"application\\/x-gzip\"/\"application\\/json\"/g' ci/vitest-report/assets/*",
+        "test:unit:ci": "vitest; exit_code=$?; sed -i 's/\"application\\/x-gzip\"/\"application\\/json\"/g' ci/vitest-report/assets/*; exit $exit_code",
         "test:testplane": "cd ci && ./node_modules/.bin/testplane",
         "test:testplane:gui": "cd ci && ./node_modules/.bin/testplane gui",
         "test:testplane:update": "cd ci && ./node_modules/.bin/testplane --update-refs",
