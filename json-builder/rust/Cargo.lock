@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "divkit-json-builder"
-version = "32.39.0-post1"
+version = "32.39.0-post2"
 dependencies = [
  "md-5",
  "pyo3",
