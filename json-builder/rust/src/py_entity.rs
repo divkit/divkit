@@ -1,9 +1,9 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PySet};
+use pyo3::types::{PyDict, PyList, PySet};
 
 use crate::entity::{DivData, DivDataState, Entity};
 use crate::field::FieldDescriptor;
@@ -154,7 +154,6 @@ impl PyDivEntity {
             }
         }
 
-        let collect_template_names = compat.getattr("_collect_template_names_from_json")?;
         let collect_related_from_value = compat.getattr("_collect_related_templates_from_value")?;
         let template_dependency_closure = compat.getattr("_template_dependency_closure")?;
         let template_registry = compat
@@ -174,10 +173,9 @@ impl PyDivEntity {
         }
 
         let payload = slf.borrow().dict(py)?;
-        let template_names = PySet::empty(py)?;
-        collect_template_names.call1((payload.bind(py), &template_names))?;
-        for name in template_names.iter() {
-            let template_name: String = name.extract()?;
+        let mut template_names = HashSet::new();
+        collect_template_names_from_json_payload(payload.bind(py), &mut template_names)?;
+        for template_name in template_names {
             if let Some(template_cls) = template_registry.get_item(template_name)? {
                 let closure = template_dependency_closure.call1((template_cls,))?;
                 related.call_method1("update", (closure,))?;
@@ -390,6 +388,30 @@ fn py_mapping_to_pyany_map(
         }
     }
     Ok(None)
+}
+
+fn collect_template_names_from_json_payload(
+    value: &Bound<'_, PyAny>,
+    out: &mut HashSet<String>,
+) -> PyResult<()> {
+    if let Ok(dict) = value.cast::<PyDict>() {
+        if let Some(type_name) = dict.get_item("type")? {
+            if let Ok(type_name) = type_name.extract::<String>() {
+                out.insert(type_name);
+            }
+        }
+        for (_, item) in dict.iter() {
+            collect_template_names_from_json_payload(&item, out)?;
+        }
+        return Ok(());
+    }
+
+    if let Ok(list) = value.cast::<PyList>() {
+        for item in list.iter() {
+            collect_template_names_from_json_payload(&item, out)?;
+        }
+    }
+    Ok(())
 }
 
 /// A dynamic Entity constructed from a HashMap at runtime.

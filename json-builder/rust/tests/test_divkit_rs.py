@@ -1257,6 +1257,31 @@ class TestPydivkitCompatibilityLayer:
         assert LateTpl.template_name in result_after["templates"]
         assert result_after["templates"][LateTpl.template_name]["type"] == "text"
 
+    def test_related_templates_updates_after_late_template_registration(self):
+        Root = type(
+            "RootRelated",
+            (DivContainer,),
+            {
+                "__module__": "late.related.module",
+                "items": [{"type": "late.related.module.LateTpl"}],
+            },
+        )
+
+        related_before = Root().related_templates()
+        assert all(
+            template.template_name != "late.related.module.LateTpl"
+            for template in related_before
+        )
+
+        LateTpl = type(
+            "LateTpl",
+            (DivText,),
+            {"__module__": "late.related.module"},
+        )
+
+        related_after = Root().related_templates()
+        assert LateTpl in related_after
+
     def test_related_templates_cached_result_is_not_mutated_by_caller(self):
         class Header(DivContainer):
             items = []
