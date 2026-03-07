@@ -3,7 +3,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList, PySet};
+use pyo3::types::{PyDict, PyList, PySet, PyTuple, PyType};
 
 use crate::entity::{DivData, DivDataState, Entity};
 use crate::field::FieldDescriptor;
@@ -15,6 +15,101 @@ use super::python::compat_dump_bound;
 // ── Cached type metadata registry (avoids per-instance Vec<String> alloc) ──
 static TYPE_META_CACHE: Mutex<Option<HashMap<String, EntityTypeMeta>>> = Mutex::new(None);
 static RELATED_TEMPLATES_CACHE_EPOCH: AtomicU64 = AtomicU64::new(1);
+static TEMPLATE_DEPENDENCY_CACHE: Mutex<Option<TemplateDependencyCache>> = Mutex::new(None);
+
+#[derive(Default)]
+struct TemplateDependencyCache {
+    epoch: u64,
+    closures: HashMap<String, Vec<Py<PyAny>>>,
+}
+
+fn class_template_name(class_obj: &Bound<'_, PyAny>) -> PyResult<String> {
+    if let Ok(name_obj) = class_obj.getattr("template_name") {
+        if let Ok(name) = name_obj.extract::<String>() {
+            return Ok(name);
+        }
+    }
+
+    let module_name: String = class_obj.getattr("__module__")?.extract()?;
+    let class_name: String = class_obj.getattr("__name__")?.extract()?;
+    Ok(format!("{module_name}.{class_name}"))
+}
+
+fn compute_template_dependency_closure(
+    py: Python<'_>,
+    template_cls: &Bound<'_, PyAny>,
+    template_registry: &Bound<'_, PyDict>,
+) -> PyResult<Vec<Py<PyAny>>> {
+    let epoch = RELATED_TEMPLATES_CACHE_EPOCH.load(Ordering::Relaxed);
+    let root_name = class_template_name(template_cls)?;
+
+    {
+        let mut guard = TEMPLATE_DEPENDENCY_CACHE.lock().unwrap();
+        let cache = guard.get_or_insert_with(TemplateDependencyCache::default);
+        if cache.epoch != epoch {
+            cache.epoch = epoch;
+            cache.closures.clear();
+        }
+        if let Some(cached) = cache.closures.get(&root_name) {
+            return Ok(cached.iter().map(|cls| cls.clone_ref(py)).collect());
+        }
+    }
+
+    let mut visited = HashSet::with_capacity(8);
+    let mut queue: Vec<Py<PyAny>> = vec![template_cls.clone().unbind()];
+    let mut closure = Vec::with_capacity(8);
+
+    while let Some(current_cls) = queue.pop() {
+        let current_bound = current_cls.bind(py);
+        let current_name = class_template_name(current_bound)?;
+        if !visited.insert(current_name) {
+            continue;
+        }
+
+        closure.push(current_cls.clone_ref(py));
+
+        if let Ok(base_type_obj) = current_bound.getattr("__dk_base_type__") {
+            if let Ok(base_type) = base_type_obj.extract::<String>() {
+                if let Some(parent_template) = template_registry.get_item(&base_type)? {
+                    queue.push(parent_template.unbind());
+                }
+            }
+        }
+
+        let is_template = current_bound
+            .getattr("__dk_is_template__")
+            .ok()
+            .and_then(|v| v.extract::<bool>().ok())
+            .unwrap_or(false);
+        if !is_template {
+            continue;
+        }
+
+        let template_body = current_bound.call_method0("template")?;
+        let mut template_names = HashSet::with_capacity(8);
+        collect_template_names_from_json_payload(template_body.as_any(), &mut template_names)?;
+        for template_name in template_names {
+            if let Some(nested_template) = template_registry.get_item(&template_name)? {
+                queue.push(nested_template.unbind());
+            }
+        }
+    }
+
+    {
+        let mut guard = TEMPLATE_DEPENDENCY_CACHE.lock().unwrap();
+        let cache = guard.get_or_insert_with(TemplateDependencyCache::default);
+        if cache.epoch != epoch {
+            cache.epoch = epoch;
+            cache.closures.clear();
+        }
+        cache.closures.insert(
+            root_name,
+            closure.iter().map(|cls| cls.clone_ref(py)).collect(),
+        );
+    }
+
+    Ok(closure)
+}
 
 /// Metadata for a registered entity type.
 #[derive(Clone)]
@@ -163,7 +258,6 @@ impl PyDivEntity {
         }
 
         let collect_related_from_value = compat.getattr("_collect_related_templates_from_value")?;
-        let template_dependency_closure = compat.getattr("_template_dependency_closure")?;
         let template_registry = compat
             .getattr("_TEMPLATE_REGISTRY")?
             .cast_into::<PyDict>()?;
@@ -176,8 +270,11 @@ impl PyDivEntity {
             .and_then(|v| v.extract::<bool>().ok())
             .unwrap_or(false);
         if is_template {
-            let closure = template_dependency_closure.call1((cls,))?;
-            related.call_method1("update", (closure,))?;
+            let closure =
+                compute_template_dependency_closure(py, cls.as_any(), &template_registry)?;
+            for template_cls in closure {
+                related.add(template_cls.bind(py))?;
+            }
         }
 
         let payload = slf.borrow().dict(py)?;
@@ -185,8 +282,14 @@ impl PyDivEntity {
         collect_template_names_from_json_payload(payload.bind(py), &mut template_names)?;
         for template_name in template_names {
             if let Some(template_cls) = template_registry.get_item(template_name)? {
-                let closure = template_dependency_closure.call1((template_cls,))?;
-                related.call_method1("update", (closure,))?;
+                let closure = compute_template_dependency_closure(
+                    py,
+                    template_cls.as_any(),
+                    &template_registry,
+                )?;
+                for nested_template_cls in closure {
+                    related.add(nested_template_cls.bind(py))?;
+                }
             }
         }
 
@@ -198,8 +301,11 @@ impl PyDivEntity {
                     .call1((value.as_ref().bind(py), &constructor_related))?;
             }
             for template_cls in constructor_related.iter() {
-                let closure = template_dependency_closure.call1((template_cls,))?;
-                related.call_method1("update", (closure,))?;
+                let closure =
+                    compute_template_dependency_closure(py, &template_cls, &template_registry)?;
+                for nested_template_cls in closure {
+                    related.add(nested_template_cls.bind(py))?;
+                }
             }
         }
 

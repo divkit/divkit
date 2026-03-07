@@ -1124,6 +1124,23 @@ class TestPydivkitCompatibilityLayer:
         assert result["templates"][ModuleLikeText.template_name]["type"] == "text"
         assert result["templates"][ModuleLikeText.template_name]["font_size"] == 16
 
+    def test_make_div_collects_transitive_template_dependencies(self):
+        class LeafTpl(DivText):
+            ranges = []
+
+        class MidTpl(DivContainer):
+            items = [{"type": LeafTpl.template_name}]
+
+        class RootTpl(DivContainer):
+            items = [{"type": MidTpl.template_name}]
+
+        root = DivContainer(items=[RootTpl(items=[])])
+        result = divkit_rs.make_div(root)
+
+        assert RootTpl.template_name in result["templates"]
+        assert MidTpl.template_name in result["templates"]
+        assert LeafTpl.template_name in result["templates"]
+
     def test_make_card_accepts_multiple_divs(self):
         card = divkit_rs.make_card(
             "card",
