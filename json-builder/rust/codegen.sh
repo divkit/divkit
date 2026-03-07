@@ -14,6 +14,12 @@ PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
     -s "$REPO_ROOT/schema" \
     -o src/generated
 
+# Generate Python type stub for native bindings
+PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
+    python "$SCRIPT_DIR/generate_native_pyi.py" \
+    -s "$REPO_ROOT/schema" \
+    -o "$SCRIPT_DIR/python/divkit_rs/_native.pyi"
+
 # Format generated code to match rustfmt expectations
 if command -v cargo >/dev/null 2>&1; then
     cargo fmt -- src/generated/*.rs
@@ -21,3 +27,4 @@ fi
 
 echo "Rust code generation complete."
 echo "Generated files in src/generated/"
+echo "Generated stub in python/divkit_rs/_native.pyi"
