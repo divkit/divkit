@@ -12,22 +12,19 @@ from divkit_rs._native import (
     DivData as NativeDivData,
 )
 from divkit_rs._native import (
-    DivDataState as NativeDivDataState,
-)
-from divkit_rs._native import (
     DivEdgeInsets as NativeDivEdgeInsets,
 )
 from divkit_rs._native import (
     PyDivData as NativePyDivData,
 )
 from divkit_rs._native import (
-    PyDivDataState as NativePyDivDataState,
-)
-from divkit_rs._native import (
     PyDivEntity,
 )
 from divkit_rs._native import (
     compat_dump as _compat_dump_native,
+)
+from divkit_rs._native import (
+    compat_make_card as _compat_make_card_native,
 )
 from divkit_rs._native import (
     normalize_pydivkit_json as _normalize_pydivkit_json,
@@ -549,13 +546,6 @@ def _compat_template(cls: type[PyDivEntity]) -> dict[str, Any]:
     return template
 
 
-def _dump_entities(items: Any) -> list[Any]:
-    dumped: list[Any] = []
-    for item in items or []:
-        dumped.append(item if isinstance(item, dict) else item.dict())
-    return dumped
-
-
 def _compat_make_card(
     log_id: str,
     *card_divs: PyDivEntity,
@@ -564,52 +554,14 @@ def _compat_make_card(
     variable_triggers: Any = None,
     timers: Any = None,
 ) -> NativePyDivData | NativeDivData:
-    if divs is not None and card_divs:
-        raise TypeError("Provide either positional divs or `divs=` keyword, not both")
-
-    selected_divs: tuple[PyDivEntity, ...]
-    if divs is not None:
-        selected_divs = tuple(divs)
-    else:
-        selected_divs = tuple(card_divs)
-
-    include_var_data = variables is not None or variable_triggers is not None or timers is not None
-    if (
-        variables is not None
-        and variable_triggers is None
-        and timers is None
-        and (
-            isinstance(variables, PyDivEntity)
-            or hasattr(variables, "variables")
-            or hasattr(variables, "variable_triggers")
-            or hasattr(variables, "timers")
-        )
-    ):
-        variable_triggers = getattr(variables, "variable_triggers", None)
-        timers = getattr(variables, "timers", None)
-        variables = getattr(variables, "variables", None)
-        include_var_data = True
-
-    if not include_var_data:
-        return NativePyDivData(
-            log_id=log_id,
-            states=[
-                NativePyDivDataState(state_id=index, div=div)
-                for index, div in enumerate(selected_divs)
-            ],
-        )
-
-    card = NativeDivData(
-        log_id=log_id,
-        states=[
-            NativeDivDataState(state_id=index, div=div) for index, div in enumerate(selected_divs)
-        ],
+    return _compat_make_card_native(
+        log_id,
+        *card_divs,
+        divs=divs,
+        variables=variables,
+        variable_triggers=variable_triggers,
+        timers=timers,
     )
-    if include_var_data:
-        card.variables = _dump_entities(variables)
-        card.variable_triggers = _dump_entities(variable_triggers)
-        card.timers = _dump_entities(timers)
-    return card
 
 
 def _compat_make_div(div: PyDivEntity) -> dict[str, Any]:

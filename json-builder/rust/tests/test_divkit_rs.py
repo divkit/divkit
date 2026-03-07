@@ -1176,6 +1176,17 @@ class TestPydivkitCompatibilityLayer:
         assert card["variable_triggers"] == []
         assert card["timers"] == []
 
+    def test_make_card_rejects_mixed_positional_and_divs_keyword(self):
+        with pytest.raises(
+            TypeError,
+            match="Provide either positional divs or `divs=` keyword, not both",
+        ):
+            divkit_rs.make_card(
+                "card",
+                DivText(text="first"),
+                divs=[DivText(text="second")],
+            )
+
     def test_actions_getattr_returns_entities(self):
         text = DivText(
             text="hello",

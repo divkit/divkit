@@ -228,6 +228,129 @@ fn compat_dump(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> 
     compat_dump_bound(py, value)
 }
 
+fn getattr_or_none<'py>(
+    obj: &Bound<'py, PyAny>,
+    attr_name: &str,
+) -> PyResult<Option<Bound<'py, PyAny>>> {
+    match obj.getattr(attr_name) {
+        Ok(value) if !value.is_none() => Ok(Some(value)),
+        Ok(_) => Ok(None),
+        Err(err) => {
+            if err.is_instance_of::<pyo3::exceptions::PyAttributeError>(obj.py()) {
+                Ok(None)
+            } else {
+                Err(err)
+            }
+        }
+    }
+}
+
+fn dump_entities(py: Python<'_>, items: Option<&Bound<'_, PyAny>>) -> PyResult<Py<PyAny>> {
+    let dumped = PyList::empty(py);
+    if let Some(seq) = items {
+        for item in seq.try_iter()? {
+            let item = item?;
+            if item.cast::<PyDict>().is_ok() {
+                dumped.append(item)?;
+            } else {
+                dumped.append(item.call_method0("dict")?)?;
+            }
+        }
+    }
+    Ok(dumped.into_any().unbind())
+}
+
+#[pyfunction(signature = (log_id, *card_divs, divs=None, variables=None, variable_triggers=None, timers=None))]
+fn compat_make_card(
+    py: Python<'_>,
+    log_id: &str,
+    card_divs: &Bound<'_, PyTuple>,
+    divs: Option<&Bound<'_, PyAny>>,
+    variables: Option<&Bound<'_, PyAny>>,
+    variable_triggers: Option<&Bound<'_, PyAny>>,
+    timers: Option<&Bound<'_, PyAny>>,
+) -> PyResult<Py<PyAny>> {
+    let keyword_divs = divs.filter(|value| !value.is_none());
+    if keyword_divs.is_some() && !card_divs.is_empty() {
+        return Err(pyo3::exceptions::PyTypeError::new_err(
+            "Provide either positional divs or `divs=` keyword, not both",
+        ));
+    }
+
+    let selected_divs: Vec<Py<PyAny>> = if let Some(divs_value) = keyword_divs {
+        divs_value
+            .try_iter()?
+            .map(|item| item.map(|v| v.unbind()))
+            .collect::<PyResult<_>>()?
+    } else {
+        card_divs.iter().map(|item| item.unbind()).collect()
+    };
+
+    let mut variables_obj = variables.filter(|value| !value.is_none()).cloned();
+    let mut variable_triggers_obj = variable_triggers.filter(|value| !value.is_none()).cloned();
+    let mut timers_obj = timers.filter(|value| !value.is_none()).cloned();
+
+    let mut include_var_data =
+        variables_obj.is_some() || variable_triggers_obj.is_some() || timers_obj.is_some();
+
+    if let Some(variables_value) = variables_obj.as_ref() {
+        if variable_triggers_obj.is_none() && timers_obj.is_none() {
+            let is_container_like = variables_value.extract::<PyRef<'_, PyDivEntity>>().is_ok()
+                || variables_value.hasattr("variables")?
+                || variables_value.hasattr("variable_triggers")?
+                || variables_value.hasattr("timers")?;
+            if is_container_like {
+                variable_triggers_obj = getattr_or_none(variables_value, "variable_triggers")?;
+                timers_obj = getattr_or_none(variables_value, "timers")?;
+                variables_obj = getattr_or_none(variables_value, "variables")?;
+                include_var_data = true;
+            }
+        }
+    }
+
+    if !include_var_data {
+        let mut states = Vec::with_capacity(selected_divs.len());
+        for (index, div_obj) in selected_divs.into_iter().enumerate() {
+            states.push(PyDivDataState {
+                state_id: index as i64,
+                div: div_obj.bind(py).extract()?,
+            });
+        }
+        return Ok(Py::new(
+            py,
+            PyDivData {
+                log_id: log_id.to_string(),
+                states,
+            },
+        )?
+        .into_any());
+    }
+
+    let dumped_variables = dump_entities(py, variables_obj.as_ref())?;
+    let dumped_variable_triggers = dump_entities(py, variable_triggers_obj.as_ref())?;
+    let dumped_timers = dump_entities(py, timers_obj.as_ref())?;
+
+    let native = py.import("divkit_rs._native")?;
+    let div_data_state_cls = native.getattr("DivDataState")?;
+    let div_data_cls = native.getattr("DivData")?;
+
+    let states = PyList::empty(py);
+    for (index, div_obj) in selected_divs.into_iter().enumerate() {
+        let kwargs = PyDict::new(py);
+        kwargs.set_item("state_id", index as i64)?;
+        kwargs.set_item("div", div_obj.bind(py))?;
+        states.append(div_data_state_cls.call((), Some(&kwargs))?)?;
+    }
+
+    let kwargs = PyDict::new(py);
+    kwargs.set_item("log_id", log_id)?;
+    kwargs.set_item("states", states)?;
+    kwargs.set_item("variables", dumped_variables.bind(py))?;
+    kwargs.set_item("variable_triggers", dumped_variable_triggers.bind(py))?;
+    kwargs.set_item("timers", dumped_timers.bind(py))?;
+    Ok(div_data_cls.call((), Some(&kwargs))?.unbind())
+}
+
 /// The native Python module `divkit_rs._native`.
 #[pymodule]
 pub fn _native(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -241,6 +364,7 @@ pub fn _native(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     m.add_function(wrap_pyfunction!(make_div, m)?)?;
     m.add_function(wrap_pyfunction!(make_card, m)?)?;
+    m.add_function(wrap_pyfunction!(compat_make_card, m)?)?;
     m.add_function(wrap_pyfunction!(compat_dump, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_pydivkit_json, m)?)?;
     m.add_function(wrap_pyfunction!(register_type_meta, m)?)?;
