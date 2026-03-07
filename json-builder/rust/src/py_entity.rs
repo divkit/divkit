@@ -3,7 +3,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList, PySet, PyTuple, PyType};
+use pyo3::types::{PyBytes, PyDict, PyList, PySet, PyString, PyTuple, PyType};
 
 use crate::entity::{DivData, DivDataState, Entity};
 use crate::field::FieldDescriptor;
@@ -109,6 +109,74 @@ fn compute_template_dependency_closure(
     }
 
     Ok(closure)
+}
+
+fn collect_related_from_constructor_value(
+    py: Python<'_>,
+    value: &Bound<'_, PyAny>,
+    template_registry: &Bound<'_, PyDict>,
+    out: &Bound<'_, PySet>,
+    visited: &mut HashSet<usize>,
+) -> PyResult<()> {
+    let ptr = value.as_ptr() as usize;
+    if !visited.insert(ptr) {
+        return Ok(());
+    }
+
+    if let Ok(class_obj) = value.cast::<PyType>() {
+        let pydiv_entity_type = py.get_type::<PyDivEntity>();
+        if class_obj.is_subclass(&pydiv_entity_type)? {
+            out.add(value)?;
+            return Ok(());
+        }
+    }
+
+    if value.extract::<PyRef<'_, PyDivEntity>>().is_ok() {
+        let related = value.call_method0("related_templates")?;
+        out.call_method1("update", (&related,))?;
+        return Ok(());
+    }
+
+    if let Ok(dict) = value.cast::<PyDict>() {
+        if let Some(type_name_obj) = dict.get_item("type")? {
+            if let Ok(type_name) = type_name_obj.extract::<String>() {
+                if let Some(template_cls) = template_registry.get_item(&type_name)? {
+                    out.add(template_cls)?;
+                }
+            }
+        }
+        for (_, item) in dict.iter() {
+            collect_related_from_constructor_value(py, &item, template_registry, out, visited)?;
+        }
+        return Ok(());
+    }
+
+    if let Ok(list) = value.cast::<PyList>() {
+        for item in list.iter() {
+            collect_related_from_constructor_value(py, &item, template_registry, out, visited)?;
+        }
+        return Ok(());
+    }
+
+    if let Ok(tuple) = value.cast::<PyTuple>() {
+        for item in tuple.iter() {
+            collect_related_from_constructor_value(py, &item, template_registry, out, visited)?;
+        }
+        return Ok(());
+    }
+
+    let collections_abc = py.import("collections.abc")?;
+    let sequence_type = collections_abc.getattr("Sequence")?;
+    if value.is_instance(sequence_type.as_any())?
+        && !value.is_instance_of::<PyString>()
+        && !value.is_instance_of::<PyBytes>()
+    {
+        for item in value.try_iter()? {
+            collect_related_from_constructor_value(py, &item?, template_registry, out, visited)?;
+        }
+    }
+
+    Ok(())
 }
 
 /// Metadata for a registered entity type.
@@ -257,7 +325,6 @@ impl PyDivEntity {
             }
         }
 
-        let collect_related_from_value = compat.getattr("_collect_related_templates_from_value")?;
         let template_registry = compat
             .getattr("_TEMPLATE_REGISTRY")?
             .cast_into::<PyDict>()?;
@@ -296,9 +363,15 @@ impl PyDivEntity {
         let constructor_values = slf.borrow().constructor_values.clone();
         if let Some(values) = constructor_values {
             let constructor_related = PySet::empty(py)?;
+            let mut visited = HashSet::with_capacity(16);
             for value in values.values() {
-                collect_related_from_value
-                    .call1((value.as_ref().bind(py), &constructor_related))?;
+                collect_related_from_constructor_value(
+                    py,
+                    value.as_ref().bind(py).as_any(),
+                    &template_registry,
+                    &constructor_related,
+                    &mut visited,
+                )?;
             }
             for template_cls in constructor_related.iter() {
                 let closure =

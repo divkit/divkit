@@ -1311,6 +1311,27 @@ class TestPydivkitCompatibilityLayer:
         related.add(DivText)
         assert DivText not in root.related_templates()
 
+    def test_related_templates_collects_mixed_constructor_values(self):
+        class LeafTpl(DivText):
+            ranges = []
+
+        class MidTpl(DivContainer):
+            items = [{"type": LeafTpl.template_name}]
+
+        root = DivContainer(items=[])
+        root._set_constructor_values(
+            {
+                "tpl_type": MidTpl,
+                "tpl_entity": MidTpl(items=[]),
+                "tpl_dict": {"type": MidTpl.template_name, "items": [{"type": LeafTpl.template_name}]},
+                "tpl_list": [MidTpl(items=[]), {"type": LeafTpl.template_name}],
+            }
+        )
+
+        related = root.related_templates()
+        assert MidTpl in related
+        assert LeafTpl in related
+
     def test_div_module_namespaces(self):
         import divkit_rs.div as div
 
