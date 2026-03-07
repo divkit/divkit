@@ -580,7 +580,6 @@ def install_pydivkit_compat() -> None:
     PyDivEntity.__init__ = _compat_entity_init
     PyDivEntity.__getattribute__ = _compat_getattribute
     PyDivEntity.__init_subclass__ = classmethod(_compat_init_subclass)
-    PyDivEntity.dict = _compat_dict
     PyDivEntity.schema = _DualMethod(_compat_schema)
     PyDivEntity.update_forward_refs = classmethod(lambda cls: None)
     PyDivEntity.template_name = classproperty(lambda cls: _template_name_for_class(cls))

@@ -345,7 +345,7 @@ impl PyDivEntity {
         }
 
         let payload = slf.borrow().dict(py)?;
-        let mut template_names = HashSet::new();
+        let mut template_names = HashSet::with_capacity(8);
         collect_template_names_from_json_payload(payload.bind(py), &mut template_names)?;
         for template_name in template_names {
             if let Some(template_cls) = template_registry.get_item(template_name)? {
@@ -360,11 +360,16 @@ impl PyDivEntity {
             }
         }
 
-        let constructor_values = slf.borrow().constructor_values.clone();
+        let constructor_values: Option<Vec<Arc<Py<PyAny>>>> = {
+            let this = slf.borrow();
+            this.constructor_values
+                .as_ref()
+                .map(|values| values.values().cloned().collect())
+        };
         if let Some(values) = constructor_values {
             let constructor_related = PySet::empty(py)?;
             let mut visited = HashSet::with_capacity(16);
-            for value in values.values() {
+            for value in values {
                 collect_related_from_constructor_value(
                     py,
                     value.as_ref().bind(py).as_any(),

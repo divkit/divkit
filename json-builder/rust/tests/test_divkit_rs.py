@@ -398,6 +398,12 @@ class TestIntegration:
         t = DivText(text="hi")
         assert t.build() == t.dict()
 
+    def test_compat_dict_function_matches_native_dict_output(self):
+        from divkit_rs._pydivkit_compat import _compat_dict
+
+        t = DivText(text="compat-check", max_lines=2)
+        assert _compat_dict(t) == t.dict()
+
     def test_getattr(self):
         t = DivText(text="hello", font_size=14)
         assert t.text == "hello"
