@@ -86,10 +86,18 @@ impl PyDivEntity {
     }
 
     pub(crate) fn dict(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
-        let entity = self.to_rust_entity();
-        let json_val = entity.dict();
-        let result_any = json_to_py(py, &json_val)?;
-        let result = result_any.bind(py).cast::<PyDict>()?;
+        let result = PyDict::new(py);
+
+        if let Some(type_name) = &self.type_meta.type_name {
+            result.set_item("type", type_name)?;
+        }
+
+        for (field_name, field_value) in &self.fields {
+            if field_value.is_null() {
+                continue;
+            }
+            result.set_item(field_name, json_to_py(py, &field_value.to_json())?)?;
+        }
 
         if self.constructor_dirty {
             if let Some(constructor_values) = &self.constructor_values {
@@ -124,7 +132,7 @@ impl PyDivEntity {
             result.set_item("type", type_name)?;
         }
 
-        Ok(result.clone().into_any().unbind())
+        Ok(result.into_any().unbind())
     }
 
     fn build(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
