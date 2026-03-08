@@ -12,10 +12,10 @@
   - `stubs`
   - `check-stubs`
 
-## Important fix applied
-- Fixed alias typing bug: `TypeAlias` unions are now per-`EntityEnumeration` members, not a union of all entities.
-- Example now correct:
-  - `DivSize = DivFixedSize | DivMatchParentSize | DivWrapContentSize`
+## Alias typing — verified correct
+- `TypeAlias` unions are per-`EntityEnumeration` members (not all entities).
+- `collect_declarations()` extracts specific members from each `EntityEnumeration.entities` list.
+- Example: `DivSize = DivFixedSize | DivMatchParentSize | DivWrapContentSize` (3 members, not 178)
 
 ## Verification
 - `make stubs` ✅
