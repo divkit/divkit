@@ -86,6 +86,9 @@ allprojects {
     }
 }
 
+tasks.register('unitTests')
+final def testTaskName = "test${project.property('testVariant').capitalize()}UnitTest"
+
 subprojects {
     tasks.withType(Test).configureEach {
         // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
@@ -94,18 +97,16 @@ subprojects {
         failOnNoDiscoveredTests = false
     }
 
+    unitTests.configure {
+        dependsOn tasks.matching { task -> task.name == testTaskName || task.name == 'lint' }
+    }
+
     configurations.configureEach {
         exclude group: "com.intellij", module: "annotations"
         exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"
     }
 
     afterEvaluate {
-        if (project.tasks.names.contains("lint")) {
-            project.tasks.named("lint").get().configure { task ->
-                unitTests.dependsOn(task)
-            }
-        }
-
         project.tasks.withType(PublishToMavenRepository).configureEach { task ->
             task.finalizedBy(reportBuildNumber)
         }
@@ -173,8 +174,6 @@ tasks.register('assembleDemoRelease') {
 tasks.register('assembleDemoReleaseBundle') {
     dependsOn ":divkit-demo-app:bundleRelease"
 }
-
-tasks.register('unitTests')
 
 tasks.register('finalVerification') {
     dependsOn unitTests
