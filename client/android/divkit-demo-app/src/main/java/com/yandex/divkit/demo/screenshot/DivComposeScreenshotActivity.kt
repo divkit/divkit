@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.createContext
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData

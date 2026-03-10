@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivReporter
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 
@@ -24,6 +25,10 @@ internal val divContext: DivContext
 internal val expressionResolver: ExpressionResolver
     @Composable
     get() = divContext.expressionResolver
+
+internal val reporter: DivReporter
+    @Composable
+    get() = divContext.reporter
 
 @Composable
 internal fun <T : Any> Expression<T>.evaluate(): T {

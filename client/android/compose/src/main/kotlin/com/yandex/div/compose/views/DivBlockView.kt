@@ -15,6 +15,6 @@ internal fun DivBlockView(
         is Div.Container -> DivContainerView(modifier, data.value)
         is Div.Image -> DivImageView(modifier, data.value)
         is Div.Text -> DivTextView(modifier, data.value)
-        else -> TODO()
+        else -> reporter.reportError("Element not supported")
     }
 }

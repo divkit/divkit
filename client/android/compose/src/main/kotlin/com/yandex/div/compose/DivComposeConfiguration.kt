@@ -1,13 +1,21 @@
 package com.yandex.div.compose
 
 import android.content.Context
-import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
+import com.yandex.div.core.annotations.PublicApi
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 
-class DivComposeConfiguration {
-    fun createContext(baseContext: Context): DivContext {
-        return DivContext(
-            baseContext = baseContext,
-            expressionResolver = ExpressionResolver.EMPTY
-        )
-    }
+@Module
+@PublicApi
+class DivComposeConfiguration(
+    @get:Provides val reporter: DivReporter = DivReporter()
+)
+
+fun DivComposeConfiguration.createContext(baseContext: Context): DivContext {
+    return `Yatagan$DivContextComponent`.builder()
+        .baseContext(baseContext)
+        .configuration(this)
+        .build()
+        .context
 }
