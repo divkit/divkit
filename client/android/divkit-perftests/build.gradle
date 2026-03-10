@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.yandex.divkit.perftests'
+    namespace = 'com.yandex.divkit.perftests'
 
     compileSdkVersion = rootProject.ext.compileSdkVersion
     buildToolsVersion = rootProject.ext.buildToolsVersion
@@ -15,11 +15,11 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.yandex.divkit.perftests'
+        applicationId = 'com.yandex.divkit.perftests'
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName '1.0.0'
+        versionCode = 1
+        versionName = '1.0.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 }

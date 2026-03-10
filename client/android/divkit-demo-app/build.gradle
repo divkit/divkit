@@ -17,7 +17,7 @@ repositories {
 }
 
 android {
-    namespace 'com.yandex.divkit.demo'
+    namespace = 'com.yandex.divkit.demo'
 
     buildFeatures {
         buildConfig = true
@@ -25,7 +25,7 @@ android {
     }
 
     defaultConfig {
-        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
+        versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
         buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(providers.gradleProperty("metricaApiKey").getOrElse(""))
         buildConfigField "boolean", "THROW_ASSERTS", "${!providers.gradleProperty("screenshot-tests").isPresent()}"

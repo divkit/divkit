@@ -4,17 +4,16 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace 'com.yandex.div.video'
+    namespace = 'com.yandex.div.video'
 }
 
 dependencies {
-    implementation project(path: ':div')
     implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':logging')
 
     implementation libs.exoplayer
-
     implementation libs.kotlin.corountines.core
-    implementation project(path: ':logging')
 }
 
 tasks.withType(KotlinCompile).configureEach {

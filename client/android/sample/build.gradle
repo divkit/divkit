@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.yandex.divkit.sample'
+    namespace = 'com.yandex.divkit.sample'
 
     buildFeatures {
         buildConfig = true
@@ -18,11 +18,11 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.yandex.divkit.sample'
+        applicationId = 'com.yandex.divkit.sample'
         minSdkVersion 23
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName '1.0.0'
+        versionCode = 1
+        versionName = '1.0.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
@@ -32,22 +32,23 @@ android {
 }
 
 dependencies {
-    implementation project(':div-core')
     implementation project(':div')
+    implementation project(':div-core')
     implementation project(':div-json')
-    implementation project(':picasso')
-    implementation project(':div-rive')
-    implementation project(':utils')
-    implementation project(':div-pinch-to-zoom')
     implementation project(':div-markdown')
+    implementation project(':div-pinch-to-zoom')
+    implementation project(':div-rive')
+    implementation project(':picasso')
+    implementation project(':utils')
 
-    implementation libs.androidx.coreKtx
     implementation libs.androidx.activity
     implementation libs.androidx.appcompat
-    implementation libs.androidx.material
     implementation libs.androidx.constraintlayout
+    implementation libs.androidx.coreKtx
+    implementation libs.androidx.material
     implementation libs.okhttp
 
     testImplementation libs.junit
+
     androidTestImplementation libs.androidx.espresso.core
 }

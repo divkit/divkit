@@ -5,7 +5,7 @@ apply from: "../div-tests.gradle"
 apply from: "../publish-android.gradle"
 
 android {
-    namespace "com.yandex.divkit.svg"
+    namespace = "com.yandex.divkit.svg"
 }
 
 dependencies {

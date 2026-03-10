@@ -8,10 +8,10 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace "com.yandex.div.compose.interop"
+    namespace = "com.yandex.div.compose.interop"
 
     buildFeatures {
-        compose true
+        compose = true
     }
 
     composeOptions {
@@ -21,14 +21,14 @@ android {
 
 dependencies {
     implementation project(path: ":assertion")
-    implementation project(path: ":logging")
     implementation project(path: ":div")
-
-    implementation libs.androidx.core
+    implementation project(path: ":logging")
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.foundation
     implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.core
+
     debugImplementation libs.androidx.compose.ui.tooling
 }
 

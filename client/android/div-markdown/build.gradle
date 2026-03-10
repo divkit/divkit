@@ -5,7 +5,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace 'com.yandex.div.markdown'
+    namespace = 'com.yandex.div.markdown'
 }
 
 dependencies {

@@ -3,7 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace 'com.yandex.div.zoom'
+    namespace = 'com.yandex.div.zoom'
 }
 
 dependencies {

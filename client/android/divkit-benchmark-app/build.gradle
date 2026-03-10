@@ -15,7 +15,7 @@ repositories {
 }
 
 android {
-    namespace 'com.yandex.divkit.benchmark'
+    namespace = 'com.yandex.divkit.benchmark'
 
     buildFeatures {
         buildConfig = true

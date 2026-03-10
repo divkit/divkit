@@ -3,7 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace "com.yandex.divkit.picasso"
+    namespace = "com.yandex.divkit.picasso"
 }
 
 dependencies {
@@ -12,7 +12,7 @@ dependencies {
     implementation project(path: ':utils')
 
     implementation libs.androidx.lifecycle.runtime
-    implementation libs.okhttp
     implementation libs.kotlin.corountines.core
+    implementation libs.okhttp
     implementation libs.picasso
 }

@@ -7,7 +7,7 @@ apply from: "../div-tests.gradle"
 apply from: "../publish-android.gradle"
 
 android {
-    namespace "com.yandex.divkit.glide"
+    namespace = "com.yandex.divkit.glide"
 }
 
 dependencies {
@@ -17,5 +17,6 @@ dependencies {
     implementation(libs.glide.core) {
         exclude group: "androidx.fragment", module: "fragment"
     }
+
     ksp libs.glide.ksp
 }

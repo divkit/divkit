@@ -2,12 +2,12 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace 'com.yandex.div.video.m3'
+    namespace = 'com.yandex.div.video.m3'
 }
 
 dependencies {
-    implementation project(path: ':div')
     implementation project(path: ':assertion')
+    implementation project(path: ':div')
     implementation project(path: ':logging')
 
     implementation libs.androidx.media3.exoplayer
@@ -16,6 +16,5 @@ dependencies {
     implementation libs.androidx.media3.exoplayer.rtsp
     implementation libs.androidx.media3.exoplayer.smoothstreaming
     implementation libs.androidx.media3.ui
-
     implementation libs.kotlin.corountines.core
 }

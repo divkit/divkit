@@ -3,7 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
-    namespace 'com.yandex.div.json'
+    namespace = 'com.yandex.div.json'
 }
 
 dependencies {

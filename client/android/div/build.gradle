@@ -15,9 +15,11 @@ def expressionApiDir = "${project.projectDir}/../../../expression-api/"
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
 
 android {
-    namespace 'com.yandex.div'
+    namespace = 'com.yandex.div'
 
-    buildFeatures { buildConfig = true }
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         buildConfigField "String", "EXPRESSION_API_PATH", JsonOutput.toJson(expressionApiDir)
@@ -56,9 +58,10 @@ dependencies {
     implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
+
     implementation libs.androidx.activity
-    implementation libs.androidx.coreKtx
     implementation libs.androidx.core
+    implementation libs.androidx.coreKtx
     implementation libs.androidx.recyclerview
     implementation libs.androidx.transition
     implementation libs.androidx.viewpager
