@@ -40,7 +40,7 @@ afterEvaluate {
 
     publishing {
         publications {
-            release(MavenPublication) {
+            withType(MavenPublication).configureEach {
                 pom {
                     name = "DivKit"
                     description = "DivKit is an open source Server-Driven UI (SDUI) framework. SDUI is a an emerging technique that leverage the server to build the user interfaces of their mobile app."
