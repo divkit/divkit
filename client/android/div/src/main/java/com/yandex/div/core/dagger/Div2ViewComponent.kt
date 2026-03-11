@@ -4,7 +4,6 @@ import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.binding.BindingCriticalSection
 import com.yandex.div.core.util.binding.BindingDispatcher
-import com.yandex.div.core.view.DrawingPassOverrideStrategy
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
@@ -19,6 +18,7 @@ import com.yandex.div.core.view2.errors.ErrorVisualMonitor
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
+import com.yandex.div.internal.view.DrawingPassOverrideStrategy
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 

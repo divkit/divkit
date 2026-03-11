@@ -1,8 +1,8 @@
 package com.yandex.div.internal.widget
 
 import android.view.ViewTreeObserver
-import com.yandex.div.core.view.DrawingPassOverrideStrategy
-import com.yandex.div.core.view.onPreDrawListener
+import com.yandex.div.internal.view.DrawingPassOverrideStrategy
+import com.yandex.div.internal.view.onPreDrawListener
 import com.yandex.div.internal.KLog
 
 /**

@@ -3,7 +3,7 @@ package com.yandex.div.core.widget
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
-import com.yandex.div.core.view.DrawingPassOverrideStrategy
+import com.yandex.div.internal.view.DrawingPassOverrideStrategy
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

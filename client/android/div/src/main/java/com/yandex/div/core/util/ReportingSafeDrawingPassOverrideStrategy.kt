@@ -3,8 +3,8 @@ package com.yandex.div.core.util
 import android.view.ViewTreeObserver.OnPreDrawListener
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.core.view.SafeDrawingPassOverrideStrategy
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.view.SafeDrawingPassOverrideStrategy
 import javax.inject.Inject
 
 @DivViewScope

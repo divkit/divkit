@@ -3,9 +3,9 @@ package com.yandex.div.sizeprovider
 import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.extension.DivExtensionHandler
-import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.pxToDp
+import com.yandex.div.internal.view.onPreDrawListener
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData

@@ -5,9 +5,8 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.core.view.ViewCompat
-import com.yandex.div.core.view.DrawingPassOverrideStrategy
-import com.yandex.div.core.view.onPreDrawListener
-import com.yandex.div.core.widget.AdaptiveMaxLines.Params
+import com.yandex.div.internal.view.DrawingPassOverrideStrategy
+import com.yandex.div.internal.view.onPreDrawListener
 
 /**
  * Adjust [TextView] max lines based on [Params].

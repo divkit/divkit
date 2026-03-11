@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.R
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.core.view.onPreDrawListener
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.internal.view.onPreDrawListener
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivLayoutProvider
