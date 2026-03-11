@@ -149,6 +149,11 @@ internal class DivVideoBinder @Inject constructor(
                 divActionBinder.handleActions(divView, resolver, div.fatalActions, DivActionReason.VIDEO)
             }
 
+            override fun onFatal(error: Throwable) {
+                divView.logError(RuntimeException("Playback in div with id '${div.id}' encountered an error:", error))
+                onFatal()
+            }
+
             override fun onReady() {
                 previewImageView.visibility = View.INVISIBLE
             }

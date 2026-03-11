@@ -33,7 +33,13 @@ interface DivPlayer {
         /**
          * Called when engine is unable to play due to internal error.
          */
+        @Deprecated("Avoid using without cause", replaceWith = ReplaceWith("onFatal(error)"))
         fun onFatal() = Unit
+
+        /**
+         * Called when engine is unable to play due to internal error, with the cause.
+         */
+        fun onFatal(error: Throwable): Unit = onFatal()
 
         /**
          * Called every second, passes the current playback time.

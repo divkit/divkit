@@ -33,7 +33,7 @@ class VideoCustomAdapter(
         expressionResolver: ExpressionResolver,
         path: DivStatePath
     ): View {
-        return VideoView(divView.context, div.videoConfig.zOrderMode, videoCustomViewController)
+        return VideoView(divView.context, div.videoConfig.zOrderMode, videoCustomViewController, divView)
     }
 
     override fun bindView(

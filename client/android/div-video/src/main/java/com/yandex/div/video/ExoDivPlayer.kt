@@ -69,7 +69,7 @@ internal class ExoDivPlayer(
 
         override fun onPlayerError(error: PlaybackException) {
             observers.forEach {
-                it.onFatal()
+                it.onFatal(error)
             }
         }
     }

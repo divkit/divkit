@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.SeekParameters
 import com.google.android.exoplayer2.ui.PlayerView
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ internal class VideoView(
     context: Context,
     zOrderMode: ZOrderMode = ZOrderMode.ON_TOP,
     private val videoCustomViewController: VideoCustomViewController,
+    private val divView: Div2View,
 ) : FrameLayout(context) {
     private val coroutineScope: CoroutineScope = MainScope()
     private var videoConfig: VideoConfig? = null
@@ -112,6 +114,7 @@ internal class VideoView(
 
         override fun onPlayerError(error: PlaybackException) {
             assertBoundToViewModel()
+            divView.logError(error)
             viewModel?.onPlaybackError(error)
         }
 
