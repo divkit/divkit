@@ -22,6 +22,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -256,9 +257,9 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?,
         subscriber: ExpressionSubscriber,
-        additionalLayer: Drawable? = null
+        additionalLayer: Drawable?
     ) {
-        target.bindBackground(context, newDiv, oldDiv, subscriber, additionalLayer)
+        target.bindBackground(context, newDiv, oldDiv, subscriber, false, additionalLayer)
         target.bindPaddings(newDiv, oldDiv, context.expressionResolver, subscriber)
     }
 
@@ -267,15 +268,27 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?,
         subscriber: ExpressionSubscriber,
+        checkEquality: Boolean = true,
         additionalLayer: Drawable? = null
     ) {
+        val newBackground = newDiv.background ?: emptyList()
+        val oldBackground = oldDiv?.background ?: emptyList()
+        val newFocusBackground = newDiv.focus?.background ?: emptyList()
+        val oldFocusBackground = oldDiv?.focus?.background ?: emptyList()
+
+        if (checkEquality &&
+            newBackground.compareWith(oldBackground) { left, right -> left.equalsToConstant(right) } &&
+            newFocusBackground.compareWith(oldFocusBackground) { left, right -> left.equalsToConstant(right) }) {
+            return
+        }
+
         divBackgroundBinder.bindBackground(
             context,
             this,
-            newDiv.background,
-            oldDiv?.background,
-            newDiv.focus?.background,
-            oldDiv?.focus?.background,
+            newBackground,
+            oldBackground,
+            newFocusBackground,
+            oldFocusBackground,
             subscriber,
             additionalLayer
         )
