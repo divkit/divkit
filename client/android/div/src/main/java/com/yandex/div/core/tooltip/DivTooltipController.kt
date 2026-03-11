@@ -244,11 +244,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
         popup.apply {
             isTouchable = true
             isOutsideTouchable = divTooltip.shouldDismissByOutsideTouch(resolver)
+            isFocusable = isModal
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                isFocusable = true
                 isTouchModal = isModal
-            } else {
-                isFocusable = isModal
             }
 
             setTouchInterceptor(
