@@ -156,7 +156,7 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         attachedViews.forEach { divView ->
-            (divView as? Div2View)?.runBindingAction {
+            divView.runBindingAction {
                 tryTriggerActions(divView)
             }
         }

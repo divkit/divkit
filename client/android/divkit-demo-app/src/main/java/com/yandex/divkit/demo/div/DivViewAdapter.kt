@@ -41,16 +41,12 @@ class DivViewAdapter(
         }
         if (startAnimationCount >= 0) {
             startAnimationCount--
-            (holder.view as? Div2View)?.startDivAnimation()
+            holder.view.startDivAnimation()
         }
         if (stopAnimationCount >= 0) {
             stopAnimationCount--
-            (holder.view as? Div2View)?.stopDivAnimation()
+            holder.view.stopDivAnimation()
         }
-    }
-
-    override fun onViewRecycled(holder: DivViewHolder) {
-        super.onViewRecycled(holder)
     }
 
     override fun getItemCount() = items.size

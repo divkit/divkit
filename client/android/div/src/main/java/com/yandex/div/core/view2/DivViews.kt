@@ -36,7 +36,7 @@ internal inline fun Div2View.runBindingAction(crossinline action: () -> Unit) {
     }
 }
 
-internal inline fun Div2View.postBindingAction(crossinline action: () -> Unit) {
+private inline fun Div2View.postBindingAction(crossinline action: () -> Unit) {
     val criticalSection = viewComponent.bindingCriticalSection
     val handle = criticalSection.enter()
     UiThreadHandler.postOnMainThread {
