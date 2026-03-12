@@ -60,6 +60,16 @@ internal class DivComposeExpressionResolver @Inject constructor(
         return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
     }
 
+    internal fun notifyVariableChanged(variableName: String) {
+        val expressions = varToExpressions[variableName].orEmpty()
+        expressions.forEach { rawExpression ->
+            evaluationsCache.remove(rawExpression)
+            expressionObservers[rawExpression]?.forEach { callback ->
+                callback.invoke()
+            }
+        }
+    }
+
     private fun <R : Any, T : Any> tryResolve(
         expressionKey: String,
         rawExpression: String,

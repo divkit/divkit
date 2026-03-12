@@ -34,7 +34,17 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             return listOf(
-                "snapshot_test_data/div-text/all_attributes.json"
+                "snapshot_test_data/div-separator/big_corner_radius.json",
+                "snapshot_test_data/div-separator/custom-color.json",
+                "snapshot_test_data/div-separator/custom-paddings.json",
+                "snapshot_test_data/div-separator/default-values.json",
+                "snapshot_test_data/div-separator/horizontal-fixed-height.json",
+                "snapshot_test_data/div-separator/horizontal-fixed-width.json",
+                "snapshot_test_data/div-separator/vertical-fixed-height.json",
+                "snapshot_test_data/div-separator/vertical-fixed-width.json",
+                "snapshot_test_data/div-separator/vertical-intrinsic-width.json",
+                "snapshot_test_data/div-separator/fixed-size-with-paddings.json",
+                "snapshot_test_data/div-text/all_attributes.json",
             ).withEscapedParameter()
         }
     }

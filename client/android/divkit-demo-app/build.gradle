@@ -109,6 +109,7 @@ dependencies {
     implementation libs.androidx.browser
     implementation libs.androidx.constraintlayout
     implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.foundation
     implementation libs.androidx.compose.ui
     implementation libs.androidx.preference
     implementation libs.androidx.test.uiautomator
