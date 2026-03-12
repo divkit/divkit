@@ -1,3 +1,9 @@
+## 32.41.0 (March 16, 2026)
+
+* Added `getTimestamp` function.
+* Added support for the negative `letter_spacing`.
+
+
 ## 32.38.0 (February 23, 2026)
 
 * Changed `lottie`s `repeat_count` logic (to better align with other platforms).

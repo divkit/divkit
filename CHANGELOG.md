@@ -1,3 +1,21 @@
+## 32.41.0
+
+# Android Client:
+* Added `getTimestamp` function.
+* Added error logging for video playing.
+* Fixed `ConcurrentModificationException` at `PagerIndicatorConnector.attach()` call.
+* Fixed an issue where non-modal tooltips intercepted the system back gesture on Android 10+.
+
+# iOS Client:
+* Added SVG support in div-image preview.
+* Added `getTimestamp` function.
+* Fixed z-order during transition_change animation.
+
+# Web Client:
+* Added `getTimestamp` function.
+* Added support for the negative `letter_spacing`.
+
+
 ## 32.40.0
 
 # Android Client:
