@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.variables.VariableSource
 import com.yandex.div.json.expressions.ExpressionResolver
 
 internal class VariableAndConstantController(

@@ -9,6 +9,8 @@ import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.util.UiThreadHandler
+import com.yandex.div.internal.variables.DeclarationObserver
+import com.yandex.div.internal.variables.VariableSource
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingVariable
 import java.util.Collections

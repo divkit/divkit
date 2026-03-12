@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
+import com.yandex.div.internal.variables.VariableRequestObserver
 
 @Deprecated("Do not use this class")
 @InternalApi
