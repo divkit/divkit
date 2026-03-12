@@ -7,12 +7,12 @@ import com.yandex.div.evaluable.EvaluableException
  *  Converts tokens to expression using this Mantras:
  *
  *  The Mantra of Expression
- *  expression -> try ( "?" expression ":" expression )?
- *  try -> or ( "!:" expression )?
+ *  expression -> or ( "?" expression ":" expression )?
  *  or -> and ( "||" and )*
  *  and -> equal ( "&&" equal )*
  *  equal -> comparison ( ( "!=" | "==" ) comparison )*
- *  comparison -> sum ( ( ">" | ">=" | "<" | "<=" ) sum )*
+ *  comparison -> try ( ( ">" | ">=" | "<" | "<=" ) try )*
+ *  try -> sum ( "!:" sum )*
  *  sum -> factor ( ( "-" | "+" ) factor )*
  *  factor -> unary ( ( "/" | "*" | "%") unary )*
  *  unary -> ( "!" | "-" | "+" ) unary | exponent
@@ -50,7 +50,7 @@ internal object Parser {
     }
 
     private fun expression(state: ParsingState): Evaluable {
-        val first = `try`(state)
+        val first = or(state)
         if (state.isNotAtEnd() && state.currentToken() is Token.Operator.TernaryIf) {
             state.forward()
             val second = expression(state)
@@ -65,10 +65,10 @@ internal object Parser {
     }
 
     private fun `try`(state: ParsingState): Evaluable {
-        val first = or(state)
+        val first = sum(state)
         if (state.isNotAtEnd() && state.currentToken() is Token.Operator.Try) {
             val token = state.next()
-            val second = expression(state)
+            val second = sum(state)
             return Evaluable.Try(token as Token.Operator.Try, first, second, state.rawExpr)
         }
         return first
@@ -105,10 +105,10 @@ internal object Parser {
     }
 
     private fun comparison(state: ParsingState): Evaluable {
-        var left = sum(state)
+        var left = `try`(state)
         while (state.isNotAtEnd() && state.currentToken() is Token.Operator.Binary.Comparison) {
             val operator = state.next()
-            val right = sum(state)
+            val right = `try`(state)
             left = Evaluable.Binary(operator as Token.Operator.Binary, left, right, state.rawExpr)
         }
         return left

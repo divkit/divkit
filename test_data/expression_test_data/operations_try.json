@@ -74,6 +74,168 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "expression": "@{undefined_var !: true || false}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{bool_var !: true || false}",
+      "variables": [
+        {
+          "name": "bool_var",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{undefined_var !: 'fallback' == 'fallback'}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{string_var !: 'fallback' == 'fallback'}",
+      "variables": [
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "defined"
+        }
+      ],
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{undefined_var !: 8 > 4}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{int_var !: 8 > 4}",
+      "variables": [
+        {
+          "name": "int_var",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{undefined_var !: 8 + 4}",
+      "expected": {
+        "type": "integer",
+        "value": 12
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{int_var !: 8 + 4}",
+      "variables": [
+        {
+          "name": "int_var",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{undefined_var !: 8 + 4 * 2}",
+      "expected": {
+        "type": "integer",
+        "value": 16
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{int_var !: 8 + 4 * 2}",
+      "variables": [
+        {
+          "name": "int_var",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{undefined_var !: 8 + 4 > 2}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{int_var !: 8 + 4 > 2}",
+      "variables": [
+        {
+          "name": "int_var",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
