@@ -3,6 +3,7 @@ package com.yandex.div.internal.util
 import androidx.collection.ArrayMap
 import com.yandex.div.core.annotations.InternalApi
 import java.util.Collections
+import java.util.WeakHashMap
 
 @InternalApi
 public fun <K, V> arrayMap(): MutableMap<K, V> = ArrayMap<K, V>()
@@ -62,4 +63,21 @@ public inline fun <T> List<T>?.compareNullableWith(other: List<T>?, comparator: 
     }
 
     return compareWith(other, comparator)
+}
+
+@InternalApi
+public fun <K, V> WeakHashMap<out K, V>.toMapSafe(): Map<K, V> {
+    if (isEmpty()) {
+        return emptyMap()
+    }
+
+    val result = mutableMapOf<K, V>()
+    val iterator = entries.iterator()
+    try {
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            result[entry.key] = entry.value
+        }
+    } catch (e: NoSuchElementException) { }
+    return result
 }
