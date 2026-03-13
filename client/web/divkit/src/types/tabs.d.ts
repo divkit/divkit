@@ -18,7 +18,9 @@ export interface TabsTitleStyle {
     letter_spacing?: number;
     font_weight?: FontWeight;
     active_font_weight?: FontWeight;
+    active_font_weight_value?: number;
     inactive_font_weight?: FontWeight;
+    inactive_font_weight_value?: number;
     font_family?: string;
     active_font_variation_settings?: FontVariationSettings;
     inactive_font_variation_settings?: FontVariationSettings;

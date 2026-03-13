@@ -1,0 +1,42 @@
+{
+  "description": "Test for active_font_weight_value and inactive_font_weight_value in tabs",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "tabs",
+          "tab_title_style": {
+            "active_font_weight_value": 700,
+            "inactive_font_weight_value": 300,
+            "font_size": 20,
+            "active_text_color": "#000000",
+            "inactive_text_color": "#888888"
+          },
+          "items": [
+            {
+              "title": "Active Tab (700)",
+              "div": {
+                "type": "text",
+                "text": "Active Tab Content"
+              }
+            },
+            {
+              "title": "Inactive Tab (300)",
+              "div": {
+                "type": "text",
+                "text": "Inactive Tab Content"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "log_id": "tabs-font-weight-value"
+  }
+}

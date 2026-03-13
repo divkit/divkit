@@ -50,6 +50,10 @@ public final class TabView extends SuperLineHeightTextView {
     private DivTypefaceType mInactiveTypefaceType;
     @Nullable
     private DivTypefaceType mActiveTypefaceType;
+    @Nullable
+    private Integer mInactiveTypefaceWeight;
+    @Nullable
+    private Integer mActiveTypefaceWeight;
 
     private boolean mIsActiveType;
 
@@ -89,6 +93,14 @@ public final class TabView extends SuperLineHeightTextView {
 
     public void setActiveTypefaceType(@Nullable DivTypefaceType activeTypefaceType) {
         mActiveTypefaceType = activeTypefaceType;
+    }
+
+    public void setInactiveTypefaceWeight(@Nullable Integer inactiveTypefaceWeight) {
+        mInactiveTypefaceWeight = inactiveTypefaceWeight;
+    }
+
+    public void setActiveTypefaceWeight(@Nullable Integer activeTypefaceWeight) {
+        mActiveTypefaceWeight = activeTypefaceWeight;
     }
 
     void setTextColorList(@Nullable ColorStateList textColorList) {
@@ -158,11 +170,15 @@ public final class TabView extends SuperLineHeightTextView {
     private Typeface getDefaultTypeface() {
         if (mTypefaceProvider != null) {
             if (mIsActiveType) {
-                if (mActiveTypefaceType != null) {
+                if (mActiveTypefaceWeight != null && mActiveTypefaceWeight > 0) {
+                    return mTypefaceProvider.getTypefaceFor(mActiveTypefaceWeight);
+                } else if (mActiveTypefaceType != null) {
                     return mActiveTypefaceType.getTypeface(mTypefaceProvider);
                 }
             } else {
-                if (mInactiveTypefaceType != null) {
+                if (mInactiveTypefaceWeight != null && mInactiveTypefaceWeight > 0) {
+                    return mTypefaceProvider.getTypefaceFor(mInactiveTypefaceWeight);
+                } else if (mInactiveTypefaceType != null) {
                     return mInactiveTypefaceType.getTypeface(mTypefaceProvider);
                 }
             }

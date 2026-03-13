@@ -243,6 +243,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
     public let activeBackgroundColor: Field<Expression<Color>>? // default value: #FFFFDC60
     public let activeFontVariationSettings: Field<Expression<[String: Any]>>?
     public let activeFontWeight: Field<Expression<DivFontWeight>>?
+    public let activeFontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let activeTextColor: Field<Expression<Color>>? // default value: #CC000000
     public let animationDuration: Field<Expression<Int>>? // constraint: number >= 0; default value: 300
     public let animationType: Field<Expression<AnimationType>>? // default value: slide
@@ -255,6 +256,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
     public let inactiveBackgroundColor: Field<Expression<Color>>?
     public let inactiveFontVariationSettings: Field<Expression<[String: Any]>>?
     public let inactiveFontWeight: Field<Expression<DivFontWeight>>?
+    public let inactiveFontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let inactiveTextColor: Field<Expression<Color>>? // default value: #80000000
     public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
     public let letterSpacing: Field<Expression<Double>>? // default value: 0
@@ -266,6 +268,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColor: dictionary.getOptionalExpressionField("active_background_color", transform: Color.color(withHexString:)),
         activeFontVariationSettings: dictionary.getOptionalExpressionField("active_font_variation_settings"),
         activeFontWeight: dictionary.getOptionalExpressionField("active_font_weight"),
+        activeFontWeightValue: dictionary.getOptionalExpressionField("active_font_weight_value"),
         activeTextColor: dictionary.getOptionalExpressionField("active_text_color", transform: Color.color(withHexString:)),
         animationDuration: dictionary.getOptionalExpressionField("animation_duration"),
         animationType: dictionary.getOptionalExpressionField("animation_type"),
@@ -278,6 +281,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColor: dictionary.getOptionalExpressionField("inactive_background_color", transform: Color.color(withHexString:)),
         inactiveFontVariationSettings: dictionary.getOptionalExpressionField("inactive_font_variation_settings"),
         inactiveFontWeight: dictionary.getOptionalExpressionField("inactive_font_weight"),
+        inactiveFontWeightValue: dictionary.getOptionalExpressionField("inactive_font_weight_value"),
         inactiveTextColor: dictionary.getOptionalExpressionField("inactive_text_color", transform: Color.color(withHexString:)),
         itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
         letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
@@ -290,6 +294,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       activeBackgroundColor: Field<Expression<Color>>? = nil,
       activeFontVariationSettings: Field<Expression<[String: Any]>>? = nil,
       activeFontWeight: Field<Expression<DivFontWeight>>? = nil,
+      activeFontWeightValue: Field<Expression<Int>>? = nil,
       activeTextColor: Field<Expression<Color>>? = nil,
       animationDuration: Field<Expression<Int>>? = nil,
       animationType: Field<Expression<AnimationType>>? = nil,
@@ -302,6 +307,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       inactiveBackgroundColor: Field<Expression<Color>>? = nil,
       inactiveFontVariationSettings: Field<Expression<[String: Any]>>? = nil,
       inactiveFontWeight: Field<Expression<DivFontWeight>>? = nil,
+      inactiveFontWeightValue: Field<Expression<Int>>? = nil,
       inactiveTextColor: Field<Expression<Color>>? = nil,
       itemSpacing: Field<Expression<Int>>? = nil,
       letterSpacing: Field<Expression<Double>>? = nil,
@@ -311,6 +317,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       self.activeBackgroundColor = activeBackgroundColor
       self.activeFontVariationSettings = activeFontVariationSettings
       self.activeFontWeight = activeFontWeight
+      self.activeFontWeightValue = activeFontWeightValue
       self.activeTextColor = activeTextColor
       self.animationDuration = animationDuration
       self.animationType = animationType
@@ -323,6 +330,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       self.inactiveBackgroundColor = inactiveBackgroundColor
       self.inactiveFontVariationSettings = inactiveFontVariationSettings
       self.inactiveFontWeight = inactiveFontWeight
+      self.inactiveFontWeightValue = inactiveFontWeightValue
       self.inactiveTextColor = inactiveTextColor
       self.itemSpacing = itemSpacing
       self.letterSpacing = letterSpacing
@@ -334,6 +342,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       let activeBackgroundColorValue = parent?.activeBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let activeFontVariationSettingsValue = parent?.activeFontVariationSettings?.resolveOptionalValue(context: context) ?? .noValue
       let activeFontWeightValue = parent?.activeFontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let activeFontWeightValueValue = parent?.activeFontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.activeFontWeightValueValidator) ?? .noValue
       let activeTextColorValue = parent?.activeTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let animationDurationValue = parent?.animationDuration?.resolveOptionalValue(context: context, validator: ResolvedValue.animationDurationValidator) ?? .noValue
       let animationTypeValue = parent?.animationType?.resolveOptionalValue(context: context) ?? .noValue
@@ -346,6 +355,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       let inactiveBackgroundColorValue = parent?.inactiveBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let inactiveFontVariationSettingsValue = parent?.inactiveFontVariationSettings?.resolveOptionalValue(context: context) ?? .noValue
       let inactiveFontWeightValue = parent?.inactiveFontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let inactiveFontWeightValueValue = parent?.inactiveFontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveFontWeightValueValidator) ?? .noValue
       let inactiveTextColorValue = parent?.inactiveTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue
       let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
@@ -355,6 +365,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_background_color", error: $0) },
         activeFontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_variation_settings", error: $0) },
         activeFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_weight", error: $0) },
+        activeFontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_weight_value", error: $0) },
         activeTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_text_color", error: $0) },
         animationDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_duration", error: $0) },
         animationTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_type", error: $0) },
@@ -367,6 +378,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_background_color", error: $0) },
         inactiveFontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_variation_settings", error: $0) },
         inactiveFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_weight", error: $0) },
+        inactiveFontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_weight_value", error: $0) },
         inactiveTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_text_color", error: $0) },
         itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
         letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
@@ -377,6 +389,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColor: activeBackgroundColorValue.value,
         activeFontVariationSettings: activeFontVariationSettingsValue.value,
         activeFontWeight: activeFontWeightValue.value,
+        activeFontWeightValue: activeFontWeightValueValue.value,
         activeTextColor: activeTextColorValue.value,
         animationDuration: animationDurationValue.value,
         animationType: animationTypeValue.value,
@@ -389,6 +402,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColor: inactiveBackgroundColorValue.value,
         inactiveFontVariationSettings: inactiveFontVariationSettingsValue.value,
         inactiveFontWeight: inactiveFontWeightValue.value,
+        inactiveFontWeightValue: inactiveFontWeightValueValue.value,
         inactiveTextColor: inactiveTextColorValue.value,
         itemSpacing: itemSpacingValue.value,
         letterSpacing: letterSpacingValue.value,
@@ -405,6 +419,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       var activeBackgroundColorValue: DeserializationResult<Expression<Color>> = parent?.activeBackgroundColor?.value() ?? .noValue
       var activeFontVariationSettingsValue: DeserializationResult<Expression<[String: Any]>> = parent?.activeFontVariationSettings?.value() ?? .noValue
       var activeFontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.activeFontWeight?.value() ?? .noValue
+      var activeFontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.activeFontWeightValue?.value() ?? .noValue
       var activeTextColorValue: DeserializationResult<Expression<Color>> = parent?.activeTextColor?.value() ?? .noValue
       var animationDurationValue: DeserializationResult<Expression<Int>> = parent?.animationDuration?.value() ?? .noValue
       var animationTypeValue: DeserializationResult<Expression<DivTabs.TabTitleStyle.AnimationType>> = parent?.animationType?.value() ?? .noValue
@@ -417,6 +432,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
       var inactiveBackgroundColorValue: DeserializationResult<Expression<Color>> = parent?.inactiveBackgroundColor?.value() ?? .noValue
       var inactiveFontVariationSettingsValue: DeserializationResult<Expression<[String: Any]>> = parent?.inactiveFontVariationSettings?.value() ?? .noValue
       var inactiveFontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.inactiveFontWeight?.value() ?? .noValue
+      var inactiveFontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.inactiveFontWeightValue?.value() ?? .noValue
       var inactiveTextColorValue: DeserializationResult<Expression<Color>> = parent?.inactiveTextColor?.value() ?? .noValue
       var itemSpacingValue: DeserializationResult<Expression<Int>> = parent?.itemSpacing?.value() ?? .noValue
       var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
@@ -430,6 +446,8 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
           activeFontVariationSettingsValue = deserialize(__dictValue).merged(with: activeFontVariationSettingsValue)
         case "active_font_weight":
           activeFontWeightValue = deserialize(__dictValue).merged(with: activeFontWeightValue)
+        case "active_font_weight_value":
+          activeFontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.activeFontWeightValueValidator).merged(with: activeFontWeightValueValue)
         case "active_text_color":
           activeTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: activeTextColorValue)
         case "animation_duration":
@@ -454,6 +472,8 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
           inactiveFontVariationSettingsValue = deserialize(__dictValue).merged(with: inactiveFontVariationSettingsValue)
         case "inactive_font_weight":
           inactiveFontWeightValue = deserialize(__dictValue).merged(with: inactiveFontWeightValue)
+        case "inactive_font_weight_value":
+          inactiveFontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.inactiveFontWeightValueValidator).merged(with: inactiveFontWeightValueValue)
         case "inactive_text_color":
           inactiveTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: inactiveTextColorValue)
         case "item_spacing":
@@ -470,6 +490,8 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
           activeFontVariationSettingsValue = activeFontVariationSettingsValue.merged(with: { deserialize(__dictValue) })
         case parent?.activeFontWeight?.link:
           activeFontWeightValue = activeFontWeightValue.merged(with: { deserialize(__dictValue) })
+        case parent?.activeFontWeightValue?.link:
+          activeFontWeightValueValue = activeFontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.activeFontWeightValueValidator) })
         case parent?.activeTextColor?.link:
           activeTextColorValue = activeTextColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
         case parent?.animationDuration?.link:
@@ -494,6 +516,8 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
           inactiveFontVariationSettingsValue = inactiveFontVariationSettingsValue.merged(with: { deserialize(__dictValue) })
         case parent?.inactiveFontWeight?.link:
           inactiveFontWeightValue = inactiveFontWeightValue.merged(with: { deserialize(__dictValue) })
+        case parent?.inactiveFontWeightValue?.link:
+          inactiveFontWeightValueValue = inactiveFontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.inactiveFontWeightValueValidator) })
         case parent?.inactiveTextColor?.link:
           inactiveTextColorValue = inactiveTextColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
         case parent?.itemSpacing?.link:
@@ -515,6 +539,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_background_color", error: $0) },
         activeFontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_variation_settings", error: $0) },
         activeFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_weight", error: $0) },
+        activeFontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_weight_value", error: $0) },
         activeTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_text_color", error: $0) },
         animationDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_duration", error: $0) },
         animationTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_type", error: $0) },
@@ -527,6 +552,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_background_color", error: $0) },
         inactiveFontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_variation_settings", error: $0) },
         inactiveFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_weight", error: $0) },
+        inactiveFontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_font_weight_value", error: $0) },
         inactiveTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_text_color", error: $0) },
         itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
         letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
@@ -537,6 +563,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColor: activeBackgroundColorValue.value,
         activeFontVariationSettings: activeFontVariationSettingsValue.value,
         activeFontWeight: activeFontWeightValue.value,
+        activeFontWeightValue: activeFontWeightValueValue.value,
         activeTextColor: activeTextColorValue.value,
         animationDuration: animationDurationValue.value,
         animationType: animationTypeValue.value,
@@ -549,6 +576,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColor: inactiveBackgroundColorValue.value,
         inactiveFontVariationSettings: inactiveFontVariationSettingsValue.value,
         inactiveFontWeight: inactiveFontWeightValue.value,
+        inactiveFontWeightValue: inactiveFontWeightValueValue.value,
         inactiveTextColor: inactiveTextColorValue.value,
         itemSpacing: itemSpacingValue.value,
         letterSpacing: letterSpacingValue.value,
@@ -569,6 +597,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         activeBackgroundColor: merged.activeBackgroundColor,
         activeFontVariationSettings: merged.activeFontVariationSettings,
         activeFontWeight: merged.activeFontWeight,
+        activeFontWeightValue: merged.activeFontWeightValue,
         activeTextColor: merged.activeTextColor,
         animationDuration: merged.animationDuration,
         animationType: merged.animationType,
@@ -581,6 +610,7 @@ public final class DivTabsTemplate: TemplateValue, Sendable {
         inactiveBackgroundColor: merged.inactiveBackgroundColor,
         inactiveFontVariationSettings: merged.inactiveFontVariationSettings,
         inactiveFontWeight: merged.inactiveFontWeight,
+        inactiveFontWeightValue: merged.inactiveFontWeightValue,
         inactiveTextColor: merged.inactiveTextColor,
         itemSpacing: merged.itemSpacing,
         letterSpacing: merged.letterSpacing,

@@ -486,16 +486,27 @@ internal fun TabView.observeStyle(
     }
     applyTabPaddings(null)
 
-    fun Expression<DivFontWeight>.addToSubscriber(callback: (DivFontWeight) -> Unit) {
-        subscriber.addSubscription(this.observeAndGet(resolver, callback))
+    val applyInactiveFontWeight = { _: Any? ->
+        val weight = style.inactiveFontWeight ?: style.fontWeight
+        val weightValue = style.inactiveFontWeightValue?.evaluate(resolver)
+        setInactiveTypefaceType(weight.evaluate(resolver).toTypefaceType())
+        setInactiveTypefaceWeight(weightValue?.toIntSafely())
     }
+    val inactiveFontWeight = style.inactiveFontWeight ?: style.fontWeight
+    subscriber.addSubscription(inactiveFontWeight.observe(resolver, applyInactiveFontWeight))
+    style.inactiveFontWeightValue?.let { subscriber.addSubscription(it.observe(resolver, applyInactiveFontWeight)) }
+    applyInactiveFontWeight(null)
 
-    (style.inactiveFontWeight ?: style.fontWeight).addToSubscriber { divFontWeight ->
-        setInactiveTypefaceType(divFontWeight.toTypefaceType())
+    val applyActiveFontWeight = { _: Any? ->
+        val weight = style.activeFontWeight ?: style.fontWeight
+        val weightValue = style.activeFontWeightValue?.evaluate(resolver)
+        setActiveTypefaceType(weight.evaluate(resolver).toTypefaceType())
+        setActiveTypefaceWeight(weightValue?.toIntSafely())
     }
-    (style.activeFontWeight ?: style.fontWeight).addToSubscriber { divFontWeight ->
-        setActiveTypefaceType(divFontWeight.toTypefaceType())
-    }
+    val activeFontWeight = style.activeFontWeight ?: style.fontWeight
+    subscriber.addSubscription(activeFontWeight.observe(resolver, applyActiveFontWeight))
+    style.activeFontWeightValue?.let { subscriber.addSubscription(it.observe(resolver, applyActiveFontWeight)) }
+    applyActiveFontWeight(null)
 }
 
 private fun DivFontWeight.toTypefaceType() = when (this) {

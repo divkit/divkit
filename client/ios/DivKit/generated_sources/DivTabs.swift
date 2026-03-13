@@ -72,6 +72,7 @@ public final class DivTabs: DivBase, Sendable {
     public let activeBackgroundColor: Expression<Color> // default value: #FFFFDC60
     public let activeFontVariationSettings: Expression<[String: Any]>?
     public let activeFontWeight: Expression<DivFontWeight>?
+    public let activeFontWeightValue: Expression<Int>? // constraint: number > 0
     public let activeTextColor: Expression<Color> // default value: #CC000000
     public let animationDuration: Expression<Int> // constraint: number >= 0; default value: 300
     public let animationType: Expression<AnimationType> // default value: slide
@@ -84,6 +85,7 @@ public final class DivTabs: DivBase, Sendable {
     public let inactiveBackgroundColor: Expression<Color>?
     public let inactiveFontVariationSettings: Expression<[String: Any]>?
     public let inactiveFontWeight: Expression<DivFontWeight>?
+    public let inactiveFontWeightValue: Expression<Int>? // constraint: number > 0
     public let inactiveTextColor: Expression<Color> // default value: #80000000
     public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 0
     public let letterSpacing: Expression<Double> // default value: 0
@@ -100,6 +102,10 @@ public final class DivTabs: DivBase, Sendable {
 
     public func resolveActiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
       resolver.resolveEnum(activeFontWeight)
+    }
+
+    public func resolveActiveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumeric(activeFontWeightValue)
     }
 
     public func resolveActiveTextColor(_ resolver: ExpressionResolver) -> Color {
@@ -146,6 +152,10 @@ public final class DivTabs: DivBase, Sendable {
       resolver.resolveEnum(inactiveFontWeight)
     }
 
+    public func resolveInactiveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumeric(inactiveFontWeightValue)
+    }
+
     public func resolveInactiveTextColor(_ resolver: ExpressionResolver) -> Color {
       resolver.resolveColor(inactiveTextColor) ?? Color.colorWithARGBHexCode(0x80000000)
     }
@@ -162,6 +172,9 @@ public final class DivTabs: DivBase, Sendable {
       resolver.resolveNumeric(lineHeight)
     }
 
+    static let activeFontWeightValueValidator: AnyValueValidator<Int> =
+      makeValueValidator(valueValidator: { $0 > 0 })
+
     static let animationDurationValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -170,6 +183,9 @@ public final class DivTabs: DivBase, Sendable {
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
+
+    static let inactiveFontWeightValueValidator: AnyValueValidator<Int> =
+      makeValueValidator(valueValidator: { $0 > 0 })
 
     static let itemSpacingValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -182,6 +198,7 @@ public final class DivTabs: DivBase, Sendable {
         activeBackgroundColor: try dictionary.getOptionalExpressionField("active_background_color", transform: Color.color(withHexString:), context: context),
         activeFontVariationSettings: try dictionary.getOptionalExpressionField("active_font_variation_settings", context: context),
         activeFontWeight: try dictionary.getOptionalExpressionField("active_font_weight", context: context),
+        activeFontWeightValue: try dictionary.getOptionalExpressionField("active_font_weight_value", validator: Self.activeFontWeightValueValidator, context: context),
         activeTextColor: try dictionary.getOptionalExpressionField("active_text_color", transform: Color.color(withHexString:), context: context),
         animationDuration: try dictionary.getOptionalExpressionField("animation_duration", validator: Self.animationDurationValidator, context: context),
         animationType: try dictionary.getOptionalExpressionField("animation_type", context: context),
@@ -194,6 +211,7 @@ public final class DivTabs: DivBase, Sendable {
         inactiveBackgroundColor: try dictionary.getOptionalExpressionField("inactive_background_color", transform: Color.color(withHexString:), context: context),
         inactiveFontVariationSettings: try dictionary.getOptionalExpressionField("inactive_font_variation_settings", context: context),
         inactiveFontWeight: try dictionary.getOptionalExpressionField("inactive_font_weight", context: context),
+        inactiveFontWeightValue: try dictionary.getOptionalExpressionField("inactive_font_weight_value", validator: Self.inactiveFontWeightValueValidator, context: context),
         inactiveTextColor: try dictionary.getOptionalExpressionField("inactive_text_color", transform: Color.color(withHexString:), context: context),
         itemSpacing: try dictionary.getOptionalExpressionField("item_spacing", validator: Self.itemSpacingValidator, context: context),
         letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing", context: context),
@@ -206,6 +224,7 @@ public final class DivTabs: DivBase, Sendable {
       activeBackgroundColor: Expression<Color>? = nil,
       activeFontVariationSettings: Expression<[String: Any]>? = nil,
       activeFontWeight: Expression<DivFontWeight>? = nil,
+      activeFontWeightValue: Expression<Int>? = nil,
       activeTextColor: Expression<Color>? = nil,
       animationDuration: Expression<Int>? = nil,
       animationType: Expression<AnimationType>? = nil,
@@ -218,6 +237,7 @@ public final class DivTabs: DivBase, Sendable {
       inactiveBackgroundColor: Expression<Color>? = nil,
       inactiveFontVariationSettings: Expression<[String: Any]>? = nil,
       inactiveFontWeight: Expression<DivFontWeight>? = nil,
+      inactiveFontWeightValue: Expression<Int>? = nil,
       inactiveTextColor: Expression<Color>? = nil,
       itemSpacing: Expression<Int>? = nil,
       letterSpacing: Expression<Double>? = nil,
@@ -227,6 +247,7 @@ public final class DivTabs: DivBase, Sendable {
       self.activeBackgroundColor = activeBackgroundColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
       self.activeFontVariationSettings = activeFontVariationSettings
       self.activeFontWeight = activeFontWeight
+      self.activeFontWeightValue = activeFontWeightValue
       self.activeTextColor = activeTextColor ?? .value(Color.colorWithARGBHexCode(0xCC000000))
       self.animationDuration = animationDuration ?? .value(300)
       self.animationType = animationType ?? .value(.slide)
@@ -239,6 +260,7 @@ public final class DivTabs: DivBase, Sendable {
       self.inactiveBackgroundColor = inactiveBackgroundColor
       self.inactiveFontVariationSettings = inactiveFontVariationSettings
       self.inactiveFontWeight = inactiveFontWeight
+      self.inactiveFontWeightValue = inactiveFontWeightValue
       self.inactiveTextColor = inactiveTextColor ?? .value(Color.colorWithARGBHexCode(0x80000000))
       self.itemSpacing = itemSpacing ?? .value(0)
       self.letterSpacing = letterSpacing ?? .value(0)
@@ -677,40 +699,46 @@ extension DivTabs.TabTitleStyle: Equatable {
     guard
       lhs.activeBackgroundColor == rhs.activeBackgroundColor,
       lhs.activeFontWeight == rhs.activeFontWeight,
-      lhs.activeTextColor == rhs.activeTextColor
+      lhs.activeFontWeightValue == rhs.activeFontWeightValue
     else {
       return false
     }
     guard
+      lhs.activeTextColor == rhs.activeTextColor,
       lhs.animationDuration == rhs.animationDuration,
-      lhs.animationType == rhs.animationType,
-      lhs.cornerRadius == rhs.cornerRadius
+      lhs.animationType == rhs.animationType
     else {
       return false
     }
     guard
+      lhs.cornerRadius == rhs.cornerRadius,
       lhs.cornersRadius == rhs.cornersRadius,
-      lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontFamily == rhs.fontFamily
     else {
       return false
     }
     guard
+      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight,
-      lhs.inactiveBackgroundColor == rhs.inactiveBackgroundColor
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
+      lhs.inactiveBackgroundColor == rhs.inactiveBackgroundColor,
       lhs.inactiveFontWeight == rhs.inactiveFontWeight,
-      lhs.inactiveTextColor == rhs.inactiveTextColor,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.inactiveFontWeightValue == rhs.inactiveFontWeightValue
     else {
       return false
     }
     guard
-      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.inactiveTextColor == rhs.inactiveTextColor,
+      lhs.itemSpacing == rhs.itemSpacing,
+      lhs.letterSpacing == rhs.letterSpacing
+    else {
+      return false
+    }
+    guard
       lhs.lineHeight == rhs.lineHeight,
       lhs.paddings == rhs.paddings
     else {
@@ -780,6 +808,7 @@ extension DivTabs.TabTitleStyle: Serializable {
     result["active_background_color"] = activeBackgroundColor.toValidSerializationValue()
     result["active_font_variation_settings"] = activeFontVariationSettings?.toValidSerializationValue()
     result["active_font_weight"] = activeFontWeight?.toValidSerializationValue()
+    result["active_font_weight_value"] = activeFontWeightValue?.toValidSerializationValue()
     result["active_text_color"] = activeTextColor.toValidSerializationValue()
     result["animation_duration"] = animationDuration.toValidSerializationValue()
     result["animation_type"] = animationType.toValidSerializationValue()
@@ -792,6 +821,7 @@ extension DivTabs.TabTitleStyle: Serializable {
     result["inactive_background_color"] = inactiveBackgroundColor?.toValidSerializationValue()
     result["inactive_font_variation_settings"] = inactiveFontVariationSettings?.toValidSerializationValue()
     result["inactive_font_weight"] = inactiveFontWeight?.toValidSerializationValue()
+    result["inactive_font_weight_value"] = inactiveFontWeightValue?.toValidSerializationValue()
     result["inactive_text_color"] = inactiveTextColor.toValidSerializationValue()
     result["item_spacing"] = itemSpacing.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()

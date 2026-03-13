@@ -120,9 +120,27 @@
               "$ref": "div-font-weight.json",
               "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight"
             },
+            "active_font_weight_value": {
+              "$ref": "common.json#/positive_integer",
+              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight_value",
+              "platforms": [
+                "ios",
+                "web",
+                "android"
+              ]
+            },
             "inactive_font_weight": {
               "$ref": "div-font-weight.json",
               "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight"
+            },
+            "inactive_font_weight_value": {
+              "$ref": "common.json#/positive_integer",
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight_value",
+              "platforms": [
+                "ios",
+                "web",
+                "android"
+              ]
             },
             "active_font_variation_settings": {
               "type": "dict",

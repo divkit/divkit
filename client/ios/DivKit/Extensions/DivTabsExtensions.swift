@@ -124,16 +124,20 @@ extension DivTabs.TabTitleStyle {
   private func makeTypo(
     fontProvider: DivFontProvider,
     fontWeight: DivFontWeight,
+    fontWeightValue: Int?,
     fontVariationSettings: [String: NSNumber]?,
     expressionResolver: ExpressionResolver
   ) -> Typo {
-    let font = fontProvider.font(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: fontWeight,
-      size: resolveFontSizeUnit(expressionResolver)
-        .makeScaledValue(resolveFontSize(expressionResolver))
-    ).withVariationSettings(axisTagToValue: fontVariationSettings)
-    return Typo(font: font)
+    let fontFamily = resolveFontFamily(expressionResolver) ?? ""
+    let size = resolveFontSizeUnit(expressionResolver)
+      .makeScaledValue(resolveFontSize(expressionResolver))
+
+    let font = if let fontWeightValue {
+      fontProvider.font(family: fontFamily, weight: fontWeightValue, size: size)
+    } else {
+      fontProvider.font(family: fontFamily, weight: fontWeight, size: size)
+    }
+    return Typo(font: font.withVariationSettings(axisTagToValue: fontVariationSettings))
       .with(height: resolveLineHeight(expressionResolver))
       .kerned(CGFloat(resolveLetterSpacing(expressionResolver)))
       .allowHeightOverrun
@@ -149,6 +153,7 @@ extension DivTabs.TabTitleStyle {
       typo: makeTypo(
         fontProvider: fontProvider,
         fontWeight: resolveActiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        fontWeightValue: resolveActiveFontWeightValue(expressionResolver),
         fontVariationSettings: resolveActiveFontVariationSettings(expressionResolver)?
           .mapValues { $0 as? NSNumber }.filteringNilValues(),
         expressionResolver: expressionResolver
@@ -156,6 +161,7 @@ extension DivTabs.TabTitleStyle {
       inactiveTypo: makeTypo(
         fontProvider: fontProvider,
         fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        fontWeightValue: resolveInactiveFontWeightValue(expressionResolver),
         fontVariationSettings: resolveInactiveFontVariationSettings(expressionResolver)?
           .mapValues { $0 as? NSNumber }.filteringNilValues(),
         expressionResolver: expressionResolver
