@@ -87,6 +87,7 @@ import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
+import com.yandex.div.internal.util.toMapSafe
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -636,7 +637,7 @@ class Div2View private constructor(
     fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         val bindingsSnapshot = synchronized(viewToDivBindings) {
-            viewToDivBindings.toMap()
+            viewToDivBindings.toMapSafe()
         }
         bindingsSnapshot.forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
@@ -652,7 +653,7 @@ class Div2View private constructor(
     private fun discardChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         val bindingsSnapshot = synchronized(viewToDivBindings) {
-            viewToDivBindings.toMap()
+            viewToDivBindings.toMapSafe()
         }
         bindingsSnapshot.forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
