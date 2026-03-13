@@ -28,7 +28,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
     @JvmField
     val rule = baseRule(case, activityRule)
 
-    @Screenshot(viewId = R.id.morda_screenshot_div)
+    @Screenshot(viewId = R.id.screenshot_view)
     @Test
     fun divScreenshot() {
         interactiveScreenshot {

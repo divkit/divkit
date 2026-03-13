@@ -28,19 +28,19 @@ class Div2ImageLoaderScreenshotTest(private val case: String) {
     val rule = baseRule(case, activityRule)
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div)
+    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotPicasso() {
         launchActivityWith(IMAGE_LOADER_PICASSO)
     }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div)
+    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotGlide() {
         launchActivityWith(IMAGE_LOADER_GLIDE)
     }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div)
+    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotCoil() {
         launchActivityWith(IMAGE_LOADER_COIL)
     }

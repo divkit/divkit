@@ -26,7 +26,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
             .createContext(baseContext = this)
 
         val view = ComposeView(divContext).apply {
-            id = R.id.morda_screenshot_div
+            id = R.id.screenshot_view
             setContent {
                 DivView(data = parseDivData())
             }

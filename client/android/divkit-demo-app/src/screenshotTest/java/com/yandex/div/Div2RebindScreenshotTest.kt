@@ -36,7 +36,7 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
     @JvmField
     val rule = screenshotRule(case, activityRule, case.relativePath)
 
-    @Screenshot(viewId = R.id.morda_screenshot_div)
+    @Screenshot(viewId = R.id.screenshot_view)
     @Test
     fun divScreenshot() {
         context.sendBroadcastAndWait<DivScreenshotActivity>(DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA_ACTION)

@@ -115,7 +115,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         val matchParentHeight = getChildAt(0)?.layoutParams?.height == LayoutParams.MATCH_PARENT
         val divViewHeight = if (matchParentHeight) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT
         layoutParams?.height = divViewHeight
-        id = R.id.morda_screenshot_div
+        id = R.id.screenshot_view
         removeAutofocusForOldApis()
         hideCursor()
         requestLayout()
@@ -155,7 +155,7 @@ class DivScreenshotActivity : AppCompatActivity() {
     }
 
     private fun rebindDivWithSameData() {
-        when (val view = findViewById<View>(R.id.morda_screenshot_div)) {
+        when (val view = findViewById<View>(R.id.screenshot_view)) {
             is Div2View -> {
                 view.setData(view.divData, view.dataTag)
             }

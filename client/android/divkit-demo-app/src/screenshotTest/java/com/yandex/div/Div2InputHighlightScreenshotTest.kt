@@ -26,13 +26,13 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     val rule = screenshotRule(case, activityRule)
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, name = "highlight_color_initial")
+    @Screenshot(viewId = R.id.screenshot_view, name = "highlight_color_initial")
     fun divScreenshotInitialColor() {
         divFocus { clickOnTopInput() }
     }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, name = "highlight_color_changed")
+    @Screenshot(viewId = R.id.screenshot_view, name = "highlight_color_changed")
     fun divScreenshotChangedColor() {
         divInput { clickOnActionButton() }
         divFocus { clickOnTopInput() }
