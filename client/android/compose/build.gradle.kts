@@ -26,7 +26,10 @@ dependencies {
     implementation(libs.yatagan.api.compiled)
 
     ksp(libs.yatagan.processor.ksp)
+
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.mockito.kotlin)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

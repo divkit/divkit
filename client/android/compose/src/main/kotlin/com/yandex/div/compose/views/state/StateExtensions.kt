@@ -6,7 +6,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import com.yandex.div.compose.views.evaluate
 import com.yandex.div.compose.views.expressionResolver
 import com.yandex.div.json.expressions.Expression
 

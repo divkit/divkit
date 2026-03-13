@@ -7,6 +7,7 @@ import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.core.expression.variables.VariableAndConstantController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
@@ -214,6 +215,10 @@ internal class ExpressionResolverImpl(
         val observers = expressionObservers.getOrPut(rawExpression) { ObserverList() }
         observers.addObserver(callback)
         return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
+    }
+
+    override fun getVariable(name: String): Variable? {
+        return variableController.getMutableVariable(name)
     }
 
     internal fun subscribeOnVariables() {

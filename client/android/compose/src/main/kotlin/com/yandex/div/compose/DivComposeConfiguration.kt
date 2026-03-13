@@ -1,21 +1,29 @@
 package com.yandex.div.compose
 
 import android.content.Context
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
 import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
+import javax.inject.Named
 
 @Module
 @PublicApi
 class DivComposeConfiguration(
-    @get:Provides val reporter: DivReporter = DivReporter()
+    @get:Provides
+    val reporter: DivReporter = DivReporter(),
+
+    @get:Provides
+    @get:Named(Names.HOST_VARIABLES)
+    val variableController: DivVariableController = DivVariableController()
 )
 
 fun DivComposeConfiguration.createContext(baseContext: Context): DivContext {
-    return `Yatagan$DivContextComponent`.builder()
+    val contextComponent = `Yatagan$DivContextComponent`.builder()
         .baseContext(baseContext)
         .configuration(this)
         .build()
-        .context
+    return DivContext(contextComponent)
 }

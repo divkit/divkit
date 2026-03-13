@@ -166,6 +166,7 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 
+mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockito" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 

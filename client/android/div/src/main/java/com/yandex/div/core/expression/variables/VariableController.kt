@@ -9,6 +9,7 @@ import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.variables.VariableSource
+import com.yandex.div.internal.variables.toVariable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVariable
 

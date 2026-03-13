@@ -1,6 +1,7 @@
 package com.yandex.div.json.expressions
 
 import com.yandex.div.core.Disposable
+import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
@@ -36,6 +37,8 @@ interface ExpressionResolver {
         callback: () -> Unit
     ): Disposable
 
+    fun getVariable(name: String): Variable?
+
     fun notifyResolveFailed(e: ParsingException) = Unit
 
     companion object {
@@ -67,6 +70,8 @@ interface ExpressionResolver {
             ): Disposable {
                 return Disposable.NULL
             }
+
+            override fun getVariable(name: String): Variable? = null
         }
     }
 }

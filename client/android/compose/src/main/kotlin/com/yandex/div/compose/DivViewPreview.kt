@@ -5,6 +5,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
+import com.yandex.div.internal.parser.TYPE_HELPER_STRING
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
@@ -16,6 +18,8 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVariable
+import com.yandex.div2.StrVariable
 
 @Preview
 @Composable
@@ -29,6 +33,14 @@ private fun DivViewPreview() {
 
 private val testData = DivData(
     logId = "preview",
+    variables = listOf(
+        DivVariable.Str(
+            StrVariable(
+                name = "title",
+                value = constant("Hello!")
+            )
+        )
+    ),
     states = listOf(
         DivData.State(
             stateId = 0,
@@ -63,7 +75,7 @@ private val testData = DivData(
                         Div.Text(
                             value = DivText(
                                 fontSize = constant(36),
-                                text = constant("Hello!"),
+                                text = expression("@{title}"),
                                 textColor = constant(0xFFBF0000.toInt()),
                             )
                         )
@@ -76,6 +88,17 @@ private val testData = DivData(
 
 private fun <T : Any> constant(value: T): Expression<T> {
     return Expression.ConstantExpression(value)
+}
+
+private fun expression(expression: String): Expression<String> {
+    return Expression.MutableExpression<String, String>(
+        expressionKey = "text",
+        rawExpression = expression,
+        converter = null,
+        validator = { true },
+        logger = ParsingErrorLogger.ASSERT,
+        typeHelper = TYPE_HELPER_STRING
+    )
 }
 
 private fun fixedSize(value: Long): DivSize {

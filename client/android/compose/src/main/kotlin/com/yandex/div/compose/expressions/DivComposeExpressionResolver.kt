@@ -1,13 +1,18 @@
 package com.yandex.div.compose.expressions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.MissingVariableException
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
@@ -18,16 +23,29 @@ import com.yandex.div.json.missingVariable
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
 import javax.inject.Inject
+import javax.inject.Named
 
-@DivContextScope
+@DivViewScope
 internal class DivComposeExpressionResolver @Inject constructor(
-    private val evaluator: Evaluator,
-    private val reporter: DivReporter
+    private val reporter: DivReporter,
+    @param:Named(Names.CARD_VARIABLES) private val variableController: DivVariableController
 ) : ExpressionResolver {
+
+    private val evaluator: Evaluator
 
     private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+
+    init {
+        val evaluationContext = EvaluationContext(
+            variableProvider = { name -> variableController.get(name)?.getValue() },
+            storedValueProvider = { _ -> null },
+            functionProvider = GeneratedBuiltinFunctionProvider,
+            warningSender = EvaluatorWarningSender(reporter)
+        )
+        evaluator = Evaluator(evaluationContext)
+    }
 
     override fun <R, T : Any> get(
         expressionKey: String,
@@ -51,21 +69,33 @@ internal class DivComposeExpressionResolver @Inject constructor(
         variableNames: List<String>,
         callback: () -> Unit
     ): Disposable {
-        variableNames.forEach {
-            val expressions = varToExpressions.getOrPut(it) { mutableSetOf() }
-            expressions.add(rawExpression)
+        variableNames.forEach { variableName ->
+            varToExpressions
+                .getOrPut(variableName) { mutableSetOf() }
+                .add(rawExpression)
+
+            variableController.get(variableName)?.let { variable ->
+                variable.removeObserver(::onVariableChanged)
+                variable.addObserver(::onVariableChanged)
+            }
         }
-        val observers = expressionObservers.getOrPut(rawExpression) { ObserverList() }
-        observers.addObserver(callback)
+
+        expressionObservers
+            .getOrPut(rawExpression) { ObserverList() }
+            .addObserver(callback)
+
         return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
     }
 
-    internal fun notifyVariableChanged(variableName: String) {
-        val expressions = varToExpressions[variableName].orEmpty()
-        expressions.forEach { rawExpression ->
-            evaluationsCache.remove(rawExpression)
-            expressionObservers[rawExpression]?.forEach { callback ->
-                callback.invoke()
+    override fun getVariable(name: String): Variable? {
+        return variableController.get(name)
+    }
+
+    private fun onVariableChanged(variable: Variable) {
+        varToExpressions[variable.name]?.forEach { expression ->
+            evaluationsCache.remove(expression)
+            expressionObservers[expression]?.forEach { observer ->
+                observer()
             }
         }
     }

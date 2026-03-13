@@ -7,12 +7,12 @@ import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.variables.declare
-import com.yandex.div.core.expression.variables.parseGet
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.data.PropertyVariableExecutor
+import com.yandex.div.internal.variables.parseGet
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections

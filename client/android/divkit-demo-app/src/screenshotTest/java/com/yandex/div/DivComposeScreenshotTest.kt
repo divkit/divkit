@@ -45,6 +45,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-separator/vertical-intrinsic-width.json",
                 "snapshot_test_data/div-separator/fixed-size-with-paddings.json",
                 "snapshot_test_data/div-text/all_attributes.json",
+                "snapshot_test_data/div-text/variables-rendering.json",
             ).withEscapedParameter()
         }
     }

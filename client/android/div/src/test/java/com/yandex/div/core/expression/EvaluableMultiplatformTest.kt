@@ -10,6 +10,7 @@ import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.internal.expressions.DivExpressionParser
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.rule.LocaleRule
