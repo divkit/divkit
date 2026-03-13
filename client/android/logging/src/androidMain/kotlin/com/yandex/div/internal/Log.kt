@@ -12,15 +12,12 @@ object Log {
     private var _severity = Severity.VERBOSE
 
     @JvmStatic
-    var isEnabled: Boolean
+    val isEnabled: Boolean
         get() {
             if (BuildKonfig.DISABLE_LOGS) {
                 return false
             }
             return _isEnabled
-        }
-        set(value) {
-            _isEnabled = value
         }
 
     var severity: Severity
@@ -28,6 +25,11 @@ object Log {
         set(value) {
             _severity = value
         }
+
+    @JvmStatic
+    fun setEnabled(enabled: Boolean) {
+        _isEnabled = enabled
+    }
 
     @JvmStatic
     fun d(tag: String, message: String) {
