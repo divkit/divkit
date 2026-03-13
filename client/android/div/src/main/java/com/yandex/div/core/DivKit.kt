@@ -91,7 +91,7 @@ class DivKit private constructor(
         @JvmStatic
         @AnyThread
         fun enableLogging(enabled: Boolean) {
-            Log.isEnabled = enabled
+            Log.setEnabled(enabled)
         }
 
         @JvmStatic
