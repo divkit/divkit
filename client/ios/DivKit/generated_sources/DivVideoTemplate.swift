@@ -32,7 +32,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
   public let muted: Field<Expression<Bool>>? // default value: false
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pauseActions: Field<[DivActionTemplate]>?
-  public let playerSettingsPayload: Field<[String: Any]>?
+  public let playerSettingsPayload: Field<Expression<[String: Any]>>?
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
   public let preview: Field<Expression<String>>?
   public let repeatable: Field<Expression<Bool>>? // default value: false
@@ -84,7 +84,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: dictionary.getOptionalExpressionField("muted"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       pauseActions: dictionary.getOptionalArray("pause_actions", templateToType: templateToType),
-      playerSettingsPayload: dictionary.getOptionalField("player_settings_payload"),
+      playerSettingsPayload: dictionary.getOptionalExpressionField("player_settings_payload"),
       preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
       preview: dictionary.getOptionalExpressionField("preview"),
       repeatable: dictionary.getOptionalExpressionField("repeatable"),
@@ -137,7 +137,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     muted: Field<Expression<Bool>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pauseActions: Field<[DivActionTemplate]>? = nil,
-    playerSettingsPayload: Field<[String: Any]>? = nil,
+    playerSettingsPayload: Field<Expression<[String: Any]>>? = nil,
     preloadRequired: Field<Expression<Bool>>? = nil,
     preview: Field<Expression<String>>? = nil,
     repeatable: Field<Expression<Bool>>? = nil,
@@ -401,7 +401,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     var mutedValue: DeserializationResult<Expression<Bool>> = parent?.muted?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pauseActionsValue: DeserializationResult<[DivAction]> = .noValue
-    var playerSettingsPayloadValue: DeserializationResult<[String: Any]> = parent?.playerSettingsPayload?.value() ?? .noValue
+    var playerSettingsPayloadValue: DeserializationResult<Expression<[String: Any]>> = parent?.playerSettingsPayload?.value() ?? .noValue
     var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
     var previewValue: DeserializationResult<Expression<String>> = parent?.preview?.value() ?? .noValue
     var repeatableValue: DeserializationResult<Expression<Bool>> = parent?.repeatable?.value() ?? .noValue

@@ -6,12 +6,10 @@ import Serialization
 
 public final class EntityWithJsonProperty: @unchecked Sendable {
   public static let type: String = "entity_with_json_property"
-  public let jsonProperty: [String: Any] // default value: { "key": "value", "items": [ "value" ] }
+  public let jsonProperty: Expression<[String: Any]> // default value: { "key": "value", "items": [ "value" ] }
 
-  init(
-    jsonProperty: [String: Any]? = nil
-  ) {
-    self.jsonProperty = jsonProperty ?? (try! JSONSerialization.jsonObject(jsonString: """
+  public func resolveJsonProperty(_ resolver: ExpressionResolver) -> [String: Any] {
+    resolver.resolveDict(jsonProperty) ?? (try! JSONSerialization.jsonObject(jsonString: """
     {
         "key": "value",
         "items": [
@@ -19,6 +17,19 @@ public final class EntityWithJsonProperty: @unchecked Sendable {
         ]
     }
     """) as! [String: Any])
+  }
+
+  init(
+    jsonProperty: Expression<[String: Any]>? = nil
+  ) {
+    self.jsonProperty = jsonProperty ?? .value((try! JSONSerialization.jsonObject(jsonString: """
+    {
+        "key": "value",
+        "items": [
+            "value"
+        ]
+    }
+    """) as! [String: Any]))
   }
 }
 

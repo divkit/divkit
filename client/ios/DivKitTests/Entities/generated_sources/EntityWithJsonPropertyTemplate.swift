@@ -10,18 +10,18 @@ import enum DivKit.Expression
 public final class EntityWithJsonPropertyTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "entity_with_json_property"
   public let parent: String?
-  public let jsonProperty: Field<[String: Any]>? // default value: { "key": "value", "items": [ "value" ] }
+  public let jsonProperty: Field<Expression<[String: Any]>>? // default value: { "key": "value", "items": [ "value" ] }
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      jsonProperty: dictionary.getOptionalField("json_property")
+      jsonProperty: dictionary.getOptionalExpressionField("json_property")
     )
   }
 
   init(
     parent: String?,
-    jsonProperty: Field<[String: Any]>? = nil
+    jsonProperty: Field<Expression<[String: Any]>>? = nil
   ) {
     self.parent = parent
     self.jsonProperty = jsonProperty
@@ -42,7 +42,7 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue, @unchecked Sen
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var jsonPropertyValue: DeserializationResult<[String: Any]> = parent?.jsonProperty?.value() ?? .noValue
+    var jsonPropertyValue: DeserializationResult<Expression<[String: Any]>> = parent?.jsonProperty?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "json_property":

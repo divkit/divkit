@@ -797,9 +797,9 @@ def default_value(lang: GeneratedLanguage,
 class PropertyType(ABC):
     @property
     def supports_expressions(self) -> bool:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url, RawArray, Dictionary)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url, RawArray, Dictionary, RawObject)):
             return True
-        elif isinstance(self, (RawObject, StaticString)):
+        elif isinstance(self, (StaticString)):
             return False
         elif isinstance(self, Array):
             if isinstance(self.property_type, Object) and \

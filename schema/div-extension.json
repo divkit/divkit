@@ -14,6 +14,7 @@
     "params": {
       "type": "object",
       "additionalProperties": true,
+      "supports_expressions": false,
       "$description": "translations.json#/div_extension_params"
     }
   },

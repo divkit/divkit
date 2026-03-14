@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithJsonProperty(
-    @JvmField val jsonProperty: JSONObject = JSON_PROPERTY_DEFAULT_VALUE, // default value: { "key": "value", "items": [ "value" ] }
+    @JvmField val jsonProperty: Expression<JSONObject> = JSON_PROPERTY_DEFAULT_VALUE, // default value: { "key": "value", "items": [ "value" ] }
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -32,18 +32,18 @@ class EntityWithJsonProperty(
 
     fun equals(other: EntityWithJsonProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
-        return jsonProperty == other.jsonProperty
+        return jsonProperty.evaluate(resolver) == other.jsonProperty.evaluate(otherResolver)
     }
 
     fun copy(
-        jsonProperty: JSONObject = this.jsonProperty,
+        jsonProperty: Expression<JSONObject> = this.jsonProperty,
     ) = EntityWithJsonProperty(
         jsonProperty = jsonProperty,
     )
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.write(key = "json_property", value = jsonProperty)
+        json.writeExpression(key = "json_property", value = jsonProperty)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -51,21 +51,21 @@ class EntityWithJsonProperty(
     companion object {
         const val TYPE = "entity_with_json_property"
 
-        private val JSON_PROPERTY_DEFAULT_VALUE = JSONObject("""
+        private val JSON_PROPERTY_DEFAULT_VALUE = Expression.constant(JSONObject("""
         {
             "key": "value",
             "items": [
                 "value"
             ]
         }
-        """)
+        """))
 
         @JvmStatic
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithJsonProperty {
             val logger = env.logger
             return EntityWithJsonProperty(
-                jsonProperty = JsonParser.readOptional(json, "json_property", logger, env) ?: JSON_PROPERTY_DEFAULT_VALUE
+                jsonProperty = JsonParser.readOptionalExpression(json, "json_property", logger, env, JSON_PROPERTY_DEFAULT_VALUE, TYPE_HELPER_DICT) ?: JSON_PROPERTY_DEFAULT_VALUE
             )
         }
 

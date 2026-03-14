@@ -6,18 +6,10 @@ import Serialization
 
 public final class EntityWithJsonProperty: @unchecked Sendable {
   public static let type: String = "entity_with_json_property"
-  public let jsonProperty: [String: Any] // default value: { "key": "value", "items": [ "value" ] }
+  public let jsonProperty: Expression<[String: Any]> // default value: { "key": "value", "items": [ "value" ] }
 
-  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
-    self.init(
-      jsonProperty: try dictionary.getOptionalField("json_property", context: context)
-    )
-  }
-
-  init(
-    jsonProperty: [String: Any]? = nil
-  ) {
-    self.jsonProperty = jsonProperty ?? (try! JSONSerialization.jsonObject(jsonString: """
+  public func resolveJsonProperty(_ resolver: ExpressionResolver) -> [String: Any] {
+    resolver.resolveDict(jsonProperty) ?? (try! JSONSerialization.jsonObject(jsonString: """
     {
         "key": "value",
         "items": [
@@ -25,6 +17,25 @@ public final class EntityWithJsonProperty: @unchecked Sendable {
         ]
     }
     """) as! [String: Any])
+  }
+
+  public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+    self.init(
+      jsonProperty: try dictionary.getOptionalExpressionField("json_property", context: context)
+    )
+  }
+
+  init(
+    jsonProperty: Expression<[String: Any]>? = nil
+  ) {
+    self.jsonProperty = jsonProperty ?? .value((try! JSONSerialization.jsonObject(jsonString: """
+    {
+        "key": "value",
+        "items": [
+            "value"
+        ]
+    }
+    """) as! [String: Any]))
   }
 }
 
@@ -42,7 +53,7 @@ extension EntityWithJsonProperty: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["json_property"] = jsonProperty
+    result["json_property"] = jsonProperty.toValidSerializationValue()
     return result
   }
 }

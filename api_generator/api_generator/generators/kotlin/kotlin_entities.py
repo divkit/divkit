@@ -1518,7 +1518,7 @@ class KotlinPropertyType(PropertyType):
             return f'{prefix}INT'
         elif isinstance(self, Double):
             return f'{prefix}DOUBLE'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return f'{prefix}DICT'
         elif isinstance(self, RawArray):
             return f'{prefix}JSON_ARRAY'

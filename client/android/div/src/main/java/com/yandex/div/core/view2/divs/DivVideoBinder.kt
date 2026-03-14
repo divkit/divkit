@@ -282,7 +282,7 @@ internal class DivVideoBinder @Inject constructor(
         autoplay = autostart.evaluate(resolver),
         isMuted = muted.evaluate(resolver),
         repeatable = repeatable.evaluate(resolver),
-        payload = playerSettingsPayload,
+        payload = playerSettingsPayload?.evaluate(resolver),
     )
 }
 

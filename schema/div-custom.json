@@ -27,6 +27,7 @@
         "custom_props": {
           "type": "object",
           "additionalProperties": true,
+          "supports_expressions": false,
           "$description": "translations.json#/div_custom_custom_props"
         }
       }

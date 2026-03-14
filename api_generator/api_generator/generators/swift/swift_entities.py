@@ -474,7 +474,7 @@ class SwiftProperty(Property):
             return 'resolveNumeric'
         elif isinstance(property_type, Object) and isinstance(property_type.object, StringEnumeration):
             return 'resolveEnum'
-        elif isinstance(property_type, Dictionary):
+        elif isinstance(property_type, Dictionary) or isinstance(property_type, RawObject):
             return 'resolveDict'
         elif isinstance(property_type, RawArray):
             return 'resolveArray'
@@ -851,9 +851,7 @@ class SwiftPropertyType(PropertyType):
             return True
 
     def serialization_suffix(self, use_expressions: bool) -> str:
-        if isinstance(self, RawObject):
-            return ''
-        elif isinstance(self, (String, Int, Double, Bool, BoolInt, Dictionary, RawArray)):
+        if isinstance(self, (String, Int, Double, Bool, BoolInt, Dictionary, RawArray, RawObject)):
             return '.toValidSerializationValue()' if use_expressions else ''
         elif isinstance(self, Object):
             if isinstance(self.object, StringEnumeration):

@@ -8,7 +8,7 @@ export class EntityWithJsonProperty<T extends EntityWithJsonPropertyProps = Enti
     readonly _props?: Exact<EntityWithJsonPropertyProps, T>;
 
     readonly type = 'entity_with_json_property';
-    json_property?: Type<{}>;
+    json_property?: Type<{} | DivExpression>;
 
     constructor(props?: Exact<EntityWithJsonPropertyProps, T>) {
         this.json_property = props?.json_property;
@@ -16,5 +16,5 @@ export class EntityWithJsonProperty<T extends EntityWithJsonPropertyProps = Enti
 }
 
 export interface EntityWithJsonPropertyProps {
-    json_property?: Type<{}>;
+    json_property?: Type<{} | DivExpression>;
 }

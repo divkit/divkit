@@ -40,7 +40,7 @@ extension DivVideo: DivBlockModeling {
       repeatable: repeatable,
       isMuted: muted,
       startPosition: elapsedTime.flatMap { CMTime(value: $0.value) } ?? .zero,
-      settingsPayload: playerSettingsPayload ?? [:]
+      settingsPayload: resolvePlayerSettingsPayload(resolver) ?? [:]
     )
 
     let state: VideoBlockViewState = context.blockStateStorage

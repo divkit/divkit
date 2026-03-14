@@ -31,7 +31,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   public let muted: Expression<Bool> // default value: false
   public let paddings: DivEdgeInsets?
   public let pauseActions: [DivAction]?
-  public let playerSettingsPayload: [String: Any]?
+  public let playerSettingsPayload: Expression<[String: Any]>?
   public let preloadRequired: Expression<Bool> // default value: false
   public let preview: Expression<String>?
   public let repeatable: Expression<Bool> // default value: false
@@ -77,6 +77,10 @@ public final class DivVideo: DivBase, @unchecked Sendable {
 
   public func resolveMuted(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(muted) ?? false
+  }
+
+  public func resolvePlayerSettingsPayload(_ resolver: ExpressionResolver) -> [String: Any]? {
+    resolver.resolveDict(playerSettingsPayload)
   }
 
   public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
@@ -149,7 +153,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
       muted: try dictionary.getOptionalExpressionField("muted", context: context),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       pauseActions: try dictionary.getOptionalArray("pause_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
-      playerSettingsPayload: try dictionary.getOptionalField("player_settings_payload", context: context),
+      playerSettingsPayload: try dictionary.getOptionalExpressionField("player_settings_payload", context: context),
       preloadRequired: try dictionary.getOptionalExpressionField("preload_required", context: context),
       preview: try dictionary.getOptionalExpressionField("preview", context: context),
       repeatable: try dictionary.getOptionalExpressionField("repeatable", context: context),
@@ -201,7 +205,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     muted: Expression<Bool>? = nil,
     paddings: DivEdgeInsets? = nil,
     pauseActions: [DivAction]? = nil,
-    playerSettingsPayload: [String: Any]? = nil,
+    playerSettingsPayload: Expression<[String: Any]>? = nil,
     preloadRequired: Expression<Bool>? = nil,
     preview: Expression<String>? = nil,
     repeatable: Expression<Bool>? = nil,
@@ -426,7 +430,7 @@ extension DivVideo: Serializable {
     result["muted"] = muted.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["pause_actions"] = pauseActions?.map { $0.toDictionary() }
-    result["player_settings_payload"] = playerSettingsPayload
+    result["player_settings_payload"] = playerSettingsPayload?.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["preview"] = preview?.toValidSerializationValue()
     result["repeatable"] = repeatable.toValidSerializationValue()

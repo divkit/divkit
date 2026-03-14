@@ -252,16 +252,16 @@ public class JsonTemplateParser {
     }
 
     @NonNull
-    public static Field<Expression<String>> readOptionalFieldWithExpression(
+    public static <T> Field<Expression<T>> readOptionalFieldWithExpression(
             @NonNull JSONObject json,
             @NonNull String key,
             boolean overridable,
-            @Nullable Field<Expression<String>> fallback,
+            @Nullable Field<Expression<T>> fallback,
             @NonNull ParsingErrorLogger logger,
             @NonNull ParsingEnvironment env,
-            @NonNull TypeHelper<String> typeHelper) {
+            @NonNull TypeHelper<T> typeHelper) {
         return readOptionalFieldWithExpression(
-                json, key, overridable, fallback, doNotConvert(), alwaysValidString(), logger, env, typeHelper);
+                json, key, overridable, fallback, doNotConvert(), alwaysValid(), logger, env, typeHelper);
     }
 
     @NonNull

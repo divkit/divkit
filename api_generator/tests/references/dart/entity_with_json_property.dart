@@ -7,12 +7,12 @@ import 'package:divkit/src/utils/parsing.dart';
 
 class EntityWithJsonProperty with EquatableMixin  {
   const EntityWithJsonProperty({
-    this.jsonProperty = None,
+    this.jsonProperty = const ValueExpression(None),
   });
 
   static const type = "entity_with_json_property";
    // default value: None
-  final Obj jsonProperty;
+  final Expression<Obj> jsonProperty;
 
   @override
   List<Object?> get props => [
@@ -20,7 +20,7 @@ class EntityWithJsonProperty with EquatableMixin  {
       ];
 
   EntityWithJsonProperty copyWith({
-      Obj?  jsonProperty,
+      Expression<Obj>?  jsonProperty,
   }) => EntityWithJsonProperty(
       jsonProperty: jsonProperty ?? this.jsonProperty,
     );
@@ -31,7 +31,7 @@ class EntityWithJsonProperty with EquatableMixin  {
     }
     try {
       return EntityWithJsonProperty(
-        jsonProperty: reqProp<Obj>(safeParseMap(json['json_property'], fallback: None,), name: 'json_property',),
+        jsonProperty: reqVProp<Obj>(safeParseMapExpr(json['json_property'], fallback: None,), name: 'json_property',),
       );
     } catch (e, st) {
       logger.warning("Parsing error", error: e, stackTrace: st);

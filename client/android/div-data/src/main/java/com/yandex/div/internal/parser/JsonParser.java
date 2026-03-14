@@ -71,13 +71,13 @@ public class JsonParser {
     }
 
     @Nullable
-    public static Expression<String> readOptionalExpression(
+    public static <T> Expression<T> readOptionalExpression(
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env,
-            @NonNull final TypeHelper<String> typeHelper) {
-        return readOptionalExpression(jsonObject, key, doNotConvert(), ALWAYS_VALID_STRING, logger, env, typeHelper);
+            @NonNull final TypeHelper<T> typeHelper) {
+        return readOptionalExpression(jsonObject, key, doNotConvert(), alwaysValid(), logger, env, typeHelper);
     }
 
     @Nullable

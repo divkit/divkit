@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithJsonPropertyTemplate(
-    @JvmField val jsonProperty: Field<JSONObject>,
+    @JvmField val jsonProperty: Field<Expression<JSONObject>>,
 ) : JSONSerializable, JsonTemplate<EntityWithJsonProperty> {
 
     constructor(
@@ -43,14 +43,14 @@ class EntityWithJsonPropertyTemplate(
     companion object {
         const val TYPE = "entity_with_json_property"
 
-        private val JSON_PROPERTY_DEFAULT_VALUE = JSONObject("""
+        private val JSON_PROPERTY_DEFAULT_VALUE = Expression.constant(JSONObject("""
         {
             "key": "value",
             "items": [
                 "value"
             ]
         }
-        """)
+        """))
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithJsonPropertyTemplate(env, json = it) }
     }
