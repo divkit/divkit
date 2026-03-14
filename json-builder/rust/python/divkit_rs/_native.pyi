@@ -3,17 +3,22 @@
 from __future__ import annotations
 
 import enum
+from collections.abc import Sequence
 from typing import Any, ClassVar, TypeAlias
 
 
 class PyDivEntity:
     template_name: ClassVar[str]
+    __field_names__: ClassVar[dict[Any, str]]
 
     def __init__(self, **kwargs: Any) -> None: ...
+    def __getattr__(self, name: str) -> Any: ...
+    def __setattr__(self, name: str, value: Any) -> None: ...
     def dict(self) -> dict[str, Any]: ...
     def build(self) -> dict[str, Any]: ...
     def related_templates(self) -> set[type[PyDivEntity]]: ...
-    def schema(self, exclude_fields: list[str] | None = None) -> dict[str, Any]: ...
+    @classmethod
+    def schema(cls, exclude_fields: Sequence[str] | None = None) -> dict[str, Any]: ...
     @classmethod
     def template(cls) -> dict[str, Any]: ...
     @classmethod
@@ -21,7 +26,7 @@ class PyDivEntity:
 
 
 class PyDivData:
-    def __init__(self, log_id: str, states: list[PyDivDataState]) -> None: ...
+    def __init__(self, log_id: str, states: Sequence[PyDivDataState]) -> None: ...
     def dict(self) -> dict[str, Any]: ...
     def build(self) -> dict[str, Any]: ...
 
@@ -37,9 +42,45 @@ def normalize_pydivkit_json(value: Any) -> Any: ...
 def register_type_meta(
     class_name: str,
     type_name: str | None,
-    field_names: list[str],
-    required_fields: list[str],
+    field_names: Sequence[str],
+    required_fields: Sequence[str],
 ) -> None: ...
+
+
+class _DivComponentBase(PyDivEntity):
+    accessibility: DivAccessibility | None
+    alignment_horizontal: DivAlignmentHorizontal | str | None
+    alignment_vertical: DivAlignmentVertical | str | None
+    alpha: float | str | None
+    animators: Sequence[DivAnimator] | None
+    background: Sequence[DivBackground] | None
+    border: DivBorder | None
+    column_span: int | str | None
+    disappear_actions: Sequence[DivDisappearAction] | None
+    extensions: Sequence[DivExtension] | None
+    focus: DivFocus | None
+    functions: Sequence[DivFunction] | None
+    height: DivSize | None
+    id: str | None
+    layout_provider: DivLayoutProvider | None
+    margins: DivEdgeInsets | None
+    paddings: DivEdgeInsets | None
+    reuse_id: str | None
+    row_span: int | str | None
+    selected_actions: Sequence[DivAction] | None
+    tooltips: Sequence[DivTooltip] | None
+    transform: DivTransform | None
+    transformations: Sequence[DivTransformation] | None
+    transition_change: DivChangeTransition | None
+    transition_in: DivAppearanceTransition | None
+    transition_out: DivAppearanceTransition | None
+    transition_triggers: Sequence[DivTransitionTrigger | str] | None
+    variable_triggers: Sequence[DivTrigger] | None
+    variables: Sequence[DivVariable] | None
+    visibility: DivVisibility | str | None
+    visibility_action: DivVisibilityAction | None
+    visibility_actions: Sequence[DivVisibilityAction] | None
+    width: DivSize | None
 
 
 class AccessibilityType(str, enum.Enum):
@@ -336,74 +377,84 @@ class ArrayValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: list[Any] | str,
+        value: list[Any] | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class ArrayVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: list[Any] | str,
+        name: str | None = None,
+        value: list[Any] | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class BooleanValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: bool | str,
+        value: bool | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class BooleanVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: bool | int | str,
+        name: str | None = None,
+        value: bool | int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class ColorValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class ColorVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: str,
+        name: str | None = None,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class ContentText(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class ContentUrl(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DictValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: dict[str, Any] | str,
+        value: dict[str, Any] | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DictVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: dict[str, Any] | str,
+        name: str | None = None,
+        value: dict[str, Any] | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAbsoluteEdgeInsets(PyDivEntity):
@@ -414,6 +465,7 @@ class DivAbsoluteEdgeInsets(PyDivEntity):
         left: int | str | None = None,
         right: int | str | None = None,
         top: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAccessibility(PyDivEntity):
@@ -427,30 +479,32 @@ class DivAccessibility(PyDivEntity):
         mute_after_action: bool | int | str | None = None,
         state_description: str | None = None,
         type: DivAccessibilityType | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAction(PyDivEntity):
     def __init__(
         self,
         *,
-        log_id: str,
         download_callbacks: DivDownloadCallbacks | None = None,
         is_enabled: bool | int | str | None = None,
+        log_id: str | None = None,
         log_url: str | None = None,
-        menu_items: list[DivActionMenuItem] | None = None,
+        menu_items: Sequence[DivActionMenuItem] | None = None,
         payload: dict[str, Any] | None = None,
         referer: str | None = None,
         scope_id: str | None = None,
         target: DivActionTarget | str | None = None,
         typed: DivActionTyped | None = None,
         url: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionAnimatorStart(PyDivEntity):
     def __init__(
         self,
         *,
-        animator_id: str,
+        animator_id: str | None = None,
         direction: DivAnimationDirection | str | None = None,
         duration: int | str | None = None,
         end_value: DivTypedValue | None = None,
@@ -458,237 +512,265 @@ class DivActionAnimatorStart(PyDivEntity):
         repeat_count: DivCount | None = None,
         start_delay: int | str | None = None,
         start_value: DivTypedValue | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionAnimatorStop(PyDivEntity):
     def __init__(
         self,
         *,
-        animator_id: str,
+        animator_id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionArrayInsertValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: DivTypedValue,
-        variable_name: str,
         index: int | str | None = None,
+        value: DivTypedValue | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionArrayRemoveValue(PyDivEntity):
     def __init__(
         self,
         *,
-        index: int | str,
-        variable_name: str,
+        index: int | str | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionArraySetValue(PyDivEntity):
     def __init__(
         self,
         *,
-        index: int | str,
-        value: DivTypedValue,
-        variable_name: str,
+        index: int | str | None = None,
+        value: DivTypedValue | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionClearFocus(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionCopyToClipboard(PyDivEntity):
     def __init__(
         self,
         *,
-        content: DivActionCopyToClipboardContent,
+        content: DivActionCopyToClipboardContent | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionCustom(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionDictSetValue(PyDivEntity):
     def __init__(
         self,
         *,
-        key: str,
-        variable_name: str,
+        key: str | None = None,
         value: DivTypedValue | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionDownload(PyDivEntity):
     def __init__(
         self,
         *,
-        url: str,
-        on_fail_actions: list[DivAction] | None = None,
-        on_success_actions: list[DivAction] | None = None,
+        on_fail_actions: Sequence[DivAction] | None = None,
+        on_success_actions: Sequence[DivAction] | None = None,
+        url: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionFocusElement(PyDivEntity):
     def __init__(
         self,
         *,
-        element_id: str,
+        element_id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionHideTooltip(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
+        id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionMenuItem(PyDivEntity):
     def __init__(
         self,
         *,
-        text: str,
         action: DivAction | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
+        text: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionScrollBy(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
         animated: bool | str | None = None,
+        id: str | None = None,
         item_count: int | str | None = None,
         offset: int | str | None = None,
         overflow: DivActionScrollByOverflow | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionScrollTo(PyDivEntity):
     def __init__(
         self,
         *,
-        destination: DivActionScrollDestination,
-        id: str,
         animated: bool | str | None = None,
+        destination: DivActionScrollDestination | None = None,
+        id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionSetState(PyDivEntity):
     def __init__(
         self,
         *,
-        state_id: str,
+        state_id: str | None = None,
         temporary: bool | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionSetStoredValue(PyDivEntity):
     def __init__(
         self,
         *,
-        lifetime: int | str,
-        name: str,
-        value: DivTypedValue,
+        lifetime: int | str | None = None,
+        name: str | None = None,
+        value: DivTypedValue | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionSetVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        value: DivTypedValue,
-        variable_name: str,
+        value: DivTypedValue | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionShowTooltip(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
+        id: str | None = None,
         multiple: bool | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionSubmit(PyDivEntity):
     def __init__(
         self,
         *,
-        container_id: str,
-        request: DivActionSubmitRequest,
-        on_fail_actions: list[DivAction] | None = None,
-        on_success_actions: list[DivAction] | None = None,
+        container_id: str | None = None,
+        on_fail_actions: Sequence[DivAction] | None = None,
+        on_success_actions: Sequence[DivAction] | None = None,
+        request: DivActionSubmitRequest | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionSubmitRequest(PyDivEntity):
     def __init__(
         self,
         *,
-        url: str,
-        headers: list[RequestHeader] | None = None,
+        headers: Sequence[RequestHeader] | None = None,
         method: RequestMethod | str | None = None,
+        url: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionTimer(PyDivEntity):
     def __init__(
         self,
         *,
-        action: DivActionTimerAction | str,
-        id: str,
+        action: DivActionTimerAction | str | None = None,
+        id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionUpdateStructure(PyDivEntity):
     def __init__(
         self,
         *,
-        path: str,
-        value: DivTypedValue,
-        variable_name: str,
+        path: str | None = None,
+        value: DivTypedValue | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivActionVideo(PyDivEntity):
     def __init__(
         self,
         *,
-        action: DivActionVideoAction | str,
-        id: str,
+        action: DivActionVideoAction | str | None = None,
+        id: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAnimation(PyDivEntity):
     def __init__(
         self,
         *,
-        name: DivAnimationName | str,
         duration: int | str | None = None,
         end_value: float | str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
-        items: list[DivAnimation] | None = None,
+        items: Sequence[DivAnimation] | None = None,
+        name: DivAnimationName | str | None = None,
         repeat: DivCount | None = None,
         start_delay: int | str | None = None,
         start_value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAnimatorBase(PyDivEntity):
     def __init__(
         self,
         *,
-        duration: int | str,
-        id: str,
-        variable_name: str,
-        cancel_actions: list[DivAction] | None = None,
+        cancel_actions: Sequence[DivAction] | None = None,
         direction: DivAnimationDirection | str | None = None,
-        end_actions: list[DivAction] | None = None,
+        duration: int | str | None = None,
+        end_actions: Sequence[DivAction] | None = None,
+        id: str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         repeat_count: DivCount | None = None,
         start_delay: int | str | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAppearanceSetTransition(PyDivEntity):
     def __init__(
         self,
         *,
-        items: list[DivAppearanceTransition],
+        items: Sequence[DivAppearanceTransition] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivAspect(PyDivEntity):
     def __init__(
         self,
         *,
-        ratio: float | str,
+        ratio: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivBase(PyDivEntity):
@@ -699,14 +781,14 @@ class DivBase(PyDivEntity):
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
@@ -714,27 +796,29 @@ class DivBase(PyDivEntity):
         paddings: DivEdgeInsets | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivBlur(PyDivEntity):
     def __init__(
         self,
         *,
-        radius: int | str,
+        radius: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivBorder(PyDivEntity):
@@ -746,6 +830,7 @@ class DivBorder(PyDivEntity):
         has_shadow: bool | int | str | None = None,
         shadow: DivShadow | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivChangeBoundsTransition(PyDivEntity):
@@ -755,13 +840,15 @@ class DivChangeBoundsTransition(PyDivEntity):
         duration: int | str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         start_delay: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivChangeSetTransition(PyDivEntity):
     def __init__(
         self,
         *,
-        items: list[DivChangeTransition],
+        items: Sequence[DivChangeTransition] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCircleShape(PyDivEntity):
@@ -771,122 +858,129 @@ class DivCircleShape(PyDivEntity):
         background_color: str | None = None,
         radius: DivFixedSize | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCloudBackground(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
-        corner_radius: int | str,
+        color: str | None = None,
+        corner_radius: int | str | None = None,
         paddings: DivEdgeInsets | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCollectionItemBuilder(PyDivEntity):
     def __init__(
         self,
         *,
-        data: list[Any] | str,
-        prototypes: list[DivCollectionItemBuilderPrototype],
+        data: list[Any] | str | None = None,
         data_element_name: str | None = None,
+        prototypes: Sequence[DivCollectionItemBuilderPrototype] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCollectionItemBuilderPrototype(PyDivEntity):
     def __init__(
         self,
         *,
-        div: Div,
+        div: Div | None = None,
         id: str | None = None,
         selector: bool | int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivColorAnimator(PyDivEntity):
     def __init__(
         self,
         *,
-        duration: int | str,
-        end_value: str,
-        id: str,
-        variable_name: str,
-        cancel_actions: list[DivAction] | None = None,
+        cancel_actions: Sequence[DivAction] | None = None,
         direction: DivAnimationDirection | str | None = None,
-        end_actions: list[DivAction] | None = None,
+        duration: int | str | None = None,
+        end_actions: Sequence[DivAction] | None = None,
+        end_value: str | None = None,
+        id: str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         repeat_count: DivCount | None = None,
         start_delay: int | str | None = None,
         start_value: str | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivContainer(PyDivEntity):
+class DivContainer(_DivComponentBase):
     def __init__(
         self,
         *,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         aspect: DivAspect | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         clip_to_bounds: bool | int | str | None = None,
         column_span: int | str | None = None,
         content_alignment_horizontal: DivContentAlignmentHorizontal | str | None = None,
         content_alignment_vertical: DivContentAlignmentVertical | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
         item_builder: DivCollectionItemBuilder | None = None,
         item_spacing: int | str | None = None,
-        items: list[Div] | None = None,
+        items: Sequence[Div] | None = None,
         layout_mode: DivContainerLayoutMode | str | None = None,
         layout_provider: DivLayoutProvider | None = None,
         line_separator: DivContainerSeparator | None = None,
         line_spacing: int | str | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         orientation: DivContainerOrientation | str | None = None,
         paddings: DivEdgeInsets | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         separator: DivContainerSeparator | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivContainerSeparator(PyDivEntity):
     def __init__(
         self,
         *,
-        style: DivDrawable,
         margins: DivEdgeInsets | None = None,
         show_at_end: bool | int | str | None = None,
         show_at_start: bool | int | str | None = None,
         show_between: bool | int | str | None = None,
+        style: DivDrawable | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCornersRadius(PyDivEntity):
@@ -897,77 +991,82 @@ class DivCornersRadius(PyDivEntity):
         bottom_right: int | str | None = None,
         top_left: int | str | None = None,
         top_right: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivCurrencyInputMask(PyDivEntity):
     def __init__(
         self,
         *,
-        raw_text_variable: str,
         locale: str | None = None,
+        raw_text_variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivCustom(PyDivEntity):
+class DivCustom(_DivComponentBase):
     def __init__(
         self,
         *,
-        custom_type: str,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
         custom_props: dict[str, Any] | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        custom_type: str | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
-        items: list[Div] | None = None,
+        items: Sequence[Div] | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivData(PyDivEntity):
     def __init__(
         self,
         *,
-        log_id: str,
-        states: list[DivDataState],
-        functions: list[DivFunction] | None = None,
-        timers: list[DivTimer] | None = None,
+        functions: Sequence[DivFunction] | None = None,
+        log_id: str | None = None,
+        states: Sequence[DivDataState] | None = None,
+        timers: Sequence[DivTimer] | None = None,
         transition_animation_selector: DivTransitionSelector | str | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivDataState(PyDivEntity):
     def __init__(
         self,
         *,
-        div: Div,
-        state_id: int,
+        div: Div | None = None,
+        state_id: int | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivDefaultIndicatorItemPlacement(PyDivEntity):
@@ -975,24 +1074,26 @@ class DivDefaultIndicatorItemPlacement(PyDivEntity):
         self,
         *,
         space_between_centers: DivFixedSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivDimension(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
         unit: DivSizeUnit | str | None = None,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivDisappearAction(PyDivEntity):
     def __init__(
         self,
         *,
-        log_id: str,
         disappear_duration: int | str | None = None,
         download_callbacks: DivDownloadCallbacks | None = None,
         is_enabled: bool | int | str | None = None,
+        log_id: str | None = None,
         log_limit: int | str | None = None,
         payload: dict[str, Any] | None = None,
         referer: str | None = None,
@@ -1000,14 +1101,16 @@ class DivDisappearAction(PyDivEntity):
         typed: DivActionTyped | None = None,
         url: str | None = None,
         visibility_percentage: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivDownloadCallbacks(PyDivEntity):
     def __init__(
         self,
         *,
-        on_fail_actions: list[DivAction] | None = None,
-        on_success_actions: list[DivAction] | None = None,
+        on_fail_actions: Sequence[DivAction] | None = None,
+        on_success_actions: Sequence[DivAction] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivEdgeInsets(PyDivEntity):
@@ -1021,14 +1124,16 @@ class DivEdgeInsets(PyDivEntity):
         start: int | str | None = None,
         top: int | str | None = None,
         unit: DivSizeUnit | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivExtension(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
+        id: str | None = None,
         params: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFadeTransition(PyDivEntity):
@@ -1039,64 +1144,72 @@ class DivFadeTransition(PyDivEntity):
         duration: int | str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         start_delay: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFilterRtlMirror(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFixedCount(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFixedLengthInputMask(PyDivEntity):
     def __init__(
         self,
         *,
-        pattern: str,
-        pattern_elements: list[DivFixedLengthInputMaskPatternElement],
-        raw_text_variable: str,
         always_visible: bool | int | str | None = None,
+        pattern: str | None = None,
+        pattern_elements: Sequence[DivFixedLengthInputMaskPatternElement] | None = None,
+        raw_text_variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFixedLengthInputMaskPatternElement(PyDivEntity):
     def __init__(
         self,
         *,
-        key: str,
+        key: str | None = None,
         placeholder: str | None = None,
         regex: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFixedSize(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
         unit: DivSizeUnit | str | None = None,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFixedTranslation(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
         unit: DivSizeUnit | str | None = None,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFocus(PyDivEntity):
     def __init__(
         self,
         *,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         next_focus_ids: DivFocusNextFocusIds | None = None,
-        on_blur: list[DivAction] | None = None,
-        on_focus: list[DivAction] | None = None,
+        on_blur: Sequence[DivAction] | None = None,
+        on_focus: Sequence[DivAction] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFocusNextFocusIds(PyDivEntity):
@@ -1108,27 +1221,30 @@ class DivFocusNextFocusIds(PyDivEntity):
         left: str | None = None,
         right: str | None = None,
         up: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFunction(PyDivEntity):
     def __init__(
         self,
         *,
-        arguments: list[DivFunctionArgument],
-        body: str,
-        name: str,
-        return_type: DivEvaluableType | str,
+        arguments: Sequence[DivFunctionArgument] | None = None,
+        body: str | None = None,
+        name: str | None = None,
+        return_type: DivEvaluableType | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivFunctionArgument(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        type: DivEvaluableType | str,
+        name: str | None = None,
+        type: DivEvaluableType | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivGallery(PyDivEntity):
+class DivGallery(_DivComponentBase):
     def __init__(
         self,
         *,
@@ -1136,23 +1252,23 @@ class DivGallery(PyDivEntity):
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_count: int | str | None = None,
         column_span: int | str | None = None,
         cross_content_alignment: DivGalleryCrossContentAlignment | str | None = None,
         cross_spacing: int | str | None = None,
         default_item: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         item_builder: DivCollectionItemBuilder | None = None,
         item_spacing: int | str | None = None,
-        items: list[Div] | None = None,
+        items: Sequence[Div] | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         orientation: DivGalleryOrientation | str | None = None,
@@ -1162,209 +1278,214 @@ class DivGallery(PyDivEntity):
         row_span: int | str | None = None,
         scroll_mode: DivGalleryScrollMode | str | None = None,
         scrollbar: DivGalleryScrollbar | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivGifImage(PyDivEntity):
+class DivGifImage(_DivComponentBase):
     def __init__(
         self,
         *,
-        gif_url: str,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         aspect: DivAspect | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         column_span: int | str | None = None,
         content_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         content_alignment_vertical: DivAlignmentVertical | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
+        gif_url: str | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
         placeholder_color: str | None = None,
         preload_required: bool | int | str | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         preview: str | None = None,
         preview_url: str | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         scale: DivImageScale | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivGrid(PyDivEntity):
+class DivGrid(_DivComponentBase):
     def __init__(
         self,
         *,
-        column_count: int | str,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
+        column_count: int | str | None = None,
         column_span: int | str | None = None,
         content_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         content_alignment_vertical: DivAlignmentVertical | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
-        items: list[Div] | None = None,
+        items: Sequence[Div] | None = None,
         layout_provider: DivLayoutProvider | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivImage(PyDivEntity):
+class DivImage(_DivComponentBase):
     def __init__(
         self,
         *,
-        image_url: str,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         appearance_animation: DivFadeTransition | None = None,
         aspect: DivAspect | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         column_span: int | str | None = None,
         content_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         content_alignment_vertical: DivAlignmentVertical | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
-        filters: list[DivFilter] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
+        filters: Sequence[DivFilter] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         high_priority_preview_show: bool | int | str | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
+        image_url: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
         placeholder_color: str | None = None,
         preload_required: bool | int | str | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         preview: str | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         scale: DivImageScale | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         tint_color: str | None = None,
         tint_mode: DivBlendMode | str | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivImageBackground(PyDivEntity):
     def __init__(
         self,
         *,
-        image_url: str,
         alpha: float | str | None = None,
         content_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         content_alignment_vertical: DivAlignmentVertical | str | None = None,
-        filters: list[DivFilter] | None = None,
+        filters: Sequence[DivFilter] | None = None,
+        image_url: str | None = None,
         preload_required: bool | int | str | None = None,
         scale: DivImageScale | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivIndicator(PyDivEntity):
+class DivIndicator(_DivComponentBase):
     def __init__(
         self,
         *,
@@ -1376,14 +1497,14 @@ class DivIndicator(PyDivEntity):
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
         animation: DivIndicatorAnimation | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         inactive_item_color: str | None = None,
@@ -1397,48 +1518,49 @@ class DivIndicator(PyDivEntity):
         pager_id: str | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         shape: DivShape | None = None,
         space_between_centers: DivFixedSize | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInfinityCount(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivInput(PyDivEntity):
+class DivInput(_DivComponentBase):
     def __init__(
         self,
         *,
-        text_variable: str,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         autocapitalization: DivInputAutocapitalization | str | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        enter_key_actions: list[DivAction] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        enter_key_actions: Sequence[DivAction] | None = None,
         enter_key_type: DivInputEnterKeyType | str | None = None,
-        extensions: list[DivExtension] | None = None,
-        filters: list[DivInputFilter] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
+        filters: Sequence[DivInputFilter] | None = None,
         focus: DivFocus | None = None,
         font_family: str | None = None,
         font_size: int | str | None = None,
@@ -1446,7 +1568,7 @@ class DivInput(PyDivEntity):
         font_variation_settings: dict[str, Any] | str | None = None,
         font_weight: DivFontWeight | str | None = None,
         font_weight_value: int | str | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         highlight_color: str | None = None,
         hint_color: str | None = None,
@@ -1466,52 +1588,58 @@ class DivInput(PyDivEntity):
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         select_all_on_focus: bool | int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         text_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         text_alignment_vertical: DivAlignmentVertical | str | None = None,
         text_color: str | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        text_variable: str | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        validators: list[DivInputValidator] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        validators: Sequence[DivInputValidator] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputFilterExpression(PyDivEntity):
     def __init__(
         self,
         *,
-        condition: bool | int | str,
+        condition: bool | int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputFilterRegex(PyDivEntity):
     def __init__(
         self,
         *,
-        pattern: str,
+        pattern: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputMaskBase(PyDivEntity):
     def __init__(
         self,
         *,
-        raw_text_variable: str,
+        raw_text_variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputNativeInterface(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
+        color: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputValidatorBase(PyDivEntity):
@@ -1521,26 +1649,29 @@ class DivInputValidatorBase(PyDivEntity):
         allow_empty: bool | int | str | None = None,
         label_id: str | None = None,
         variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputValidatorExpression(PyDivEntity):
     def __init__(
         self,
         *,
-        condition: bool | int | str,
-        label_id: str,
-        variable: str,
         allow_empty: bool | int | str | None = None,
+        condition: bool | int | str | None = None,
+        label_id: str | None = None,
+        variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivInputValidatorRegex(PyDivEntity):
     def __init__(
         self,
         *,
-        label_id: str,
-        pattern: str,
-        variable: str,
         allow_empty: bool | int | str | None = None,
+        label_id: str | None = None,
+        pattern: str | None = None,
+        variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivLayoutProvider(PyDivEntity):
@@ -1549,6 +1680,7 @@ class DivLayoutProvider(PyDivEntity):
         *,
         height_variable_name: str | None = None,
         width_variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivLinearGradient(PyDivEntity):
@@ -1556,16 +1688,18 @@ class DivLinearGradient(PyDivEntity):
         self,
         *,
         angle: int | str | None = None,
-        color_map: list[DivLinearGradientColorPoint] | None = None,
-        colors: list[str] | str | None = None,
+        color_map: Sequence[DivLinearGradientColorPoint] | None = None,
+        colors: Sequence[str] | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivLinearGradientColorPoint(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
-        position: float | str,
+        color: str | None = None,
+        position: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivMatchParentSize(PyDivEntity):
@@ -1575,50 +1709,56 @@ class DivMatchParentSize(PyDivEntity):
         max_size: DivSizeUnitValue | None = None,
         min_size: DivSizeUnitValue | None = None,
         weight: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivNeighbourPageSize(PyDivEntity):
     def __init__(
         self,
         *,
-        neighbour_page_width: DivFixedSize,
+        neighbour_page_width: DivFixedSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivNinePatchBackground(PyDivEntity):
     def __init__(
         self,
         *,
-        image_url: str,
-        insets: DivAbsoluteEdgeInsets,
+        image_url: str | None = None,
+        insets: DivAbsoluteEdgeInsets | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivNumberAnimator(PyDivEntity):
     def __init__(
         self,
         *,
-        duration: int | str,
-        end_value: float | str,
-        id: str,
-        variable_name: str,
-        cancel_actions: list[DivAction] | None = None,
+        cancel_actions: Sequence[DivAction] | None = None,
         direction: DivAnimationDirection | str | None = None,
-        end_actions: list[DivAction] | None = None,
+        duration: int | str | None = None,
+        end_actions: Sequence[DivAction] | None = None,
+        end_value: float | str | None = None,
+        id: str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         repeat_count: DivCount | None = None,
         start_delay: int | str | None = None,
         start_value: float | str | None = None,
+        variable_name: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPageContentSize(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPageSize(PyDivEntity):
     def __init__(
         self,
         *,
-        page_width: DivPercentageSize,
+        page_width: DivPercentageSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPageTransformationOverlap(PyDivEntity):
@@ -1631,6 +1771,7 @@ class DivPageTransformationOverlap(PyDivEntity):
         previous_page_alpha: float | str | None = None,
         previous_page_scale: float | str | None = None,
         reversed_stacking_order: bool | int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPageTransformationSlide(PyDivEntity):
@@ -1642,33 +1783,34 @@ class DivPageTransformationSlide(PyDivEntity):
         next_page_scale: float | str | None = None,
         previous_page_alpha: float | str | None = None,
         previous_page_scale: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivPager(PyDivEntity):
+class DivPager(_DivComponentBase):
     def __init__(
         self,
         *,
-        layout_mode: DivPagerLayoutMode,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
         cross_axis_alignment: DivPagerItemAlignment | str | None = None,
         default_item: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         infinite_scroll: bool | int | str | None = None,
         item_builder: DivCollectionItemBuilder | None = None,
         item_spacing: DivFixedSize | None = None,
-        items: list[Div] | None = None,
+        items: Sequence[Div] | None = None,
+        layout_mode: DivPagerLayoutMode | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         orientation: DivPagerOrientation | str | None = None,
@@ -1678,59 +1820,65 @@ class DivPager(PyDivEntity):
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         scroll_axis_alignment: DivPagerItemAlignment | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPatch(PyDivEntity):
     def __init__(
         self,
         *,
-        changes: list[DivPatchChange],
+        changes: Sequence[DivPatchChange] | None = None,
         mode: DivPatchMode | str | None = None,
-        on_applied_actions: list[DivAction] | None = None,
-        on_failed_actions: list[DivAction] | None = None,
+        on_applied_actions: Sequence[DivAction] | None = None,
+        on_failed_actions: Sequence[DivAction] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPatchChange(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
-        items: list[Div] | None = None,
+        id: str | None = None,
+        items: Sequence[Div] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPercentageSize(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPercentageTranslation(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPhoneInputMask(PyDivEntity):
     def __init__(
         self,
         *,
-        raw_text_variable: str,
+        raw_text_variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPivotFixed(PyDivEntity):
@@ -1739,21 +1887,24 @@ class DivPivotFixed(PyDivEntity):
         *,
         unit: DivSizeUnit | str | None = None,
         value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPivotPercentage(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivPoint(PyDivEntity):
     def __init__(
         self,
         *,
-        x: DivDimension,
-        y: DivDimension,
+        x: DivDimension | None = None,
+        y: DivDimension | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRadialGradient(PyDivEntity):
@@ -1762,48 +1913,54 @@ class DivRadialGradient(PyDivEntity):
         *,
         center_x: DivRadialGradientCenter | None = None,
         center_y: DivRadialGradientCenter | None = None,
-        color_map: list[DivRadialGradientColorPoint] | None = None,
-        colors: list[str] | str | None = None,
+        color_map: Sequence[DivRadialGradientColorPoint] | None = None,
+        colors: Sequence[str] | str | None = None,
         radius: DivRadialGradientRadius | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRadialGradientColorPoint(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
-        position: float | str,
+        color: str | None = None,
+        position: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRadialGradientFixedCenter(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
         unit: DivSizeUnit | str | None = None,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRadialGradientRelativeCenter(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRadialGradientRelativeRadius(PyDivEntity):
     def __init__(
         self,
         *,
-        value: DivRadialGradientRelativeRadiusValue | str,
+        value: DivRadialGradientRelativeRadiusValue | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRotationTransformation(PyDivEntity):
     def __init__(
         self,
         *,
-        angle: float | str,
+        angle: float | str | None = None,
         pivot_x: DivPivot | None = None,
         pivot_y: DivPivot | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivRoundedRectangleShape(PyDivEntity):
@@ -1815,6 +1972,7 @@ class DivRoundedRectangleShape(PyDivEntity):
         item_height: DivFixedSize | None = None,
         item_width: DivFixedSize | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivScaleTransition(PyDivEntity):
@@ -1827,24 +1985,23 @@ class DivScaleTransition(PyDivEntity):
         pivot_y: float | str | None = None,
         scale: float | str | None = None,
         start_delay: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivSelect(PyDivEntity):
+class DivSelect(_DivComponentBase):
     def __init__(
         self,
         *,
-        options: list[DivSelectOption],
-        value_variable: str,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
         font_family: str | None = None,
         font_size: int | str | None = None,
@@ -1852,7 +2009,7 @@ class DivSelect(PyDivEntity):
         font_variation_settings: dict[str, Any] | str | None = None,
         font_weight: DivFontWeight | str | None = None,
         font_weight_value: int | str | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         hint_color: str | None = None,
         hint_text: str | None = None,
@@ -1861,82 +2018,87 @@ class DivSelect(PyDivEntity):
         letter_spacing: float | str | None = None,
         line_height: int | str | None = None,
         margins: DivEdgeInsets | None = None,
+        options: Sequence[DivSelectOption] | None = None,
         paddings: DivEdgeInsets | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         text_color: str | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        value_variable: str | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSelectOption(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
         text: str | None = None,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivSeparator(PyDivEntity):
+class DivSeparator(_DivComponentBase):
     def __init__(
         self,
         *,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         column_span: int | str | None = None,
         delimiter_style: DivSeparatorDelimiterStyle | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSeparatorDelimiterStyle(PyDivEntity):
@@ -1945,48 +2107,53 @@ class DivSeparatorDelimiterStyle(PyDivEntity):
         *,
         color: str | None = None,
         orientation: DelimiterStyleOrientation | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivShadow(PyDivEntity):
     def __init__(
         self,
         *,
-        offset: DivPoint,
         alpha: float | str | None = None,
         blur: int | str | None = None,
         color: str | None = None,
+        offset: DivPoint | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivShapeDrawable(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
-        shape: DivShape,
+        color: str | None = None,
+        shape: DivShape | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSightAction(PyDivEntity):
     def __init__(
         self,
         *,
-        log_id: str,
         download_callbacks: DivDownloadCallbacks | None = None,
         is_enabled: bool | int | str | None = None,
+        log_id: str | None = None,
         log_limit: int | str | None = None,
         payload: dict[str, Any] | None = None,
         referer: str | None = None,
         scope_id: str | None = None,
         typed: DivActionTyped | None = None,
         url: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSizeUnitValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
         unit: DivSizeUnit | str | None = None,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSlideTransition(PyDivEntity):
@@ -1998,27 +2165,25 @@ class DivSlideTransition(PyDivEntity):
         edge: DivSlideTransitionEdge | str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         start_delay: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivSlider(PyDivEntity):
+class DivSlider(_DivComponentBase):
     def __init__(
         self,
         *,
-        thumb_style: DivDrawable,
-        track_active_style: DivDrawable,
-        track_inactive_style: DivDrawable,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         is_enabled: bool | int | str | None = None,
@@ -2027,31 +2192,35 @@ class DivSlider(PyDivEntity):
         max_value: int | str | None = None,
         min_value: int | str | None = None,
         paddings: DivEdgeInsets | None = None,
-        ranges: list[DivSliderRange] | None = None,
+        ranges: Sequence[DivSliderRange] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         secondary_value_accessibility: DivAccessibility | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         thumb_secondary_style: DivDrawable | None = None,
         thumb_secondary_text_style: DivSliderTextStyle | None = None,
         thumb_secondary_value_variable: str | None = None,
+        thumb_style: DivDrawable | None = None,
         thumb_text_style: DivSliderTextStyle | None = None,
         thumb_value_variable: str | None = None,
         tick_mark_active_style: DivDrawable | None = None,
         tick_mark_inactive_style: DivDrawable | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
+        track_active_style: DivDrawable | None = None,
+        track_inactive_style: DivDrawable | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSliderRange(PyDivEntity):
@@ -2063,14 +2232,15 @@ class DivSliderRange(PyDivEntity):
         start: int | str | None = None,
         track_active_style: DivDrawable | None = None,
         track_inactive_style: DivDrawable | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSliderTextStyle(PyDivEntity):
     def __init__(
         self,
         *,
-        font_size: int | str,
         font_family: str | None = None,
+        font_size: int | str | None = None,
         font_size_unit: DivSizeUnit | str | None = None,
         font_variation_settings: dict[str, Any] | str | None = None,
         font_weight: DivFontWeight | str | None = None,
@@ -2078,79 +2248,83 @@ class DivSliderTextStyle(PyDivEntity):
         letter_spacing: float | str | None = None,
         offset: DivPoint | None = None,
         text_color: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivSolidBackground(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
+        color: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivState(PyDivEntity):
+class DivState(_DivComponentBase):
     def __init__(
         self,
         *,
-        states: list[DivStateState],
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         clip_to_bounds: bool | int | str | None = None,
         column_span: int | str | None = None,
         default_state_id: str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
         div_id: str | None = None,
-        doubletap_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         state_id_variable: str | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        states: Sequence[DivStateState] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_animation_selector: DivTransitionSelector | str | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivStateState(PyDivEntity):
     def __init__(
         self,
         *,
-        state_id: str,
         animation_in: DivAnimation | None = None,
         animation_out: DivAnimation | None = None,
         div: Div | None = None,
-        swipe_out_actions: list[DivAction] | None = None,
+        state_id: str | None = None,
+        swipe_out_actions: Sequence[DivAction] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivStretchIndicatorItemPlacement(PyDivEntity):
@@ -2159,98 +2333,103 @@ class DivStretchIndicatorItemPlacement(PyDivEntity):
         *,
         item_spacing: DivFixedSize | None = None,
         max_visible_items: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivStroke(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
+        color: str | None = None,
         style: DivStrokeStyle | None = None,
         unit: DivSizeUnit | str | None = None,
         width: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivStrokeStyleDashed(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivStrokeStyleSolid(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivSwitch(PyDivEntity):
+class DivSwitch(_DivComponentBase):
     def __init__(
         self,
         *,
-        is_on_variable: str,
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        extensions: list[DivExtension] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         is_enabled: bool | int | str | None = None,
+        is_on_variable: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         on_color: str | None = None,
         paddings: DivEdgeInsets | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivTabs(PyDivEntity):
+class DivTabs(_DivComponentBase):
     def __init__(
         self,
         *,
-        items: list[DivTabsItem],
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
-        background: list[DivBackground] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
         dynamic_height: bool | int | str | None = None,
-        extensions: list[DivExtension] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         has_separator: bool | int | str | None = None,
         height: DivSize | None = None,
         id: str | None = None,
+        items: Sequence[DivTabsItem] | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         paddings: DivEdgeInsets | None = None,
         restrict_parent_scroll: bool | int | str | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         selected_tab: int | str | None = None,
         separator_color: str | None = None,
         separator_paddings: DivEdgeInsets | None = None,
@@ -2258,37 +2437,40 @@ class DivTabs(PyDivEntity):
         tab_title_delimiter: DivTabsTabTitleDelimiter | None = None,
         tab_title_style: DivTabsTabTitleStyle | None = None,
         title_paddings: DivEdgeInsets | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTabsItem(PyDivEntity):
     def __init__(
         self,
         *,
-        div: Div,
-        title: str,
+        div: Div | None = None,
+        title: str | None = None,
         title_click_action: DivAction | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTabsTabTitleDelimiter(PyDivEntity):
     def __init__(
         self,
         *,
-        image_url: str,
         height: DivFixedSize | None = None,
+        image_url: str | None = None,
         width: DivFixedSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTabsTabTitleStyle(PyDivEntity):
@@ -2315,30 +2497,30 @@ class DivTabsTabTitleStyle(PyDivEntity):
         letter_spacing: float | str | None = None,
         line_height: int | str | None = None,
         paddings: DivEdgeInsets | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivText(PyDivEntity):
+class DivText(_DivComponentBase):
     def __init__(
         self,
         *,
-        text: str,
         accessibility: DivAccessibility | None = None,
         action: DivAction | None = None,
         action_animation: DivAnimation | None = None,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         auto_ellipsize: bool | int | str | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         capture_focus_on_action: bool | str | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
-        doubletap_actions: list[DivAction] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
+        doubletap_actions: Sequence[DivAction] | None = None,
         ellipsis: DivTextEllipsis | None = None,
-        extensions: list[DivExtension] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
         focus: DivFocus | None = None,
         focused_text_color: str | None = None,
         font_family: str | None = None,
@@ -2348,82 +2530,86 @@ class DivText(PyDivEntity):
         font_variation_settings: dict[str, Any] | str | None = None,
         font_weight: DivFontWeight | str | None = None,
         font_weight_value: int | str | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
-        hover_end_actions: list[DivAction] | None = None,
-        hover_start_actions: list[DivAction] | None = None,
+        hover_end_actions: Sequence[DivAction] | None = None,
+        hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
-        images: list[DivTextImage] | None = None,
+        images: Sequence[DivTextImage] | None = None,
         layout_provider: DivLayoutProvider | None = None,
         letter_spacing: float | str | None = None,
         line_height: int | str | None = None,
-        longtap_actions: list[DivAction] | None = None,
+        longtap_actions: Sequence[DivAction] | None = None,
         margins: DivEdgeInsets | None = None,
         max_lines: int | str | None = None,
         min_hidden_lines: int | str | None = None,
         paddings: DivEdgeInsets | None = None,
-        press_end_actions: list[DivAction] | None = None,
-        press_start_actions: list[DivAction] | None = None,
-        ranges: list[DivTextRange] | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
+        ranges: Sequence[DivTextRange] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         selectable: bool | int | str | None = None,
-        selected_actions: list[DivAction] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
         strike: DivLineStyle | str | None = None,
+        text: str | None = None,
         text_alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         text_alignment_vertical: DivAlignmentVertical | str | None = None,
         text_color: str | None = None,
         text_gradient: DivTextGradient | None = None,
         text_shadow: DivShadow | None = None,
         tighten_width: bool | int | str | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
         truncate: DivTextTruncate | str | None = None,
         underline: DivLineStyle | str | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextEllipsis(PyDivEntity):
     def __init__(
         self,
         *,
-        text: str,
-        actions: list[DivAction] | None = None,
-        images: list[DivTextImage] | None = None,
-        ranges: list[DivTextRange] | None = None,
+        actions: Sequence[DivAction] | None = None,
+        images: Sequence[DivTextImage] | None = None,
+        ranges: Sequence[DivTextRange] | None = None,
+        text: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextImage(PyDivEntity):
     def __init__(
         self,
         *,
-        start: int | str,
-        url: str,
         accessibility: ImageAccessibility | None = None,
         alignment_vertical: DivTextAlignmentVertical | str | None = None,
         height: DivFixedSize | None = None,
         indexing_direction: ImageIndexingDirection | str | None = None,
         preload_required: bool | int | str | None = None,
+        start: int | str | None = None,
         tint_color: str | None = None,
         tint_mode: DivBlendMode | str | None = None,
+        url: str | None = None,
         width: DivFixedSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextRange(PyDivEntity):
     def __init__(
         self,
         *,
-        actions: list[DivAction] | None = None,
+        actions: Sequence[DivAction] | None = None,
         alignment_vertical: DivTextAlignmentVertical | str | None = None,
         background: DivTextRangeBackground | None = None,
         baseline_offset: float | str | None = None,
@@ -2445,6 +2631,7 @@ class DivTextRange(PyDivEntity):
         text_shadow: DivShadow | None = None,
         top_offset: int | str | None = None,
         underline: DivLineStyle | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextRangeBorder(PyDivEntity):
@@ -2453,6 +2640,7 @@ class DivTextRangeBorder(PyDivEntity):
         *,
         corner_radius: int | str | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextRangeMaskBase(PyDivEntity):
@@ -2460,66 +2648,73 @@ class DivTextRangeMaskBase(PyDivEntity):
         self,
         *,
         is_enabled: bool | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextRangeMaskParticles(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
+        color: str | None = None,
         density: float | str | None = None,
         is_animated: bool | str | None = None,
         is_enabled: bool | str | None = None,
         particle_size: DivFixedSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTextRangeMaskSolid(PyDivEntity):
     def __init__(
         self,
         *,
-        color: str,
+        color: str | None = None,
         is_enabled: bool | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTimer(PyDivEntity):
     def __init__(
         self,
         *,
-        id: str,
         duration: int | str | None = None,
-        end_actions: list[DivAction] | None = None,
-        tick_actions: list[DivAction] | None = None,
+        end_actions: Sequence[DivAction] | None = None,
+        id: str | None = None,
+        tick_actions: Sequence[DivAction] | None = None,
         tick_interval: int | str | None = None,
         value_variable: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTooltip(PyDivEntity):
     def __init__(
         self,
         *,
-        div: Div,
-        id: str,
-        position: DivTooltipPosition | str,
         animation_in: DivAnimation | None = None,
         animation_out: DivAnimation | None = None,
         background_accessibility_description: str | None = None,
         bring_to_top_id: str | None = None,
         close_by_tap_outside: bool | str | None = None,
+        div: Div | None = None,
         duration: int | str | None = None,
+        id: str | None = None,
         mode: DivTooltipMode | None = None,
         offset: DivPoint | None = None,
+        position: DivTooltipPosition | str | None = None,
         substrate_div: Div | None = None,
-        tap_outside_actions: list[DivAction] | None = None,
+        tap_outside_actions: Sequence[DivAction] | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTooltipModeModal(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTooltipModeNonModal(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTransform(PyDivEntity):
@@ -2529,6 +2724,7 @@ class DivTransform(PyDivEntity):
         pivot_x: DivPivot | None = None,
         pivot_y: DivPivot | None = None,
         rotation: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTransitionBase(PyDivEntity):
@@ -2538,6 +2734,7 @@ class DivTransitionBase(PyDivEntity):
         duration: int | str | None = None,
         interpolator: DivAnimationInterpolator | str | None = None,
         start_delay: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTranslationTransformation(PyDivEntity):
@@ -2546,96 +2743,101 @@ class DivTranslationTransformation(PyDivEntity):
         *,
         x: DivTranslation | None = None,
         y: DivTranslation | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivTrigger(PyDivEntity):
     def __init__(
         self,
         *,
-        actions: list[DivAction],
-        condition: bool | int | str,
+        actions: Sequence[DivAction] | None = None,
+        condition: bool | int | str | None = None,
         mode: DivTriggerMode | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
-class DivVideo(PyDivEntity):
+class DivVideo(_DivComponentBase):
     def __init__(
         self,
         *,
-        video_sources: list[DivVideoSource],
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
         alpha: float | str | None = None,
-        animators: list[DivAnimator] | None = None,
+        animators: Sequence[DivAnimator] | None = None,
         aspect: DivAspect | None = None,
         autostart: bool | int | str | None = None,
-        background: list[DivBackground] | None = None,
+        background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
-        buffering_actions: list[DivAction] | None = None,
+        buffering_actions: Sequence[DivAction] | None = None,
         column_span: int | str | None = None,
-        disappear_actions: list[DivDisappearAction] | None = None,
+        disappear_actions: Sequence[DivDisappearAction] | None = None,
         elapsed_time_variable: str | None = None,
-        end_actions: list[DivAction] | None = None,
-        extensions: list[DivExtension] | None = None,
-        fatal_actions: list[DivAction] | None = None,
+        end_actions: Sequence[DivAction] | None = None,
+        extensions: Sequence[DivExtension] | None = None,
+        fatal_actions: Sequence[DivAction] | None = None,
         focus: DivFocus | None = None,
-        functions: list[DivFunction] | None = None,
+        functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
         layout_provider: DivLayoutProvider | None = None,
         margins: DivEdgeInsets | None = None,
         muted: bool | int | str | None = None,
         paddings: DivEdgeInsets | None = None,
-        pause_actions: list[DivAction] | None = None,
+        pause_actions: Sequence[DivAction] | None = None,
         player_settings_payload: dict[str, Any] | None = None,
         preload_required: bool | int | str | None = None,
         preview: str | None = None,
         repeatable: bool | int | str | None = None,
-        resume_actions: list[DivAction] | None = None,
+        resume_actions: Sequence[DivAction] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
         scale: DivVideoScale | str | None = None,
-        selected_actions: list[DivAction] | None = None,
-        tooltips: list[DivTooltip] | None = None,
+        selected_actions: Sequence[DivAction] | None = None,
+        tooltips: Sequence[DivTooltip] | None = None,
         transform: DivTransform | None = None,
-        transformations: list[DivTransformation] | None = None,
+        transformations: Sequence[DivTransformation] | None = None,
         transition_change: DivChangeTransition | None = None,
         transition_in: DivAppearanceTransition | None = None,
         transition_out: DivAppearanceTransition | None = None,
-        transition_triggers: list[DivTransitionTrigger | str] | None = None,
-        variable_triggers: list[DivTrigger] | None = None,
-        variables: list[DivVariable] | None = None,
+        transition_triggers: Sequence[DivTransitionTrigger | str] | None = None,
+        variable_triggers: Sequence[DivTrigger] | None = None,
+        variables: Sequence[DivVariable] | None = None,
+        video_sources: Sequence[DivVideoSource] | None = None,
         visibility: DivVisibility | str | None = None,
         visibility_action: DivVisibilityAction | None = None,
-        visibility_actions: list[DivVisibilityAction] | None = None,
+        visibility_actions: Sequence[DivVisibilityAction] | None = None,
         width: DivSize | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivVideoSource(PyDivEntity):
     def __init__(
         self,
         *,
-        mime_type: str,
-        url: str,
         bitrate: int | str | None = None,
+        mime_type: str | None = None,
         resolution: DivVideoSourceResolution | None = None,
+        url: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivVideoSourceResolution(PyDivEntity):
     def __init__(
         self,
         *,
-        height: int | str,
-        width: int | str,
+        height: int | str | None = None,
+        width: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivVisibilityAction(PyDivEntity):
     def __init__(
         self,
         *,
-        log_id: str,
         download_callbacks: DivDownloadCallbacks | None = None,
         is_enabled: bool | int | str | None = None,
+        log_id: str | None = None,
         log_limit: int | str | None = None,
         payload: dict[str, Any] | None = None,
         referer: str | None = None,
@@ -2644,6 +2846,7 @@ class DivVisibilityAction(PyDivEntity):
         url: str | None = None,
         visibility_duration: int | str | None = None,
         visibility_percentage: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class DivWrapContentSize(PyDivEntity):
@@ -2653,11 +2856,13 @@ class DivWrapContentSize(PyDivEntity):
         constrained: bool | int | str | None = None,
         max_size: DivSizeUnitValue | None = None,
         min_size: DivSizeUnitValue | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class EndDestination(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class ImageAccessibility(PyDivEntity):
@@ -2666,104 +2871,118 @@ class ImageAccessibility(PyDivEntity):
         *,
         description: str | None = None,
         type: AccessibilityType | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class IndexDestination(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class IntegerValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class IntegerVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: int | str,
+        name: str | None = None,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class NumberValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: float | str,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class NumberVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: float | str,
+        name: str | None = None,
+        value: float | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class OffsetDestination(PyDivEntity):
     def __init__(
         self,
         *,
-        value: int | str,
+        value: int | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class PropertyVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        get: str,
-        name: str,
-        value_type: DivEvaluableType | str,
+        get: str | None = None,
+        name: str | None = None,
         new_value_variable_name: str | None = None,
-        set: list[DivAction] | None = None,
+        set: Sequence[DivAction] | None = None,
+        value_type: DivEvaluableType | str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class RequestHeader(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: str,
+        name: str | None = None,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class StartDestination(PyDivEntity):
     def __init__(
         self,
+        **kwargs: Any,
     ) -> None: ...
 
 class StringValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class StringVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: str,
+        name: str | None = None,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class UrlValue(PyDivEntity):
     def __init__(
         self,
         *,
-        value: str,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class UrlVariable(PyDivEntity):
     def __init__(
         self,
         *,
-        name: str,
-        value: str,
+        name: str | None = None,
+        value: str | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 

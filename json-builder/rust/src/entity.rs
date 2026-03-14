@@ -4,6 +4,18 @@ use crate::field::FieldDescriptor;
 use crate::schema::SchemaGenerator;
 use crate::value::DivValue;
 
+/// Normalize a Rust field name to the DivKit JSON key name.
+/// Only corners_radius fields use hyphens; all others pass through unchanged.
+pub fn normalize_json_key(key: &str) -> &str {
+    match key {
+        "top_left" => "top-left",
+        "top_right" => "top-right",
+        "bottom_left" => "bottom-left",
+        "bottom_right" => "bottom-right",
+        _ => key,
+    }
+}
+
 /// Core trait for all entities (mirrors Python's `BaseEntity`).
 ///
 /// Every entity type implements this trait to provide:
@@ -29,7 +41,7 @@ pub trait Entity: std::fmt::Debug + EntityClone + Send + Sync {
         let mut map = serde_json::Map::new();
         for (name, value) in self.field_values() {
             if !value.is_null() {
-                map.insert(name, value.to_json());
+                map.insert(normalize_json_key(&name).to_string(), value.to_json());
             }
         }
         Value::Object(map)

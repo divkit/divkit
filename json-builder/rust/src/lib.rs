@@ -630,8 +630,8 @@ mod tests {
         assert_eq!(result["duration"], 300);
         assert_eq!(result["start_delay"], 100);
         assert_eq!(result["interpolator"], "ease_in_out");
-        assert_eq!(result["start_value"], 0);
-        assert_eq!(result["end_value"], 1);
+        assert_eq!(result["start_value"], 0.0);
+        assert_eq!(result["end_value"], 1.0);
     }
 
     #[test]
@@ -641,7 +641,7 @@ mod tests {
             .pivot_x(DivPivotPercentage::new().value(0.5))
             .pivot_y(DivPivotPercentage::new().value(0.5));
         let result = transform.dict();
-        assert_eq!(result["rotation"], 45);
+        assert_eq!(result["rotation"], 45.0);
         assert_eq!(result["pivot_x"]["type"], "pivot-percentage");
         assert_eq!(result["pivot_x"]["value"], 0.5);
         assert_eq!(result["pivot_y"]["type"], "pivot-percentage");
@@ -669,8 +669,8 @@ mod tests {
         assert_eq!(result["div"]["text"], "Tooltip text");
         assert_eq!(result["position"], "top");
         assert_eq!(result["duration"], 3000);
-        assert_eq!(result["offset"]["x"]["value"], 0);
-        assert_eq!(result["offset"]["y"]["value"], -8);
+        assert_eq!(result["offset"]["x"]["value"], 0.0);
+        assert_eq!(result["offset"]["y"]["value"], -8.0);
     }
 
     // ================================================================
@@ -706,8 +706,8 @@ mod tests {
         assert_eq!(result["id"], "anim_1");
         assert_eq!(result["variable_name"], "progress");
         assert_eq!(result["duration"], 500);
-        assert_eq!(result["start_value"], 0);
-        assert_eq!(result["end_value"], 100);
+        assert_eq!(result["start_value"], 0.0);
+        assert_eq!(result["end_value"], 100.0);
         assert_eq!(result["interpolator"], "ease_out");
     }
 
@@ -798,7 +798,7 @@ mod tests {
         let result = ps.dict();
         assert_eq!(result["type"], "percentage");
         assert_eq!(result["page_width"]["type"], "percentage");
-        assert_eq!(result["page_width"]["value"], 80);
+        assert_eq!(result["page_width"]["value"], 80.0);
     }
 
     #[test]
@@ -914,10 +914,10 @@ mod tests {
             .bottom_left(0)
             .bottom_right(0);
         let result = cr.dict();
-        assert_eq!(result["top_left"], 8);
-        assert_eq!(result["top_right"], 8);
-        assert_eq!(result["bottom_left"], 0);
-        assert_eq!(result["bottom_right"], 0);
+        assert_eq!(result["top-left"], 8);
+        assert_eq!(result["top-right"], 8);
+        assert_eq!(result["bottom-left"], 0);
+        assert_eq!(result["bottom-right"], 0);
     }
 
     #[test]
@@ -935,8 +935,8 @@ mod tests {
         assert_eq!(result["alpha"], 0.5);
         assert_eq!(result["blur"], 10);
         assert_eq!(result["color"], "#000000");
-        assert_eq!(result["offset"]["x"]["value"], 2);
-        assert_eq!(result["offset"]["y"]["value"], 4);
+        assert_eq!(result["offset"]["x"]["value"], 2.0);
+        assert_eq!(result["offset"]["y"]["value"], 4.0);
     }
 
     #[test]
@@ -988,7 +988,7 @@ mod tests {
         let size = DivMatchParentSize::new().weight(2.0);
         let result = size.dict();
         assert_eq!(result["type"], "match_parent");
-        assert_eq!(result["weight"], 2);
+        assert_eq!(result["weight"], 2.0);
     }
 
     #[test]
@@ -1185,9 +1185,9 @@ mod tests {
         assert_eq!(DivValue::String("hello".into()).to_json(), json!("hello"));
         assert_eq!(DivValue::Bool(true).to_json(), json!(true));
         assert_eq!(DivValue::Bool(false).to_json(), json!(false));
-        // Whole-number floats serialize as integers
-        assert_eq!(DivValue::Float(1.0).to_json(), json!(1));
-        assert_eq!(DivValue::Float(-3.0).to_json(), json!(-3));
+        // Whole-number floats preserve float type
+        assert_eq!(DivValue::Float(1.0).to_json(), json!(1.0));
+        assert_eq!(DivValue::Float(-3.0).to_json(), json!(-3.0));
         // Fractional floats stay as floats
         assert_eq!(DivValue::Float(1.5).to_json(), json!(1.5));
     }
@@ -2158,5 +2158,131 @@ mod tests {
 
         // Unknown entities return None
         assert!(entity_field_descriptors("NonExistentEntity").is_none());
+    }
+
+    // ================================================================
+    // Bug A: DivValue::Map key normalization
+    // ================================================================
+
+    #[test]
+    fn test_map_corners_radius_keys_normalized() {
+        let map = DivValue::Map(vec![
+            ("top_left".to_string(), DivValue::Int(24)),
+            ("top_right".to_string(), DivValue::Int(24)),
+        ]);
+        let json = map.to_json();
+        let obj = json.as_object().unwrap();
+        assert!(
+            obj.contains_key("top-left"),
+            "expected top-left, got {:?}",
+            obj.keys().collect::<Vec<_>>()
+        );
+        assert!(obj.contains_key("top-right"));
+    }
+
+    // ================================================================
+    // Bug B: Schema coercion recursion
+    // ================================================================
+
+    #[test]
+    fn test_coerce_int_to_float_for_number_schema() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+        let st = SchemaFieldType::AnyOf(vec![SchemaFieldType::Number, SchemaFieldType::Expr]);
+        let result = coerce_for_schema(DivValue::Int(1), &st);
+        assert!(
+            matches!(result, DivValue::Float(f) if f == 1.0),
+            "expected Float(1.0), got {:?}",
+            result
+        );
+    }
+
+    #[test]
+    fn test_coerce_string_true_to_bool() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+        let st = SchemaFieldType::AnyOf(vec![SchemaFieldType::Boolean, SchemaFieldType::Expr]);
+        let result = coerce_for_schema(DivValue::String("True".to_string()), &st);
+        assert!(
+            matches!(result, DivValue::Bool(true)),
+            "expected Bool(true), got {:?}",
+            result
+        );
+    }
+
+    #[test]
+    fn test_coerce_map_by_ref_schema() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+        let st = SchemaFieldType::Ref("DivBorder".to_string());
+        let map = DivValue::Map(vec![("has_shadow".to_string(), DivValue::Int(1))]);
+        let result = coerce_for_schema(map, &st);
+        match result {
+            DivValue::Map(entries) => {
+                let (_, val) = entries.iter().find(|(k, _)| k == "has_shadow").unwrap();
+                assert!(
+                    matches!(val, DivValue::Bool(true)),
+                    "expected Bool(true), got {:?}",
+                    val
+                );
+            }
+            other => panic!("expected Map, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn test_coerce_nested_ref_chain() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+        let st = SchemaFieldType::Ref("DivBorder".to_string());
+        let map = DivValue::Map(vec![(
+            "shadow".to_string(),
+            DivValue::Map(vec![("alpha".to_string(), DivValue::Int(1))]),
+        )]);
+        let result = coerce_for_schema(map, &st);
+        match result {
+            DivValue::Map(entries) => {
+                let (_, shadow_val) = entries.iter().find(|(k, _)| k == "shadow").unwrap();
+                match shadow_val {
+                    DivValue::Map(shadow_entries) => {
+                        let (_, alpha_val) =
+                            shadow_entries.iter().find(|(k, _)| k == "alpha").unwrap();
+                        assert!(
+                            matches!(alpha_val, DivValue::Float(f) if *f == 1.0),
+                            "expected Float(1.0), got {:?}",
+                            alpha_val
+                        );
+                    }
+                    other => panic!("expected shadow Map, got {:?}", other),
+                }
+            }
+            other => panic!("expected Map, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn test_coerce_array_with_ref_elements() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+        let st = SchemaFieldType::Array(Box::new(SchemaFieldType::Ref("DivAction".to_string())));
+        let arr = DivValue::Array(vec![DivValue::Map(vec![
+            ("is_enabled".to_string(), DivValue::Int(1)),
+            ("log_id".to_string(), DivValue::String("click".to_string())),
+        ])]);
+        let result = coerce_for_schema(arr, &st);
+        match result {
+            DivValue::Array(items) => match &items[0] {
+                DivValue::Map(entries) => {
+                    let (_, val) = entries.iter().find(|(k, _)| k == "is_enabled").unwrap();
+                    assert!(
+                        matches!(val, DivValue::Bool(true)),
+                        "expected Bool(true), got {:?}",
+                        val
+                    );
+                }
+                other => panic!("expected Map, got {:?}", other),
+            },
+            other => panic!("expected Array, got {:?}", other),
+        }
     }
 }

@@ -203,7 +203,7 @@ fn coerce_normalized_value(
 
     let should_coerce_to_float = matches!(
         normalized_key,
-        "alpha" | "ratio" | "weight" | "letter_spacing"
+        "alpha" | "ratio" | "weight" | "letter_spacing" | "rotation"
     ) || (normalized_key == "value"
         && matches!(parent_key, Some("x" | "y")))
         || (normalized_key == "width" && parent_key == Some("stroke"));

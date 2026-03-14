@@ -2,18 +2,21 @@
 
 This repo is a Rust library (`divkit-json-builder`) with Python bindings built via PyO3 + maturin.
 
-No Cursor rules found in `.cursor/rules/` or `.cursorrules`.
-No Copilot rules found in `.github/copilot-instructions.md`.
-
 ## Quick Repo Map
 
 - `Cargo.toml`: Rust crate `divkit-json-builder` (library) + `bench` binary.
 - `src/`: Rust implementation and PyO3 module.
+  - `src/entity.rs`: Core `Entity` / `Template` traits, `DivData`, `DivDataState`, `make_div()`, `make_card()`, `normalize_json_key()`.
+  - `src/value.rs`: `DivValue` enum — dynamic value type stored in entity fields; `to_json()` serialization.
+  - `src/py_entity.rs`: `PyDivEntity` — PyO3 wrapper for all entities; `dict()`, `_set_fields()` with schema-driven type coercion, `related_templates()`.
+  - `src/python.rs`: Python-facing functions (`compat_dump`, `normalize_pydivkit_json`, `compat_make_card`, `make_div`, `make_card`).
+  - `src/py_value.rs`: `json_to_py()` — converts `serde_json::Value` back to Python objects.
 - `src/generated/`: **Auto-generated** Rust entity files and Python registration code (see [Code Generation](#code-generation)).
-- `pyproject.toml`: Python package metadata, maturin config.
+  - `src/generated/schema_registry.rs`: `entity_field_descriptors(name)` — looks up field `SchemaFieldType` info by entity short name (e.g. `"DivContainer"`).
 - `python/divkit_rs/__init__.py`: Python-facing exports.
+- `python/divkit_rs/_pydivkit_compat.py`: pydivkit compatibility layer — `_compat_getattribute`, template registry, `install_pydivkit_compat()`.
+- `pyproject.toml`: Python package metadata, maturin config.
 - `docs/`: benchmarking + binding notes.
-- `.venv/`: Python virtual environment (local, not checked in). Created via `python3 -m venv .venv` for maturin/pip workflows.
 
 ## Build / Lint / Test
 
@@ -28,7 +31,8 @@ No Copilot rules found in `.github/copilot-instructions.md`.
 - Lint (Clippy):
   - `cargo clippy --all-targets --all-features -- -D warnings`
 - Run tests:
-  - `cargo test`
+  - `cargo test --lib` (or `make test`)
+  - **Note:** bare `cargo test` fails to link because PyO3 requires Python symbols. Always use `--lib` to skip the binary target.
 
 Single test (Rust):
 
@@ -45,39 +49,37 @@ Bench binary:
 
 ### Python bindings (maturin)
 
-Typical local workflow uses a virtualenv.
+This project uses `uv` for Python dependency management and virtualenv.
+
+- Editable install (fast iteration):
+  - `uv run maturin develop`
 
 - Build wheel:
-  - `python -m pip install maturin`
-  - `maturin build --release`
-  - `python -m pip install target/wheels/divkit_rs-*.whl`
-
-- Editable install into current venv (fast iteration):
-  - `maturin develop`
+  - `uv run maturin build --release`
 
 Smoke check import:
 
-- `python -c "import divkit_rs; print(divkit_rs.DivText(text='hi').dict())"`
+- `uv run python -c "import divkit_rs; print(divkit_rs.DivText(text='hi').dict())"`
 
 ### Python tests (pytest)
 
-Requires the extension to be installed first (`maturin develop`):
+Requires the extension to be installed first (`uv run maturin develop`):
 
 ```bash
-source .venv/bin/activate
-maturin develop
-pytest tests/
+uv run maturin develop
+uv run pytest tests/
 ```
 
 Single test:
 
-- `pytest tests/test_divkit_rs.py::TestBoolSerialization::test_bool_true_serializes_as_true`
-- `pytest tests/ -k "enum"` (keyword filter)
+- `uv run pytest tests/test_divkit_rs.py::TestBoolSerialization::test_bool_true_serializes_as_true`
+- `uv run pytest tests/ -k "enum"` (keyword filter)
 
 Notes:
 
 - Tests live in `tests/test_divkit_rs.py`; pytest config is in `pyproject.toml`.
 - Python tests cover PyO3-specific behavior (class types, enum types, serialization from Python) that Rust unit tests cannot exercise.
+- **Note:** `python` is not on PATH; always use `uv run` prefix.
 
 ## Code Generation
 
@@ -124,6 +126,40 @@ python3 -m api_generator \
 - After schema changes in `../../schema/`.
 - After modifying the generator templates in `../../api_generator/api_generator/generators/rust/`.
 - **Do not** manually edit files in `src/generated/`. If you need to change registration logic (e.g. how `register_enums` works), update `generator.py` and re-run `./codegen.sh`.
+
+## Architecture
+
+### Two JSON output paths
+
+1. **Compat path** (used by `make_div`/`make_card` in `_pydivkit_compat.py`): `entity.dict()` → `normalize_pydivkit_json()` → `json.dumps`. The normalize step converts underscore keys to hyphens for corners_radius and coerces int→float for specific fields.
+2. **Native path** (used by `make_div`/`make_card` in `python.rs`): `entity.dict()` → `json_to_py()` → `json.dumps`. No post-processing normalize step; correctness must come from `dict()` itself.
+
+Both paths must produce identical output matching the original pydivkit (prod).
+
+### Serialization rules (JSON output parity)
+
+These rules ensure preprod (Rust) output matches prod (pydivkit):
+
+- **corners_radius keys**: Use hyphens (`top-left`, `bottom-right`), not underscores. Handled by `normalize_json_key()` in `entity.rs`, applied in both `Entity::dict()` and `PyDivEntity::dict()`.
+- **Float preservation**: `DivValue::Float` values always serialize as JSON floats (e.g. `1.0` not `1`). No truncation of whole-number floats to integers.
+- **Type-aware coercion** (in `py_entity.rs` `_set_fields()`): Uses the schema registry to coerce values at field-set time:
+  - Int 0/1 → Bool for fields with `SchemaFieldType::Boolean` (e.g. `clip_to_bounds`, `has_shadow`).
+  - String → Int for fields with `SchemaFieldType::Integer` (e.g. `IntegerVariable.value`).
+- **normalize_pydivkit_json coercion** (in `python.rs`): Coerces int→float for keys: `alpha`, `ratio`, `weight`, `letter_spacing`, `rotation`, `value` (under `x`/`y`), `width` (under `stroke`). Coerces int `color` to string.
+
+### Compat layer (`_pydivkit_compat.py`)
+
+`install_pydivkit_compat()` monkey-patches `PyDivEntity` to emulate pydivkit behavior:
+
+- `_compat_getattribute`: Intercepts attribute access to wrap raw dicts/lists returned by Rust back into entity objects:
+  - `margins` → `NativeDivEdgeInsets`
+  - `action` (singular) → `NativeDivAction`
+  - `actions` (plural) → `list[NativeDivAction]`
+  - Constructor-assigned `PyDivEntity` values are returned directly (mutable reference pattern).
+- `_compat_init_subclass`: Template registration, field declaration processing, `_TEMPLATE_REGISTRY` management.
+- `_compat_entity_init`: Applies `__dk_defaults__` and `__dk_fields__` defaults.
+
+When adding new fields that return entities via `getattr`, check if `_compat_getattribute` needs a wrapping case (like `action`/`actions`/`margins`).
 
 ## Code Style (Rust)
 
@@ -210,3 +246,6 @@ python3 -m api_generator \
 
 - Prefer small, declarative tests that compare `serde_json::json!(...)` values.
 - When testing nested entities, assert key fields rather than entire deep structures if ordering/noise makes diffs brittle.
+- When changing serialization behavior (e.g. float handling, key normalization), update assertions in **both** Rust tests (`src/lib.rs`) and Python tests (`tests/test_divkit_rs.py`).
+- Float assertions in Rust tests: `json!(1.0)` and `json!(1)` are distinct `serde_json::Value` types — use the correct one matching expected output.
+- Schema-driven coercion tests (bool/int) only apply to the Python path (`_set_fields` in `py_entity.rs`) — Rust-only entity construction does not coerce.

@@ -5,8 +5,8 @@ use std::sync::{Arc, Mutex};
 use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyDict, PyList, PySet, PyString, PyTuple, PyType};
 
-use crate::entity::{DivData, DivDataState, Entity};
-use crate::field::FieldDescriptor;
+use crate::entity::{normalize_json_key, DivData, DivDataState, Entity};
+use crate::field::{FieldDescriptor, SchemaFieldType};
 use crate::value::DivValue;
 
 use super::py_value::{divvalue_to_py, json_to_py, py_to_divvalue};
@@ -259,19 +259,21 @@ impl PyDivEntity {
             if field_value.is_null() {
                 continue;
             }
-            result.set_item(field_name, json_to_py(py, &field_value.to_json())?)?;
+            let json_key = normalize_json_key(field_name);
+            result.set_item(json_key, json_to_py(py, &field_value.to_json())?)?;
         }
 
         if self.constructor_dirty {
             if let Some(constructor_values) = &self.constructor_values {
                 for (field_name, constructor_value) in constructor_values {
-                    let Some(current_value) = result.get_item(field_name)? else {
+                    let json_key = normalize_json_key(field_name);
+                    let Some(current_value) = result.get_item(json_key)? else {
                         continue;
                     };
                     let dumped_raw =
                         compat_dump_bound(py, constructor_value.as_ref().bind(py).as_any())?;
                     if !dumped_raw.bind(py).eq(&current_value)? {
-                        result.set_item(field_name, dumped_raw.bind(py))?;
+                        result.set_item(json_key, dumped_raw.bind(py))?;
                     }
                 }
             }
@@ -279,7 +281,8 @@ impl PyDivEntity {
 
         if let Some(defaults) = &self.defaults {
             for (field_name, default_value) in defaults {
-                if result.get_item(field_name)?.is_some() {
+                let json_key = normalize_json_key(field_name);
+                if result.get_item(json_key)?.is_some() {
                     continue;
                 }
                 let dumped_default =
@@ -287,7 +290,7 @@ impl PyDivEntity {
                 if dumped_default.bind(py).is_none() {
                     continue;
                 }
-                result.set_item(field_name, dumped_default.bind(py))?;
+                result.set_item(json_key, dumped_default.bind(py))?;
             }
         }
 
@@ -420,12 +423,26 @@ impl PyDivEntity {
     fn __getattr__(&self, py: Python<'_>, name: &str) -> PyResult<Py<PyAny>> {
         if let Some(val) = self.fields.get(name) {
             divvalue_to_py(py, val)
+        } else if self.type_meta.field_names.iter().any(|f| f == name) {
+            Ok(py.None().into())
         } else {
             Err(pyo3::exceptions::PyAttributeError::new_err(format!(
                 "'{}' object has no attribute '{}'",
                 self.type_meta.class_name, name
             )))
         }
+    }
+
+    fn __copy__(slf: &Bound<'_, Self>) -> PyResult<Py<PyAny>> {
+        let cls = slf.get_type();
+        let dict: Bound<'_, PyDict> = slf.call_method0("dict")?.cast_into()?;
+        // Constructor does not accept "type" — it's a serialization-only field
+        dict.del_item("type").ok();
+        cls.call((), Some(&dict)).map(|obj| obj.unbind())
+    }
+
+    fn __deepcopy__(slf: &Bound<'_, Self>, _memo: &Bound<'_, PyAny>) -> PyResult<Py<PyAny>> {
+        Self::__copy__(slf)
     }
 
     fn __setattr__(&mut self, name: String, value: &Bound<'_, PyAny>) -> PyResult<()> {
@@ -478,14 +495,30 @@ impl PyDivEntity {
     /// overriding whatever `__new__` originally stored.
     #[pyo3(signature = (fields_dict))]
     fn _set_fields(&mut self, fields_dict: &Bound<'_, PyDict>) -> PyResult<()> {
+        let short_name = self
+            .type_meta
+            .class_name
+            .rsplit('.')
+            .next()
+            .unwrap_or(&self.type_meta.class_name);
+        let descriptors = crate::generated::schema_registry::entity_field_descriptors(short_name);
+
         let mut fields = HashMap::with_capacity(fields_dict.len());
         for (k, v) in fields_dict.iter() {
             let key: String = k.extract()?;
-            let value = py_to_divvalue(&v)?;
+            let mut value = py_to_divvalue(&v)?;
             // Preserve pydivkit semantics: None-valued kwargs behave as unset fields.
-            if !value.is_null() {
-                fields.insert(key, value);
+            if value.is_null() {
+                continue;
             }
+            if let Some(ref descs) = descriptors {
+                if let Some(desc) = descs.iter().find(|d| d.name == key) {
+                    if let Some(ref st) = desc.schema_type {
+                        value = coerce_for_schema(value, st);
+                    }
+                }
+            }
+            fields.insert(key, value);
         }
         self.fields = fields;
         self.related_templates_cache = None;
@@ -580,6 +613,157 @@ fn py_mapping_to_pyany_map(
         }
     }
     Ok(None)
+}
+
+fn schema_contains_type(
+    st: &SchemaFieldType,
+    target: std::mem::Discriminant<SchemaFieldType>,
+) -> bool {
+    if std::mem::discriminant(st) == target {
+        return true;
+    }
+    if let SchemaFieldType::AnyOf(types) = st {
+        return types.iter().any(|t| schema_contains_type(t, target));
+    }
+    false
+}
+
+pub(crate) fn coerce_for_schema(value: DivValue, st: &SchemaFieldType) -> DivValue {
+    let bool_disc = std::mem::discriminant(&SchemaFieldType::Boolean);
+    let int_disc = std::mem::discriminant(&SchemaFieldType::Integer);
+    let num_disc = std::mem::discriminant(&SchemaFieldType::Number);
+    match value {
+        DivValue::Int(0) if schema_contains_type(st, bool_disc) => DivValue::Bool(false),
+        DivValue::Int(1) if schema_contains_type(st, bool_disc) => DivValue::Bool(true),
+        DivValue::Int(n) if schema_contains_type(st, num_disc) => DivValue::Float(n as f64),
+        DivValue::String(ref s) if schema_contains_type(st, int_disc) => {
+            s.parse::<i64>().map(DivValue::Int).unwrap_or(value)
+        }
+        DivValue::String(ref s) if schema_contains_type(st, bool_disc) => match s.as_str() {
+            "True" | "true" | "1" => DivValue::Bool(true),
+            "False" | "false" | "0" => DivValue::Bool(false),
+            _ => value,
+        },
+        DivValue::Map(entries) => {
+            if let Some(ref_name) = resolve_ref_for_map(&entries, st) {
+                coerce_map_by_ref(entries, ref_name)
+            } else {
+                DivValue::Map(entries)
+            }
+        }
+        DivValue::Array(items) => {
+            if let Some(inner) = extract_array_inner(st) {
+                DivValue::Array(
+                    items
+                        .into_iter()
+                        .map(|v| coerce_for_schema(v, inner))
+                        .collect(),
+                )
+            } else {
+                DivValue::Array(items)
+            }
+        }
+        _ => value,
+    }
+}
+
+fn extract_single_ref(st: &SchemaFieldType) -> Option<&str> {
+    match st {
+        SchemaFieldType::Ref(name) => Some(name),
+        SchemaFieldType::AnyOf(types) => {
+            let refs: Vec<&str> = types
+                .iter()
+                .filter_map(|t| match t {
+                    SchemaFieldType::Ref(name) => Some(name.as_str()),
+                    _ => None,
+                })
+                .collect();
+            if refs.len() == 1 {
+                Some(refs[0])
+            } else {
+                None
+            }
+        }
+        _ => None,
+    }
+}
+
+/// Resolve the entity Ref for a Map value, supporting discriminated unions.
+///
+/// First tries `extract_single_ref` (fast path for fields with one Ref).
+/// When the schema is `AnyOf` with multiple Refs, looks at the map's `type`
+/// entry and matches it against each Ref entity's type_name default.
+fn resolve_ref_for_map<'a>(
+    entries: &[(String, DivValue)],
+    st: &'a SchemaFieldType,
+) -> Option<&'a str> {
+    if let Some(name) = extract_single_ref(st) {
+        return Some(name);
+    }
+
+    let types = match st {
+        SchemaFieldType::AnyOf(types) => types,
+        _ => return None,
+    };
+
+    let type_name = entries
+        .iter()
+        .find(|(k, _)| k == "type")
+        .and_then(|(_, v)| match v {
+            DivValue::String(s) => Some(s.as_str()),
+            _ => None,
+        })?;
+
+    for t in types {
+        if let SchemaFieldType::Ref(ref_name) = t {
+            if let Some(descs) =
+                crate::generated::schema_registry::entity_field_descriptors(ref_name)
+            {
+                if descs.iter().any(|d| {
+                    d.name == "type" && d.default.as_ref().and_then(|v| v.as_str()) == Some(type_name)
+                }) {
+                    return Some(ref_name);
+                }
+            }
+        }
+    }
+
+    None
+}
+
+fn extract_array_inner(st: &SchemaFieldType) -> Option<&SchemaFieldType> {
+    match st {
+        SchemaFieldType::Array(inner) => Some(inner),
+        SchemaFieldType::AnyOf(types) => types.iter().find_map(|t| match t {
+            SchemaFieldType::Array(inner) => Some(inner.as_ref()),
+            _ => None,
+        }),
+        _ => None,
+    }
+}
+
+fn coerce_map_by_ref(entries: Vec<(String, DivValue)>, ref_name: &str) -> DivValue {
+    let descriptors = crate::generated::schema_registry::entity_field_descriptors(ref_name);
+    match descriptors {
+        Some(descs) => {
+            let coerced = entries
+                .into_iter()
+                .map(|(k, v)| {
+                    if let Some(desc) = descs.iter().find(|d| d.name == k) {
+                        if let Some(ref field_st) = desc.schema_type {
+                            (k, coerce_for_schema(v, field_st))
+                        } else {
+                            (k, v)
+                        }
+                    } else {
+                        (k, v)
+                    }
+                })
+                .collect();
+            DivValue::Map(coerced)
+        }
+        None => DivValue::Map(entries),
+    }
 }
 
 fn collect_template_names_from_json_payload(

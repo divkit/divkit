@@ -24,11 +24,11 @@ test:
 
 stubs:
 	UV_CACHE_DIR=/tmp/uv-cache PYTHONPATH="$(REPO_ROOT)/api_generator" uv run --no-project \
-		python generate_native_pyi.py -s "$(REPO_ROOT)/schema" -o python/divkit_rs/_native.pyi
+		python tools/generate_native_pyi.py -s "$(REPO_ROOT)/schema" -o python/divkit_rs/_native.pyi
 
 check-stubs:
 	UV_CACHE_DIR=/tmp/uv-cache PYTHONPATH="$(REPO_ROOT)/api_generator" uv run --no-project \
-		python generate_native_pyi.py -s "$(REPO_ROOT)/schema" -o python/divkit_rs/_native.pyi --check
+		python tools/generate_native_pyi.py -s "$(REPO_ROOT)/schema" -o python/divkit_rs/_native.pyi --check
 
 bump:
 	@test -n "$(BASE)" || (echo "Usage: make bump BASE=x.y.z U=n" && exit 1)

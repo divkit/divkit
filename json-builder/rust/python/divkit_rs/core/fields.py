@@ -77,27 +77,27 @@ def Field(
     )
 
 
-def Ref(field: Any) -> str:
+def Ref(field: Any) -> Any:
     if not isinstance(field, _Field):
         raise ValueError(f"Value {field} has wrong type. Expected type is Field.")
     field.is_ref = True
     return f"{REF_MARKER_PREFIX}{field.uid}"
 
 
-class Expr:
-    __slots__ = ("v",)
-    v: str
+class Expr(str):
+    __slots__ = ()
 
-    def __init__(self, v: str):
+    def __new__(cls, v: str) -> "Expr":
         if not v.startswith("@{") or not v.endswith("}"):
             raise ValueError(f"failed to initiate Expr with {v}")
-        self.v = v
+        return super().__new__(cls, v)
+
+    @property
+    def v(self) -> str:
+        return str(self)
 
     def __repr__(self) -> str:
-        return f"Expr({self.v})"
-
-    def __str__(self) -> str:
-        return self.v
+        return f"Expr({str(self)})"
 
 
 __all__ = ("Field", "Ref", "Expr", "_Field", "REF_MARKER_PREFIX")

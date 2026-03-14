@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::entity::Entity;
+use crate::entity::{normalize_json_key, Entity};
 use crate::expr::Expr;
 
 /// A dynamically-typed value that can be stored in entity fields.
@@ -30,18 +30,7 @@ impl DivValue {
             DivValue::Null => Value::Null,
             DivValue::Bool(b) => Value::Bool(*b),
             DivValue::Int(n) => Value::from(*n),
-            DivValue::Float(f) => {
-                // Whole-number floats serialize as integers to match DivKit spec
-                if f.fract() == 0.0
-                    && f.is_finite()
-                    && *f >= i64::MIN as f64
-                    && *f <= i64::MAX as f64
-                {
-                    Value::from(*f as i64)
-                } else {
-                    serde_json::json!(*f)
-                }
-            }
+            DivValue::Float(f) => serde_json::json!(*f),
             DivValue::String(s) => Value::String(s.clone()),
             DivValue::Expr(e) => Value::String(e.to_string()),
             DivValue::Enum(s) => Value::String(s.clone()),
@@ -50,7 +39,7 @@ impl DivValue {
             DivValue::Map(entries) => {
                 let map: serde_json::Map<String, Value> = entries
                     .iter()
-                    .map(|(k, v)| (k.clone(), v.to_json()))
+                    .map(|(k, v)| (normalize_json_key(k).to_string(), v.to_json()))
                     .collect();
                 Value::Object(map)
             }

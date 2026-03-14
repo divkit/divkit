@@ -1,5 +1,5 @@
 [package]
-name = "divkit-json-builder"
+name = "divkit-rs"
 version = "32.39.0-post2"
 edition = "2021"
 description = "Fast Rust-backed DivKit JSON builder with Python bindings"

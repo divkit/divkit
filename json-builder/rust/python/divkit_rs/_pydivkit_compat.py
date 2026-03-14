@@ -15,6 +15,9 @@ from divkit_rs._native import (
     DivEdgeInsets as NativeDivEdgeInsets,
 )
 from divkit_rs._native import (
+    DivVisibilityAction as NativeDivVisibilityAction,
+)
+from divkit_rs._native import (
     PyDivData as NativePyDivData,
 )
 from divkit_rs._native import (
@@ -499,10 +502,26 @@ def _compat_getattribute(self: PyDivEntity, name: str) -> Any:
         except Exception:
             pass
         return entity_value
+    if name == "action" and isinstance(value, dict):
+        try:
+            return NativeDivAction(**value)
+        except Exception:
+            return value
     if name == "actions" and isinstance(value, list):
         if all(isinstance(item, dict) for item in value):
             try:
                 return [NativeDivAction(**item) for item in value]
+            except Exception:
+                return value
+    if name == "visibility_action" and isinstance(value, dict):
+        try:
+            return NativeDivVisibilityAction(**value)
+        except Exception:
+            return value
+    if name == "visibility_actions" and isinstance(value, list):
+        if all(isinstance(item, dict) for item in value):
+            try:
+                return [NativeDivVisibilityAction(**item) for item in value]
             except Exception:
                 return value
     return value

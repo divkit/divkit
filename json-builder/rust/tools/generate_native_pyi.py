@@ -49,6 +49,7 @@ HEADER = """# Generated code. Do not modify.
 from __future__ import annotations
 
 import enum
+from collections.abc import Sequence
 from typing import Any, ClassVar, TypeAlias
 """
 
@@ -229,7 +230,7 @@ def map_property_type(
         return "list[Any]"
     if isinstance(ptype, RustArray):
         inner = map_property_type(ptype.property_type, alias_names)
-        return f"list[{inner}]"
+        return f"Sequence[{inner}]"
     if isinstance(ptype, RustObject):
         obj = ptype.object
         if obj is None:
@@ -259,12 +260,16 @@ def emit_core_class_stubs() -> str:
     return """
 class PyDivEntity:
     template_name: ClassVar[str]
+    __field_names__: ClassVar[dict[Any, str]]
 
     def __init__(self, **kwargs: Any) -> None: ...
+    def __getattr__(self, name: str) -> Any: ...
+    def __setattr__(self, name: str, value: Any) -> None: ...
     def dict(self) -> dict[str, Any]: ...
     def build(self) -> dict[str, Any]: ...
     def related_templates(self) -> set[type[PyDivEntity]]: ...
-    def schema(self, exclude_fields: list[str] | None = None) -> dict[str, Any]: ...
+    @classmethod
+    def schema(cls, exclude_fields: Sequence[str] | None = None) -> dict[str, Any]: ...
     @classmethod
     def template(cls) -> dict[str, Any]: ...
     @classmethod
@@ -272,7 +277,7 @@ class PyDivEntity:
 
 
 class PyDivData:
-    def __init__(self, log_id: str, states: list[PyDivDataState]) -> None: ...
+    def __init__(self, log_id: str, states: Sequence[PyDivDataState]) -> None: ...
     def dict(self) -> dict[str, Any]: ...
     def build(self) -> dict[str, Any]: ...
 
@@ -288,8 +293,8 @@ def normalize_pydivkit_json(value: Any) -> Any: ...
 def register_type_meta(
     class_name: str,
     type_name: str | None,
-    field_names: list[str],
-    required_fields: list[str],
+    field_names: Sequence[str],
+    required_fields: Sequence[str],
 ) -> None: ...
 """
 
@@ -304,32 +309,53 @@ def emit_enum_stub(enum_decl: EnumDecl) -> str:
     return "\n".join(lines)
 
 
-def emit_entity_stub(entity: EntityDecl, alias_names: set[str]) -> str:
-    lines = [f"class {entity.name}(PyDivEntity):", "    def __init__("]
+def emit_div_component_base(
+    div_base: EntityDecl,
+    alias_names: set[str],
+) -> str:
+    lines = ["class _DivComponentBase(PyDivEntity):"]
+    for prop in div_base.props:
+        name = ag_utils.snake_case(prop.name)
+        if not is_identifier(name):
+            continue
+        ann = property_annotation(prop, alias_names)
+        lines.append(f"    {name}: {ann} | None")
+    return "\n".join(lines)
 
-    required_entries: list[tuple[str, RustProperty]] = []
-    optional_entries: list[tuple[str, RustProperty]] = []
+
+def emit_entity_stub(
+    entity: EntityDecl,
+    alias_names: set[str],
+    div_member_names: set[str] | None = None,
+) -> str:
+    parent = (
+        "_DivComponentBase"
+        if div_member_names and entity.name in div_member_names
+        else "PyDivEntity"
+    )
+    lines = [f"class {entity.name}({parent}):", "    def __init__("]
+
+    entries: list[tuple[str, RustProperty]] = []
 
     for prop in entity.props:
         name = ag_utils.snake_case(prop.name)
         if not is_identifier(name):
             continue
-        if prop.optional:
-            optional_entries.append((name, prop))
-        else:
-            required_entries.append((name, prop))
+        entries.append((name, prop))
 
-    has_params = bool(required_entries or optional_entries)
+    has_params = bool(entries)
     params: list[str] = ["        self,"]
     if has_params:
         params.append("        *,")
 
-    for name, prop in required_entries:
-        params.append(f"        {name}: {property_annotation(prop, alias_names)},")
-
-    for name, prop in optional_entries:
+    for name, prop in entries:
         ann = property_annotation(prop, alias_names)
-        params.append(f"        {name}: {ann} | None = None,")
+        if prop.optional:
+            params.append(f"        {name}: {ann} | None = None,")
+        else:
+            params.append(f"        {name}: {ann} | None = None,")
+
+    params.append("        **kwargs: Any,")
 
     lines.extend(params)
     lines.append("    ) -> None: ...")
@@ -354,11 +380,27 @@ def render_stub(
     alias_set = set(alias_members)
     parts: list[str] = [HEADER.rstrip(), emit_core_class_stubs().strip()]
 
+    # Find DivBase entity and Div member names for _DivComponentBase generation
+    div_base: EntityDecl | None = None
+    div_member_names: set[str] | None = None
+    for ent in entities:
+        if ent.name == "DivBase":
+            div_base = ent
+            break
+    if div_base and "Div" in alias_members:
+        div_member_names = set(alias_members["Div"])
+        parts.append(emit_div_component_base(div_base, alias_set))
+
     if enums:
         parts.append("\n\n".join(emit_enum_stub(enum_decl) for enum_decl in enums))
 
     if entities:
-        parts.append("\n\n".join(emit_entity_stub(entity, alias_set) for entity in entities))
+        parts.append(
+            "\n\n".join(
+                emit_entity_stub(entity, alias_set, div_member_names)
+                for entity in entities
+            )
+        )
 
     if alias_members:
         parts.append(emit_aliases(alias_members))
@@ -387,7 +429,7 @@ def write_or_check(output_path: Path, content: str, check: bool) -> int:
 
 def main() -> int:
     args = parse_args()
-    project_root = Path(__file__).resolve().parent
+    project_root = Path(__file__).resolve().parent.parent
     schema_dir = Path(args.schema).resolve()
     output_path = Path(args.output)
     if not output_path.is_absolute():

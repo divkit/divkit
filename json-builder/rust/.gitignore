@@ -1,3 +1,4 @@
+.ignore/
 /target
 /dist
 /src/generated/

@@ -5,6 +5,7 @@ Run with: pytest tests/ (after `maturin develop`)
 
 import enum
 from collections.abc import Mapping, Sequence
+from copy import copy, deepcopy
 
 import divkit_rs
 import pytest
@@ -27,6 +28,7 @@ from divkit_rs import (
     DivAspect,
     DivBorder,
     DivContainer,
+    DivCornersRadius,
     DivEdgeInsets,
     DivFixedSize,
     DivFontWeight,
@@ -36,16 +38,24 @@ from divkit_rs import (
     DivSolidBackground,
     DivState,
     DivStateState,
+    DivStroke,
     DivTabs,
     DivTabsItem,
     DivText,
     DivTextRange,
+    DivTransform,
     DivVideo,
     DivVideoSource,
     DivVisibility,
+    DivVisibilityAction,
     DivWrapContentSize,
+    BooleanVariable,
+    DivPoint,
+    DivDimension,
+    DivShadow,
     Field,
     IndexDestination,
+    IntegerVariable,
     PyDivEntity,
     Ref,
     RequestHeader,
@@ -76,6 +86,145 @@ class _CustomSequence(Sequence):
 
     def __len__(self):
         return len(self._items)
+
+
+# ================================================================
+# JSON output parity: preprod must match prod
+# ================================================================
+
+
+class TestJsonOutputParity:
+    """Preprod JSON output must match prod for all field types."""
+
+    # --- corners_radius keys must use hyphens ---
+
+    def test_corners_radius_hyphen_keys(self):
+        d = DivCornersRadius(top_left=8, bottom_right=4).dict()
+        assert "top-left" in d
+        assert "bottom-right" in d
+        assert d["top-left"] == 8
+        assert d["bottom-right"] == 4
+
+    def test_corners_radius_all_keys(self):
+        d = DivCornersRadius(
+            top_left=1, top_right=2, bottom_left=3, bottom_right=4,
+        ).dict()
+        assert list(sorted(d.keys())) == [
+            "bottom-left", "bottom-right", "top-left", "top-right",
+        ]
+
+    # --- whole-number floats stay as float ---
+
+    def test_alpha_whole_float_stays_float(self):
+        d = DivText(text="hi", alpha=1.0).dict()
+        assert isinstance(d["alpha"], float)
+        assert d["alpha"] == 1.0
+
+    def test_alpha_zero_float_stays_float(self):
+        d = DivText(text="hi", alpha=0.0).dict()
+        assert isinstance(d["alpha"], float)
+        assert d["alpha"] == 0.0
+
+    def test_stroke_width_whole_float_stays_float(self):
+        d = DivStroke(color="#000", width=1.0).dict()
+        assert isinstance(d["width"], float)
+        assert d["width"] == 1.0
+
+    def test_transform_rotation_zero_stays_float(self):
+        d = DivTransform(rotation=0.0).dict()
+        assert isinstance(d["rotation"], float)
+        assert d["rotation"] == 0.0
+
+    def test_transform_rotation_whole_stays_float(self):
+        d = DivTransform(rotation=45.0).dict()
+        assert isinstance(d["rotation"], float)
+        assert d["rotation"] == 45.0
+
+    # --- normalize must coerce rotation int → float ---
+
+    def test_normalize_coerces_rotation_to_float(self):
+        from divkit_rs._native import normalize_pydivkit_json
+
+        n = normalize_pydivkit_json({"rotation": 0})
+        assert isinstance(n["rotation"], float)
+        assert n["rotation"] == 0.0
+
+    # --- boolean_int fields: int 0/1 → bool ---
+
+    def test_clip_to_bounds_int_one_coerced_to_true(self):
+        d = DivContainer(items=[], clip_to_bounds=1).dict()
+        assert d["clip_to_bounds"] is True
+
+    def test_clip_to_bounds_int_zero_coerced_to_false(self):
+        d = DivContainer(items=[], clip_to_bounds=0).dict()
+        assert d["clip_to_bounds"] is False
+
+    def test_has_shadow_int_coerced_to_bool(self):
+        d = DivBorder(has_shadow=1).dict()
+        assert d["has_shadow"] is True
+
+    def test_bool_passthrough_unchanged(self):
+        d = DivContainer(items=[], clip_to_bounds=True).dict()
+        assert d["clip_to_bounds"] is True
+
+    # --- integer variable: string value → int ---
+
+    def test_integer_variable_string_value_coerced_to_int(self):
+        d = IntegerVariable(name="x", value="10522").dict()
+        assert d["value"] == 10522
+        assert isinstance(d["value"], int)
+
+    def test_integer_variable_int_value_unchanged(self):
+        d = IntegerVariable(name="x", value=42).dict()
+        assert d["value"] == 42
+        assert isinstance(d["value"], int)
+
+    # --- boolean variable: int 0/1 → bool ---
+
+    def test_boolean_variable_int_one_coerced_to_true(self):
+        d = BooleanVariable(name="flag", value=1).dict()
+        assert d["value"] is True
+
+    def test_boolean_variable_int_zero_coerced_to_false(self):
+        d = BooleanVariable(name="flag", value=0).dict()
+        assert d["value"] is False
+
+    def test_boolean_variable_bool_passthrough(self):
+        d = BooleanVariable(name="flag", value=True).dict()
+        assert d["value"] is True
+
+    # --- visibility_action is_enabled: int 0/1 → bool ---
+
+    def test_visibility_action_is_enabled_int_coerced_to_bool(self):
+        d = DivVisibilityAction(log_id="appear", is_enabled=1).dict()
+        assert d["is_enabled"] is True
+
+    def test_visibility_action_is_enabled_zero_coerced_to_false(self):
+        d = DivVisibilityAction(log_id="appear", is_enabled=0).dict()
+        assert d["is_enabled"] is False
+
+    # --- shadow offset value: float preserved ---
+
+    def test_shadow_offset_value_float_preserved(self):
+        shadow = DivShadow(
+            alpha=1.0,
+            offset=DivPoint(
+                x=DivDimension(value=0.0),
+                y=DivDimension(value=-2.0),
+            ),
+        )
+        d = shadow.dict()
+        assert isinstance(d["alpha"], float)
+        assert isinstance(d["offset"]["x"]["value"], float)
+        assert isinstance(d["offset"]["y"]["value"], float)
+        assert d["offset"]["y"]["value"] == -2.0
+
+    # --- match_parent weight: float preserved ---
+
+    def test_match_parent_weight_float_preserved(self):
+        d = DivMatchParentSize(weight=1.0).dict()
+        assert isinstance(d["weight"], float)
+        assert d["weight"] == 1.0
 
 
 # ================================================================
@@ -113,38 +262,38 @@ class TestBoolSerialization:
 
 
 class TestFloatSerialization:
-    """Whole-number floats serialize as integers to match DivKit spec."""
+    """Float values preserve their type through serialization."""
 
-    def test_whole_float_serializes_as_int(self):
+    def test_whole_float_stays_float(self):
         d = DivAspect(ratio=1.0).dict()
-        assert d["ratio"] == 1
-        assert isinstance(d["ratio"], int)
+        assert d["ratio"] == 1.0
+        assert isinstance(d["ratio"], float)
 
     def test_fractional_float_stays_float(self):
         d = DivAspect(ratio=1.5).dict()
         assert d["ratio"] == 1.5
         assert isinstance(d["ratio"], float)
 
-    def test_weight_whole_float(self):
+    def test_weight_whole_float_stays_float(self):
         d = DivMatchParentSize(weight=2.0).dict()
-        assert d["weight"] == 2
-        assert isinstance(d["weight"], int)
+        assert d["weight"] == 2.0
+        assert isinstance(d["weight"], float)
 
-    def test_zero_float(self):
+    def test_zero_float_stays_float(self):
         d = DivAspect(ratio=0.0).dict()
-        assert d["ratio"] == 0
-        assert isinstance(d["ratio"], int)
+        assert d["ratio"] == 0.0
+        assert isinstance(d["ratio"], float)
 
-    def test_negative_whole_float(self):
+    def test_negative_whole_float_stays_float(self):
         d = DivEdgeInsets(left=-8.0).dict()
-        assert d["left"] == -8
-        assert isinstance(d["left"], int)
+        assert d["left"] == -8.0
+        assert isinstance(d["left"], float)
 
-    def test_int_passthrough_unchanged(self):
-        """Python int values stay as ints (no regression)."""
+    def test_number_schema_int_coerced_to_float(self):
+        """Int values for Number-typed fields become float (pydivkit parity)."""
         d = DivAspect(ratio=1).dict()
-        assert d["ratio"] == 1
-        assert isinstance(d["ratio"], int)
+        assert d["ratio"] == 1.0
+        assert isinstance(d["ratio"], float)
 
 
 # ================================================================
@@ -1222,6 +1371,49 @@ class TestPydivkitCompatibilityLayer:
         assert isinstance(actions[0], DivAction)
         assert actions[0].dict()["log_id"] == "log"
 
+    def test_action_singular_getattr_returns_entity(self):
+        img = DivImage(
+            image_url="https://example.com/icon.png",
+            action=DivAction(log_id="menu_{hash}", url="div-action://open"),
+        )
+
+        action = getattr(img, "action", None)
+
+        assert action is not None
+        assert isinstance(action, DivAction)
+        assert action.dict()["log_id"] == "menu_{hash}"
+
+    def test_visibility_action_singular_getattr_returns_entity(self):
+        text = DivText(
+            text="hello",
+            visibility_action=DivVisibilityAction(
+                log_id="appear_{hash}",
+                visibility_percentage=50,
+            ),
+        )
+
+        va = getattr(text, "visibility_action", None)
+
+        assert va is not None
+        assert isinstance(va, DivVisibilityAction)
+        assert va.dict()["log_id"] == "appear_{hash}"
+
+    def test_visibility_actions_plural_getattr_returns_entities(self):
+        text = DivText(
+            text="hello",
+            visibility_actions=[
+                DivVisibilityAction(log_id="appear_1"),
+                DivVisibilityAction(log_id="appear_2"),
+            ],
+        )
+
+        vas = getattr(text, "visibility_actions")
+
+        assert len(vas) == 2
+        assert all(isinstance(v, DivVisibilityAction) for v in vas)
+        assert vas[0].dict()["log_id"] == "appear_1"
+        assert vas[1].dict()["log_id"] == "appear_2"
+
     def test_tuple_background_serializes_as_list(self):
         container = DivContainer(
             items=[],
@@ -1393,7 +1585,7 @@ class TestPydivkitCompatibilityLayer:
     def test_none_list_kwargs_behave_as_unset_fields(self):
         container = DivContainer(items=[], actions=None)
 
-        assert getattr(container, "actions", []) == []
+        assert container.actions is None
         assert "actions" not in container.dict()
 
     def test_base_pydiventity_kwargs_and_getattr_do_not_fail(self):
@@ -1418,3 +1610,86 @@ class TestPydivkitCompatibilityLayer:
         container.margins.top = 2
 
         assert container.dict()["margins"] == {"right": 6, "top": 2}
+
+    def test_unset_optional_field_returns_none(self):
+        container = DivContainer(items=[])
+        assert container.column_span is None
+
+    def test_unknown_field_raises_attribute_error(self):
+        container = DivContainer(items=[])
+        with pytest.raises(AttributeError):
+            _ = container.totally_unknown_field
+
+    def test_unset_field_isinstance_pattern(self):
+        container = DivContainer(items=[])
+        result = container.column_span if isinstance(container.column_span, int) else 1
+        assert result == 1
+
+
+class TestCopySupport:
+    def test_copy_simple(self):
+        original = DivText(text="hello", font_size=14)
+        cloned = copy(original)
+        assert cloned is not original
+        assert cloned.dict() == original.dict()
+
+    def test_copy_preserves_type(self):
+        original = DivText(text="hello")
+        cloned = copy(original)
+        assert type(cloned) is DivText
+
+    def test_copy_with_enum_fields(self):
+        original = DivText(text="hi", visibility=DivVisibility.INVISIBLE)
+        cloned = copy(original)
+        assert cloned.visibility == DivVisibility.INVISIBLE
+
+    def test_copy_nested(self):
+        original = DivContainer(items=[DivText(text="a"), DivText(text="b")])
+        cloned = copy(original)
+        assert cloned.dict() == original.dict()
+        assert cloned is not original
+
+    def test_deepcopy_simple(self):
+        original = DivText(text="hello", font_size=14)
+        cloned = deepcopy(original)
+        assert cloned is not original
+        assert cloned.dict() == original.dict()
+
+    def test_deepcopy_nested(self):
+        original = DivContainer(items=[DivText(text="a")])
+        cloned = deepcopy(original)
+        assert cloned.dict() == original.dict()
+        assert cloned is not original
+
+
+class TestRawDictCoercion:
+    """When entities are passed as raw dicts (not PyDivEntity), schema coercion must recurse."""
+
+    def test_border_dict_has_shadow_int_coerced_to_bool(self):
+        d = DivContainer(items=[], border={"has_shadow": 1}).dict()
+        assert d["border"]["has_shadow"] is True
+
+    def test_border_dict_shadow_alpha_int_coerced_to_float(self):
+        d = DivContainer(items=[], border={
+            "shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}
+        }).dict()
+        assert isinstance(d["border"]["shadow"]["alpha"], float)
+        assert d["border"]["shadow"]["alpha"] == 1.0
+
+    def test_border_dict_shadow_offset_value_int_coerced_to_float(self):
+        d = DivContainer(items=[], border={
+            "shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}
+        }).dict()
+        assert isinstance(d["border"]["shadow"]["offset"]["x"]["value"], float)
+        assert isinstance(d["border"]["shadow"]["offset"]["y"]["value"], float)
+        assert d["border"]["shadow"]["offset"]["y"]["value"] == -2.0
+
+    def test_action_dict_is_enabled_string_coerced_to_bool(self):
+        d = DivText(text="hi", actions=[{"is_enabled": "True", "log_id": "x"}]).dict()
+        assert d["actions"][0]["is_enabled"] is True
+
+    def test_corners_radius_dict_keys_hyphenated(self):
+        d = DivContainer(items=[], border={"corners_radius": {"top_left": 24, "top_right": 24}}).dict()
+        cr = d["border"]["corners_radius"]
+        assert "top-left" in cr, f"expected top-left, got keys: {list(cr.keys())}"
+        assert "top-right" in cr

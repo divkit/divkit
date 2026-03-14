@@ -16,7 +16,7 @@ PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
 
 # Generate Python type stub for native bindings
 PYTHONPATH="$REPO_ROOT/api_generator" uv run --no-project \
-    python "$SCRIPT_DIR/generate_native_pyi.py" \
+    python "$SCRIPT_DIR/tools/generate_native_pyi.py" \
     -s "$REPO_ROOT/schema" \
     -o "$SCRIPT_DIR/python/divkit_rs/_native.pyi"
 
