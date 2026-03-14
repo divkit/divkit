@@ -120,7 +120,7 @@ function parseControlsInner(obj: Schema, prefix = ''): Control[] {
 
             if (prop.anyOf) {
                 const control: SelectControl = {
-                    name: prefix + key + '.type',
+                    name: prefix + key,
                     type: 'select',
                     options: prop.anyOf.map(item => {
                         const type = item.properties?.type?.enum?.[0];
