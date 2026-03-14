@@ -77,6 +77,7 @@
         border: 2px solid transparent;
         transition: .15s ease-in-out;
         transition-property: background-color, border-color;
+        list-style-type: none;
     }
 
     .spoiler2__title::-webkit-details-marker {

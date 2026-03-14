@@ -356,6 +356,7 @@
         display: flex;
         flex: 1 1 auto;
         align-items: center;
+        font: inherit;
         font-size: 14px;
         border: none;
         background: none;
