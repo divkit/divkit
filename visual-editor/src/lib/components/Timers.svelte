@@ -59,7 +59,7 @@
         value: string | number;
     }>): void {
         const timer = { ...$timers[index] };
-        timer.duration = event.detail.value;
+        timer.duration = Number(event.detail.value);
         const newList = $timers.slice();
         newList[index] = timer;
 
@@ -70,7 +70,7 @@
         value: string | number;
     }>): void {
         const timer = { ...$timers[index] };
-        timer.tick_interval = event.detail.value;
+        timer.tick_interval = Number(event.detail.value);
         const newList = $timers.slice();
         newList[index] = timer;
 
