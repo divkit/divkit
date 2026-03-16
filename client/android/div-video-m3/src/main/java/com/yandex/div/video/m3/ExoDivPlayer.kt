@@ -20,7 +20,6 @@ import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_FULL
 import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_MUTED
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoSource
-import com.yandex.div.internal.KAssert
 
 @OptIn(UnstableApi::class)
 internal class ExoDivPlayer(
@@ -46,6 +45,7 @@ internal class ExoDivPlayer(
     private var isMuted = config.isMuted
 
     private var targetResolutionArea = 0
+    private var reportSourceError = false
 
     private val playerPauseListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -108,7 +108,7 @@ internal class ExoDivPlayer(
             player.addListener(playerPauseListener)
             setConfig(config)
         } else {
-            KAssert.fail { "Attempt to create a player with an empty source" }
+            reportSourceError = true
         }
         player.volume = if (isMuted) VOLUME_MUTED else VOLUME_FULL
 
@@ -147,6 +147,8 @@ internal class ExoDivPlayer(
     }
 
     private fun applyMediaSource() {
+        if (src.isEmpty()) return
+
         var minSourceGreaterThanTarget: DivVideoSource? = null
         var minArea = 0
 
@@ -185,6 +187,10 @@ internal class ExoDivPlayer(
 
     override fun addObserver(observer: DivPlayer.Observer) {
         observers.addObserver(observer)
+        if (reportSourceError) {
+            reportSourceError = false
+            observer.onFatal(SourceError)
+        }
     }
 
     override fun removeObserver(observer: DivPlayer.Observer) {
@@ -194,6 +200,9 @@ internal class ExoDivPlayer(
     override fun setSource(sourceVariants: List<DivVideoSource>, config: DivPlayerPlaybackConfig) {
         setConfig(config)
         src = sourceVariants
+        if (src.isNotEmpty()) {
+            observers.forEach { it.onFatal(SourceError) }
+        }
         applyMediaSource()
     }
 
@@ -219,5 +228,9 @@ internal class ExoDivPlayer(
     override fun release() {
         player.release()
         (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(playerActivityCallback)
+    }
+
+    private companion object {
+        val SourceError = Throwable("Attempt to create a player with an empty source")
     }
 }

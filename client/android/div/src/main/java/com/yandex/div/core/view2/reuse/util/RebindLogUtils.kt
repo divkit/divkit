@@ -64,7 +64,7 @@ private fun Div.printSelf(
         is Div.Text -> ": ${this.value.text.rawValue.toString().replace("\n", " \\n ")}"
         is Div.Image -> ": ${this.value.imageUrl.rawValue}"
         is Div.GifImage -> ": ${this.value.gifUrl.rawValue}"
-        is Div.Video -> ": ${this.value.videoSources.firstOrNull()?.url?.rawValue}"
+        is Div.Video -> ": ${this.value.videoSources?.firstOrNull()?.url?.rawValue}"
         else -> ""
     }
     builder.appendLine(logString)

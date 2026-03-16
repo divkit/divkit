@@ -26,6 +26,7 @@ import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.runBindingAction
@@ -70,6 +71,10 @@ internal class DivVideoBinder @Inject constructor(
         val source = div.createSource(resolver)
         val config = div.createConfig(resolver)
 
+        if (source.isEmpty() && div.playerSettingsPayload == null) {
+            bindingContext.divView.logSourceError(div)
+        }
+
         val currentPlayerView = getPlayerView()
         var currentPreviewView: PreviewImageView? = null
 
@@ -82,7 +87,7 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         val playerView = currentPlayerView ?: playerFactory.makePlayerView(context).apply {
-            // We won't to show black video square before preview is rendered
+            // We won't show black video square before preview is rendered
             visibility = View.INVISIBLE
         }
 
@@ -109,7 +114,7 @@ internal class DivVideoBinder @Inject constructor(
         observeElapsedTime(div, bindingContext, player, path)
         observeMuted(div, resolver, player)
         observeScale(div, resolver, playerView, previewImageView)
-        observeSource(div, resolver, player)
+        observeSource(div, resolver, player, bindingContext.divView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             removeAllViews()
@@ -218,9 +223,13 @@ internal class DivVideoBinder @Inject constructor(
         div: DivVideo,
         resolver: ExpressionResolver,
         player: DivPlayer,
+        divView: Div2View,
     ) {
         addVideoSubscription(
             div.observeSource(resolver) {
+                if (it.isEmpty() && div.playerSettingsPayload == null) {
+                    divView.logSourceError(div)
+                }
                 player.setSource(it, div.createConfig(resolver))
             }
         )
@@ -232,12 +241,15 @@ internal class DivVideoBinder @Inject constructor(
     ): Disposable {
         val itemCallback = { _ : Any -> callback(createSource(resolver)) }
 
-        if (videoSources.size == 1) {
-            return videoSources.first().observe(resolver, itemCallback)
+        val sources = videoSources ?: return Disposable.NULL
+        if (sources.isEmpty()) return Disposable.NULL
+
+        if (sources.size == 1) {
+            return sources.first().observe(resolver, itemCallback)
         }
 
         val disposable = CompositeDisposable()
-        videoSources.forEach {
+        sources.forEach {
             disposable.add(it.observe(resolver, itemCallback))
         }
 
@@ -284,10 +296,16 @@ internal class DivVideoBinder @Inject constructor(
         repeatable = repeatable.evaluate(resolver),
         payload = playerSettingsPayload?.evaluate(resolver),
     )
+
+    private fun Div2View.logSourceError(div: DivVideo) {
+        logError(Throwable(
+            "Neither 'video_source' nor 'player_settings_payload' are specified for video with id '${div.id}'"
+        ))
+    }
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
-    return videoSources.map {
+    return videoSources?.map {
         DivVideoSource(
             url = it.url.evaluate(resolver),
             mimeType = it.mimeType.evaluate(resolver),
@@ -299,7 +317,7 @@ fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
             },
             bitrate = it.bitrate?.evaluate(resolver)
         )
-    }
+    } ?: emptyList()
 }
 
 private class PreviewImageView(context: Context) : AppCompatImageView(context) {

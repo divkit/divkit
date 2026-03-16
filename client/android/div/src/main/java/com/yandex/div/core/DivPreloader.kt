@@ -128,7 +128,7 @@ class DivPreloader internal constructor(
             defaultVisit(data, resolver)
             if (preloadFilter.shouldPreloadContent(data, resolver)) {
                 val sources = mutableListOf<Uri>()
-                data.value.videoSources.forEach {
+                data.value.videoSources?.forEach {
                     sources.add(it.url.evaluate(resolver))
                 }
                 videoPreloader.preloadVideo(sources).also { ticket.addReference(it) }

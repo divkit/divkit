@@ -17,8 +17,7 @@
           "items": {
             "$ref": "div-video-source.json",
             "$description": "translations.json#/div_video_source"
-          },
-          "minItems": 1
+          }
         },
         "repeatable": {
           "$ref": "common.json#/boolean_int",
@@ -116,7 +115,6 @@
     "web"
   ],
   "required": [
-    "type",
-    "video_sources"
+    "type"
   ]
 }

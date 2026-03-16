@@ -62,7 +62,7 @@ internal class DivViewDataPreloader internal constructor(
             defaultVisit(data, context, path)
             if (preloadFilter.shouldPreloadContent(data, context.expressionResolver)) {
                 val sources = mutableListOf<Uri>()
-                data.value.videoSources.forEach {
+                data.value.videoSources?.forEach {
                     sources.add(it.url.evaluate(context.expressionResolver))
                 }
                 videoPreloader.preloadVideo(sources).also { ticket.addReference(it) }
