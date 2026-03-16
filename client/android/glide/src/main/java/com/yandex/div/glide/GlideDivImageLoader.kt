@@ -7,7 +7,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.BaseRequestOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
@@ -57,23 +56,6 @@ class GlideDivImageLoader @JvmOverloads constructor(
 
         return LoadReference {
             Glide.with(context).clear(imageView)
-        }
-    }
-
-    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
-        val imageUri = Uri.parse(imageUrl)
-        // create target to be able to cancel loading
-        val target = createTarget<GifDrawable>()
-
-        // load result will be handled by RequestListener to get dataSource
-        Glide.with(context).asGif()
-            .limitImageBitmapSizeIfNeed()
-            .listener(ImageRequestListener(callback))
-            .load(imageUri)
-            .into(target)
-
-        return LoadReference {
-            Glide.with(context).clear(target)
         }
     }
 
