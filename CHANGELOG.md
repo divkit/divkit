@@ -76,6 +76,19 @@
 * Added a warning about using gifs in the `div-image` component.
 
 
+## 32.36.2
+
+# Android Client:
+* Fixed NoSuchElementException at `Div2View.trackChildrenVisibility()` call.
+
+
+## 32.36.1
+
+# Android Client:
+* Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
+* Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
+
+
 ## 32.36.0
 
 # Android Client:
