@@ -19,6 +19,12 @@ extension DivVideo: DivBlockModeling {
       return EmptyBlock()
     }
 
+    if videoSources == nil, playerSettingsPayload == nil {
+      context.addError(
+        message: "Neither 'video_sources' nor 'player_settings_payload' are specified for video with id: '\(id ?? "null")'."
+      )
+    }
+
     let resumeActions = resumeActions?.uiActions(context: context) ?? []
     let pauseActions = pauseActions?.uiActions(context: context) ?? []
     let bufferingActions = bufferingActions?.uiActions(context: context) ?? []
@@ -33,7 +39,9 @@ extension DivVideo: DivBlockModeling {
       context.makeBinding(variableName: $0, defaultValue: 0)
     }
     let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
-    let videoData = VideoData(videos: videoSources.compactMap { $0.makeVideo(resolver: resolver) })
+    let videoData = VideoData(videos: videoSources?
+      .compactMap { $0.makeVideo(resolver: resolver) } ?? []
+    )
 
     let playbackConfig = PlaybackConfig(
       autoPlay: autostart,

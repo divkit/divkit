@@ -131,7 +131,7 @@ extension DivText.Image: ResourceDiv {
 
 extension DivVideo: ResourceDiv {
   func resolvePreloadURLs(_ resolver: ExpressionResolver) -> [URL?] {
-    videoSources.map { $0.resolveUrl(resolver) }
+    videoSources?.map { $0.resolveUrl(resolver) } ?? []
   }
 }
 

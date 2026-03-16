@@ -591,7 +591,7 @@ public func solidBackground(_ color: RGBAColor) -> DivBackground {
 
 public func divVideo(
   id: String? = nil,
-  videoSources: [DivVideoSource],
+  videoSources: [DivVideoSource]?,
   preloadRequired: Bool? = nil,
   preloadRequiredExpression: String? = nil
 ) -> Div {

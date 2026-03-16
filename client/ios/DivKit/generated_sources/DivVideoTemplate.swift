@@ -50,7 +50,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
   public let variableTriggers: Field<[DivTriggerTemplate]>?
   public let variables: Field<[DivVariableTemplate]>?
-  public let videoSources: Field<[DivVideoSourceTemplate]>? // at least 1 elements
+  public let videoSources: Field<[DivVideoSourceTemplate]>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
@@ -256,12 +256,12 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
     let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let videoSourcesValue = parent?.videoSources?.resolveValue(context: context, validator: ResolvedValue.videoSourcesValidator, useOnlyLinks: true) ?? .noValue
+    let videoSourcesValue = parent?.videoSources?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
@@ -311,14 +311,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = videoSourcesValue {
-      errors.append(.requiredFieldIsMissing(field: "video_sources"))
-    }
-    guard
-      let videoSourcesNonNil = videoSourcesValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivVideo(
       accessibility: accessibilityValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
@@ -363,7 +355,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       transitionTriggers: transitionTriggersValue.value,
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value,
-      videoSources: videoSourcesNonNil,
+      videoSources: videoSourcesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -513,7 +505,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       case "variables":
         variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "video_sources":
-        videoSourcesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.videoSourcesValidator, type: DivVideoSourceTemplate.self).merged(with: videoSourcesValue)
+        videoSourcesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.self).merged(with: videoSourcesValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
       case "visibility_action":
@@ -609,7 +601,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       case parent?.variables?.link:
         variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.videoSources?.link:
-        videoSourcesValue = videoSourcesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.videoSourcesValidator, type: DivVideoSourceTemplate.self) })
+        videoSourcesValue = videoSourcesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.self) })
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
       case parent?.visibilityAction?.link:
@@ -649,12 +641,12 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       _ = transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       _ = variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       _ = variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      _ = videoSourcesValue = videoSourcesValue.merged(with: { parent.videoSources?.resolveValue(context: context, validator: ResolvedValue.videoSourcesValidator, useOnlyLinks: true) })
+      _ = videoSourcesValue = videoSourcesValue.merged(with: { parent.videoSources?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       _ = visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       _ = visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       _ = widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
@@ -704,14 +696,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = videoSourcesValue {
-      errors.append(.requiredFieldIsMissing(field: "video_sources"))
-    }
-    guard
-      let videoSourcesNonNil = videoSourcesValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivVideo(
       accessibility: accessibilityValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
@@ -756,7 +740,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       transitionTriggers: transitionTriggersValue.value,
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value,
-      videoSources: videoSourcesNonNil,
+      videoSources: videoSourcesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -873,7 +857,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       transitionTriggers: merged.transitionTriggers,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates),
-      videoSources: try merged.videoSources?.resolveParent(templates: templates),
+      videoSources: merged.videoSources?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),
       visibilityActions: merged.visibilityActions?.tryResolveParent(templates: templates),

@@ -49,7 +49,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
-  public let videoSources: [DivVideoSource] // at least 1 elements
+  public let videoSources: [DivVideoSource]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -123,9 +123,6 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
 
-  static let videoSourcesValidator: AnyArrayValueValidator<DivVideoSource> =
-    makeArrayValidator(minItems: 1)
-
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       accessibility: try dictionary.getOptionalField("accessibility", transform: { (dict: [String: Any]) in try DivAccessibility(dictionary: dict, context: context) }),
@@ -171,7 +168,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
       transitionTriggers: try dictionary.getOptionalArray("transition_triggers", validator: Self.transitionTriggersValidator, context: context),
       variableTriggers: try dictionary.getOptionalArray("variable_triggers", transform: { (dict: [String: Any]) in try? DivTrigger(dictionary: dict, context: context) }),
       variables: try dictionary.getOptionalArray("variables", transform: { (dict: [String: Any]) in try? DivVariable(dictionary: dict, context: context) }),
-      videoSources: try dictionary.getArray("video_sources", transform: { (dict: [String: Any]) in try? DivVideoSource(dictionary: dict, context: context) }, validator: Self.videoSourcesValidator, context: context),
+      videoSources: try dictionary.getOptionalArray("video_sources", transform: { (dict: [String: Any]) in try? DivVideoSource(dictionary: dict, context: context) }),
       visibility: try dictionary.getOptionalExpressionField("visibility", context: context),
       visibilityAction: try dictionary.getOptionalField("visibility_action", transform: { (dict: [String: Any]) in try DivVisibilityAction(dictionary: dict, context: context) }),
       visibilityActions: try dictionary.getOptionalArray("visibility_actions", transform: { (dict: [String: Any]) in try? DivVisibilityAction(dictionary: dict, context: context) }),
@@ -223,7 +220,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     transitionTriggers: [DivTransitionTrigger]? = nil,
     variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
-    videoSources: [DivVideoSource],
+    videoSources: [DivVideoSource]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -448,7 +445,7 @@ extension DivVideo: Serializable {
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
-    result["video_sources"] = videoSources.map { $0.toDictionary() }
+    result["video_sources"] = videoSources?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }
