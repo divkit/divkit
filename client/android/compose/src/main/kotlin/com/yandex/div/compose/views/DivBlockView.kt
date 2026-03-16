@@ -10,7 +10,7 @@ internal fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier
 ) {
-    val modifier = modifier.apply(data.value())
+    val modifier = modifier.apply(data)
     when (data) {
         is Div.Container -> DivContainerView(modifier, data.value)
         is Div.Image -> DivImageView(modifier, data.value)

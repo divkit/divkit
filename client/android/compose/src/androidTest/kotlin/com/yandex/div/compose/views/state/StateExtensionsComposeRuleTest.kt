@@ -9,14 +9,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.intExpression
 import com.yandex.div.compose.views.DivViewContext
 import com.yandex.div.compose.views.LocalDivViewContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.json.expressions.Expression
 import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -45,7 +44,7 @@ class StateExtensionsComposeRuleTest {
     fun observedValueChangesWhenVariableChanges() {
         variableController.declare(Variable.IntegerVariable("counter", 1))
 
-        val expression = expression("@{counter}")
+        val expression = intExpression("@{counter}")
         var observedValue by mutableLongStateOf(0L)
 
         setContent {
@@ -76,7 +75,7 @@ class StateExtensionsComposeRuleTest {
     fun observedValueDoesNotChangeWhenItLeavesComposition() {
         variableController.declare(Variable.IntegerVariable("counter", 1))
 
-        val expression = expression("@{counter}")
+        val expression = intExpression("@{counter}")
         var showExpression by mutableStateOf(true)
         var observedValue by mutableLongStateOf(0L)
 
@@ -100,8 +99,8 @@ class StateExtensionsComposeRuleTest {
         variableController.declare(Variable.IntegerVariable("counter_a", 1))
         variableController.declare(Variable.IntegerVariable("counter_b", 10))
 
-        val expressionA = expression("@{counter_a}")
-        val expressionB = expression("@{counter_b}")
+        val expressionA = intExpression("@{counter_a}")
+        val expressionB = intExpression("@{counter_b}")
         var useExpressionB by mutableStateOf(false)
         var observedValue by mutableLongStateOf(0L)
 
@@ -123,15 +122,6 @@ class StateExtensionsComposeRuleTest {
 
         assertEquals(20L, observedValue)
     }
-
-    private fun expression(rawExpression: String) = Expression.MutableExpression<Long, Long>(
-        expressionKey = "test",
-        rawExpression = rawExpression,
-        validator = { true },
-        converter = { it },
-        logger = { fail(it.message) },
-        typeHelper = TYPE_HELPER_INT,
-    )
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {

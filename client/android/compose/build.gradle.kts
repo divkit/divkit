@@ -9,6 +9,11 @@ apply(from = "../div-tests.gradle")
 
 android {
     namespace = "com.yandex.div.compose"
+
+    sourceSets {
+        getByName("androidTest").kotlin.srcDirs("src/commonTest/kotlin")
+        getByName("test").kotlin.srcDirs("src/commonTest/kotlin")
+    }
 }
 
 dependencies {

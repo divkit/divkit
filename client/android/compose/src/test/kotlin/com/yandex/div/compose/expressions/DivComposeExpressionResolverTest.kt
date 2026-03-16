@@ -1,12 +1,10 @@
 package com.yandex.div.compose.expressions
 
-import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.expression
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.parser.TYPE_HELPER_STRING
-import com.yandex.div.json.expressions.Expression
 import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -16,18 +14,8 @@ class DivComposeExpressionResolverTest {
 
     private val variableController = DivVariableController()
 
-    private val reporter = object : DivReporter() {
-        override fun reportError(message: String) {
-            fail(message)
-        }
-
-        override fun reportError(message: String, e: Throwable) {
-            fail(message)
-        }
-    }
-
     private val expressionResolver = DivComposeExpressionResolver(
-        reporter = reporter,
+        reporter = TestReporter(),
         variableController = variableController
     )
 
@@ -102,16 +90,5 @@ class DivComposeExpressionResolverTest {
 
     private fun evaluate(expression: String): String {
         return expression(expression).evaluate(expressionResolver)
-    }
-
-    private fun expression(expression: String): Expression<String> {
-        return Expression.MutableExpression<String, String>(
-            expressionKey = "test",
-            rawExpression = expression,
-            validator = { true },
-            converter = { it },
-            logger = { fail(it.message) },
-            typeHelper = TYPE_HELPER_STRING,
-        )
     }
 }

@@ -6,11 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.yandex.div.compose.views.state.observeAsValue
 import com.yandex.div.compose.views.toDp
-import com.yandex.div2.DivBase
+import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 
 @Composable
-internal fun Modifier.apply(data: DivBase): Modifier {
+internal fun Modifier.apply(div: Div): Modifier {
+    val data = div.value()
+
     var modifier = this
 
     data.margins?.let {
@@ -20,6 +22,7 @@ internal fun Modifier.apply(data: DivBase): Modifier {
     modifier = modifier
         .width(data.width, data.alignmentHorizontal?.observeAsValue())
         .height(data.height, data.alignmentVertical?.observeAsValue())
+        .actions(div)
 
     data.border?.let {
         modifier = modifier.divBorderClip(it)

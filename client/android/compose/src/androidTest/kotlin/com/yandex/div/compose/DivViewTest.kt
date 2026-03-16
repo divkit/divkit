@@ -3,18 +3,19 @@ package com.yandex.div.compose
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVariable
-import com.yandex.div2.IntegerVariable
-import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test
 
@@ -85,6 +86,24 @@ class DivViewTest {
         rule.onNodeWithText("value = 20").assertIsDisplayed()
     }
 
+    @Test
+    fun textChangesWhenSetVariableActionIsTriggered() {
+        setContent(
+            text(
+                action = action(url = "div-action://set_variable?name=counter&value=20"),
+                id = "title",
+                text = expression("value = @{counter}")
+            ),
+            variables = listOf(integerVariable("counter", 10))
+        )
+
+        rule.onNodeWithTag("title").apply {
+            assertTextEquals("value = 10")
+            performClick()
+            assertTextEquals("value = 20")
+        }
+    }
+
     private fun setContent(content: Div, variables: List<DivVariable>? = null) {
         setContent(data(content, variables))
     }
@@ -115,27 +134,16 @@ private fun data(
     )
 }
 
-private fun text(text: Expression<String>): Div {
+private fun text(
+    action: DivAction? = null,
+    id: String? = null,
+    text: Expression<String>
+): Div {
     return Div.Text(
         value = DivText(
+            action = action,
+            id = id,
             text = text
         )
-    )
-}
-
-private fun integerVariable(name: String, value: Long): DivVariable {
-    return DivVariable.Integer(IntegerVariable(name = name, value = constant(value)))
-}
-
-private fun <T : Any> constant(value: T) = Expression.ConstantExpression(value)
-
-private fun expression(expression: String): Expression<String> {
-    return Expression.MutableExpression<String, String>(
-        expressionKey = "text",
-        rawExpression = expression,
-        converter = null,
-        validator = { true },
-        logger = { fail(it.message) },
-        typeHelper = TYPE_HELPER_STRING
     )
 }

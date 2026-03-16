@@ -103,7 +103,7 @@ public class DivActionHandler {
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleAction(action, (Div2View) view, localResolver);
         }
-        return handleAction(action.scopeId, url, view, localResolver);
+        return handleAction(url, view, localResolver);
     }
 
     /**
@@ -231,7 +231,7 @@ public class DivActionHandler {
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, localResolver);
         }
-        return handleAction(action.getScopeId(), url, view, resolver);
+        return handleAction(url, view, resolver);
     }
 
     /**
@@ -350,11 +350,10 @@ public class DivActionHandler {
     ) {
         ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, scopeId);
         ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
-        return handleAction(scopeId, uri, view, localResolver);
+        return handleAction(uri, view, localResolver);
     }
 
     private boolean handleAction(
-            @Nullable String scopeId,
             @Nullable Uri uri,
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
@@ -365,15 +364,14 @@ public class DivActionHandler {
 
         //noinspection SimplifiableIfStatement
         if (SCHEME_DIV_ACTION.equals(uri.getScheme())) {
-            return handleActionInternal(scopeId, uri, view, resolver);
+            return handleActionInternal(uri, view, resolver);
         }
 
         return false;
     }
 
     private boolean handleActionInternal(
-            @Nullable String scopeId,
-            @Nullable Uri uri,
+            @NonNull Uri uri,
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {

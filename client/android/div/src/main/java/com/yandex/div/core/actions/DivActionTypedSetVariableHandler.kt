@@ -7,6 +7,7 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.internal.variables.evaluate
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivEvaluableType

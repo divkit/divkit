@@ -1,6 +1,9 @@
 package com.yandex.div.compose
 
 import android.content.Context
+import com.yandex.div.compose.actions.DivActionData
+import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.DivCustomActionHandler
 import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
 import com.yandex.div.core.annotations.PublicApi
@@ -12,6 +15,9 @@ import javax.inject.Named
 @Module
 @PublicApi
 class DivComposeConfiguration(
+    @get:Provides
+    val customActionHandler: DivCustomActionHandler = defaultCustomActionHandler,
+
     @get:Provides
     val reporter: DivReporter = DivReporter(),
 
@@ -26,4 +32,11 @@ fun DivComposeConfiguration.createContext(baseContext: Context): DivContext {
         .configuration(this)
         .build()
     return DivContext(contextComponent)
+}
+
+private val defaultCustomActionHandler = object : DivCustomActionHandler {
+    override fun handle(
+        context: DivActionHandlingContext,
+        action: DivActionData
+    ) = Unit
 }

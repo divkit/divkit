@@ -36,20 +36,6 @@ internal fun DivTypedValue.evaluateToPrimitive(resolver: ExpressionResolver): An
     }
 }
 
-internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any {
-    val newValue: Any = when (this) {
-        is DivTypedValue.Integer -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Str -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Bool -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Color -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Number -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Url -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Array -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Dict -> value.value.evaluate(expressionResolver)
-    }
-    return newValue
-}
-
 internal fun DivTypedValue.longValue(expressionResolver: ExpressionResolver): Long? {
     return when (this) {
         is DivTypedValue.Integer -> value.value.evaluate(expressionResolver)

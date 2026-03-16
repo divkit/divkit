@@ -123,9 +123,6 @@ internal object StoredValuesActionHandler {
 
     @Throws(StoredValueDeclarationException::class)
     private fun String.parseAsColor(): Color {
-        val intColor = STRING_TO_COLOR_INT(this) ?: throw StoredValueDeclarationException(
-            "Wrong value format for color stored value: '$this'")
-        return Color(intColor)
+        return Color(STRING_TO_COLOR_INT(this))
     }
-
 }
