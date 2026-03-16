@@ -164,7 +164,6 @@ internal class DivGifImageBinder @Inject constructor(
         div: DivGifImage,
         errorCollector: ErrorCollector,
     ) {
-
         val preview = div.preview?.evaluate(resolver)
 
         // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
@@ -194,7 +193,7 @@ internal class DivGifImageBinder @Inject constructor(
         if (preview != null ||
             newPreviewUrl == null ||
             isImageLoaded ||
-            previewUrl == newPreviewUrl
+            (isImagePreview && previewUrl == newPreviewUrl)
         ) return
 
         previewUrl = newPreviewUrl
