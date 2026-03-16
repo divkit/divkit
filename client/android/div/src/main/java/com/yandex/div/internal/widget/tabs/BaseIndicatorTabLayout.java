@@ -986,8 +986,8 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     }
 
     private void removeTabViewAt(int position) {
-        final TabView view = (TabView) mTabIndicators.getChildAt(position);
         int positionInLayout = mTabIndicators.getTabPositionInLayout(position);
+        TabView view = (TabView) mTabIndicators.getChildAt(positionInLayout);
         mTabIndicators.removeViewAt(positionInLayout);
         mTabTitleDelimitersController.tabRemoved(positionInLayout);
         if (view != null) {

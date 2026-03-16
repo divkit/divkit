@@ -53,7 +53,7 @@ internal class TabTitleDelimitersController(
 
     private fun removeDelimiters() {
         if (indicators.hasDelimiters()) {
-            var i = indicators.childCount - 1
+            var i = indicators.childCount - 2
             while (i > 0) {
                 indicators.removeViewAt(i)
                 i -= 2
