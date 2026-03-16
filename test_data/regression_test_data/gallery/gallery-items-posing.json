@@ -137,7 +137,7 @@
               },
               "margins": {
                 "start": 4,
-                "left": 4,
+                "end": 4,
                 "bottom": 8
               },
               "background": [
