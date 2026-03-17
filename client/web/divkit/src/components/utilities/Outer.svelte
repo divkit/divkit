@@ -458,7 +458,8 @@
                 //     newWidthFill = true;
                 // }
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
-                newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
+                newFlexGrow = ($jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1) *
+                    (layoutParams.multiplyGrow || 1);
                 if (layoutParams.parentContainerWrap) {
                     newWidthFill = true;
                 }
@@ -569,7 +570,8 @@
                 //     newHeightFill = true;
                 // }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
-                newFlexGrow = ($jsonHeight as MatchParentSize)?.weight || 1;
+                newFlexGrow = (($jsonHeight as MatchParentSize)?.weight || 1) *
+                    (layoutParams.multiplyGrow || 1);
                 if (layoutParams.parentContainerWrap) {
                     newHeightFill = true;
                 }

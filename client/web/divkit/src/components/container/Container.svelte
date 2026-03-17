@@ -367,6 +367,17 @@
             newChildLayoutParams.parentContainerWrap = true;
         }
 
+        let sumWidth = 0;
+        $childStore.forEach(child => {
+            const size = child[orientation === 'horizontal' ? 'width' : 'height'];
+            if (orientation === 'horizontal' && !size || size?.type === 'match_parent') {
+                sumWidth += size?.weight || 1;
+            }
+        });
+        if (sumWidth > 0 && sumWidth < 1) {
+            newChildLayoutParams.multiplyGrow = 1 / sumWidth;
+        }
+
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }
 

@@ -1,0 +1,60 @@
+{
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "description": "The total weight is less than 1, and the space should be distributed proportionally",
+  "card": {
+    "log_id": "gradient_incut",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#f00"
+                }
+              ],
+              "text": "67% width",
+              "font_size": 32,
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "match_parent",
+                "weight": 0.2
+              }
+            },
+            {
+              "type": "text",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0f0"
+                }
+              ],
+              "text": "33% width",
+              "font_size": 32,
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "width": {
+                "type": "match_parent",
+                "weight": 0.1
+              }
+            }
+          ],
+          "orientation": "horizontal"
+        }
+      }
+    ]
+  }
+}

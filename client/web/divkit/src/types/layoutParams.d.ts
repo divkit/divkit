@@ -24,4 +24,5 @@ export interface LayoutParams {
         rowSpan: number;
     };
     scrollSnap?: ScrollSnap;
+    multiplyGrow?: number;
 }
