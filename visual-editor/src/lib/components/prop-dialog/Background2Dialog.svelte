@@ -450,7 +450,6 @@
                     />
 
                     {#if $paletteEnabled && (subtype === 'solid' || subtype === 'gradient' || subtype === 'radial_gradient')}
-                        <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button
                             class="background2-dialog__palette-toggle"
                             class:background2-dialog__palette-toggle_toggled={togglePalette}

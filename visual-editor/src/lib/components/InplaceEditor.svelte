@@ -1068,7 +1068,6 @@
             >
                 <ColorPreview {color} mix="inplace-editor__color-preview" />
             </button>
-            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="inplace-editor__button2 inplace-editor__button2_color"
                 title={$l10nString('props.text_alignment_horizontal')}
@@ -1093,7 +1092,6 @@
                     <option value="bold">{$l10nString('props.font_weight_bold')}</option>
                 </select>
             </div>
-            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_toggled={underline}
@@ -1102,7 +1100,6 @@
             >
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_underline"></div>
             </button>
-            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_toggled={strike}
@@ -1114,7 +1111,6 @@
 
             <div class="inplace-editor__separator"></div>
 
-            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="inplace-editor__button2"
                 title={$l10nString('props.actions')}
@@ -1123,7 +1119,6 @@
             >
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_actions"></div>
             </button>
-            <!-- svelte-ignore a11y_consider_explicit_label -->
             <button
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_disabled={textDisabled}
@@ -1167,7 +1162,6 @@
 
                 {$l10nString('inplaceEditorDisabled')}
 
-                <!-- svelte-ignore a11y_consider_explicit_label -->
                 <button
                     class="inplace-editor__disabled-alert-close"
                     title={$l10nString('close')}

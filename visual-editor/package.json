@@ -22,7 +22,7 @@
     "dev": "npm run build:grammar && vite",
     "build": "vite build",
     "build:grammar": "lezer-generator src/lib/grammar/div.grammar -o src/lib/grammar/div.js",
-    "build-lib": "npm run build:grammar && vite build --config vite-lib.config.ts && terser dist/divkit-editor.js -o dist/divkit-editor.js && terser dist/editor.js -o dist/editor.js && terser dist/lottieApi.js -o dist/lottieApi.js && terser dist/lib.js -o dist/lib.js",
+    "build-lib": "npm run build:grammar && vite build --config vite-lib.config.ts",
     "build-typings": "rollup --config rollup-typings.config.ts --configPlugin typescript",
     "preview": "vite preview",
     "check:ts": "npm run build:grammar && tsc --noEmit",
@@ -41,7 +41,7 @@
     "@codemirror/state": "6.4.1",
     "@codemirror/theme-one-dark": "6.1.2",
     "@codemirror/view": "6.27.0",
-    "@divkitframework/divkit": "32.27.0-canary-48acc2af1301995e78aece832ea389dd1a76cf61",
+    "@divkitframework/divkit": "32.40.0",
     "@lezer/generator": "1.7.3",
     "@lezer/highlight": "1.2.1",
     "@lezer/lr": "1.4.2",
@@ -58,12 +58,12 @@
     "eslint-plugin-svelte": "2.39.0",
     "lottie-web": "5.11.0",
     "rollup-plugin-dts": "6.1.1",
-    "svelte": "5.38.8",
+    "svelte": "5.53.12",
     "svelte-check": "4.3.1",
-    "terser": "5.17.7",
+    "terser": "5.46.0",
     "tslib": "^2.5.0",
     "typescript": "5.4.5",
-    "vite": "7.1.5",
+    "vite": "7.3.1",
     "vitest": "3.2.4"
   }
 }

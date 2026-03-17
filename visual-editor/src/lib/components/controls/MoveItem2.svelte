@@ -26,6 +26,7 @@
     bind:this={elem}
 >
     {#if canBeMoved}
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
             class="move-item__move"
             on:pointerdown|preventDefault={event => dispatch('movestart', { event, elem })}
