@@ -9,7 +9,7 @@ import com.yandex.div.core.expression.ExpressionTestCaseUtils
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_DICT
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createVariable
-import com.yandex.div.core.expression.local.variableController
+import com.yandex.div.core.expression.getWrappedValue
 import com.yandex.div.core.expression.name
 import com.yandex.div.core.expression.variables.wrapVariableValue
 import com.yandex.div.core.images.DivImageLoader
@@ -81,7 +81,7 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
                 is IntegrationTestCase.ExpectedResult.Error -> checkError(it)
                 is IntegrationTestCase.ExpectedResult.Variable -> {
                     val expectedValue = it.value.wrapVariableValue()
-                    val actualValue = divView.expressionResolver.variableController?.get(it.name)
+                    val actualValue = divView.expressionResolver.getVariable(it.name)?.getWrappedValue()
                     if (it.type == VALUE_TYPE_DICT || it.type == VALUE_TYPE_ARRAY) {
                         Assert.assertEquals(expectedValue.toString(), actualValue.toString())
                     } else {

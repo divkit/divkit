@@ -9,7 +9,6 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.actions.colorIntValue
 import com.yandex.div.core.actions.doubleValue
 import com.yandex.div.core.actions.longValue
-import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.isAlternated
 import com.yandex.div.core.util.isReversed
@@ -49,7 +48,7 @@ internal object DivVariableAnimatorBuilder {
         startAction: DivActionAnimatorStart,
         resolver: ExpressionResolver
     ): Animator? {
-        return when (val variable = findVariable<Variable>(animator.variableName, resolver)) {
+        return when (val variable = resolver.getVariable(animator.variableName)) {
             is Variable.IntegerVariable -> buildIntegerAnimator(divView, animator, startAction, resolver, variable)
             is Variable.DoubleVariable -> buildDoubleAnimator(divView, animator, startAction, resolver, variable)
 
@@ -102,7 +101,7 @@ internal object DivVariableAnimatorBuilder {
         startAction: DivActionAnimatorStart,
         resolver: ExpressionResolver
     ): Animator? {
-        val variable = findVariable<Variable.ColorVariable>(animator.variableName, resolver)
+        val variable = resolver.getVariable(animator.variableName) as? Variable.ColorVariable
         if (variable == null) {
             divView.logError(
                 RuntimeException("Unable to find color variable with name '${animator.variableName}'")
@@ -152,7 +151,4 @@ internal object DivVariableAnimatorBuilder {
         }
         return this
     }
-
-    private inline  fun <reified T : Variable> findVariable(name: String, resolver: ExpressionResolver) =
-        resolver.variableController?.getMutableVariable(name) as? T
 }

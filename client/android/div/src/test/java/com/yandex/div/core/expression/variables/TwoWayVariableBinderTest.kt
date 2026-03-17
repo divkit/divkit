@@ -31,7 +31,6 @@ class TwoWayVariableBinderTest {
     private val variableUpdateCaptor = argumentCaptor<(Variable?) -> Unit>()
     private val invokeOnSubscriptionCaptor = argumentCaptor<Boolean>()
     private val variableController = mock<VariableController> {
-        on { getMutableVariable(VARIABLE_NAME) } doReturn variable
         on {
             subscribeToVariableChange(
                 any(),
@@ -48,6 +47,7 @@ class TwoWayVariableBinderTest {
     }
     private val expressionResolver = mock<ExpressionResolverImpl> {
         on { variableController } doReturn variableController
+        on { getVariable(VARIABLE_NAME) } doReturn variable
     }
 
     private val divView = mock<Div2View> {

@@ -1,7 +1,7 @@
 package com.yandex.div.internal.core
 
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.expression.local.asImpl
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull

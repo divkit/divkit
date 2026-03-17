@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.local.variableController
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -63,10 +63,10 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
     ): Disposable {
         val divView = bindingContext.divView
         val data = divView.divData ?: return Disposable.NULL
+        val resolver = bindingContext.expressionResolver.asImpl ?: return Disposable.NULL
 
         var pendingValue: T? = null
         val tag = divView.dataTag
-        val variableController = bindingContext.expressionResolver.variableController ?: return Disposable.NULL
 
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
@@ -79,7 +79,7 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
             )
         }
 
-        return variableController.subscribeToVariableChange(
+        return resolver.variableController.subscribeToVariableChange(
             variableName,
             errorCollectors.getOrCreate(tag, data),
             invokeOnSubscription = true

@@ -2,7 +2,7 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivRequestExecutor
-import com.yandex.div.core.expression.local.variableController
+import com.yandex.div.core.expression.getWrappedValue
 import com.yandex.div.core.expression.name
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -56,13 +56,12 @@ class DivActionTypedSubmitHandler @Inject constructor(
         val variables = container.div.value().variables
         if (variables.isNullOrEmpty()) return ""
 
-        val variableController = container.expressionResolver.variableController ?: return ""
-
         val body = JSONObject()
         variables.forEach {
             val name = it.name
-            variableController.get(name)?.let { value -> body.put(name, value) }
-                ?: view.logError(MissingVariableException(name))
+            container.expressionResolver.getVariable(name)?.let {
+                variable -> body.put(name, variable.getWrappedValue())
+            } ?: view.logError(MissingVariableException(name))
         }
         return body.toString()
     }

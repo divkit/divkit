@@ -4,8 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.expression.local.ChildPathUnitCache
-import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems

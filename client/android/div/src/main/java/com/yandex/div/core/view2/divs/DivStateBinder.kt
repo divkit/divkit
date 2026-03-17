@@ -16,7 +16,6 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
-import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
@@ -307,10 +306,8 @@ internal class DivStateBinder @Inject constructor(
         return div.value.contentAlignmentHorizontal.evaluate(resolver)
     }
 
-    private fun getValueFromVariable(context: BindingContext, variableName: String): String? {
-        val variableController = context.expressionResolver.variableController ?: return null
-        return variableController.getMutableVariable(variableName)?.getValue()?.toString()
-    }
+    private fun getValueFromVariable(context: BindingContext, variableName: String) =
+        context.expressionResolver.getVariable(variableName)?.getValue()?.toString()
 
     private fun DivStateLayout.observeStateIdVariable(
         div: DivState,

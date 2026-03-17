@@ -152,9 +152,7 @@ internal class DivRuntimeVisitor @Inject constructor(
 
         return temporaryStateCache.getState(cardId, statePath)
             ?: divStateCache.getState(cardId, statePath)
-            ?: div.stateIdVariable?.let {
-                resolver.variableController.getMutableVariable(it)?.getValue().toString()
-            }
+            ?: div.stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
             ?: div.defaultStateId?.evaluate(resolver)
             ?: div.states.firstOrNull()?.stateId
     }

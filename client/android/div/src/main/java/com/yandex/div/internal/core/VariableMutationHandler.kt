@@ -1,7 +1,6 @@
 package com.yandex.div.internal.core
 
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
@@ -21,7 +20,7 @@ class VariableMutationHandler {
             value: String,
             resolver: ExpressionResolver
         ): VariableMutationException? {
-            val mutableVariable = findVariable(name, resolver)
+            val mutableVariable = resolver.getVariable(name)
                 ?: return createAndReportError(null, div2View, "Variable '$name' not defined!")
 
             runCatching {
@@ -45,7 +44,7 @@ class VariableMutationHandler {
             resolver: ExpressionResolver,
             valueMutation: (T) -> T,
         ): VariableMutationException? {
-            val mutableVariable = findVariable(name, resolver)
+            val mutableVariable = resolver.getVariable(name)
                 ?: return createAndReportError(null, div2View, "Variable '$name' not defined!")
 
             runCatching {
@@ -57,9 +56,6 @@ class VariableMutationHandler {
 
             return null
         }
-
-        private fun findVariable(name: String, resolver: ExpressionResolver) =
-            resolver.variableController?.getMutableVariable(name)
 
         private fun createAndReportError(
             e: Throwable?,
