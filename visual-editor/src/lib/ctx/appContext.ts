@@ -232,6 +232,7 @@ export interface AppContext {
     directionSelector: boolean;
     perThemeProps: boolean;
     imageConversion: ImageConversion | undefined;
+    viewportList: string[];
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

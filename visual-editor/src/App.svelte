@@ -64,6 +64,14 @@
 
     export let imageConversion: ImageConversion | undefined;
 
+    export let viewportList: string[] = [
+        '320x568',
+        '360x640',
+        '375x667',
+        '414x896',
+        '768x1024'
+    ];
+
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
     export let editorFabric: (opts: EditorOptions) => EditorInstance = editorFabricInternal;
@@ -160,6 +168,7 @@
         directionSelector,
         perThemeProps,
         imageConversion,
+        viewportList,
 
         rendererApi() {
             return rendererApi;

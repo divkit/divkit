@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    const DEFAULT_VIEWPORT = '360x640';
+</script>
+
 <script lang="ts">
     import { getContext, onMount } from 'svelte';
     import { Tween } from 'svelte/motion';
@@ -17,7 +21,7 @@
     import ViewportControl from './ViewportControl.svelte';
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { state, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
+    const { state, viewportList, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
     const {
         currentUndoStore,
         currentRedoStore,
@@ -27,7 +31,7 @@
         themeStore,
     } = state;
 
-    const DEFAULT_VIEWPORT = '360x640';
+    const startViewport = viewportList.includes(DEFAULT_VIEWPORT) ? DEFAULT_VIEWPORT : viewportList[0];
 
     setShowErrors(function showErrors(opts) {
         errorsDialog.show(errorButtonNode, {
@@ -35,7 +39,7 @@
         });
     });
 
-    let viewport = DEFAULT_VIEWPORT;
+    let viewport = startViewport;
     let scale = new Tween(1, {
         duration: 100
     });

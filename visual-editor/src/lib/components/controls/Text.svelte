@@ -42,6 +42,10 @@
     export let generateFromVideo: VideoSource[] | undefined = undefined;
     export let generateFromLottie: string | undefined = undefined;
 
+    export function focus(): void {
+        inputNode?.focus();
+    }
+
     const dispatch = createEventDispatcher();
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const {
@@ -55,6 +59,7 @@
 
     let internalValue: string | number = 0;
     let elem: HTMLElement;
+    let inputNode: HTMLInputElement;
     let subtypeError = false;
     let requiredError = false;
     let filterError = false;
@@ -212,6 +217,7 @@
 >
     {#if type === 'text'}
         <input
+            bind:this={inputNode}
             type="text"
             pattern={resultPattern}
             class="text__input"
@@ -233,6 +239,7 @@
         >
     {:else}
         <input
+            bind:this={inputNode}
             type="number"
             {min}
             {max}

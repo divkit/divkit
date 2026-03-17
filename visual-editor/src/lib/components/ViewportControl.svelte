@@ -1,17 +1,10 @@
 <script lang="ts" context="module">
     const WINDOW_OFFSET = 24;
-
-    const VIEWPORT_LIST = [
-        '320x568',
-        '360x640',
-        '375x667',
-        '768x1024'
-    ];
 </script>
 
 <script lang="ts">
-    import { afterUpdate, createEventDispatcher, getContext } from 'svelte';
-    import { fly } from 'svelte/transition';
+    import { afterUpdate, createEventDispatcher, getContext, onDestroy } from 'svelte';
+    import { fly, slide } from 'svelte/transition';
     import { popupClose, submit } from '../utils/keybinder/shortcuts';
     import { encodeBackground } from '../utils/encodeBackground';
     import { simpleThrottle } from '../utils/simpleThrottle';
@@ -34,7 +27,8 @@
     const {
         state,
         directionSelector,
-        cardLocales
+        cardLocales,
+        viewportList
     } = getContext<AppContext>(APP_CTX);
     const {
         safeAreaEmulationEnabled,
@@ -47,6 +41,12 @@
     const id = 'select' + Math.random();
 
     const dispatch = createEventDispatcher();
+
+    let isCustomViewport = false;
+    let customViewportWidth = 0;
+    let customViewportHeight = 0;
+    let customViewportWidthInput: Text;
+    let focusTimer: number;
 
     let toggled = false;
     let popupDirection = 'down';
@@ -102,10 +102,29 @@
 
     function selectViewport(value: string): void {
         viewport = value;
+        isCustomViewport = false;
+        clearTimeout(focusTimer);
     }
 
     function selectLocale(localeId: string): void {
         locale.set(localeId);
+    }
+
+    function selectCustomViewport(): void {
+        isCustomViewport = true;
+        [customViewportWidth, customViewportHeight] = viewport.split('x').map(Number);
+
+        clearTimeout(focusTimer);
+        focusTimer = setTimeout(() => {
+            customViewportWidthInput?.focus();
+        }, 400);
+    }
+
+    function onCustomViewportChange(): void {
+        viewport = [
+            customViewportWidth,
+            customViewportHeight
+        ].join('x');
     }
 
     const calcDirection = (): void => {
@@ -135,6 +154,10 @@
             popupLeft = bbox.left + window.pageXOffset;
             popupTop = bbox.bottom + 4 + window.pageYOffset;
         }
+    });
+
+    onDestroy(() => {
+        clearTimeout(focusTimer);
     });
 </script>
 
@@ -184,18 +207,49 @@
                     {$l10nString('previewViewport')}
                 </div>
                 <ul class="viewport-control__list">
-                    {#each VIEWPORT_LIST as item}
+                    {#each viewportList as item}
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                         <li
                             class="viewport-control__item"
-                            class:viewport-control__item_selected={item === viewport}
+                            class:viewport-control__item_selected={!isCustomViewport && item === viewport}
                             on:click|preventDefault={() => selectViewport(item)}
                         >
                             {item}
                         </li>
                     {/each}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                    <li
+                        class="viewport-control__item"
+                        class:viewport-control__item_selected={isCustomViewport}
+                        on:click|preventDefault={selectCustomViewport}
+                    >
+                        {$l10nString('canvasCustomSize')}
+                    </li>
                 </ul>
+                {#if isCustomViewport}
+                    <div class="viewport-control__custom-viewport" transition:slide>
+                        <Text
+                            bind:this={customViewportWidthInput}
+                            bind:value={customViewportWidth}
+                            subtype="integer"
+                            size="small"
+                            width="small"
+                            min={1}
+                            on:change={onCustomViewportChange}
+                        />
+                        x
+                        <Text
+                            bind:value={customViewportHeight}
+                            subtype="integer"
+                            size="small"
+                            width="small"
+                            min={1}
+                            on:change={onCustomViewportChange}
+                        />
+                    </div>
+                {/if}
                 {#if safeAreaEmulationEnabled}
                     <hr class="viewport-control__hr">
 
@@ -533,5 +587,12 @@
 
     .viewport-control__button-icon_inversed {
         filter: var(--icon-filter);
+    }
+
+    .viewport-control__custom-viewport {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        padding: 8px 16px 0;
     }
 </style>

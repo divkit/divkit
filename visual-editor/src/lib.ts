@@ -203,6 +203,7 @@ export interface DivProEditorOptions {
     perThemeProps?: boolean;
     safeAreaEmulation?: SafeAreaEmulation;
     fitViewportOnCreate?: boolean;
+    viewportList?: string[];
     imageConversion?: ImageConversion;
 }
 
@@ -281,6 +282,14 @@ export const DivProEditor = {
 
         state.setDivJson(json);
 
+        let viewportList;
+        if (opts.viewportList?.length && opts.viewportList.every(
+            it => typeof it === 'string' &&
+            /^\d+x\d+$/.test(it)
+        )) {
+            viewportList = opts.viewportList;
+        }
+
         const app = mount(App, {
             target: opts.renderTo,
             props: {
@@ -299,6 +308,7 @@ export const DivProEditor = {
                 directionSelector: opts.directionSelector,
                 perThemeProps: opts.perThemeProps,
                 imageConversion: opts.imageConversion,
+                viewportList,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,
