@@ -136,6 +136,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     transitionChangeAnimationContainer.frame = startFrameInParent
     transitionChangeAnimationContainer.clipsToBounds = false
     transitionChangeAnimationContainer.addSubview(childView)
+    self.isHidden = true
 
     parentView.addSubview(transitionChangeAnimationContainer)
     parentView.layoutIfNeeded()
@@ -151,6 +152,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         parentView.layoutIfNeeded()
       },
       completion: { [weak self] _ in
+        self?.isHidden = false
         self?.animationChange = nil
         if transitionChangeAnimationContainer.superview == parentView {
           self?.childView = childView
