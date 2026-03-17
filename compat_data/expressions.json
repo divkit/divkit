@@ -312,5 +312,19 @@
                 "version_added": "32.16.0"
             }
         }
+    }, {
+        "id": "fn_datetime_get_timestamp",
+        "name": "<code>getTimestamp</code> function for datetime",
+        "compat": {
+            "web": {
+                "version_added": "32.41.0"
+            },
+            "ios": {
+                "version_added": "32.41.0"
+            },
+            "android": {
+                "version_added": "32.41.0"
+            }
+        }
     }]
 }
