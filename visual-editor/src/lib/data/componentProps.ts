@@ -474,8 +474,70 @@ export const BASE_COMPONENT_PROPS: ComponentProperty[] = [{
     }]
 }];
 
+const A11Y_DESCRIPTION: ComponentProperty = {
+    name: 'props.a11y_description',
+    prop: 'accessibility.description',
+    type: 'string',
+    enableSources: true
+};
+
+const A11Y_PROPS_LIST: ComponentProperty[] = [{
+    name: 'props.a11y_type',
+    prop: 'accessibility.type',
+    type: 'select',
+    hasEmpty: true,
+    default: 'auto',
+    options: [
+        'none',
+        'button',
+        'image',
+        'text',
+        'edit_text',
+        'header',
+        'tab_bar',
+        'list',
+        'select',
+        'checkbox',
+        'radio',
+        'auto'
+    ].map(it => ({
+        rawName: it,
+        value: it
+    })),
+    enableSources: true
+}, A11Y_DESCRIPTION, {
+    name: 'props.a11y_mode',
+    prop: 'accessibility.mode',
+    type: 'select',
+    hasEmpty: true,
+    default: 'default',
+    options: [
+        'default',
+        'merge',
+        'exclude'
+    ].map(it => ({
+        rawName: it,
+        value: it
+    })),
+    enableSources: true
+}];
+
+const A11Y_DESCRIPTION_PROPS: ComponentProperty[] = [{
+    type: 'group',
+    title: 'a11yProps.title',
+    list: [
+        A11Y_DESCRIPTION
+    ]
+}];
+
+export const A11Y_PROPS: ComponentProperty[] = [{
+    type: 'group',
+    title: 'a11yProps.title',
+    list: A11Y_PROPS_LIST
+}];
+
 export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
-    text: [...BASE_COMPONENT_PROPS, {
+    text: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'textProps.title',
         list: [{
@@ -556,7 +618,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             aloneProp: 'action'
         }]
     }],
-    image: [...BASE_COMPONENT_PROPS, {
+    image: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'imageProps.title',
         list: [{
@@ -606,7 +668,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    gif: [...BASE_COMPONENT_PROPS, {
+    gif: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'imageProps.title',
         list: [{
@@ -651,7 +713,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    video: [...BASE_COMPONENT_PROPS, {
+    video: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'videoProps.title',
         list: [{
@@ -700,7 +762,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    container: [...BASE_COMPONENT_PROPS, {
+    container: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'containerProps.title',
         list: [{
@@ -734,7 +796,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    grid: [...BASE_COMPONENT_PROPS, {
+    grid: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'gridProps.title',
         list: [{
@@ -754,7 +816,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             isContent: true
         }]
     }],
-    gallery: [...BASE_COMPONENT_PROPS, {
+    gallery: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'galleryProps.title',
         list: [{
@@ -794,7 +856,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    separator: [...BASE_COMPONENT_PROPS, {
+    separator: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'separatorProps.title',
         list: [{
@@ -818,16 +880,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    input: [...BASE_COMPONENT_PROPS, {
-        type: 'group',
-        title: 'a11yProps.title',
-        list: [{
-            name: 'props.a11y_description',
-            prop: 'accessibility.description',
-            type: 'string',
-            enableSources: true
-        }]
-    }, {
+    input: [...BASE_COMPONENT_PROPS, ...A11Y_DESCRIPTION_PROPS, {
         type: 'group',
         title: 'inputProps.title',
         list: [{
@@ -898,16 +951,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    select: [...BASE_COMPONENT_PROPS, {
-        type: 'group',
-        title: 'a11yProps.title',
-        list: [{
-            name: 'props.a11y_description',
-            prop: 'accessibility.description',
-            type: 'string',
-            enableSources: true
-        }]
-    }, {
+    select: [...BASE_COMPONENT_PROPS, ...A11Y_DESCRIPTION_PROPS, {
         type: 'group',
         title: 'selectProps.title',
         list: [{
@@ -948,16 +992,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    switch: [...BASE_COMPONENT_PROPS, {
-        type: 'group',
-        title: 'a11yProps.title',
-        list: [{
-            name: 'props.a11y_description',
-            prop: 'accessibility.description',
-            type: 'string',
-            enableSources: true
-        }]
-    }, {
+    switch: [...BASE_COMPONENT_PROPS, ...A11Y_DESCRIPTION_PROPS, {
         type: 'group',
         title: 'switchProps.title',
         list: [{
@@ -978,7 +1013,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    state: [...BASE_COMPONENT_PROPS, {
+    state: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'stateProps.title',
         list: [{
@@ -1001,7 +1036,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    tabs: [...BASE_COMPONENT_PROPS, {
+    tabs: [...BASE_COMPONENT_PROPS, ...A11Y_DESCRIPTION_PROPS, {
         type: 'group',
         title: 'tabsProps.title',
         list: [{
@@ -1067,16 +1102,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
-    slider: [...BASE_COMPONENT_PROPS, {
-        type: 'group',
-        title: 'a11yProps.title',
-        list: [{
-            name: 'props.a11y_description',
-            prop: 'accessibility.description',
-            type: 'string',
-            enableSources: true
-        }]
-    }, {
+    slider: [...BASE_COMPONENT_PROPS, ...A11Y_DESCRIPTION_PROPS, {
         type: 'group',
         title: 'sliderProps.title',
         list: [{

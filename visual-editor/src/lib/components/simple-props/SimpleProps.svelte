@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext } from 'svelte';
     import { namedTemplates } from '../../data/templates';
-    import { BASE_COMPONENT_PROPS, COMPONENT_PROPS, ROOT_PROPS, type ComponentProperty, type SiblingComponentProperty } from '../../data/componentProps';
+    import { A11Y_PROPS, BASE_COMPONENT_PROPS, COMPONENT_PROPS, ROOT_PROPS, type ComponentProperty, type SiblingComponentProperty } from '../../data/componentProps';
     import SimplePropsList from './SimplePropsList.svelte';
     import { SetPropertyCommand, type SetPropertyItem } from '../../data/commands/setProperty';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
@@ -22,9 +22,9 @@
     $: type = json?.type;
     $: baseType = state.getBaseType(type);
     $: list = !rootConfigurable && $selectedLeaf === $tree && ROOT_PROPS ||
-        namedTemplates[type]?.props && [...BASE_COMPONENT_PROPS, ...namedTemplates[type]?.props] ||
+        namedTemplates[type]?.props && [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, ...namedTemplates[type]?.props] ||
         baseType && COMPONENT_PROPS[baseType] ||
-        BASE_COMPONENT_PROPS;
+        [...BASE_COMPONENT_PROPS, ...A11Y_PROPS];
 
     $: {
         const props = type in namedTemplates ? [] : getTemplateProps(state, type);
