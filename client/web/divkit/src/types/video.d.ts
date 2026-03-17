@@ -5,7 +5,7 @@ import type { DivAspect } from './image';
 export interface DivVideoData extends DivBaseData {
     type: 'video';
 
-    video_sources: VideoSource[];
+    video_sources?: VideoSource[];
     repeatable?: BooleanInt;
     autostart?: BooleanInt;
     preload_required?: BooleanInt;

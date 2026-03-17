@@ -20,7 +20,6 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { genClassName } from '../../utils/genClassName';
-    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivVideoData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -29,7 +28,6 @@
     const videoPlayerProvider = rootCtx.videoPlayerProvider;
 
     let prevId: string | undefined;
-    let hasError = false;
     let isSelfVariableSet = false;
     let videoElem: HTMLVideoElement;
     let videoParentElem: HTMLElement;
@@ -161,11 +159,8 @@
     $: {
         sources = correctVideoSource($jsonSource, sources);
 
-        if (sources.length) {
-            hasError = false;
-        } else {
-            hasError = true;
-            componentContext.logError(wrapError(new Error('Missing "video_sources" in "video"')));
+        if (!sources.length && !componentContext.json.player_settings_payload) {
+            componentContext.logError(wrapError(new Error('Missing "video_sources" or "player_settings_payload" in "video"')));
         }
     }
 
@@ -227,7 +222,7 @@
             prevId = undefined;
         }
 
-        if (componentContext.id && !hasError && !componentContext.fakeElement) {
+        if (componentContext.id && !componentContext.fakeElement) {
             prevId = componentContext.id;
             rootCtx.registerInstance<VideoElements>(prevId, {
                 pause,
@@ -308,48 +303,15 @@
     });
 </script>
 
-{#if !hasError}
-    <Outer
-        cls={genClassName('video', css, mods)}
-        customActions="video"
-        {componentContext}
-        {layoutParams}
-        heightByAspect={aspectPaddingBottom !== '0'}
-    >
-        {#if aspectPaddingBottom !== '0'}
-            <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
-                {#if shouldUseVideoProvider}
-                    <div class={css.video__container} bind:this={videoParentElem}>
-                        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                        {@html providedVideoTemplate}
-                    </div>
-                {:else}
-                    <video
-                        bind:this={videoElem}
-                        class={css.video__video}
-                        style={makeStyle(style)}
-                        playsinline
-                        {loop}
-                        {autoplay}
-                        {muted}
-                        {poster}
-                        preload={preload ? 'metadata' : 'auto'}
-                        on:timeupdate={onTimeUpdate}
-                        on:ended={onEnd}
-                        on:playing={onPlaying}
-                        on:pause={onPause}
-                        on:waiting={onWaiting}
-                        on:error={onError}
-                    >
-                        {#each sources as source}
-                            {#key source}
-                                <source src={source.src} type={source.type} on:error={onError}>
-                            {/key}
-                        {/each}
-                    </video>
-                {/if}
-            </div>
-        {:else}
+<Outer
+    cls={genClassName('video', css, mods)}
+    customActions="video"
+    {componentContext}
+    {layoutParams}
+    heightByAspect={aspectPaddingBottom !== '0'}
+>
+    {#if aspectPaddingBottom !== '0'}
+        <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
             {#if shouldUseVideoProvider}
                 <div class={css.video__container} bind:this={videoParentElem}>
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -380,10 +342,37 @@
                     {/each}
                 </video>
             {/if}
+        </div>
+    {:else}
+        {#if shouldUseVideoProvider}
+            <div class={css.video__container} bind:this={videoParentElem}>
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html providedVideoTemplate}
+            </div>
+        {:else}
+            <video
+                bind:this={videoElem}
+                class={css.video__video}
+                style={makeStyle(style)}
+                playsinline
+                {loop}
+                {autoplay}
+                {muted}
+                {poster}
+                preload={preload ? 'metadata' : 'auto'}
+                on:timeupdate={onTimeUpdate}
+                on:ended={onEnd}
+                on:playing={onPlaying}
+                on:pause={onPause}
+                on:waiting={onWaiting}
+                on:error={onError}
+            >
+                {#each sources as source}
+                    {#key source}
+                        <source src={source.src} type={source.type} on:error={onError}>
+                    {/key}
+                {/each}
+            </video>
         {/if}
-    </Outer>
-{:else if process.env.DEVTOOL}
-    <DevtoolHolder
-        {componentContext}
-    />
-{/if}
+    {/if}
+</Outer>
