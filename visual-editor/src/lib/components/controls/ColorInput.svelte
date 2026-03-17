@@ -9,6 +9,7 @@
     export let value: string;
     export let hasDialog = false;
     export let readOnly = false;
+    export let showAlpha = true;
 
     // todo validate input
 
@@ -140,24 +141,26 @@
 
         <div class="color-input__separator"></div>
 
-        <input
-            class="color-input__second-input"
-            type="number"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            min="0"
-            {max}
-            disabled={readOnly}
-            bind:value={secondVal}
-            on:input={rebuildVal}
-            title={$l10nString('background.solid_second_title')}
-        >
+        {#if showAlpha}
+            <input
+                class="color-input__second-input"
+                type="number"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                min="0"
+                {max}
+                disabled={readOnly}
+                bind:value={secondVal}
+                on:input={rebuildVal}
+                title={$l10nString('background.solid_second_title')}
+            >
 
-        <div class="color-input__symbol">
-            %
-        </div>
+            <div class="color-input__symbol">
+                %
+            </div>
+        {/if}
     {/if}
 </div>
 

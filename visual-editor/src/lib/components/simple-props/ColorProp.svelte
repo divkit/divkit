@@ -1,11 +1,11 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
-    import type { ComponentProperty } from '../../data/componentProps';
+    import type { ColorProperty } from '../../data/componentProps';
     import ColorInput from '../controls/ColorInput.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
 
     export let value: string;
-    export let item: ComponentProperty;
+    export let item: ColorProperty;
 
     const { state } = getContext<AppContext>(APP_CTX);
     const { readOnly } = state;
@@ -25,4 +25,5 @@
     on:change={onChange}
     hasDialog={true}
     readOnly={$readOnly}
+    showAlpha={item.showAlpha}
 />

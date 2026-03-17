@@ -38,6 +38,21 @@ export const containerComponents = new Set([
     'custom'
 ]);
 
+const SHADOW_EDIT_ENABLED: ConditionObject = {
+    not: {
+        or: [{
+            prop: 'border.has_shadow',
+            isEmpty: true
+        }, {
+            prop: 'border.has_shadow',
+            equal: false
+        }, {
+            prop: 'border.has_shadow',
+            equal: 0
+        }]
+    }
+};
+
 export interface BaseProperty {
     name?: string;
     rawName?: string;
@@ -51,6 +66,10 @@ export interface BaseProperty {
     enableSources?: boolean;
     enablePerTheme?: boolean;
     required?: boolean;
+    related?: {
+        prop: string;
+        value: string | number;
+    }[];
 }
 
 export interface RadioProperty extends BaseProperty {
@@ -113,6 +132,7 @@ export interface StringProperty extends BaseProperty {
 
 export interface ColorProperty extends BaseProperty {
     type: 'color';
+    showAlpha?: boolean;
 }
 
 export interface Actions2Property extends BaseProperty {
@@ -201,12 +221,7 @@ export type ComponentProperty = RadioProperty | IntegerProperty | BooleanPropert
     SelectOptionsProperty | SelectFontFamily | ItemsProperty | StateDefaultIdProperty |
     TabsSelectedTabProperty;
 
-export type SiblingComponentProperty = ComponentProperty & {
-    related?: {
-        prop: string;
-        value: string;
-    }[];
-}
+export type SiblingComponentProperty = ComponentProperty;
 
 export const BASE_COMPONENT_PROPS: ComponentProperty[] = [{
     type: 'group',
@@ -402,6 +417,60 @@ export const BASE_COMPONENT_PROPS: ComponentProperty[] = [{
         name: 'props.background',
         prop: 'background',
         type: 'background2'
+    }, {
+        name: 'props.shadow',
+        prop: 'border.has_shadow',
+        type: 'boolean',
+        enableSources: true,
+        related: [{
+            prop: 'border.shadow.offset.x',
+            value: 0
+        }, {
+            prop: 'border.shadow.offset.y',
+            value: 0
+        }]
+    }, {
+        type: 'split',
+        list: [{
+            name: 'props.shadow_color',
+            prop: 'border.shadow.color',
+            type: 'color',
+            default: '#000000',
+            showAlpha: false,
+            enableSources: true,
+            enabled: SHADOW_EDIT_ENABLED
+        }, {
+            name: 'props.shadow_alpha',
+            prop: 'border.shadow.alpha',
+            type: 'percent',
+            default: 0.19,
+            enableSources: true,
+            enabled: SHADOW_EDIT_ENABLED
+        }]
+    }, {
+        name: 'props.shadow_blur',
+        prop: 'border.shadow.blur',
+        type: 'integer',
+        min: 0,
+        max: 1000,
+        default: 2,
+        enableSources: true,
+        enabled: SHADOW_EDIT_ENABLED
+    }, {
+        type: 'split',
+        list: [{
+            name: 'props.shadow_offset_x',
+            prop: 'border.shadow.offset.x.value',
+            type: 'number',
+            enableSources: true,
+            enabled: SHADOW_EDIT_ENABLED
+        }, {
+            name: 'props.shadow_offset_y',
+            prop: 'border.shadow.offset.y.value',
+            type: 'number',
+            enableSources: true,
+            enabled: SHADOW_EDIT_ENABLED
+        }]
     }]
 }];
 
@@ -657,6 +726,12 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             verticalProp: 'content_alignment_vertical',
             orientationProp: 'orientation',
             isContent: true
+        }, {
+            name: 'props.clip_to_bounds',
+            prop: 'clip_to_bounds',
+            type: 'boolean',
+            default: true,
+            enableSources: true
         }]
     }],
     grid: [...BASE_COMPONENT_PROPS, {
