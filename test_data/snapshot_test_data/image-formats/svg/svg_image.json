@@ -1,6 +1,7 @@
 {
   "description": "Image in .svg format",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

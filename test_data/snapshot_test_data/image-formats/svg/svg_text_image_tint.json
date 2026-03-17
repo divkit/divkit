@@ -1,6 +1,7 @@
 {
   "description": "Text with image with tint in .svg format",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

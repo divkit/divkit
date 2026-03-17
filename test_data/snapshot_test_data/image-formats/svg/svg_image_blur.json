@@ -1,6 +1,7 @@
 {
   "description": "Image in .svg format with blur",
   "platforms": [
+    "android",
     "web"
   ],
   "card": {

@@ -22,6 +22,7 @@ import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThread
+import com.yandex.div.svg.SvgDecoder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
+import java.io.InputStream
 import kotlin.math.max
 
 @Deprecated("Picasso library is deprecated. " +
@@ -76,11 +78,16 @@ class PicassoDivImageLoader(
             .build()
     }
 
-    override fun hasSvgSupport() = false
+    @Deprecated("Is unused in DivKit, will be removed in future")
+    override fun hasSvgSupport() = true
 
     override fun needLimitBitmapSize() = false
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+        if (SvgDecoder.isSvg(imageUrl)) {
+            return loadImageBytes(imageUrl, callback, this::decodeSvgDrawable)
+        }
+
         val imageUri = Uri.parse(imageUrl)
         val target = DownloadCallbackAdapter(callback)
         targets.addTarget(target)
@@ -109,14 +116,19 @@ class PicassoDivImageLoader(
     }
 
     override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
-        return loadImageBytes(imageUrl, callback) { bytes, bitmapSource ->
+        return loadImageBytes(imageUrl, callback) { byteStream, bitmapSource ->
+            if (SvgDecoder.isSvg(imageUrl)) {
+                return@loadImageBytes decodeSvgDrawable(byteStream, bitmapSource)
+            }
+
+            val bytes = byteStream.use { it.readBytes() }
             when {
                 bytes.isEmpty() -> null
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
                     DivCachedImage.Drawable(decodeAnimatedDrawable(bytes), bitmapSource)
                 else -> {
                     BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {
-                        DivCachedImage.Bitmap(it, bitmapSource)
+                        DivCachedImage.Bitmap(it.scale(maxDisplaySize), bitmapSource)
                     }
                 }
             }
@@ -126,7 +138,7 @@ class PicassoDivImageLoader(
     private fun loadImageBytes(
         imageUrl: String,
         callback: DivImageDownloadCallback,
-        decode: (ByteArray, BitmapSource) -> DivCachedImage?,
+        decode: (InputStream, BitmapSource) -> DivCachedImage?,
     ): LoadReference {
         targets.addTarget(targetStub)
         var loadReference: LoadReference = EMPTY_LOAD_REFERENCE
@@ -138,9 +150,9 @@ class PicassoDivImageLoader(
         }
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val (bytes, source) = call?.let { loadFromNetwork(it) ?: return@withContext null }
+                val (input, source) = call?.let { loadFromNetwork(it) ?: return@withContext null }
                     ?: loadFromDisk(imageUrl) ?: return@withContext null
-                decode(bytes, source)
+                decode(input, source)
             }?.let {
                 callback.onSuccess(it)
             } ?: callback.onError()
@@ -150,18 +162,21 @@ class PicassoDivImageLoader(
         return loadReference
     }
 
-    private fun loadFromNetwork(call: Call): Pair<ByteArray, BitmapSource>? {
+    private fun loadFromNetwork(call: Call): Pair<InputStream, BitmapSource>? {
         val response = runCatching { call.execute() }.getOrNull() ?: return null
-        val bytes = response.body?.bytes() ?: return null
+        val byteStream = response.body?.byteStream() ?: return null
         val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
-        return bytes to source
+        return byteStream to source
     }
 
-    private fun loadFromDisk(url: String): Pair<ByteArray, BitmapSource>? {
+    private fun loadFromDisk(url: String): Pair<InputStream, BitmapSource>? {
         val assetPath = url.removePrefix(ASSET_PREFIX)
         val stream = runCatching { appContext.assets?.open(assetPath) }.getOrNull() ?: return null
-        return stream.use { it.readBytes() } to BitmapSource.DISK
+        return stream to BitmapSource.DISK
     }
+
+    private fun decodeSvgDrawable(source: InputStream, bitmapSource: BitmapSource) =
+        SvgDecoder.decode(source)?.let { DivCachedImage.Drawable(it, bitmapSource) }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun decodeAnimatedDrawable(bytes: ByteArray): Drawable {
@@ -208,6 +223,13 @@ class PicassoDivImageLoader(
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
         }
 
+        fun Bitmap.scale(maxSize: Int): Bitmap {
+            if (width <= maxSize && height <= maxSize) return this
+
+            val scale = maxSize.toFloat() / max(width, height)
+            return Bitmap.createScaledBitmap(this, (width * scale).toInt(), (height * scale).toInt(), true)
+        }
+
         fun Picasso.LoadedFrom.toBitmapSource(): BitmapSource {
             return when (this) {
                 Picasso.LoadedFrom.MEMORY -> BitmapSource.MEMORY
@@ -248,7 +270,7 @@ class PicassoDivImageLoader(
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
     }
 
-    @Deprecated("Was needed for internal usa")
+    @Deprecated("Was needed for internal use")
     inner class TargetList {
         private val activeTargets = ArrayList<Target>()
         val size get() = activeTargets.size

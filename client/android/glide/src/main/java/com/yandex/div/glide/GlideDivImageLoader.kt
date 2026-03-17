@@ -2,11 +2,16 @@ package com.yandex.div.glide
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.Option
+import com.bumptech.glide.load.Options
+import com.bumptech.glide.load.ResourceDecoder
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.SimpleResource
 import com.bumptech.glide.request.BaseRequestOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
@@ -17,6 +22,8 @@ import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.svg.SvgDecoder
+import java.io.InputStream
 import kotlin.math.max
 
 class GlideDivImageLoader @JvmOverloads constructor(
@@ -28,7 +35,13 @@ class GlideDivImageLoader @JvmOverloads constructor(
         max(it.widthPixels, it.heightPixels)
     }
 
-    override fun hasSvgSupport() = false
+    init {
+        Glide.get(context).registry
+            .append(InputStream::class.java, PictureDrawable::class.java, svgDecoder)
+    }
+
+    @Deprecated("Is unused in DivKit, will be removed in future")
+    override fun hasSvgSupport() = true
 
     override fun needLimitBitmapSize() = false
 
@@ -39,6 +52,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
 
         // load result will be handled by RequestListener to get dataSource
         Glide.with(context).load(imageUri)
+            .set(Option.memory(KEY_SVG), SvgDecoder.isSvg(imageUrl))
             .limitImageBitmapSizeIfNeed()
             .listener(ImageRequestListener(callback))
             .into(target)
@@ -94,12 +108,23 @@ class GlideDivImageLoader @JvmOverloads constructor(
 
     private companion object {
 
+        private const val KEY_SVG = "is_svg"
+
         fun <T: Drawable> createTarget() = object : CustomTarget<T>() {
             override fun onResourceReady(resource: T, transition: Transition<in T>?) = Unit
             override fun onLoadCleared(placeholder: Drawable?) = Unit
         }
 
-        fun DataSource.toBitmapSource(): BitmapSource {
+        private val svgDecoder = object : ResourceDecoder<InputStream, PictureDrawable> {
+
+            override fun handles(source: InputStream, options: Options) =
+                options.get(Option.memory<Boolean>(KEY_SVG)) == true
+
+            override fun decode(source: InputStream, width: Int, height: Int, options: Options) =
+                SvgDecoder.decode(source)?.let { SimpleResource(it) }
+        }
+
+        private fun DataSource.toBitmapSource(): BitmapSource {
             return when (this) {
                 DataSource.REMOTE -> BitmapSource.NETWORK
                 DataSource.LOCAL -> BitmapSource.DISK

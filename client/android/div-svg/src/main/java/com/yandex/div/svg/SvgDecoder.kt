@@ -1,6 +1,5 @@
 package com.yandex.div.svg
 
-import android.graphics.RectF
 import android.graphics.drawable.PictureDrawable
 import com.caverock.androidsvg.SVG
 import com.caverock.androidsvg.SVGParseException
@@ -9,34 +8,34 @@ import com.yandex.div.internal.KLog
 import java.io.InputStream
 
 @InternalApi
-public class SvgDecoder(
-    private val useViewBoundsAsIntrinsicSize: Boolean = true
-) {
-    public fun decode(source: InputStream): PictureDrawable? {
-        return try {
-            val svg: SVG = SVG.getFromInputStream(source)
+public object SvgDecoder {
 
-            val svgWidth: Float
-            val svgHeight: Float
-            val viewBox: RectF? = svg.documentViewBox
-            if (useViewBoundsAsIntrinsicSize && viewBox != null) {
-                svgWidth = viewBox.width()
-                svgHeight = viewBox.height()
-            } else {
-                svgWidth = svg.documentWidth
-                svgHeight = svg.documentHeight
-            }
-
-            if (viewBox == null && svgWidth > 0 && svgHeight > 0) {
-                svg.setDocumentViewBox(0f, 0f, svgWidth, svgHeight)
-            }
-
-            PictureDrawable(svg.renderToPicture())
-        } catch (e: Exception) {
-            KLog.e(TAG) { e.toString() }
-            null
-        }
+    public fun isSvg(imageUrl: String): Boolean {
+        val queryStartIndex = imageUrl.indexOf('?')
+        val pathEndIndex = if (queryStartIndex < 0) imageUrl.length else queryStartIndex
+        return imageUrl.substring(0, pathEndIndex).endsWith(".svg")
     }
+
+    public fun decode(source: InputStream): PictureDrawable? {
+        val svg = try {
+            SVG.getFromInputStream(source)
+        } catch (e: SVGParseException) {
+            KLog.e(TAG) { e.toString() }
+            return null
+        }
+
+        if (svg.documentViewBox != null) return svg.toDrawable()
+
+        val svgWidth = svg.documentWidth
+        val svgHeight = svg.documentHeight
+        if (svgWidth > 0 && svgHeight > 0) {
+            svg.setDocumentViewBox(0f, 0f, svgWidth, svgHeight)
+        }
+
+        return svg.toDrawable()
+    }
+
+    private fun SVG.toDrawable() = PictureDrawable(renderToPicture())
 }
 
 private const val TAG = "SvgDecoder"

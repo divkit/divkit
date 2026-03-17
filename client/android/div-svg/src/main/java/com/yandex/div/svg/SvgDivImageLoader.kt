@@ -22,7 +22,6 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
     private val context = context.applicationContext
     private val httpClient = OkHttpClient.Builder().build()
     private val coroutineScope = MainScope()
-    private val svgDecoder = SvgDecoder()
     private val svgCacheManager = SvgCacheManager()
 
     override fun hasSvgSupport(): Boolean = true
@@ -44,7 +43,7 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
                     downloadImage(call)
                 } ?: return@withContext null
 
-                val drawable = svgDecoder.decode(bytes.inputStream()) ?: return@withContext null
+                val drawable = SvgDecoder.decode(bytes.inputStream()) ?: return@withContext null
                 svgCacheManager.set(imageUrl, drawable)
 
                 drawable

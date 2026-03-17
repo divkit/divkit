@@ -92,6 +92,7 @@ class CoilDivImageLoader private constructor(
         }
     }
 
+    @Deprecated("Is unused in DivKit, will be removed in future")
     override fun hasSvgSupport() = true
 
     override fun needLimitBitmapSize() = false

@@ -1,6 +1,7 @@
 {
   "description": "Image in .svg format in tabs delimiter",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

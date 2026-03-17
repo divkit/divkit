@@ -1,6 +1,7 @@
 {
   "description": "Background in .svg format with blur",
   "platforms": [
+    "android",
     "web"
   ],
   "card": {
