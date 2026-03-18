@@ -49,6 +49,10 @@ const moveEsbuildHelpersPlugin = (): Plugin => {
 };
 
 export default defineConfig(({ isSsrBuild, mode }) => {
+    if (mode === 'test') {
+        process.env.TZ = 'UTC';
+    }
+
     const isProd = mode === 'production';
     const outputSubDir = FORMAT === 'iife' ? 'browser/' : (FORMAT === 'es' ? 'esm/' : '');
 
