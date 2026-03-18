@@ -25,10 +25,15 @@ export function valToInternal(val: EvalValue): EvalValue {
 }
 
 export function dateToString(date: Date): string {
-    return date
-        .toISOString()
-        .replace('T', ' ')
-        .replace(/\.\d{3}Z$/, '');
+    return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, '0'),
+        String(date.getDate()).padStart(2, '0')
+    ].join('-') + ' ' + [
+        String(date.getHours()).padStart(2, '0'),
+        String(date.getMinutes()).padStart(2, '0'),
+        String(date.getSeconds()).padStart(2, '0')
+    ].join(':');
 }
 
 export function valToString(val: EvalValue, stringifyComplex: boolean): string {
