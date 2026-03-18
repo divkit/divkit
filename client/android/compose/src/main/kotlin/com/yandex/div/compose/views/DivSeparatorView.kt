@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.views.state.observeAsValue
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSeparator.DelimiterStyle.Orientation
 
@@ -22,8 +21,8 @@ internal fun DivSeparatorView(
     data: DivSeparator
 ) {
     val style = data.delimiterStyle
-    val color = style?.color.observeAsValue(COLOR_DEFAULT)
-    val orientation = style?.orientation.observeAsValue(Orientation.HORIZONTAL)
+    val color = style?.color.observedValue(COLOR_DEFAULT)
+    val orientation = style?.orientation.observedValue(Orientation.HORIZONTAL)
 
     Box(modifier = modifier) {
         when (orientation) {

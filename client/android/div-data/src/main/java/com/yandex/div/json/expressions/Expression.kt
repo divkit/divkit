@@ -82,7 +82,7 @@ abstract class Expression<T : Any> {
     }
 
     class StringConstantExpression(
-        private val value: String,
+        value: String,
         private val defaultValue: String = "",
         private val logger: ParsingErrorLogger = ParsingErrorLogger.LOG
     ) : ConstantExpression<String>(value) {
@@ -102,7 +102,7 @@ abstract class Expression<T : Any> {
         }
     }
 
-    open class ConstantExpression<T : Any>(private val value: T) : Expression<T>() {
+    open class ConstantExpression<T : Any>(val value: T) : Expression<T>() {
 
         override val rawValue
             get() = value as Any

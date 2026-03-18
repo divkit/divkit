@@ -5,13 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.views.LocalDivViewContext
 import com.yandex.div.compose.views.actionHandler
-import com.yandex.div.compose.views.state.observeAsValue
+import com.yandex.div.compose.views.observedValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 
 @Composable
 internal fun Modifier.actions(data: Div): Modifier {
-    val actions = data.actions.filter { it.isEnabled.observeAsValue() }
+    val actions = data.actions.filter { it.isEnabled.observedValue() }
     if (actions.isEmpty()) {
         return this
     }

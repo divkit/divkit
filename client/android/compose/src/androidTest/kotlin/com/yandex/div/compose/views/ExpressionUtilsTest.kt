@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.state
+package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -10,8 +10,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.intExpression
-import com.yandex.div.compose.views.DivViewContext
-import com.yandex.div.compose.views.LocalDivViewContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -20,7 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class StateExtensionsComposeRuleTest {
+class ExpressionUtilsTest {
 
     @get:Rule
     val composeRule = createComposeRule()
@@ -48,7 +46,7 @@ class StateExtensionsComposeRuleTest {
         var observedValue by mutableLongStateOf(0L)
 
         setContent {
-            observedValue = expression.observeAsValue()
+            observedValue = expression.observedValue()
         }
 
         assertEquals(1L, observedValue)
@@ -65,7 +63,7 @@ class StateExtensionsComposeRuleTest {
         var observedValue by mutableLongStateOf(0L)
 
         setContent {
-            observedValue = expression.observeAsValue(10)
+            observedValue = expression.observedValue(10)
         }
 
         assertEquals(10L, observedValue)
@@ -81,7 +79,7 @@ class StateExtensionsComposeRuleTest {
 
         setContent {
             if (showExpression) {
-                observedValue = expression.observeAsValue()
+                observedValue = expression.observedValue()
             }
         }
 
@@ -106,7 +104,7 @@ class StateExtensionsComposeRuleTest {
 
         setContent {
             val expression = if (useExpressionB) expressionB else expressionA
-            observedValue = expression.observeAsValue()
+            observedValue = expression.observedValue()
         }
 
         assertEquals(1L, observedValue)

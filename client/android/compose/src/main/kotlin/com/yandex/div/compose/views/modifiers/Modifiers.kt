@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.yandex.div.compose.views.state.observeAsValue
+import com.yandex.div.compose.views.observedValue
 import com.yandex.div.compose.views.toDp
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
@@ -20,8 +20,8 @@ internal fun Modifier.apply(div: Div): Modifier {
     }
 
     modifier = modifier
-        .width(data.width, data.alignmentHorizontal?.observeAsValue())
-        .height(data.height, data.alignmentVertical?.observeAsValue())
+        .width(data.width, data.alignmentHorizontal?.observedValue())
+        .height(data.height, data.alignmentVertical?.observedValue())
         .actions(div)
 
     data.border?.let {
@@ -50,9 +50,9 @@ internal fun Modifier.apply(div: Div): Modifier {
 @Composable
 private fun Modifier.padding(value: DivEdgeInsets): Modifier {
     return padding(
-        start = (value.start ?: value.left).observeAsValue().toDp(),
-        end = (value.end ?: value.right).observeAsValue().toDp(),
-        top = value.top.observeAsValue().toDp(),
-        bottom = value.bottom.observeAsValue().toDp()
+        start = (value.start ?: value.left).observedValue().toDp(),
+        end = (value.end ?: value.right).observedValue().toDp(),
+        top = value.top.observedValue().toDp(),
+        bottom = value.bottom.observedValue().toDp()
     )
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.views.state.observeAsValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 
@@ -14,7 +13,7 @@ internal fun DivContainerView(
     modifier: Modifier,
     data: DivContainer
 ) {
-    when (data.orientation.observeAsValue()) {
+    when (data.orientation.observedValue()) {
         DivContainer.Orientation.HORIZONTAL ->
             HorizontalView(
                 modifier = modifier,

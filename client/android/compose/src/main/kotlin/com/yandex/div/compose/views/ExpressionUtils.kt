@@ -1,22 +1,31 @@
-package com.yandex.div.compose.views.state
+package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import com.yandex.div.compose.views.expressionResolver
 import com.yandex.div.json.expressions.Expression
 
 @Composable
-@JvmName("asStateNullable")
-internal fun <T : Any> Expression<T>?.asState(defaultValue: T): State<T> {
-    return this?.asState(defaultValue) ?: rememberUpdatedState(defaultValue)
+internal fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
+    return when (this) {
+        null -> defaultValue
+        is Expression.ConstantExpression -> value
+        else -> asState(defaultValue).value
+    }
 }
 
 @Composable
-internal fun <T : Any> Expression<T>.asState(): State<T> {
+internal fun <T : Any> Expression<T>.observedValue(): T {
+    return when (this) {
+        is Expression.ConstantExpression -> value
+        else -> asState().value
+    }
+}
+
+@Composable
+private fun <T : Any> Expression<T>.asState(): State<T> {
     val resolver = expressionResolver
     val state = remember(this, resolver) { mutableStateOf(evaluate(resolver)) }
 
@@ -29,7 +38,7 @@ internal fun <T : Any> Expression<T>.asState(): State<T> {
 }
 
 @Composable
-internal fun <T : Any> Expression<T>.asState(defaultValue: T): State<T> {
+private fun <T : Any> Expression<T>.asState(defaultValue: T): State<T> {
     val resolver = expressionResolver
     val state = remember(this, resolver) { mutableStateOf(defaultValue) }
 
@@ -39,14 +48,4 @@ internal fun <T : Any> Expression<T>.asState(defaultValue: T): State<T> {
     }
 
     return state
-}
-
-@Composable
-internal fun <T : Any> Expression<T>?.observeAsValue(defaultValue: T): T {
-    return asState(defaultValue).value
-}
-
-@Composable
-internal fun <T : Any> Expression<T>.observeAsValue(): T {
-    return asState().value
 }
