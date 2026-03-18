@@ -11,7 +11,7 @@
         {
           "name": "message",
           "type": "string",
-          "value": "Visibility action will trigger in 2 seconds"
+          "value": "Visibility action will trigger in 4 seconds"
         }
       ],
       "states": [
@@ -34,7 +34,7 @@
                   {
                     "log_id": "text/visible",
                     "url": "div-action://set_variable?name=message&value=Triggered!",
-                    "visibility_duration": 3000
+                    "visibility_duration": 4000
                   }
                 ]
               }
@@ -49,7 +49,7 @@
       "expected_screenshot": "step0.png"
     },
     {
-      "delay": 3000,
+      "delay": 4000,
       "expected_screenshot": "step1.png"
     }
   ]
