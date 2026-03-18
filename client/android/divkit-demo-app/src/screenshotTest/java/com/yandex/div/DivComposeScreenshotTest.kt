@@ -1,11 +1,16 @@
 package com.yandex.div
 
+import android.content.Context
+import android.os.Build
+import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
+import com.yandex.test.screenshot.DIV_SCREENSHOT_CASE_EXTENSION
 import com.yandex.test.screenshot.Screenshot
+import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,27 +31,43 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
 
     @Screenshot(viewId = R.id.screenshot_view)
     @Test
-    fun divScreenshot() = Unit
+    fun divScreenshot() {
+        Assume.assumeTrue(
+            "Skipping DivComposeScreenshotTest on API 24",
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.N
+        )
+    }
 
     companion object {
+        private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             return listOf(
-                "snapshot_test_data/div-separator/big_corner_radius.json",
-                "snapshot_test_data/div-separator/custom-color.json",
-                "snapshot_test_data/div-separator/custom-paddings.json",
-                "snapshot_test_data/div-separator/default-values.json",
-                "snapshot_test_data/div-separator/horizontal-fixed-height.json",
-                "snapshot_test_data/div-separator/horizontal-fixed-width.json",
-                "snapshot_test_data/div-separator/vertical-fixed-height.json",
-                "snapshot_test_data/div-separator/vertical-fixed-width.json",
-                "snapshot_test_data/div-separator/vertical-intrinsic-width.json",
-                "snapshot_test_data/div-separator/fixed-size-with-paddings.json",
+                // div-separator
+                "snapshot_test_data/div-separator",
+                // div-text
                 "snapshot_test_data/div-text/all_attributes.json",
                 "snapshot_test_data/div-text/variables-rendering.json",
-            ).withEscapedParameter()
+                "snapshot_test_data/div-text/visibility-gone.json",
+                "snapshot_test_data/div-text/visibility-invisible.json",
+                // div-container
+                "snapshot_test_data/div-container",
+                "snapshot_test_data/div-container/constraint-propagation",
+            ).expandDirectories().withEscapedParameter()
+        }
+
+        private fun List<String>.expandDirectories(): List<String> {
+            return flatMap { path ->
+                if (path.endsWith(DIV_SCREENSHOT_CASE_EXTENSION)) {
+                    listOf(path)
+                } else {
+                    AssetEnumerator(context).enumerate(path, predicate = { filename ->
+                        filename.endsWith(DIV_SCREENSHOT_CASE_EXTENSION)
+                    }, recursive = false)
+                }
+            }
         }
     }
 }

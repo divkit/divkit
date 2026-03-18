@@ -13,6 +13,7 @@ internal fun DivImageView(
     AsyncImage(
         modifier = modifier,
         model = data.imageUrl.observedValue(),
+        imageLoader = imageLoader,
         contentDescription = null
     )
 }

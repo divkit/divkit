@@ -1,6 +1,7 @@
 package com.yandex.div.compose.dagger
 
 import android.content.Context
+import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
@@ -19,6 +20,7 @@ internal interface DivContextComponent {
     val actionHandler: DivActionHandler
     val baseContext: Context
     val reporter: DivReporter
+    val imageLoader: ImageLoader
 
     fun viewComponent(): DivViewComponent.Builder
 

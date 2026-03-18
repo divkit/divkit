@@ -3,26 +3,44 @@ package com.yandex.div.compose.views.modifiers
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
 import com.yandex.div.compose.views.observedValue
 import com.yandex.div.compose.views.toDp
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivVisibility
 
 @Composable
-internal fun Modifier.apply(div: Div): Modifier {
+internal fun Modifier.apply(
+    div: Div,
+    applyPaddings: Boolean = true,
+    applyMargins: Boolean = true,
+): Modifier {
     val data = div.value()
 
     var modifier = this
 
-    data.margins?.let {
-        modifier = modifier.padding(it)
+    if (applyMargins) {
+        data.margins?.let {
+            modifier = modifier.padding(it)
+        }
     }
 
     modifier = modifier
         .width(data.width, data.alignmentHorizontal?.observedValue())
         .height(data.height, data.alignmentVertical?.observedValue())
         .actions(div)
+
+
+    val alphaValue = if (data.visibility.observedValue() == DivVisibility.VISIBLE) {
+        data.alpha.observedValue().toFloat()
+    } else {
+        0f
+    }
+    if (alphaValue < 1f) {
+        modifier = modifier.alpha(alphaValue)
+    }
 
     data.border?.let {
         modifier = modifier.divBorderClip(it)
@@ -36,8 +54,10 @@ internal fun Modifier.apply(div: Div): Modifier {
         modifier = modifier.divBorderStroke(it)
     }
 
-    data.paddings?.let {
-        modifier = modifier.padding(it)
+    if (applyPaddings) {
+        data.paddings?.let {
+            modifier = modifier.padding(it)
+        }
     }
 
     data.id?.let {
@@ -53,6 +73,22 @@ private fun Modifier.padding(value: DivEdgeInsets): Modifier {
         start = (value.start ?: value.left).observedValue().toDp(),
         end = (value.end ?: value.right).observedValue().toDp(),
         top = value.top.observedValue().toDp(),
-        bottom = value.bottom.observedValue().toDp()
+        bottom = value.bottom.observedValue().toDp(),
+    )
+}
+
+@Composable
+internal fun Modifier.verticalPaddings(value: DivEdgeInsets): Modifier {
+    return padding(
+        top = value.top.observedValue().toDp(),
+        bottom = value.bottom.observedValue().toDp(),
+    )
+}
+
+@Composable
+internal fun Modifier.horizontalPaddings(value: DivEdgeInsets): Modifier {
+    return padding(
+        start = (value.start ?: value.left).observedValue().toDp(),
+        end = (value.end ?: value.right).observedValue().toDp(),
     )
 }

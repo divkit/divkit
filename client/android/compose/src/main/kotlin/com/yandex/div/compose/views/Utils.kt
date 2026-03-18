@@ -37,7 +37,7 @@ fun Dp.toPx(): Float {
     }
 }
 
-// TODO: replace with asState/observeAsValue
+// TODO: replace with asState/observedValue
 @Composable
 internal fun <T : Any> Expression<T>.evaluate(): T {
     return evaluate(expressionResolver)
