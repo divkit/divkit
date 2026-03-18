@@ -27,8 +27,8 @@ object Log {
         }
 
     @JvmStatic
-    fun setEnabled(enabled: Boolean) {
-        _isEnabled = enabled
+    fun setEnabled(enabled: Boolean?) {
+        _isEnabled = enabled ?: false
     }
 
     @JvmStatic
