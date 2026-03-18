@@ -9,6 +9,8 @@ import androidx.media3.datasource.cache.CacheWriter
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.player.DivPlayerFactory
 import com.yandex.div.core.player.DivPlayerPreloader
+import com.yandex.div.core.preload.PreloadResult
+import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.internal.KLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,8 +27,19 @@ public class ExoPlayerVideoPreloader(
     private val cache: ExoPlayerCache = ExoPlayerCache(context)
 ): DivPlayerPreloader {
     override fun preloadVideo(src: List<Uri>): DivPreloader.PreloadReference {
+        return preloadVideoInternal(src) {}
+    }
+
+    override fun preloadVideo(src: List<Uri>, callback: (List<PreloadResult>) -> Unit): DivPreloader.PreloadReference {
+        return preloadVideoInternal(src, callback)
+    }
+
+    private fun preloadVideoInternal(
+        src: List<Uri>,
+        callback: (List<PreloadResult>) -> Unit,
+    ): DivPreloader.PreloadReference {
         if (src.isEmpty()) return DivPreloader.PreloadReference.EMPTY
-        val job = GlobalScope.launch(Dispatchers.IO) { preCacheVideo(src) }
+        val job = GlobalScope.launch(Dispatchers.IO) { preCacheVideo(src, callback) }
         return DivPreloader.PreloadReference {
             job.cancel()
         }
@@ -36,7 +49,9 @@ public class ExoPlayerVideoPreloader(
         return ExoDivPlayerFactory(context)
     }
 
-    private fun preCacheVideo(src: List<Uri>) {
+    private fun preCacheVideo(src: List<Uri>, callback: (List<PreloadResult>) -> Unit) {
+        val results = mutableListOf<PreloadResult>()
+
         src.forEach { videoUri ->
             val dataSpec = DataSpec(videoUri)
 
@@ -46,15 +61,17 @@ public class ExoPlayerVideoPreloader(
                     KLog.d(TAG) { "downloadPercentage $downloadPercentage videoUri: $videoUri" }
                 }
 
-            cacheVideo(dataSpec, progressListener)
+            val error = cacheVideo(dataSpec, progressListener)
+            results.add(UriPreloadResult(videoUri, error))
         }
+        callback(results)
     }
 
     private fun cacheVideo(
         dataSpec: DataSpec,
         progressListener: CacheWriter.ProgressListener
-    ) {
-        runCatching {
+    ): Throwable? {
+        return runCatching {
             CacheWriter(
                 cache.cacheDataSourceFactory.createDataSource(),
                 dataSpec,
@@ -64,6 +81,6 @@ public class ExoPlayerVideoPreloader(
         }.onFailure {
             KLog.e(TAG) { "error on loading video with URL = \"${dataSpec.uri}\"" }
             it.printStackTrace()
-        }
+        }.exceptionOrNull()
     }
 }

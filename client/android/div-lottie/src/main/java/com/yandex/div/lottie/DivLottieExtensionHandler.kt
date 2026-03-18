@@ -7,6 +7,7 @@ import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.preload.PreloadingRegistry
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
@@ -48,10 +49,30 @@ open class DivLottieExtensionHandler(
     override val subscriptions: MutableList<Disposable> = mutableListOf()
 
     override fun preprocess(div: DivBase, expressionResolver: ExpressionResolver) {
+        preprocessInternal(div, expressionResolver, null)
+    }
+
+    override fun preprocess(
+        div: DivBase,
+        expressionResolver: ExpressionResolver,
+        preloadingRegistry: PreloadingRegistry,
+    ) {
+        preprocessInternal(div, expressionResolver, preloadingRegistry)
+    }
+
+    private fun preprocessInternal(
+        div: DivBase,
+        expressionResolver: ExpressionResolver,
+        preloadingRegistry: PreloadingRegistry?,
+    ) {
         val lottieUrl = div.extensions
             ?.find { extension -> extension.id == EXTENSION_ID }
             ?.params?.lottieUrl ?: return
-        repo.preloadLottieComposition(lottieUrl.evaluate(expressionResolver))
+        val url = lottieUrl.evaluate(expressionResolver)
+        val preloading = preloadingRegistry?.registerPreloading("lottie")
+        repo.preloadLottieComposition(url) { result ->
+            preloading?.onCompleted(result)
+        }
     }
 
     override fun beforeBindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {

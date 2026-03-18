@@ -1,21 +1,28 @@
 package com.yandex.div.core
 
+import android.net.Uri
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivPlayerPreloader
+import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivImage
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
+import com.yandex.div2.DivVideoSource
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -25,6 +32,9 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.Arrays
 
+/**
+ * Tests for [DivPreloader].
+ */
 @RunWith(RobolectricTestRunner::class)
 class DivPreloaderTest {
 
@@ -53,6 +63,29 @@ class DivPreloaderTest {
     private val container = DivContainer(items = containerItems, extensions = listOf(DivExtension(id = "test2")))
     private val divContainer = Div.Container(container)
     private val videoPreloader = mock<DivPlayerPreloader>()
+
+    private val videoSourceUrl = Uri.parse("https://example.com/video.mp4")
+    private val videoSource = DivVideoSource(
+        mimeType = Expression.constant("video/mp4"),
+        url = Expression.constant(videoSourceUrl)
+    )
+    private val videoWithPreload = DivVideo(
+        videoSources = listOf(videoSource),
+        preloadRequired = Expression.constant(true)
+    )
+    private val divVideoWithPreload = Div.Video(videoWithPreload)
+    private val videoWithoutPreload = DivVideo(videoSources = listOf(videoSource))
+    private val divVideoWithoutPreload = Div.Video(videoWithoutPreload)
+
+    private val imageWithPreload = DivImage(
+        imageUrl = Expression.constant(Uri.parse("https://example.com/img.png")),
+        preloadRequired = Expression.constant(true)
+    )
+    private val divImageWithPreload = Div.Image(imageWithPreload)
+    private val containerWithVideoAndImage = DivContainer(
+        items = Arrays.asList(divVideoWithPreload, divImageWithPreload)
+    )
+    private val divContainerWithVideoAndImage = Div.Container(containerWithVideoAndImage)
 
     private val underTest: DivPreloader = DivPreloader(
         divImagePreloader,
@@ -124,7 +157,31 @@ class DivPreloaderTest {
 
         underTest.preload(divContainer, mock())
 
-        verify(extensionHandlers[0], times(1)).preprocess(eq(container), any())
-        verify(extensionHandlers[1], times(1)).preprocess(eq(separator), any())
+        verify(extensionHandlers[0], times(1)).preprocess(eq(container), any(), any())
+        verify(extensionHandlers[1], times(1)).preprocess(eq(separator), any(), any())
+    }
+
+    @Test
+    fun `preload div video calls video preloader when preload required`() {
+        whenever(videoPreloader.preloadVideo(any(), any())).doAnswer { invocation ->
+            (invocation.getArgument<(List<PreloadResult>) -> Unit>(1)).invoke(emptyList())
+            DivPreloader.PreloadReference.EMPTY
+        }
+
+        underTest.preload(divVideoWithPreload, ExpressionResolver.EMPTY)
+
+        verify(videoPreloader).preloadVideo(eq(listOf(videoSourceUrl)), any())
+    }
+
+    @Test
+    fun `video preload reference cancelled when ticket cancelled`() {
+        val videoPreloadReference = mock<DivPreloader.PreloadReference>()
+        whenever(videoPreloader.preloadVideo(any(), any())).doReturn(videoPreloadReference)
+
+        val ticket = underTest.preload(divVideoWithPreload, ExpressionResolver.EMPTY)
+
+        ticket.cancel()
+
+        verify(videoPreloadReference).cancel()
     }
 }

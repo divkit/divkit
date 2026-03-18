@@ -16,6 +16,14 @@ interface DivLottieNetworkCache {
      */
     fun cacheComposition(url: String)
 
+    /**
+     * Requests caching lottie composition from network with result.
+     * @return true if caching callbacks supported.
+     */
+    fun cacheComposition(url: String, onComplete: ((Throwable?) -> Unit)): Boolean {
+        return false
+    }
+
     companion object {
         @JvmStatic
         val STUB = object : DivLottieNetworkCache {

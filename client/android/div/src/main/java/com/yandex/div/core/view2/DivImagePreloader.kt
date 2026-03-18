@@ -34,13 +34,13 @@ class DivImagePreloader @Inject constructor(
     }
 
     private fun preloadImage(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
-        references.add(imageLoader.loadImage(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
         callback.onSingleLoadingStarted()
+        references.add(imageLoader.loadImage(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
     }
 
     private fun preloadImageBytes(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
-        references.add(imageLoader.loadImageBytes(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
         callback.onSingleLoadingStarted()
+        references.add(imageLoader.loadImageBytes(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
     }
 
     private inner class PreloadVisitor(

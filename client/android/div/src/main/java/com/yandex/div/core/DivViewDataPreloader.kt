@@ -6,6 +6,7 @@ import com.yandex.div.core.DivPreloader.Companion.NO_CALLBACK
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
+import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -50,7 +51,7 @@ internal class DivViewDataPreloader internal constructor(
         override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
             imagePreloader?.preloadImage(data, context.expressionResolver, preloadFilter, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data.value(), context.expressionResolver)
+            extensionController.preprocessExtensions(data.value(), context.expressionResolver, downloadCallback)
         }
 
         override fun visit(data: Div.Custom, context: BindingContext, path: DivStatePath) {
@@ -65,7 +66,10 @@ internal class DivViewDataPreloader internal constructor(
                 data.value.videoSources?.forEach {
                     sources.add(it.url.evaluate(context.expressionResolver))
                 }
-                videoPreloader.preloadVideo(sources).also { ticket.addReference(it) }
+                val preloading = downloadCallback.registerPreloading("video")
+                videoPreloader.preloadVideo(sources, callback = { results ->
+                    preloading.onCompleted(CompositeResult(results))
+                }).also { ticket.addReference(it) }
             }
         }
     }

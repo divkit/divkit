@@ -10,8 +10,17 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.player.DivPlayerPreloader
+import com.yandex.div.core.preload.PreloadResult
+import com.yandex.div.core.preload.PreloadingCompletion
+import com.yandex.div.core.preload.PreloadingCompletionImpl
+import com.yandex.div.core.preload.PreloadingRegistry
+import com.yandex.div.core.preload.filterErrorResults
 import com.yandex.div.core.view2.DivImagePreloader
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.KLog
+import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
@@ -85,7 +94,7 @@ class DivPreloader internal constructor(
         override fun defaultVisit(data: Div, resolver: ExpressionResolver) {
             imagePreloader?.preloadImage(data, resolver, preloadFilter, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data.value(), resolver)
+            extensionController.preprocessExtensions(data.value(), resolver, downloadCallback)
         }
 
         override fun visit(data: Div.Container, resolver: ExpressionResolver) {
@@ -126,12 +135,16 @@ class DivPreloader internal constructor(
 
         override fun visit(data: Div.Video, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
-            if (preloadFilter.shouldPreloadContent(data, resolver)) {
+            val shouldPreloadContent = preloadFilter.shouldPreloadContent(data, resolver)
+            if (shouldPreloadContent) {
+                val preloading = downloadCallback.registerPreloading("video")
                 val sources = mutableListOf<Uri>()
                 data.value.videoSources?.forEach {
                     sources.add(it.url.evaluate(resolver))
                 }
-                videoPreloader.preloadVideo(sources).also { ticket.addReference(it) }
+                videoPreloader.preloadVideo(sources, callback = { results: List<PreloadResult> ->
+                    preloading.onCompleted(CompositeResult(results))
+                }).also { ticket.addReference(it) }
             }
         }
     }
@@ -164,13 +177,23 @@ class DivPreloader internal constructor(
         }
     }
 
-    class DownloadCallback(private val callback: Callback) : DivImageDownloadCallback() {
-        private var downloadsLeftCount = 0
-        private var failures = 0
+    class DownloadCallback(private val callback: Callback) : DivImageDownloadCallback(), PreloadingRegistry {
+        private val activePreloads = mutableMapOf<String, PreloadingCompletionImpl>()
+        private val legacyPreloading = LegacyPreloading()
         private var started = false
 
+        override fun registerPreloading(tag: String): PreloadingCompletion {
+            val key = "preload#${Any().hashCode()}/$tag"
+            val completion = PreloadingCompletionImpl(tag) {
+                tryFinish()
+            }
+            activePreloads[key] = completion
+            return completion
+        }
+
+        @Deprecated("Use registerPreloading")
         fun onSingleLoadingStarted() = runOnUiThread {
-            downloadsLeftCount++
+            legacyPreloading.onSingleLoadingStarted()
         }
 
         override fun onSuccess(cachedImage: DivCachedImage) {
@@ -198,23 +221,54 @@ class DivPreloader internal constructor(
 
         override fun onError(e: Throwable?) {
             runOnUiThread {
-                failures++
-                done()
+                legacyPreloading.onSingleLoadingFailed(e ?: UnknownError("No stack provided"))
+                tryFinish()
             }
         }
 
         private fun done() = runOnUiThread {
-            downloadsLeftCount--
+            legacyPreloading.onSingleLoadingCompleted()
+            tryFinish()
+        }
+
+        private fun tryFinish() = runOnUiThread {
+            val downloadsLeftCount =
+                (activePreloads.size - activePreloads.count { it.value.isCompleted }) +
+                        legacyPreloading.downloadsLeftCount
+            val failures =
+                activePreloads.count { it.value.isFailed } + legacyPreloading.failures.size
+
             if (downloadsLeftCount == 0 && started) {
+                if (failures > 0 && Log.isEnabled) {
+                    val errors = gatherPreloadErrors()
+                    errors.forEachIndexed { index, throwable ->
+                        KLog.e(TAG, throwable) { "Preload error ${index + 1} / ${errors.size}" }
+                    }
+                }
+
                 callback.finish(failures != 0)
             }
         }
 
+        private fun gatherPreloadErrors(): List<Throwable> {
+            val results = mutableListOf<Throwable>()
+            results.addAll(legacyPreloading.failures)
+
+            activePreloads.values.forEach { completion ->
+                val errors: Sequence<RuntimeException> = completion.result
+                    ?.filterErrorResults()
+                    ?.map { RuntimeException("Preload of '${it.uri}' failed!", it.error) }
+                    ?: return@forEach
+                results.addAll(errors)
+
+            }
+            return results
+        }
+
+
         fun onFullPreloadStarted() = runOnUiThread {
             started = true
-            if (downloadsLeftCount == 0) {
-                callback.finish(failures != 0)
-            }
+            tryFinish()
         }
 
         private inline fun runOnUiThread(crossinline action: () -> Unit) {
@@ -270,3 +324,31 @@ class DivPreloader internal constructor(
         }
     }
 }
+
+private class LegacyPreloading {
+    val failures = mutableListOf<Throwable>()
+    private var downloadsLeftCountRaw = 0
+
+    val downloadsLeftCount
+        get() = downloadsLeftCountRaw.coerceAtLeast(0)
+
+    fun onSingleLoadingStarted() {
+        downloadsLeftCountRaw++
+    }
+
+    fun onSingleLoadingCompleted() {
+        downloadsLeftCountRaw--
+
+        if (downloadsLeftCountRaw < 0) {
+            Assert.fail("Got more downloads than started! Is there a race?")
+        }
+    }
+
+    fun onSingleLoadingFailed(t: Throwable) {
+        failures.add(t)
+        onSingleLoadingCompleted()
+    }
+
+}
+
+private const val TAG = "DivPreloader"

@@ -364,6 +364,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
                         hideTooltip(divTooltip.id, div2View)
                     }
                 }
+            } else {
+                tooltips.remove(divTooltip.id)
             }
         }
         tooltipData.ticket = ticket

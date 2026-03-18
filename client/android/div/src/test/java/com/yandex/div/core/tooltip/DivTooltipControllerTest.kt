@@ -46,6 +46,9 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 
+/**
+ * Tests for [DivTooltipController].
+ */
 @RunWith(RobolectricTestRunner::class)
 class DivTooltipControllerTest {
 
@@ -279,6 +282,21 @@ class DivTooltipControllerTest {
         verify(popupWindow, never()).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
         verify(tooltipShownCallback, never()).onDivTooltipShown(div2View, anchor, tooltips[0])
         Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    @Test
+    fun `when preload completes with failures tooltip can be shown again`() {
+        val preloadCallback = argumentCaptor<DivPreloader.Callback>()
+        val preloadTicket = mock<DivPreloader.Ticket>()
+        whenever(divPreloader.preload(any(), any(), preloadCallback.capture()))
+            .doReturn(preloadTicket)
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+
+        preloadCallback.lastValue.finish(true)
+
+        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(popupWindow, never()).showAtLocation(any(), anyInt(), anyInt(), anyInt())
     }
 
     private fun prepareDiv(duration: Long = 5000, offset: DivPoint? = null) {

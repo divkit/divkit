@@ -5,6 +5,9 @@ import android.net.Uri
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieResult
+import com.yandex.div.core.preload.PreloadResult
+import com.yandex.div.core.preload.UriPreloadResult
+import com.yandex.div.internal.Assert
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.ASSET_SCHEME
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.DIVKIT_ASSET_SCHEME
 import com.yandex.div.lottie.DivLottieRawResProvider.Companion.HTTPS_SCHEME
@@ -36,10 +39,32 @@ internal class DivLottieCompositionRepository(
         }
     }
 
-    internal fun preloadLottieComposition(url: Uri) {
+    internal fun preloadLottieComposition(url: Uri, onComplete: (PreloadResult) -> Unit = {  }) {
         when (url.scheme) {
             HTTP_SCHEME, HTTPS_SCHEME -> {
-                networkCache.cacheComposition(url.toString())
+                val supported = networkCache.cacheComposition(url.toString()) { error ->
+                    onComplete(UriPreloadResult(url, error))
+                }
+                if (!supported) {
+                    Assert.fail("Lottie preloading works unstable! " +
+                            "Please implement DivLottieNetworkCache.cacheComposition(String, onComplete)!")
+                    networkCache.cacheComposition(url.toString())
+                    onComplete(UriPreloadResult(url, null))
+                }
+            }
+
+            RES_SCHEME, ASSET_SCHEME, DIVKIT_ASSET_SCHEME -> {
+                onComplete(UriPreloadResult(url, null))
+            }
+
+            else -> {
+                onComplete(
+                    UriPreloadResult(
+                        url, RuntimeException(
+                            "Unsupported scheme '${url.scheme}'. Preload cancelled"
+                        )
+                    )
+                )
             }
         }
     }

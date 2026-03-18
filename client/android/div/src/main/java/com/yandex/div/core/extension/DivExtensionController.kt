@@ -1,6 +1,7 @@
 package com.yandex.div.core.extension
 
 import android.view.View
+import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
@@ -15,13 +16,17 @@ internal class DivExtensionController @Inject constructor(
     private val extensionHandlers: List<DivExtensionHandler>,
 ) {
 
-    fun preprocessExtensions(div: DivBase, resolver: ExpressionResolver) {
+    fun preprocessExtensions(
+        div: DivBase,
+        resolver: ExpressionResolver,
+        downloadCallback: DivPreloader.DownloadCallback,
+    ) {
         if (!hasExtensions(div)) {
             return
         }
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
-                handler.preprocess(div, resolver)
+                handler.preprocess(div, resolver, downloadCallback)
             }
         }
     }
