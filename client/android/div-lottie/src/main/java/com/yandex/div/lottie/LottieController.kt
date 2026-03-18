@@ -2,7 +2,6 @@ package com.yandex.div.lottie
 
 import android.animation.Animator
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
@@ -11,6 +10,7 @@ import android.view.View.LAYER_TYPE_SOFTWARE
 import androidx.annotation.FloatRange
 import androidx.annotation.MainThread
 import com.airbnb.lottie.*
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
 
@@ -38,12 +38,12 @@ internal class LottieController(
     // Div Lottie Extension fields
     var data: LottieData? = null
 
-    private var onEndListener: (() -> Unit)? = null
+    private val onEndListeners = ObserverList<() -> Unit>()
 
     private val animatorListener = object : Animator.AnimatorListener {
         override fun onAnimationStart(animation: Animator) = Unit
         override fun onAnimationEnd(animation: Animator) {
-            onEndListener?.invoke()
+            onEndListeners.forEach { it.invoke() }
         }
         override fun onAnimationCancel(animation: Animator) = Unit
         override fun onAnimationRepeat(animation: Animator) = Unit
@@ -69,8 +69,12 @@ internal class LottieController(
         return if (gifImageView.drawable === lottieDrawable) lottieDrawable else dr
     }
 
-    fun setEndListener(listener: (() -> Unit)?) {
-        onEndListener = listener
+    fun addEndListener(listener: () -> Unit) {
+        onEndListeners.addObserver(listener)
+    }
+
+    fun clearPlaybackEndListeners() {
+        onEndListeners.clear()
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int): Boolean {
@@ -159,6 +163,7 @@ internal class LottieController(
 
     fun clearComposition() {
         composition = null
+        clearPlaybackEndListeners()
         lottieDrawable.clearComposition()
         gifImageView.externalImage = null
         gifImageView.imageTransformer = null
@@ -232,6 +237,14 @@ internal class LottieController(
         wasAnimatingWhenNotShown = false
         playAnimationWhenShown = false
         lottieDrawable.pauseAnimation()
+        enableOrDisableHardwareLayer()
+    }
+
+    @MainThread
+    fun pauseAnimationAt(progress: Float) {
+        lottieDrawable.pauseAnimation()
+        lottieDrawable.progress = progress
+
         enableOrDisableHardwareLayer()
     }
 

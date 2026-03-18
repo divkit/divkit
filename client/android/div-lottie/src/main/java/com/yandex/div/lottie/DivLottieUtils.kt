@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 internal fun View.launchOnAttachedToWindow(
     action: suspend CoroutineScope.() -> Unit
 ) {
-    val listener = ScopedOnAttachStateChangeListener(action)
+    val listener = ScopedOnAttachStateChangeListener(action, view = this)
     if (ViewCompat.isAttachedToWindow(this)) {
         listener.performActionInScope()
     }
@@ -27,7 +27,8 @@ internal fun View.clearOnAttachedToWindowScope() {
 }
 
 private class ScopedOnAttachStateChangeListener(
-    val action: suspend CoroutineScope.() -> Unit
+    val action: suspend CoroutineScope.() -> Unit,
+    private val view: View,
 ) : View.OnAttachStateChangeListener {
 
     private var attachScope: CoroutineScope? = null
@@ -46,6 +47,7 @@ private class ScopedOnAttachStateChangeListener(
             action()
         }
         attachScope = scope
+        view.removeOnAttachStateChangeListener(this)
     }
 
     fun clearScope() {

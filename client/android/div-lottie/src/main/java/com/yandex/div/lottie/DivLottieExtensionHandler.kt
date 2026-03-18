@@ -44,7 +44,7 @@ open class DivLottieExtensionHandler(
 ) : DivExtensionHandler, ExpressionSubscriber {
 
     private val repo = DivLottieCompositionRepository(rawResProvider, cache)
-
+    private val playbackRecords = mutableMapOf<String, PlaybackStateController>()
     override val subscriptions: MutableList<Disposable> = mutableListOf()
 
     override fun preprocess(div: DivBase, expressionResolver: ExpressionResolver) {
@@ -90,15 +90,32 @@ open class DivLottieExtensionHandler(
 
         lottieController.clearComposition()
         lottieController.data = lottieData
+        lottieController.clearPlaybackEndListeners()
 
         lottieView.launchOnAttachedToWindow {
             val result = withContext(Dispatchers.IO) {
                 repo.receiveLottieComposition(lottieData, view.context)
             }
             withContext(Dispatchers.Main) {
-                lottieController.bind(result, params, expressionResolver, lottieData.description)
+                val playbackState = getOrCreatePlaybackState(divView, div)
+                lottieController.addEndListener(playbackState.animationEndListener)
+                lottieController.bind(
+                    result = result,
+                    params = params,
+                    resolver = expressionResolver,
+                    description = lottieData.description,
+                    playbackStateController = playbackState,
+                )
             }
         }
+    }
+
+    private fun getOrCreatePlaybackState(
+        divView: Div2View,
+        div: DivBase
+    ): PlaybackStateController {
+        val id = "tag: ${divView.dataTag} div: $div"
+        return playbackRecords.getOrPut(id) { PlaybackStateController() }
     }
 
     private fun LottieController.bind(
@@ -106,6 +123,7 @@ open class DivLottieExtensionHandler(
         params: JSONObject,
         resolver: ExpressionResolver,
         description: String,
+        playbackStateController: PlaybackStateController,
     ) {
         val composition = result.value ?: return logger.fail(
             "failed to receive lotte composition on $description",
@@ -121,8 +139,13 @@ open class DivLottieExtensionHandler(
             setRepeatCount(params.getRepeatCount(resolver))
             setRepeatMode(params.getRepeatMode(resolver))
         }
+        playbackStateController.overrideRepeatCount(getRepeatCount())
 
-        playAnimation()
+        if (playbackStateController.canPlay()) {
+            playAnimation()
+        } else {
+            pauseAnimationAt(progress = if (getRepeatMode() == LottieDrawable.REVERSE) 0f else 1f)
+        }
 
         params.isPlaying?.let { expression ->
             addSubscription(expression.observe(resolver) { playOrPauseAnimation(it) })
@@ -159,7 +182,7 @@ open class DivLottieExtensionHandler(
 
         currentRepeat?.let(update)
 
-        setEndListener {
+        addEndListener {
             repeatIndex++
 
             currentRepeat = repeatList.getOrNull(repeatIndex)
@@ -178,6 +201,7 @@ open class DivLottieExtensionHandler(
         lottieView.clearOnAttachedToWindowScope()
         lottieController.clearComposition()
         lottieController.data = null
+        lottieController.clearPlaybackEndListeners()
         release()
     }
 
@@ -287,3 +311,22 @@ open class DivLottieExtensionHandler(
         }
     }
 }
+
+private class PlaybackStateController {
+    private var playedAlLeastOnce = false
+    private var infinitePlaybacks = false
+
+    val animationEndListener: () -> Unit = {
+        playedAlLeastOnce = true
+    }
+
+    fun overrideRepeatCount(repeatCount: Int) {
+        infinitePlaybacks = repeatCount == INFINITE_PLAYBACK
+    }
+
+    fun canPlay(): Boolean {
+        return infinitePlaybacks || !playedAlLeastOnce
+    }
+}
+
+private const val INFINITE_PLAYBACK = -1
