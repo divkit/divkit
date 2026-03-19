@@ -449,6 +449,7 @@ data class Tabs internal constructor(
                 activeBackgroundColor = additive.activeBackgroundColor ?: properties.activeBackgroundColor,
                 activeFontVariationSettings = additive.activeFontVariationSettings ?: properties.activeFontVariationSettings,
                 activeFontWeight = additive.activeFontWeight ?: properties.activeFontWeight,
+                activeFontWeightValue = additive.activeFontWeightValue ?: properties.activeFontWeightValue,
                 activeTextColor = additive.activeTextColor ?: properties.activeTextColor,
                 animationDuration = additive.animationDuration ?: properties.animationDuration,
                 animationType = additive.animationType ?: properties.animationType,
@@ -461,6 +462,7 @@ data class Tabs internal constructor(
                 inactiveBackgroundColor = additive.inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
                 inactiveFontVariationSettings = additive.inactiveFontVariationSettings ?: properties.inactiveFontVariationSettings,
                 inactiveFontWeight = additive.inactiveFontWeight ?: properties.inactiveFontWeight,
+                inactiveFontWeightValue = additive.inactiveFontWeightValue ?: properties.inactiveFontWeightValue,
                 inactiveTextColor = additive.inactiveTextColor ?: properties.inactiveTextColor,
                 itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
                 letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
@@ -484,6 +486,10 @@ data class Tabs internal constructor(
              * Active tab title style.
              */
             val activeFontWeight: Property<FontWeight>?,
+            /**
+             * Numeric value for font weight of the active tab title.
+             */
+            val activeFontWeightValue: Property<Int>?,
             /**
              * Color of the active tab title text.
              * Default value: `#CC000000`.
@@ -540,6 +546,10 @@ data class Tabs internal constructor(
              */
             val inactiveFontWeight: Property<FontWeight>?,
             /**
+             * Numeric value for font weight of the inactive tab title.
+             */
+            val inactiveFontWeightValue: Property<Int>?,
+            /**
              * Color of the inactive tab title text.
              * Default value: `#80000000`.
              */
@@ -570,6 +580,7 @@ data class Tabs internal constructor(
                 result.tryPutProperty("active_background_color", activeBackgroundColor)
                 result.tryPutProperty("active_font_variation_settings", activeFontVariationSettings)
                 result.tryPutProperty("active_font_weight", activeFontWeight)
+                result.tryPutProperty("active_font_weight_value", activeFontWeightValue)
                 result.tryPutProperty("active_text_color", activeTextColor)
                 result.tryPutProperty("animation_duration", animationDuration)
                 result.tryPutProperty("animation_type", animationType)
@@ -582,6 +593,7 @@ data class Tabs internal constructor(
                 result.tryPutProperty("inactive_background_color", inactiveBackgroundColor)
                 result.tryPutProperty("inactive_font_variation_settings", inactiveFontVariationSettings)
                 result.tryPutProperty("inactive_font_weight", inactiveFontWeight)
+                result.tryPutProperty("inactive_font_weight_value", inactiveFontWeightValue)
                 result.tryPutProperty("inactive_text_color", inactiveTextColor)
                 result.tryPutProperty("item_spacing", itemSpacing)
                 result.tryPutProperty("letter_spacing", letterSpacing)
@@ -2309,6 +2321,7 @@ fun Tabs.TabTitleDelimiter.asList() = listOf(this)
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2321,6 +2334,7 @@ fun Tabs.TabTitleDelimiter.asList() = listOf(this)
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2333,6 +2347,7 @@ fun DivScope.tabsTabTitleStyle(
     activeBackgroundColor: Color? = null,
     activeFontVariationSettings: Map<String, Any>? = null,
     activeFontWeight: FontWeight? = null,
+    activeFontWeightValue: Int? = null,
     activeTextColor: Color? = null,
     animationDuration: Int? = null,
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
@@ -2345,6 +2360,7 @@ fun DivScope.tabsTabTitleStyle(
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
+    inactiveFontWeightValue: Int? = null,
     inactiveTextColor: Color? = null,
     itemSpacing: Int? = null,
     letterSpacing: Double? = null,
@@ -2355,6 +2371,7 @@ fun DivScope.tabsTabTitleStyle(
         activeBackgroundColor = valueOrNull(activeBackgroundColor),
         activeFontVariationSettings = valueOrNull(activeFontVariationSettings),
         activeFontWeight = valueOrNull(activeFontWeight),
+        activeFontWeightValue = valueOrNull(activeFontWeightValue),
         activeTextColor = valueOrNull(activeTextColor),
         animationDuration = valueOrNull(animationDuration),
         animationType = valueOrNull(animationType),
@@ -2367,6 +2384,7 @@ fun DivScope.tabsTabTitleStyle(
         inactiveBackgroundColor = valueOrNull(inactiveBackgroundColor),
         inactiveFontVariationSettings = valueOrNull(inactiveFontVariationSettings),
         inactiveFontWeight = valueOrNull(inactiveFontWeight),
+        inactiveFontWeightValue = valueOrNull(inactiveFontWeightValue),
         inactiveTextColor = valueOrNull(inactiveTextColor),
         itemSpacing = valueOrNull(itemSpacing),
         letterSpacing = valueOrNull(letterSpacing),
@@ -2379,6 +2397,7 @@ fun DivScope.tabsTabTitleStyle(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2391,6 +2410,7 @@ fun DivScope.tabsTabTitleStyle(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2403,6 +2423,7 @@ fun DivScope.tabsTabTitleStyleProps(
     activeBackgroundColor: Color? = null,
     activeFontVariationSettings: Map<String, Any>? = null,
     activeFontWeight: FontWeight? = null,
+    activeFontWeightValue: Int? = null,
     activeTextColor: Color? = null,
     animationDuration: Int? = null,
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
@@ -2415,6 +2436,7 @@ fun DivScope.tabsTabTitleStyleProps(
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
+    inactiveFontWeightValue: Int? = null,
     inactiveTextColor: Color? = null,
     itemSpacing: Int? = null,
     letterSpacing: Double? = null,
@@ -2424,6 +2446,7 @@ fun DivScope.tabsTabTitleStyleProps(
     activeBackgroundColor = valueOrNull(activeBackgroundColor),
     activeFontVariationSettings = valueOrNull(activeFontVariationSettings),
     activeFontWeight = valueOrNull(activeFontWeight),
+    activeFontWeightValue = valueOrNull(activeFontWeightValue),
     activeTextColor = valueOrNull(activeTextColor),
     animationDuration = valueOrNull(animationDuration),
     animationType = valueOrNull(animationType),
@@ -2436,6 +2459,7 @@ fun DivScope.tabsTabTitleStyleProps(
     inactiveBackgroundColor = valueOrNull(inactiveBackgroundColor),
     inactiveFontVariationSettings = valueOrNull(inactiveFontVariationSettings),
     inactiveFontWeight = valueOrNull(inactiveFontWeight),
+    inactiveFontWeightValue = valueOrNull(inactiveFontWeightValue),
     inactiveTextColor = valueOrNull(inactiveTextColor),
     itemSpacing = valueOrNull(itemSpacing),
     letterSpacing = valueOrNull(letterSpacing),
@@ -2447,6 +2471,7 @@ fun DivScope.tabsTabTitleStyleProps(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2459,6 +2484,7 @@ fun DivScope.tabsTabTitleStyleProps(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2471,6 +2497,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     activeBackgroundColor: ReferenceProperty<Color>? = null,
     activeFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     activeFontWeight: ReferenceProperty<FontWeight>? = null,
+    activeFontWeightValue: ReferenceProperty<Int>? = null,
     activeTextColor: ReferenceProperty<Color>? = null,
     animationDuration: ReferenceProperty<Int>? = null,
     animationType: ReferenceProperty<Tabs.TabTitleStyle.AnimationType>? = null,
@@ -2483,6 +2510,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     inactiveBackgroundColor: ReferenceProperty<Color>? = null,
     inactiveFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     inactiveFontWeight: ReferenceProperty<FontWeight>? = null,
+    inactiveFontWeightValue: ReferenceProperty<Int>? = null,
     inactiveTextColor: ReferenceProperty<Color>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
@@ -2492,6 +2520,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     activeBackgroundColor = activeBackgroundColor,
     activeFontVariationSettings = activeFontVariationSettings,
     activeFontWeight = activeFontWeight,
+    activeFontWeightValue = activeFontWeightValue,
     activeTextColor = activeTextColor,
     animationDuration = animationDuration,
     animationType = animationType,
@@ -2504,6 +2533,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     inactiveBackgroundColor = inactiveBackgroundColor,
     inactiveFontVariationSettings = inactiveFontVariationSettings,
     inactiveFontWeight = inactiveFontWeight,
+    inactiveFontWeightValue = inactiveFontWeightValue,
     inactiveTextColor = inactiveTextColor,
     itemSpacing = itemSpacing,
     letterSpacing = letterSpacing,
@@ -2515,6 +2545,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2527,6 +2558,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2539,6 +2571,7 @@ fun Tabs.TabTitleStyle.override(
     activeBackgroundColor: Color? = null,
     activeFontVariationSettings: Map<String, Any>? = null,
     activeFontWeight: FontWeight? = null,
+    activeFontWeightValue: Int? = null,
     activeTextColor: Color? = null,
     animationDuration: Int? = null,
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
@@ -2551,6 +2584,7 @@ fun Tabs.TabTitleStyle.override(
     inactiveBackgroundColor: Color? = null,
     inactiveFontVariationSettings: Map<String, Any>? = null,
     inactiveFontWeight: FontWeight? = null,
+    inactiveFontWeightValue: Int? = null,
     inactiveTextColor: Color? = null,
     itemSpacing: Int? = null,
     letterSpacing: Double? = null,
@@ -2561,6 +2595,7 @@ fun Tabs.TabTitleStyle.override(
         activeBackgroundColor = valueOrNull(activeBackgroundColor) ?: properties.activeBackgroundColor,
         activeFontVariationSettings = valueOrNull(activeFontVariationSettings) ?: properties.activeFontVariationSettings,
         activeFontWeight = valueOrNull(activeFontWeight) ?: properties.activeFontWeight,
+        activeFontWeightValue = valueOrNull(activeFontWeightValue) ?: properties.activeFontWeightValue,
         activeTextColor = valueOrNull(activeTextColor) ?: properties.activeTextColor,
         animationDuration = valueOrNull(animationDuration) ?: properties.animationDuration,
         animationType = valueOrNull(animationType) ?: properties.animationType,
@@ -2573,6 +2608,7 @@ fun Tabs.TabTitleStyle.override(
         inactiveBackgroundColor = valueOrNull(inactiveBackgroundColor) ?: properties.inactiveBackgroundColor,
         inactiveFontVariationSettings = valueOrNull(inactiveFontVariationSettings) ?: properties.inactiveFontVariationSettings,
         inactiveFontWeight = valueOrNull(inactiveFontWeight) ?: properties.inactiveFontWeight,
+        inactiveFontWeightValue = valueOrNull(inactiveFontWeightValue) ?: properties.inactiveFontWeightValue,
         inactiveTextColor = valueOrNull(inactiveTextColor) ?: properties.inactiveTextColor,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
@@ -2585,6 +2621,7 @@ fun Tabs.TabTitleStyle.override(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2597,6 +2634,7 @@ fun Tabs.TabTitleStyle.override(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2609,6 +2647,7 @@ fun Tabs.TabTitleStyle.defer(
     activeBackgroundColor: ReferenceProperty<Color>? = null,
     activeFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     activeFontWeight: ReferenceProperty<FontWeight>? = null,
+    activeFontWeightValue: ReferenceProperty<Int>? = null,
     activeTextColor: ReferenceProperty<Color>? = null,
     animationDuration: ReferenceProperty<Int>? = null,
     animationType: ReferenceProperty<Tabs.TabTitleStyle.AnimationType>? = null,
@@ -2621,6 +2660,7 @@ fun Tabs.TabTitleStyle.defer(
     inactiveBackgroundColor: ReferenceProperty<Color>? = null,
     inactiveFontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     inactiveFontWeight: ReferenceProperty<FontWeight>? = null,
+    inactiveFontWeightValue: ReferenceProperty<Int>? = null,
     inactiveTextColor: ReferenceProperty<Color>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
@@ -2631,6 +2671,7 @@ fun Tabs.TabTitleStyle.defer(
         activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,
         activeFontVariationSettings = activeFontVariationSettings ?: properties.activeFontVariationSettings,
         activeFontWeight = activeFontWeight ?: properties.activeFontWeight,
+        activeFontWeightValue = activeFontWeightValue ?: properties.activeFontWeightValue,
         activeTextColor = activeTextColor ?: properties.activeTextColor,
         animationDuration = animationDuration ?: properties.animationDuration,
         animationType = animationType ?: properties.animationType,
@@ -2643,6 +2684,7 @@ fun Tabs.TabTitleStyle.defer(
         inactiveBackgroundColor = inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
         inactiveFontVariationSettings = inactiveFontVariationSettings ?: properties.inactiveFontVariationSettings,
         inactiveFontWeight = inactiveFontWeight ?: properties.inactiveFontWeight,
+        inactiveFontWeightValue = inactiveFontWeightValue ?: properties.inactiveFontWeightValue,
         inactiveTextColor = inactiveTextColor ?: properties.inactiveTextColor,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
@@ -2655,6 +2697,7 @@ fun Tabs.TabTitleStyle.defer(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2667,6 +2710,7 @@ fun Tabs.TabTitleStyle.defer(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2679,6 +2723,7 @@ fun Tabs.TabTitleStyle.modify(
     activeBackgroundColor: Property<Color>? = null,
     activeFontVariationSettings: Property<Map<String, Any>>? = null,
     activeFontWeight: Property<FontWeight>? = null,
+    activeFontWeightValue: Property<Int>? = null,
     activeTextColor: Property<Color>? = null,
     animationDuration: Property<Int>? = null,
     animationType: Property<Tabs.TabTitleStyle.AnimationType>? = null,
@@ -2691,6 +2736,7 @@ fun Tabs.TabTitleStyle.modify(
     inactiveBackgroundColor: Property<Color>? = null,
     inactiveFontVariationSettings: Property<Map<String, Any>>? = null,
     inactiveFontWeight: Property<FontWeight>? = null,
+    inactiveFontWeightValue: Property<Int>? = null,
     inactiveTextColor: Property<Color>? = null,
     itemSpacing: Property<Int>? = null,
     letterSpacing: Property<Double>? = null,
@@ -2701,6 +2747,7 @@ fun Tabs.TabTitleStyle.modify(
         activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,
         activeFontVariationSettings = activeFontVariationSettings ?: properties.activeFontVariationSettings,
         activeFontWeight = activeFontWeight ?: properties.activeFontWeight,
+        activeFontWeightValue = activeFontWeightValue ?: properties.activeFontWeightValue,
         activeTextColor = activeTextColor ?: properties.activeTextColor,
         animationDuration = animationDuration ?: properties.animationDuration,
         animationType = animationType ?: properties.animationType,
@@ -2713,6 +2760,7 @@ fun Tabs.TabTitleStyle.modify(
         inactiveBackgroundColor = inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
         inactiveFontVariationSettings = inactiveFontVariationSettings ?: properties.inactiveFontVariationSettings,
         inactiveFontWeight = inactiveFontWeight ?: properties.inactiveFontWeight,
+        inactiveFontWeightValue = inactiveFontWeightValue ?: properties.inactiveFontWeightValue,
         inactiveTextColor = inactiveTextColor ?: properties.inactiveTextColor,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
@@ -2725,6 +2773,7 @@ fun Tabs.TabTitleStyle.modify(
  * @param activeBackgroundColor Background color of the active tab title.
  * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
  * @param activeFontWeight Active tab title style.
+ * @param activeFontWeightValue Numeric value for font weight of the active tab title.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
  * @param animationType Active title change animation.
@@ -2736,6 +2785,7 @@ fun Tabs.TabTitleStyle.modify(
  * @param inactiveBackgroundColor Background color of the inactive tab title.
  * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
  * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveFontWeightValue Numeric value for font weight of the inactive tab title.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -2747,6 +2797,7 @@ fun Tabs.TabTitleStyle.evaluate(
     activeBackgroundColor: ExpressionProperty<Color>? = null,
     activeFontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     activeFontWeight: ExpressionProperty<FontWeight>? = null,
+    activeFontWeightValue: ExpressionProperty<Int>? = null,
     activeTextColor: ExpressionProperty<Color>? = null,
     animationDuration: ExpressionProperty<Int>? = null,
     animationType: ExpressionProperty<Tabs.TabTitleStyle.AnimationType>? = null,
@@ -2758,6 +2809,7 @@ fun Tabs.TabTitleStyle.evaluate(
     inactiveBackgroundColor: ExpressionProperty<Color>? = null,
     inactiveFontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     inactiveFontWeight: ExpressionProperty<FontWeight>? = null,
+    inactiveFontWeightValue: ExpressionProperty<Int>? = null,
     inactiveTextColor: ExpressionProperty<Color>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -2767,6 +2819,7 @@ fun Tabs.TabTitleStyle.evaluate(
         activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,
         activeFontVariationSettings = activeFontVariationSettings ?: properties.activeFontVariationSettings,
         activeFontWeight = activeFontWeight ?: properties.activeFontWeight,
+        activeFontWeightValue = activeFontWeightValue ?: properties.activeFontWeightValue,
         activeTextColor = activeTextColor ?: properties.activeTextColor,
         animationDuration = animationDuration ?: properties.animationDuration,
         animationType = animationType ?: properties.animationType,
@@ -2779,6 +2832,7 @@ fun Tabs.TabTitleStyle.evaluate(
         inactiveBackgroundColor = inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
         inactiveFontVariationSettings = inactiveFontVariationSettings ?: properties.inactiveFontVariationSettings,
         inactiveFontWeight = inactiveFontWeight ?: properties.inactiveFontWeight,
+        inactiveFontWeightValue = inactiveFontWeightValue ?: properties.inactiveFontWeightValue,
         inactiveTextColor = inactiveTextColor ?: properties.inactiveTextColor,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         letterSpacing = letterSpacing ?: properties.letterSpacing,

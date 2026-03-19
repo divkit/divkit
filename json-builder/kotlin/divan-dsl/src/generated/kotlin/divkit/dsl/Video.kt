@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [video].
  * 
- * Required parameters: `video_sources, type`.
+ * Required parameters: `type`.
  */
 @Generated
 @ExposedCopyVisibility
