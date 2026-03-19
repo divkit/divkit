@@ -1,6 +1,7 @@
 package com.yandex.div.shine
 
 import android.view.View
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.doAnswer
@@ -8,7 +9,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import java.lang.ref.WeakReference
-import kotlin.test.assertEquals
 
 class ShineAnimationControllerTest {
 

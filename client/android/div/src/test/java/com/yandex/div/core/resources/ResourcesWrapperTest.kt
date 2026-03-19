@@ -10,8 +10,10 @@ import java.lang.reflect.Modifier
 
 // These methods are either not part of Android public API (but still observable through reflection)
 // or cannot be overridden.
-val ANDROID_INTERNAL_OR_FINAL_RESOURCES_PUBLIC_METHODS = listOf(
+private val ANDROID_INTERNAL_OR_FINAL_RESOURCES_PUBLIC_METHODS = setOf(
     "calcConfigChanges(Configuration)",
+    "clearLoaders()",
+    "dump(PrintWriter, String)",
     "finishPreloading()",
     "flushLayoutCache()",
     "getAnimatorCache()",
@@ -22,11 +24,16 @@ val ANDROID_INTERNAL_OR_FINAL_RESOURCES_PUBLIC_METHODS = listOf(
     "getDrawableInflater()",
     "getImpl()",
     "getPreloadedDrawables()",
+    "getLoaders()",
+    "getLastResourceResolution()",
+    "getSizeAndUiModeConfigurations()",
     "getSizeConfigurations()",
     "getStateListAnimatorCache()",
+    "hasOverrideDisplayAdjustments()",
     "loadComplexColor(TypedValue, int, Theme)",
     "newTheme()",
     "preloadFonts(int)",
+    "setCallbacks(UpdateCallbacks)",
     "setCompatibilityInfo(CompatibilityInfo)",
     "setImpl(ResourcesImpl)",
     "startPreloading()",
@@ -48,9 +55,9 @@ class ResourcesWrapperTest {
     }
 }
 
-fun <T> Class<T>.getOverridablePublicMethodSignatures() = declaredMethods
+private fun <T> Class<T>.getOverridablePublicMethodSignatures() = declaredMethods
     .filter {
         Modifier.isPublic(it.modifiers) && !Modifier.isStatic(it.modifiers) && !it.isSynthetic
     }.map { it.signature() }
 
-fun Method.signature() = "$name(${parameterTypes.joinToString { it.simpleName }})"
+private fun Method.signature() = "$name(${parameterTypes.joinToString { it.simpleName }})"

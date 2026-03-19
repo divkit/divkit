@@ -4,10 +4,10 @@ import app.rive.runtime.kotlin.core.Alignment
 import app.rive.runtime.kotlin.core.Fit
 import app.rive.runtime.kotlin.core.Loop
 import org.json.JSONObject
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.test.assertEquals
 
 @RunWith(Parameterized::class)
 internal class CustomPropsParserTest(private val actual: String, private val expected: DivRiveCustomProps) {
