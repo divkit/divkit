@@ -1,3 +1,27 @@
+## 32.42.0
+
+# Android Client:
+* Fixed NoSuchElementException at `Div2View.trackChildrenVisibility()` call.
+* Fixed showing of non-animated images in `gif-image` downloaded via `GlideDivImageLoader`.
+* Fixed showing of preview by url in `gif-image` after rebind.
+* Prevent excessive lottie animations when div view is being recycled.
+* Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
+* Support preloading for lottie and video.
+* Supported `.svg` images in `PicassoDivImageLoader` and `GlideDivImageLoader`.
+* The `!:` operator now has higher precedence than logical and comparison operators.
+* `video_sources` made optional for `video`.
+
+# iOS Client:
+* Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
+* `video_sources` made optional for `video`.
+
+# Web Client:
+* Changed the default datetime conversion to a string according to the local time zone to better match other platforms.
+* Fixed an issue with the layout of items in the `container`, the total weight of which was less than 1.
+* Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
+* `video_sources` made optional for `video`.
+
+
 ## 32.41.0
 
 # Android Client:
