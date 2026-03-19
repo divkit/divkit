@@ -17,7 +17,7 @@ object ParsingValueUtils {
         return try {
             this.toLong()
         } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
+            throw VariableMutationException("Failed to convert value to Long: $this", e)
         }
     }
 
@@ -25,20 +25,20 @@ object ParsingValueUtils {
         return try {
             this.toInt()
         } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
+            throw VariableMutationException("Failed to convert value to Int: $this", e)
         }
     }
 
     fun String.parseAsBoolean(): Boolean {
         return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
-            ?: throw VariableMutationException("Unable to convert $this to boolean")
+            ?: throw VariableMutationException("Failed to convert value to Boolean: $this")
     }
 
     fun String.parseAsDouble(): Double {
         return try {
             this.toDouble()
         } catch (e: NumberFormatException) {
-            throw VariableMutationException(cause = e)
+            throw VariableMutationException("Failed to convert value to Double: $this", e)
         }
     }
 

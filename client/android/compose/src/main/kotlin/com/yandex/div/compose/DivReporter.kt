@@ -10,8 +10,8 @@ open class DivReporter {
         Log.e(TAG, message)
     }
 
-    open fun reportError(message: String, e: Throwable) {
-        Log.e(TAG, message, e)
+    open fun reportError(message: String? = null, throwable: Throwable) {
+        Log.e(TAG, message ?: "", throwable)
     }
 
     open fun reportWarning(message: String) {

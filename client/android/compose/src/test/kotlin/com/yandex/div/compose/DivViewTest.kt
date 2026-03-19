@@ -91,14 +91,15 @@ class DivViewTest {
     }
 
     @Test
-    fun `text changes when variable changes`() {
-        variableController.declare(Variable.IntegerVariable("counter", 10))
+    fun `text changes when host variable changes`() {
+        val variable = Variable.IntegerVariable("counter", 10)
+        variableController.declare(variable)
 
         setContent(
             text(text = expression("value = @{counter}"))
         )
 
-        variableController.get("counter")?.set("20")
+        variable.set(20)
 
         rule.onNodeWithText("value = 20").assertIsDisplayed()
     }

@@ -1,18 +1,13 @@
 package com.yandex.div.core.actions
 
-import android.net.Uri
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
-import com.yandex.div.evaluable.types.Color
-import com.yandex.div.evaluable.types.DateTime
-import com.yandex.div.evaluable.types.Url
+import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.internal.variables.castAndSetValue
 import com.yandex.div.internal.variables.evaluate
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
-import com.yandex.div2.DivEvaluableType
-import org.json.JSONArray
-import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,69 +37,12 @@ internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActio
         val variableName = action.value.variableName.evaluate(resolver)
         val newValue = action.value.value.evaluate(resolver)
         VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
-            variable.apply {
-                when (this) {
-                    is Variable.ArrayVariable ->
-                        checkValueAndCast<JSONArray>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.BooleanVariable ->
-                        checkValueAndCast<Boolean>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.ColorVariable ->
-                        checkValueAndCast<Int>(newValue, view, variableName)?.let(::Color)?.let(::set)
-
-                    is Variable.DictVariable ->
-                        checkValueAndCast<JSONObject>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.DoubleVariable ->
-                        checkValueAndCast<Double>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.IntegerVariable ->
-                        checkValueAndCast<Long>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.StringVariable ->
-                        checkValueAndCast<String>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.UrlVariable ->
-                        checkValueAndCast<Uri>(newValue, view, variableName)?.let(::set)
-
-                    is Variable.PropertyVariable -> if (isValid(newValue, view)) set(newValue)
-                }
+            try {
+                variable.castAndSetValue(newValue)
+            } catch (e: VariableMutationException) {
+                view.logError(e)
             }
+            return@setVariable variable
         }
-    }
-
-    private inline fun <reified T : Any> checkValueAndCast(
-        newValue: Any,
-        view: Div2View,
-        variableName: String
-    ): T? =
-        (newValue as? T).also { value ->
-            if (value == null) {
-                val valueType = when (newValue) {
-                    is Int, is Double -> "number"
-                    is JSONObject -> "dict"
-                    is JSONArray -> "array"
-                    else -> newValue.javaClass.simpleName.lowercase()
-                }
-                view.logError(IllegalArgumentException(
-                    "Trying to set value with invalid type ($valueType) to variable $variableName"
-                ))
-            }
-        }
-
-    private fun Variable.PropertyVariable.isValid(newValue: Any, view: Div2View): Boolean {
-        val castValue = when (valueType) {
-            DivEvaluableType.STRING -> checkValueAndCast<String>(newValue, view, name)
-            DivEvaluableType.INTEGER -> checkValueAndCast<Long>(newValue, view, name)
-            DivEvaluableType.NUMBER -> checkValueAndCast<Double>(newValue, view, name)
-            DivEvaluableType.BOOLEAN -> checkValueAndCast<Boolean>(newValue, view, name)
-            DivEvaluableType.URL -> checkValueAndCast<Url>(newValue, view, name)
-            DivEvaluableType.COLOR -> checkValueAndCast<Color>(newValue, view, name)
-            DivEvaluableType.DICT -> checkValueAndCast<JSONObject>(newValue, view, name)
-            DivEvaluableType.ARRAY -> checkValueAndCast<JSONArray>(newValue, view, name)
-            DivEvaluableType.DATETIME -> checkValueAndCast<DateTime>(newValue, view, name)
-        }
-        return castValue != null
     }
 }

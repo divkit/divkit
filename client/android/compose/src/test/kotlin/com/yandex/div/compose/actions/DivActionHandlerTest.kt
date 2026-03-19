@@ -3,35 +3,28 @@ package com.yandex.div.compose.actions
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.action
-import com.yandex.div.compose.constant
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.data.Variable
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionCustom
-import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
-import com.yandex.div2.DivTypedValue
-import com.yandex.div2.IntegerValue
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
     private val customActionHandler = CustomActionHandler()
     private val reporter = TestReporter()
+    private val variableController = DivVariableController()
 
     private val actionHandler = DivActionHandler(
         customActionHandler = customActionHandler,
         reporter = reporter,
-        setVariableActionHandler = SetVariableActionHandler(
-            reporter = reporter
-        )
+        setVariableActionHandler = mock()
     )
-
-    private val variableController = DivVariableController()
 
     private val expressionResolver = DivComposeExpressionResolver(
         reporter = reporter,
@@ -41,35 +34,6 @@ class DivActionHandlerTest {
     private val actionHandlingContext = DivActionHandlingContext(
         expressionResolver = expressionResolver
     )
-
-    @Test
-    fun `handle set_variable action`() {
-        val variable = Variable.IntegerVariable("counter", 10)
-        variableController.declare(variable)
-
-        handle(
-            action(
-                typed = DivActionTyped.SetVariable(
-                    DivActionSetVariable(
-                        value = DivTypedValue.Integer(IntegerValue(value = constant(20))),
-                        variableName = constant("counter")
-                    )
-                )
-            )
-        )
-
-        assertEquals(20L, variable.getValue())
-    }
-
-    @Test
-    fun `handle set_variable url action`() {
-        val variable = Variable.IntegerVariable("counter", 10)
-        variableController.declare(variable)
-
-        handle(action(url = "div-action://set_variable?name=counter&value=20"))
-
-        assertEquals(20L, variable.getValue())
-    }
 
     @Test
     fun `handle custom action`() {

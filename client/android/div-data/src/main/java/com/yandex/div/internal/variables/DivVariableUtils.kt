@@ -9,7 +9,6 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivVariable
 import com.yandex.div2.PropertyVariable
 
