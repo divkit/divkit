@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds

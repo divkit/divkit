@@ -8,10 +8,8 @@ import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivImage
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivInput
@@ -74,18 +72,6 @@ class DivPreloaderTest {
         preloadRequired = Expression.constant(true)
     )
     private val divVideoWithPreload = Div.Video(videoWithPreload)
-    private val videoWithoutPreload = DivVideo(videoSources = listOf(videoSource))
-    private val divVideoWithoutPreload = Div.Video(videoWithoutPreload)
-
-    private val imageWithPreload = DivImage(
-        imageUrl = Expression.constant(Uri.parse("https://example.com/img.png")),
-        preloadRequired = Expression.constant(true)
-    )
-    private val divImageWithPreload = Div.Image(imageWithPreload)
-    private val containerWithVideoAndImage = DivContainer(
-        items = Arrays.asList(divVideoWithPreload, divImageWithPreload)
-    )
-    private val divContainerWithVideoAndImage = Div.Container(containerWithVideoAndImage)
 
     private val underTest: DivPreloader = DivPreloader(
         divImagePreloader,
@@ -168,7 +154,7 @@ class DivPreloaderTest {
             DivPreloader.PreloadReference.EMPTY
         }
 
-        underTest.preload(divVideoWithPreload, ExpressionResolver.EMPTY)
+        underTest.preload(divVideoWithPreload, resolver)
 
         verify(videoPreloader).preloadVideo(eq(listOf(videoSourceUrl)), any())
     }
@@ -178,7 +164,7 @@ class DivPreloaderTest {
         val videoPreloadReference = mock<DivPreloader.PreloadReference>()
         whenever(videoPreloader.preloadVideo(any(), any())).doReturn(videoPreloadReference)
 
-        val ticket = underTest.preload(divVideoWithPreload, ExpressionResolver.EMPTY)
+        val ticket = underTest.preload(divVideoWithPreload, resolver)
 
         ticket.cancel()
 
