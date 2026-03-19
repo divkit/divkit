@@ -21,31 +21,26 @@ private const val CHILD_VARIABLE = "child_variable"
 
 class RuntimeStoreImplTest {
     private val rootResolver = mock<ExpressionResolverImpl>()
-    private val rootRuntime = mock<ExpressionsRuntime> {
-        on { expressionResolver } doReturn rootResolver
-    }
+    private val rootRuntime = ExpressionsRuntime(rootResolver)
     private val resolver = mock<ExpressionResolverImpl> {
         on { variableController } doReturn mock()
     }
-    private val childRuntime = mock<ExpressionsRuntime> {
-        on { expressionResolver } doReturn resolver
+    private val childRuntime = ExpressionsRuntime(resolver)
+    private val filler = mock< RuntimeStoreFiller> {
+        on { fillStore(any(), any()) } doReturn rootRuntime
     }
     private val runtimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { createRootRuntime(any(), any(), any()) } doReturn rootRuntime
         on { createChildRuntime(any(), any(), any(), any()) } doReturn childRuntime
     }
-    private val underTest = RuntimeStoreImpl(mock(), runtimeProvider, mock())
+    private val underTest = RuntimeStoreImpl(mock(), filler, runtimeProvider, mock()).apply {
+        putRuntime(rootRuntime, "", null)
+    }
 
     private val divBase = mock<DivBase>()
     private val div = mock<Div> {
         on { value() } doReturn divBase
     }
     private val path = DivStatePath(0, path = listOf("0", "div1"))
-
-    @Test
-    fun `root resolver registered in store`() {
-        Assert.assertNotNull(underTest.getRuntimeWithOrNull(rootResolver))
-    }
 
     @Test
     fun `resolveRuntimeWith links path to created runtime`() {
@@ -58,20 +53,20 @@ class RuntimeStoreImplTest {
     fun `getOrCreateRuntime returns runtime for path if exist`() {
         underTest.putRuntime(childRuntime, PATH, rootRuntime)
 
-        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(path, div, resolver))
+        Assert.assertEquals(childRuntime, underTest.getOrCreateRuntime(path.fullPath, div, resolver))
         Assert.assertEquals(childRuntime, underTest.getRuntimeWithOrNull(resolver))
     }
 
     @Test
     fun `getOrCreateRuntime returns parent runtime for path if no variables provided`() {
-        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(path, div, rootResolver))
+        Assert.assertEquals(rootRuntime, underTest.getOrCreateRuntime(path.fullPath, div, rootResolver))
     }
 
     @Test
     fun `getOrCreateRuntime returns new runtime if new variables provided`() {
         setVariable()
 
-        val runtime = underTest.getOrCreateRuntime(path, div, rootResolver)
+        val runtime = underTest.getOrCreateRuntime(path.fullPath, div, rootResolver)
 
         Assert.assertNotNull(runtime)
         Assert.assertNotSame(rootRuntime, runtime)
@@ -79,7 +74,7 @@ class RuntimeStoreImplTest {
 
     @Test
     fun `getOrCreateRuntime returns root runtime if parent runtime is not found`() {
-        val runtime = underTest.getOrCreateRuntime(path, div, mock<ExpressionResolverImpl>())
+        val runtime = underTest.getOrCreateRuntime(path.fullPath, div, mock<ExpressionResolverImpl>())
 
         Assert.assertEquals(rootRuntime, runtime)
     }

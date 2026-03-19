@@ -47,7 +47,9 @@ open class DivBinderTest {
 
     internal val context = RuntimeEnvironment.application
     private val oldExpressionResolver = mock<ExpressionResolver>()
-    private val resolver = mock<ExpressionResolverImpl>()
+    internal val resolver = mock<ExpressionResolverImpl> {
+        on { childPath(any()) } doReturn ""
+    }
     private val runtime = mock<ExpressionsRuntime> {
         on { expressionResolver } doReturn resolver
     }
@@ -65,7 +67,7 @@ open class DivBinderTest {
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { runtimeStore } doReturn runtimeStore
     }
-    internal val bindingContext = BindingContext(divView, ExpressionResolver.EMPTY)
+    internal val bindingContext = BindingContext(divView, resolver)
     private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(
@@ -95,6 +97,10 @@ open class DivBinderTest {
 
     internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
     internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
+
+    init {
+        whenever(resolver.runtimeStore).doReturn(runtimeStore)
+    }
 
     companion object {
         internal const val CARD_ID = "id"

@@ -5,6 +5,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.expression.local.RuntimeStoreFiller
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.variables.declare
 import com.yandex.div.core.view2.Div2View
@@ -43,7 +44,8 @@ internal class RuntimeStoreProvider @Inject constructor(
             return store
         }
 
-        return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also { store ->
+        val filler = RuntimeStoreFiller(runtimeProvider, errorCollector)
+        return RuntimeStoreImpl(data, filler, runtimeProvider, errorCollector).also { store ->
             runtimeStores[tag.id] = store
             div2View?.let { store.attachView(it) }
         }

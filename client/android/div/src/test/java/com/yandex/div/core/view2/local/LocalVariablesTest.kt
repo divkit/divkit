@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -50,7 +49,7 @@ class LocalVariablesTest {
     private val container get() = state.getChildAt(0) as DivLinearLayout
     private val inputWithLocalVariable get() = container.getChildAt(0) as EditText
     private val inputWithCardVariable get() = container.getChildAt(1) as EditText
-    private val path = DivStatePath.parse("0/label/state_1")
+    private val path = "0:label/state_1"
 
     private fun setDivView(json: String) {
         val parsingEnvironment = DivParsingEnvironment({ e -> throw AssertionError(e) })
@@ -110,7 +109,7 @@ class LocalVariablesTest {
         assertTextShown("text", textWithLocalVariable)
         assertTextShown("text", textWithParentVariable)
 
-        setVariable("text", "changed text", DivStatePath.parse("0/label/state_4"))
+        setVariable("text", "changed text", "0:label/state_4")
         assertTextShown("text", textWithLocalVariable)
         assertTextShown("changed text", textWithParentVariable)
     }
@@ -126,7 +125,7 @@ class LocalVariablesTest {
         )
     }
 
-    private fun setVariable(name: String, value: String, path: DivStatePath) {
+    private fun setVariable(name: String, value: String, path: String) {
         val variable = div2View.runtimeStore.getOrCreateRuntime(path, div, div2View.expressionResolver)
             .expressionResolver.variableController.getMutableVariable(name) ?: return
         variable.set(value)

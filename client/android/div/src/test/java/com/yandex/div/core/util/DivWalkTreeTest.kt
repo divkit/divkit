@@ -2,7 +2,7 @@ package com.yandex.div.core.util
 
 import android.net.Uri
 import com.yandex.div.core.asExpression
-import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
@@ -11,13 +11,12 @@ import com.yandex.div2.DivText
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivWalkTreeTest {
 
-    private val resolver = mock<ExpressionResolver>()
+    private val resolver = mockExpressionResolver()
 
     @Test
     fun `walking single node hierarchy`() {

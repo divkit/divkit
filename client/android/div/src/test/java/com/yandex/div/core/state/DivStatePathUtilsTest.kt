@@ -1,17 +1,16 @@
 package com.yandex.div.core.state
 
+import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.compactPathList
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.view2.divs.UnitTestData
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import junit.framework.AssertionFailedError
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -23,7 +22,7 @@ class DivStatePathUtilsTest {
     private val thrdLvlPath = DivStatePath(0, getStates(3), getPath(3))
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val div = testData.div
-    private val resolver = mock<ExpressionResolver>()
+    private val resolver = mockExpressionResolver()
 
     @Test
     fun `find div state by path finds first container`() {

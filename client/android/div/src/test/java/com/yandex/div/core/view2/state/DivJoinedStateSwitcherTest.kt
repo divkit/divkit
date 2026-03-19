@@ -29,6 +29,7 @@ class DivJoinedStateSwitcherTest {
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val rootDiv = testData.div
     private val divDataState = DivData.State(rootDiv, 0)
+    private val rootStatePath = DivStatePath.fromState(divDataState)
 
     private val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
     private val viewBinder = mock<DivBinder>()
@@ -57,7 +58,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, listOf(notActiveState))
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(DivStatePath.fromState(divDataState)))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
 
     @Test
@@ -92,7 +93,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(commonPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
 
     @Test
@@ -106,7 +107,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(commonPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
 
     @Test

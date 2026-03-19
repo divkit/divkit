@@ -91,8 +91,10 @@ data class DivStatePath @VisibleForTesting internal constructor(
         val list = states.toMutableList()
         val lastState = list.removeAt(list.lastIndex)
         val lastStateIndex = path.indexOfLast { it == lastState.divId }.takeIf { it != -1 }
-            ?: path.indexOfLast { it.substringBeforeLast('#') == lastState.divId }
-        return DivStatePath(topLevelStateId, list, path.subList(0, lastStateIndex + 1))
+            ?: path.indexOfLast { it.substringBeforeLast('#') == lastState.divId }.takeIf { it != -1 }
+            ?: 0.takeIf { path.first().removePrefix("$topLevelStateId:") == lastState.divId }
+            ?: return this
+        return DivStatePath(topLevelStateId, list, path.subList(0, lastStateIndex + 1), containsOnlyStates)
     }
 
     fun isRootPath(): Boolean = states.isEmpty()
@@ -140,10 +142,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
         internal fun fromState(state: DivData.State) = fromRootDiv(state.stateId, state.div)
 
         internal fun fromRootDiv(stateId: Long, div: Div): DivStatePath {
-            val path = listOf(
-                stateId.toString(),
-                div.getId() ?: ChildPathUnitCache.getValue(0)
-            )
+            val path = listOf(stateId.toString() + (div.getId()?.let { ":$it" } ?: ""))
             return DivStatePath(stateId, emptyList(), path)
         }
 

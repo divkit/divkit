@@ -33,6 +33,7 @@ class DivMultipleStateSwitcherTest {
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val rootDiv = testData.div
     private val divDataState = DivData.State(rootDiv, 0)
+    private val rootStatePath = DivStatePath.fromState(divDataState)
 
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val div2Context = Div2Context(
@@ -62,7 +63,7 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, listOf(activeState))
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
 
     @Test
@@ -80,7 +81,7 @@ class DivMultipleStateSwitcherTest {
     fun `switch to single state of missing state layout binds root div`() {
         val inactiveState = "0/state_container/second/second_state/hidden".path
         stateSwitcher.switchStates(bindingContext, divDataState, listOf(inactiveState))
-        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(rootStatePath))
     }
 
     @Test
@@ -109,7 +110,7 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(rootStatePath))
     }
 
     @Test
@@ -148,6 +149,6 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(bindingContext, divDataState, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(rootStatePath))
     }
 }

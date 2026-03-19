@@ -13,7 +13,6 @@ import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toLocalFunctions
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -24,7 +23,7 @@ import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.data.PropertyVariableExecutor
-import com.yandex.div2.DivBase
+import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
@@ -76,30 +75,31 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     fun createChildRuntime(
-        path: DivStatePath,
-        div: DivBase,
+        path: String,
+        div: Div,
         parentResolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
     ): ExpressionsRuntime {
+        val divValue = div.value()
         val localVariableController = VariableControllerImpl(
             parentResolver.runtimeStore.viewProvider,
             parentResolver.variableController
         )
 
-        val functions = div.functions
+        val functions = divValue.functions
         var functionProvider = parentResolver.evaluator.evaluationContext.functionProvider as FunctionProviderDecorator
         if (!functions.isNullOrEmpty()) {
             functionProvider += functions.toLocalFunctions()
         }
 
         return createRuntime(
-            div.variables,
-            div.variableTriggers,
+            divValue.variables,
+            divValue.variableTriggers,
             localVariableController,
             parentResolver.evaluator.evaluationContext.storedValueProvider,
             functionProvider,
             parentResolver.evaluator.evaluationContext.warningSender,
-            path = parentResolver.path + "/" + path.lastDivId,
+            path,
             parentResolver.runtimeStore,
             errorCollector,
         )
@@ -148,5 +148,16 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val controller = TriggersController(resolver, errorCollector, logger, divActionBinder)
         controller.ensureTriggersSynced(this)
         return controller
+    }
+
+    fun createRuntimeWithResolver(
+        div: Div,
+        resolver: ExpressionResolverImpl,
+        errorCollector: ErrorCollector,
+    ): ExpressionsRuntime {
+        return ExpressionsRuntime(
+            expressionResolver = resolver,
+            triggersController = div.value().variableTriggers.toTriggersController(resolver, errorCollector)
+        )
     }
 }

@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -15,7 +18,12 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
 import org.junit.Assert
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 internal fun View.viewEquals(other: View): Boolean {
     if (this::class.java != other::class.java) return false
@@ -65,6 +73,18 @@ internal fun ViewGroup.childrenToFlatList(): List<View> {
         }
     }
     return viewList
+}
+
+internal fun mockExpressionResolver(): ExpressionResolver {
+    val resolver = mock<ExpressionResolverImpl> {
+        on { childPath(any()) } doReturn ""
+    }
+    val runtime = ExpressionsRuntime(resolver)
+    val runtimeStore = mock<RuntimeStore> {
+        on { getOrCreateRuntime(any(), any(), any()) } doReturn runtime
+    }
+    whenever(resolver.runtimeStore).doReturn(runtimeStore)
+    return resolver
 }
 
 internal class TestComponent(

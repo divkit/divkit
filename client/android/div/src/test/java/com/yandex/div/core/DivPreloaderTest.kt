@@ -30,7 +30,6 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.util.Arrays
 
 /**
  * Tests for [DivPreloader].
@@ -58,11 +57,12 @@ class DivPreloaderTest {
     private val separator = DivSeparator(extensions = listOf(DivExtension(id = "test1")))
     private val divSeparator = Div.Separator(separator)
 
-    private val containerItems = Arrays.asList(divText, divInput, divCustom, divSeparator)
+    private val containerItems = listOf(divText, divInput, divCustom, divSeparator)
 
     private val container = DivContainer(items = containerItems, extensions = listOf(DivExtension(id = "test2")))
     private val divContainer = Div.Container(container)
     private val videoPreloader = mock<DivPlayerPreloader>()
+    private val resolver = mockExpressionResolver()
 
     private val videoSourceUrl = Uri.parse("https://example.com/video.mp4")
     private val videoSource = DivVideoSource(
@@ -97,14 +97,14 @@ class DivPreloaderTest {
 
     @Test
     fun `preload div background`() {
-        underTest.preload(divInput, mock())
+        underTest.preload(divInput, resolver)
 
         verify(divImagePreloader).preloadImage(eq(divInput), any(), any(), any())
     }
 
     @Test
     fun `preload div items background in containers`() {
-        underTest.preload(divContainer, mock())
+        underTest.preload(divContainer, resolver)
 
         verify(divImagePreloader, times(1)).preloadImage(eq(divContainer), any(), any(), any())
         verify(divImagePreloader, times(1)).preloadImage(eq(divInput), any(), any(), any())
@@ -114,14 +114,14 @@ class DivPreloaderTest {
 
     @Test
     fun `preload div custom`() {
-        underTest.preload(divCustom, mock())
+        underTest.preload(divCustom, resolver)
 
         verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
 
     @Test
     fun `preload div custom in container`() {
-        underTest.preload(divContainer, mock())
+        underTest.preload(divContainer, resolver)
 
         verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
@@ -140,7 +140,7 @@ class DivPreloaderTest {
             .thenReturn(listOf(textLoadReference))
         whenever(divImagePreloader.preloadImage(eq(divCustom), any(), any(), any()))
             .thenReturn(listOf(customLoadReference))
-        val ticket = underTest.preload(divContainer, mock())
+        val ticket = underTest.preload(divContainer, resolver)
 
         ticket.cancel()
 
@@ -155,7 +155,7 @@ class DivPreloaderTest {
         whenever(extensionHandlers[0].matches(eq(container))).thenReturn(true)
         whenever(extensionHandlers[1].matches(eq(separator))).thenReturn(true)
 
-        underTest.preload(divContainer, mock())
+        underTest.preload(divContainer, resolver)
 
         verify(extensionHandlers[0], times(1)).preprocess(eq(container), any(), any())
         verify(extensionHandlers[1], times(1)).preprocess(eq(separator), any(), any())

@@ -21,6 +21,7 @@ private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
 
 internal class RuntimeStoreImpl(
     data: DivData,
+    filler: RuntimeStoreFiller,
     private val runtimeProvider: ExpressionsRuntimeProvider,
     private val errorCollector: ErrorCollector,
 ) : RuntimeStore {
@@ -36,9 +37,7 @@ internal class RuntimeStoreImpl(
 
     override val viewProvider = Provider { viewRef?.get() }
 
-    override val rootRuntime = runtimeProvider.createRootRuntime(data, errorCollector, this).also {
-        putRuntime(it, "", null)
-    }
+    override val rootRuntime = filler.fillStore(this, data)
 
     fun attachView(view: Div2View) {
         viewRef = WeakReference(view)
@@ -56,32 +55,31 @@ internal class RuntimeStoreImpl(
      * @param parentResolver
      */
     override fun getOrCreateRuntime(
-        path: DivStatePath,
+        path: String,
         div: Div,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime {
-        val pathString = path.fullPath
-        pathToRuntime[pathString]?.let { return it }
+        pathToRuntime[path]?.let { return it }
 
         if (parentResolver !is ExpressionResolverImpl) return rootRuntime
 
         val parentRuntime = getRuntimeWithOrNull(parentResolver) ?: run {
-            reportParentRuntimeError(pathString)
+            reportParentRuntimeError(path)
             return rootRuntime
         }
 
         if (!div.needLocalRuntime) {
-            pathToRuntime[pathString] = parentRuntime
+            pathToRuntime[path] = parentRuntime
             return parentRuntime
         }
 
         val runtime = runtimeProvider.createChildRuntime(
             path = path,
-            div = div.value(),
+            div = div,
             parentResolver = parentResolver,
             errorCollector = errorCollector,
         )
-        putRuntime(runtime, pathString, parentRuntime)
+        putRuntime(runtime, path, parentRuntime)
         return runtime
     }
 
@@ -118,8 +116,8 @@ internal class RuntimeStoreImpl(
         return when {
             div.needLocalRuntime -> {
                 runtimeProvider.createChildRuntime(
-                    path = path,
-                    div = div.value(),
+                    path = pathString,
+                    div = div,
                     parentResolver = resolver,
                     errorCollector = errorCollector,
                 ).also {
@@ -166,17 +164,8 @@ internal class RuntimeStoreImpl(
         errorCollector.logError(AssertionError(message))
     }
 
-    override fun getOrPutItemBuilderResolver(
-        path: String,
-        parentResolver: ExpressionResolver,
-        createResolver: () -> ExpressionResolver
-    ): ExpressionResolver {
-        return itemBuilderResolvers.getOrPut(path) {
-            val resolver = createResolver()
-            getRuntimeWithOrNull(parentResolver)?.let { resolverToRuntime[resolver] = it }
-            resolver
-        }
-    }
+    override fun getOrPutItemBuilderResolver(path: String, createResolver: () -> ExpressionResolver) =
+        itemBuilderResolvers.getOrPut(path) { createResolver() }
 
     private val Div.needLocalRuntime get() =
         !value().run { variables.isNullOrEmpty() && variableTriggers.isNullOrEmpty() && functions.isNullOrEmpty() }

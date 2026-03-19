@@ -21,7 +21,7 @@ internal interface RuntimeStore {
      * @param parentResolver
      */
     fun getOrCreateRuntime(
-        path: DivStatePath,
+        path: String,
         div: Div,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime
@@ -47,11 +47,7 @@ internal interface RuntimeStore {
 
     fun getUniquePathsAndRuntimes(): Map<String, ExpressionsRuntime>
 
-    fun getOrPutItemBuilderResolver(
-        path: String,
-        parentResolver: ExpressionResolver,
-        createResolver: () -> ExpressionResolver
-    ): ExpressionResolver
+    fun getOrPutItemBuilderResolver(path: String, createResolver: () -> ExpressionResolver): ExpressionResolver
 
     companion object {
         val EMPTY = object : RuntimeStore {
@@ -61,7 +57,7 @@ internal interface RuntimeStore {
             override val viewProvider: Provider<Div2View?> get() = Provider { null }
 
             override fun getOrCreateRuntime(
-                path: DivStatePath,
+                path: String,
                 div: Div,
                 parentResolver: ExpressionResolver,
             ) = throw IllegalStateException()
@@ -91,11 +87,8 @@ internal interface RuntimeStore {
 
             override fun getUniquePathsAndRuntimes(): Map<String, ExpressionsRuntime> = throwException()
 
-            override fun getOrPutItemBuilderResolver(
-                path: String,
-                parentResolver: ExpressionResolver,
-                createResolver: () -> ExpressionResolver
-            ) = throwException()
+            override fun getOrPutItemBuilderResolver(path: String, createResolver: () -> ExpressionResolver) =
+                throwException()
 
             private fun throwException(): Nothing =
                 throw IllegalStateException("Trying to use RuntimeStore before initializing.")

@@ -3,6 +3,7 @@ package com.yandex.div.internal.core
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
+import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -68,7 +69,7 @@ private fun DivCollectionItemBuilder.getItemResolver(
     val resolverImpl = resolver.asImpl ?: return resolver
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
     val pathSegment = "$dataElement:$index"
-    return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(resolverImpl.path + "/" + pathSegment, resolver) {
+    return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(resolverImpl.childPath(pathSegment)) {
         val localDataProvider = ConstantsProvider(mapOf(
             dataElementName to validElement,
             INDEX_VARIABLE_NAME to index.toLong()
@@ -137,6 +138,13 @@ internal fun DivTabs.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
 internal fun DivState.statesToDivItemBuilderResult(resolver: ExpressionResolver) =
     states.mapNotNull { state -> state.div?.toItemBuilderResult(resolver) }
 
-internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver) = map { it.toItemBuilderResult(resolver) }
+internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver): List<DivItemBuilderResult> {
+    val resolverImpl = resolver.asImpl ?: return emptyList()
+    val ids = getIds()
+    return mapIndexed { index, div ->
+        val path = resolverImpl.childPath(ids[index])
+        div.toItemBuilderResult(resolverImpl.runtimeStore.getOrCreateRuntime(path, div, resolver).expressionResolver)
+    }
+}
 
 internal fun Div.toItemBuilderResult(resolver: ExpressionResolver) = DivItemBuilderResult(this, resolver)

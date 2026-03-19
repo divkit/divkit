@@ -31,8 +31,12 @@ internal class DivIndicatorBinder @Inject constructor(
     private val pagerIndicatorConnector: PagerIndicatorConnector
 ) : DivViewBinder<Div.Indicator, DivIndicator, DivPagerIndicatorView>(baseBinder) {
     override fun bindView(context: BindingContext, view: DivPagerIndicatorView, div: Div.Indicator) {
-        context.divView.rootDiv()?.let { rootDiv ->
-            findNearest<DivPager>(rootDiv, context.expressionResolver, div.value()) {
+        val divView = context.divView
+        divView.rootDiv()?.let { rootDiv ->
+            val rootDivResolver = divView.runtimeStore
+                .getOrCreateRuntime(divView.currentRootPath.fullPath, rootDiv, divView.expressionResolver)
+                .expressionResolver
+            findNearest<DivPager>(rootDiv, rootDivResolver, div.value()) {
                 div.value.pagerId == null || it.id == div.value.pagerId
             }?.let { pagerToAttach ->
                 pagerIndicatorConnector.submitIndicator(view, pagerToAttach)
