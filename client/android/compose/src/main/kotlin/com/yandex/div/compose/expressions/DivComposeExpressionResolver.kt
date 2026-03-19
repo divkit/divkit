@@ -1,8 +1,7 @@
 package com.yandex.div.compose.expressions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.dagger.DivLocalScope
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -23,12 +22,11 @@ import com.yandex.div.json.missingVariable
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
 import javax.inject.Inject
-import javax.inject.Named
 
-@DivViewScope
+@DivLocalScope
 internal class DivComposeExpressionResolver @Inject constructor(
     private val reporter: DivReporter,
-    @param:Named(Names.CARD_VARIABLES) private val variableController: DivVariableController
+    private val variableController: DivVariableController
 ) : ExpressionResolver {
 
     private val evaluator: Evaluator

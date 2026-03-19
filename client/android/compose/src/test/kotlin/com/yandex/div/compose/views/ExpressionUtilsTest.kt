@@ -34,10 +34,9 @@ class ExpressionUtilsTest {
         variableController = variableController
     )
 
-    private val viewContext = DivViewContext(
+    private val localContext = DivLocalContext(
+        actionHandlingContext = mock(),
         expressionResolver = resolver,
-        reporter = reporter,
-        variableAdapter = mock(),
         variableController = variableController
     )
 
@@ -126,7 +125,7 @@ class ExpressionUtilsTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
-            CompositionLocalProvider(LocalDivViewContext provides viewContext) {
+            CompositionLocalProvider(LocalDivContext provides localContext) {
                 content()
             }
         }

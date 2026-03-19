@@ -14,6 +14,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVariable
@@ -47,7 +48,7 @@ class DivViewTest {
     fun `text with expression is displayed`() {
         setContent(
             text(text = expression("value = @{counter}")),
-            variables = listOf(integerVariable("counter", 10))
+            variables = listOf(variable("counter", 10))
         )
 
         rule.onNodeWithText("value = 10").assertIsDisplayed()
@@ -70,7 +71,20 @@ class DivViewTest {
 
         setContent(
             text(text = expression("value = @{counter}")),
-            variables = listOf(integerVariable("counter", 20))
+            variables = listOf(variable("counter", 20))
+        )
+
+        rule.onNodeWithText("value = 20").assertIsDisplayed()
+    }
+
+    @Test
+    fun localVariableShadowsCardVariable() {
+        setContent(
+            text(
+                text = expression("value = @{counter}"),
+                variables = listOf(variable("counter", 20))
+            ),
+            variables = listOf(variable("counter", 10))
         )
 
         rule.onNodeWithText("value = 20").assertIsDisplayed()
@@ -92,18 +106,34 @@ class DivViewTest {
     @Test
     fun `text changes when set_variable action is triggered`() {
         setContent(
-            text(
-                action = action(url = "div-action://set_variable?name=counter&value=20"),
-                id = "title",
-                text = expression("value = @{counter}")
+            container(
+                items = listOf(
+                    text(
+                        action = action(url = "div-action://set_variable?name=card_var&value=new card value"),
+                        id = "card_text",
+                        text = expression("card_var = @{card_var}")
+                    ),
+                    text(
+                        action = action(url = "div-action://set_variable?name=local_var&value=new local value"),
+                        id = "local_text",
+                        text = expression("local_var = @{local_var}")
+                    )
+                ),
+                variables = listOf(variable("local_var", "local value"))
             ),
-            variables = listOf(integerVariable("counter", 10))
+            variables = listOf(variable("card_var", "card value"))
         )
 
-        rule.onNodeWithTag("title").apply {
-            assertTextEquals("value = 10")
+        rule.onNodeWithTag("card_text").apply {
+            assertTextEquals("card_var = card value")
             performClick()
-            assertTextEquals("value = 20")
+            assertTextEquals("card_var = new card value")
+        }
+
+        rule.onNodeWithTag("local_text").apply {
+            assertTextEquals("local_var = local value")
+            performClick()
+            assertTextEquals("local_var = new local value")
         }
     }
 
@@ -136,13 +166,27 @@ private fun data(
 private fun text(
     action: DivAction? = null,
     id: String? = null,
-    text: Expression<String>
+    text: Expression<String>,
+    variables: List<DivVariable>? = null
 ): Div {
     return Div.Text(
         value = DivText(
             action = action,
             id = id,
-            text = text
+            text = text,
+            variables = variables
+        )
+    )
+}
+
+private fun container(
+    items: List<Div>,
+    variables: List<DivVariable>? = null
+): Div {
+    return Div.Container(
+        value = DivContainer(
+            items = items,
+            variables = variables
         )
     )
 }

@@ -9,6 +9,6 @@ class TestReporter : DivReporter() {
     }
 
     override fun reportError(message: String, e: Throwable) {
-        fail(message)
+        fail("$message\n${e.message}")
     }
 }

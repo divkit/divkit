@@ -1,7 +1,7 @@
 package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.action
 import com.yandex.div.compose.constant
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
@@ -17,12 +17,11 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
     private val customActionHandler = CustomActionHandler()
-    private val reporter = mock<DivReporter>()
+    private val reporter = TestReporter()
 
     private val actionHandler = DivActionHandler(
         customActionHandler = customActionHandler,
@@ -45,7 +44,8 @@ class DivActionHandlerTest {
 
     @Test
     fun `handle set_variable action`() {
-        variableController.declare(Variable.IntegerVariable("counter", 10))
+        val variable = Variable.IntegerVariable("counter", 10)
+        variableController.declare(variable)
 
         handle(
             action(
@@ -58,16 +58,17 @@ class DivActionHandlerTest {
             )
         )
 
-        assertEquals(20L, variableController.get("counter")?.getValue())
+        assertEquals(20L, variable.getValue())
     }
 
     @Test
     fun `handle set_variable url action`() {
-        variableController.declare(Variable.IntegerVariable("counter", 10))
+        val variable = Variable.IntegerVariable("counter", 10)
+        variableController.declare(variable)
 
         handle(action(url = "div-action://set_variable?name=counter&value=20"))
 
-        assertEquals(20L, variableController.get("counter")?.getValue())
+        assertEquals(20L, variable.getValue())
     }
 
     @Test

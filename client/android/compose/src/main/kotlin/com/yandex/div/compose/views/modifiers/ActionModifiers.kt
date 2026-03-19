@@ -3,7 +3,7 @@ package com.yandex.div.compose.views.modifiers
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.views.LocalDivViewContext
+import com.yandex.div.compose.views.LocalDivContext
 import com.yandex.div.compose.views.actionHandler
 import com.yandex.div.compose.views.observedValue
 import com.yandex.div2.Div
@@ -16,7 +16,7 @@ internal fun Modifier.actions(data: Div): Modifier {
         return this
     }
 
-    val localContext = LocalDivViewContext.current
+    val localContext = LocalDivContext.current
     val actionHandler = actionHandler
     return clickable {
         val actionHandlingContext = localContext.actionHandlingContext

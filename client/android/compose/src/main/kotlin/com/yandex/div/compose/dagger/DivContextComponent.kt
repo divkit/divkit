@@ -5,8 +5,10 @@ import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
+import javax.inject.Named
 
 @DivContextScope
 @Component(
@@ -22,7 +24,10 @@ internal interface DivContextComponent {
     val reporter: DivReporter
     val imageLoader: ImageLoader
 
-    fun viewComponent(): DivViewComponent.Builder
+    @get:Named(Names.HOST_VARIABLES)
+    val variableController: DivVariableController
+
+    fun localComponent(): DivLocalComponent.Builder
 
     @Component.Builder
     interface Builder {

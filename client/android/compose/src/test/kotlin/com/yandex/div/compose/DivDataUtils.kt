@@ -1,39 +1,12 @@
 package com.yandex.div.compose
 
 import androidx.core.net.toUri
-import com.yandex.div.internal.parser.TYPE_HELPER_INT
-import com.yandex.div.internal.parser.TYPE_HELPER_STRING
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivVariable
 import com.yandex.div2.IntegerVariable
+import com.yandex.div2.StrVariable
 import org.json.JSONObject
-import org.junit.Assert.fail
-
-fun <T : Any> constant(value: T) = Expression.ConstantExpression(value)
-
-fun expression(expression: String): Expression<String> {
-    return Expression.MutableExpression<String, String>(
-        expressionKey = "test",
-        rawExpression = expression,
-        converter = null,
-        validator = { true },
-        logger = { fail(it.message) },
-        typeHelper = TYPE_HELPER_STRING
-    )
-}
-
-fun intExpression(expression: String): Expression<Long> {
-    return Expression.MutableExpression<Long, Long>(
-        expressionKey = "test",
-        rawExpression = expression,
-        converter = { it },
-        validator = { true },
-        logger = { fail(it.message) },
-        typeHelper = TYPE_HELPER_INT,
-    )
-}
 
 fun action(
     typed: DivActionTyped? = null,
@@ -48,6 +21,10 @@ fun action(
     )
 }
 
-fun integerVariable(name: String, value: Long): DivVariable {
+fun variable(name: String, value: Long): DivVariable {
     return DivVariable.Integer(IntegerVariable(name = name, value = constant(value)))
+}
+
+fun variable(name: String, value: String): DivVariable {
+    return DivVariable.Str(StrVariable(name = name, value = constant(value)))
 }
