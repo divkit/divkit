@@ -55,6 +55,33 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 // div-container
                 "snapshot_test_data/div-container",
                 "snapshot_test_data/div-container/constraint-propagation",
+                // div-image
+                "snapshot_test_data/div-image/scale_fill.json",
+                "snapshot_test_data/div-image/scale_fill_bottom.json",
+                "snapshot_test_data/div-image/scale_fill_right.json",
+                "snapshot_test_data/div-image/scale_fit.json",
+                "snapshot_test_data/div-image/scale_fit_bottom.json",
+                "snapshot_test_data/div-image/scale_fit_left.json",
+                "snapshot_test_data/div-image/scale_fit_right.json",
+                "snapshot_test_data/div-image/scale_fit_top.json",
+                "snapshot_test_data/div-image/scale_stretch.json",
+                "snapshot_test_data/div-image/no_scale.json",
+                "snapshot_test_data/div-image/no_scale_bottom_right.json",
+                "snapshot_test_data/div-image/no_scale_top_left.json",
+                "snapshot_test_data/div-image/content-horizontal-alignment-end.json",
+                "snapshot_test_data/div-image/content-horizontal-alignment-start.json",
+                "snapshot_test_data/div-image/placeholder-color.json",
+                "snapshot_test_data/div-image/custom-tint-color.json",
+                "snapshot_test_data/div-image/custom-alpha.json",
+                "snapshot_test_data/div-image/custom-height.json",
+                "snapshot_test_data/div-image/custom-width.json",
+                "snapshot_test_data/div-image/custom-margins.json",
+                "snapshot_test_data/div-image/custom-paddings.json",
+                "snapshot_test_data/div-image/corner-radius.json",
+                "snapshot_test_data/div-image/corners_radius.json",
+                "snapshot_test_data/div-image/border-with-stroke.json",
+                "snapshot_test_data/div-image/blur.json",
+                "snapshot_test_data/div-image/blur-with-big-radius.json",
             ).expandDirectories().withEscapedParameter()
         }
 

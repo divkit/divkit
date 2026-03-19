@@ -6,8 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.toHorizontalAlignment
+import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer

@@ -3,9 +3,9 @@ package com.yandex.div.compose.views.modifiers
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.views.evaluate
-import com.yandex.div.compose.views.reporter
-import com.yandex.div.compose.views.toColor
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivLinearGradient
@@ -40,6 +40,6 @@ internal fun Modifier.backgrounds(value: List<DivBackground>): Modifier {
 @Composable
 private fun Modifier.solidBackground(value: DivSolidBackground): Modifier {
     return background(
-        color = value.color.evaluate().toColor()
+        color = value.color.observedValue().toColor()
     )
 }

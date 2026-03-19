@@ -9,8 +9,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivEdgeInsets

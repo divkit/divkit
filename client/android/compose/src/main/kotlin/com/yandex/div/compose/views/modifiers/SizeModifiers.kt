@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.toHorizontalAlignment
+import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivSize
@@ -24,11 +26,7 @@ internal fun Modifier.width(
     width: DivSize,
     horizontalAlignment: DivAlignmentHorizontal? = null
 ): Modifier {
-    val align = when (horizontalAlignment) {
-        DivAlignmentHorizontal.CENTER -> Alignment.CenterHorizontally
-        DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> Alignment.End
-        else -> Alignment.Start
-    }
+    val align = horizontalAlignment?.toHorizontalAlignment() ?: Alignment.Start
     return when (width) {
         is DivSize.MatchParent -> fillMaxWidth()
         is DivSize.WrapContent -> {
@@ -46,11 +44,7 @@ internal fun Modifier.height(
     height: DivSize,
     verticalAlignment: DivAlignmentVertical? = null
 ): Modifier {
-    val align = when (verticalAlignment) {
-        DivAlignmentVertical.CENTER -> Alignment.CenterVertically
-        DivAlignmentVertical.BOTTOM -> Alignment.Bottom
-        else -> Alignment.Top
-    }
+    val align = verticalAlignment?.toVerticalAlignment() ?: Alignment.Top
     return when (height) {
         is DivSize.MatchParent -> fillMaxHeight()
         is DivSize.WrapContent -> {

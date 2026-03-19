@@ -28,7 +28,7 @@ import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
 import com.yandex.div.compose.views.container.visibleItems
-import com.yandex.div.compose.views.observedValue
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivContainer
 
 @OptIn(ExperimentalLayoutApi::class)

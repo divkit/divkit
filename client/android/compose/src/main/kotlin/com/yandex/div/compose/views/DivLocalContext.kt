@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.dagger.DivLocalScope
-import com.yandex.div.compose.variables.DivVariableAdapter
+import com.yandex.div.compose.utils.divContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase

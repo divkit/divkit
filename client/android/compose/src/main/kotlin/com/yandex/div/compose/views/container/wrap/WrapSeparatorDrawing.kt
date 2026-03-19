@@ -10,9 +10,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.views.container.SeparatorVisibility
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toColor
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toColor
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivShape

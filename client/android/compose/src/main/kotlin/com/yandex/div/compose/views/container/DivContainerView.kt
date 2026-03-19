@@ -3,7 +3,7 @@ package com.yandex.div.compose.views.container
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import com.yandex.div.compose.views.observedValue
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
 import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
 import com.yandex.div2.DivContainer

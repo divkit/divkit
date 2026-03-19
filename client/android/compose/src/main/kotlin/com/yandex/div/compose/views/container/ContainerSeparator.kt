@@ -11,9 +11,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toColor
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toColor
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets

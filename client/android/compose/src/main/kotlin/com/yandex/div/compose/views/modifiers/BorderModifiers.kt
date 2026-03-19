@@ -16,10 +16,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.views.evaluate
-import com.yandex.div.compose.views.toColor
-import com.yandex.div.compose.views.toDp
-import com.yandex.div.compose.views.toPx
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toColor
+import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivStrokeStyle
@@ -40,13 +40,13 @@ internal fun Modifier.divBorderStroke(data: DivBorder): Modifier {
 @Composable
 private fun DivBorder.toShape(): Shape {
     val cornersRadius = cornersRadius
-    val singleRadius = cornerRadius?.evaluate()
+    val singleRadius = cornerRadius?.observedValue()
     return when {
         cornersRadius != null -> RoundedCornerShape(
-            topStart = (cornersRadius.topLeft?.evaluate() ?: singleRadius ?: 0L).toDp(),
-            topEnd = (cornersRadius.topRight?.evaluate() ?: singleRadius ?: 0L).toDp(),
-            bottomStart = (cornersRadius.bottomLeft?.evaluate() ?: singleRadius ?: 0L).toDp(),
-            bottomEnd = (cornersRadius.bottomRight?.evaluate() ?: singleRadius ?: 0L).toDp(),
+            topStart = (cornersRadius.topLeft?.observedValue() ?: singleRadius ?: 0L).toDp(),
+            topEnd = (cornersRadius.topRight?.observedValue() ?: singleRadius ?: 0L).toDp(),
+            bottomStart = (cornersRadius.bottomLeft?.observedValue() ?: singleRadius ?: 0L).toDp(),
+            bottomEnd = (cornersRadius.bottomRight?.observedValue() ?: singleRadius ?: 0L).toDp(),
         )
         singleRadius != null -> RoundedCornerShape(singleRadius.toDp())
         else -> RectangleShape
@@ -55,7 +55,7 @@ private fun DivBorder.toShape(): Shape {
 
 @Composable
 private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
-    val color = stroke.color.evaluate().toColor()
+    val color = stroke.color.observedValue().toColor()
     val width = stroke.widthToDp()
     return when (stroke.style) {
         is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
@@ -65,8 +65,8 @@ private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): 
 
 @Composable
 private fun DivStroke.widthToDp(): Dp {
-    val widthValue = width.evaluate().toFloat()
-    return widthValue.toDp(unit.evaluate())
+    val widthValue = width.observedValue().toFloat()
+    return widthValue.toDp(unit.observedValue())
 }
 
 @Composable

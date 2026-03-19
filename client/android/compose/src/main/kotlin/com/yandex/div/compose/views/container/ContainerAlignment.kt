@@ -2,9 +2,7 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
-import com.yandex.div.compose.views.toDp
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 
@@ -52,18 +50,4 @@ internal fun DivContentAlignmentHorizontal.toCrossAxisHorizontalAlignment(): Ali
         DivContentAlignmentHorizontal.CENTER -> Alignment.CenterHorizontally
         DivContentAlignmentHorizontal.RIGHT, DivContentAlignmentHorizontal.END -> Alignment.End
         else -> Alignment.Start
-    }
-
-internal fun DivAlignmentHorizontal.toHorizontalAlignment(): Alignment.Horizontal =
-    when (this) {
-        DivAlignmentHorizontal.CENTER -> Alignment.CenterHorizontally
-        DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> Alignment.End
-        else -> Alignment.Start
-    }
-
-internal fun DivAlignmentVertical.toVerticalAlignment(): Alignment.Vertical =
-    when (this) {
-        DivAlignmentVertical.CENTER -> Alignment.CenterVertically
-        DivAlignmentVertical.BOTTOM -> Alignment.Bottom
-        else -> Alignment.Top
     }

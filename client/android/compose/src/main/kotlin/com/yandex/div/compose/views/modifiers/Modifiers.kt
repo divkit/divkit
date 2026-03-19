@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
-import com.yandex.div.compose.views.observedValue
-import com.yandex.div.compose.views.toDp
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivVisibility

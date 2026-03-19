@@ -3,7 +3,10 @@ package com.yandex.div.compose.views
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.views.container.DivContainerView
+import com.yandex.div.compose.views.image.DivImageView
 import com.yandex.div.compose.views.modifiers.apply
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reporter
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
