@@ -1,5 +1,6 @@
 package com.yandex.div.compose.actions
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.action
 import com.yandex.div.compose.constant
@@ -17,9 +18,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
     private val customActionHandler = CustomActionHandler()
     private val reporter = mock<DivReporter>()

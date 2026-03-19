@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.intExpression
@@ -16,8 +17,10 @@ import com.yandex.div.json.expressions.Expression
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 
+@RunWith(AndroidJUnit4::class)
 class ExpressionUtilsTest {
 
     @get:Rule

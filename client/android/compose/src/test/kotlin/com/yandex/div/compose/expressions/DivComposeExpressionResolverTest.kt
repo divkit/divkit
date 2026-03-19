@@ -1,5 +1,6 @@
 package com.yandex.div.compose.expressions
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.expression
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -7,9 +8,8 @@ import com.yandex.div.data.Variable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivComposeExpressionResolverTest {
 
     private val variableController = DivVariableController()

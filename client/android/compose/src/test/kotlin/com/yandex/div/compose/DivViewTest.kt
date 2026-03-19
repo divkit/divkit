@@ -8,6 +8,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -18,7 +19,9 @@ import com.yandex.div2.DivText
 import com.yandex.div2.DivVariable
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class DivViewTest {
 
     @get:Rule
@@ -32,7 +35,7 @@ class DivViewTest {
     )
 
     @Test
-    fun simpleTextIsDisplayed() {
+    fun `simple text is displayed`() {
         setContent(
             text(text = constant("Hello!"))
         )
@@ -41,7 +44,7 @@ class DivViewTest {
     }
 
     @Test
-    fun textWithExpressionIsDisplayed() {
+    fun `text with expression is displayed`() {
         setContent(
             text(text = expression("value = @{counter}")),
             variables = listOf(integerVariable("counter", 10))
@@ -51,7 +54,7 @@ class DivViewTest {
     }
 
     @Test
-    fun textWithHostVariableIsDisplayed() {
+    fun `text with host variable is displayed`() {
         variableController.declare(Variable.IntegerVariable("counter", 10))
 
         setContent(
@@ -62,7 +65,7 @@ class DivViewTest {
     }
 
     @Test
-    fun cardVariableShadowsHostVariable() {
+    fun `card variable shadows host variable`() {
         variableController.declare(Variable.IntegerVariable("counter", 10))
 
         setContent(
@@ -74,7 +77,7 @@ class DivViewTest {
     }
 
     @Test
-    fun textChangesWhenVariableChanges() {
+    fun `text changes when variable changes`() {
         variableController.declare(Variable.IntegerVariable("counter", 10))
 
         setContent(
@@ -87,7 +90,7 @@ class DivViewTest {
     }
 
     @Test
-    fun textChangesWhenSetVariableActionIsTriggered() {
+    fun `text changes when set_variable action is triggered`() {
         setContent(
             text(
                 action = action(url = "div-action://set_variable?name=counter&value=20"),
@@ -105,14 +108,10 @@ class DivViewTest {
     }
 
     private fun setContent(content: Div, variables: List<DivVariable>? = null) {
-        setContent(data(content, variables))
-    }
-
-    private fun setContent(data: DivData) {
         rule.setContent {
             val divContext = configuration.createContext(baseContext = LocalContext.current)
             CompositionLocalProvider(LocalContext provides divContext) {
-                DivView(data = data)
+                DivView(data = data(content, variables))
             }
         }
     }

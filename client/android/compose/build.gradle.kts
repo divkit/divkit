@@ -9,11 +9,6 @@ apply(from = "../div-tests.gradle")
 
 android {
     namespace = "com.yandex.div.compose"
-
-    sourceSets {
-        getByName("androidTest").kotlin.srcDirs("src/commonTest/kotlin")
-        getByName("test").kotlin.srcDirs("src/commonTest/kotlin")
-    }
 }
 
 dependencies {
@@ -32,10 +27,8 @@ dependencies {
 
     ksp(libs.yatagan.processor.ksp)
 
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.mockito.android)
-    androidTestImplementation(libs.mockito.kotlin)
-
     debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.compose.ui.test.manifest)
 }
