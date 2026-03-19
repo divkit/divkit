@@ -140,12 +140,8 @@ JsonStringChar
     / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Expression
-    = expr:Try tail:(_ '?' _ Expression _ ':' _ Expression)?
+    = expr:Or tail:(_ '?' _ Expression _ ':' _ Expression)?
         { return buildConditionalExpression(expr, tail); }
-
-Try
-    = expr:Or tail:(_ '!:' _ Expression)?
-        { return buildTryExpression(expr, tail); }
 
 Or
     = head:And tail:( _ '||' _ And )*
@@ -160,8 +156,12 @@ Equal
         { return buildBinaryExpression(head, tail); }
 
 Comparison
-    = head:Sum tail:( _ ( '>=' / '>' / '<=' / '<' ) _  Sum )*
+    = head:Try tail:( _ ( '>=' / '>' / '<=' / '<' ) _  Try )*
         { return buildBinaryExpression(head, tail); }
+
+Try
+    = expr:Sum tail:(_ '!:' _ Sum)?
+        { return buildTryExpression(expr, tail); }
 
 Sum
     = head:Factor tail:( _ ( '+' / '-' ) _  Factor )*

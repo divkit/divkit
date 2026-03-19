@@ -82,7 +82,9 @@
         "value": true
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -99,7 +101,9 @@
         "value": false
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -109,7 +113,9 @@
         "value": true
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -126,7 +132,9 @@
         "value": false
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -136,7 +144,9 @@
         "value": true
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -153,7 +163,9 @@
         "value": false
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -163,7 +175,9 @@
         "value": 12
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -180,7 +194,9 @@
         "value": 1
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -190,7 +206,9 @@
         "value": 16
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -207,7 +225,9 @@
         "value": 1
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -217,7 +237,9 @@
         "value": true
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -234,7 +256,9 @@
         "value": false
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     }
   ]
