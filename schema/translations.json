@@ -2327,6 +2327,10 @@
     "en": "Active tab title style.",
     "ru": "Начертание заголовка активного таба."
   },
+  "div_tabs_tab_title_style_active_font_weight_value": {
+    "en": "Numeric value for font weight of the active tab title.",
+    "ru": "Числовое значение толщины шрифта активного таба."
+  },
   "div_tabs_tab_title_style_active_text_color": {
     "en": "Color of the active tab title text.",
     "ru": "Цвет текста заголовка активного таба."
@@ -2374,10 +2378,6 @@
   "div_tabs_tab_title_style_inactive_font_weight_value": {
     "en": "Numeric value for font weight of the inactive tab title.",
     "ru": "Числовое значение толщины шрифта неактивного таба."
-  },
-  "div_tabs_tab_title_style_active_font_weight_value": {
-    "en": "Numeric value for font weight of the active tab title.",
-    "ru": "Числовое значение толщины шрифта активного таба."
   },
   "div_tabs_tab_title_style_inactive_text_color": {
     "en": "Color of the inactive tab title text.",
