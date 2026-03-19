@@ -1,3 +1,11 @@
+## 32.42.0 (March 23, 2026)
+
+* Changed the default datetime conversion to a string according to the local time zone to better match other platforms.
+* Fixed an issue with the layout of items in the `container`, the total weight of which was less than 1.
+* Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
+* `video_sources` made optional for `video`.
+
+
 ## 32.41.0 (March 16, 2026)
 
 * Added `getTimestamp` function.
