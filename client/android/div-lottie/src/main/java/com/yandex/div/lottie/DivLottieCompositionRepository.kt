@@ -17,7 +17,8 @@ import org.json.JSONObject
 
 internal class DivLottieCompositionRepository(
     private val rawResProvider: DivLottieRawResProvider,
-    private val networkCache: DivLottieNetworkCache
+    private val networkCache: DivLottieNetworkCache,
+    private val logger: DivLottieLogger,
 ) {
 
     private fun modifyLottieUrl(lottieUrl: String): String {
@@ -46,7 +47,7 @@ internal class DivLottieCompositionRepository(
                     onComplete(UriPreloadResult(url, error))
                 }
                 if (!supported) {
-                    Assert.fail("Lottie preloading works unstable! " +
+                    logger.fail("Lottie preloading works unstable! " +
                             "Please implement DivLottieNetworkCache.cacheComposition(String, onComplete)!")
                     networkCache.cacheComposition(url.toString())
                     onComplete(UriPreloadResult(url, null))
@@ -58,13 +59,8 @@ internal class DivLottieCompositionRepository(
             }
 
             else -> {
-                onComplete(
-                    UriPreloadResult(
-                        url, RuntimeException(
-                            "Unsupported scheme '${url.scheme}'. Preload cancelled"
-                        )
-                    )
-                )
+                logger.fail("Unsupported scheme '${url.scheme}'. Preloading skipped!")
+                onComplete(UriPreloadResult(url, null))
             }
         }
     }
