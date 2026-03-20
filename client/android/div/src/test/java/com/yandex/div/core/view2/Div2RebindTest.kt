@@ -131,9 +131,9 @@ class Div2RebindTest {
         val errorCollectors = div2View.viewComponent.errorCollectors
         
         div2View.setData(oldData, tag)
-        assertEquals(1, Iterators.size(errorCollectors.getOrCreate(tag, oldData).getWarnings()))
+        assertEquals(1, Iterators.size(errorCollectors.getOrCreate(tag, oldData).getWarnings().iterator()))
 
         div2View.setData(newData, oldData, tag)
-        assertEquals(0, Iterators.size(errorCollectors.getOrCreate(tag, newData).getWarnings()))
+        assertEquals(0, Iterators.size(errorCollectors.getOrCreate(tag, newData).getWarnings().iterator()))
     }
 }

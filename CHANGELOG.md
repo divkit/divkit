@@ -1,3 +1,10 @@
+## 32.37.1
+
+# Android Client:
+* Fixed `NoSuchElementException` at `Div2View.trackChildrenVisibility()` and `Div2View.discardChildrenVisibility()` calls.
+* Fixed `ConcurrentModificationException` at `PagerIndicatorConnector.attach()` and `ErrorCollector.notifyObservers()` calls.
+
+
 ## 32.37.0
 
 # Android Client:
