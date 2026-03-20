@@ -82,8 +82,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
       model: model,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      accessibilityElement: model.accessibilityElement
+      renderingDelegate: renderingDelegate
     )
   }
 }

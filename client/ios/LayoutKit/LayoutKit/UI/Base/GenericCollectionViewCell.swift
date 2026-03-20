@@ -27,8 +27,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
     model: UIViewRenderable,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?,
-    accessibilityElement: AccessibilityElement?
+    renderingDelegate: RenderingDelegate?
   ) {
     self.model = model
 
@@ -47,7 +46,13 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
       )
     }
 
-    applyAccessibilityFromScratch(accessibilityElement)
+    // Do not apply accessibility on the cell itself — the inner BlockView
+    // already carries its own accessibility properties.  Applying them on the
+    // cell as well produced a redundant accessibility node because UIKit's
+    // mandatory contentView sits between the cell and the BlockView, showing
+    // up as an extra "Other" element in the accessibility tree.
+    isAccessibilityElement = false
+    contentView.isAccessibilityElement = false
   }
 }
 #endif

@@ -226,8 +226,7 @@ final class TabContentsView: BlockView {
         model: blocks[indexPath.row],
         observer: observer,
         overscrollDelegate: overscrollDelegate,
-        renderingDelegate: renderingDelegate,
-        accessibilityElement: blocks[indexPath.row].accessibilityElement
+        renderingDelegate: renderingDelegate
       )
     }
   }

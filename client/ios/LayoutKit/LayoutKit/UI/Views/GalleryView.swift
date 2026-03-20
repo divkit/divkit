@@ -257,8 +257,7 @@ public final class GalleryView: BlockView {
         model: blocks[indexPath.row],
         observer: observer,
         overscrollDelegate: overscrollDelegate,
-        renderingDelegate: renderingDelegate,
-        accessibilityElement: blocks[indexPath.row].accessibilityElement
+        renderingDelegate: renderingDelegate
       )
     }
   }
@@ -610,8 +609,7 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
       model: block,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      accessibilityElement: blocks[indexPath.item].accessibilityElement
+      renderingDelegate: renderingDelegate
     )
     return cell
   }
