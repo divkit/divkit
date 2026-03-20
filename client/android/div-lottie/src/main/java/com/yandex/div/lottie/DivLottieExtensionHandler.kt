@@ -44,7 +44,7 @@ open class DivLottieExtensionHandler(
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
 ) : DivExtensionHandler, ExpressionSubscriber {
 
-    private val repo = DivLottieCompositionRepository(rawResProvider, cache)
+    private val repo = DivLottieCompositionRepository(rawResProvider, cache, logger)
     private val playbackRecords = mutableMapOf<String, PlaybackStateController>()
     override val subscriptions: MutableList<Disposable> = mutableListOf()
 
