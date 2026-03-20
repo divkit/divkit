@@ -43,8 +43,9 @@ class ExpressionUtilsTest {
     )
 
     @Test
-    fun observedValueChangesWhenVariableChanges() {
-        variableController.declare(Variable.IntegerVariable("counter", 1))
+    fun `observed value changes when variable changes`() {
+        val variable = Variable.IntegerVariable("counter", 1)
+        variableController.declare(variable)
 
         val expression = intExpression("@{counter}")
         var observedValue by mutableLongStateOf(0L)
@@ -55,14 +56,14 @@ class ExpressionUtilsTest {
 
         assertEquals(1L, observedValue)
 
-        variableController.get("counter")?.set("2")
+        variable.set(2)
         composeRule.waitForIdle()
 
         assertEquals(2L, observedValue)
     }
 
     @Test
-    fun observedValueHasDefaultValueIfExpressionIsNull() {
+    fun `observed value has default value if expression is null`() {
         val expression: Expression<Long>? = null
         var observedValue by mutableLongStateOf(0L)
 
@@ -74,8 +75,9 @@ class ExpressionUtilsTest {
     }
 
     @Test
-    fun observedValueDoesNotChangeWhenItLeavesComposition() {
-        variableController.declare(Variable.IntegerVariable("counter", 1))
+    fun `observed value does not change when it leaves composition`() {
+        val variable = Variable.IntegerVariable("counter", 1)
+        variableController.declare(variable)
 
         val expression = intExpression("@{counter}")
         var showExpression by mutableStateOf(true)
@@ -90,16 +92,19 @@ class ExpressionUtilsTest {
         assertEquals(1L, observedValue)
 
         showExpression = false
-        variableController.get("counter")?.set("2")
+        variable.set(2)
         composeRule.waitForIdle()
 
         assertEquals(1L, observedValue)
     }
 
     @Test
-    fun observedValueChangesWhenExpressionInstanceChanges() {
-        variableController.declare(Variable.IntegerVariable("counter_a", 1))
-        variableController.declare(Variable.IntegerVariable("counter_b", 10))
+    fun `observed value changes when expression instance changes`() {
+        val counterA = Variable.IntegerVariable("counter_a", 1)
+        variableController.declare(counterA)
+
+        val counterB = Variable.IntegerVariable("counter_b", 10)
+        variableController.declare(counterB)
 
         val expressionA = intExpression("@{counter_a}")
         val expressionB = intExpression("@{counter_b}")
@@ -118,8 +123,8 @@ class ExpressionUtilsTest {
 
         assertEquals(10L, observedValue)
 
-        variableController.get("counter_a")?.set("2")
-        variableController.get("counter_b")?.set("20")
+        counterA.set(2)
+        counterB.set(20)
         composeRule.waitForIdle()
 
         assertEquals(20L, observedValue)

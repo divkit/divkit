@@ -8,6 +8,8 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivTypedValue
+import com.yandex.div2.DivTrigger
+import com.yandex.div2.DivTrigger.Mode
 import com.yandex.div2.DivVariable
 import com.yandex.div2.IntegerValue
 import com.yandex.div2.IntegerVariable
@@ -60,3 +62,15 @@ fun typedColorValue(value: Long): DivTypedValue {
 }
 
 fun color(value: Long) = Color(value.toInt())
+
+fun trigger(
+    action: DivAction,
+    condition: String,
+    mode: Mode = Mode.ON_CONDITION
+): DivTrigger {
+    return DivTrigger(
+        actions = listOf(action),
+        condition = booleanExpression(condition),
+        mode = constant(mode)
+    )
+}

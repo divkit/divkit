@@ -1,5 +1,6 @@
 package com.yandex.div.compose
 
+import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
 import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.json.expressions.Expression
@@ -15,6 +16,17 @@ fun expression(expression: String): Expression<String> {
         validator = { true },
         logger = { fail(it.message) },
         typeHelper = TYPE_HELPER_STRING
+    )
+}
+
+fun booleanExpression(expression: String): Expression<Boolean> {
+    return Expression.MutableExpression<Boolean, Boolean>(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = { it },
+        validator = { true },
+        logger = { fail(it.message) },
+        typeHelper = TYPE_HELPER_BOOLEAN,
     )
 }
 

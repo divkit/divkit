@@ -30,7 +30,8 @@ internal fun WithLocalDivContext(data: DivData, content: @Composable () -> Unit)
     val divContext = divContext
     val localContext = remember(data) {
         divContext.createLocalContext(
-            baseVariableController = divContext.component.variableController,
+            variableController = DivVariableController(divContext.component.variableController),
+            triggers = data.variableTriggers.orEmpty(),
             variables = data.variables.orEmpty()
         )
     }
@@ -40,15 +41,22 @@ internal fun WithLocalDivContext(data: DivData, content: @Composable () -> Unit)
 @Composable
 internal fun WithLocalDivContext(data: DivBase, content: @Composable () -> Unit) {
     val variables = data.variables.orEmpty()
-    if (variables.isEmpty()) {
+    val triggers = data.variableTriggers.orEmpty()
+    if (variables.isEmpty() && triggers.isEmpty()) {
         return content()
     }
 
     val divContext = divContext
     val localContext = LocalDivContext.current
     val newLocalContext = remember(data) {
+        val variableController = if (variables.isEmpty()) {
+            localContext.variableController
+        } else {
+            DivVariableController(localContext.variableController)
+        }
         divContext.createLocalContext(
-            baseVariableController = localContext.variableController,
+            variableController = variableController,
+            triggers = triggers,
             variables = variables
         )
     }

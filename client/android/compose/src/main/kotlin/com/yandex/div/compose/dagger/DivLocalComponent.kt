@@ -1,5 +1,6 @@
 package com.yandex.div.compose.dagger
 
+import com.yandex.div.compose.triggers.DivTriggerStorage
 import com.yandex.div.compose.variables.DivVariableAdapter
 import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -16,6 +17,7 @@ import com.yandex.yatagan.Component
 internal interface DivLocalComponent {
 
     val context: DivLocalContext
+    val triggerStorage: DivTriggerStorage
     val variableAdapter: DivVariableAdapter
 
     @Component.Builder

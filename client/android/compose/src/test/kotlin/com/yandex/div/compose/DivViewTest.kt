@@ -17,6 +17,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import org.junit.Rule
 import org.junit.Test
@@ -78,7 +79,7 @@ class DivViewTest {
     }
 
     @Test
-    fun localVariableShadowsCardVariable() {
+    fun `local variable shadows card variable`() {
         setContent(
             text(
                 text = expression("value = @{counter}"),
@@ -105,44 +106,106 @@ class DivViewTest {
     }
 
     @Test
-    fun `text changes when set_variable action is triggered`() {
+    fun `text changes when set_variable action is clicked`() {
+        setContent(
+            text(
+                action = action(url = "div-action://set_variable?name=var&value=new value"),
+                id = "title",
+                text = expression("var = @{var}"),
+                variables = listOf(variable("var", "initial value"))
+            )
+        )
+
+        rule.onNodeWithTag("title").apply {
+            assertTextEquals("var = initial value")
+            performClick()
+            assertTextEquals("var = new value")
+        }
+    }
+
+    @Test
+    fun `text changes when set_variable action with local variable is clicked`() {
         setContent(
             container(
                 items = listOf(
                     text(
-                        action = action(url = "div-action://set_variable?name=card_var&value=new card value"),
-                        id = "card_text",
-                        text = expression("card_var = @{card_var}")
-                    ),
-                    text(
-                        action = action(url = "div-action://set_variable?name=local_var&value=new local value"),
-                        id = "local_text",
-                        text = expression("local_var = @{local_var}")
+                        action = action(url = "div-action://set_variable?name=var&value=new value"),
+                        id = "title",
+                        text = expression("var = @{var}")
                     )
-                ),
-                variables = listOf(variable("local_var", "local value"))
+                )
             ),
-            variables = listOf(variable("card_var", "card value"))
+            variables = listOf(variable("var", "initial value"))
         )
 
-        rule.onNodeWithTag("card_text").apply {
-            assertTextEquals("card_var = card value")
+        rule.onNodeWithTag("title").apply {
+            assertTextEquals("var = initial value")
             performClick()
-            assertTextEquals("card_var = new card value")
-        }
-
-        rule.onNodeWithTag("local_text").apply {
-            assertTextEquals("local_var = local value")
-            performClick()
-            assertTextEquals("local_var = new local value")
+            assertTextEquals("var = new value")
         }
     }
 
-    private fun setContent(content: Div, variables: List<DivVariable>? = null) {
+    @Test
+    fun `text changes when trigger is triggered`() {
+        val condition = Variable.BooleanVariable("condition", false)
+        variableController.declare(condition)
+
+        setContent(
+            text(
+                id = "title",
+                text = expression("@{text}")
+            ),
+            triggers = listOf(
+                trigger(
+                    action = action(url = "div-action://set_variable?name=text&value=new text"),
+                    condition = "@{condition}"
+                )
+            ),
+            variables = listOf(variable("text", "initial text"))
+        )
+
+        rule.onNodeWithTag("title").assertTextEquals("initial text")
+
+        condition.set(true)
+
+        rule.onNodeWithTag("title").assertTextEquals("new text")
+    }
+
+    @Test
+    fun `text changes when local trigger is triggered`() {
+        val condition = Variable.BooleanVariable("condition", false)
+        variableController.declare(condition)
+
+        setContent(
+            text(
+                id = "title",
+                text = expression("@{text}"),
+                triggers = listOf(
+                    trigger(
+                        action = action(url = "div-action://set_variable?name=text&value=new text"),
+                        condition = "@{condition}"
+                    )
+                ),
+                variables = listOf(variable("text", "initial text"))
+            )
+        )
+
+        rule.onNodeWithTag("title").assertTextEquals("initial text")
+
+        condition.set(true)
+
+        rule.onNodeWithTag("title").assertTextEquals("new text")
+    }
+
+    private fun setContent(
+        content: Div,
+        triggers: List<DivTrigger>? = null,
+        variables: List<DivVariable>? = null
+    ) {
         rule.setContent {
             val divContext = configuration.createContext(baseContext = LocalContext.current)
             CompositionLocalProvider(LocalContext provides divContext) {
-                DivView(data = data(content, variables))
+                DivView(data = data(content, triggers, variables))
             }
         }
     }
@@ -150,17 +213,19 @@ class DivViewTest {
 
 private fun data(
     content: Div,
+    triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null
 ): DivData {
     return DivData(
         logId = "test",
-        variables = variables,
         states = listOf(
             DivData.State(
                 stateId = 0,
                 div = content
             )
-        )
+        ),
+        variables = variables,
+        variableTriggers = triggers,
     )
 }
 
@@ -168,6 +233,7 @@ private fun text(
     action: DivAction? = null,
     id: String? = null,
     text: Expression<String>,
+    triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null
 ): Div {
     return Div.Text(
@@ -175,7 +241,8 @@ private fun text(
             action = action,
             id = id,
             text = text,
-            variables = variables
+            variables = variables,
+            variableTriggers = triggers
         )
     )
 }
