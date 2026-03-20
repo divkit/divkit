@@ -1,6 +1,7 @@
 {
   "description": "Vertical container with layout_mode = wrap and elements with match_parent height with constraints",
   "platforms": [
+    "android",
     "web"
   ],
   "templates": {

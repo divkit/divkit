@@ -1,6 +1,7 @@
 {
   "description": "Horizontal container with layout_mode = wrap and elements with match_parent width with constraints.",
   "platforms": [
+    "android",
     "web"
   ],
   "templates": {
