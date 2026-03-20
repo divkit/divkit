@@ -36,6 +36,7 @@ internal class DebugView(
     private val errorModel: DebugViewModelProvider,
     private val typefaceProvider: DivTypefaceProvider,
 ) : Disposable {
+    private val safeAreaTopMargin = SafeAreaTopMarginController(root)
     private var counterViewHolder: CounterViewHolder? = null
     private var detailsViewHolder: DetailsViewHolder? = null
     private var detailsPopupWindow: PopupWindow? = null
@@ -68,6 +69,8 @@ internal class DebugView(
                 removeDetailsView()
             }
         }
+
+        safeAreaTopMargin.targetView = counterViewHolder?.rootView ?: detailsViewHolder?.rootView
     }
 
     private fun removeCounterView() {
@@ -98,11 +101,6 @@ internal class DebugView(
             },
         )
 
-        val layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-        )
-
         val minSizePx = MIN_SIZE_FOR_DETAILS_DP.dpToPx(root.context.resources.displayMetrics)
         if (root.width < minSizePx || root.height < minSizePx) {
             detailsPopupWindow = PopupWindow(
@@ -116,6 +114,10 @@ internal class DebugView(
                 setOnDismissListener { errorModel.hideDetails() }
             }
         } else {
+            val layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
             root.addView(holder.rootView, layoutParams)
         }
         detailsViewHolder = holder
@@ -150,10 +152,12 @@ internal class DebugView(
             onCounterClick = { errorModel.onCounterClick() }
         )
 
-        root.addView(holder.rootView, ViewGroup.LayoutParams(
+        root.addView(
+            holder.rootView, ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-            ))
+            )
+        )
         counterViewHolder = holder
     }
 
@@ -163,6 +167,7 @@ internal class DebugView(
         counterViewHolder?.let { holder ->
             root.removeView(holder.rootView)
         }
+        safeAreaTopMargin.close()
         removeDetailsView()
     }
 }
