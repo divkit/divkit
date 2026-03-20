@@ -11,7 +11,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyBoolean
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -124,7 +124,7 @@ class SendBeaconWorkerTest {
         assertTrue(stopResult)
 
         verify(job2Callback, times(1)).finish(true)
-        verify(job2Callback, times(1)).finish(anyBoolean())
+        verify(job2Callback, times(1)).finish(any())
 
         val job3Callback = mock<SendBeaconWorker.Callback>()
         startResult = worker.onStart(job3Callback)
@@ -136,13 +136,13 @@ class SendBeaconWorkerTest {
         assertEquals(2, requestExecutor.sentOut.size)
         assertEquals(0, testDb.items.size)
         verify(job3Callback, times(1)).finish(false)
-        verify(job3Callback, times(1)).finish(anyBoolean())
+        verify(job3Callback, times(1)).finish(any())
 
         stopResult = worker.onStop()
         assertFalse(stopResult)
 
         assertTrue(requestExecutor.sentOut.contains(noGoUrl))
-        verify(job1Callback, times(1)).finish(anyBoolean())
+        verify(job1Callback, times(1)).finish(any())
     }
 
     @Test
@@ -170,7 +170,7 @@ class SendBeaconWorkerTest {
 
         assertTrue(requestExecutor.sentOut.isEmpty())
         assertEquals(2, testDb.items.size)
-        verify(job1Callback, never()).finish(anyBoolean())
+        verify(job1Callback, never()).finish(any())
 
         val job2Callback = mock<SendBeaconWorker.Callback>()
         startResult = worker.onStart(job2Callback)
@@ -181,8 +181,8 @@ class SendBeaconWorkerTest {
 
         assertEquals(1, requestExecutor.sentOut.size)
         assertEquals(1, testDb.items.size)
-        verify(job1Callback, never()).finish(anyBoolean())
-        verify(job2Callback, never()).finish(anyBoolean())
+        verify(job1Callback, never()).finish(any())
+        verify(job2Callback, never()).finish(any())
     }
 
     @Test
@@ -207,7 +207,7 @@ class SendBeaconWorkerTest {
 
         assertEquals(2, testDb.items.size)
         verify(job1Callback, times(1)).finish(true)
-        verify(job1Callback, times(1)).finish(anyBoolean())
+        verify(job1Callback, times(1)).finish(any())
 
         now = baselineTime + (expirePeriodMs * 1.25).toLong()
 
@@ -219,7 +219,7 @@ class SendBeaconWorkerTest {
 
         assertEquals(1, testDb.items.size)
         verify(job2Callback, times(1)).finish(true)
-        verify(job2Callback, times(1)).finish(anyBoolean())
+        verify(job2Callback, times(1)).finish(any())
 
         requestExecutor.ioException = null
 
@@ -230,14 +230,14 @@ class SendBeaconWorkerTest {
         executor.runAllOnce()
 
         verify(job3Callback, times(1)).finish(false)
-        verify(job3Callback, times(1)).finish(anyBoolean())
+        verify(job3Callback, times(1)).finish(any())
 
         val job4Callback = mock<SendBeaconWorker.Callback>()
         startResult = worker.onStart(job4Callback)
         assertFalse(startResult)
 
         assertTrue(executor.commands.isEmpty())
-        verify(job4Callback, times(0)).finish(anyBoolean())
+        verify(job4Callback, times(0)).finish(any())
     }
 
     private companion object {

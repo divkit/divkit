@@ -20,21 +20,16 @@ import com.yandex.div.test.expression.TestCaseOrError
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.After
-import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import org.mockito.MockedStatic
-import org.mockito.Mockito
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import com.yandex.div.internal.Assert as DivAssert
 
 @RunWith(Parameterized::class)
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
@@ -172,20 +167,6 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     companion object {
-
-        private lateinit var assertStatic: MockedStatic<DivAssert>
-
-        @JvmStatic
-        @BeforeClass
-        fun disableDivThreadAsserts() {
-            assertStatic = Mockito.mockStatic(DivAssert::class.java)
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun restoreDivThreadAsserts() {
-            assertStatic.close()
-        }
 
         private const val TEST_CASES_FILE_PATH = "expression_test_data"
 

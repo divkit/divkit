@@ -28,7 +28,6 @@ import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
@@ -113,7 +112,7 @@ class DivTooltipControllerTest {
     }
 
     private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
-        on { buildTooltipView(any(), any(), anyOrNull(), anyInt(), anyInt()) } doReturn tooltipWrapper
+        on { buildTooltipView(any(), any(), anyOrNull(), any(), any()) } doReturn tooltipWrapper
     }
 
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
@@ -296,7 +295,7 @@ class DivTooltipControllerTest {
         preloadCallback.lastValue.finish(true)
 
         Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-        verify(popupWindow, never()).showAtLocation(any(), anyInt(), anyInt(), anyInt())
+        verify(popupWindow, never()).showAtLocation(any(), any(), any(), any())
     }
 
     private fun prepareDiv(duration: Long = 5000, offset: DivPoint? = null) {

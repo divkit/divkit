@@ -18,7 +18,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
-import org.mockito.stubbing.Answer
 
 /**
  * Tests for [DivVariableController].
@@ -101,7 +100,7 @@ class DivVariableControllerTest {
         val firstVar = Variable.StringVariable("A", "value of A")
         val secondVar = Variable.StringVariable("B", "value of B")
         val declarationCallback = mock<DeclarationObserver> {
-            on { onDeclared(any()) } doAnswer Answer { underTest.putOrUpdate(secondVar) }
+            on { onDeclared(any()) } doAnswer { underTest.putOrUpdate(secondVar) }
         }
 
         withContext(Dispatchers.IO) {

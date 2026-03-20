@@ -5,9 +5,9 @@ import com.yandex.div.core.view2.Div2View
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.startsWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -37,7 +37,6 @@ class ReportingSafeDrawingPassOverrideStrategyTest {
     fun `frame cancellation within limit - no override`() {
         overrideStrategy.frameCancelLimit = 10
 
-        var overridden = false
         repeat(times = 4) {
             assertEquals(overrideStrategy.overrideDrawingPass(mock(), proceed = false), false)
         }
@@ -47,7 +46,6 @@ class ReportingSafeDrawingPassOverrideStrategyTest {
     fun `frame cancellation within limit - no limit exceed logging`() {
         overrideStrategy.frameCancelLimit = 10
 
-        var overridden = false
         repeat(times = 4) {
             overrideStrategy.overrideDrawingPass(mock(), proceed = false)
         }

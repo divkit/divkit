@@ -21,12 +21,12 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivComparatorTest {
-    private val transitionMock = mock(DivAppearanceTransition::class.java)
+    private val transitionMock = mock<DivAppearanceTransition>()
     private val resolver = mockExpressionResolver()
 
     @Test

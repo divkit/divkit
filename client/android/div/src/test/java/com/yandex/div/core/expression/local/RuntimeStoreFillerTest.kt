@@ -42,7 +42,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
@@ -55,11 +54,11 @@ import org.mockito.kotlin.verify
 class RuntimeStoreFillerTest {
 
     private val store: RuntimeStoreImpl = mock<RuntimeStoreImpl> {
-        on { putRuntime(any(), anyString(), anyOrNull()) } doAnswer {
+        on { putRuntime(any(), any(), anyOrNull()) } doAnswer {
             runtimePaths.add(it.arguments[1] as String)
             Unit
         }
-        on { getOrPutItemBuilderResolver(anyString(), any()) } doAnswer {
+        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer {
             createResolver(it.arguments[0] as String)
         }
     }

@@ -78,6 +78,5 @@ dependencies {
 
     testImplementation libs.json
     testImplementation libs.junit
-    testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
 }

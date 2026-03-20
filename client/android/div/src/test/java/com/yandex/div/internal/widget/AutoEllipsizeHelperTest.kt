@@ -3,12 +3,12 @@ package com.yandex.div.internal.widget
 import android.text.Layout
 import android.view.ViewTreeObserver
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.eq
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -29,12 +29,12 @@ class AutoEllipsizeHelperTest {
     private val textLayout = mock<Layout> {
         on { lineCount } doReturn 4096
 
-        on { getLineTop(anyInt()) } doAnswer { invocationOnMock ->
+        on { getLineTop(any()) } doAnswer { invocationOnMock ->
             val line = invocationOnMock.arguments.first() as Int
             line * lineHeight
         }
 
-        on { getLineForVertical(anyInt()) } doAnswer { invocationOnMock ->
+        on { getLineForVertical(any()) } doAnswer { invocationOnMock ->
             val vertical = invocationOnMock.arguments.first() as Int
             vertical / lineHeight
         }
@@ -45,7 +45,7 @@ class AutoEllipsizeHelperTest {
         on { layout } doReturn textLayout
         on { height } doReturn TEXT_VIEW_HEIGHT
         on { getLineHeight() } doReturn lineHeight
-        on { setLineHeight(anyInt()) } doAnswer { invocationOnMock ->
+        on { setLineHeight(any()) } doAnswer { invocationOnMock ->
             lineHeight = invocationOnMock.arguments.first() as Int
         }
         on { lineCount } doAnswer { textLayout.lineCount }
