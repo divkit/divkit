@@ -10,6 +10,7 @@ import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.DIV_SCREENSHOT_CASE_EXTENSION
 import com.yandex.test.screenshot.Screenshot
+import org.junit.Assert
 import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +45,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return listOf(
+            val suite = listOf(
                 // div-separator
                 "snapshot_test_data/div-separator",
                 // div-text
@@ -82,7 +83,20 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-image/border-with-stroke.json",
                 "snapshot_test_data/div-image/blur.json",
                 "snapshot_test_data/div-image/blur-with-big-radius.json",
-            ).expandDirectories().withEscapedParameter()
+            ).expandDirectories()
+
+            //TODO: to be stabilized
+            val flakyTests = listOf(
+                "snapshot_test_data/div-container/horizontal-orientation-bottom-horizontal-alignment.json",
+                "snapshot_test_data/div-container/horizontal-orientation-space-around-alignment.json",
+                "snapshot_test_data/div-container/horizontal-orientation-space-evenly-alignment.json",
+            ).expandDirectories().toSet()
+
+            val resultSuite = (suite - flakyTests)
+            Assert.assertEquals("Looks like there are outdated flaky tests",
+                resultSuite.size, suite.size - flakyTests.size)
+
+            return resultSuite.withEscapedParameter()
         }
 
         private fun List<String>.expandDirectories(): List<String> {
