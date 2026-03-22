@@ -147,23 +147,48 @@ final class UntypedDivTemplateResolver {
   }
 
   private func collectParameterNames(from dict: [String: Any]) -> Set<String> {
+    var visited = Set<TemplateName>()
+    return collectParameterNames(from: dict, visited: &visited)
+  }
+
+  private func collectParameterNames(
+    from dict: [String: Any],
+    visited: inout Set<TemplateName>
+  ) -> Set<String> {
     var names = Set<String>()
     for (key, value) in dict {
       if key.hasPrefix("$"), let name = value as? String {
         names.insert(name)
       }
       if let nestedDict = value as? [String: Any] {
-        names.formUnion(collectParameterNames(from: nestedDict))
+        names.formUnion(collectParameterNamesResolvingTemplates(
+          from: nestedDict, visited: &visited
+        ))
       }
       if let array = value as? [Any] {
         for element in array {
           if let elementDict = element as? [String: Any] {
-            names.formUnion(collectParameterNames(from: elementDict))
+            names.formUnion(collectParameterNamesResolvingTemplates(
+              from: elementDict, visited: &visited
+            ))
           }
         }
       }
     }
     return names
+  }
+
+  private func collectParameterNamesResolvingTemplates(
+    from dict: [String: Any],
+    visited: inout Set<TemplateName>
+  ) -> Set<String> {
+    if let type = dict["type"] as? String,
+       !visited.contains(type),
+       let resolvedTemplate = resolveTemplate(named: type).value {
+      visited.insert(type)
+      return collectParameterNames(from: resolvedTemplate, visited: &visited)
+    }
+    return collectParameterNames(from: dict, visited: &visited)
   }
 }
 
