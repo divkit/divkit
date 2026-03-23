@@ -53,7 +53,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             val filter = { filename: String ->
-                filename.endsWith(CASE_EXTENSION) && !filename.contains("templates")
+                filename.endsWith(CASE_EXTENSION)
             }
 
             val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)

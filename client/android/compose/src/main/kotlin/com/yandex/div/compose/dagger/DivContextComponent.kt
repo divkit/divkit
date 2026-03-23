@@ -6,6 +6,7 @@ import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.compose.internal.DivActionPerformer
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import javax.inject.Named
@@ -20,6 +21,7 @@ import javax.inject.Named
 internal interface DivContextComponent {
 
     val actionHandler: DivActionHandler
+    val actionPerformer: DivActionPerformer
     val baseContext: Context
     val reporter: DivReporter
     val imageLoader: ImageLoader

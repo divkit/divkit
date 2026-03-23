@@ -7,14 +7,17 @@ import androidx.compose.ui.platform.ComposeView
 import coil3.ImageLoader
 import coil3.request.allowHardware
 import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.compose.createContext
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
+import org.json.JSONObject
 
 /**
  * Run:
@@ -23,6 +26,8 @@ adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.D
  */
 @OptIn(InternalApi::class)
 class DivComposeScreenshotActivity : ComponentActivity() {
+
+    private lateinit var divContext: DivContext
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
@@ -36,13 +41,26 @@ class DivComposeScreenshotActivity : ComponentActivity() {
                 .build()
         }
 
-        val divContext = DivComposeConfiguration(imageLoaderProvider = imageLoaderProvider)
-            .createContext(baseContext = this)
+        divContext = DivComposeConfiguration(
+            imageLoaderProvider = imageLoaderProvider
+        ).createContext(baseContext = this)
+
+        intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
+            setDivData(DivAssetReader(this).read(it))
+        }
+    }
+
+    fun setDivData(json: JSONObject) {
+        val templatesJson = json.optJSONObject("templates")
+        val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
+            if (templatesJson != null) parseTemplates(templatesJson)
+        }
+        val data = DivData(environment, json.getJSONObject("card"))
 
         val view = ComposeView(divContext).apply {
             id = R.id.screenshot_view
             setContent {
-                DivView(data = parseDivData())
+                DivView(data = data)
             }
         }
 
@@ -53,16 +71,10 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         )
     }
 
-    private fun parseDivData(): DivData {
-        val assetName = intent.extras?.getString(EXTRA_DIV_ASSET_NAME)
-            ?: throw IllegalArgumentException("Missing div asset name")
-
-        val json = DivAssetReader(this).read(assetName)
-        val templatesJson = json.optJSONObject("templates")
-        val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
-            if (templatesJson != null) parseTemplates(templatesJson)
+    fun performActions(actions: List<DivAction>) {
+        actions.forEach {
+            divContext.actionPerformer.perform(it)
         }
-        return DivData(environment, json.getJSONObject("card"))
     }
 
     companion object {

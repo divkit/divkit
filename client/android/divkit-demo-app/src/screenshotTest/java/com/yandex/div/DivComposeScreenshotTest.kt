@@ -26,8 +26,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME to case
     )
 
-    @Rule
-    @JvmField
+    @get:Rule
     val rule = composeScreenshotRule(case, activityRule, case.relativePath)
 
     @Screenshot(viewId = R.id.screenshot_view)

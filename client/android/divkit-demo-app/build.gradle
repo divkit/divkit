@@ -130,9 +130,11 @@ dependencies {
     implementation libs.zxing.core
 
     androidTestUtil libs.androidx.test.services
-    androidTestImplementation libs.hamcrest.library
+    androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation libs.androidx.compose.ui.test.junit4
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
+    androidTestImplementation libs.hamcrest.library
 }
 
 screenshotTests {

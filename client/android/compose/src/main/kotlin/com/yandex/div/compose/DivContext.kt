@@ -2,8 +2,11 @@ package com.yandex.div.compose
 
 import android.content.ContextWrapper
 import androidx.annotation.MainThread
+import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.dagger.DivContextComponent
 import com.yandex.div.compose.views.DivLocalContext
+import com.yandex.div.compose.internal.DivActionPerformer
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivTrigger
@@ -14,6 +17,11 @@ import javax.inject.Inject
 class DivContext @Inject @MainThread internal constructor(
     internal val component: DivContextComponent
 ) : ContextWrapper(component.baseContext) {
+
+    @InternalApi
+    @VisibleForTesting
+    val actionPerformer: DivActionPerformer
+        get() = component.actionPerformer
 
     internal fun createLocalContext(
         variableController: DivVariableController,
@@ -34,6 +42,8 @@ class DivContext @Inject @MainThread internal constructor(
             localComponent.triggerStorage.add(it)
         }
 
-        return localComponent.context
+        val context = localComponent.context
+        actionPerformer.actionHandlingContext = context.actionHandlingContext
+        return context
     }
 }
