@@ -2,8 +2,9 @@ package com.yandex.div.compose.dagger
 
 import android.content.Context
 import coil3.ImageLoader
-import coil3.request.allowHardware
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.internal.ImageLoaderProvider
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
@@ -19,13 +20,10 @@ internal object DivContextModule {
         }
     }
 
+    @OptIn(InternalApi::class)
     @DivContextScope
     @Provides
-    fun provideImageLoader(
-        baseContext: Context
-    ): ImageLoader {
-        return ImageLoader.Builder(context = baseContext)
-            .allowHardware(false)
-            .build()
+    fun provideImageLoader(imageLoaderProvider: ImageLoaderProvider, context: Context): ImageLoader {
+        return imageLoaderProvider.provide(context)
     }
 }

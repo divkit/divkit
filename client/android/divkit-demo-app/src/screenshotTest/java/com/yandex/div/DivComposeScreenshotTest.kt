@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
-import com.yandex.div.rule.screenshotRule
+import com.yandex.div.rule.composeScreenshotRule
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
@@ -28,7 +28,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
 
     @Rule
     @JvmField
-    val rule = screenshotRule(case, activityRule, case.relativePath)
+    val rule = composeScreenshotRule(case, activityRule, case.relativePath)
 
     @Screenshot(viewId = R.id.screenshot_view)
     @Test
