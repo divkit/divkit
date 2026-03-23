@@ -1,6 +1,7 @@
 {
   "description": "State variable value is synchronized with state changes by actions.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

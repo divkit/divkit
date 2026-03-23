@@ -7,14 +7,13 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.state.InMemoryDivStateCache
 import com.yandex.div2.Div
 import org.junit.Assert
 import org.junit.Test
@@ -24,6 +23,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 private const val STATE_DIR = "div-state"
@@ -35,8 +35,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     private val divTwo = UnitTestData(STATE_DIR, "state_list.json")
 
     private val viewBinder = mock<DivBinder>()
-    private val stateCache = InMemoryDivStateCache()
-    private val temporaryStateCache = TemporaryDivStateCache()
+    private val stateManager = mock<DivStateManager>()
     private val div2Logger = mock<Div2Logger>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val errorCollectors = mock<ErrorCollectors>()
@@ -54,8 +53,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
-        divStateCache = stateCache,
-        temporaryStateCache = temporaryStateCache,
+        stateManager = stateManager,
         divActionBinder = actionBinder,
         divActionBeaconSender = divActionBeaconSender,
         divPatchManager = divPatchManager,
@@ -88,7 +86,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     @Test
     fun `change state release old views`() {
         stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
-        switchToState("second")
+        whenever(stateManager.getState(cardId = CARD_ID, statePath = "0/state_container")).thenReturn("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
             .findStateLayout(DivStatePath.parse("0/state_container/first"))
             ?: throw AssertionError("failed to find state")
@@ -105,11 +103,6 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
             verify(visitor).release(view)
         }
         verify(visitor, times(allChildren.size)).release(any())
-    }
-
-    private fun switchToState(stateId: String, temporaryStateId: String = stateId) {
-        stateCache.putState(cardId = CARD_ID, path = "0/state_container", state = stateId)
-        temporaryStateCache.putState(cardId = CARD_ID, path = "0/state_container", stateId = temporaryStateId)
     }
 }
 

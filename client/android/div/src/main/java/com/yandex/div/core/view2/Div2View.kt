@@ -213,6 +213,7 @@ class Div2View private constructor(
             oldRuntimeStore?.clearBindings(this)
         }
         bindingContext = BindingContext(this, expressionResolver)
+        div2Component.stateManager.collectStateVariables(data, bindingContext)
     }
 
     private fun tryAttachVariableTriggers(data: DivData?) {
@@ -1433,7 +1434,6 @@ class Div2View private constructor(
                 switchToState(newState.stateId, isPendingStateTemporary)
             } else if (childCount > 0) {
                 try {
-                    val bindingContext = BindingContext(this@Div2View, expressionResolver)
                     viewComponent.stateSwitcher.switchStates(bindingContext, newState, pendingPaths.immutableCopy())
                 } catch (e: StateConflictException) {
                     logError(e)

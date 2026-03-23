@@ -18,8 +18,8 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.getId
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
@@ -50,7 +50,6 @@ import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
-import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
@@ -65,8 +64,7 @@ internal class DivStateBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val viewCreator: DivViewCreator,
     private val viewBinder: Provider<DivBinder>,
-    private val divStateCache: DivStateCache,
-    private val temporaryStateCache: TemporaryDivStateCache,
+    private val stateManager: DivStateManager,
     private val divActionBinder: DivActionBinder,
     private val divActionBeaconSender: DivActionBeaconSender,
     private val divPatchManager: DivPatchManager,
@@ -83,7 +81,7 @@ internal class DivStateBinder @Inject constructor(
      * @param context includes Div2View and ExpressionResolver for current Div.
      * @param view layout with path 0/content/expanded/comments/expanded/comment_03/{any_state_here}.
      * @param div [DivState], corresponding to path 0/content/expanded/comments/expanded/comment_03,
-     * Exact stateId will be set via [DivStateCache] or [TemporaryDivStateCache], and this class will
+     * Exact stateId will be set via [DivStateManager], and this class will
      * handle receiving corresponding to the state [Div] by itself.
      * @param path path 0/content/expanded/comments/expanded, so to previous [DivStateLayout].
      */
@@ -96,7 +94,11 @@ internal class DivStateBinder @Inject constructor(
             errorCollectors.getOrCreate(context.divView.dataTag, context.divView.divData)
                 .logError(missingValue("id", path.toString()))
         }
-        val (oldState, newState) = divValue.getStates(context, view, path, id)
+        val oldState = divValue.states.find { it.stateId == view.stateId }
+            ?: divValue.getDefaultState(context.expressionResolver)
+        val currentStateId = getCurrentStateId(context, divValue, path, id)
+        val newState = divValue.states.find { it.stateId == currentStateId }
+            ?: divValue.getDefaultState(context.expressionResolver)
         if (oldState == null || newState == null) return
 
         val oldDiv = view.activeStateDiv
@@ -108,24 +110,21 @@ internal class DivStateBinder @Inject constructor(
         view.bindState(context, divValue, newState, oldDivState?.value, oldState, oldDiv, path, oldResolver, id)
     }
 
-    private fun DivState.getStates(
+    private fun getCurrentStateId(
         context: BindingContext,
-        view: DivStateLayout,
+        div: DivState,
         path: DivStatePath,
         id: String,
-    ): Pair<DivState.State?, DivState.State?> {
+    ): String? {
+        div.getStateIdVariableValue(context.expressionResolver)?.let { return it.toString() }
+
         val cardId = context.divView.divTag.id
         val statePath = "${path.statesString}/$id"
-        val stateId = (temporaryStateCache.getState(cardId, statePath) ?: divStateCache.getState(cardId, statePath))
-            ?.also { view.variableUpdater?.invoke(it) }
-            ?: stateIdVariable?.let { getValueFromVariable(context, it) }
-
-        val oldState = states.find { it.stateId == view.stateId }
-            ?: getDefaultState(context.expressionResolver)
-        val newState = states.find { it.stateId == stateId }
-            ?: getDefaultState(context.expressionResolver)
-        return Pair(oldState, newState)
+        return stateManager.getState(cardId, statePath)
     }
+
+    private fun DivState.getStateIdVariableValue(resolver: ExpressionResolver) =
+        stateIdVariable?.let { resolver.getVariable(it)?.getValue() }
 
     private fun DivStateLayout.bind(
         context: BindingContext,
@@ -306,9 +305,6 @@ internal class DivStateBinder @Inject constructor(
         return div.value.contentAlignmentHorizontal.evaluate(resolver)
     }
 
-    private fun getValueFromVariable(context: BindingContext, variableName: String) =
-        context.expressionResolver.getVariable(variableName)?.getValue()?.toString()
-
     private fun DivStateLayout.observeStateIdVariable(
         div: DivState,
         bindingContext: BindingContext,
@@ -328,7 +324,7 @@ internal class DivStateBinder @Inject constructor(
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    variableUpdater = valueUpdater
+                    stateManager.bindVariable(bindingContext.divView.dataTag.id, divStatePath, valueUpdater)
                 }
             },
             path = divStatePath

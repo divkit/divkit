@@ -4,14 +4,13 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.state.InMemoryDivStateCache
 import com.yandex.div2.Div
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -26,6 +25,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -33,8 +33,7 @@ class DivStateBinderTest: DivBinderTest() {
 
     private val viewBinder = mock<DivBinder>()
     private val divActionBinder = mock<DivActionBinder>()
-    private val stateCache = InMemoryDivStateCache()
-    private val temporaryStateCache = TemporaryDivStateCache()
+    private val stateManager = mock<DivStateManager>()
     private val div2Logger = mock<Div2Logger>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val errorCollectors = mock<ErrorCollectors>()
@@ -54,8 +53,7 @@ class DivStateBinderTest: DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
-        divStateCache = stateCache,
-        temporaryStateCache = temporaryStateCache,
+        stateManager = stateManager,
         divActionBinder = divActionBinder,
         divActionBeaconSender = divActionBeaconSender,
         divPatchManager = divPatchManager,
@@ -112,15 +110,6 @@ class DivStateBinderTest: DivBinderTest() {
     @Test
     fun `selected state bound`() {
         switchToState("second")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
-
-        val expectedStateDiv = divState.states[1].div!!
-        assertStateBound(pathToState("second"), expectedStateDiv)
-    }
-
-    @Test
-    fun `selected temporary state bound`() {
-        switchToState(stateId = "first", temporaryStateId = "second")
         stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
 
         val expectedStateDiv = divState.states[1].div!!
@@ -261,9 +250,8 @@ class DivStateBinderTest: DivBinderTest() {
         verify(divView).bindViewToDiv(stateLayout.getChildAt(0), newData.value.states[0].div!!)
     }
 
-    private fun switchToState(stateId: String, temporaryStateId: String = stateId) {
-        stateCache.putState(cardId = CARD_ID, path = "0/state_container", state = stateId)
-        temporaryStateCache.putState(cardId = CARD_ID, path = "0/state_container", stateId = temporaryStateId)
+    private fun switchToState(stateId: String) {
+        whenever(stateManager.getState(cardId = CARD_ID, statePath = "0/state_container")).thenReturn(stateId)
     }
 
     private fun pathToState(stateId: String): DivStatePath {

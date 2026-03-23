@@ -6,14 +6,14 @@ import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds
+import com.yandex.div.core.state.DivPathUtils.statePath
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
-import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.build
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivState
@@ -23,8 +23,7 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class DivRuntimeVisitor @Inject constructor(
-    private val divStateCache: DivStateCache,
-    private val temporaryStateCache: TemporaryDivStateCache,
+    private val stateManager: DivStateManager,
     private val tabsCache: TabsStateCache,
 ) {
 
@@ -147,15 +146,13 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         resolver: ExpressionResolverImpl,
     ): String? {
-        val statePath = "${path.statesString}/${path.lastDivId}"
-        val cardId = divView.divTag.id
-
-        return temporaryStateCache.getState(cardId, statePath)
-            ?: divStateCache.getState(cardId, statePath)
-            ?: div.stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
+        return div.stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
+            ?: stateManager.getState(divView.cardId, path.statePath)
             ?: div.defaultStateId?.evaluate(resolver)
             ?: div.states.firstOrNull()?.stateId
     }
+
+    private val Div2View.cardId get() = divTag.id
 
     private fun visitState(
         div: Div.State,
@@ -197,7 +194,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeTab = tabsCache.getSelectedTab(divView.dataTag.id, path.fullPath)
+        val activeTab = tabsCache.getSelectedTab(divView.cardId, path.fullPath)
             ?: div.selectedTab.evaluate(runtime.expressionResolver).toIntSafely()
 
         val ids = div.items.getIds({ this.div })

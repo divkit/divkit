@@ -1,6 +1,7 @@
 {
   "description": "State variable has higher priority than cached state.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

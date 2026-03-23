@@ -182,6 +182,8 @@ internal object DivPathUtils {
     }
 
     fun Div.getId() = value().run { if (this is DivState) getId() else id }
+
+    val DivStatePath.statePath get() = "$statesString/$lastDivId"
 }
 
 internal class StateConflictException(message: String, cause: Throwable? = null) : Exception(message, cause)

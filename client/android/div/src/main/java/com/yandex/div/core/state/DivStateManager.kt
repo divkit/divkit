@@ -4,8 +4,20 @@ import androidx.annotation.AnyThread
 import androidx.collection.ArrayMap
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.asImpl
+import com.yandex.div.core.state.DivPathUtils.statePath
+import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.data.Variable
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.state.DivStateCache
+import com.yandex.div2.Div
+import com.yandex.div2.DivData
+import java.lang.ref.WeakReference
 import javax.inject.Inject
+
+private typealias CardVariables = MutableMap<String, StateVariableHolder>
+private typealias VariableUpdater = (String) -> Unit
 
 /**
  * Manipulates application's div data state change and retrieval.
@@ -16,7 +28,14 @@ internal class DivStateManager @Inject constructor(
     private val cache: DivStateCache,
     private val temporaryCache: TemporaryDivStateCache
 ) {
+
     private val states = ArrayMap<DivDataTag, DivViewState>()
+    private val variables = mutableMapOf<String, CardVariables>()
+
+    fun collectStateVariables(data: DivData, context: BindingContext) {
+        val cardVariables = variables.getOrPut(context.divView.dataTag.id) { mutableMapOf() }
+        StateVariableCollector(cardVariables).collectStateVariables(data, context)
+    }
 
     fun getState(tag: DivDataTag): DivViewState? = synchronized(states) {
         var state = states[tag]
@@ -27,18 +46,18 @@ internal class DivStateManager @Inject constructor(
         return state
     }
 
+    fun getState(cardId: String, statePath: String): String? =
+        temporaryCache.getState(cardId, statePath) ?: cache.getState(cardId, statePath)
+
     fun updateState(tag: DivDataTag, stateId: Long, temporary: Boolean) {
-        if (DivDataTag.INVALID != tag) {
-            synchronized(states) {
-                val state = getState(tag)
-                states[tag] = if (state == null) DivViewState(stateId) else DivViewState(
-                    stateId,
-                    state.blockStates
-                )
-                temporaryCache.putRootState(tag.id, stateId.toString())
-                if (!temporary) {
-                    cache.putRootState(tag.id, stateId.toString())
-                }
+        if (DivDataTag.INVALID == tag) return
+
+        synchronized(states) {
+            val state = getState(tag)
+            states[tag] = state?.let { DivViewState(stateId, it.blockStates) } ?: DivViewState(stateId)
+            temporaryCache.putRootState(tag.id, stateId.toString())
+            if (!temporary) {
+                cache.putRootState(tag.id, stateId.toString())
             }
         }
     }
@@ -46,14 +65,20 @@ internal class DivStateManager @Inject constructor(
     fun updateStates(cardId: String, divStatePath: DivStatePath, temporary: Boolean) {
         val path = divStatePath.pathToLastState
         val stateId = divStatePath.lastStateId
-        if (path != null && stateId != null) {
-            synchronized(states) {
-                temporaryCache.putState(cardId, path, stateId)
-                if (!temporary) {
-                    cache.putState(cardId, path, stateId)
-                }
+        if (path == null || stateId == null) return
+
+        synchronized(states) {
+            temporaryCache.putState(cardId, path, stateId)
+            if (!temporary) {
+                cache.putState(cardId, path, stateId)
             }
+            variables[cardId]?.get(path)?.setValue(stateId)
         }
+    }
+
+    fun bindVariable(cardId: String, divStatePath: DivStatePath, variableUpdater: VariableUpdater) {
+        val cardVariables = variables[cardId] ?: return Assert.fail("State variables weren't collected before binding.")
+        cardVariables[divStatePath.statePath]?.variableUpdater = WeakReference(variableUpdater)
     }
 
     fun reset(tags: List<DivDataTag>) {
@@ -61,12 +86,38 @@ internal class DivStateManager @Inject constructor(
             states.clear()
             cache.clear()
             temporaryCache.clear()
+            variables.clear()
         } else {
             tags.forEach { tag ->
                 states.remove(tag)
                 cache.resetCard(tag.id)
                 temporaryCache.resetCard(tag.id)
+                variables.remove(tag.id)
             }
         }
+    }
+}
+
+private class StateVariableHolder(val variable: Variable) {
+
+    var variableUpdater: WeakReference<VariableUpdater>? = null
+
+    fun setValue(value: String) {
+        variableUpdater?.get()?.invoke(value) ?: variable.set(value)
+    }
+}
+
+private class StateVariableCollector(
+    private val variables: CardVariables
+) : DivTreeVisitor<Unit>() {
+
+    fun collectStateVariables(data: DivData, context: BindingContext) = visit(data, context)
+
+    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
+        if (data !is Div.State) return
+        val resolver = context.expressionResolver.asImpl ?: return
+        val variableName = data.value.stateIdVariable ?: return
+        val variable = resolver.getVariable(variableName) ?: return
+        variables.getOrPut(path.statePath) { StateVariableHolder(variable) }
     }
 }
