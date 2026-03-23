@@ -708,6 +708,25 @@
                             ]
                         },
                         {
+                            "type": "settings_item",
+                            "items": [
+                                {
+                                    "type": "settings_item_title",
+                                    "text": "Show assertion dialog"
+                                },
+                                {
+                                    "type": "setting_switch_state",
+                                    "id": "visual_assertion_handler",
+                                    "active_click_log_id": "set_visual_assertion_handler_disabled",
+                                    "active_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/inactive",
+                                    "active_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=0",
+                                    "inactive_click_log_id": "set_visual_assertion_handler_enabled",
+                                    "inactive_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=1",
+                                    "inactive_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/active"
+                                }
+                            ]
+                        },
+                        {
                             "type": "text",
                             "text": "@{app_version}",
                             "font_size": 16,

@@ -22,6 +22,7 @@ const val PERMANENT_DEBUG_PANEL = "permanent_debug_panel"
 const val RENDER_EFFECT_ENABLED = "render_effect_enabled"
 const val BACKGROUND_BINDING = "background_binding"
 const val LIMIT_IMAGE_BITMAP_SIZE_ENABLED = "limit_image_bitmap_size_enabled"
+const val VISUAL_ASSERTION_HANDLER = "visual_assertion_handler"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"
@@ -60,6 +61,7 @@ internal object SettingsActionHandler {
             RENDER_EFFECT_ENABLED -> setPreferencesBooleanFlag(Experiment.RENDER_EFFECT_ENABLED, valueInt.toBooleanOrException())
             BACKGROUND_BINDING -> Container.preferences.useBackgroundBinding = valueInt.toBooleanOrException()
             LIMIT_IMAGE_BITMAP_SIZE_ENABLED -> Container.preferences.limitImageBitmapSizeEnabled = valueInt.toBooleanOrException()
+            VISUAL_ASSERTION_HANDLER -> Container.preferences.visualAssertionHandlerEnabled = valueInt.toBooleanOrException()
             else -> return false
         }
 
