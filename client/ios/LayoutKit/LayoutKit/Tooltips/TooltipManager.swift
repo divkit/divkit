@@ -80,8 +80,6 @@ public class DefaultTooltipManager: TooltipManager {
 
   public var shownTooltips: Property<Set<String>>
 
-  private(set) var tooltipWindowManager: TooltipWindowManager?
-
   private var viewsById: [BlockViewID: WeakBlockView] = [:]
 
   private var handleAction: (UIActionEvent) -> Void
@@ -90,11 +88,15 @@ public class DefaultTooltipManager: TooltipManager {
   private var previousOrientation = UIDevice.current.orientation
 
   private let lock = AllocatedUnfairLock()
+  private let presenter: TooltipPresenter
 
   public init(
     shownTooltips: Property<Set<String>> = Property(),
-    handleAction: @escaping (UIActionEvent) -> Void = { _ in }
+    handleAction: @escaping (UIActionEvent) -> Void = { _ in },
+    externalView: UIView? = nil
   ) {
+    self.presenter = externalView.map { ViewTooltipPresenter(containerView: $0) }
+      ?? WindowTooltipPresenter()
     self.handleAction = handleAction
     self.shownTooltips = shownTooltips
 
@@ -115,55 +117,33 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltip(info: TooltipInfo) {
-    setupTooltipWindowManager()
-    guard let tooltipWindowManager,
-          !showingTooltips.keys.contains(info.id)
-    else { return }
+    guard !showingTooltips.keys.contains(info.id) else { return }
+
+    guard let (constraint, coordinateSpace) = presenter.prepare() else { return }
 
     Task { @MainActor in
-      let modalWindow = tooltipWindowManager.modalWindow
-      let windowBounds = modalWindow.bounds.inset(by: modalWindow.safeAreaInsets)
-
       guard let tooltip = await existingAnchorViews.compactMap(
         concurrencyLimit: 1,
-        transform: { await $0?.makeTooltip(id: info.id, in: windowBounds) }
+        transform: {
+          await $0?.makeTooltip(id: info.id, in: constraint, relativeTo: coordinateSpace)
+        }
       ).first else { return }
 
-      weak var proxyVC: UIViewController?
       let view = TooltipContainerView(
         tooltip: tooltip,
         handleAction: handleAction,
         onCloseAction: { [weak self] in
           guard let self else { return }
-          proxyVC?.removeFromParent()
           showingTooltips.removeValue(forKey: tooltip.params.id)
-          if !showingTooltips.contains(where: { $1.isModal }) {
-            self.tooltipWindowManager?.hideModalWindow()
-          }
+          let hasRemainingModals = !showingTooltips.values.filter(\.isModal).isEmpty
+          presenter.onClosed(tooltipID: tooltip.params.id, hasRemainingModals: hasRemainingModals)
         },
         getViewById: { [weak self] in
           self?.viewsById[$0]?.view
         }
       )
 
-      let mainWindow = tooltipWindowManager.mainWindow
-      // Passing the statusBarStyle control to `rootViewController` of the main window
-
-      if tooltip.params.mode == .modal {
-        let vc = ProxyViewController(
-          viewController: mainWindow.rootViewController ?? UIViewController()
-        )
-        vc.view = view
-        proxyVC = vc
-
-        // Window won't rotate if `rootViewController` is not set
-        modalWindow.rootViewController = vc
-        tooltipWindowManager.showModalWindow()
-      } else {
-        mainWindow.addSubview(view)
-      }
-
-      view.frame = modalWindow.bounds
+      presenter.present(view, for: tooltip)
 
       view.animateAppear()
 
@@ -201,11 +181,16 @@ public class DefaultTooltipManager: TooltipManager {
     viewsById.removeAll()
     showingTooltips.values.forEach { $0.close(animated: false) }
     showingTooltips = [:]
-    tooltipWindowManager = nil
+    presenter.reset()
   }
 
   public func setHandler(_ handler: @escaping (UIActionEvent) -> Void) {
     handleAction = handler
+  }
+
+  @MainActor
+  func currentTooltipView() async -> UIView? {
+    await presenter.currentTooltipView()
   }
 
   @objc func orientationDidChange(_: Notification) {
@@ -216,32 +201,14 @@ public class DefaultTooltipManager: TooltipManager {
     }
     previousOrientation = orientation
   }
-
-  private func setupTooltipWindowManager() {
-    guard tooltipWindowManager == nil else { return }
-
-    let scenes = UIApplication.shared.connectedScenes
-    guard let windowScene = scenes
-      .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-      let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) else {
-      return
-    }
-
-    tooltipWindowManager = TooltipWindowManager(
-      mainWindow: keyWindow,
-      modalWindow: modified(UIWindow(windowScene: windowScene)) {
-        $0.windowLevel = UIWindow.Level.alert + 1
-        $0.isHidden = true
-      }
-    )
-  }
 }
 
 extension TooltipAnchorView {
   @MainActor
   fileprivate func makeTooltip(
     id: String,
-    in constraint: CGRect
+    in constraint: CGRect,
+    relativeTo containerView: UIView? = nil
   ) async -> DefaultTooltipManager.Tooltip? {
     guard let tooltip = tooltips.first(where: { $0.id == id }) else {
       return nil
@@ -250,7 +217,7 @@ extension TooltipAnchorView {
     let tooltipView = await tooltip.tooltipViewFactory?() ?? tooltip.block.makeBlockView()
 
     let targetRect = window != nil ?
-      convert(bounds, to: nil) :
+      convert(bounds, to: containerView) :
       frame
 
     tooltipView.frame = tooltip.calculateFrame(
@@ -267,45 +234,6 @@ extension TooltipAnchorView {
       substrateView: substrateView,
       bringToTopId: tooltip.bringToTopId
     )
-  }
-}
-
-private final class ProxyViewController: UIViewController {
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    viewController.preferredStatusBarStyle
-  }
-
-  private let viewController: UIViewController
-
-  init(viewController: UIViewController) {
-    self.viewController = viewController
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-}
-
-final class TooltipWindowManager {
-  let mainWindow: UIWindow
-  let modalWindow: UIWindow
-
-  init(mainWindow: UIWindow, modalWindow: UIWindow) {
-    self.mainWindow = mainWindow
-    self.modalWindow = modalWindow
-  }
-
-  func showModalWindow() {
-    mainWindow.accessibilityElementsHidden = true
-    modalWindow.isHidden = false
-    modalWindow.makeKeyAndVisible()
-  }
-
-  func hideModalWindow() {
-    mainWindow.accessibilityElementsHidden = false
-    modalWindow.isHidden = true
   }
 }
 

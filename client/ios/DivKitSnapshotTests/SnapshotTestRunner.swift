@@ -101,19 +101,8 @@ final class SnapshotTestRunner {
     manager: DefaultTooltipManager,
     check: CheckAction
   ) async throws {
-    guard let tooltipWindow = manager.tooltipWindowManager?.modalWindow else {
-      return try await check(nil)
-    }
-
-    while !tooltipWindow.isKeyWindow {
-      await Task.yield()
-    }
-
-    guard let tooltipView = tooltipWindow.subviews.first else {
-      return try await check(nil)
-    }
-
-    try await check(tooltipView)
+    let tooltip = await manager.currentTooltipView()
+    return try await check(tooltip)
   }
 
   private func getLayoutDirection(
