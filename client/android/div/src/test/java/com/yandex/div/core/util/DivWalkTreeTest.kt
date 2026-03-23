@@ -3,8 +3,8 @@ package com.yandex.div.core.util
 import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.mockExpressionResolver
+import com.yandex.div.test.data.container
 import com.yandex.div2.Div
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivText
@@ -30,7 +30,7 @@ class DivWalkTreeTest {
 
     @Test
     fun `walking multiple node hierarchy`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
                 divText("lorem ipsum"),
                 divImage("https://none")
@@ -45,9 +45,9 @@ class DivWalkTreeTest {
 
     @Test
     fun `walking uses depth-first order`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
-                divContainer(
+                container(
                     listOf(
                         divText("lorem ipsum"),
                         divImage("https://none")
@@ -65,7 +65,7 @@ class DivWalkTreeTest {
 
     @Test
     fun `onEnter excludes subtree from walking`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
                 divGallery(
                     listOf(
@@ -86,10 +86,10 @@ class DivWalkTreeTest {
 
     @Test
     fun `maxDepth limits walk depth`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
                 divText("lorem ipsum"),
-                divContainer(
+                container(
                     listOf(
                         divText("lorem ipsum"),
                         divImage("https://none")
@@ -107,7 +107,7 @@ class DivWalkTreeTest {
 
     @Test
     fun `onEnter() called only for branch nodes`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
                 divText("lorem ipsum"),
                 divGallery(
@@ -132,7 +132,7 @@ class DivWalkTreeTest {
 
     @Test
     fun `onLeave() called only for branch nodes`() {
-        val rootDiv = divContainer(
+        val rootDiv = container(
             listOf(
                 divText("lorem ipsum"),
                 divGallery(
@@ -158,10 +158,6 @@ class DivWalkTreeTest {
 
     private fun divImage(imageUrl: String): Div {
         return Div.Image(DivImage(imageUrl = Uri.parse(imageUrl).asExpression()))
-    }
-
-    private fun divContainer(items: List<Div>): Div {
-        return Div.Container(DivContainer(items = items))
     }
 
     private fun divGallery(items: List<Div>): Div {

@@ -1,7 +1,6 @@
 package com.yandex.div.evaluable
 
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
-import com.yandex.div.test.expression.withEvaluator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.mock

@@ -131,10 +131,10 @@ apiValidation {
         "divkit-demo-app",
         "divkit-perftests",
         "divkit-regression-testing",
-        "expression-test-common",
         "lint-rules",
         "sample",
         "screenshot-test-runtime",
+        "test-utils",
         "ui-test-common",
     ]
     ignoredPackages += ["com.yandex.div.internal"]

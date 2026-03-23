@@ -10,12 +10,12 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
-import com.yandex.div.compose.intExpression
 import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.compose.views.LocalDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.intExpression
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

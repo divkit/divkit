@@ -3,11 +3,9 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivVariable
-import com.yandex.div2.IntegerVariable
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -90,7 +88,7 @@ class RuntimeStoreImplTest {
     }
 
     private fun setVariable() {
-        val variables = listOf(DivVariable.Integer(IntegerVariable(CHILD_VARIABLE, Expression.constant(123))))
-        whenever(divBase.variables).doReturn(variables)
+        val variables = listOf(variable(CHILD_VARIABLE, 123))
+        whenever(divBase.variables) doReturn variables
     }
 }

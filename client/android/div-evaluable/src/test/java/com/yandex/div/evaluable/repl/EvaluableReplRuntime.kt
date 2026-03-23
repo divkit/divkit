@@ -9,8 +9,13 @@ import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.internal.Parser
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.internal.Tokenizer
-import com.yandex.div.test.expression.parseAsUTC
-import com.yandex.div.test.expression.withEvaluator
+import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.evaluable.withEvaluator
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 internal object EvaluableReplRuntime {
     private val variableProvider = VariableProvider { variableName -> variableList[variableName] }
@@ -65,12 +70,7 @@ internal object EvaluableReplRuntime {
     fun evaluateExpression(expression: String) {
         val evaluable = parseEvaluable(expression) ?: return
         try {
-            withEvaluator(
-                evaluationContext,
-                warningsValidator = { warnings ->
-                    warnings.forEach { println("Warning: $it") }
-                }
-            ) {
+            withEvaluator(evaluationContext) {
                 eval<Any?>(evaluable).also { println(it) }
             }
         } catch (t: Throwable) {
@@ -109,7 +109,7 @@ internal object EvaluableReplRuntime {
 
     private fun String.getNewVariableValue(): Pair<String, Any> {
         val (_, name, type, value) = variableAssigningRegex.matchEntire(this.minifySpaces())!!.groupValues
-        val evaluableType = EvaluableType.values().find { it.typeName.lowercase() == type.lowercase() }
+        val evaluableType = EvaluableType.values().find { it.typeName.equals(type, ignoreCase = true) }
             ?: throw RuntimeException("Unknown type $type.")
         return try {
             val convertedValue = when (evaluableType) {
@@ -118,7 +118,7 @@ internal object EvaluableReplRuntime {
                 EvaluableType.BOOLEAN -> value.toBoolean()
                 EvaluableType.STRING -> value
                 EvaluableType.COLOR -> value
-                EvaluableType.DATETIME -> parseAsUTC(value)
+                EvaluableType.DATETIME -> parseDateTime(value)
                 EvaluableType.URL -> value
                 EvaluableType.DICT -> value
                 EvaluableType.ARRAY -> value
@@ -150,4 +150,13 @@ internal object EvaluableReplRuntime {
             null
         }
     }
+}
+
+private fun parseDateTime(utcString: String): DateTime {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+    val date: Date = dateFormat.parse(utcString)!!
+    return DateTime(
+        timestampMillis = date.time + Calendar.getInstance().timeZone.rawOffset,
+        timezone = TimeZone.getTimeZone("UTC"),
+    )
 }

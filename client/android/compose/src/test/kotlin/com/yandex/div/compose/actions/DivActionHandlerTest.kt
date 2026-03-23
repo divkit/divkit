@@ -2,9 +2,9 @@ package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.action
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.test.data.action
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionTyped

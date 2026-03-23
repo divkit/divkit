@@ -2,7 +2,6 @@ package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
-import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.FunctionProvider
 
 @Deprecated(
@@ -317,12 +316,5 @@ internal object BuiltinFunctionProvider : FunctionProvider {
 
     override fun getMethod(name: String, args: List<EvaluableType>): Function {
         return registry.getMethod(name, args)
-    }
-
-    internal fun ensureFunctionRegistered(name: String,
-                                          args: List<FunctionArgument>,
-                                          resultType: EvaluableType,
-                                          isMethod: Boolean,) {
-        registry.ensureRegistered(name, args, resultType, isMethod)
     }
 }

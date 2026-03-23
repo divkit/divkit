@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.local
 
 import android.app.Activity
-import android.net.Uri
 import android.widget.EditText
 import android.widget.TextView
 import com.yandex.div.DivDataTag
@@ -12,9 +11,8 @@ import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.action
 import com.yandex.div2.Div
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -115,14 +113,11 @@ class LocalVariablesTest {
     }
 
     private fun setState(stateNum: Int) {
-        handleAction(Uri.parse("div-action://set_state?state_id=0/label/state_$stateNum"))
+        handleAction("div-action://set_state?state_id=0/label/state_$stateNum")
     }
 
-    private fun handleAction(uri: Uri) {
-        div2View.handleAction(DivAction(
-            logId = Expression.constant("id"),
-            url = Expression.constant(uri))
-        )
+    private fun handleAction(url: String) {
+        div2View.handleAction(action(url = url))
     }
 
     private fun setVariable(name: String, value: String, path: String) {

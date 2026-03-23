@@ -2,9 +2,9 @@ package com.yandex.div.compose.expressions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.expression
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.expression
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -20,6 +20,4 @@ class IntegrationTestLogger : ParsingErrorLogger {
             .mapNotNull { it.message }
             .forEach { _messages.add(it) }
     }
-
-    fun clear() = _messages.clear()
 }

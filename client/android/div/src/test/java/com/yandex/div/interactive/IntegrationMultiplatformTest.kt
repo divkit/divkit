@@ -5,7 +5,6 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.actions.observeErrors
-import com.yandex.div.core.expression.ExpressionTestCaseUtils
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_DICT
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createVariable
@@ -16,12 +15,13 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.test.expression.MultiplatformTestUtils
-import com.yandex.div.test.expression.TestCaseOrError
+import com.yandex.div.test.crossplatform.IntegrationTestCase
+import com.yandex.div.test.crossplatform.MultiplatformTestUtils
+import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -29,23 +29,24 @@ import org.robolectric.Robolectric
 import java.util.UUID
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase>) {
+class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>) {
 
-    private val case = testCase.getCaseOrThrow()
-    private val expected = case.expected
+    private val testCase = testCaseParsingResult.getOrThrow()
+    private val expectedResults = testCase.expectedResults
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
+    private val logger = IntegrationTestLogger()
 
     @Test
-    fun runTestCase() {
-        val env = DivParsingEnvironment(LOGGER)
-        case.divData.optJSONObject("templates")?.let {
+    fun run() {
+        val env = DivParsingEnvironment(logger)
+        testCase.divData.optJSONObject("templates")?.let {
             env.parseTemplates(it)
         }
         val divData = runCatching {
-            DivData(env, case.divData.getJSONObject("card"))
+            DivData(env, testCase.divData.getJSONObject("card"))
         }.getOrElse {
             var errorIsExpected = false
-            expected.forEach { e ->
+            expectedResults.forEach { e ->
                 if (e !is IntegrationTestCase.ExpectedResult.Error) return@forEach
                 checkError(e)
                 errorIsExpected = true
@@ -58,34 +59,44 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
         }
 
         val context = Div2Context(activity, DivConfiguration.Builder(IMAGE_LOADER_STUB).build())
-        expected.forEach { result ->
-            val variable = result as? IntegrationTestCase.ExpectedResult.Variable ?: return@forEach
-            if (divData.variables?.any { it.name == variable.name } == true) return@forEach
-            context.divVariableController.declare(createVariable(variable.type, variable.name, null))
+
+        expectedResults.forEach { result ->
+            when (result) {
+                is IntegrationTestCase.ExpectedResult.Variable -> {
+                    if (divData.variables?.any { it.name == result.name } != true) {
+                        val variable = createVariable(result.type, result.name, null)
+                        context.divVariableController.declare(variable)
+                    }
+                }
+
+                is IntegrationTestCase.ExpectedResult.Error -> return@forEach
+            }
         }
 
         val divView = Div2View(context)
         divView.setData(divData, DivDataTag(UUID.randomUUID().toString()))
         divView.observeErrors { errors, _ ->
             errors.forEach { error ->
-                LOGGER.logErrorDirectly(error)
+                logger.logErrorDirectly(error)
             }
         }
 
-        case.actions?.forEach {
+        testCase.actions.forEach {
             runCatching { divView.handleAction(DivAction(env, it)) }
         }
 
-        expected.forEach {
+        expectedResults.forEach {
             when (it) {
                 is IntegrationTestCase.ExpectedResult.Error -> checkError(it)
                 is IntegrationTestCase.ExpectedResult.Variable -> {
                     val expectedValue = it.value.wrapVariableValue()
-                    val actualValue = divView.expressionResolver.getVariable(it.name)?.getWrappedValue()
+                    val actualValue = divView.expressionResolver
+                        .getVariable(it.name)
+                        ?.getWrappedValue()
                     if (it.type == VALUE_TYPE_DICT || it.type == VALUE_TYPE_ARRAY) {
-                        Assert.assertEquals(expectedValue.toString(), actualValue.toString())
+                        assertEquals(expectedValue.toString(), actualValue.toString())
                     } else {
-                        Assert.assertEquals(expectedValue, actualValue)
+                        assertEquals(expectedValue, actualValue)
                     }
                 }
             }
@@ -93,35 +104,33 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
     }
 
     private fun checkError(expected: IntegrationTestCase.ExpectedResult.Error) {
-        Assert.assertTrue(
-            "Expected: <${expected.message}> but was: <${LOGGER.messages.toSet().joinToString(", ")}>",
-            LOGGER.messages.contains(expected.message)
+        assertTrue(
+            "Expected: <${expected.message}> but was: <${
+                logger.messages.toSet().joinToString(", ")
+            }>",
+            logger.messages.contains(expected.message)
         )
     }
-
-    @After
-    fun clear() = LOGGER.clear()
 
     companion object {
         private const val TEST_CASES_FILE_PATH = "integration_test_data"
         private val EMPTY_REF = LoadReference { }
         private val IMAGE_LOADER_STUB = DivImageLoader { _, _ -> EMPTY_REF }
 
-        private val LOGGER = IntegrationTestLogger()
-        private val CASES = getCases()
+        // Store parsed test cases to prevent multiple parsing by
+        // ParameterizedRobolectricTestRunner
+        private val cases: List<ParsingResult<IntegrationTestCase>> = run {
+            val cases = mutableListOf<ParsingResult<IntegrationTestCase>>()
+            val errors = MultiplatformTestUtils
+                .walkJSONs(TEST_CASES_FILE_PATH) { file, json ->
+                    cases.addAll(IntegrationTestCase.parse(file.name, json))
+                }
+            errors + cases
+        }
 
         @JvmStatic
         @Suppress("unused")
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
-        fun cases() = CASES
-
-        private fun getCases(): List<TestCaseOrError<IntegrationTestCase>> {
-            val cases = mutableListOf<TestCaseOrError<IntegrationTestCase>>()
-            val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, json ->
-                val steps = ExpressionTestCaseUtils.parseIntegrationTestCase(file.name, json)
-                cases.addAll(steps)
-            }.map { TestCaseOrError<IntegrationTestCase>(it) }
-            return errors + cases
-        }
+        fun cases() = cases
     }
 }

@@ -12,11 +12,11 @@ import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.expressions.DivExpressionParser
 import com.yandex.div.internal.util.UiThreadHandler
+import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.rule.LocaleRule
-import com.yandex.div.test.expression.MultiplatformTestUtils
-import com.yandex.div.test.expression.MultiplatformTestUtils.toSortedList
-import com.yandex.div.test.expression.TestCaseOrError
+import com.yandex.div.test.crossplatform.MultiplatformTestUtils
+import com.yandex.div.test.crossplatform.ParsingResult
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.After
@@ -26,16 +26,17 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
-class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
+class EvaluableMultiplatformTest(
+    private val caseParsingResult: ParsingResult<ExpressionTestCase>
+) {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val localeRule = LocaleRule()
 
     private lateinit var testCase: ExpressionTestCase
@@ -49,10 +50,9 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     private val warnings = mutableListOf<String>()
     private val errors = mutableListOf<String>()
-    private val warningCaptor = argumentCaptor<Throwable>()
     private val errorCollector = mock<ErrorCollector> {
-        on { logWarning(warningCaptor.capture()) } doAnswer {
-            warningCaptor.lastValue.cause?.message?.let { warnings += it }
+        on { logWarning(any()) } doAnswer { answer ->
+            (answer.arguments.first() as Throwable).cause?.message?.let { warnings += it }
         }
     }
     private val testParsingLogger = ParsingErrorLogger { e ->
@@ -72,7 +72,12 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
         warnings.clear()
         errors.clear()
-        testCase = caseOrError.getCaseOrThrow()
+
+        when (caseParsingResult) {
+            is ParsingResult.Success -> testCase = caseParsingResult.value
+            is ParsingResult.Error -> caseParsingResult.throwException()
+        }
+
         val testDivData = createDivDataFromTestVars(testCase.variables, testCase.functions, testParsingLogger)
 
         runtimeProvider = ExpressionsRuntimeProvider(
@@ -111,8 +116,8 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
             is JSONArray, is JSONObject -> {
                 if (testCase.expectedType == VALUE_TYPE_UNORDERED_ARRAY){
                     checkEquality(testCase) { message, expected, actual ->
-                        val expectedList = (expected as JSONArray).toSortedList()
-                        val actualList = (actual as JSONArray).toSortedList()
+                        val expectedList = (expected as JSONArray).map { toString() }.sorted()
+                        val actualList = (actual as JSONArray).map { toString() }.sorted()
                         Assert.assertEquals(message, expectedList.toString(), actualList.toString())
                     }
                 } else {
@@ -172,17 +177,16 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
-        fun cases(): List<TestCaseOrError<ExpressionTestCase>> {
-            val cases = mutableListOf<TestCaseOrError<ExpressionTestCase>>()
-            val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, jsonString ->
-                val newCases = ExpressionTestCaseUtils.parseTestCases(JSONObject(jsonString), file.name)
-                cases.addAll(newCases)
-            }.map { TestCaseOrError<ExpressionTestCase>(it) }
+        fun cases(): List<ParsingResult<ExpressionTestCase>> {
+            val cases = mutableListOf<ParsingResult<ExpressionTestCase>>()
+            val errors = MultiplatformTestUtils
+                .walkJSONs(TEST_CASES_FILE_PATH) { file, jsonString ->
+                    val newCases = ExpressionTestCaseUtils.parseTestCases(JSONObject(jsonString), file.name)
+                    cases.addAll(newCases)
+                }
 
             val allCases = errors + cases
-
             ExpressionTestCaseUtils.checkDuplicates(allCases.asSequence())
-
             return allCases
         }
     }

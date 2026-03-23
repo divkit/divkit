@@ -1,13 +1,13 @@
-
 package com.yandex.div.core.view2
 
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.asExpression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivDisappearAction
-import com.yandex.div2.DivText
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -65,16 +65,12 @@ class DivVisibilityActionTrackerTest {
             visibilityDuration = delay.asExpression()
         )
     }.toList()
-    private val divBase1 = DivText(text = "test1".asExpression(), visibilityActions = listOf(action1))
-    private val divBase2 = DivText(text = "test2".asExpression(), visibilityActions = listOf(action2))
-    private val divBase3 = DivText(text = "test3".asExpression(), visibilityActions = lottaActions)
-    private val divBase4 = DivText(text = "test4".asExpression(), visibilityActions = actionsWithThreeDifferentDelays)
-    private val divBase5 = DivText(text = "test5".asExpression(), visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
-    private val div1 = Div.Text(divBase1)
-    private val div2 = Div.Text(divBase2)
-    private val div3 = Div.Text(divBase3)
-    private val div4 = Div.Text(divBase4)
-    private val div5 = Div.Text(divBase5)
+
+    private val div1 = text(text = constant("test1"), visibilityActions = listOf(action1))
+    private val div2 = text(text = constant("test2"), visibilityActions = listOf(action2))
+    private val div3 = text(text = constant("test3"), visibilityActions = lottaActions)
+    private val div4 = text(text = constant("test4"), visibilityActions = actionsWithThreeDifferentDelays)
+    private val div5 = text(text = constant("test5"), visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
 
     private val visibilityActionTracker = DivVisibilityActionTracker(
         viewVisibilityCalculator,

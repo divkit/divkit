@@ -2,14 +2,14 @@ package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.action
-import com.yandex.div.compose.color
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
-import com.yandex.div.compose.setVariableAction
-import com.yandex.div.compose.typedColorValue
-import com.yandex.div.compose.typedValue
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.action
+import com.yandex.div.test.data.color
+import com.yandex.div.test.data.setVariableAction
+import com.yandex.div.test.data.typedColorValue
+import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.junit.Assert.assertEquals

@@ -29,6 +29,7 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    testImplementation(project(":test-utils"))
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.compose.ui.test.manifest)
 }

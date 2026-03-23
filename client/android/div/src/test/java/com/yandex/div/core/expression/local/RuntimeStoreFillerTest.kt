@@ -5,6 +5,8 @@ import android.net.Uri
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.data
+import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivCollectionItemBuilder
@@ -35,7 +37,6 @@ import com.yandex.div2.DivText
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVideo
-import com.yandex.div2.StrVariable
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -100,7 +101,7 @@ class RuntimeStoreFillerTest {
         val text3 = createText()
         val container1 = createContainer(items = listOf(text3))
         val container2 = createContainer(items = listOf(text1, text2, container1))
-        val data = createData(container2)
+        val data = data(content = container2)
 
         underTest.fillStore(store, data)
 
@@ -110,7 +111,7 @@ class RuntimeStoreFillerTest {
     @Test
     fun `create runtime for root div with id`() {
         val text = createText("root_id")
-        val data = createData(text)
+        val data = data(content = text)
 
         underTest.fillStore(store, data)
 
@@ -120,7 +121,7 @@ class RuntimeStoreFillerTest {
     @Test
     fun `create runtime for root div without id`() {
         val text = createText()
-        val data = createData(text)
+        val data = data(content = text)
 
         underTest.fillStore(store, data)
 
@@ -131,7 +132,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for div with id`() {
         val text = createText("text_id")
         val container = createContainer(items = listOf(text))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -142,7 +143,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for div without id`() {
         val text = createText()
         val container = createContainer(items = listOf(text))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -154,7 +155,7 @@ class RuntimeStoreFillerTest {
         val text1 = createText("item1")
         val text2 = createText()
         val gallery = createGallery(items = listOf(text1, text2))
-        val data = createData(gallery)
+        val data = data(content = gallery)
 
         underTest.fillStore(store, data)
 
@@ -166,7 +167,7 @@ class RuntimeStoreFillerTest {
         val text1 = createText("page1")
         val text2 = createText()
         val pager = createPager(items = listOf(text1, text2))
-        val data = createData(pager)
+        val data = data(content = pager)
 
         underTest.fillStore(store, data)
 
@@ -178,7 +179,7 @@ class RuntimeStoreFillerTest {
         val text1 = createText("item1")
         val text2 = createText()
         val grid = Div.Grid(DivGrid(columnCount = Expression.constant(2), items = listOf(text1, text2)))
-        val data = createData(grid)
+        val data = data(content = grid)
 
         underTest.fillStore(store, data)
 
@@ -191,7 +192,7 @@ class RuntimeStoreFillerTest {
         val text2 = createText()
         val items = listOf(text1, text2).map { DivTabs.Item(div = it, title = Expression.constant("Tab")) }
         val tabs = Div.Tabs(DivTabs(items = items))
-        val data = createData(tabs)
+        val data = data(content = tabs)
 
         underTest.fillStore(store, data)
 
@@ -204,7 +205,7 @@ class RuntimeStoreFillerTest {
             DivState.State(div = div, stateId = "state$index")
         }
         val state = Div.State(DivState(id = "state_id", states = states))
-        val data = createData(state)
+        val data = data(content = state)
 
         underTest.fillStore(store, data)
 
@@ -216,7 +217,7 @@ class RuntimeStoreFillerTest {
         val text1 = createText("custom_item1")
         val text2 = createText()
         val custom = Div.Custom(DivCustom(customType = "custom", id = "custom_id", items = listOf(text1, text2)))
-        val data = createData(custom)
+        val data = data(content = custom)
 
         underTest.fillStore(store, data)
 
@@ -246,7 +247,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer("container_id", listOf(
             image, gifImage, separator, indicator, slider, input, select, video, switch
         ))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -263,7 +264,7 @@ class RuntimeStoreFillerTest {
         val innerContainer = createContainer("inner", listOf(text1, text2))
         val text3 = createText("text3")
         val outerContainer = createContainer(items = listOf(innerContainer, text3))
-        val data = createData(outerContainer)
+        val data = data(content = outerContainer)
 
         underTest.fillStore(store, data)
 
@@ -276,7 +277,7 @@ class RuntimeStoreFillerTest {
         val text2 = createText("duplicate")
         val text3 = createText("duplicate")
         val container = createContainer("container", listOf(text1, text2, text3))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -286,15 +287,14 @@ class RuntimeStoreFillerTest {
 
     @Test
     fun `fillStore returns root runtime`() {
-        val data = createData(createText())
+        val data = data(content = createText())
         val result = underTest.fillStore(store, data)
         assertSame(rootRuntime, result)
     }
 
     @Test
     fun `create runtime for container with null items`() {
-        val container = createContainer()
-        val data = createData(container)
+        val data = data(content = createContainer())
 
         underTest.fillStore(store, data)
 
@@ -304,7 +304,7 @@ class RuntimeStoreFillerTest {
     @Test
     fun `create runtime for container with empty items`() {
         val container = createContainer(items = emptyList())
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -313,9 +313,9 @@ class RuntimeStoreFillerTest {
 
     @Test
     fun `create child runtime for div with variables`() {
-        val text = createText("var_div", variables = listOf(DivVariable.Str(StrVariable("x", Expression.constant("")))))
+        val text = createText("var_div", variables = listOf(variable("x", "")))
         val container = createContainer(items = listOf(text))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -327,7 +327,7 @@ class RuntimeStoreFillerTest {
     fun `create child runtime for div with functions`() {
         val text = createText("var_div", functions = listOf(DivFunction(emptyList(), "", "", DivEvaluableType.INTEGER)))
         val container = createContainer(items = listOf(text))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -339,7 +339,7 @@ class RuntimeStoreFillerTest {
     fun `copy resolver for div with triggers`() {
         val text = createText("var_div", triggers = listOf(DivTrigger(emptyList(), Expression.constant(true))))
         val container = createContainer(items = listOf(text))
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -351,7 +351,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for items from builder in container`() {
         val builder = createItemBuilder()
         val container = createContainer(builder = builder)
-        val data = createData(container)
+        val data = data(content = container)
 
         underTest.fillStore(store, data)
 
@@ -362,7 +362,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for items from builder in gallery`() {
         val builder = createItemBuilder()
         val gallery = createGallery(builder = builder)
-        val data = createData(gallery)
+        val data = data(content = gallery)
 
         underTest.fillStore(store, data)
 
@@ -373,7 +373,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for items from builder in pager`() {
         val builder = createItemBuilder()
         val pager = createPager(builder = builder)
-        val data = createData(pager)
+        val data = data(content = pager)
 
         underTest.fillStore(store, data)
 
@@ -390,7 +390,7 @@ class RuntimeStoreFillerTest {
                 DivState.State(stateId = "state_1")
             )
         ))
-        val data = createData(state)
+        val data = data(content = state)
 
         underTest.fillStore(store, data)
 
@@ -455,8 +455,6 @@ class RuntimeStoreFillerTest {
     }
 
     private fun createData(states: List<DivData.State>) = DivData(logId = "test", states = states)
-
-    private fun createData(rootDiv: Div) = createData(listOf(DivData.State(rootDiv, 0)))
 
     private fun assertPaths(expectedSize: Int, vararg paths: String) {
         assertEquals(expectedSize, runtimePaths.size)

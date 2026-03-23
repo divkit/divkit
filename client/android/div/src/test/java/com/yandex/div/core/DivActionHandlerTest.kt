@@ -8,19 +8,16 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.Div
-import com.yandex.div2.DivAction
+import com.yandex.div.test.data.action
+import com.yandex.div.test.data.container
+import com.yandex.div.test.data.setVariableAction
+import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionDictSetValue
-import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
-import com.yandex.div2.DivTypedValue
-import com.yandex.div2.IntegerValue
-import com.yandex.div2.StrValue
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert
@@ -44,7 +41,7 @@ class DivActionHandlerTest {
             )
         ).apply {
             setData(
-                DivData(logId = "id", states = listOf(DivData.State(Div.Container(DivContainer()), 0))),
+                DivData(logId = "id", states = listOf(DivData.State(container(), 0))),
                 DivDataTag("id")
             )
         }
@@ -96,12 +93,7 @@ class DivActionHandlerTest {
         setVariable("string_var", "value")
 
         val isHandled = handleTypedAction(
-            DivActionTyped.SetVariable(
-                DivActionSetVariable(
-                    value = typedValue("new value"),
-                    variableName = Expression.constant("string_var")
-                )
-            )
+            setVariableAction(name = "string_var", value = typedValue("new value"))
         )
 
         Assert.assertTrue(isHandled)
@@ -111,12 +103,7 @@ class DivActionHandlerTest {
     @Test
     fun `SetVariable action does not add new variable`() {
         val isHandled = handleTypedAction(
-            DivActionTyped.SetVariable(
-                DivActionSetVariable(
-                    value = typedValue("new value"),
-                    variableName = Expression.constant("string_var")
-                )
-            )
+            setVariableAction(name = "string_var", value = typedValue("new value"))
         )
 
         Assert.assertTrue(isHandled)
@@ -128,12 +115,7 @@ class DivActionHandlerTest {
         setVariable("string_var", "value")
 
         val isHandled = handleTypedAction(
-            DivActionTyped.SetVariable(
-                DivActionSetVariable(
-                    value = typedValue(123),
-                    variableName = Expression.constant("string_var")
-                )
-            )
+            setVariableAction(name = "string_var", value = typedValue(123))
         )
 
         Assert.assertTrue(isHandled)
@@ -514,10 +496,7 @@ class DivActionHandlerTest {
 
     private fun handleTypedAction(action: DivActionTyped): Boolean {
         return underTest.handleAction(
-            DivAction(
-                logId = Expression.constant("log_id"),
-                typed = action
-            ),
+            action(typed = action),
             divView,
             divView.expressionResolver
         )
@@ -543,13 +522,5 @@ class DivActionHandlerTest {
         divView.context.divVariableController.putOrUpdate(
             Variable.DictVariable(name = name, defaultValue = value)
         )
-    }
-
-    private fun typedValue(value: String): DivTypedValue {
-        return DivTypedValue.Str(StrValue(Expression.constant(value)))
-    }
-
-    private fun typedValue(value: Long): DivTypedValue {
-        return DivTypedValue.Integer(IntegerValue(Expression.constant(value)))
     }
 }

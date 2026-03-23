@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.local
 
 import android.app.Activity
-import android.net.Uri
 import android.widget.TextView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -10,8 +9,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivAction
+import com.yandex.div.test.data.action
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert
@@ -116,21 +114,18 @@ class LocalTriggersTest {
 
     private fun setState(stateNum: Int) {
         when (stateNum) {
-            1 -> handleAction(Uri.parse("div-action://set_state?state_id=0/sample/first"))
-            2 -> handleAction(Uri.parse("div-action://set_state?state_id=0/sample/second"))
+            1 -> handleAction("div-action://set_state?state_id=0/sample/first")
+            2 -> handleAction("div-action://set_state?state_id=0/sample/second")
             else -> Unit
         }
     }
 
     private fun setVariableValue(value: Int) {
-        handleAction(Uri.parse("div-action://set_variable?name=counter&value=$value"))
+        handleAction("div-action://set_variable?name=counter&value=$value")
     }
 
-    private fun handleAction(uri: Uri) {
-        div2View.handleAction(DivAction(
-            logId = Expression.constant("id"),
-            url = Expression.constant(uri))
-        )
+    private fun handleAction(url: String) {
+        div2View.handleAction(action(url = url))
     }
 
     private fun assertTextShown(expected: String, view: TextView) {

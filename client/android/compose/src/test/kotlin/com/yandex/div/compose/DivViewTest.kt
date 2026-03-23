@@ -11,12 +11,15 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.action
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
+import com.yandex.div.test.data.data
+import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.text
+import com.yandex.div.test.data.trigger
+import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
-import com.yandex.div2.DivAction
-import com.yandex.div2.DivContainer
-import com.yandex.div2.DivData
-import com.yandex.div2.DivText
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import org.junit.Rule
@@ -209,52 +212,4 @@ class DivViewTest {
             }
         }
     }
-}
-
-private fun data(
-    content: Div,
-    triggers: List<DivTrigger>? = null,
-    variables: List<DivVariable>? = null
-): DivData {
-    return DivData(
-        logId = "test",
-        states = listOf(
-            DivData.State(
-                stateId = 0,
-                div = content
-            )
-        ),
-        variables = variables,
-        variableTriggers = triggers,
-    )
-}
-
-private fun text(
-    action: DivAction? = null,
-    id: String? = null,
-    text: Expression<String>,
-    triggers: List<DivTrigger>? = null,
-    variables: List<DivVariable>? = null
-): Div {
-    return Div.Text(
-        value = DivText(
-            action = action,
-            id = id,
-            text = text,
-            variables = variables,
-            variableTriggers = triggers
-        )
-    )
-}
-
-private fun container(
-    items: List<Div>,
-    variables: List<DivVariable>? = null
-): Div {
-    return Div.Container(
-        value = DivContainer(
-            items = items,
-            variables = variables
-        )
-    )
 }

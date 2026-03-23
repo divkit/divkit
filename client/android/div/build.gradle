@@ -69,7 +69,7 @@ dependencies {
         exclude group: "androidx.fragment", module: "fragment"
     }
 
-    testImplementation project(path: ':expression-test-common')
+    testImplementation project(path: ':test-utils')
 
     testImplementation libs.androidx.test.coreKtx
     testImplementation libs.json

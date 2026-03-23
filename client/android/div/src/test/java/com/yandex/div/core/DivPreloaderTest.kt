@@ -8,13 +8,14 @@ import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivText
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoSource
 import org.junit.Test
@@ -43,8 +44,7 @@ class DivPreloaderTest {
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
     private val extensionHandlersController = DivExtensionController(extensionHandlers)
 
-    private val text = DivText(text = Expression.constant("test"))
-    private val divText = Div.Text(text)
+    private val divText = text(text = constant("test"))
 
     private val custom = DivCustom(customType = "test")
     private val divCustom = Div.Custom(custom)
