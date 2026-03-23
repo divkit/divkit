@@ -7,10 +7,17 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
+import com.yandex.div2.DivData
 
 internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> Boolean)? = null) {
 
-    protected fun visit(div: Div, parentContext: BindingContext, path: DivStatePath): T {
+    protected fun visit(data: DivData, context: BindingContext) {
+        data.states.forEach { state ->
+            visit(state.div, context, DivStatePath.fromState(state))
+        }
+    }
+
+    private fun visit(div: Div, parentContext: BindingContext, path: DivStatePath): T {
         val context = parentContext.getChildContext(div, path)
         return when (div) {
             is Div.Text -> visit(div, context, path)

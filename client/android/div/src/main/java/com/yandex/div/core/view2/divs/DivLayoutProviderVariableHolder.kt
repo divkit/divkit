@@ -25,7 +25,7 @@ internal class DivLayoutProviderVariableHolder : DivTreeVisitor<Unit>(), Express
 
     fun observeDivDataIfNeeded(data: DivData, context: BindingContext) {
         if (subscriptions.isNotEmpty()) return
-        data.states.forEach { visit(it.div, context, DivStatePath.fromState(it)) }
+        visit(data, context)
     }
 
     override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) =

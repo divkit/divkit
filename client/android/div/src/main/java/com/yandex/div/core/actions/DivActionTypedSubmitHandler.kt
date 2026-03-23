@@ -98,9 +98,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
 
         fun findContainer(view: Div2View): DivItemBuilderResult? {
             val data = view.divData ?: return null
-            data.states.forEach { state ->
-                visit(state.div, view.bindingContext, DivStatePath.fromState(state))
-            }
+            visit(data, view.bindingContext)
 
             if (containers.isEmpty()) {
                 view.logError(

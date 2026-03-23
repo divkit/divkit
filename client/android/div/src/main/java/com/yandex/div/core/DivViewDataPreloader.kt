@@ -6,13 +6,14 @@ import com.yandex.div.core.DivPreloader.Companion.NO_CALLBACK
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
-import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.player.DivPlayerPreloader
+import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div2.Div
+import com.yandex.div2.DivData
 
 @PublicApi
 @Mockable
@@ -25,13 +26,12 @@ internal class DivViewDataPreloader internal constructor(
 ) {
 
     fun preload(
-        div: Div,
+        data: DivData,
         context: BindingContext,
-        path: DivStatePath,
         callback: Callback = NO_CALLBACK
     ): DivPreloader.Ticket {
         val downloadCallback = DivPreloader.DownloadCallback(callback)
-        val ticket = PreloadVisitor(downloadCallback, callback, preloadFilter).preload(div, context, path)
+        val ticket = PreloadVisitor(downloadCallback, callback, preloadFilter).preload(data, context)
         downloadCallback.onFullPreloadStarted()
         return ticket
     }
@@ -43,8 +43,8 @@ internal class DivViewDataPreloader internal constructor(
     ) : DivTreeVisitor<Unit>() {
         private val ticket = DivPreloader.TicketImpl()
 
-        fun preload(div: Div, context: BindingContext, path: DivStatePath): DivPreloader.Ticket {
-            visit(div, context, path)
+        fun preload(data: DivData, context: BindingContext): DivPreloader.Ticket {
+            visit(data, context)
             return ticket
         }
 
