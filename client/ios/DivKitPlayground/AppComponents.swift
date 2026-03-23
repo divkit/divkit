@@ -64,7 +64,10 @@ enum AppComponents {
         InputAutocorrectionExtensionHandler(),
         InputPropertiesExtensionHandler(),
       ],
-      flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
+      flagsInfo: DivFlagsInfo(
+        initializeTriggerOnSet: false,
+        useUntypedTemplateResolver: true
+      ),
       fontProvider: fontProvider,
       imageHolderFactory: holderFactory
         .withInMemoryCache(imageCountLimit: 20),
