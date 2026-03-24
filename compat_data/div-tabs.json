@@ -60,5 +60,19 @@
                 "version_added": "32.31.0"
             }
         }
+    }, {
+        "id": "tabs_font_weight_value",
+        "name": "Tabs <code>active_font_weight_value</code> and <code>inactive_font_weight_value</code> properties",
+        "compat": {
+            "android": {
+                "version_added": "32.42.0"
+            },
+            "ios": {
+                "version_added": "32.42.0"
+            },
+            "web": {
+                "version_added": "32.42.0"
+            }
+        }
     }]
 }
