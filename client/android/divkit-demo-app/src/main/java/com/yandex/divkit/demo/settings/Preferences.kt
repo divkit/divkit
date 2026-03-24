@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.settings
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.yandex.divkit.demo.BuildConfig
 
 class Preferences(context: Context) : DivkitDemoPreferences(context) {
 
@@ -24,4 +25,6 @@ class Preferences(context: Context) : DivkitDemoPreferences(context) {
     var useBackgroundBinding by BooleanPreference(false)
 
     var limitImageBitmapSizeEnabled by BooleanPreference(true)
+
+    var visualAssertionHandlerEnabled by BooleanPreference(BuildConfig.DEBUG)
 }

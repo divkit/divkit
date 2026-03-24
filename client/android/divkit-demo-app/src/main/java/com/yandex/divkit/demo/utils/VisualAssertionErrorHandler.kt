@@ -4,12 +4,15 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import androidx.core.view.doOnAttach
 import com.yandex.div.core.util.SafeAlertDialog
 import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.internal.AssertionErrorHandler
 import com.yandex.div.internal.util.UiThreadHandler
+import com.yandex.divkit.demo.BuildConfig
+import com.yandex.divkit.demo.Container
 import java.lang.ref.WeakReference
 import java.util.LinkedList
 import java.util.Queue
@@ -28,6 +31,11 @@ class VisualAssertionErrorHandler(private val application: Application) : Assert
     }
 
     override fun handleError(assertionError: AssertionError) {
+        if (!Container.preferences.visualAssertionHandlerEnabled) {
+            Log.e(TAG, assertionError.message, assertionError)
+            return
+        }
+
         if (suppressed.contains(assertionError.key())) {
             softFail(assertionError)
             return
@@ -161,3 +169,4 @@ private const val ASSERT_DIALOG_CRASH = "Crash"
 private const val ASSERT_DIALOG_SKIP = "Skip"
 private const val ASSERT_DIALOG_SUPPRESS = "Suppress in the future"
 private const val ASSERT_PREFERENCES = "assert_prefs"
+private const val TAG = "AssertionErrorHandler"

@@ -107,6 +107,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val useAsyncBinding = Container.preferences.useBackgroundBinding
         setPreferenceState(BACKGROUND_BINDING, useAsyncBinding)
+        setPreferenceState(VISUAL_ASSERTION_HANDLER, Container.preferences.visualAssertionHandlerEnabled)
     }
 
     private fun setPreferenceState(name: String, flag: Experiment) {
