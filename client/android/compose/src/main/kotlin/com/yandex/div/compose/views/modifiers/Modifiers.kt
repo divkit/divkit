@@ -14,7 +14,6 @@ import com.yandex.div2.DivVisibility
 @Composable
 internal fun Modifier.apply(
     div: Div,
-    applyPaddings: Boolean = true,
     applyMargins: Boolean = true,
 ): Modifier {
     val data = div.value()
@@ -54,17 +53,17 @@ internal fun Modifier.apply(
         modifier = modifier.divBorderStroke(it)
     }
 
-    if (applyPaddings) {
-        data.paddings?.let {
-            modifier = modifier.padding(it)
-        }
-    }
-
     data.id?.let {
         modifier = modifier.testTag(it)
     }
 
     return modifier
+}
+
+@Composable
+internal fun Modifier.applyPaddings(div: Div): Modifier {
+    val paddings = div.value().paddings ?: return this
+    return padding(paddings)
 }
 
 @Composable
