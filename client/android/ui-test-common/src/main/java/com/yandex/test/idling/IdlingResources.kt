@@ -11,14 +11,6 @@ import java.io.Closeable
 
 private const val TAG = "IdlingResources"
 
-fun waitForCondition(name: String? = null, condition: (SimpleIdlingResource) -> Boolean) {
-    waitForIdlingResource(object : SimpleIdlingResource(description = name) {
-        override fun checkIdle(): Boolean {
-            return condition(this)
-        }
-    })
-}
-
 fun waitForView(@IdRes id: Int): View {
     val idlingResource = ViewIdlingResource(id)
     waitForIdlingResource(idlingResource)
@@ -26,8 +18,6 @@ fun waitForView(@IdRes id: Int): View {
 }
 
 fun waitForIdlingResource(res: IdlingResource) = res.register().use { onIdle() }
-
-fun IdlingResource.await() = waitForIdlingResource(this)
 
 fun IdlingResource.register(): Disposable = IdlingResourceRegistration(this)
 

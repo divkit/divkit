@@ -1,10 +1,6 @@
 apply plugin: 'kotlin-android'
 
 android {
-    defaultConfig {
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-    }
-
     testOptions {
         unitTests {
             all {
@@ -21,7 +17,6 @@ android {
 
 dependencies {
     testImplementation libs.androidx.test.core
-    testImplementation libs.fest.reflect
     testImplementation libs.junit
     testImplementation libs.kotlin.corountines.test
     testImplementation libs.mockito.core

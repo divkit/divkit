@@ -11,7 +11,7 @@ dependencies {
     api libs.androidx.core
     api libs.androidx.coreKtx
     api libs.androidx.espresso.core
-    api (libs.androidx.espresso.contrib) {
+    api(libs.androidx.espresso.contrib) {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
     api libs.androidx.espresso.intents
