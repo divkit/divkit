@@ -4,6 +4,7 @@ import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.binding.BindingCriticalSection
 import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.view2.BulkActionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
@@ -52,6 +53,7 @@ internal interface Div2ViewComponent {
     val layoutProviderBinder: DivLayoutProviderBinder
     val bindingDispatcher: BindingDispatcher
     val bindingCriticalSection: BindingCriticalSection
+    val bulkActionHandler: BulkActionHandler
 
     @Component.Builder
     interface Builder {

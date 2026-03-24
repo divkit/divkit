@@ -42,7 +42,6 @@ import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
-import com.yandex.div.core.state.StateConflictException
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
@@ -86,7 +85,6 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
-import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.util.toMapSafe
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber
@@ -125,7 +123,6 @@ class Div2View private constructor(
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
-    private val bulkActionsHandler = BulkActionHandler()
     private val divVideoActionHandler: DivVideoActionHandler
         get() = div2Component.divVideoActionHandler
     private val tooltipController: DivTooltipController
@@ -835,7 +832,7 @@ class Div2View private constructor(
         temporary: Boolean
     ): Unit = bindingDispatcher.withLock {
         val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
-        bulkActionsHandler.switchState(state, path, temporary)
+        viewComponent.bulkActionHandler.switchState(state, path, temporary)
     }
 
     /**
@@ -854,7 +851,7 @@ class Div2View private constructor(
         }
         if (stateId == firstPath.topLevelStateId) {
             val state = divData?.states?.firstOrNull { it.stateId == firstPath.topLevelStateId }
-            bulkActionsHandler.switchMultipleStates(state, pathList, temporary)
+            viewComponent.bulkActionHandler.switchMultipleStates(state, pathList, temporary)
         } else {
             pathList.forEach { path ->
                 div2Component.stateManager.updateStates(divTag.id, path, temporary)
@@ -1386,67 +1383,6 @@ class Div2View private constructor(
         }
 
     internal fun bulkActions(function: () -> Unit) {
-        bulkActionsHandler.bulkActions(function)
-    }
-
-    private inner class BulkActionHandler {
-        private var bulkModeDepth = 0
-        private var pendingState: DivData.State? = null
-        private var isPendingStateTemporary: Boolean = true
-        private val pendingPaths = mutableListOf<DivStatePath>()
-
-        fun bulkActions(function: () -> Unit = {}) {
-            bulkModeDepth++
-            function()
-            bulkModeDepth--
-            if (bulkModeDepth == 0) {
-                runBulkActions()
-            }
-        }
-
-        fun switchState(state: DivData.State?, path: DivStatePath, temporary: Boolean) {
-            switchMultipleStates(state, listOf(path), temporary)
-        }
-
-        fun switchMultipleStates(
-            state: DivData.State?,
-            paths: List<DivStatePath>,
-            temporary: Boolean,
-        ) {
-            if (pendingState != null && state != pendingState) {
-                reset()
-            }
-            pendingState = state
-            isPendingStateTemporary = isPendingStateTemporary && temporary
-            pendingPaths += paths
-            paths.forEach { path: DivStatePath ->
-                div2Component.stateManager.updateStates(divTag.id, path, temporary)
-            }
-
-            if (bulkModeDepth == 0) {
-                runBulkActions()
-            }
-        }
-
-        fun runBulkActions() {
-            val newState = pendingState ?: return
-            if (newState.stateId != stateId) {
-                switchToState(newState.stateId, isPendingStateTemporary)
-            } else if (childCount > 0) {
-                try {
-                    viewComponent.stateSwitcher.switchStates(bindingContext, newState, pendingPaths.immutableCopy())
-                } catch (e: StateConflictException) {
-                    logError(e)
-                    resetToInitialState()
-                }
-            }
-            reset()
-        }
-
-        private fun reset() {
-            pendingState = null
-            isPendingStateTemporary = true
-            pendingPaths.clear()
-        }
+        viewComponent.bulkActionHandler.bulkActions(function)
     }
 }
