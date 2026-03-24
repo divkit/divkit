@@ -55,6 +55,29 @@ public final class ScrollableContentPager: NSObject {
     return indexedPageOrigins[resultPageIndex].origin
   }
 
+  public func targetPageOffsetForSinglePageStep(
+    startOffset: CGFloat,
+    proposedOffset: CGFloat,
+    velocity: CGFloat
+  ) -> CGFloat {
+    let origins = indexedPageOrigins
+    guard !origins.isEmpty else {
+      return proposedOffset
+    }
+
+    let startPage = pageIndex(forOffset: startOffset)
+    var targetPage = pageIndex(forOffset: proposedOffset)
+
+    if targetPage == startPage, velocity.isApproximatelyNotEqualTo(0) {
+      targetPage += velocity > 0 ? 1 : -1
+    }
+
+    targetPage = clamp(targetPage, min: startPage - 1, max: startPage + 1)
+    targetPage = clamp(targetPage, min: 0, max: origins.count - 1)
+
+    return origins[targetPage].origin
+  }
+
   private func pageIndex(forOffset offset: CGFloat) -> Int {
     Int(round(intermediatePageIndex(forOffset: offset)))
   }

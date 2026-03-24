@@ -1,19 +1,36 @@
 import Foundation
 import VGSLUI
 
-enum InfiniteScroll {
+struct InfiniteScroll {
   struct Position: Equatable {
     let offset: CGFloat
     let page: Int
   }
 
-  static func getNewPosition(
-    currentOffset: CGFloat,
+  let origins: [CGFloat]
+  let bufferSize: Int
+  let boundsSize: CGFloat
+  let alignment: Alignment
+  let insetMode: InsetMode
+
+  var isPerformed = false
+
+  init(
     origins: [CGFloat],
     bufferSize: Int,
     boundsSize: CGFloat = 0,
     alignment: Alignment = .center,
     insetMode: InsetMode = .fixed(values: .zero)
+  ) {
+    self.origins = origins
+    self.bufferSize = bufferSize
+    self.boundsSize = boundsSize
+    self.alignment = alignment
+    self.insetMode = insetMode
+  }
+
+  func getNewPosition(
+    currentOffset: CGFloat
   ) -> Position? {
     guard bufferSize > 0 else {
       assertionFailure("Buffer size couldn't be less than one element for infinite scroll")
@@ -35,6 +52,33 @@ enum InfiniteScroll {
       return Position(offset: currentOffset - cycleSize, page: cycleStartIndex)
     }
     return nil
+  }
+
+  func getNewPositionForState(
+    oldPosition: GalleryViewState.Position?,
+    newPosition: GalleryViewState.Position,
+    updateToPosition: (CGFloat) -> Void
+  ) -> GalleryViewState.Position? {
+    guard let oldStatePageIndex = oldPosition?.pageIndex,
+          let newStatePageIndex = newPosition.pageIndex else {
+      return nil
+    }
+
+    let firstRealPageIndex = CGFloat(bufferSize)
+    let lastRealPageIndex = CGFloat(origins.count - bufferSize) - 1
+    let bufferedCopyOfFirstRealPageIndex = lastRealPageIndex + 1
+    let bufferedCopyOfLastRealPageIndex = firstRealPageIndex - 1
+
+    switch (oldStatePageIndex.rounded(), newStatePageIndex.rounded()) {
+    case (lastRealPageIndex, bufferedCopyOfFirstRealPageIndex):
+      updateToPosition(bufferedCopyOfLastRealPageIndex)
+      return .paging(index: firstRealPageIndex)
+    case (firstRealPageIndex, bufferedCopyOfLastRealPageIndex):
+      updateToPosition(bufferedCopyOfFirstRealPageIndex)
+      return .paging(index: lastRealPageIndex)
+    default:
+      return newPosition
+    }
   }
 }
 
