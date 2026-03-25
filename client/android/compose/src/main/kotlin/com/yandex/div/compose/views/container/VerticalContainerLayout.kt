@@ -11,6 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.isMatchParent
+import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observeIsConstrained
+import com.yandex.div.compose.utils.observeVerticalInsets
+import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.horizontalPaddings
 import com.yandex.div.compose.utils.observedValue
@@ -33,14 +39,14 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val weightedChildrenMargins = resolveWeightedChildrenMargins(
         items = visibleItems,
         childMainSize = { it.height },
-        childMainAxisMargins = { it.verticalMargins() },
+        childMainAxisMargins = { it.observeVerticalMarginsSum() },
     )
 
     val needsCrossAxisIntrinsicSize = data.width is DivSize.WrapContent
         && visibleItems.any { it.value().width is DivSize.MatchParent }
 
     val modifier = modifier
-        .adaptiveContainerPadding(data.paddings.toContainerInsets(), horizontalAlignment, verticalAlignment)
+        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
         .applyIf(needsCrossAxisIntrinsicSize) { width(IntrinsicSize.Max) }
 
     Column(
@@ -80,13 +86,12 @@ private fun ColumnScope.VerticalChildItem(childDiv: Div, containerMainSize: DivS
     childDiv.observeHorizontalChildAlignment()?.let { childModifier = childModifier.align(it) }
 
     if (isWeightedChild) {
-        val topMargin = childBase.margins.observeTopMargin()
-        val bottomMargin = childBase.margins.observeBottomMargin()
+        val (top, bottom) = childBase.margins.observeVerticalInsets()
         childBase.margins?.let { childModifier = childModifier.horizontalPaddings(it) }
 
-        if (topMargin > 0.dp) Spacer(Modifier.height(topMargin))
+        if (top > 0.dp) Spacer(Modifier.height(top))
         DivBlockView(childDiv, childModifier, applyMargins = false)
-        if (bottomMargin > 0.dp) Spacer(Modifier.height(bottomMargin))
+        if (bottom > 0.dp) Spacer(Modifier.height(bottom))
     } else {
         DivBlockView(childDiv, childModifier)
     }

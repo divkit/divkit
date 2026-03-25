@@ -11,6 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.isMatchParent
+import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observeHorizontalInsets
+import com.yandex.div.compose.utils.observeHorizontalMarginsSum
+import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div.compose.utils.observedValue
@@ -33,14 +39,14 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val weightedChildrenMargins = resolveWeightedChildrenMargins(
         items = visibleItems,
         childMainSize = { it.width },
-        childMainAxisMargins = { it.horizontalMargins() }
+        childMainAxisMargins = { it.observeHorizontalMarginsSum() }
     )
 
     val needsCrossAxisIntrinsicSize = data.height is DivSize.WrapContent
         && visibleItems.any { it.value().height is DivSize.MatchParent }
 
     val modifier = modifier
-        .adaptiveContainerPadding(data.paddings.toContainerInsets(), horizontalAlignment, verticalAlignment)
+        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
         .applyIf(needsCrossAxisIntrinsicSize) { height(IntrinsicSize.Max) }
 
     Row(
@@ -80,8 +86,7 @@ private fun RowScope.HorizontalChildItem(childDiv: Div, containerMainSize: DivSi
     childDiv.observeVerticalChildAlignment()?.let { childModifier = childModifier.align(it) }
 
     if (isWeightedChild) {
-        val startMargin = childBase.margins.observeStartMargin()
-        val endMargin = childBase.margins.observeEndMargin()
+        val (startMargin, endMargin) = childBase.margins.observeHorizontalInsets()
         childBase.margins?.let { childModifier = childModifier.verticalPaddings(it) }
 
         if (startMargin > 0.dp) Spacer(Modifier.width(startMargin))

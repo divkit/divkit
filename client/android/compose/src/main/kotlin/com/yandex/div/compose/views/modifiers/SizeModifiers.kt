@@ -35,7 +35,7 @@ internal fun Modifier.width(
                 .applyWrapContentWidthBounds(width)
         }
         is DivSize.Fixed -> wrapContentWidth(align = align, unbounded = true)
-            .requiredWidth(width.value.value.observedValue().toDp())
+            .requiredWidth(width.value.observedValue())
     }
 }
 
@@ -53,7 +53,7 @@ internal fun Modifier.height(
                 .applyWrapContentHeightBounds(height)
         }
         is DivSize.Fixed -> wrapContentHeight(align = align, unbounded = true)
-            .requiredHeight(height.value.value.observedValue().toDp())
+            .requiredHeight(height.value.observedValue())
     }
 }
 @Composable

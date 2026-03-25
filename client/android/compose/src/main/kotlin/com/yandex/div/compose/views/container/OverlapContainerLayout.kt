@@ -21,7 +21,7 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
 
     val modifier = modifier.adaptiveContainerPadding(
-        data.paddings.toContainerInsets(),
+        data.paddings,
         horizontalAlignment,
         verticalAlignment,
     )

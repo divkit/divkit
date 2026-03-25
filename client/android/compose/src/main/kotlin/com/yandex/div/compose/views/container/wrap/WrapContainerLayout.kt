@@ -22,7 +22,6 @@ import com.yandex.div.compose.views.container.adaptiveContainerPadding
 import com.yandex.div.compose.views.container.observeHorizontalChildAlignment
 import com.yandex.div.compose.views.container.resolveSeparatorVisibility
 import com.yandex.div.compose.views.container.observeVerticalChildAlignment
-import com.yandex.div.compose.views.container.toContainerInsets
 import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
@@ -41,7 +40,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
     val childRects = rememberChildRects(visibleItems.size)
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings.toContainerInsets(), horizontalAlignment, verticalAlignment)
+        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
         .padding(
             start = wrapLayoutState.mainAxisStartPadding,
             end = wrapLayoutState.mainAxisEndPadding,
@@ -88,7 +87,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
     val childRects = rememberChildRects(visibleItems.size)
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings.toContainerInsets(), horizontalAlignment, verticalAlignment)
+        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
         .padding(
             top = wrapLayoutState.mainAxisStartPadding,
             bottom = wrapLayoutState.mainAxisEndPadding,

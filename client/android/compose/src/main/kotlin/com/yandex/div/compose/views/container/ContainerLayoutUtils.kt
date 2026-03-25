@@ -6,14 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
 
@@ -48,61 +47,21 @@ internal fun Div.observeVerticalChildAlignment(): Alignment.Vertical? =
 internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =
     value().alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
 
-internal val DivSize.isWrapContent: Boolean
-    get() = this is DivSize.WrapContent
-
-internal val DivSize.isMatchParent: Boolean
-    get() = this is DivSize.MatchParent
-
-@Composable
-internal fun DivSize.observeIsConstrained(): Boolean = when (this) {
-    is DivSize.WrapContent -> value.constrained?.observedValue() == true
-    is DivSize.Fixed, is DivSize.MatchParent -> true
-}
-
 @Composable
 internal fun resolveWeightedChildrenMargins(
     items: List<Div>,
     childMainSize: (DivBase) -> DivSize,
-    childMainAxisMargins: @Composable (DivBase) -> Long,
+    childMainAxisMargins: @Composable (DivBase) -> Dp,
 ): Dp {
-    var total = 0L
+    var total = 0.dp
     for (item in items) {
         val childBase = item.value()
         if (childMainSize(childBase).isMatchParent) {
             total += childMainAxisMargins(childBase)
         }
     }
-    return total.toDp()
+    return total
 }
-
-@Composable
-internal fun DivBase.horizontalMargins(): Long {
-    val margins = margins ?: return 0L
-    return (margins.start ?: margins.left).observedValue() + (margins.end ?: margins.right).observedValue()
-}
-
-@Composable
-internal fun DivBase.verticalMargins(): Long {
-    val margins = margins ?: return 0L
-    return margins.top.observedValue() + margins.bottom.observedValue()
-}
-
-@Composable
-internal fun DivEdgeInsets?.observeStartMargin(): Dp =
-    this?.let { (it.start ?: it.left).observedValue().toDp() } ?: 0.dp
-
-@Composable
-internal fun DivEdgeInsets?.observeEndMargin(): Dp =
-    this?.let { (it.end ?: it.right).observedValue().toDp() } ?: 0.dp
-
-@Composable
-internal fun DivEdgeInsets?.observeTopMargin(): Dp =
-    this?.top?.observedValue()?.toDp() ?: 0.dp
-
-@Composable
-internal fun DivEdgeInsets?.observeBottomMargin(): Dp =
-    this?.bottom?.observedValue()?.toDp() ?: 0.dp
 
 internal fun Modifier.reduceMaxConstraint(reductionAmount: Dp, isWidth: Boolean): Modifier {
     if (reductionAmount <= 0.dp) return this
@@ -117,11 +76,6 @@ internal fun Modifier.reduceMaxConstraint(reductionAmount: Dp, isWidth: Boolean)
         layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
     }
 }
-
-internal inline fun Modifier.applyIf(
-    condition: Boolean,
-    block: Modifier.() -> Modifier,
-): Modifier = if (condition) block() else this
 
 @Composable
 internal inline fun LinearContainer(

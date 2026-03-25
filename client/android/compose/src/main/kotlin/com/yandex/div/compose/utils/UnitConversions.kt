@@ -23,10 +23,14 @@ internal fun Double.toDp(): Dp {
 fun Float.toDp(unit: DivSizeUnit): Dp {
     val float = this
     return when (unit) {
-        DivSizeUnit.DP -> float.dp
+        DivSizeUnit.DP, DivSizeUnit.SP -> float.dp
         DivSizeUnit.PX -> with(LocalDensity.current) { float.toDp() }
-        else -> float.dp
     }
+}
+
+@Composable
+fun Long.toDp(unit: DivSizeUnit): Dp {
+    return toFloat().toDp(unit)
 }
 
 @Composable

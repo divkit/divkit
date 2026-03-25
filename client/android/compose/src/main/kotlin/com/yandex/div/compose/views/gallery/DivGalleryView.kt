@@ -1,16 +1,14 @@
 package com.yandex.div.compose.views.gallery
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.observeInsets
+import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toDp
-import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivGallery
-import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
 
 @Composable
@@ -23,7 +21,7 @@ internal fun DivGalleryView(
     val crossContentAlignment = data.crossContentAlignment.observedValue()
     val columnCount = data.columnCount?.observedValue()?.toInt() ?: 1
     val defaultItem = data.defaultItem.observedValue().toInt()
-    val contentPadding = data.paddings.toPaddingValues()
+    val contentPadding = data.paddings.observeInsets()
 
     val items = data.items.orEmpty().filter {
         it.value().visibility.observedValue() != DivVisibility.GONE
@@ -66,29 +64,12 @@ internal fun DivGalleryView(
 private fun DivGallery.isScrollable(orientation: DivGallery.Orientation): Boolean {
     return when (orientation) {
         DivGallery.Orientation.HORIZONTAL -> {
-            width.isScrollable()
+            width.observeIsConstrained()
         }
         DivGallery.Orientation.VERTICAL -> {
-            height.isScrollable()
+            height.observeIsConstrained()
         }
     }
-}
-
-@Composable
-private fun DivSize.isScrollable(): Boolean {
-    return if (this is DivSize.WrapContent) {
-        this.value.constrained?.observedValue() == true
-    } else true
-}
-
-@Composable
-private fun DivEdgeInsets?.toPaddingValues(): PaddingValues {
-    return PaddingValues(
-        start = this?.let { (it.start ?: it.left).observedValue().toDp() } ?: 0.dp,
-        top = this?.top?.observedValue()?.toDp() ?: 0.dp,
-        end = this?.let { (it.end ?: it.right).observedValue().toDp() } ?: 0.dp,
-        bottom = this?.bottom?.observedValue()?.toDp() ?: 0.dp,
-    )
 }
 
 private fun Modifier.constrainScrollAxis(isHorizontal: Boolean): Modifier = layout { measurable, constraints ->

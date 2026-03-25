@@ -1,75 +1,67 @@
 package com.yandex.div.compose.views.container
 
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
-import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivEdgeInsets
 
-internal data class ContainerInsets(
-    val start: Dp,
-    val top: Dp,
-    val end: Dp,
-    val bottom: Dp,
-)
-
 @Composable
-internal fun DivEdgeInsets?.toContainerInsets(): ContainerInsets =
-    ContainerInsets(
-        start = this?.run { (start ?: left).observedValue().toDp() } ?: 0.dp,
-        top = this?.top.observedValue(0L).toDp(),
-        end = this?.run { (end ?: right).observedValue().toDp() } ?: 0.dp,
-        bottom = this?.bottom.observedValue(0L).toDp(),
-    )
-
 internal fun Modifier.adaptiveContainerPadding(
-    insets: ContainerInsets,
+    insets: DivEdgeInsets?,
     horizontalAlignment: DivContentAlignmentHorizontal,
     verticalAlignment: DivContentAlignmentVertical,
-): Modifier = layout { measurable, constraints ->
-    val padding = ResolvedPadding.from(insets, this)
+): Modifier {
+    val insets = (insets ?: DivEdgeInsets()).observeInsets()
 
-    val initialConstraints = constraints.shrinkBy(padding.horizontal, padding.vertical)
-    val initialPlaceable = measurable.measure(initialConstraints)
-
-    val adaptedPadding = padding.adaptForOverflow(
-        constraints, initialPlaceable, horizontalAlignment, verticalAlignment,
-    )
-
-    val placeable = if (adaptedPadding != padding) {
-        measurable.measure(constraints.shrinkBy(adaptedPadding.horizontal, adaptedPadding.vertical))
-    } else {
-        initialPlaceable
-    }
-
-    val width = if (constraints.hasFixedWidth) {
-        constraints.maxWidth
-    } else {
-        constraints.constrainWidth(placeable.width + adaptedPadding.horizontal)
-    }
-    val height = if (constraints.hasFixedHeight) {
-        constraints.maxHeight
-    } else {
-        constraints.constrainHeight(placeable.height + adaptedPadding.vertical)
-    }
-
-    val overflowX = placeable.horizontalOverflowCompensation(horizontalAlignment)
-    val overflowY = placeable.verticalOverflowCompensation(verticalAlignment)
-
-    layout(width, height) {
-        placeable.placeRelative(
-            x = adaptedPadding.startPx + overflowX,
-            y = adaptedPadding.topPx + overflowY,
+    return layout { measurable, constraints ->
+        val paddings = ResolvedPadding(
+            startPx = insets.calculateStartPadding(layoutDirection).roundToPx(),
+            topPx = insets.calculateTopPadding().roundToPx(),
+            endPx = insets.calculateEndPadding(layoutDirection).roundToPx(),
+            bottomPx = insets.calculateBottomPadding().roundToPx(),
         )
+        val initialConstraints = constraints.shrinkBy(paddings.horizontal, paddings.vertical)
+        val initialPlaceable = measurable.measure(initialConstraints)
+
+        val adaptedPadding = paddings.adaptForOverflow(
+            constraints, initialPlaceable, horizontalAlignment, verticalAlignment,
+        )
+
+        val placeable = if (adaptedPadding != paddings) {
+            measurable.measure(constraints.shrinkBy(adaptedPadding.horizontal, adaptedPadding.vertical))
+        } else {
+            initialPlaceable
+        }
+
+        val width = if (constraints.hasFixedWidth) {
+            constraints.maxWidth
+        } else {
+            constraints.constrainWidth(placeable.width + adaptedPadding.horizontal)
+        }
+        val height = if (constraints.hasFixedHeight) {
+            constraints.maxHeight
+        } else {
+            constraints.constrainHeight(placeable.height + adaptedPadding.vertical)
+        }
+
+        val overflowX = placeable.horizontalOverflowCompensation(horizontalAlignment)
+        val overflowY = placeable.verticalOverflowCompensation(verticalAlignment)
+
+        layout(width, height) {
+            placeable.placeRelative(
+                x = adaptedPadding.startPx + overflowX,
+                y = adaptedPadding.topPx + overflowY,
+            )
+        }
     }
 }
 
@@ -82,42 +74,33 @@ private data class ResolvedPadding(
     val horizontal: Int get() = startPx + endPx
     val vertical: Int get() = topPx + bottomPx
 
-    companion object {
-        fun from(insets: ContainerInsets, density: androidx.compose.ui.unit.Density) = ResolvedPadding(
-            startPx = with(density) { insets.start.roundToPx() },
-            topPx = with(density) { insets.top.roundToPx() },
-            endPx = with(density) { insets.end.roundToPx() },
-            bottomPx = with(density) { insets.bottom.roundToPx() },
-        )
+    fun adaptForOverflow(
+        constraints: Constraints,
+        placeable: Placeable,
+        horizontalAlignment: DivContentAlignmentHorizontal,
+        verticalAlignment: DivContentAlignmentVertical
+    ): ResolvedPadding {
+        val shrunkConstraints = constraints.shrinkBy(horizontal, vertical)
+        val hasHorizontalOverflow = constraints.hasBoundedWidth &&
+                placeable.measuredWidth > shrunkConstraints.maxWidth
+        val hasVerticalOverflow = constraints.hasBoundedHeight &&
+                placeable.measuredHeight > shrunkConstraints.maxHeight
+
+        if (!hasHorizontalOverflow && !hasVerticalOverflow) return this
+
+        val (adaptedStart, adaptedEnd) = if (hasHorizontalOverflow) {
+            adaptPaddingForOverflow(horizontalAlignment.overflowBehavior, startPx, endPx)
+        } else {
+            startPx to endPx
+        }
+        val (adaptedTop, adaptedBottom) = if (hasVerticalOverflow) {
+            adaptPaddingForOverflow(verticalAlignment.overflowBehavior, topPx, bottomPx)
+        } else {
+            topPx to bottomPx
+        }
+
+        return ResolvedPadding(adaptedStart, adaptedTop, adaptedEnd, adaptedBottom)
     }
-}
-
-private fun ResolvedPadding.adaptForOverflow(
-    constraints: Constraints,
-    placeable: Placeable,
-    horizontalAlignment: DivContentAlignmentHorizontal,
-    verticalAlignment: DivContentAlignmentVertical,
-): ResolvedPadding {
-    val shrunkConstraints = constraints.shrinkBy(horizontal, vertical)
-    val hasHorizontalOverflow = constraints.hasBoundedWidth &&
-        placeable.measuredWidth > shrunkConstraints.maxWidth
-    val hasVerticalOverflow = constraints.hasBoundedHeight &&
-        placeable.measuredHeight > shrunkConstraints.maxHeight
-
-    if (!hasHorizontalOverflow && !hasVerticalOverflow) return this
-
-    val (adaptedStart, adaptedEnd) = if (hasHorizontalOverflow) {
-        adaptPaddingForOverflow(horizontalAlignment.overflowBehavior, startPx, endPx)
-    } else {
-        startPx to endPx
-    }
-    val (adaptedTop, adaptedBottom) = if (hasVerticalOverflow) {
-        adaptPaddingForOverflow(verticalAlignment.overflowBehavior, topPx, bottomPx)
-    } else {
-        topPx to bottomPx
-    }
-
-    return ResolvedPadding(adaptedStart, adaptedTop, adaptedEnd, adaptedBottom)
 }
 
 private enum class OverflowBehavior {
