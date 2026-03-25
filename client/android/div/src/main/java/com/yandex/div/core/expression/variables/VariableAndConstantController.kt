@@ -4,6 +4,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.variables.VariableSource
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
 
 internal class VariableAndConstantController(
@@ -11,7 +12,9 @@ internal class VariableAndConstantController(
     private val constants: ConstantsProvider,
 ) : VariableController {
 
-    override fun get(name: String) = constants.get(name).wrapVariableValue() ?: delegate.get(name)
+    override fun get(name: String): Any? {
+        return constants.get(name).variableValueToEvaluableValue() ?: delegate.get(name)
+    }
 
     override fun subscribeToVariablesChange(
         names: List<String>,

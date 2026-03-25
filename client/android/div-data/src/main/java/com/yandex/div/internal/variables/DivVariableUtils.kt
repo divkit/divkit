@@ -1,7 +1,9 @@
 package com.yandex.div.internal.variables
 
+import android.net.Uri
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.data.PropertyDelegate
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.expressions.DivExpressionParser.readTypedExpression
@@ -69,6 +71,34 @@ fun PropertyVariable.parseGet(
         return null
     }
     return expression
+}
+
+@InternalApi
+val DivVariable.name: String
+    get() {
+        return when (this) {
+            is DivVariable.Bool -> this.value.name
+            is DivVariable.Integer -> this.value.name
+            is DivVariable.Number -> this.value.name
+            is DivVariable.Str -> this.value.name
+            is DivVariable.Color -> this.value.name
+            is DivVariable.Url -> this.value.name
+            is DivVariable.Dict -> this.value.name
+            is DivVariable.Array -> this.value.name
+            is DivVariable.Property -> this.value.name
+        }
+    }
+
+/**
+ * Converts [DivVariable] value to the value that can be used in
+ * [com.yandex.div.evaluable.VariableProvider].
+ */
+@InternalApi
+fun Any?.variableValueToEvaluableValue(): Any? {
+    return when(this) {
+        is Uri -> Url(toString())
+        else -> this
+    }
 }
 
 private fun PropertyVariable.toVariable(

@@ -15,6 +15,7 @@ import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
@@ -37,7 +38,9 @@ internal class DivComposeExpressionResolver @Inject constructor(
 
     init {
         val evaluationContext = EvaluationContext(
-            variableProvider = { name -> variableController.get(name)?.getValue() },
+            variableProvider = { name ->
+                variableController.get(name)?.getValue().variableValueToEvaluableValue()
+            },
             storedValueProvider = { _ -> null },
             functionProvider = GeneratedBuiltinFunctionProvider,
             warningSender = EvaluatorWarningSender(reporter)

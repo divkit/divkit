@@ -73,7 +73,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
     fun performActions(actions: List<DivAction>) {
         actions.forEach {
-            divContext.actionPerformer.perform(it)
+            divContext.debugFeatures.performAction(it)
         }
     }
 

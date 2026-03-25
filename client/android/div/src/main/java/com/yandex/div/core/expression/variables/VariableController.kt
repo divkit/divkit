@@ -1,12 +1,10 @@
 package com.yandex.div.core.expression.variables
 
-import android.net.Uri
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.VariableProvider
-import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.variables.VariableSource
 import com.yandex.div.internal.variables.toVariable
@@ -46,11 +44,6 @@ internal interface VariableController : VariableProvider {
     fun restoreSubscriptions()
 
     fun captureAll(): List<Variable> = emptyList()
-}
-
-internal fun Any?.wrapVariableValue() = when(this) {
-    is Uri -> Url(this.toString())
-    else -> this
 }
 
 internal fun VariableController.declare(

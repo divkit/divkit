@@ -15,8 +15,8 @@ import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.rule.LocaleRule
-import com.yandex.div.test.crossplatform.MultiplatformTestUtils
 import com.yandex.div.test.crossplatform.ParsingResult
+import com.yandex.div.test.crossplatform.ParsingUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.After
@@ -78,7 +78,11 @@ class EvaluableMultiplatformTest(
             is ParsingResult.Error -> caseParsingResult.throwException()
         }
 
-        val testDivData = createDivDataFromTestVars(testCase.variables, testCase.functions, testParsingLogger)
+        val testDivData = createDivDataFromTestVars(
+            testCase.variables,
+            testCase.functions,
+            testParsingLogger
+        )
 
         runtimeProvider = ExpressionsRuntimeProvider(
             mockDivVariableController,
@@ -114,7 +118,7 @@ class EvaluableMultiplatformTest(
             }
 
             is JSONArray, is JSONObject -> {
-                if (testCase.expectedType == VALUE_TYPE_UNORDERED_ARRAY){
+                if (testCase.expectedType == VALUE_TYPE_UNORDERED_ARRAY) {
                     checkEquality(testCase) { message, expected, actual ->
                         val expectedList = (expected as JSONArray).map { toString() }.sorted()
                         val actualList = (actual as JSONArray).map { toString() }.sorted()
@@ -146,7 +150,8 @@ class EvaluableMultiplatformTest(
         if (evalExpression is Throwable) {
             throw AssertionError(
                 "Expecting '${testCase.expectedValue}' at expression '${testCase.expression}' " +
-                    "but got exception instead!", evalExpression)
+                        "but got exception instead!", evalExpression
+            )
         }
         validate("expression: '${testCase.expression}'", testCase.expectedValue, evalExpression)
     }
@@ -173,21 +178,14 @@ class EvaluableMultiplatformTest(
 
     companion object {
 
-        private const val TEST_CASES_FILE_PATH = "expression_test_data"
-
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun cases(): List<ParsingResult<ExpressionTestCase>> {
-            val cases = mutableListOf<ParsingResult<ExpressionTestCase>>()
-            val errors = MultiplatformTestUtils
-                .walkJSONs(TEST_CASES_FILE_PATH) { file, jsonString ->
-                    val newCases = ExpressionTestCaseUtils.parseTestCases(JSONObject(jsonString), file.name)
-                    cases.addAll(newCases)
-                }
-
-            val allCases = errors + cases
-            ExpressionTestCaseUtils.checkDuplicates(allCases.asSequence())
-            return allCases
+            val cases = ParsingUtils.parseFiles("expression_test_data") { file, json ->
+                ExpressionTestCaseUtils.parseTestCases(JSONObject(json), file.name)
+            }
+            ExpressionTestCaseUtils.checkDuplicates(cases.asSequence())
+            return cases
         }
     }
 }

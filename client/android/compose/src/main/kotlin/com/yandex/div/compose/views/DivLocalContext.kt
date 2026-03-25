@@ -33,7 +33,9 @@ internal fun WithLocalDivContext(data: DivData, content: @Composable () -> Unit)
             variableController = DivVariableController(divContext.component.variableController),
             triggers = data.variableTriggers.orEmpty(),
             variables = data.variables.orEmpty()
-        )
+        ).also {
+            divContext.debugFeatures.lastViewLocalContext = it
+        }
     }
     CompositionLocalProvider(LocalDivContext provides localContext, content)
 }

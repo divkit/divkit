@@ -4,8 +4,8 @@ import android.content.ContextWrapper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.dagger.DivContextComponent
+import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.views.DivLocalContext
-import com.yandex.div.compose.internal.DivActionPerformer
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -20,8 +20,8 @@ class DivContext @Inject @MainThread internal constructor(
 
     @InternalApi
     @VisibleForTesting
-    val actionPerformer: DivActionPerformer
-        get() = component.actionPerformer
+    val debugFeatures: DivDebugFeatures
+        get() = component.debugFeatures
 
     internal fun createLocalContext(
         variableController: DivVariableController,
@@ -42,8 +42,6 @@ class DivContext @Inject @MainThread internal constructor(
             localComponent.triggerStorage.add(it)
         }
 
-        val context = localComponent.context
-        actionPerformer.actionHandlingContext = context.actionHandlingContext
-        return context
+        return localComponent.context
     }
 }

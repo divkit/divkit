@@ -5,8 +5,8 @@ import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.test.crossplatform.isForAndroid
-import com.yandex.div.test.crossplatform.MultiplatformTestUtils
 import com.yandex.div.test.crossplatform.ParsingResult
+import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.div.test.crossplatform.toObjectList
 import org.json.JSONException
 import org.json.JSONObject
@@ -63,18 +63,14 @@ class SignaturesMultiplatformTest(testCaseParsingResult: ParsingResult<Signature
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun signatures(): List<ParsingResult<SignatureTestCase>> {
-            val cases = mutableListOf<ParsingResult<SignatureTestCase>>()
-            val errors = MultiplatformTestUtils
-                .walkJSONs(File(SIGNATURES_DIR_PATH)) { file, jsonString ->
-                    val newCases = JSONObject(jsonString)
-                        .optJSONArray(FIELD_SIGNATURE)
-                        .toObjectList()
-                        .filter { it.isForAndroid }
-                        .map { parseSignature(file, it) }
-                        .filterIsInstance<ParsingResult.Success<SignatureTestCase>>()
-                    cases.addAll(newCases)
-                }
-            return cases + errors
+            return ParsingUtils.parseFiles(File(SIGNATURES_DIR_PATH)) { file, json ->
+                JSONObject(json)
+                    .optJSONArray(FIELD_SIGNATURE)
+                    .toObjectList()
+                    .filter { it.isForAndroid }
+                    .map { parseSignature(file, it) }
+                    .filterIsInstance<ParsingResult.Success<SignatureTestCase>>()
+            }
         }
 
         private fun parseSignature(file: File, json: JSONObject): ParsingResult<SignatureTestCase> {
@@ -97,12 +93,14 @@ class SignaturesMultiplatformTest(testCaseParsingResult: ParsingResult<Signature
                 return ParsingResult.Error(file.name, json, e)
             }
             val isMethod = json.optBoolean(FIELD_SIGNATURE_IS_METHOD)
-            return ParsingResult.Success(SignatureTestCase(
-                "$functionName(${arguments ?: ""}) $resultType",
-                functionName,
-                arguments ?: emptyList(),
-                resultType,
-                isMethod)
+            return ParsingResult.Success(
+                SignatureTestCase(
+                    "$functionName(${arguments ?: ""}) $resultType",
+                    functionName,
+                    arguments ?: emptyList(),
+                    resultType,
+                    isMethod
+                )
             )
         }
     }

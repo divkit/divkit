@@ -2,8 +2,6 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivRequestExecutor
-import com.yandex.div.core.expression.getWrappedValue
-import com.yandex.div.core.expression.name
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
@@ -11,6 +9,8 @@ import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.internal.core.toItemBuilderResult
+import com.yandex.div.internal.variables.name
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -60,7 +60,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
         variables.forEach {
             val name = it.name
             container.expressionResolver.getVariable(name)?.let {
-                variable -> body.put(name, variable.getWrappedValue())
+                variable -> body.put(name, variable.getValue().variableValueToEvaluableValue())
             } ?: view.logError(MissingVariableException(name))
         }
         return body.toString()

@@ -1,8 +1,6 @@
 package com.yandex.div.core.expression
 
-import android.net.Uri
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
@@ -18,7 +16,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivVariable
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -32,8 +29,8 @@ object ExpressionTestCaseUtils {
     private const val VALUE_TYPE_DATE_TIME = "datetime"
     private const val VALUE_TYPE_URL = "url"
     private const val VALUE_TYPE_COLOR = "color"
-    const val VALUE_TYPE_DICT = "dict"
-    const val VALUE_TYPE_ARRAY = "array"
+    private const val VALUE_TYPE_DICT = "dict"
+    private const val VALUE_TYPE_ARRAY = "array"
     const val VALUE_TYPE_UNORDERED_ARRAY = "unordered_array"
     private const val VALUE_TYPE_UNIT = "unit"
     private const val VALUE_TYPE_ERROR = "error"
@@ -113,21 +110,7 @@ object ExpressionTestCaseUtils {
         return value
     }
 
-    val JSONObject.type: String get() = getString(TYPE_FIELD)
-
-    fun createVariable(type: String, name: String, value: Any?): Variable {
-        return when (type) {
-            VALUE_TYPE_STRING -> Variable.StringVariable(name, value as String? ?: "")
-            VALUE_TYPE_INTEGER -> Variable.IntegerVariable(name, value as Long? ?: 0)
-            VALUE_TYPE_DECIMAL -> Variable.DoubleVariable(name, value as Double? ?: 0.0)
-            VALUE_TYPE_BOOLEAN -> Variable.BooleanVariable(name, ANY_TO_BOOLEAN(value ?: false))
-            VALUE_TYPE_COLOR -> Variable.ColorVariable(name, (value as Color?)?.value ?: 0)
-            VALUE_TYPE_URL -> Variable.UrlVariable(name, value as Uri? ?: Uri.EMPTY)
-            VALUE_TYPE_DICT -> Variable.DictVariable(name, value as JSONObject? ?: JSONObject())
-            VALUE_TYPE_ARRAY -> Variable.ArrayVariable(name, value as JSONArray? ?: JSONArray())
-            else -> throw IllegalAccessException("Unknown variable type: $type")
-        }
-    }
+    private val JSONObject.type: String get() = getString(TYPE_FIELD)
 
     fun createDivDataFromTestVars(
         vars: List<JSONObject>,

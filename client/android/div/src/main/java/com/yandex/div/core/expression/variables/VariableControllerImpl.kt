@@ -11,6 +11,7 @@ import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.variables.DeclarationObserver
 import com.yandex.div.internal.variables.VariableSource
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingVariable
 import java.util.Collections
@@ -42,7 +43,9 @@ internal class VariableControllerImpl(
         observers.addObserver(observer)
     }
 
-    override fun get(name: String) = getMutableVariable(name)?.getValue().wrapVariableValue() ?: delegate?.get(name)
+    override fun get(name: String): Any? {
+        return getMutableVariable(name)?.getValue().variableValueToEvaluableValue() ?: delegate?.get(name)
+    }
 
     override fun subscribeToVariablesChange(
         names: List<String>,

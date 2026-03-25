@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.data.PropertyVariableExecutor
+import com.yandex.div.internal.variables.name
 import com.yandex.div.internal.variables.parseGet
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
@@ -125,18 +126,3 @@ internal class RuntimeStoreProvider @Inject constructor(
         }
     }
 }
-
-internal val DivVariable.name: String
-    get() {
-        return when (this) {
-            is DivVariable.Bool -> this.value.name
-            is DivVariable.Integer -> this.value.name
-            is DivVariable.Number -> this.value.name
-            is DivVariable.Str -> this.value.name
-            is DivVariable.Color -> this.value.name
-            is DivVariable.Url -> this.value.name
-            is DivVariable.Dict -> this.value.name
-            is DivVariable.Array -> this.value.name
-            is DivVariable.Property -> this.value.name
-        }
-    }
