@@ -27,7 +27,8 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
     model: UIViewRenderable,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
+    renderingDelegate: RenderingDelegate?,
+    accessibilityElement _: AccessibilityElement? = nil
   ) {
     self.model = model
 
