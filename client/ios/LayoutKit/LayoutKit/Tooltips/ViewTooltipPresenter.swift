@@ -3,19 +3,19 @@ import UIKit
 import VGSL
 
 final class ViewTooltipPresenter: TooltipPresenter {
-  private let containerView: UIView
+  private let containerView: TooltipHostView
 
-  init(containerView: UIView) {
+  init(containerView: TooltipHostView) {
     self.containerView = containerView
   }
 
   func prepare() -> (constraint: CGRect, coordinateSpace: UIView?)? {
-    (containerView.bounds, containerView)
+    (containerView.tooltipContainerBounds, containerView)
   }
 
   func present(_ view: TooltipContainerView, for tooltip: DefaultTooltipManager.Tooltip) {
-    containerView.addSubview(view)
-    view.frame = containerView.bounds
+    containerView.addTooltipView(view)
+    view.frame = containerView.tooltipContainerBounds
     if tooltip.params.mode == .modal {
       view.accessibilityViewIsModal = true
     }

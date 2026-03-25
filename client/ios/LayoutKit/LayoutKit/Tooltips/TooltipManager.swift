@@ -93,7 +93,7 @@ public class DefaultTooltipManager: TooltipManager {
   public init(
     shownTooltips: Property<Set<String>> = Property(),
     handleAction: @escaping (UIActionEvent) -> Void = { _ in },
-    externalView: UIView? = nil
+    externalView: TooltipHostView? = nil
   ) {
     self.presenter = externalView.map { ViewTooltipPresenter(containerView: $0) }
       ?? WindowTooltipPresenter()
