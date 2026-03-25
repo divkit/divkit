@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabsClient
@@ -32,11 +31,7 @@ class CustomTabHelper(private val context: Context) {
         }
 
         val intentBuilder = CustomTabsIntent.Builder(customTabSession)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            intentBuilder.setToolbarColor(context.resources.getColor(R.color.colorPrimary, null))
-        } else {
-            intentBuilder.setToolbarColor(context.resources.getColor(R.color.colorPrimary))
-        }
+        intentBuilder.setToolbarColor(context.resources.getColor(R.color.colorPrimary, null))
 
         if (colors != null) {
             colors.toolbarColor?.let { intentBuilder.setToolbarColor(it) }

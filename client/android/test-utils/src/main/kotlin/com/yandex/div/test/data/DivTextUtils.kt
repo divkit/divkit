@@ -1,5 +1,6 @@
 package com.yandex.div.test.data
 
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -10,10 +11,30 @@ import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibilityAction
 
 fun text(
-    action: DivAction? = null,
     disappearActions: List<DivDisappearAction>? = null,
     id: String? = null,
+    text: String,
+    triggers: List<DivTrigger>? = null,
+    variables: List<DivVariable>? = null,
+    visibilityActions: List<DivVisibilityAction>? = null
+): Div {
+    return text(
+        disappearActions = disappearActions,
+        id = id,
+        text = constant(text),
+        triggers = triggers,
+        variables = variables,
+        visibilityActions = visibilityActions
+    )
+}
+
+fun text(
+    action: DivAction? = null,
+    disappearActions: List<DivDisappearAction>? = null,
+    fontSize: Long = 12,
+    id: String? = null,
     text: Expression<String>,
+    textColor: Color? = null,
     triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null,
     visibilityActions: List<DivVisibilityAction>? = null
@@ -22,8 +43,10 @@ fun text(
         value = DivText(
             action = action,
             disappearActions = disappearActions,
+            fontSize = constant(fontSize),
             id = id,
             text = text,
+            textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
             variables = variables,
             variableTriggers = triggers,
             visibilityActions = visibilityActions

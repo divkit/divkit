@@ -26,10 +26,7 @@ dependencies {
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.foundation
-    implementation libs.androidx.compose.ui.tooling.preview
     implementation libs.androidx.core
-
-    debugImplementation libs.androidx.compose.ui.tooling
 }
 
 tasks.withType(KotlinCompile).configureEach {

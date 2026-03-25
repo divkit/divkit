@@ -4,10 +4,10 @@ import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.test.data.container
+import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivImage
-import com.yandex.div2.DivText
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,7 +20,7 @@ class DivWalkTreeTest {
 
     @Test
     fun `walking single node hierarchy`() {
-        val rootDiv = divText("lorem ipsum")
+        val rootDiv = text(text = "lorem ipsum")
 
         val divWalk = rootDiv.walk(resolver)
             .map { item -> item.div.type }
@@ -31,8 +31,8 @@ class DivWalkTreeTest {
     @Test
     fun `walking multiple node hierarchy`() {
         val rootDiv = container(
-            listOf(
-                divText("lorem ipsum"),
+            items = listOf(
+                text(text = "lorem ipsum"),
                 divImage("https://none")
             )
         )
@@ -46,14 +46,14 @@ class DivWalkTreeTest {
     @Test
     fun `walking uses depth-first order`() {
         val rootDiv = container(
-            listOf(
+            items = listOf(
                 container(
-                    listOf(
-                        divText("lorem ipsum"),
+                    items = listOf(
+                        text(text = "lorem ipsum"),
                         divImage("https://none")
                     )
                 ),
-                divText("lorem ipsum")
+                text(text = "lorem ipsum")
             )
         )
 
@@ -66,14 +66,14 @@ class DivWalkTreeTest {
     @Test
     fun `onEnter excludes subtree from walking`() {
         val rootDiv = container(
-            listOf(
+            items = listOf(
                 divGallery(
                     listOf(
-                        divText("lorem ipsum"),
+                        text(text = "lorem ipsum"),
                         divImage("https://none")
                     )
                 ),
-                divText("lorem ipsum")
+                text(text = "lorem ipsum")
             )
         )
 
@@ -87,11 +87,11 @@ class DivWalkTreeTest {
     @Test
     fun `maxDepth limits walk depth`() {
         val rootDiv = container(
-            listOf(
-                divText("lorem ipsum"),
+            items = listOf(
+                text(text = "lorem ipsum"),
                 container(
-                    listOf(
-                        divText("lorem ipsum"),
+                    items = listOf(
+                        text(text = "lorem ipsum"),
                         divImage("https://none")
                     )
                 )
@@ -108,11 +108,11 @@ class DivWalkTreeTest {
     @Test
     fun `onEnter() called only for branch nodes`() {
         val rootDiv = container(
-            listOf(
-                divText("lorem ipsum"),
+            items = listOf(
+                text(text = "lorem ipsum"),
                 divGallery(
                     listOf(
-                        divText("lorem ipsum"),
+                        text(text = "lorem ipsum"),
                         divImage("https://none")
                     )
                 )
@@ -133,11 +133,11 @@ class DivWalkTreeTest {
     @Test
     fun `onLeave() called only for branch nodes`() {
         val rootDiv = container(
-            listOf(
-                divText("lorem ipsum"),
+            items = listOf(
+                text(text = "lorem ipsum"),
                 divGallery(
                     listOf(
-                        divText("lorem ipsum"),
+                        text(text = "lorem ipsum"),
                         divImage("https://none")
                     )
                 )
@@ -150,10 +150,6 @@ class DivWalkTreeTest {
             .toList()
 
         assertEquals(listOf("gallery", "container"), leftDivs)
-    }
-
-    private fun divText(text: String): Div {
-        return Div.Text(DivText(text = text.asExpression()))
     }
 
     private fun divImage(imageUrl: String): Div {

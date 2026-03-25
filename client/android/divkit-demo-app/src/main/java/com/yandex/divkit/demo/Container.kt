@@ -2,7 +2,6 @@ package com.yandex.divkit.demo
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.neovisionaries.ws.client.WebSocketFactory
 import com.yandex.div.coil.CoilDivImageLoader
@@ -74,11 +73,9 @@ internal object Container {
             .setSSLContext(NaiveSSLContext.getInstance("TLS"))
             .setConnectionTimeout(TimeUnit.SECONDS.toMillis(15).toInt())
             .apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    context.connectivityManager.defaultProxy?.let { proxyInfo ->
-                        proxySettings.host = proxyInfo.host
-                        proxySettings.port = proxyInfo.port
-                    }
+                context.connectivityManager.defaultProxy?.let { proxyInfo ->
+                    proxySettings.host = proxyInfo.host
+                    proxySettings.port = proxyInfo.port
                 }
             }
     }

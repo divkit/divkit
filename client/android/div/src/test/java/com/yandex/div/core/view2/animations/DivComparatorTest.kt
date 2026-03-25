@@ -3,9 +3,9 @@ package com.yandex.div.core.view2.animations
 import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.mockExpressionResolver
+import com.yandex.div.test.data.container
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
@@ -83,48 +83,48 @@ class DivComparatorTest {
 
     @Test
     fun `containers with similar hierarchy are replaceable`() {
-        val div1 = divContainer(items = listOf(divText(text = "Text 01")))
-        val div2 = divContainer(items = listOf(divText(text = "Text 02")))
+        val div1 = container(items = listOf(divText(text = "Text 01")))
+        val div2 = container(items = listOf(divText(text = "Text 02")))
 
         assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
 
     @Test
     fun `containers with different child count are not replaceable`() {
-        val div1 = divContainer(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
-        val div2 = divContainer(items = listOf(divText(text = "Text 02")))
+        val div1 = container(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
+        val div2 = container(items = listOf(divText(text = "Text 02")))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
 
     @Test
     fun `containers with different child types are not replaceable`() {
-        val div1 = divContainer(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divContainer(items = listOf(divText(text = "Text")))
+        val div1 = container(items = listOf(divImage(imageUrl = "https://image")))
+        val div2 = container(items = listOf(divText(text = "Text")))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
 
     @Test
     fun `containers with different child order are not replaceable`() {
-        val div1 = divContainer(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
-        val div2 = divContainer(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
+        val div1 = container(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
+        val div2 = container(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
 
     @Test
     fun `containers with different child ids are replaceable`() {
-        val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01")))
-        val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02")))
+        val div1 = container(items = listOf(divText(id = "01", text = "Text 01")))
+        val div2 = container(items = listOf(divText(id = "02", text = "Text 02")))
 
         assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
 
     @Test
     fun `containers which children has transitions and different ids are not replaceable`() {
-        val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
-        val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
+        val div1 = container(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
+        val div2 = container(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver))
     }
@@ -233,20 +233,6 @@ class DivComparatorTest {
 
     private fun divCustom(type: String, transitionIn: DivAppearanceTransition? = null): Div {
         return Div.Custom(DivCustom(customType = type, transitionIn = transitionIn))
-    }
-
-    private fun divContainer(
-        orientation: DivContainer.Orientation = DivContainer.Orientation.VERTICAL,
-        items: List<Div>,
-        transitionIn: DivAppearanceTransition? = null
-    ): Div {
-        return Div.Container(
-            DivContainer(
-                orientation = orientation.asExpression(),
-                items = items,
-                transitionIn = transitionIn
-            )
-        )
     }
 
     private fun divGrid(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {

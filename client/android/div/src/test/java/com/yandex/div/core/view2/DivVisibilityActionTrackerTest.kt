@@ -66,11 +66,11 @@ class DivVisibilityActionTrackerTest {
         )
     }.toList()
 
-    private val div1 = text(text = constant("test1"), visibilityActions = listOf(action1))
-    private val div2 = text(text = constant("test2"), visibilityActions = listOf(action2))
-    private val div3 = text(text = constant("test3"), visibilityActions = lottaActions)
-    private val div4 = text(text = constant("test4"), visibilityActions = actionsWithThreeDifferentDelays)
-    private val div5 = text(text = constant("test5"), visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
+    private val div1 = text(text = "test1", visibilityActions = listOf(action1))
+    private val div2 = text(text = "test2", visibilityActions = listOf(action2))
+    private val div3 = text(text = "test3", visibilityActions = lottaActions)
+    private val div4 = text(text = "test4", visibilityActions = actionsWithThreeDifferentDelays)
+    private val div5 = text(text = "test5", visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
 
     private val visibilityActionTracker = DivVisibilityActionTracker(
         viewVisibilityCalculator,

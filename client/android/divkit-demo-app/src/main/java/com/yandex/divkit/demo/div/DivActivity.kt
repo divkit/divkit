@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -175,12 +174,8 @@ open class DivActivity : AppCompatActivity() {
 
     private fun (()->Unit).invokeWithPermissions(vararg permissions: String) =
             when {
-                checkPermissions(permissions) ->
-                    invoke()
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
-                    requestPermissions(permissions, REQUEST_CODE)
-                else ->
-                    noPermissions()
+                checkPermissions(permissions) -> invoke()
+                else -> requestPermissions(permissions, REQUEST_CODE)
             }
 
     private fun checkPermissions(permissions: Array<out String>) =

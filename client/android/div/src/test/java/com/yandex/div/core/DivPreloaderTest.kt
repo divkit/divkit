@@ -44,7 +44,7 @@ class DivPreloaderTest {
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
     private val extensionHandlersController = DivExtensionController(extensionHandlers)
 
-    private val divText = text(text = constant("test"))
+    private val divText = text(text = "test")
 
     private val custom = DivCustom(customType = "test")
     private val divCustom = Div.Custom(custom)

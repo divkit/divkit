@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Path
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.state.DivStateChangeListener
 import com.yandex.div.core.state.DivStateTransition
-import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
@@ -280,13 +278,7 @@ class Div2Activity : AppCompatActivity() {
     private fun (() -> Unit).invokeWithPermissions(vararg permissions: String) =
         when {
             checkPermissions(permissions) -> invoke()
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
-                requestPermissions(permissions, OPEN_FILE_ACTIVITY_REQUEST_CODE)
-            else -> SafeAlertDialogBuilder(this@Div2Activity)
-                .setTitle("Unable to add new template from storage: no permissions")
-                .setPositiveButton("Ok") { dialog, id ->
-                    dialog.cancel()
-                }
+            else -> requestPermissions(permissions, OPEN_FILE_ACTIVITY_REQUEST_CODE)
         }
 
     private fun checkPermissions(permissions: Array<out String>) =

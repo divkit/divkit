@@ -25,6 +25,8 @@ android {
     }
 
     defaultConfig {
+        minSdk = 23
+
         versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
         buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(providers.gradleProperty("metricaApiKey").getOrElse(""))
