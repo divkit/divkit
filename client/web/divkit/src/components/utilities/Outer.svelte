@@ -27,8 +27,8 @@
 </script>
 
 <script lang="ts">
-    import { afterUpdate, getContext, onDestroy, tick } from 'svelte';
-    import { get } from 'svelte/store';
+    import { afterUpdate, getContext, onDestroy, setContext, tick } from 'svelte';
+    import { get, writable } from 'svelte/store';
 
     import css from './Outer.module.css';
 
@@ -80,6 +80,7 @@
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import { componentFakePagerDuplicate } from '../../utils/componentContext';
     import { transformationsToTransform } from '../../utils/transformationsToTransform';
+    import { VISIBILITY_CTX, type VisibilityCtxValue } from '../../context/visibility';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -105,6 +106,7 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
     const { isEnabled } = getContext<EnabledCtxValue>(ENABLED_CTX);
+    const visibilityCtx = getContext<VisibilityCtxValue>(VISIBILITY_CTX);
     const direction = rootCtx.direction;
 
     let currentNode: HTMLElement;
@@ -200,6 +202,10 @@
     } | undefined;
     let dev: DevtoolResult | null = null;
     let idUnregister: (() => void) | undefined;
+
+    let visAction: {
+        destroy(): void;
+    } | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -861,6 +867,18 @@
         }
     }
 
+    const parentVisibilityStore = visibilityCtx.visible;
+    $: isVisible = $parentVisibilityStore && visibility !== 'gone' && visibility !== 'invisible';
+    const selfVisibilityStore = writable(isVisible);
+
+    $: {
+        selfVisibilityStore.set(isVisible);
+    }
+
+    setContext<VisibilityCtxValue>(VISIBILITY_CTX, {
+        visible: selfVisibilityStore
+    });
+
     async function onVisibilityChange(nextVisibility: Visibility) {
         visibility = nextVisibility;
 
@@ -1079,33 +1097,6 @@
             });
         }
 
-        const isVisibilityActionsEnabled = !componentContext.fakeElement ||
-            componentContext.fakeElement === componentFakePagerDuplicate;
-
-        const visibilityActions = isVisibilityActionsEnabled ?
-            (
-                componentContext.json.visibility_actions ||
-                componentContext.json.visibility_action && [componentContext.json.visibility_action]
-            ) :
-            [];
-
-        const disappearActions = isVisibilityActionsEnabled ? componentContext.json.disappear_actions : [];
-
-        let visAction: {
-            destroy(): void;
-        } | undefined;
-        if (
-            Array.isArray(visibilityActions) && visibilityActions.length ||
-            Array.isArray(disappearActions) && disappearActions.length
-        ) {
-            visAction = visibilityAction(node, {
-                visibilityActions,
-                disappearActions,
-                rootCtx,
-                componentContext
-            });
-        }
-
         const id = componentContext.id;
         if (id) {
             idUnregister?.();
@@ -1154,6 +1145,38 @@
         };
 
         return registred;
+    }
+
+    $: if (currentNode && isVisible) {
+        visAction?.destroy();
+
+        const isVisibilityActionsEnabled = (
+            !componentContext.fakeElement ||
+            componentContext.fakeElement === componentFakePagerDuplicate
+        );
+
+        const visibilityActions = isVisibilityActionsEnabled ?
+            (
+                componentContext.json.visibility_actions ||
+                componentContext.json.visibility_action && [componentContext.json.visibility_action]
+            ) :
+            [];
+
+        const disappearActions = isVisibilityActionsEnabled ? componentContext.json.disappear_actions : [];
+
+        if (
+            Array.isArray(visibilityActions) && visibilityActions.length ||
+            Array.isArray(disappearActions) && disappearActions.length
+        ) {
+            visAction = visibilityAction(currentNode, {
+                visibilityActions,
+                disappearActions,
+                rootCtx,
+                componentContext
+            });
+        } else {
+            visAction = undefined;
+        }
     }
 
     function focusHandler() {

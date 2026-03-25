@@ -94,6 +94,7 @@
     import { getStateContext, getTooltipContext } from '../utils/componentUtils';
     import { checkSubmitAction } from '../utils/checkSubmitAction';
     import { updateStructure } from '../actions/updateStructure';
+    import { VISIBILITY_CTX, type VisibilityCtxValue } from '../context/visibility';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -2296,6 +2297,10 @@
         hasAction(): boolean {
             return false;
         }
+    });
+
+    setContext<VisibilityCtxValue>(VISIBILITY_CTX, {
+        visible: constStore(true)
     });
 
     setContext<StateCtxValue>(STATE_CTX, {
