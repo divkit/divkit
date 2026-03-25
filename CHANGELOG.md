@@ -1,3 +1,14 @@
+## 32.43.0
+
+# Android Client:
+* Fixed `div-state` state restoring on rebind after `state_id_variable` changes.
+* Shift debug view below status bar area.
+
+# Web Client:
+* Fixed an issue where `visibility_actions` were called inside a component with `visibility=invisible`.
+* The `!:` operator now has higher precedence than logical and comparison operators.
+
+
 ## 32.42.0
 
 # Android Client:

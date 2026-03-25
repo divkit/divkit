@@ -1,3 +1,9 @@
+## 32.43.0 (March 30, 2026)
+
+* Fixed an issue where `visibility_actions` were called inside a component with `visibility=invisible`.
+* The `!:` operator now has higher precedence than logical and comparison operators.
+
+
 ## 32.42.0 (March 23, 2026)
 
 * Changed the default datetime conversion to a string according to the local time zone to better match other platforms.
