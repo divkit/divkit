@@ -17,11 +17,21 @@ internal fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
 }
 
 @Composable
+internal fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float {
+    return observedValue(defaultValue.toDouble()).toFloat()
+}
+
+@Composable
 internal fun <T : Any> Expression<T>.observedValue(): T {
     return when (this) {
         is Expression.ConstantExpression -> value
         else -> asState().value
     }
+}
+
+@Composable
+internal fun Expression<Long>.observedIntValue(): Int {
+    return observedValue().toInt()
 }
 
 @Composable
