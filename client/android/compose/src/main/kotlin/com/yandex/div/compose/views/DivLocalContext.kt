@@ -9,6 +9,9 @@ import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.dagger.DivLocalScope
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
+import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
@@ -18,6 +21,7 @@ import javax.inject.Inject
 internal class DivLocalContext @Inject constructor(
     val actionHandlingContext: DivActionHandlingContext,
     val expressionResolver: ExpressionResolver,
+    val functionProvider: FunctionProviderDecorator,
     val variableController: DivVariableController
 )
 
@@ -29,8 +33,11 @@ internal val LocalDivContext = compositionLocalOf<DivLocalContext> {
 internal fun WithLocalDivContext(data: DivData, content: @Composable () -> Unit) {
     val divContext = divContext
     val localContext = remember(data) {
+        val baseFunctionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
+        val functions = data.functions.orEmpty().toLocalFunctions()
         divContext.createLocalContext(
             variableController = DivVariableController(divContext.component.variableController),
+            functionProvider = baseFunctionProvider + functions,
             triggers = data.variableTriggers.orEmpty(),
             variables = data.variables.orEmpty()
         ).also {
@@ -42,9 +49,10 @@ internal fun WithLocalDivContext(data: DivData, content: @Composable () -> Unit)
 
 @Composable
 internal fun WithLocalDivContext(data: DivBase, content: @Composable () -> Unit) {
+    val functions = data.functions.orEmpty()
     val variables = data.variables.orEmpty()
     val triggers = data.variableTriggers.orEmpty()
-    if (variables.isEmpty() && triggers.isEmpty()) {
+    if (functions.isEmpty() && variables.isEmpty() && triggers.isEmpty()) {
         return content()
     }
 
@@ -58,6 +66,7 @@ internal fun WithLocalDivContext(data: DivBase, content: @Composable () -> Unit)
         }
         divContext.createLocalContext(
             variableController = variableController,
+            functionProvider = localContext.functionProvider + functions.toLocalFunctions(),
             triggers = triggers,
             variables = variables
         )

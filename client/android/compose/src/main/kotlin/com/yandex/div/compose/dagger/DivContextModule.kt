@@ -15,15 +15,16 @@ internal object DivContextModule {
     @DivContextScope
     @Provides
     fun provideParsingErrorLogger(reporter: DivReporter): ParsingErrorLogger {
-        return ParsingErrorLogger { exception ->
-            reporter.reportError("Parsing error", exception)
-        }
+        return ParsingErrorLogger { reporter.reportError(it) }
     }
 
     @OptIn(InternalApi::class)
     @DivContextScope
     @Provides
-    fun provideImageLoader(imageLoaderProvider: ImageLoaderProvider, context: Context): ImageLoader {
+    fun provideImageLoader(
+        imageLoaderProvider: ImageLoaderProvider,
+        context: Context
+    ): ImageLoader {
         return imageLoaderProvider.provide(context)
     }
 }

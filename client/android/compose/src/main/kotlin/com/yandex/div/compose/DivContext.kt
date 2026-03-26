@@ -9,6 +9,9 @@ import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.evaluable.FunctionProvider
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
+import com.yandex.div2.DivFunction
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import javax.inject.Inject
@@ -25,10 +28,12 @@ class DivContext @Inject @MainThread internal constructor(
 
     internal fun createLocalContext(
         variableController: DivVariableController,
+        functionProvider: FunctionProviderDecorator,
         triggers: List<DivTrigger>,
         variables: List<DivVariable>,
     ): DivLocalContext {
         val localComponent = component.localComponent()
+            .functionProvider(functionProvider)
             .variableController(variableController)
             .build()
 

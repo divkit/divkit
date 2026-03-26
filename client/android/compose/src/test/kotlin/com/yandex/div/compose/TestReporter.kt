@@ -17,22 +17,17 @@ class TestReporter : DivReporter() {
         }
     }
 
-    override fun reportError(message: String?, throwable: Throwable) {
-        val error = format(message, throwable)
-        lastError = error
+    override fun reportError(e: Exception) {
+        lastError = e.message
 
         if (failOnError) {
-            fail(error)
+            fail(format(e))
         }
     }
 }
 
-private fun format(message: String?, throwable: Throwable?): String? {
-    if (message != null) {
-        return message
-    }
-    if (throwable != null) {
-        return format(throwable.message, throwable.cause)
-    }
-    return null
+private fun format(e: Throwable): String {
+    return generateSequence(e) { it.cause }
+        .mapNotNull { it.message }
+        .joinToString("\n")
 }

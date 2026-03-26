@@ -8,8 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.compose.views.LocalDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -28,17 +27,14 @@ class ExpressionUtilsTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val reporter = TestReporter()
     private val variableController = DivVariableController()
-
-    private val resolver = DivComposeExpressionResolver(
-        reporter = reporter,
-        variableController = variableController
-    )
 
     private val localContext = DivLocalContext(
         actionHandlingContext = mock(),
-        expressionResolver = resolver,
+        expressionResolver = createExpressionResolver(
+            variableController = variableController
+        ),
+        functionProvider = mock(),
         variableController = variableController
     )
 

@@ -1,9 +1,8 @@
 package com.yandex.div.compose.triggers
 
-import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
-import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
@@ -28,8 +27,7 @@ class DivTriggerStorageTest {
     private val triggerStorage = DivTriggerStorage(
         actionHandler = actionHandler,
         actionHandlingContext = actionHandlingContext,
-        expressionResolver = DivComposeExpressionResolver(
-            reporter = TestReporter(),
+        expressionResolver = createExpressionResolver(
             variableController = variableController
         )
     )

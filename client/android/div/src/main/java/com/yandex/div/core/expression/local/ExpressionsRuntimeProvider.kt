@@ -5,7 +5,6 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
-import com.yandex.div.core.expression.FunctionProviderDecorator
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -13,7 +12,6 @@ import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
-import com.yandex.div.core.util.toLocalFunctions
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.EvaluationContext
@@ -23,6 +21,8 @@ import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.data.PropertyVariableExecutor
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
+import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger

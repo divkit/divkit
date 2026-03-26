@@ -5,6 +5,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivFunction
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
@@ -32,6 +33,7 @@ fun text(
     action: DivAction? = null,
     disappearActions: List<DivDisappearAction>? = null,
     fontSize: Long = 12,
+    functions: List<DivFunction>? = null,
     id: String? = null,
     text: Expression<String>,
     textColor: Color? = null,
@@ -43,6 +45,7 @@ fun text(
         value = DivText(
             action = action,
             disappearActions = disappearActions,
+            functions = functions,
             fontSize = constant(fontSize),
             id = id,
             text = text,

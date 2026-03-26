@@ -1,7 +1,7 @@
 package com.yandex.div.compose.expressions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.expression
@@ -14,8 +14,7 @@ class DivComposeExpressionResolverTest {
 
     private val variableController = DivVariableController()
 
-    private val expressionResolver = DivComposeExpressionResolver(
-        reporter = TestReporter(),
+    private val expressionResolver = createExpressionResolver(
         variableController = variableController
     )
 
@@ -60,21 +59,23 @@ class DivComposeExpressionResolverTest {
 
     @Test
     fun `observed value changes when variable changes`() {
-        variableController.declare(Variable.IntegerVariable("value", 10))
+        val variable = Variable.IntegerVariable("value", 10)
+        variableController.declare(variable)
 
         var value: String? = null
         expression("value = @{value}").observeAndGet(expressionResolver) { value = it }
 
         assertEquals("value = 10", value)
 
-        variableController.get("value")?.set("20")
+        variable.set(20)
 
         assertEquals("value = 20", value)
     }
 
     @Test
     fun `observed value does not change when subscription is closed`() {
-        variableController.declare(Variable.IntegerVariable("value", 10))
+        val variable = Variable.IntegerVariable("value", 10)
+        variableController.declare(variable)
 
         var value: String? = null
         val subscription = expression("value = @{value}")
@@ -83,7 +84,7 @@ class DivComposeExpressionResolverTest {
         assertEquals("value = 10", value)
 
         subscription.close()
-        variableController.get("value")?.set("20")
+        variable.set(20)
 
         assertEquals("value = 10", value)
     }

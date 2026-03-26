@@ -17,10 +17,8 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
-import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
-import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import org.junit.Rule
 import org.junit.Test
@@ -148,67 +146,14 @@ class DivViewTest {
         }
     }
 
-    @Test
-    fun `text changes when trigger is triggered`() {
-        val condition = Variable.BooleanVariable("condition", false)
-        variableController.declare(condition)
-
-        setContent(
-            text(
-                id = "title",
-                text = expression("@{text}")
-            ),
-            triggers = listOf(
-                trigger(
-                    action = action(url = "div-action://set_variable?name=text&value=new text"),
-                    condition = "@{condition}"
-                )
-            ),
-            variables = listOf(variable("text", "initial text"))
-        )
-
-        rule.onNodeWithTag("title").assertTextEquals("initial text")
-
-        condition.set(true)
-
-        rule.onNodeWithTag("title").assertTextEquals("new text")
-    }
-
-    @Test
-    fun `text changes when local trigger is triggered`() {
-        val condition = Variable.BooleanVariable("condition", false)
-        variableController.declare(condition)
-
-        setContent(
-            text(
-                id = "title",
-                text = expression("@{text}"),
-                triggers = listOf(
-                    trigger(
-                        action = action(url = "div-action://set_variable?name=text&value=new text"),
-                        condition = "@{condition}"
-                    )
-                ),
-                variables = listOf(variable("text", "initial text"))
-            )
-        )
-
-        rule.onNodeWithTag("title").assertTextEquals("initial text")
-
-        condition.set(true)
-
-        rule.onNodeWithTag("title").assertTextEquals("new text")
-    }
-
     private fun setContent(
         content: Div,
-        triggers: List<DivTrigger>? = null,
         variables: List<DivVariable>? = null
     ) {
         rule.setContent {
             val divContext = configuration.createContext(baseContext = LocalContext.current)
             CompositionLocalProvider(LocalContext provides divContext) {
-                DivView(data = data(content, triggers, variables))
+                DivView(data = data(content, variables = variables))
             }
         }
     }

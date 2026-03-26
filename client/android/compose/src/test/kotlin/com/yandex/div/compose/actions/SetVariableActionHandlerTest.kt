@@ -2,7 +2,7 @@ package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
@@ -30,7 +30,7 @@ class SetVariableActionHandlerTest {
         )
     )
 
-    private val expressionResolver = DivComposeExpressionResolver(
+    private val expressionResolver = createExpressionResolver(
         reporter = reporter,
         variableController = variableController
     )

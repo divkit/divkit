@@ -4,6 +4,7 @@ import com.yandex.div.compose.triggers.DivTriggerStorage
 import com.yandex.div.compose.variables.DivVariableAdapter
 import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 
@@ -22,6 +23,9 @@ internal interface DivLocalComponent {
 
     @Component.Builder
     interface Builder {
+
+        @BindsInstance
+        fun functionProvider(functionProvider: FunctionProviderDecorator): Builder
 
         @BindsInstance
         fun variableController(variableController: DivVariableController): Builder

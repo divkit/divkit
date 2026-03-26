@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.test.crossplatform.IntegrationTestCase
 import com.yandex.div.test.crossplatform.IntegrationTestCaseParser
+import com.yandex.div.test.crossplatform.IntegrationTestLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
@@ -28,7 +29,7 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
 
         val variableController = DivVariableController()
         val divContext = DivComposeConfiguration(
-            reporter = TestReporter(),
+            reporter = Reporter(testCase.logger),
             variableController = variableController
         ).createContext(baseContext = getApplicationContext())
 
@@ -72,22 +73,22 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
     }
 }
 
+private class Reporter(private val logger: IntegrationTestLogger) : DivReporter() {
+    override fun reportError(message: String) {
+        logger.logError(Exception(message))
+    }
+
+    override fun reportError(e: Exception) {
+        logger.logError(e)
+    }
+}
+
 private val ignoredFiles = listOf(
     "array_variable_mutation.json",
     "decl_expressions_item_builder.json",
     "decl_expressions_item_builder_override.json",
     "dict_set_value.json",
-    "expression_with_several_local_functions.json",
     "item_builder_variable_triggers.json",
-    "local_functions_array.json",
-    "local_functions_datetime.json",
-    "local_functions_color.json",
-    "local_functions_dict.json",
-    "local_functions_div_data.json",
-    "local_functions_int.json",
-    "local_functions_number.json",
-    "local_functions_string.json",
-    "local_functions_url.json",
     "local-triggers-gallery.json",
     "local-triggers-gallery-with-item-builder.json",
     "local-triggers-states.json",

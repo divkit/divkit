@@ -11,6 +11,7 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
@@ -21,7 +22,10 @@ import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
-import org.junit.Assert
+import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.intExpression
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -78,7 +82,7 @@ class ExpressionResolverImplTest {
     private val evaluationContext = EvaluationContext(
         variableProvider = { externalVariables.getMutableVariable(it)?.getValue() },
         storedValueProvider = mock(),
-        functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider),
+        functionProvider = GeneratedBuiltinFunctionProvider,
         warningSender = { _, _ -> }
     )
 
@@ -124,154 +128,97 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `string with multiple variables`() {
-        Assert.assertEquals(
+        assertEquals(
             "http://yandex.ru/mail",
-            mutableExpression<String>("http://@{host}/@{path}", TYPE_HELPER_STRING).evaluate(
-                underTest
-            )
+            expression("http://@{host}/@{path}").evaluate(underTest)
         )
     }
 
     @Test
     fun `string with single variable at center`() {
-        Assert.assertEquals(
+        assertEquals(
             "http://yandex.ru/api?",
-            mutableExpression<String>("http://@{host}/api?", TYPE_HELPER_STRING).evaluate(underTest)
+            expression("http://@{host}/api?").evaluate(underTest)
         )
-    }
-
-    @Test
-    fun `numeric variable accessed via getInt`() {
-        val mutableExpression = mutableExpression<Long>(
-            rawExpression = "@{hundred}",
-            typeHelper = TYPE_HELPER_INT,
-        )
-        Assert.assertEquals(100, mutableExpression.evaluate(underTest))
     }
 
     @Test
     fun `int variable access`() {
-        val intValue = mutableExpression<Long>("@{hundred}", TYPE_HELPER_INT).evaluate(underTest)
-        Assert.assertEquals(100, intValue)
+        assertEquals(100, intExpression("@{hundred}").evaluate(underTest))
     }
 
     @Test
     fun `double variable accessed via numeric expression`() {
-        val doubleExpression = Expression.MutableExpression(
-            expressionKey = "some_key",
+        val expression = mutableExpressionWithConverter(
             rawExpression = "@{hundred}",
             converter = NUMBER_TO_DOUBLE,
-            validator = { true },
-            logger = failFastLogger,
             typeHelper = TYPE_HELPER_DOUBLE
         )
-        Assert.assertEquals(100.0f.toDouble(), doubleExpression.evaluate(underTest), 0f.toDouble())
+        assertEquals(100.0f.toDouble(), expression.evaluate(underTest), 0f.toDouble())
     }
 
     @Test
     fun `string expression can access non-string variables`() {
-        val value = mutableExpression(
-            rawExpression = "@{hundred}",
-            typeHelper = TYPE_HELPER_STRING,
-            logger = silentLogger
-        ).evaluate(underTest)
-        Assert.assertEquals("100", value)
-    }
-
-    @Test
-    fun `string expression can access non-string variables with evaluable`() {
-        val value = mutableExpression(
-            rawExpression = "@{hundred}",
-            typeHelper = TYPE_HELPER_STRING,
-            logger = silentLogger
-        ).evaluate(underTest)
-        Assert.assertEquals("100", value)
+        assertEquals("100", expression("@{hundred}").evaluate(underTest))
     }
 
     @Test
     fun `string expression may use non-string variables for composing itself`() {
-        val stringValue = mutableExpression<String>(
-            "http://@{host}/api?int_param=@{hundred}",
-            TYPE_HELPER_STRING
-        ).evaluate(underTest)
-        Assert.assertEquals("http://yandex.ru/api?int_param=100", stringValue)
+        assertEquals(
+            "http://yandex.ru/api?int_param=100",
+            expression("http://@{host}/api?int_param=@{hundred}").evaluate(underTest)
+        )
     }
 
     @Test
     fun `boolean variable evaluates in boolean`() {
-        Assert.assertTrue(
-            mutableExpression<Boolean>(
-                "@{logical_true}",
-                TYPE_HELPER_BOOLEAN
-            ).evaluate(underTest)
+        assertTrue(
+            mutableExpression("@{logical_true}", TYPE_HELPER_BOOLEAN).evaluate(underTest)
         )
     }
 
     @Test
     fun `boolean variable inside string evaluates to int boolean (true is 1)`() {
-        Assert.assertEquals(
+        assertEquals(
             "bool_int:true",
-            mutableExpression<String>("bool_int:@{logical_true}", TYPE_HELPER_STRING).evaluate(
-                underTest
-            )
+            expression("bool_int:@{logical_true}").evaluate(underTest)
         )
     }
 
     @Test
     fun `boolean variable inside string evaluates to int boolean (false is 0)`() {
-        Assert.assertEquals(
+        assertEquals(
             "bool_int:false",
-            mutableExpression<String>("bool_int:@{logical_false}", TYPE_HELPER_STRING).evaluate(
-                underTest
-            )
+            expression("bool_int:@{logical_false}").evaluate(underTest)
         )
     }
 
     @Test
     fun `property with variable-like string`() {
-        Assert.assertEquals(
+        assertEquals(
             "@{host$[path",
-            mutableExpression<String>("\\@{host$[path", TYPE_HELPER_STRING).evaluate(underTest)
+            expression("\\@{host$[path").evaluate(underTest)
         )
     }
 
     @Test
     fun `non-variable properties handling`() {
-        Assert.assertEquals(
-            "5",
-            mutableExpression<String>("5", TYPE_HELPER_STRING).evaluate(underTest)
-        )
-    }
-
-    @Test(expected = ParsingException::class)
-    fun `parsing fails when variable cannot be resolved`() {
-        mutableExpression<String>("@{undefined}", TYPE_HELPER_STRING).evaluate(underTest)
+        assertEquals("5", expression("5").evaluate(underTest))
     }
 
     @Test(expected = ParsingException::class)
     fun `parsing fails when variable cannot be resolved when evaluable enabled`() {
-        mutableExpression("@{undefined}", TYPE_HELPER_STRING)
-            .evaluate(underTest)
+        mutableExpression("@{undefined}", TYPE_HELPER_STRING).evaluate(underTest)
     }
 
     @Test
-    fun `resolving numeric variable as string will return type default`() {
-        val intValue = mutableExpression<Long>(
+    fun `resolving string variable as integer will return type default`() {
+        val expression = mutableExpression(
             rawExpression = "@{path}",
             typeHelper = TYPE_HELPER_INT,
             logger = silentLogger
-        ).evaluate(underTest)
-        Assert.assertEquals(0, intValue)
-    }
-
-    @Test
-    fun `resolving numeric variable as string will return type default with evaluable`() {
-        val intValue = mutableExpression<Long>(
-            rawExpression = "@{path}",
-            typeHelper = TYPE_HELPER_INT,
-            logger = silentLogger
-        ).evaluate(underTest)
-        Assert.assertEquals(0, intValue)
+        )
+        assertEquals(0, expression.evaluate(underTest))
     }
 
     @Test
@@ -281,51 +228,35 @@ class ExpressionResolverImplTest {
             TYPE_HELPER_STRING,
             logger = silentLogger
         )
-
-        val uri = expression.evaluate(underTest)
-
-        Assert.assertEquals("", uri)
-    }
-
-    @Test
-    fun `unknown variables fallback to field type defaults when evaluable enabled`() {
-        val expression = mutableExpression(
-            "scheme://action?value=@{this.random_property}",
-            TYPE_HELPER_STRING,
-            logger = silentLogger
-        )
-
-        val uri = expression.evaluate(underTest)
-
-        Assert.assertEquals("", uri)
+        assertEquals("", expression.evaluate(underTest))
     }
 
     @Test
     fun `cache entry is deleted after the local variable is changed`() {
-        val mutableExpression = mutableExpression<Long>(
-            rawExpression = "@{some_number}",
-            typeHelper = TYPE_HELPER_INT,
-        )
-        Assert.assertEquals(42, mutableExpression.evaluate(underTest))
+        val expression = intExpression("@{some_number}")
+
+        assertEquals(42, expression.evaluate(underTest))
+
         variables["some_number"]?.set("12")
-        Assert.assertEquals(12, mutableExpression.evaluate(underTest))
+
+        assertEquals(12, expression.evaluate(underTest))
     }
 
     @Test
     fun `cache entry is deleted after the global variable is changed`() {
-        val mutableExpression = mutableExpression<Long>(
-            rawExpression = "@{global_number}",
-            typeHelper = TYPE_HELPER_INT,
-        )
-        Assert.assertEquals(777, mutableExpression.evaluate(underTest))
+        val expression = intExpression("@{global_number}")
+
+        assertEquals(777, expression.evaluate(underTest))
+
         globalVariables["global_number"]?.set("120")
-        Assert.assertEquals(120, mutableExpression.evaluate(underTest))
+
+        assertEquals(120, expression.evaluate(underTest))
     }
 
     @Test
     fun `pure expression saved in cache`() {
         var counter = 0
-        val mutableExpression = mutableExpression(
+        val expression = mutableExpression(
             rawExpression = "@{sum(2,2)}",
             typeHelper = TYPE_HELPER_INT
         )
@@ -333,15 +264,15 @@ class ExpressionResolverImplTest {
             counter++
         }
         val expressionResolverImpl = withFuncGetCallback(increaseCounter)
-        mutableExpression.evaluate(expressionResolverImpl)
-        mutableExpression.evaluate(expressionResolverImpl)
-        assert(counter == 1)
+        expression.evaluate(expressionResolverImpl)
+        expression.evaluate(expressionResolverImpl)
+        assertEquals(1, counter)
     }
 
     @Test
     fun `non pure expression not saved in cache`() {
         var counter = 0
-        val mutableExpression = mutableExpression(
+        val expression = mutableExpression(
             rawExpression = "@{nowLocal()}",
             typeHelper = TypeHelper.from(DateTime(0, TimeZone.getDefault())) {
                 it is DateTime
@@ -351,9 +282,9 @@ class ExpressionResolverImplTest {
             counter++
         }
         val expressionResolverImpl = withFuncGetCallback(increaseCounter)
-        mutableExpression.evaluate(expressionResolverImpl)
-        mutableExpression.evaluate(expressionResolverImpl)
-        assert(counter == 2)
+        expression.evaluate(expressionResolverImpl)
+        expression.evaluate(expressionResolverImpl)
+        assertEquals(2, counter)
     }
 
     @Test
@@ -366,7 +297,7 @@ class ExpressionResolverImplTest {
             callbackCalled = true
         }
         variables["another_number"]?.set("111")
-        assert(callbackCalled)
+        assertTrue(callbackCalled)
     }
 
     @Test
@@ -390,46 +321,47 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `cache work with converter correctly`() {
-        val mutableExpression = mutableExpression<Long>(
-            rawExpression = "@{timer}",
-            typeHelper = TYPE_HELPER_INT,
-        )
-        Assert.assertEquals(2000, mutableExpression.evaluate(underTest))
-        val mutableExpressionWithConverter = mutableExpressionWithConverter<Int, String>(
+        val expression = intExpression("@{timer}")
+
+        assertEquals(2000, expression.evaluate(underTest))
+
+        val expressionWithConverter = mutableExpressionWithConverter<Int, String>(
             rawExpression = "@{timer}",
             typeHelper = TYPE_HELPER_STRING,
             converter = { it.toString() }
         )
-        Assert.assertEquals("2000", mutableExpressionWithConverter.evaluate(underTest))
+        assertEquals("2000", expressionWithConverter.evaluate(underTest))
     }
 
     @Test(expected = ParsingException::class)
     fun `cache work with validator correctly`() {
-        val mutableExpression = mutableExpression<Long>(
-            rawExpression = "@{timer}",
-            typeHelper = TYPE_HELPER_INT,
-        )
-        Assert.assertEquals(2000, mutableExpression.evaluate(underTest))
-        val mutableExpressionWithValidator = mutableExpression<Long>(
+        val expression = intExpression("@{timer}")
+
+        assertEquals(2000, expression.evaluate(underTest))
+
+        val expressionWithValidator = mutableExpression(
             rawExpression = "@{timer}",
             typeHelper = TYPE_HELPER_INT,
             validator = { false }
         )
-        mutableExpressionWithValidator.evaluate(underTest)
+        expressionWithValidator.evaluate(underTest)
     }
 
     @Test
     fun `on expression changed callback called when variable declared`() {
-        val mutableExpression = mutableExpression<Long>(
+        val expression = mutableExpression(
             rawExpression = "@{none_var}",
-            typeHelper = TYPE_HELPER_INT,
+            typeHelper = TYPE_HELPER_INT
         )
+
         var declaredValue = 0L
-        mutableExpression.observeAndGet(underTest) {
+        expression.observeAndGet(underTest) {
             declaredValue = it
         }
+
         variableController.declare(Variable.IntegerVariable("none_var", 56))
-        Assert.assertEquals(56, declaredValue)
+
+        assertEquals(56, declaredValue)
     }
 
     private fun <T : Any> mutableExpression(
@@ -452,7 +384,7 @@ class ExpressionResolverImplTest {
         converter: Converter<R, T>,
         logger: ParsingErrorLogger = failFastLogger,
         validator: (T) -> Boolean = { true },
-    ) = Expression.MutableExpression<R, T>(
+    ) = Expression.MutableExpression(
         expressionKey = "some_key",
         rawExpression = rawExpression,
         validator = validator,

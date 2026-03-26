@@ -11,7 +11,7 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.MissingVariableException
-import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 @DivLocalScope
 internal class DivComposeExpressionResolver @Inject constructor(
+    functionProvider: FunctionProviderDecorator,
     private val reporter: DivReporter,
     private val variableController: DivVariableController
 ) : ExpressionResolver {
@@ -42,7 +43,7 @@ internal class DivComposeExpressionResolver @Inject constructor(
                 variableController.get(name)?.getValue().variableValueToEvaluableValue()
             },
             storedValueProvider = { _ -> null },
-            functionProvider = GeneratedBuiltinFunctionProvider,
+            functionProvider = functionProvider,
             warningSender = EvaluatorWarningSender(reporter)
         )
         evaluator = Evaluator(evaluationContext)
@@ -60,7 +61,7 @@ internal class DivComposeExpressionResolver @Inject constructor(
         return try {
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
         } catch (e: Exception) {
-            reporter.reportError("Failed to resolve expression", e)
+            reporter.reportError(e)
             throw e
         }
     }

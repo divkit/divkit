@@ -27,7 +27,7 @@ internal class SetVariableActionHandler @Inject constructor(
         try {
             variable.castAndSetValue(action.value.evaluate(expressionResolver))
         } catch (e: VariableMutationException) {
-            reporter.reportError(throwable = e)
+            reporter.reportError(e)
         }
     }
 
@@ -45,7 +45,7 @@ internal class SetVariableActionHandler @Inject constructor(
         try {
             variable.set(action.value)
         } catch (e: VariableMutationException) {
-            reporter.reportError(throwable = e)
+            reporter.reportError(e)
         }
     }
 }
