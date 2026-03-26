@@ -122,6 +122,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-container/horizontal-orientation-bottom-horizontal-alignment.json",
                 "snapshot_test_data/div-container/horizontal-orientation-space-around-alignment.json",
                 "snapshot_test_data/div-container/horizontal-orientation-space-evenly-alignment.json",
+                "snapshot_test_data/div-container/size_unit.json",
             ).expandDirectories().toSet()
 
             val resultSuite = (suite - flakyTests)
