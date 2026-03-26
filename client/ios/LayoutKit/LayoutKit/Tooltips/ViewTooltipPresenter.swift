@@ -10,7 +10,7 @@ final class ViewTooltipPresenter: TooltipPresenter {
   }
 
   func prepare() -> (constraint: CGRect, coordinateSpace: UIView?)? {
-    (containerView.tooltipContainerBounds, containerView)
+    (containerView.tooltipContainerBounds, containerView.coordinateSpace)
   }
 
   func present(_ view: TooltipContainerView, for tooltip: DefaultTooltipManager.Tooltip) {
@@ -23,7 +23,7 @@ final class ViewTooltipPresenter: TooltipPresenter {
 
   func currentTooltipView() async -> UIView? {
     await MainActor.run {
-      containerView.subviews.first
+      containerView.coordinateSpace.subviews.first
     }
   }
 
