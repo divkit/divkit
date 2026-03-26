@@ -100,7 +100,8 @@ final class UntypedDivTemplateResolver {
     if let dict = value as? [String: Any] {
       if let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
-        let parameterNames = collectParameterNames(from: resolvedTemplate)
+        var parameterNames = collectParameterNames(from: resolvedTemplate)
+        parameterNames.formUnion(collectParameterNames(from: dict))
         return resolveInstanceLinks(
           in: dict,
           linkSource: linkSource,
@@ -186,7 +187,9 @@ final class UntypedDivTemplateResolver {
        !visited.contains(type),
        let resolvedTemplate = resolveTemplate(named: type).value {
       visited.insert(type)
-      return collectParameterNames(from: resolvedTemplate, visited: &visited)
+      var names = collectParameterNames(from: dict, visited: &visited)
+      names.formUnion(collectParameterNames(from: resolvedTemplate, visited: &visited))
+      return names
     }
     return collectParameterNames(from: dict, visited: &visited)
   }
