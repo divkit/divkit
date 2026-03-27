@@ -3,6 +3,8 @@
 package com.yandex.div.rule
 
 import android.app.Activity
+import androidx.test.platform.app.InstrumentationRegistry
+import com.yandex.div.Div2ScreenshotTest
 import com.yandex.div.steps.waitForImages
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
@@ -37,7 +39,9 @@ fun composeScreenshotRule(
     activityRule: ActivityParamsTestRule<DivComposeScreenshotActivity>,
     relativePath: String = "",
 ): TestRule {
-    return screenshotRule(casePath, activityRule, relativePath, "") {
+    val compareWithView = InstrumentationRegistry.getArguments().getString("compareComposeWithView") == "true"
+    val expectedSuite = if (compareWithView) Div2ScreenshotTest::class.qualifiedName ?: "" else ""
+    return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
         waitForIdlingResource(activityRule.activity.imageLoadingTracker)
     }
 }

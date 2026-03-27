@@ -35,6 +35,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments useTestStorageService: 'true'
+        if (providers.gradleProperty("compare-compose").isPresent()) {
+            testInstrumentationRunnerArguments compareComposeWithView: 'true'
+        }
 
         providers.gradleProperty("shardIndex").orNull?.with { index ->
             testInstrumentationRunnerArguments.shardIndex = index
