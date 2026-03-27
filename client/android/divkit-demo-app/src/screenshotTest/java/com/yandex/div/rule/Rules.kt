@@ -25,13 +25,11 @@ fun screenshotRule(
     casePath: String,
     activityRule: ActivityParamsTestRule<out Activity>,
     relativePath: String = "",
+    expectedSuite: String = "",
 ): TestRule {
-    val screenshotRule = ScreenshotRule(relativePath, casePath)
-    screenshotRule.beforeScreenshotTaken {
+    return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
         waitForImages { activityRule.activity as? DivScreenshotActivity }
     }
-    return baseRule(casePath, activityRule)
-        .chain(screenshotRule)
 }
 
 fun composeScreenshotRule(
@@ -39,10 +37,20 @@ fun composeScreenshotRule(
     activityRule: ActivityParamsTestRule<DivComposeScreenshotActivity>,
     relativePath: String = "",
 ): TestRule {
-    val screenshotRule = ScreenshotRule(relativePath, casePath)
-    screenshotRule.beforeScreenshotTaken {
+    return screenshotRule(casePath, activityRule, relativePath, "") {
         waitForIdlingResource(activityRule.activity.imageLoadingTracker)
     }
+}
+
+private fun screenshotRule(
+    casePath: String,
+    activityRule: ActivityParamsTestRule<out Activity>,
+    relativePath: String,
+    expectedSuite: String,
+    waitForImages: () -> Unit
+): TestRule {
+    val screenshotRule = ScreenshotRule(casePath, relativePath, expectedSuite)
+    screenshotRule.beforeScreenshotTaken(waitForImages)
     return baseRule(casePath, activityRule)
         .chain(screenshotRule)
 }

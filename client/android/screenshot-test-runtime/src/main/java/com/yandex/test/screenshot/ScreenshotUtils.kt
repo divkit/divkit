@@ -17,7 +17,8 @@ fun captureScreenshots(
     casePath: String,
     screenshotName: String = "",
     stepId: Int? = null,
-    expectedScreenshot: String = ""
+    expectedScreenshot: String = "",
+    expectedSuite: String = "",
 ) {
     val (suiteName, caseName) = when {
         screenshotName.isNotEmpty() -> artifactsRelativePath to screenshotName
@@ -29,19 +30,19 @@ fun captureScreenshots(
         val screenshots = ScreenshotCaptor.takeScreenshots(view, suiteName, caseName)
         TestCaseReferencesFileWriter.append(casePath, screenshots)
 
-        if (expectedScreenshot.isEmpty()) return@runOnMainSync
+        if (expectedScreenshot.isEmpty() && expectedSuite.isEmpty()) return@runOnMainSync
 
-        val expected = expectedScreenshot.substringBefore(ScreenshotType.SCREENSHOT_EXTENSION)
-        if (expected == caseName) return@runOnMainSync
+        val expected = expectedScreenshot.takeIf { it.isNotEmpty() }
+            ?.substringBefore(ScreenshotType.SCREENSHOT_EXTENSION)
+            ?: caseName
+        if (expected == caseName && expectedSuite.isEmpty()) return@runOnMainSync
 
-        appendReference(ScreenshotType.ViewRender, suiteName, caseName, expected)
-        appendReference(ScreenshotType.ViewPixelCopy, suiteName, caseName, expected)
+        val expectedSuite = expectedSuite.takeIf { it.isNotEmpty() } ?: suiteName
+        ScreenshotType.values().forEach {
+            ReferenceFileWriter.append(
+                targetFile = it.relativeScreenshotPath(suiteName, caseName),
+                compareWith = it.relativeScreenshotPath(expectedSuite, expected)
+            )
+        }
     }
-}
-
-private fun appendReference(type: ScreenshotType, suiteName: String, actual: String, expected: String) {
-    ReferenceFileWriter.append(
-        targetFile = type.relativeScreenshotPath(suiteName, actual),
-        compareWith = type.relativeScreenshotPath(suiteName, expected)
-    )
 }

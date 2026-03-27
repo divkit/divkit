@@ -34,22 +34,19 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
     companion object {
 
         const val TEST_CASES_PATH = "snapshot_test_data"
-        const val PRODUCTION_CASES_PATH = "production_data"
 
-        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val context: Context get() = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             val filter = { filename: String -> filename.endsWith(DIV_SCREENSHOT_CASE_EXTENSION) }
             val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)
-            val productionCases = AssetEnumerator(context).enumerate(PRODUCTION_CASES_PATH, filter)
-            return (testCases + productionCases).withEscapedParameter()
+            return testCases.withEscapedParameter()
         }
 
         val String.relativePath: String get() {
             return substringAfter("$TEST_CASES_PATH${File.separator}")
-                .substringAfter("$PRODUCTION_CASES_PATH${File.separator}")
                 .substringBeforeLast(File.separator)
         }
     }

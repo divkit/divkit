@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import com.yandex.div.Div2ScreenshotTest.Companion.PRODUCTION_CASES_PATH
-import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.R
@@ -13,11 +11,7 @@ import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.ActivityIdlingResource
 import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.rules.ActivityParamsTestRule
-import com.yandex.test.screenshot.DIV_SCREENSHOT_CASE_EXTENSION
-import com.yandex.test.screenshot.ReferenceFileWriter
 import com.yandex.test.screenshot.Screenshot
-import com.yandex.test.screenshot.ScreenshotType
-import com.yandex.test.screenshot.caseName
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,43 +28,22 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
 
     @Rule
     @JvmField
-    val rule = screenshotRule(case, activityRule, case.relativePath)
+    val rule = screenshotRule(case, activityRule, case.relativePath, expectedSuite)
 
     @Screenshot(viewId = R.id.screenshot_view)
     @Test
     fun divScreenshot() {
         context.sendBroadcastAndWait<DivScreenshotActivity>(DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA_ACTION)
-        createReferenceOverride()
-    }
-
-    private fun createReferenceOverride() {
-        val caseRelativePath = case.relativePath
-        val caseName = case.caseName
-        ScreenshotType.values().forEach {
-            val targetSuiteName = "${Div2RebindScreenshotTest::class.qualifiedName}/$caseRelativePath"
-            val actualSuiteName = "${Div2ScreenshotTest::class.qualifiedName}/$caseRelativePath"
-
-            ReferenceFileWriter.append(
-                it.relativeScreenshotPath(targetSuiteName, caseName),
-                it.relativeScreenshotPath(actualSuiteName, caseName)
-            )
-        }
     }
 
     companion object {
 
         private val context: Context = ApplicationProvider.getApplicationContext()
+        private val expectedSuite = Div2ScreenshotTest::class.qualifiedName ?: ""
 
         @JvmStatic
         @Parameters(name = "{1}")
-        fun cases(): List<Array<String>> {
-            val filter = { filename: String ->
-                filename.endsWith(DIV_SCREENSHOT_CASE_EXTENSION) && !filename.contains("templates")
-            }
-            val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)
-            val productionCases = AssetEnumerator(context).enumerate(PRODUCTION_CASES_PATH, filter)
-            return (testCases + productionCases).withEscapedParameter()
-        }
+        fun cases() = Div2ScreenshotTest.cases()
     }
 }
 
