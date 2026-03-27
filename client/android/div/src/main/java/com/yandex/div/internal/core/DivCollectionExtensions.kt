@@ -139,11 +139,14 @@ internal fun DivState.statesToDivItemBuilderResult(resolver: ExpressionResolver)
     states.mapNotNull { state -> state.div?.toItemBuilderResult(resolver) }
 
 internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver): List<DivItemBuilderResult> {
-    val resolverImpl = resolver.asImpl ?: return emptyList()
     val ids = getIds()
     return mapIndexed { index, div ->
-        val path = resolverImpl.childPath(ids[index])
-        div.toItemBuilderResult(resolverImpl.runtimeStore.getOrCreateRuntime(path, div, resolver).expressionResolver)
+        val targetResolver = resolver.asImpl?.let { impl ->
+            val path = impl.childPath(ids[index])
+            impl.runtimeStore.getOrCreateRuntime(path, div, resolver).expressionResolver
+        } ?: resolver
+
+        div.toItemBuilderResult(targetResolver)
     }
 }
 
