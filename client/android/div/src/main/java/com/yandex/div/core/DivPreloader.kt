@@ -28,6 +28,7 @@ import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
+import java.util.concurrent.atomic.AtomicBoolean
 
 @PublicApi
 @Mockable
@@ -180,14 +181,15 @@ class DivPreloader internal constructor(
     class DownloadCallback(private val callback: Callback) : DivImageDownloadCallback(), PreloadingRegistry {
         private val activePreloads = mutableMapOf<String, PreloadingCompletionImpl>()
         private val legacyPreloading = LegacyPreloading()
-        private var started = false
+        private val started = AtomicBoolean()
+        private val finished = AtomicBoolean()
 
         override fun registerPreloading(tag: String): PreloadingCompletion {
             val key = "preload#${Any().hashCode()}/$tag"
             val completion = PreloadingCompletionImpl(tag) {
                 tryFinish()
             }
-            activePreloads[key] = completion
+            synchronized(activePreloads) { activePreloads[key] = completion }
             return completion
         }
 
@@ -232,15 +234,16 @@ class DivPreloader internal constructor(
         }
 
         private fun tryFinish() = runOnUiThread {
+            val activePreloadsSnapshot = synchronized(activePreloads) { activePreloads.toMap() }
             val downloadsLeftCount =
-                (activePreloads.size - activePreloads.count { it.value.isCompleted }) +
+                (activePreloadsSnapshot.size - activePreloadsSnapshot.count { it.value.isCompleted }) +
                         legacyPreloading.downloadsLeftCount
             val failures =
-                activePreloads.count { it.value.isFailed } + legacyPreloading.failures.size
+                activePreloadsSnapshot.count { it.value.isFailed } + legacyPreloading.failures.size
 
-            if (downloadsLeftCount == 0 && started) {
+            if (downloadsLeftCount == 0 && started.get() && finished.compareAndSet(false, true)) {
                 if (failures > 0 && Log.isEnabled) {
-                    val errors = gatherPreloadErrors()
+                    val errors = gatherPreloadErrors(activePreloadsSnapshot)
                     errors.forEachIndexed { index, throwable ->
                         KLog.e(TAG, throwable) { "Preload error ${index + 1} / ${errors.size}" }
                     }
@@ -250,11 +253,11 @@ class DivPreloader internal constructor(
             }
         }
 
-        private fun gatherPreloadErrors(): List<Throwable> {
+        private fun gatherPreloadErrors(active: Map<String, PreloadingCompletionImpl>): List<Throwable> {
             val results = mutableListOf<Throwable>()
             results.addAll(legacyPreloading.failures)
 
-            activePreloads.values.forEach { completion ->
+            active.values.forEach { completion ->
                 val errors: Sequence<RuntimeException> = completion.result
                     ?.filterErrorResults()
                     ?.map { RuntimeException("Preload of '${it.uri}' failed!", it.error) }
@@ -267,7 +270,7 @@ class DivPreloader internal constructor(
 
 
         fun onFullPreloadStarted() = runOnUiThread {
-            started = true
+            started.set(true)
             tryFinish()
         }
 
