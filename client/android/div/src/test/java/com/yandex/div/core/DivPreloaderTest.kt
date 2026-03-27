@@ -1,6 +1,7 @@
 package com.yandex.div.core
 
 import android.net.Uri
+import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
@@ -8,7 +9,6 @@ import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -18,6 +18,14 @@ import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoSource
+import com.yandex.div.internal.util.UiThreadHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -80,6 +88,16 @@ class DivPreloaderTest {
         videoPreloader,
         DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
     )
+
+    @Before
+    fun setUp() {
+        UiThreadHandler.setInTestMode(true)
+    }
+
+    @After
+    fun teardown() {
+        UiThreadHandler.setInTestMode(false)
+    }
 
     @Test
     fun `preload div background`() {
@@ -169,5 +187,28 @@ class DivPreloaderTest {
         ticket.cancel()
 
         verify(videoPreloadReference).cancel()
+    }
+
+    @Test
+    fun `concurrency stress-test`() = runBlocking {
+        val videoChildren = (1..100).map { divVideoWithPreload }
+        val div = Div.Container(DivContainer(items = videoChildren))
+        val completionDispatcher = Dispatchers.Default.limitedParallelism(32)
+        val jobs = mutableListOf<Job>()
+        whenever(videoPreloader.preloadVideo(any(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<(List<PreloadResult>) -> Unit>(1)
+            val job = launch(completionDispatcher) {
+                callback(emptyList())
+            }
+            jobs.add(job)
+            DivPreloader.PreloadReference.EMPTY
+        }
+
+        val callback = mock<Callback>()
+        underTest.preload(div, resolver, callback)
+
+        jobs.joinAll()
+
+        verify(callback).finish(false)
     }
 }
