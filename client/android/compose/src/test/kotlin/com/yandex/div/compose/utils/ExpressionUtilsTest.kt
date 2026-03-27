@@ -2,6 +2,7 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -124,6 +125,65 @@ class ExpressionUtilsTest {
         composeRule.waitForIdle()
 
         assertEquals(20L, observedValue)
+    }
+
+    @Test
+    fun `recompose once when variable changes`() {
+        val variable = Variable.IntegerVariable("counter", 1)
+        variableController.declare(variable)
+
+        val expression = intExpression("@{counter}")
+        var recompositionCount = 0
+        var observedValue1 by mutableLongStateOf(0L)
+        var observedValue2 by mutableLongStateOf(0L)
+
+        setContent {
+            observedValue1 = expression.observedValue()
+            observedValue2 = expression.observedValue()
+            SideEffect { recompositionCount++ }
+        }
+
+        assertEquals(1, recompositionCount)
+        assertEquals(1L, observedValue1)
+        assertEquals(1L, observedValue2)
+
+        variable.set(20)
+        composeRule.waitForIdle()
+
+        assertEquals(2, recompositionCount)
+        assertEquals(20L, observedValue1)
+        assertEquals(20L, observedValue2)
+    }
+
+    @Test
+    fun `recompose once when multiple variables change`() {
+        val variable1 = Variable.IntegerVariable("counter1", 1)
+        val variable2 = Variable.IntegerVariable("counter2", 1)
+        variableController.declare(variable1, variable2)
+
+        val expression1 = intExpression("@{counter1}")
+        val expression2 = intExpression("@{counter2}")
+        var recompositionCount = 0
+        var observedValue1 by mutableLongStateOf(0L)
+        var observedValue2 by mutableLongStateOf(0L)
+
+        setContent {
+            observedValue1 = expression1.observedValue()
+            observedValue2 = expression2.observedValue()
+            SideEffect { recompositionCount++ }
+        }
+
+        assertEquals(1, recompositionCount)
+        assertEquals(1L, observedValue1)
+        assertEquals(1L, observedValue2)
+
+        variable1.set(20)
+        variable2.set(30)
+        composeRule.waitForIdle()
+
+        assertEquals(2, recompositionCount)
+        assertEquals(20L, observedValue1)
+        assertEquals(30L, observedValue2)
     }
 
     private fun setContent(content: @Composable () -> Unit) {
