@@ -1,0 +1,82 @@
+{
+  "description": "Link with same name (items) defined in two templates",
+  "templates": {
+    "root_container": {
+      "type": "container"
+    },
+    "nested_container": {
+      "type": "container",
+      "items": [
+        {
+          "type": "container",
+          "$items": "content"
+        }
+      ]
+    },
+    "row": {
+      "type": "container",
+      "$items": "items"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root_container",
+          "items": [
+            {
+              "type": "nested_container",
+              "content": [
+                {
+                  "type": "row",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Title Text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "container",
+                        "items": [
+                          {
+                            "text": "Title Text",
+                            "type": "text"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

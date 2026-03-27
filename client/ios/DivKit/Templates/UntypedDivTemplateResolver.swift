@@ -101,7 +101,9 @@ final class UntypedDivTemplateResolver {
       if let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
         var parameterNames = collectParameterNames(from: resolvedTemplate)
-        parameterNames.formUnion(collectParameterNames(from: dict))
+        parameterNames.formUnion(
+          collectParameterNames(from: dict, excludingKeys: parameterNames)
+        )
         return resolveInstanceLinks(
           in: dict,
           linkSource: linkSource,
@@ -149,11 +151,20 @@ final class UntypedDivTemplateResolver {
 
   private func collectParameterNames(from dict: [String: Any]) -> Set<String> {
     var visited = Set<TemplateName>()
-    return collectParameterNames(from: dict, visited: &visited)
+    return collectParameterNames(from: dict, excludingKeys: [], visited: &visited)
   }
 
   private func collectParameterNames(
     from dict: [String: Any],
+    excludingKeys: Set<String>
+  ) -> Set<String> {
+    var visited = Set<TemplateName>()
+    return collectParameterNames(from: dict, excludingKeys: excludingKeys, visited: &visited)
+  }
+
+  private func collectParameterNames(
+    from dict: [String: Any],
+    excludingKeys: Set<String> = [],
     visited: inout Set<TemplateName>
   ) -> Set<String> {
     var names = Set<String>()
@@ -161,6 +172,7 @@ final class UntypedDivTemplateResolver {
       if key.hasPrefix("$"), let name = value as? String {
         names.insert(name)
       }
+      guard !excludingKeys.contains(key) else { continue }
       if let nestedDict = value as? [String: Any] {
         names.formUnion(collectParameterNamesResolvingTemplates(
           from: nestedDict, visited: &visited
