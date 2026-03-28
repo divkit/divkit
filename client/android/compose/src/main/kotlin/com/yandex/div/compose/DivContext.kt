@@ -9,13 +9,19 @@ import com.yandex.div.compose.views.DivLocalContext
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.evaluable.FunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
-import com.yandex.div2.DivFunction
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import javax.inject.Inject
 
+/**
+ * An implementation of [android.content.Context] that must be used for composing [DivView]s.
+ *
+ * Example usage:
+ *
+ *    val configuration = DivComposeConfiguration()
+ *    val divContext = configuration.createContext(baseContext = activity)
+ */
 @PublicApi
 class DivContext @Inject @MainThread internal constructor(
     internal val component: DivContextComponent

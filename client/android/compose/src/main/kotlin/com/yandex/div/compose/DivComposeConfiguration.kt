@@ -16,6 +16,19 @@ import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
 import javax.inject.Named
 
+/**
+ * Entry point of DivKit `compose` library. Provides configuration for composing [DivView]s.
+ *
+ * Example usage:
+ *
+ *    val configuration = DivComposeConfiguration(
+ *        reporter = MyReporter()
+ *    )
+ *    val divContext = configuration.createContext(baseContext = activity)
+ *    ComposeView(divContext).setContent {
+ *        DivView(data = data)
+ *    }
+ */
 @Module
 @PublicApi
 class DivComposeConfiguration(

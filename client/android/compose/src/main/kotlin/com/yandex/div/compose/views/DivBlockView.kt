@@ -31,7 +31,23 @@ internal fun DivBlockView(
             is Div.Image -> DivImageView(modifier.applyPaddings(data), data.value)
             is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
             is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
-            else -> reporter.reportError("Element not supported")
+            is Div.Custom -> NotSupported("custom")
+            is Div.GifImage -> NotSupported("gif")
+            is Div.Grid -> NotSupported("grid")
+            is Div.Indicator -> NotSupported("indicator")
+            is Div.Input -> NotSupported("input")
+            is Div.Pager -> NotSupported("pager")
+            is Div.Select -> NotSupported("select")
+            is Div.Slider -> NotSupported("slider")
+            is Div.State -> NotSupported("state")
+            is Div.Switch -> NotSupported("switch")
+            is Div.Tabs -> NotSupported("tabs")
+            is Div.Video -> NotSupported("video")
         }
     }
+}
+
+@Composable
+private fun NotSupported(name: String) {
+    reporter.reportError("Element not supported: $name")
 }
