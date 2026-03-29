@@ -1147,7 +1147,7 @@
         return registred;
     }
 
-    $: if (currentNode && isVisible) {
+    function runVisibilityActions(): void {
         visAction?.destroy();
 
         const isVisibilityActionsEnabled = (
@@ -1177,6 +1177,13 @@
         } else {
             visAction = undefined;
         }
+    }
+
+    $: if (currentNode && isVisible) {
+        runVisibilityActions();
+    } else {
+        visAction?.destroy();
+        visAction = undefined;
     }
 
     function focusHandler() {
