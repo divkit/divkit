@@ -18,29 +18,6 @@ class DemoDiv2Logger(
     private val scenarioLogDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
 ) : Div2Logger {
 
-    companion object {
-        private const val TAG = "DemoDiv2Logger"
-
-        private val capturedVisibilityActions = mutableListOf<DivVisibilityAction>()
-        private var captureVisibilityActions = false
-        private val capturedLogActions = mutableListOf<String>()
-        val logActions get() = ArrayList(capturedLogActions)
-
-        fun withCaptureVisibilityActions(block: () -> Unit): List<DivVisibilityAction> {
-            return try {
-                captureVisibilityActions = true
-                capturedVisibilityActions.clear()
-                block()
-                ArrayList(capturedVisibilityActions)
-            } finally {
-                captureVisibilityActions = false
-                capturedVisibilityActions.clear()
-            }
-        }
-
-        fun clearLogActions() = capturedLogActions.clear()
-    }
-
     override fun logClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
         val actionLogId = action.logId.evaluate(resolver)
         log {
@@ -148,9 +125,6 @@ class DemoDiv2Logger(
         log {
             "logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"
         }
-        if (captureVisibilityActions) {
-            capturedVisibilityActions += action
-        }
     }
 
     override fun logViewDisappeared(
@@ -227,7 +201,8 @@ class DemoDiv2Logger(
 
     private inline fun log(message : () -> String) {
         KLog.d(TAG, message)
-        capturedLogActions.add(message.invoke())
         scenarioLogDelegate.println(message.invoke())
     }
 }
+
+private const val TAG = "DemoDiv2Logger"

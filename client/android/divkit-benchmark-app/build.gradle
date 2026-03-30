@@ -67,7 +67,6 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div')
     implementation project(path: ':div-gesture')
-    implementation project(path: ':div-json')
     implementation project(path: ':div-lottie')
     implementation project(path: ':div-markdown')
     implementation project(path: ':div-network')
@@ -83,11 +82,8 @@ dependencies {
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
     implementation project(path: ':video-custom')
-    implementation project(path: ':div-storage')
     implementation project(path: ':div-video-m3')
-    implementation project(path: ':picasso')
     implementation project(path: ':glide')
-    implementation project(path: ':coil')
 
     implementation libs.androidx.preference
     implementation libs.kotlin.reflect

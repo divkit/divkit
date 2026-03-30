@@ -9,8 +9,6 @@ android {
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div')
-    implementation project(path: ':div-core')
-    implementation project(path: ':div-json')
     implementation project(path: ':logging')
 
     implementation libs.androidx.coreKtx

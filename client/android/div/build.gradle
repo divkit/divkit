@@ -38,7 +38,6 @@ unMock {
 
 dependencies {
     implementation project(path: ':assertion')
-    implementation project(path: ':div-json')
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 

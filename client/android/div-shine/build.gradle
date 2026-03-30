@@ -9,7 +9,6 @@ android {
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div')
-    implementation project(path: ':div-json')
 
     implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"

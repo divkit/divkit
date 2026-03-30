@@ -8,5 +8,4 @@ android {
 
 dependencies {
     implementation project(path: ':div')
-    implementation project(path: ':div-json')
 }
