@@ -30,6 +30,7 @@ import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
+import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
@@ -43,7 +44,6 @@ import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.internal.core.getChildContext
-import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase

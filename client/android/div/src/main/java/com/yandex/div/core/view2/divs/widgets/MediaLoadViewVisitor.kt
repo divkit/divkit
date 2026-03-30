@@ -10,7 +10,6 @@ import com.yandex.div.core.view2.divs.DivGifImageBinder
 import com.yandex.div.core.view2.divs.DivImageBinder
 import com.yandex.div.core.view2.divs.DivVideoBinder
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.internal.view.DivImageView
 import javax.inject.Inject
 
 @DivViewScope

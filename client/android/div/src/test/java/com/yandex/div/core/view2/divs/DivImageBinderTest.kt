@@ -10,8 +10,8 @@ import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.DivPlaceholderLoader
+import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivImage

@@ -12,8 +12,8 @@ import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
+import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstantOrNull

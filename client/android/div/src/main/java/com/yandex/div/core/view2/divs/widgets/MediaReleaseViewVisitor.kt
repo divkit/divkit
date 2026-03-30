@@ -6,7 +6,6 @@ import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.binding.BindingCriticalSection
 import com.yandex.div.core.util.binding.runBindingAction
-import com.yandex.div.internal.view.DivImageView
 import javax.inject.Inject
 
 @DivViewScope
