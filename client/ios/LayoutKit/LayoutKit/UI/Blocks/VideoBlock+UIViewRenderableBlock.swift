@@ -149,7 +149,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       videoView?.set(scale: model.scale)
     }
 
-    if model.videoData != oldValue.videoData {
+    if !model.hasEqualVideoData(to: oldValue) {
       player?.set(data: model.videoData, config: model.playbackConfig)
     }
 
@@ -205,11 +205,22 @@ extension VideoBlockViewModel {
     playbackConfig: .default,
     path: .init("video")
   )
+
+  fileprivate func hasEqualVideoData(to other: Self) -> Bool {
+    videoData == other.videoData
+      && playbackConfig.settingsPayload.isEqual(to: other.playbackConfig.settingsPayload)
+  }
 }
 
 extension CGSize {
   fileprivate var area: CGFloat {
     width * height
+  }
+}
+
+extension [String: Any] {
+  fileprivate func isEqual(to other: [String: Any]) -> Bool {
+    NSDictionary(dictionary: self).isEqual(to: other)
   }
 }
 #endif
