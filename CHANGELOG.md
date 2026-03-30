@@ -1,6 +1,8 @@
 ## 32.43.0
 
 # Android Client:
+* Do not interrupt visit of div hierarchy without ExpressionResolverImpl.
+* Fix ConcurrentModificationException during preload.
 * Fixed `div-state` state restoring on rebind after `state_id_variable` changes.
 * Shift debug view below status bar area.
 
