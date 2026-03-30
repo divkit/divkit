@@ -233,6 +233,13 @@ internal class DivVideoBinder @Inject constructor(
                 player.setSource(it, div.createConfig(resolver))
             }
         )
+        div.playerSettingsPayload?.let { payload ->
+            addVideoSubscription(
+                payload.observe(resolver) {
+                    player.setSource(div.createSource(resolver), div.createConfig(resolver))
+                }
+            )
+        }
     }
 
     private fun DivVideo.observeSource(
