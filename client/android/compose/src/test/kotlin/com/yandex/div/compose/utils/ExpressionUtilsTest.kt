@@ -10,8 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.compose.views.DivLocalContext
-import com.yandex.div.compose.views.LocalDivContext
+import com.yandex.div.compose.context.DivLocalContext
+import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -36,6 +36,7 @@ class ExpressionUtilsTest {
             variableController = variableController
         ),
         functionProvider = mock(),
+        triggerStorage = mock(),
         variableController = variableController
     )
 

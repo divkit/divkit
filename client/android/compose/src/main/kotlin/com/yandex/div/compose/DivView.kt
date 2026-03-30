@@ -1,10 +1,14 @@
 package com.yandex.div.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.context.LocalDivContext
+import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.triggers.observe
+import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.compose.views.WithLocalDivContext
 import com.yandex.div2.DivData
 
 /**
@@ -39,7 +43,12 @@ fun DivView(
         return
     }
 
-    WithLocalDivContext(data) {
+    val viewContext = divContext.getViewContext(data)
+    viewContext.rootLocalContext.triggerStorage.observe()
+    CompositionLocalProvider(
+        LocalDivViewContext provides viewContext,
+        LocalDivContext provides viewContext.rootLocalContext
+    ) {
         DivBlockView(
             data = div,
             modifier = modifier

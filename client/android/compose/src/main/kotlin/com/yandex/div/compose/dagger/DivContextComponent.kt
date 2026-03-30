@@ -5,8 +5,9 @@ import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.internal.DivDebugFeatures
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import javax.inject.Named
@@ -25,6 +26,7 @@ internal interface DivContextComponent {
     val debugFeatures: DivDebugFeatures
     val imageLoader: ImageLoader
     val reporter: DivReporter
+    val viewContextStorage: DivViewContextStorage
 
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController

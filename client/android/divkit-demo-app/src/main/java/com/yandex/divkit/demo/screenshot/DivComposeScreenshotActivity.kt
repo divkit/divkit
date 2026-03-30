@@ -28,6 +28,7 @@ adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.D
 class DivComposeScreenshotActivity : ComponentActivity() {
 
     private lateinit var divContext: DivContext
+    private lateinit var data: DivData
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
@@ -55,7 +56,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
             if (templatesJson != null) parseTemplates(templatesJson)
         }
-        val data = DivData(environment, json.getJSONObject("card"))
+        data = DivData(environment, json.getJSONObject("card"))
 
         val view = ComposeView(divContext).apply {
             id = R.id.screenshot_view
@@ -73,7 +74,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
     fun performActions(actions: List<DivAction>) {
         actions.forEach {
-            divContext.debugFeatures.performAction(it)
+            divContext.debugFeatures.performAction(data = data, action = it)
         }
     }
 

@@ -1,7 +1,5 @@
 package com.yandex.div.compose
 
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -150,11 +148,9 @@ class DivViewTest {
         content: Div,
         variables: List<DivVariable>? = null
     ) {
-        rule.setContent {
-            val divContext = configuration.createContext(baseContext = LocalContext.current)
-            CompositionLocalProvider(LocalContext provides divContext) {
-                DivView(data = data(content, variables = variables))
-            }
-        }
+        rule.setContent(
+            configuration = configuration,
+            data = data(content, variables = variables)
+        )
     }
 }

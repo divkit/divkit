@@ -1,5 +1,7 @@
 package com.yandex.div.compose.triggers
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.dagger.DivLocalScope
@@ -19,18 +21,13 @@ internal class DivTriggerStorage @Inject constructor(
 
     private class Item(
         private val trigger: DivTrigger,
-        expressionResolver: ExpressionResolver,
+        private val expressionResolver: ExpressionResolver,
         private val handleActions: (actions: List<DivAction>) -> Unit
     ) {
         private val mode = trigger.mode.evaluate(expressionResolver)
-        private val conditionSubscription: Disposable
 
         private var lastCondition: Boolean = false
-
-        init {
-            conditionSubscription = trigger.condition
-                .observeAndGet(expressionResolver, this::onConditionChanged)
-        }
+        private var conditionSubscription: Disposable? = null
 
         private fun onConditionChanged(condition: Boolean) {
             when (mode) {
@@ -47,17 +44,57 @@ internal class DivTriggerStorage @Inject constructor(
                     }
             }
         }
+
+        fun startObserving() {
+            conditionSubscription = trigger.condition
+                .observeAndGet(expressionResolver, this::onConditionChanged)
+        }
+
+        fun stopObserving() {
+            conditionSubscription?.close()
+            conditionSubscription = null
+        }
     }
 
     private val items = mutableListOf<Item>()
+    private var isActive = true
 
     fun add(trigger: DivTrigger) {
-        items.add(Item(trigger, expressionResolver, this::handle))
+        val item = Item(trigger, expressionResolver, this::handle)
+        items.add(item)
+
+        if (isActive) {
+            item.startObserving()
+        }
+    }
+
+    fun startObserving() {
+        if (!isActive) {
+            items.forEach { it.startObserving() }
+            isActive = true
+        }
+    }
+
+    fun stopObserving() {
+        if (isActive) {
+            items.forEach { it.stopObserving() }
+            isActive = false
+        }
     }
 
     private fun handle(actions: List<DivAction>) {
         actions.forEach {
             actionHandler.handle(context = actionHandlingContext, action = it)
+        }
+    }
+}
+
+@Composable
+internal fun DivTriggerStorage.observe() {
+    DisposableEffect(this) {
+        startObserving()
+        onDispose {
+            stopObserving()
         }
     }
 }

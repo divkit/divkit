@@ -118,6 +118,38 @@ class DivTriggerStorageTest {
         verifyTriggered()
     }
 
+    @Test
+    fun `not triggered when added after stopObserving() is called`() {
+        triggerStorage.stopObserving()
+        triggerStorage.add(trigger(action = action, condition = "@{true}"))
+
+        verifyNoInteractions(actionHandler)
+    }
+
+    @Test
+    fun `triggered when startObserving() is called`() {
+        triggerStorage.stopObserving()
+        triggerStorage.add(trigger(action = action, condition = "@{true}"))
+
+        verifyNoInteractions(actionHandler)
+
+        triggerStorage.startObserving()
+
+        verifyTriggered()
+    }
+
+    @Test
+    fun `not triggered when startObserving() is called and was triggered before`() {
+        triggerStorage.add(trigger(action = action, condition = "@{true}"))
+
+        verifyTriggered()
+
+        triggerStorage.stopObserving()
+        triggerStorage.startObserving()
+
+        verifyNoInteractions(actionHandler)
+    }
+
     private fun verifyTriggered() {
         verify(actionHandler).handle(actionHandlingContext, action)
         clearInvocations(actionHandler)

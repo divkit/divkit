@@ -45,11 +45,11 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         }
 
         testCase.parseActions().forEach {
-            divContext.debugFeatures.performAction(it)
+            divContext.debugFeatures.performAction(data = divData, action = it)
         }
 
         testCase.checkResult(
-            expressionResolver = divContext.debugFeatures.expressionResolver!!
+            expressionResolver = divContext.debugFeatures.getExpressionResolver(divData)!!
         )
     }
 

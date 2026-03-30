@@ -16,7 +16,7 @@ import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
-import com.yandex.div.compose.views.LocalDivContext
+import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation

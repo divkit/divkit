@@ -6,7 +6,7 @@ import coil3.ImageLoader
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.compose.views.LocalDivContext
+import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div.json.expressions.ExpressionResolver
 
 internal val divContext: DivContext
