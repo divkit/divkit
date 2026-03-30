@@ -23,11 +23,11 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
-import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.core.widget.LoadableImageView
+import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver

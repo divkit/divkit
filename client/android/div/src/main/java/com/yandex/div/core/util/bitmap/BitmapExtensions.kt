@@ -10,8 +10,8 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.availableHeight
 import com.yandex.div.core.view2.divs.availableWidth
 import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.wrapsContent
+import com.yandex.div.internal.view.DivImageView
 import com.yandex.div2.DivImageScale
 import kotlin.math.max
 import kotlin.math.min
