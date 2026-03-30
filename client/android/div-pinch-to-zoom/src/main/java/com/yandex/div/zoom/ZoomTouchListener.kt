@@ -8,7 +8,8 @@ import com.yandex.div.internal.KLog
 import kotlin.math.abs
 
 internal class ZoomTouchListener(
-    private val touchController: ZoomTouchController
+    private val touchController: ZoomTouchController,
+    private val baseTouchListener: View.OnTouchListener?,
 ) : View.OnTouchListener {
 
     private val viewLocation = IntArray(2)
@@ -30,13 +31,13 @@ internal class ZoomTouchListener(
                 }
 
                 lastUnconsumedDownEvent =
-                    if (view.onTouchEvent(event)) null else DownEvent(event.downTime, event.x, event.y)
+                    if (view.handleTouchEvent(event)) null else DownEvent(event.downTime, event.x, event.y)
                 return true
             }
 
             MotionEvent.ACTION_POINTER_DOWN -> {
                 when {
-                    event.pointerCount < 2 -> view.onTouchEvent(event)
+                    event.pointerCount < 2 -> view.handleTouchEvent(event)
                     touchController.isInZoom -> Unit
                     else -> {
                         view.sendCancelEvent(event)
@@ -77,14 +78,14 @@ internal class ZoomTouchListener(
     private fun View.sendCancelEvent(event: MotionEvent) {
         val cancelEvent = MotionEvent.obtain(event)
         cancelEvent.action = MotionEvent.ACTION_CANCEL
-        onTouchEvent(cancelEvent)
+        handleTouchEvent(cancelEvent)
         cancelEvent.recycle()
     }
 
     private fun View.tryDispatchGesture(event: MotionEvent): Boolean {
-        val down = lastUnconsumedDownEvent ?: return onTouchEvent(event)
+        val down = lastUnconsumedDownEvent ?: return handleTouchEvent(event)
 
-        if (skipMoveEvent(event, down)) return true
+        if (skipMoveEvent(event, down)) return handleTouchEvent(event)
 
         lastUnconsumedDownEvent = null
         skipDownEvent = true
@@ -112,6 +113,9 @@ internal class ZoomTouchListener(
         return true
     }
 
+    private fun View.handleTouchEvent(event: MotionEvent) =
+        baseTouchListener?.onTouch(this, event) == true || onTouchEvent(event)
+
     private fun View.skipMoveEvent(event: MotionEvent, down: DownEvent): Boolean {
         if (event.actionMasked != MotionEvent.ACTION_MOVE) return false
 
@@ -122,7 +126,11 @@ internal class ZoomTouchListener(
     private fun View.dispatchEvent(downTime: Long, eventTime: Long, action: Int, x: Float, y: Float) {
         val event = MotionEvent.obtain(downTime, eventTime, action, x, y, 0)
         dispatchTouchEvent(event)
-        event.recycle()
+        try {
+            event.recycle()
+        } catch (_: IllegalStateException) {
+            // ignore
+        }
     }
 
     private fun offset(index: Int) = (viewLocation[index] - rootLocation[index]).toFloat()

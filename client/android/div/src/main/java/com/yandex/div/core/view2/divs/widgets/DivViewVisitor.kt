@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import com.yandex.div.internal.view.DivImageView
 
 internal abstract class DivViewVisitor {
     open fun defaultVisit(view: DivHolderView<*>) = Unit

@@ -12,7 +12,6 @@ import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
-import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
@@ -30,6 +29,7 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.drawable.NoOpDrawable
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.createBitmap
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
 import androidx.transition.R
@@ -15,8 +16,7 @@ import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
-import com.yandex.div.core.view2.divs.widgets.DivImageView
-import androidx.core.graphics.createBitmap
+import com.yandex.div.internal.view.DivImageView
 
 @MainThread
 internal fun createOrGetVisualCopy(
