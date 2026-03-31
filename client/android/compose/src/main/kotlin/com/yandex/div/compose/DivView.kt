@@ -12,20 +12,20 @@ import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div2.DivData
 
 /**
- * A composable that builds its own layout according to the provided [DivData]. Must be used within
- * the [DivContext].
+ * A composable that builds its own layout according to the provided [DivData].
  *
- * Example usage:
+ * Requires [DivContext] to be set as the current [android.content.Context] in the composition.
+ * The simplest way to achieve this is to use [DivContext] as the context for
+ * [androidx.compose.ui.platform.ComposeView]:
  *
+ *    val configuration = DivComposeConfiguration()
+ *    val divContext = configuration.createContext(baseContext = activity)
  *    ComposeView(divContext).setContent {
  *        DivView(data = data)
  *    }
  *
- * or
- *
- *    CompositionLocalProvider(LocalContext provides divContext) {
- *        DivView(data = data)
- *    }
+ * @param data the [DivData] describing the layout to render.
+ * @param modifier the [Modifier] to be applied to the root layout.
  */
 @Composable
 fun DivView(

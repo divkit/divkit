@@ -3,6 +3,13 @@ package com.yandex.div.compose
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.internal.Log
 
+/**
+ * Handles error and warning reports from the DivKit pipeline.
+ *
+ * Override the methods to provide custom logging.
+ *
+ * @see DivComposeConfiguration
+ */
 @PublicApi
 open class DivReporter {
 
