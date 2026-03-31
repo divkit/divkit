@@ -63,12 +63,20 @@ internal class ZoomTouchListener(
                 return true
             }
 
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            MotionEvent.ACTION_UP -> {
                 if (touchController.isInZoom) {
                     touchController.finishZoomTouch(view, event)
                     return true
                 }
                 return view.tryDispatchGesture(event)
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                if (touchController.isInZoom) {
+                    touchController.finishZoomTouch(view, event)
+                    return true
+                }
+                return view.handleTouchEvent(event)
             }
         }
 
@@ -126,11 +134,7 @@ internal class ZoomTouchListener(
     private fun View.dispatchEvent(downTime: Long, eventTime: Long, action: Int, x: Float, y: Float) {
         val event = MotionEvent.obtain(downTime, eventTime, action, x, y, 0)
         dispatchTouchEvent(event)
-        try {
-            event.recycle()
-        } catch (_: IllegalStateException) {
-            // ignore
-        }
+        event.recycle()
     }
 
     private fun offset(index: Int) = (viewLocation[index] - rootLocation[index]).toFloat()
