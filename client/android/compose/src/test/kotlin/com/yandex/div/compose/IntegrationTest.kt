@@ -84,10 +84,8 @@ private class Reporter(private val logger: IntegrationTestLogger) : DivReporter(
 }
 
 private val ignoredFiles = listOf(
-    "array_variable_mutation.json",
     "decl_expressions_item_builder.json",
     "decl_expressions_item_builder_override.json",
-    "dict_set_value.json",
     "item_builder_variable_triggers.json",
     "local-triggers-gallery.json",
     "local-triggers-gallery-with-item-builder.json",
@@ -106,6 +104,5 @@ private val ignoredFiles = listOf(
     "property_string_value_from_variable.json",
     "property_url_value_from_dict.json",
     "property_without_setter.json",
-    "update_structure.json",
     "wrap_content_constraints_warning.json",
 )

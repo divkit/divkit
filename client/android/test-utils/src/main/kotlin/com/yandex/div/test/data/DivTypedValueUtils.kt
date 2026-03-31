@@ -3,10 +3,12 @@ package com.yandex.div.test.data
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.ArrayValue
 import com.yandex.div2.ColorValue
+import com.yandex.div2.DictValue
 import com.yandex.div2.DivTypedValue
 import com.yandex.div2.IntegerValue
 import com.yandex.div2.StrValue
 import org.json.JSONArray
+import org.json.JSONObject
 
 fun typedValue(value: String): DivTypedValue {
     return DivTypedValue.Str(StrValue(value = constant(value)))
@@ -22,6 +24,10 @@ fun typedValue(value: Expression<Long>): DivTypedValue {
 
 fun typedValue(value: JSONArray): DivTypedValue {
     return DivTypedValue.Array(ArrayValue(value = constant(value)))
+}
+
+fun typedValue(value: JSONObject): DivTypedValue {
+    return DivTypedValue.Dict(DictValue(value = constant(value)))
 }
 
 fun typedColorValue(value: Long): DivTypedValue {

@@ -3,6 +3,8 @@ package com.yandex.div.core.actions
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.util.clone
+import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionTyped
@@ -34,7 +36,7 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val key = action.key.evaluate(resolver)
-        val newValue = action.value?.evaluateToPrimitive(resolver)
+        val newValue = action.value?.evaluateAsPrimitive(resolver)
         VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
             if (variable !is Variable.DictVariable) {
                 view.logError(
@@ -59,12 +61,4 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
             return@setVariable variable
         }
     }
-}
-
-private fun JSONObject.clone(): JSONObject {
-    val clone = JSONObject()
-    keys().forEach { key ->
-        clone.put(key, this[key])
-    }
-    return clone
 }

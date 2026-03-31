@@ -4,6 +4,7 @@ import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.util.asList
+import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
@@ -45,7 +46,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index?.evaluate(resolver)?.toInt()
-        val newValue = action.value.evaluateToPrimitive(resolver)
+        val newValue = action.value.evaluateAsPrimitive(resolver)
         view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {
@@ -89,7 +90,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
-        val newValue = action.value.evaluateToPrimitive(resolver)
+        val newValue = action.value.evaluateAsPrimitive(resolver)
         view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {

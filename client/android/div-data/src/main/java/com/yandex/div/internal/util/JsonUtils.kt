@@ -11,7 +11,6 @@ inline fun <reified T> JSONObject.forEach(action: (String, T) -> Unit) {
     }
 }
 
-
 inline fun <reified T> JSONArray.forEach(action: (Int, T) -> Unit) {
     val length = length()
     for (i in 0 until length) {
@@ -85,3 +84,11 @@ fun JSONArray.summary(indentSpaces: Int = 0): String {
 fun JSONObject.isEmpty(): Boolean = length() == 0
 
 fun JSONArray.isEmpty(): Boolean = length() == 0
+
+fun JSONObject.clone(): JSONObject {
+    val clone = JSONObject()
+    keys().forEach { key ->
+        clone.put(key, this[key])
+    }
+    return clone
+}

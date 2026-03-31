@@ -2,7 +2,6 @@ package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
@@ -15,28 +14,21 @@ import org.json.JSONArray
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class SetVariableActionHandlerTest {
-    private val reporter = TestReporter()
-    private val variableController = DivVariableController()
+    private val actionHandlerEnvironment = ActionHandlerEnvironment()
 
-    private val actionHandler = DivActionHandler(
-        customActionHandler = mock(),
-        reporter = reporter,
+    private val reporter: TestReporter
+        get() = actionHandlerEnvironment.reporter
+
+    private val variableController: DivVariableController
+        get() = actionHandlerEnvironment.variableController
+
+    private val actionHandler = actionHandlerEnvironment.createActionHandler(
         setVariableActionHandler = SetVariableActionHandler(
             reporter = reporter
         )
-    )
-
-    private val expressionResolver = createExpressionResolver(
-        reporter = reporter,
-        variableController = variableController
-    )
-
-    private val actionHandlingContext = DivActionHandlingContext(
-        expressionResolver = expressionResolver
     )
 
     @Test
@@ -186,6 +178,6 @@ class SetVariableActionHandlerTest {
     }
 
     private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlingContext, action = action)
+        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
     }
 }

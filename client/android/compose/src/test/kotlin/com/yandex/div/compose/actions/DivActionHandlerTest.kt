@@ -1,9 +1,6 @@
 package com.yandex.div.compose.actions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.test.data.action
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionCustom
@@ -12,27 +9,14 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
+    private val actionHandlerEnvironment = ActionHandlerEnvironment()
     private val customActionHandler = CustomActionHandler()
-    private val reporter = TestReporter()
-    private val variableController = DivVariableController()
 
-    private val actionHandler = DivActionHandler(
-        customActionHandler = customActionHandler,
-        reporter = reporter,
-        setVariableActionHandler = mock()
-    )
-
-    private val expressionResolver = createExpressionResolver(
-        reporter = reporter,
-        variableController = variableController
-    )
-
-    private val actionHandlingContext = DivActionHandlingContext(
-        expressionResolver = expressionResolver
+    private val actionHandler = actionHandlerEnvironment.createActionHandler(
+        customActionHandler = customActionHandler
     )
 
     @Test
@@ -52,7 +36,7 @@ class DivActionHandlerTest {
     }
 
     private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlingContext, action = action)
+        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
     }
 }
 

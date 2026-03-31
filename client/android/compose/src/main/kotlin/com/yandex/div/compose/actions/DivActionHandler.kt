@@ -11,7 +11,10 @@ import javax.inject.Inject
 internal class DivActionHandler @Inject constructor(
     private val customActionHandler: DivCustomActionHandler,
     private val reporter: DivReporter,
-    private val setVariableActionHandler: SetVariableActionHandler
+    private val arrayActionsHandler: ArrayActionsHandler,
+    private val dictSetValueActionHandler: DictSetValueActionHandler,
+    private val setVariableActionHandler: SetVariableActionHandler,
+    private val updateStructureActionHandler: UpdateStructureActionHandler
 ) {
 
     fun handle(context: DivActionHandlingContext, action: DivAction) {
@@ -34,9 +37,15 @@ internal class DivActionHandler @Inject constructor(
         when (action) {
             is DivActionTyped.AnimatorStart -> notSupported()
             is DivActionTyped.AnimatorStop -> notSupported()
-            is DivActionTyped.ArrayInsertValue -> notSupported()
-            is DivActionTyped.ArrayRemoveValue -> notSupported()
-            is DivActionTyped.ArraySetValue -> notSupported()
+            is DivActionTyped.ArrayInsertValue ->
+                arrayActionsHandler.handle(context, action.value)
+
+            is DivActionTyped.ArrayRemoveValue ->
+                arrayActionsHandler.handle(context, action.value)
+
+            is DivActionTyped.ArraySetValue ->
+                arrayActionsHandler.handle(context, action.value)
+
             is DivActionTyped.ClearFocus -> notSupported()
             is DivActionTyped.CopyToClipboard -> notSupported()
             is DivActionTyped.Custom ->
@@ -48,7 +57,9 @@ internal class DivActionHandler @Inject constructor(
                     )
                 )
 
-            is DivActionTyped.DictSetValue -> notSupported()
+            is DivActionTyped.DictSetValue ->
+                dictSetValueActionHandler.handle(context, action.value)
+
             is DivActionTyped.Download -> notSupported()
             is DivActionTyped.FocusElement -> notSupported()
             is DivActionTyped.HideTooltip -> notSupported()
@@ -62,7 +73,9 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ShowTooltip -> notSupported()
             is DivActionTyped.Submit -> notSupported()
             is DivActionTyped.Timer -> notSupported()
-            is DivActionTyped.UpdateStructure -> notSupported()
+            is DivActionTyped.UpdateStructure ->
+                updateStructureActionHandler.handle(context, action.value)
+
             is DivActionTyped.Video -> notSupported()
         }
     }

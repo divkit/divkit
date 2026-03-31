@@ -8,7 +8,8 @@ class IntegrationTestLogger : ParsingErrorLogger {
     val messages: List<String> get() = _messages
 
     override fun logError(e: Exception) {
-        e.cause?.message?.let { _messages.add(it) }
+        val message = e.cause?.message ?: e.message
+        message?.let { _messages.add(it) }
     }
 
     fun logErrorDirectly(e: Throwable) {
