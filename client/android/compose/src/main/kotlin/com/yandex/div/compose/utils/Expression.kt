@@ -5,13 +5,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionList
 
 @Composable
 internal fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
     return when (this) {
         null -> defaultValue
-        is Expression.ConstantExpression -> value
+        is Expression.ConstantExpression -> evaluate(expressionResolver)
         else -> asState(defaultValue).value
     }
 }
@@ -24,7 +26,7 @@ internal fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float 
 @Composable
 internal fun <T : Any> Expression<T>.observedValue(): T {
     return when (this) {
-        is Expression.ConstantExpression -> value
+        is Expression.ConstantExpression -> evaluate(expressionResolver)
         else -> asState().value
     }
 }
@@ -32,6 +34,11 @@ internal fun <T : Any> Expression<T>.observedValue(): T {
 @Composable
 internal fun Expression<Long>.observedIntValue(): Int {
     return observedValue().toInt()
+}
+
+@Composable
+internal fun Expression<Double>.observedFloatValue(): Float {
+    return observedValue().toFloat()
 }
 
 @Composable
@@ -54,6 +61,27 @@ private fun <T : Any> Expression<T>.asState(defaultValue: T): State<T> {
 
     DisposableEffect(this, resolver) {
         val disposable = observeAndGet(resolver) { state.value = it }
+        onDispose { disposable.close() }
+    }
+
+    return state
+}
+
+@Composable
+internal fun <T : Any> ExpressionList<T>.observedValue(): List<T> {
+    return when (this) {
+        is ConstantExpressionList -> evaluate(expressionResolver)
+        else -> asState().value
+    }
+}
+
+@Composable
+private fun <T : Any> ExpressionList<T>.asState(): State<List<T>> {
+    val resolver = expressionResolver
+    val state = remember(this, resolver) { mutableStateOf(evaluate(resolver)) }
+
+    DisposableEffect(this, resolver) {
+        val disposable = observe(resolver) { state.value = it }
         onDispose { disposable.close() }
     }
 

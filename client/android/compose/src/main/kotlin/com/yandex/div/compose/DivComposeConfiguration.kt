@@ -1,6 +1,8 @@
 package com.yandex.div.compose
 
 import android.content.Context
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import coil3.ImageLoader
 import coil3.request.allowHardware
 import com.yandex.div.compose.actions.DivActionData
@@ -36,15 +38,18 @@ class DivComposeConfiguration(
     val customActionHandler: DivCustomActionHandler = defaultCustomActionHandler,
 
     @get:Provides
+    val fontFamilyProvider: DivFontFamilyProvider = defaultFontFamilyProvider,
+
+    @get:Provides
+    @property:InternalApi
+    val imageLoaderProvider: ImageLoaderProvider = defaultImageLoaderProvider,
+
+    @get:Provides
     val reporter: DivReporter = DivReporter(),
 
     @get:Provides
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController = DivVariableController(),
-
-    @get:Provides
-    @property:InternalApi
-    val imageLoaderProvider: ImageLoaderProvider = defaultImageLoaderProvider,
 )
 
 fun DivComposeConfiguration.createContext(baseContext: Context): DivContext {
@@ -66,4 +71,10 @@ private val defaultCustomActionHandler = object : DivCustomActionHandler {
         context: DivActionHandlingContext,
         action: DivActionData
     ) = Unit
+}
+
+private val defaultFontFamilyProvider = object : DivFontFamilyProvider {
+    override fun getFontFamily(fontFamilyName: String?, weight: FontWeight): FontFamily {
+        return FontFamily.Default
+    }
 }

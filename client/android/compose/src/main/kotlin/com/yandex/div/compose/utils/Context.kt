@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import coil3.ImageLoader
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.LocalDivContext
@@ -24,6 +25,10 @@ internal val imageLoader: ImageLoader
 internal val reporter: DivReporter
     @Composable
     get() = divContext.component.reporter
+
+internal val fontFamilyProvider: DivFontFamilyProvider
+    @Composable
+    get() = divContext.component.fontFamilyProvider
 
 internal val expressionResolver: ExpressionResolver
     @Composable

@@ -97,6 +97,30 @@ class ExpressionUtilsTest {
     }
 
     @Test
+    fun `observed value resolves constant`() {
+        val expression = Expression.constant("Hello, world!")
+        var observedValue by mutableStateOf("")
+
+        setContent {
+            observedValue = expression.observedValue()
+        }
+
+        assertEquals("Hello, world!", observedValue)
+    }
+
+    @Test
+    fun `observed value resolves constant with slashes`() {
+        val expression = Expression.constant("Hello, world! \\\\")
+        var observedValue by mutableStateOf("")
+
+        setContent {
+            observedValue = expression.observedValue()
+        }
+
+        assertEquals("Hello, world! \\", observedValue)
+    }
+
+    @Test
     fun `observed value changes when expression instance changes`() {
         val counterA = Variable.IntegerVariable("counter_a", 1)
         variableController.declare(counterA)

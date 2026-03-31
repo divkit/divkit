@@ -10,6 +10,7 @@ import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
