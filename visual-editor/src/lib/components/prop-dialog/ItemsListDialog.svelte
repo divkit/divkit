@@ -82,6 +82,8 @@
     function onTypeChange(event: CustomEvent<string>): void {
         value = {
             state_id: (value as ItemStates).state_id,
+            title: (value as ItemTabs).title,
+            title_click_action: (value as ItemTabs).title_click_action,
             div: {
                 type: event.detail
             }

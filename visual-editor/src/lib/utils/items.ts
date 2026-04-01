@@ -1,3 +1,5 @@
+import type { DivAction } from '../../types/divjson';
+
 export interface ItemStates {
     div: {
         type: string;
@@ -12,6 +14,7 @@ export interface ItemTabs {
         __leafId?: string;
     };
     title: string;
+    title_click_action?: DivAction;
 }
 
 export type Item = ItemStates | ItemTabs;

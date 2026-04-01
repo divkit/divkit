@@ -1335,7 +1335,7 @@
                     };
                     if (isConnected) {
                         list.push(errorObj);
-                    } else if (event.error.level !== 'warn') {
+                    } else if (!list.length) {
                         list = [errorObj];
                     }
                     if (isUpdating) {
@@ -1403,7 +1403,7 @@
             (
                 event.target.matches('.renderer__divkit-gallery > div:not(:first-child) *') ||
                 event.target.matches('.renderer__divkit-pager > div:not(:first-child) *') ||
-                event.target.matches('.renderer__divkit-tabs > div:first-child > div:nth-child(3) > button')
+                event.target.matches('.renderer__divkit-tabs > div:first-child > div:nth-child(2) > button')
             )
         ) {
             return;
