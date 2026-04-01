@@ -933,8 +933,8 @@ class SwiftEntityEnumeration(EntityEnumeration):
         result = Text(f'private static func resolveUnknownValue({params}) -> {return_type} {{')
         if self.default_entity_declaration:
             default_type = utils.capitalize_camel_case(self.default_entity_declaration)
-            result += f'  let type = (context.templateData["type"] as? String ?? {default_type}.type)'
-            result += '    .flatMap { context.templateToType[$0] ?? $0 } '
+            result += f'  let raw = context.templateData["type"] as? String ?? {default_type}.type'
+            result += '  let type = context.templateToType[raw] ?? raw'
         else:
             result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'
             result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'

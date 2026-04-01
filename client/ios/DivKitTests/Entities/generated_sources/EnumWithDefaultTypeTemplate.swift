@@ -68,8 +68,8 @@ public enum EnumWithDefaultTypeTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<EnumWithDefaultType> {
-    let type = (context.templateData["type"] as? String ?? WithDefault.type)
-      .flatMap { context.templateToType[$0] ?? $0 } 
+    let raw = context.templateData["type"] as? String ?? WithDefault.type
+    let type = context.templateToType[raw] ?? raw
 
     return {
       var result: DeserializationResult<EnumWithDefaultType>?

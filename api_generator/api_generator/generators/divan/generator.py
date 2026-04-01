@@ -89,8 +89,6 @@ class DivanGenerator(Generator):
 
         if with_factory_methods:
             def add_methods_declarations(ent: DivanEntity):
-                nonlocal result_declaration
-
                 def add_declaration(comment_block: Text, declaration: Text):
                     nonlocal result_declaration
                     if not declaration.lines:

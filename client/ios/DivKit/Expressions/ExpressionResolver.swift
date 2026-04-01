@@ -212,9 +212,13 @@ public final class ExpressionResolver {
     return nil
   }
 
+  private func resolveStringBasedLink<String>(_ link: ExpressionLink<String>) -> String? {
+    resolveStringBasedLink(link, initializer: { $0 as? String })
+  }
+
   private func resolveStringBasedLink<T>(
     _ link: ExpressionLink<T>,
-    initializer: (String) -> T? = { $0 }
+    initializer: (String) -> T?
   ) -> T? {
     var stringValue = ""
     for item in link.items {
