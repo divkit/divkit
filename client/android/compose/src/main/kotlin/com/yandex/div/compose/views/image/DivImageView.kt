@@ -1,7 +1,10 @@
 package com.yandex.div.compose.views.image
 
 import android.content.Context
+import android.util.Base64
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,8 +23,8 @@ import coil3.request.transformations
 import coil3.transform.Transformation
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
-import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
@@ -40,6 +43,7 @@ internal fun DivImageView(
     val contentAlignmentHorizontal = data.contentAlignmentHorizontal.observedValue()
     val contentAlignmentVertical = data.contentAlignmentVertical.observedValue()
     val placeholderColor = data.placeholderColor.observedValue()
+    val preview = data.preview?.observedValue()
     val tintColor = data.tintColor?.observedValue()
     val density = LocalDensity.current.density
     val contentScale = scale.toContentScale(density)
@@ -53,26 +57,45 @@ internal fun DivImageView(
 
     var imageLoaded by remember { mutableStateOf(false) }
 
-    val modifier = if (!imageLoaded) {
-        modifier.background(placeholderColor.toColor())
-    } else modifier
-
-    val model = remember(imageUrl, scale, filterTransformations) {
+    val previewModel = if (preview != null) {
+        remember(preview, scale, filterTransformations) {
+            buildImagePreviewRequest(context, preview, scale, filterTransformations)
+        }
+    } else null
+    val remoteModel = remember(imageUrl, scale, filterTransformations) {
         buildImageRequest(context, imageUrl, scale, filterTransformations)
     }
 
-    AsyncImage(
-        modifier = modifier,
-        model = model,
-        imageLoader = imageLoader,
-        contentDescription = null,
-        contentScale = contentScale,
-        alignment = alignment,
-        colorFilter = colorFilter,
-        onSuccess = {
-            imageLoaded = true
-        },
-    )
+    val backgroundModifier = if (!imageLoaded && previewModel == null) {
+        modifier.background(placeholderColor.toColor())
+    } else modifier
+
+    Box(modifier = backgroundModifier) {
+        if (!imageLoaded && previewModel != null) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = previewModel,
+                imageLoader = imageLoader,
+                contentDescription = null,
+                contentScale = contentScale,
+                alignment = alignment,
+                colorFilter = colorFilter,
+            )
+        }
+
+        AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = remoteModel,
+            imageLoader = imageLoader,
+            contentDescription = null,
+            contentScale = contentScale,
+            alignment = alignment,
+            colorFilter = colorFilter,
+            onSuccess = {
+                imageLoaded = true
+            },
+        )
+    }
 }
 
 @Composable
@@ -103,14 +126,28 @@ private fun List<DivFilter>?.resolveTransformations(
     return transformations
 }
 
+private fun buildImagePreviewRequest(
+    context: Context,
+    preview: String,
+    scale: DivImageScale,
+    filterTransformations: List<Transformation>,
+): ImageRequest {
+    val decodedBase64 = Base64.decode(
+        extractBase64String(preview),
+        Base64.DEFAULT
+    )
+
+    return buildImageRequest(context, decodedBase64, scale, filterTransformations)
+}
+
 private fun buildImageRequest(
     context: Context,
-    imageUrl: Any?,
+    data: Any?,
     scale: DivImageScale,
     filterTransformations: List<Transformation>,
 ): ImageRequest {
     return ImageRequest.Builder(context).apply {
-        data(imageUrl)
+        data(data)
         if (scale == DivImageScale.NO_SCALE) {
             size(CoilSize.ORIGINAL)
         }
@@ -118,6 +155,13 @@ private fun buildImageRequest(
             transformations(filterTransformations)
         }
     }.build()
+}
+
+private fun extractBase64String(rawBase64: String): String {
+    if (rawBase64.startsWith("data:")) {
+        return rawBase64.substring(rawBase64.indexOf(',') + 1)
+    }
+    return rawBase64
 }
 
 private fun DivImageScale.toContentScale(density: Float): ContentScale {

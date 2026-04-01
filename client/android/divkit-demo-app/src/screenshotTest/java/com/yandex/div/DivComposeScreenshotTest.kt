@@ -115,6 +115,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-image/border-with-stroke.json",
                 "snapshot_test_data/div-image/blur.json",
                 "snapshot_test_data/div-image/blur-with-big-radius.json",
+                "snapshot_test_data/div-image/preview.json",
                 // div-gallery
                 "snapshot_test_data/div-gallery/corners_radius.json",
                 "snapshot_test_data/div-gallery/empty.json",
