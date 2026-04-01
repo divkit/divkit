@@ -4,7 +4,6 @@ import androidx.annotation.AnyThread
 import androidx.collection.ArrayMap
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.statePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.data.Variable
@@ -32,8 +31,8 @@ internal class DivStateManager @Inject constructor(
     private val states = ArrayMap<DivDataTag, DivViewState>()
     private val variables = mutableMapOf<String, CardVariables>()
 
-    fun collectStateVariables(data: DivData, context: BindingContext) {
-        val cardVariables = variables.getOrPut(context.divView.dataTag.id) { mutableMapOf() }
+    fun collectStateVariables(tag: DivDataTag, data: DivData, context: BindingContext) {
+        val cardVariables = variables.getOrPut(tag.id) { mutableMapOf() }
         StateVariableCollector(cardVariables).collectStateVariables(data, context)
     }
 
@@ -113,11 +112,12 @@ private class StateVariableCollector(
 
     fun collectStateVariables(data: DivData, context: BindingContext) = visit(data, context)
 
-    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
-        if (data !is Div.State) return
-        val resolver = context.expressionResolver.asImpl ?: return
+    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) = Unit
+
+    override fun visit(data: Div.State, context: BindingContext, path: DivStatePath) {
         val variableName = data.value.stateIdVariable ?: return
-        val variable = resolver.getVariable(variableName) ?: return
+        val variable = context.expressionResolver.getVariable(variableName) ?: return
         variables.getOrPut(path.statePath) { StateVariableHolder(variable) }
+        super.visit(data, context, path)
     }
 }

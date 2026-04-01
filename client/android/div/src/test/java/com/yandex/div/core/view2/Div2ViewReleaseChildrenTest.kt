@@ -52,8 +52,10 @@ class Div2ViewReleaseChildrenTest {
     private val div2Context = spy(backingContext) {
         on { div2Component } doReturn component
     }
-    private val divView = Div2View(div2Context).apply {
-        divData = testData.data
+    private val divView = Div2View(div2Context)
+
+    init {
+        divView.setData(testData.data, tag)
     }
 
     @Test

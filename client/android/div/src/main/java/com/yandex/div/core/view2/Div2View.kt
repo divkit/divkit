@@ -12,7 +12,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
-import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.transition.Scene
@@ -193,16 +192,16 @@ class Div2View private constructor(
     var prevDataTag: DivDataTag = DivDataTag.INVALID
         internal set
 
-    var divData: DivData? = null
-        internal set(value) {
+    private var _divData: DivData? = null
+        set(value) {
             field = value
-            updateRuntimeStore()
             updateTimers()
             bindingProvider.update(dataTag, field)
         }
 
-    private fun updateRuntimeStore(data: DivData? = divData, tag: DivDataTag = dataTag) {
-        data ?: return
+    val divData: DivData? get() = _divData
+
+    private fun updateRuntimeStore(data: DivData, tag: DivDataTag) {
         oldRuntimeStore = runtimeStore
         runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, data, this)
         runtimeStore.updateSubscriptions()
@@ -210,7 +209,7 @@ class Div2View private constructor(
             oldRuntimeStore?.clearBindings(this)
         }
         bindingContext = BindingContext(this, expressionResolver)
-        div2Component.stateManager.collectStateVariables(data, bindingContext)
+        div2Component.stateManager.collectStateVariables(tag, data, bindingContext)
     }
 
     private fun tryAttachVariableTriggers(data: DivData?) {
@@ -360,22 +359,19 @@ class Div2View private constructor(
         )
 
         val result = when {
-            oldData == null || data.allowsTransitionsOnDataChange(expressionResolver) -> {
+            oldData == null || data.allowsTransitionsOnDataChange(expressionResolver) ->
                 updateNow(data, tag, reporter)
-            }
-            !isDataReplaceable
-                && isComplexRebindEnabled
-                && view.getChildAt(0) is ViewGroup
-                && complexRebind(data, oldData, reporter)
-            -> {
-                false
-            }
+
             isDataReplaceable -> {
-                rebind(data, false, reporter)
+                rebind(data, reporter)
                 false
             }
+            isComplexRebindEnabled && getChildAt(0) is ViewGroup && complexRebind(data, oldData, reporter) ->
+                false
+
             else -> updateNow(data, tag, reporter)
         }
+
         div2Component.divBinder.attachIndicators(this)
 
         sendCreationHistograms()
@@ -399,7 +395,7 @@ class Div2View private constructor(
         tag: DivDataTag,
         paths: List<DivStatePath>,
         temporary: Boolean
-    ) = setDataWithStatesInternal(data, tag, paths, temporary)
+    ): Boolean = setDataWithStatesInternal(data, tag, paths, temporary)
 
     private fun setDataWithStatesInternal(
         data: DivData?,
@@ -442,19 +438,17 @@ class Div2View private constructor(
         }
         val result = when {
             oldData == null -> updateNow(data, tag, reporter)
-            !isDataReplaceable
-                && isComplexRebindEnabled
-                && view.getChildAt(0) is ViewGroup
-                && complexRebind(data, oldData, reporter)
-            -> {
-                true
-            }
+
             isDataReplaceable -> {
-                rebind(data, false, reporter)
+                rebind(data, reporter)
                 true
             }
+            isComplexRebindEnabled && getChildAt(0) is ViewGroup && complexRebind(data, oldData, reporter) ->
+                true
+
             else -> updateNow(data, tag, reporter)
         }
+
         div2Component.divBinder.attachIndicators(this)
         sendCreationHistograms()
         notifyBindEnded()
@@ -525,8 +519,8 @@ class Div2View private constructor(
         bindOnAttachRunnable?.cancel()
         val oldRootDiv = oldData.state()?.div
         val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
-            rebind(oldData, false, reporter)
-            divData = newDivData
+            rebind(oldData, reporter)
+            _divData = newDivData
             div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
             return true
         }
@@ -553,12 +547,13 @@ class Div2View private constructor(
             bindingReporter
         )
         return when {
-            !isDataReplaceable && isComplexRebindEnabled && view.getChildAt(0) is ViewGroup &&
-                complexRebind(newDivData, oldData, bindingReporter) -> true
             isDataReplaceable -> {
-                rebind(newDivData, false, reporter)
+                rebind(newDivData, reporter)
                 true
             }
+            isComplexRebindEnabled && getChildAt(0) is ViewGroup &&
+                complexRebind(newDivData, oldData, bindingReporter) -> true
+
             else -> updateNow(newDivData, dataTag, reporter)
         }
     }
@@ -574,7 +569,7 @@ class Div2View private constructor(
         cleanup(removeChildren = false)
 
         dataTag = tag
-        divData = data
+        _divData = data
 
         val result = switchToDivData(oldData, data, reporter)
 
@@ -635,7 +630,7 @@ class Div2View private constructor(
         }
         bindingsSnapshot.forEach { (view, div) ->
             view.bindingContext?.expressionResolver?.let {
-                if (ViewCompat.isAttachedToWindow(view)) {
+                if (view.isAttachedToWindow) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
                 } else {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
@@ -789,7 +784,7 @@ class Div2View private constructor(
         }
         viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         layoutProviderBinder.release(divData)
-        divData = null
+        _divData = null
         dataTag = DivDataTag.INVALID
     }
 
@@ -1182,7 +1177,7 @@ class Div2View private constructor(
 
     override fun hasScrollableViewUnder(event: MotionEvent): Boolean = hasScrollableChildUnder(event)
 
-    override fun getCurrentStateId() = stateId
+    override fun getCurrentStateId(): Long = stateId
 
     internal val currentRootPath: DivStatePath
         get() {
@@ -1201,7 +1196,7 @@ class Div2View private constructor(
         }
     }
 
-    override fun getView() = this
+    override fun getView(): Div2View = this
 
     override fun getExpressionResolver(): ExpressionResolver {
         return runtimeStore.resolver
@@ -1290,7 +1285,7 @@ class Div2View private constructor(
         viewToDivBindings.remove(view)
     }
 
-    private fun rebind(newData: DivData, isAutoanimations: Boolean, reporter: SimpleRebindReporter) {
+    private fun rebind(newData: DivData, reporter: SimpleRebindReporter) {
         try {
             if (childCount == 0) {
                 reporter.onSimpleRebindNoChild()
@@ -1305,13 +1300,10 @@ class Div2View private constructor(
             runBindingAction {
                 histogramReporter.onRebindingStarted()
                 viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
-                divData = newData
+                _divData = newData
                 div2Component.stateManager.updateState(dataTag, state.stateId, true)
                 div2Component.divBinder.bind(bindingContext, getChildAt(0), state.div, DivStatePath.fromState(state))
                 requestLayout()
-                if (isAutoanimations) {
-                    div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
-                }
                 tryAttachVariableTriggers(newData)
                 histogramReporter.onRebindingFinished()
 
@@ -1334,7 +1326,7 @@ class Div2View private constructor(
             return@executeOnMainThreadBlocking false
         }
         histogramReporter.onRebindingStarted()
-        divData = newData
+        _divData = newData
 
         val task = this.rebindTask ?: createRebindTask(reporter).also {
             this.rebindTask = it
