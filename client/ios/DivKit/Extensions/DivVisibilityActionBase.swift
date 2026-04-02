@@ -42,7 +42,7 @@ extension DivVisibilityActionBase {
     return VisibilityAction(
       logId: logId,
       uiAction: UserInterfaceAction(
-        payload: makeDivActionPayload(path: path, source: source),
+        payload: makeDivActionPayload(path: path, source: source, localValues: context.localValues),
         path: path
       ),
       requiredDuration: TimeInterval(
