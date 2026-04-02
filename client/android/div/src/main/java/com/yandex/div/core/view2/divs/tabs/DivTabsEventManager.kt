@@ -2,10 +2,9 @@ package com.yandex.div.core.view2.divs.tabs
 
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivVisibilityActionTracker
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
@@ -14,7 +13,7 @@ import com.yandex.div2.DivTabs
 
 internal class DivTabsEventManager(
     private val context: BindingContext,
-    private val actionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val div2Logger: Div2Logger,
     private val visibilityActionTracker: DivVisibilityActionTracker,
     private val tabLayout: DivTabsLayout,
@@ -57,8 +56,7 @@ internal class DivTabsEventManager(
             // TODO(MORDAANDROID-90): handle case with menuItems != null
             KLog.w(TAG) { "non-null menuItems ignored in title click action" }
         }
-        div2Logger.logActiveTabTitleClick(context.divView, context.expressionResolver, tabPosition, action)
-        actionBinder.handleAction(context.divView, context.expressionResolver, action, DivActionReason.CLICK)
+        actionPerformer.performTabTitleClick(context.divView, context.expressionResolver, action, tabPosition)
     }
 
     private companion object {

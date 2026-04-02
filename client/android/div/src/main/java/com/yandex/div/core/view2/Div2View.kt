@@ -495,14 +495,14 @@ class Div2View private constructor(
             tryAttachVariableTriggers(newDivData)
             div2Component.divBinder.attachIndicators(this)
             reporter.onPatchSuccess()
-            div2Component.actionBinder
-                .handleActions(this@Div2View, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
+            div2Component.actionPerformer
+                .performActions(this@Div2View, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
             return true
         }
 
         runBindingAction {
-            div2Component.actionBinder
-                .handleActions(this@Div2View, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
+            div2Component.actionPerformer
+                .performActions(this@Div2View, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
         }
         reporter.onPatchNoState()
         return false
@@ -1131,7 +1131,7 @@ class Div2View private constructor(
         reason: String = DivActionReason.EXTERNAL,
         resolver: ExpressionResolver = expressionResolver
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return div2Component.actionBinder.handleAction(
+        return div2Component.actionPerformer.performAction(
             divView = this,
             resolver,
             action = action,

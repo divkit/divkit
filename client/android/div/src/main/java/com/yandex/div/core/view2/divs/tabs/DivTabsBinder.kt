@@ -10,6 +10,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
@@ -27,7 +28,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.applyPaddings
@@ -69,7 +69,7 @@ internal class DivTabsBinder @Inject constructor(
     private val divBinder: Provider<DivBinder>,
     private val viewPool: ViewPool,
     private val textStyleProvider: TabTextStyleProvider,
-    private val actionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val div2Logger: Div2Logger,
     private val imageLoader: DivImageLoader,
     private val visibilityActionTracker: DivVisibilityActionTracker,
@@ -216,7 +216,7 @@ internal class DivTabsBinder @Inject constructor(
         tabToSelect: Int? = null,
     ) {
         val eventManager =
-            DivTabsEventManager(bindingContext, actionBinder, div2Logger, visibilityActionTracker, this, div)
+            DivTabsEventManager(bindingContext, actionPerformer, div2Logger, visibilityActionTracker, this, div)
         val isDynamicHeight = div.dynamicHeight.evaluate(bindingContext.expressionResolver)
         val heightCalculatorFactory = if (isDynamicHeight) {
             HeightCalculatorFactory(::DynamicCardHeightCalculator)

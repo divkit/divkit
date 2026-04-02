@@ -2,10 +2,13 @@ package com.yandex.div.core.dagger;
 
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
+
 import com.yandex.div.core.Div2Logger;
 import com.yandex.div.core.DivActionHandler;
+import com.yandex.div.core.DivActionPerformer;
 import com.yandex.div.core.DivConfiguration;
 import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
@@ -15,6 +18,7 @@ import com.yandex.div.core.DivErrorsReporter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
 import com.yandex.div.core.actions.DivActionTypedHandlerCombiner;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
@@ -54,6 +58,7 @@ import javax.inject.Named;
 /**
  * Context scoped component for div2 {@link com.yandex.div.core.Div2Context}
  */
+@InternalApi
 @DivScope
 @Component(isRoot = false,
     multiThreadAccess = true,
@@ -94,6 +99,9 @@ public interface Div2Component {
 
     @NonNull
     DivActionBinder getActionBinder();
+
+    @NonNull
+    DivActionPerformer getActionPerformer();
 
     @NonNull
     TemporaryDivStateCache getTemporaryDivStateCache();

@@ -40,7 +40,7 @@ class DivPagerBinderTest: DivBinderTest() {
         viewCreator = viewCreator,
         divBinder = { divBinder },
         divPatchCache = mock(),
-        divActionBinder = mock(),
+        actionPerformer = mock(),
         pagerIndicatorConnector = PagerIndicatorConnector(),
         accessibilityStateProvider = accessibilityStateProvider,
     )

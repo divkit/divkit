@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.View
-import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -36,12 +35,10 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
 
     private val viewBinder = mock<DivBinder>()
     private val stateManager = mock<DivStateManager>()
-    private val div2Logger = mock<Div2Logger>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val errorCollectors = mock<ErrorCollectors>()
     private val divPatchManager = mock<DivPatchManager>()
     private val divPatchCache = mock<DivPatchCache>()
-    private val divActionBeaconSender = mock<DivActionBeaconSender>()
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val stateLayout = (viewCreator.create(divOne.div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
@@ -54,11 +51,9 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
         stateManager = stateManager,
-        divActionBinder = actionBinder,
-        divActionBeaconSender = divActionBeaconSender,
+        actionPerformer = actionPerformer,
         divPatchManager = divPatchManager,
         divPatchCache = divPatchCache,
-        div2Logger = div2Logger,
         divVisibilityActionTracker = divVisibilityActionTracker,
         errorCollectors = errorCollectors,
         variableBinder = variableBinder,

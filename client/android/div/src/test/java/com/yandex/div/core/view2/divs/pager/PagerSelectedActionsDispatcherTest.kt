@@ -2,9 +2,9 @@ package com.yandex.div.core.view2.divs.pager
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.divView
 import com.yandex.div.internal.core.buildItems
@@ -30,10 +30,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class PagerSelectedActionsDispatcherTest {
 
-    private val divActionBinder = mock<DivActionBinder> {
-        on { handleActionWithoutEnableCheck(any(), any(), any(), any(), anyOrNull(), anyOrNull()) }.thenReturn(true)
-        on { handleActions(any(), any(), any(), anyOrNull(), anyOrNull())  }.thenCallRealMethod()
-    }
+    private val actionPerformer = mock<DivActionPerformer>()
     private val divView = divView(logId = CARD_ID, divTag = CARD_ID)
     private val bulkActionsArgumentCaptor = argumentCaptor<() -> Unit>()
 
@@ -44,7 +41,7 @@ class PagerSelectedActionsDispatcherTest {
     private val underTest = PagerSelectedActionsDispatcher(
         divView,
         divPager.buildItems(resolver),
-        divActionBinder
+        actionPerformer
     )
 
     @Before
@@ -59,7 +56,7 @@ class PagerSelectedActionsDispatcherTest {
         val underTest = PagerSelectedActionsDispatcher(
             divView,
             divPager.buildItems(resolver),
-            divActionBinder
+            actionPerformer
         )
         underTest.whenAttached()
         underTest.whenPageSelected(0)
@@ -116,20 +113,18 @@ class PagerSelectedActionsDispatcherTest {
 
         whenBulkActionsRun(times = 4)
 
-        divActionBinder.inOrder {
+        actionPerformer.inOrder {
             bulkActionsArgumentCaptor.firstValue.invoke()
             verifyActionHandled(divView, "div-action://set_state?state_id=0/description/0")
 
             bulkActionsArgumentCaptor.secondValue.invoke()
-            verifyActionHandled(divView, "div-action://set_state?state_id=0/description/1")
-            verifyActionHandled(divView, "some-action://authority")
+            verifyActionHandled(divView, "div-action://set_state?state_id=0/description/1", "some-action://authority")
 
             bulkActionsArgumentCaptor.thirdValue.invoke()
             verifyActionHandled(divView, "div-action://set_state?state_id=0/description/2")
 
             bulkActionsArgumentCaptor.allValues[3].invoke()
-            verifyActionHandled(divView, "div-action://set_state?state_id=0/description/1")
-            verifyActionHandled(divView, "some-action://authority")
+            verifyActionHandled(divView, "div-action://set_state?state_id=0/description/1", "some-action://authority")
         }
     }
 
@@ -172,19 +167,26 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     private fun verifyActionHandled(urlStr: String, times: Int = 1) {
-        verify(divActionBinder, times(times)).handleActionWithoutEnableCheck(
-            eq(divView), any(), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
+        verify(actionPerformer, times(times)).performActions(eq(divView), any(), urlEq(urlStr), any(), anyOrNull())
     }
 
-    private fun InOrderOnType<DivActionBinder>.verifyActionHandled(div2View: Div2View, url: String) {
-        verify().handleActionWithoutEnableCheck(
-            eq(div2View), any(), urlEq(url), any(), anyOrNull(), anyOrNull())
+    private fun InOrderOnType<DivActionPerformer>.verifyActionHandled(div2View: Div2View, vararg urls: String) {
+        verify().performActions(eq(div2View), any(), urlEq(urls.toList()), any(), anyOrNull())
     }
 
     private companion object {
         private const val PAGER_DIR = "div-pager"
         private const val CARD_ID = "div_pager_card"
 
-        private fun urlEq(urlStr: String) = argThat<DivAction> { url?.evaluate(ExpressionResolver.EMPTY).toString() == urlStr }
+        private fun urlEq(urlStr: String) = argThat<List<DivAction>> {
+            any { it.url?.evaluate(ExpressionResolver.EMPTY).toString() == urlStr }
+        }
+
+        private fun urlEq(urls: List<String>) = argThat<List<DivAction>> {
+            zip(urls) { action, url ->
+                if (action.url?.evaluate(ExpressionResolver.EMPTY).toString() != url) return@argThat false
+            }
+            true
+        }
     }
 }

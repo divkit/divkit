@@ -1,13 +1,12 @@
 package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
@@ -15,7 +14,6 @@ import com.yandex.div2.DivTrigger
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -37,9 +35,8 @@ class TriggersControllerTest {
     private val expressionResolver = mock<ExpressionResolverImpl> {
         on { variableController } doReturn variableController
     }
-    private val divActionBinder = mock<DivActionBinder>()
+    private val actionPerformer = mock<DivActionPerformer>()
     private val errorCollector = mock<ErrorCollector>()
-    private val logger = mock<Div2Logger>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val view = mock<Div2View> {
         on { addPersistentDivDataObserver(any()) } doAnswer {
@@ -68,8 +65,7 @@ class TriggersControllerTest {
     private val underTest = TriggersController(
         expressionResolver,
         errorCollector,
-        logger,
-        divActionBinder
+        actionPerformer
     )
 
     @Test
@@ -98,7 +94,7 @@ class TriggersControllerTest {
         underTest.onAttachedToWindow(view)
         underTest.ensureTriggersSynced(triggersA)
 
-        verifyNoInteractions(divActionBinder)
+        verifyNoInteractions(actionPerformer)
     }
 
     @Test
@@ -149,7 +145,7 @@ class TriggersControllerTest {
     }
 
     private fun verifyActionTriggered(actions: List<DivAction>, times: Int = 1) {
-        verify(divActionBinder, times(times)).handleActions(any(), any(), eq(actions), any(), anyOrNull())
+        verify(actionPerformer, times(times)).performTriggerActions(any(), any(), eq(actions))
     }
 
     private fun notifyBindStarted() {

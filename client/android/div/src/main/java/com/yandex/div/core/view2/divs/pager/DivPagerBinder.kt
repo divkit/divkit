@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
@@ -20,7 +21,6 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
@@ -44,7 +44,7 @@ internal class DivPagerBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
-    private val divActionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val accessibilityStateProvider: AccessibilityStateProvider,
 ) : DivViewBinder<Div.Pager, DivPager, DivPagerView>(baseBinder) {
@@ -128,7 +128,7 @@ internal class DivPagerBinder @Inject constructor(
         pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
             divView = divView,
             items = adapter.itemsToShow,
-            divActionBinder = divActionBinder,
+            actionPerformer = actionPerformer,
         )
 
         changePageCallbackForLogger = DivPagerPageChangeCallback(

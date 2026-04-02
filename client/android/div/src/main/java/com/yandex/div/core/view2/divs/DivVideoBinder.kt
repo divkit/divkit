@@ -14,6 +14,7 @@ import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
@@ -42,7 +43,7 @@ import com.yandex.div2.DivVideoSource as Div2VideoSource
 internal class DivVideoBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
-    private val divActionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val videoViewMapper: DivVideoViewMapper,
     private val executorService: ExecutorService,
     private val playerFactory: DivPlayerFactory,
@@ -135,23 +136,23 @@ internal class DivVideoBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         return object : DivPlayer.Observer {
             override fun onPlay() {
-                divActionBinder.handleActions(divView, resolver, div.resumeActions, DivActionReason.VIDEO)
+                actionPerformer.performActions(divView, resolver, div.resumeActions, DivActionReason.VIDEO)
             }
 
             override fun onPause() {
-                divActionBinder.handleActions(divView, resolver, div.pauseActions, DivActionReason.VIDEO)
+                actionPerformer.performActions(divView, resolver, div.pauseActions, DivActionReason.VIDEO)
             }
 
             override fun onBuffering() {
-                divActionBinder.handleActions(divView, resolver, div.bufferingActions, DivActionReason.VIDEO)
+                actionPerformer.performActions(divView, resolver, div.bufferingActions, DivActionReason.VIDEO)
             }
 
             override fun onEnd() {
-                divActionBinder.handleActions(divView, resolver, div.endActions, DivActionReason.VIDEO)
+                actionPerformer.performActions(divView, resolver, div.endActions, DivActionReason.VIDEO)
             }
 
             override fun onFatal() {
-                divActionBinder.handleActions(divView, resolver, div.fatalActions, DivActionReason.VIDEO)
+                actionPerformer.performActions(divView, resolver, div.fatalActions, DivActionReason.VIDEO)
             }
 
             override fun onFatal(error: Throwable) {

@@ -1,18 +1,19 @@
 package com.yandex.div.core.timer
 
 import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTimer
 
 internal class TimerController(
     val divTimer: DivTimer,
-    private val divActionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val errorCollector: ErrorCollector,
     private val expressionResolver: ExpressionResolver
 ) {
+
     private var div2View: Div2View? = null
 
     private val id = divTimer.id
@@ -88,7 +89,7 @@ internal class TimerController(
         updateTimerVariable(time)
 
         div2View?.let {
-            divActionBinder.handleActions(it, it.expressionResolver, tickActions, DivActionReason.TIMER)
+            actionPerformer.performActions(it, it.expressionResolver, tickActions, DivActionReason.TIMER)
         }
     }
 
@@ -96,7 +97,7 @@ internal class TimerController(
         updateTimerVariable(time)
 
         div2View?.let {
-            divActionBinder.handleActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
+            actionPerformer.performActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
         }
     }
 

@@ -2,6 +2,8 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import com.yandex.div.R
+import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.BindingContext
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @DivScope
 @Mockable
-internal class DivFocusBinder @Inject constructor(private val actionBinder: DivActionBinder) {
+internal class DivFocusBinder @Inject constructor(private val actionPerformer: DivActionPerformer) {
 
     fun bindDivBorder(
         view: View,
@@ -128,16 +130,16 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (hasFocus) {
                 applyBorder(v, focusedBorder)
-                focusActions?.handle(v, DivActionBinder.LogType.LOG_FOCUS)
+                focusActions?.handle(v, DivActionReason.FOCUS)
             } else {
                 if (focusedBorder != null) applyBorder(v, blurredBorder)
-                blurActions?.handle(v, DivActionBinder.LogType.LOG_BLUR)
+                blurActions?.handle(v, DivActionReason.BLUR)
             }
         }
 
         private fun applyBorder(view: View, border: DivBorder?) = view.applyBorder(context, border)
 
         private fun List<DivAction>.handle(target: View, actionLogType: String) =
-            actionBinder.handleBulkActions(context, target, this, actionLogType)
+            actionPerformer.performBulkActions(context, target, this, actionLogType)
     }
 }

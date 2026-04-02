@@ -1,6 +1,6 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionResolverImpl
@@ -12,7 +12,6 @@ import com.yandex.div.core.expression.variables.PropertyVariableExecutorImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
@@ -33,8 +32,7 @@ import javax.inject.Inject
 @Mockable
 internal class ExpressionsRuntimeProvider @Inject constructor(
     private val divVariableController: DivVariableController,
-    private val divActionBinder: DivActionBinder,
-    private val logger: Div2Logger,
+    private val actionPerformer: DivActionPerformer,
     private val storedValuesController: StoredValuesController,
 ) {
 
@@ -145,7 +143,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         errorCollector: ErrorCollector,
     ): TriggersController? {
         if (isNullOrEmpty()) return null
-        val controller = TriggersController(resolver, errorCollector, logger, divActionBinder)
+        val controller = TriggersController(resolver, errorCollector, actionPerformer)
         controller.ensureTriggersSynced(this)
         return controller
     }

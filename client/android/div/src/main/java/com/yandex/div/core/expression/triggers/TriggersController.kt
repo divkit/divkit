@@ -1,13 +1,11 @@
 package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runBindingAction
 import com.yandex.div.evaluable.EvaluableException
@@ -20,9 +18,9 @@ import java.util.WeakHashMap
 internal class TriggersController(
     private val expressionResolver: ExpressionResolverImpl,
     private val errorCollector: ErrorCollector,
-    private val logger: Div2Logger,
-    private val divActionBinder: DivActionBinder
+    private val actionPerformer: DivActionPerformer
 ) {
+
     private val executors = mutableMapOf<List<DivTrigger>, MutableList<TriggerExecutor>>()
     private var currentView: Div2View? = null
     private var activeTriggers: List<DivTrigger>? = null
@@ -63,8 +61,7 @@ internal class TriggersController(
                 trigger.mode,
                 expressionResolver,
                 errorCollector,
-                logger,
-                divActionBinder
+                actionPerformer
             ))
         }
 
@@ -105,9 +102,9 @@ private class TriggerExecutor(
     private val mode: Expression<DivTrigger.Mode>,
     private val resolver: ExpressionResolverImpl,
     private val errorCollector: ErrorCollector,
-    private val logger: Div2Logger,
-    private val divActionBinder: DivActionBinder
+    private val actionPerformer: DivActionPerformer
 ) {
+
     private val changeTrigger = { _: Boolean -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
@@ -172,10 +169,7 @@ private class TriggerExecutor(
             return
         }
 
-        actions.forEach {
-            logger.logTrigger(view, it)
-        }
-        divActionBinder.handleActions(view, resolver, actions, DivActionReason.TRIGGER)
+        actionPerformer.performTriggerActions(view, resolver, actions)
     }
 
     private fun tryTriggerActionsAfterBind(div2View: Div2View) {

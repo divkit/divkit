@@ -10,6 +10,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
@@ -35,7 +37,6 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
-import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTER
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -63,7 +64,7 @@ internal class DivInputBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
-    private val actionBinder: DivActionBinder,
+    private val actionPerformer: DivActionPerformer,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<Div.Input, DivInput, DivInputView>(baseBinder) {
@@ -268,7 +269,7 @@ internal class DivInputBinder @Inject constructor(
             if (!actions.isNullOrEmpty()) {
                 this.setOnEditorActionListener { _, actionId, _ ->
                     if ((actionId and EditorInfo.IME_MASK_ACTION) != 0) {
-                        actionBinder.handleBulkActions(bindingContext, this, actions, LOG_ENTER)
+                        actionPerformer.performBulkActions(bindingContext, this, actions, DivActionReason.ENTER)
                     }
 
                     false

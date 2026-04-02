@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import androidx.transition.TransitionSet
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
@@ -36,6 +37,7 @@ open class DivBinderTest {
         on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
             anyOrNull(), any(), any()) }.thenCallRealMethod()
     }
+    internal val actionPerformer = mock<DivActionPerformer>()
     private val mockComponent = mock<Div2Component>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
         on { actionBinder } doReturn actionBinder
     }

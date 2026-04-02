@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
@@ -38,7 +39,7 @@ private const val ELEVATION = 10f
 @RunWith(RobolectricTestRunner::class)
 class DivFocusBinderTest {
 
-    private val actionBinder = mock<DivActionBinder>()
+    private val actionPerformer = mock<DivActionPerformer>()
     private val resources = mock<Resources> {
         on { getDimension(any()) } doReturn ELEVATION
     }
@@ -62,7 +63,7 @@ class DivFocusBinderTest {
     private val focusActions = listOf(action(url = "focus"))
     private val blurActions = listOf(action(url = "blur"))
 
-    private val underTest = DivFocusBinder(actionBinder)
+    private val underTest = DivFocusBinder(actionPerformer)
 
     @Test
     fun `apply blurred border on bind when focused border is null`() {
@@ -272,7 +273,7 @@ class DivFocusBinderTest {
     fun `not handle blur actions on focus`() {
         bindActions(focusActions, blurActions)
         onFocusChange(true)
-        verify(actionBinder, never()).handleBulkActions(any(), any(), eq(blurActions), any())
+        verify(actionPerformer, never()).performBulkActions(any(), any(), eq(blurActions), any())
     }
 
     @Test
@@ -297,7 +298,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(actionBinder, never()).handleBulkActions(any(), any(), any(), any())
+        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any())
     }
 
     @Test
@@ -308,7 +309,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(actionBinder, never()).handleBulkActions(any(), any(), any(), any())
+        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any())
     }
 
     @Test
@@ -396,5 +397,5 @@ class DivFocusBinderTest {
     }
 
     private fun verifyActionsHandled(actions: List<DivAction>, mode: VerificationMode = times(1)) =
-        verify(actionBinder, mode).handleBulkActions(any(), any(), eq(actions), any())
+        verify(actionPerformer, mode).performBulkActions(any(), any(), eq(actions), any())
 }

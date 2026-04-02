@@ -1,6 +1,6 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_UNORDERED_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createDivDataFromTestVars
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.toEvaluableType
@@ -8,7 +8,6 @@ import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.expressions.DivExpressionParser
 import com.yandex.div.internal.util.UiThreadHandler
@@ -86,8 +85,7 @@ class EvaluableMultiplatformTest(
 
         runtimeProvider = ExpressionsRuntimeProvider(
             mockDivVariableController,
-            mock<DivActionBinder>(),
-            mock<Div2Logger>(),
+            mock<DivActionPerformer>(),
             mock<StoredValuesController>(),
         )
 

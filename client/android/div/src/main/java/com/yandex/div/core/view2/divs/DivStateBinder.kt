@@ -10,8 +10,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
-import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -51,7 +50,6 @@ import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
 import com.yandex.div2.Div
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
@@ -65,11 +63,9 @@ internal class DivStateBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val viewBinder: Provider<DivBinder>,
     private val stateManager: DivStateManager,
-    private val divActionBinder: DivActionBinder,
-    private val divActionBeaconSender: DivActionBeaconSender,
+    private val actionPerformer: DivActionPerformer,
     private val divPatchManager: DivPatchManager,
     private val divPatchCache: DivPatchCache,
-    private val div2Logger: Div2Logger,
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
     private val errorCollectors: ErrorCollectors,
     private val variableBinder: TwoWayStringVariableBinder,
@@ -152,7 +148,7 @@ internal class DivStateBinder @Inject constructor(
         observeStateIdVariable(div, context, path)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
         swipeOutCallback = newState.swipeOutActions?.let {
-            { swipeOut(context.divView, resolver, it) }
+            { actionPerformer.performSwipeOutActions(context.divView, resolver, this, it) }
         }
     }
 
@@ -263,15 +259,6 @@ internal class DivStateBinder @Inject constructor(
 
     private fun getIncomingView(reusableIncomingView: View?, div: Div, resolver: ExpressionResolver) =
         reusableIncomingView ?: viewCreator.create(div, resolver).apply { createLayoutParams() }
-
-    private fun DivStateLayout.swipeOut(divView: Div2View, resolver: ExpressionResolver, actions: List<DivAction>) {
-        divView.bulkActions {
-            divActionBinder.handleActions(divView, resolver, actions, DivActionReason.STATE_SWIPE_OUT) {
-                div2Logger.logSwipedAway(divView, resolver, this, it)
-                divActionBeaconSender.sendSwipeOutActionBeacon(it, resolver)
-            }
-        }
-    }
 
     private fun DivStateLayout.fixAlignment(
         div: DivState,
