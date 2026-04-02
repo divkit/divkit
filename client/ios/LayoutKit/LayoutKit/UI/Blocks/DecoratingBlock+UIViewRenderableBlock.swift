@@ -251,6 +251,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         } else {
           addSubview(blurView)
         }
+
+        if let oldValue {
+          blurView.frame = oldValue.frame
+        }
       }
     }
   }
@@ -382,7 +386,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     self.observer = observer
     self.renderingDelegate = renderingDelegate
 
-    blurView = model.blurEffect.map { UIVisualEffectView(effect: UIBlurEffect(style: $0.cast())) }
+    if oldModel?.blurEffect != model.blurEffect {
+      blurView = model.blurEffect.map { UIVisualEffectView(effect: UIBlurEffect(style: $0.cast())) }
+    }
 
     backgroundColor = model.backgroundColor.systemColor
     if shouldUpdateChildView {
