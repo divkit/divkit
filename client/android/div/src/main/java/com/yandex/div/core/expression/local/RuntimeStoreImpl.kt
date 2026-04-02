@@ -21,7 +21,6 @@ private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
 
 internal class RuntimeStoreImpl(
     data: DivData,
-    filler: RuntimeStoreFiller,
     private val runtimeProvider: ExpressionsRuntimeProvider,
     private val errorCollector: ErrorCollector,
 ) : RuntimeStore {
@@ -37,7 +36,9 @@ internal class RuntimeStoreImpl(
 
     override val viewProvider = Provider { viewRef?.get() }
 
-    override val rootRuntime = filler.fillStore(this, data)
+    override val rootRuntime = runtimeProvider.createRootRuntime(data, errorCollector, this).also {
+        putRuntime(it, "", null)
+    }
 
     fun attachView(view: Div2View) {
         viewRef = WeakReference(view)
