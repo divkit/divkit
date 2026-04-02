@@ -192,7 +192,7 @@ internal fun DivPivot?.equalsToConstant(other: DivPivot?): Boolean {
 internal fun DivPivot?.isConstant(): Boolean {
     return when (this) {
         null -> true
-        is DivPivot.Fixed -> value.value.isConstantOrNull() && value.value.isConstantOrNull()
+        is DivPivot.Fixed -> value.value.isConstant() && value.unit.isConstant()
         is DivPivot.Percentage -> value.value.isConstant()
     }
 }

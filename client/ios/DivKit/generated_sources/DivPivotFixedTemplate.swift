@@ -30,14 +30,22 @@ public final class DivPivotFixedTemplate: TemplateValue, Sendable {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPivotFixedTemplate?) -> DeserializationResult<DivPivotFixed> {
     let unitValue = { parent?.unit?.resolveOptionalValue(context: context) ?? .noValue }()
-    let valueValue = { parent?.value?.resolveOptionalValue(context: context) ?? .noValue }()
-    let errors = mergeErrors(
+    let valueValue = { parent?.value?.resolveValue(context: context) ?? .noValue }()
+    var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
+    if case .noValue = valueValue {
+      errors.append(.requiredFieldIsMissing(field: "value"))
+    }
+    guard
+      let valueNonNil = valueValue.value
+    else {
+      return .failure(NonEmptyArray(errors)!)
+    }
     let result = DivPivotFixed(
       unit: { unitValue.value }(),
-      value: { valueValue.value }()
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -75,13 +83,21 @@ public final class DivPivotFixedTemplate: TemplateValue, Sendable {
         }()
       }
     }()
-    let errors = mergeErrors(
+    var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
+    if case .noValue = valueValue {
+      errors.append(.requiredFieldIsMissing(field: "value"))
+    }
+    guard
+      let valueNonNil = valueValue.value
+    else {
+      return .failure(NonEmptyArray(errors)!)
+    }
     let result = DivPivotFixed(
       unit: { unitValue.value }(),
-      value: { valueValue.value }()
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

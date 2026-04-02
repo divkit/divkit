@@ -65,8 +65,9 @@ public enum DivPivotTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivPivot> {
-    let raw = context.templateData["type"] as? String ?? DivPivotFixed.type
-    let type = context.templateToType[raw] ?? raw
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }
 
     return {
       var result: DeserializationResult<DivPivot>?

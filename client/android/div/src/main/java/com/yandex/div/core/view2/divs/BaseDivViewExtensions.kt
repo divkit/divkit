@@ -147,7 +147,7 @@ internal fun View.applyTransform(
 private fun View.getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionResolver): Float {
     return when (val pivot = divPivot.value()) {
         is DivPivotFixed -> {
-            val offset = pivot.value?.evaluate(resolver)?.toFloat() ?: return len / 2f
+            val offset = pivot.value.evaluate(resolver).toFloat()
             when (pivot.unit.evaluate(resolver)) {
                 DivSizeUnit.DP -> offset.dpToPxF(resources.displayMetrics)
                 DivSizeUnit.PX -> offset

@@ -7,7 +7,7 @@ import VGSL
 public final class DivPivotFixed: Sendable {
   public static let type: String = "pivot-fixed"
   public let unit: Expression<DivSizeUnit> // default value: dp
-  public let value: Expression<Int>?
+  public let value: Expression<Int>
 
   public func resolveUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
     resolver.resolveEnum(unit) ?? DivSizeUnit.dp
@@ -20,13 +20,13 @@ public final class DivPivotFixed: Sendable {
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       unit: try dictionary.getOptionalExpressionField("unit", context: context),
-      value: try dictionary.getOptionalExpressionField("value", context: context)
+      value: try dictionary.getExpressionField("value", context: context)
     )
   }
 
   init(
     unit: Expression<DivSizeUnit>? = nil,
-    value: Expression<Int>? = nil
+    value: Expression<Int>
   ) {
     self.unit = unit ?? .value(.dp)
     self.value = value
@@ -53,7 +53,7 @@ extension DivPivotFixed: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["unit"] = unit.toValidSerializationValue()
-    result["value"] = value?.toValidSerializationValue()
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

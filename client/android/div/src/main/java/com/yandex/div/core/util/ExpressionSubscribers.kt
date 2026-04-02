@@ -126,7 +126,7 @@ internal fun ExpressionSubscriber.observePivot(
 
         is DivPivot.Fixed -> {
             val fixedPivot = pivot.value
-            addSubscription(fixedPivot.value?.observe(resolver, callback))
+            addSubscription(fixedPivot.value.observe(resolver, callback))
             addSubscription(fixedPivot.unit.observe(resolver, callback))
         }
 
