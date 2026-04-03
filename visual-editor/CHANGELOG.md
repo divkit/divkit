@@ -1,3 +1,18 @@
+## 0.4.13
+
+* DivKit updated 32.32.0 -> 32.40.0, minor updates to other dependencies
+* The css name in the package has been reverted.
+* Fixed a property with an `action` `type` in json
+* Fixed the type of properties with duration and `timer` interval per number in json
+* Minor visual fixes, especially in Safari
+* The 414x896 `viewport` returned. The ability to manually specify a custom viewport (with input fields for this) has returned. A new viewportList configuration property has been added, which allows you to set your own list of viewports.
+* Added `shadow` properties
+* Added `clip_to_bounds` property in the container
+* Added `accessibility` properties for all components (type, mode, description). Only the description has been intentionally left for a number of components.
+* Fixed the loss of the `tab` header when changing the component type in it.
+* Fixed the `tab` selection for 1 click in the preview
+* Fixed the display of warnings if they are inside inactive tabs/statuses.
+
 ## 0.4.12
 
 * Updated DivKit 32.27.0 -> 32.32.0

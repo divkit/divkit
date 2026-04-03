@@ -153,7 +153,7 @@
         "props.thumb_text_style": "Текст указателя",
         "props.shadow": "Тень",
         "props.shadow_color": "Цвет тени",
-        "props.shadow_alpha": "Дополнительная прозрачность",
+        "props.shadow_alpha": "Прозрачность",
         "props.shadow_blur": "Сила размытия",
         "props.shadow_offset_x": "Смещение по X",
         "props.shadow_offset_y": "Смещение по Y",
