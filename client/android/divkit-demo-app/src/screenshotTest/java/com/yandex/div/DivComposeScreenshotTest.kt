@@ -85,6 +85,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-text/visibility-gone.json",
                 "snapshot_test_data/div-text/visibility-invisible.json",
                 "snapshot_test_data/div-text/underline.json",
+                "snapshot_test_data/div-text/gradient-background.json",
+                "snapshot_test_data/div-text/diagonal-gradient-background.json",
                 // div-container
                 "snapshot_test_data/div-container",
                 "snapshot_test_data/div-container/constraint-propagation",
@@ -149,6 +151,13 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-gallery/vertical-gallery-resizable-height.json",
                 "snapshot_test_data/div-gallery/vertical-gallery-resizable-width.json",
                 "snapshot_test_data/div-gallery/vertical-gallery-wrap-content-width-with-constraints.json",
+                // div-background
+                "snapshot_test_data/div-background/gradient-angles.json",
+                "snapshot_test_data/div-background/gradient-positions.json",
+                "snapshot_test_data/div-background/radial-gradient-positions.json",
+                "snapshot_test_data/div-background/radial-positions.json",
+                // div-radial-gradient
+                "snapshot_test_data/div-radial-gradient",
             ).expandDirectories()
 
             //TODO: to be stabilized

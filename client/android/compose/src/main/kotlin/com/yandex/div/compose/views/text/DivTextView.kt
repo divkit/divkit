@@ -6,14 +6,14 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextOverflow
-import com.yandex.div.compose.utils.observeLinearGradient
+import com.yandex.div.compose.utils.gradient.observeLinearGradient
+import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivText
@@ -111,9 +111,6 @@ private fun DivText.observeTextGradient(): Brush? {
     val textGradient = textGradient ?: return null
     return when (textGradient) {
         is DivTextGradient.Linear -> textGradient.value.observeLinearGradient()
-        is DivTextGradient.Radial -> {
-            reporter.reportError("Text gradient not supported: radial_gradient")
-            null
-        }
+        is DivTextGradient.Radial -> textGradient.value.observeRadialGradient()
     }
 }
