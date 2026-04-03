@@ -35,7 +35,7 @@ internal fun Modifier.apply(
         .width(data.width, data.alignmentHorizontal?.observedValue())
         .height(data.height, data.alignmentVertical?.observedValue())
         .actions(div)
-
+        .visibilityActions(data)
 
     val alphaValue = if (data.visibility.observedValue() == DivVisibility.VISIBLE) {
         data.alpha.observedValue().toFloat()

@@ -83,9 +83,7 @@ internal class DivTriggerStorage @Inject constructor(
     }
 
     private fun handle(actions: List<DivAction>) {
-        actions.forEach {
-            actionHandler.handle(context = actionHandlingContext, action = it)
-        }
+        actionHandler.handle(actionHandlingContext, actions)
     }
 }
 

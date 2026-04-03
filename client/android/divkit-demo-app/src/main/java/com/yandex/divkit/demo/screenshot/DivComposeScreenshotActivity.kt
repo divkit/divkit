@@ -14,6 +14,7 @@ import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.compose.createContext
+import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.data.DivParsingEnvironment
@@ -59,7 +60,9 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         val fontFamilyProvider = TypefaceProviderFontFamilyAdapter(defaultProvider, additionalProviders)
 
         divContext = DivComposeConfiguration(
-            imageLoaderProvider = imageLoaderProvider,
+            debugConfiguration = DivDebugConfiguration(
+                imageLoaderProvider = imageLoaderProvider
+            ),
             fontFamilyProvider = fontFamilyProvider,
         ).createContext(baseContext = this)
 

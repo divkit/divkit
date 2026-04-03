@@ -11,12 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.yandex.div.compose.utils.actionHandler
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.context.LocalDivContext
+import com.yandex.div.compose.utils.divContext
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
@@ -30,13 +30,10 @@ internal fun Modifier.actions(data: Div): Modifier {
         return this
     }
 
-    val localContext = LocalDivContext.current
-    val actionHandler = actionHandler
+    val actionHandler = divContext.component.actionHandler
+    val actionHandlingContext = LocalDivContext.current.actionHandlingContext
     val onClick: () -> Unit = {
-        val actionHandlingContext = localContext.actionHandlingContext
-        actions.forEach {
-            actionHandler.handle(context = actionHandlingContext, action = it)
-        }
+        actionHandler.handle(actionHandlingContext, actions)
     }
 
     return when (val name = actionParams.animation.name.observedValue()) {
@@ -50,7 +47,7 @@ internal fun Modifier.actions(data: Div): Modifier {
                 onClick = onClick
             )
 
-        DivAnimation.Name.NO_ANIMATION, null ->
+        DivAnimation.Name.NO_ANIMATION ->
             clickable(indication = null, interactionSource = null, onClick = onClick)
 
         DivAnimation.Name.SCALE,

@@ -16,8 +16,10 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
+import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivVariable
+import com.yandex.div2.DivVisibility
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,6 +54,35 @@ class DivViewTest {
         )
 
         rule.onNodeWithText("value = 10").assertIsDisplayed()
+    }
+
+    @Test
+    fun `text with visibility=gone is not displayed`() {
+        setContent(
+            text(id = "title", text = "Hello!", visibility = constant(DivVisibility.GONE))
+        )
+
+        rule.onNodeWithTag("title").assertDoesNotExist()
+    }
+
+    @Test
+    fun `text disappears when visibility changes to gone`() {
+        val visibility = Variable.StringVariable("visibility", "visible")
+        variableController.declare(visibility)
+
+        setContent(
+            text(
+                id = "title",
+                text = "Hello!",
+                visibility = visibilityExpression("@{visibility}")
+            )
+        )
+
+        rule.onNodeWithTag("title").assertIsDisplayed()
+
+        visibility.set("gone")
+
+        rule.onNodeWithTag("title").assertDoesNotExist()
     }
 
     @Test

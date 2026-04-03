@@ -151,7 +151,7 @@ class DivTriggerStorageTest {
     }
 
     private fun verifyTriggered() {
-        verify(actionHandler).handle(actionHandlingContext, action)
+        verify(actionHandler).handle(actionHandlingContext, listOf(action))
         clearInvocations(actionHandler)
     }
 }

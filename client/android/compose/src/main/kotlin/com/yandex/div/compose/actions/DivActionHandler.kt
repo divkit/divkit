@@ -1,11 +1,15 @@
 package com.yandex.div.compose.actions
 
+import android.net.Uri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
+import com.yandex.div2.DivSightAction
+import org.json.JSONObject
 import javax.inject.Inject
 
 @DivContextScope
@@ -18,7 +22,37 @@ internal class DivActionHandler @Inject constructor(
     private val updateStructureActionHandler: UpdateStructureActionHandler
 ) {
 
+    fun handle(context: DivActionHandlingContext, actions: List<DivAction>) {
+        actions.forEach { handle(context = context, action = it) }
+    }
+
     fun handle(context: DivActionHandlingContext, action: DivAction) {
+        handle(
+            context = context,
+            action = DivActionBase(
+                id = action.logId,
+                isEnabled = action.isEnabled,
+                payload = action.payload,
+                typed = action.typed,
+                url = action.url
+            )
+        )
+    }
+
+    fun handle(context: DivActionHandlingContext, action: DivSightAction) {
+        handle(
+            context = context,
+            action = DivActionBase(
+                id = action.logId,
+                isEnabled = action.isEnabled,
+                payload = action.payload,
+                typed = action.typed,
+                url = action.url
+            )
+        )
+    }
+
+    private fun handle(context: DivActionHandlingContext, action: DivActionBase) {
         val expressionResolver = context.expressionResolver
         if (!action.isEnabled.evaluate(expressionResolver)) {
             return
@@ -38,9 +72,9 @@ internal class DivActionHandler @Inject constructor(
             externalActionHandler.handle(
                 context = context,
                 action = DivActionData(
-                    id = action.logId.evaluate(expressionResolver),
+                    id = action.id.evaluate(expressionResolver),
                     payload = action.payload,
-                    url = action.url?.evaluate(expressionResolver)
+                    url = action.url.evaluate(expressionResolver)
                 )
             )
         }
@@ -49,7 +83,7 @@ internal class DivActionHandler @Inject constructor(
     private fun handle(
         context: DivActionHandlingContext,
         action: DivActionTyped,
-        baseAction: DivAction
+        baseAction: DivActionBase
     ) {
         when (action) {
             is DivActionTyped.AnimatorStart -> notSupported()
@@ -69,7 +103,7 @@ internal class DivActionHandler @Inject constructor(
                 externalActionHandler.handleCustomAction(
                     context = context,
                     action = DivCustomActionData(
-                        id = baseAction.logId.evaluate(context.expressionResolver),
+                        id = baseAction.id.evaluate(context.expressionResolver),
                         payload = baseAction.payload
                     )
                 )
@@ -118,3 +152,11 @@ internal class DivActionHandler @Inject constructor(
         reporter.reportError("Action not supported")
     }
 }
+
+private class DivActionBase(
+    val id: Expression<String>,
+    val isEnabled: Expression<Boolean>,
+    val payload: JSONObject?,
+    val typed: DivActionTyped?,
+    val url: Expression<Uri>?,
+)
