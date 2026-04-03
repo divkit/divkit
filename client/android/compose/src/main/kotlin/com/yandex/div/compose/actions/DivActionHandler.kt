@@ -3,13 +3,14 @@ package com.yandex.div.compose.actions
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.internal.actions.DivUntypedAction
+import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
 import javax.inject.Inject
 
 @DivContextScope
 internal class DivActionHandler @Inject constructor(
-    private val customActionHandler: DivCustomActionHandler,
+    private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
     private val arrayActionsHandler: ArrayActionsHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
@@ -18,14 +19,30 @@ internal class DivActionHandler @Inject constructor(
 ) {
 
     fun handle(context: DivActionHandlingContext, action: DivAction) {
+        val expressionResolver = context.expressionResolver
+        if (!action.isEnabled.evaluate(expressionResolver)) {
+            return
+        }
+
         action.typed?.let {
             handle(context = context, action = it, baseAction = action)
             return
         }
 
-        val uri = action.url?.evaluate(context.expressionResolver) ?: return
-        DivUntypedAction.parse(uri)?.let {
-            handle(context = context, action = it)
+        val url = action.url?.evaluate(expressionResolver) ?: return
+        if (url.isDivAction) {
+            DivUntypedAction.parse(url)?.let {
+                handle(context = context, action = it)
+            }
+        } else {
+            externalActionHandler.handle(
+                context = context,
+                action = DivActionData(
+                    id = action.logId.evaluate(expressionResolver),
+                    payload = action.payload,
+                    url = action.url?.evaluate(expressionResolver)
+                )
+            )
         }
     }
 
@@ -49,11 +66,11 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ClearFocus -> notSupported()
             is DivActionTyped.CopyToClipboard -> notSupported()
             is DivActionTyped.Custom ->
-                customActionHandler.handle(
+                externalActionHandler.handleCustomAction(
                     context = context,
-                    action = DivActionData(
-                        payload = baseAction.payload,
-                        url = baseAction.url?.evaluate(context.expressionResolver)
+                    action = DivCustomActionData(
+                        id = baseAction.logId.evaluate(context.expressionResolver),
+                        payload = baseAction.payload
                     )
                 )
 

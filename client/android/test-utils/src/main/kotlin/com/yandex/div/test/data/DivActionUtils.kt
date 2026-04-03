@@ -5,6 +5,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
+import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
@@ -13,12 +14,15 @@ import com.yandex.div2.DivTypedValue
 import org.json.JSONObject
 
 fun action(
-    typed: DivActionTyped? = null,
+    id: String = "test",
+    isEnabled: Boolean = true,
     payload: JSONObject? = null,
+    typed: DivActionTyped? = null,
     url: String? = null,
 ): DivAction {
     return DivAction(
-        logId = constant("test"),
+        isEnabled = constant(isEnabled),
+        logId = constant(id),
         payload = payload,
         typed = typed,
         url = url?.let { constant(it.toUri()) }
@@ -64,6 +68,8 @@ fun arraySetValueAction(
         )
     )
 }
+
+fun customAction(): DivActionTyped = DivActionTyped.Custom(DivActionCustom())
 
 fun dictSetValueAction(
     name: String,

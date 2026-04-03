@@ -19,14 +19,14 @@ internal class ActionHandlerEnvironment {
     )
 
     fun createActionHandler(
-        customActionHandler: DivCustomActionHandler = mock(),
+        externalActionHandler: DivExternalActionHandler = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
         setVariableActionHandler: SetVariableActionHandler = mock(),
         updateStructureActionHandler: UpdateStructureActionHandler = mock()
     ): DivActionHandler {
         return DivActionHandler(
-            customActionHandler = customActionHandler,
+            externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,

@@ -47,7 +47,7 @@ sealed class DivUntypedAction {
 
         @JvmStatic
         fun parse(uri: Uri): DivUntypedAction? {
-            if (uri.scheme != "div-action") {
+            if (!uri.isDivAction) {
                 return null
             }
 
@@ -111,3 +111,7 @@ sealed class DivUntypedAction {
         }
     }
 }
+
+@InternalApi
+val Uri.isDivAction: Boolean
+    get() = scheme == "div-action"
