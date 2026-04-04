@@ -158,6 +158,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-background/radial-positions.json",
                 // div-radial-gradient
                 "snapshot_test_data/div-radial-gradient",
+                // div-transform
+                "snapshot_test_data/div-transform",
             ).expandDirectories()
 
             //TODO: to be stabilized

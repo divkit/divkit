@@ -46,6 +46,10 @@ internal fun Modifier.apply(
         modifier = modifier.alpha(alphaValue)
     }
 
+    data.transform?.let {
+        modifier = modifier.transform(it)
+    }
+
     data.border?.let {
         modifier = modifier.divBorderClip(it)
     }
