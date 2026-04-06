@@ -4,14 +4,13 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
-import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.player.DivPlayerPreloader
+import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.preload.PreloadingCompletion
 import com.yandex.div.core.preload.PreloadingCompletionImpl
@@ -30,7 +29,6 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
 import java.util.concurrent.atomic.AtomicBoolean
 
-@PublicApi
 @Mockable
 class DivPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,

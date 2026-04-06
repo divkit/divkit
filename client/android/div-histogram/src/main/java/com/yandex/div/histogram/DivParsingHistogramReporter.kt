@@ -1,17 +1,14 @@
 package com.yandex.div.histogram
 
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils
-import com.yandex.div.internal.util.Clock
 import org.json.JSONObject
 import java.util.concurrent.Executor
 
 /**
  * Histogram reporter to measure and report Div related parsing.
  */
-@PublicApi
 interface DivParsingHistogramReporter {
 
     /**

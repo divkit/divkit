@@ -1,10 +1,8 @@
 package com.yandex.div.histogram
 
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.internal.util.DoubleCheckProvider
 import javax.inject.Provider
 
-@PublicApi
 interface HistogramConfiguration : HistogramRecordConfiguration {
 
     val histogramBridge: Provider<HistogramBridge>

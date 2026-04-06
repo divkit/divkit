@@ -5,7 +5,6 @@ import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.state.db.DivStateDao
 import com.yandex.div.state.db.DivStateDaoImpl
 import com.yandex.div.state.db.DivStateDbOpenHelper
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit
 /**
  * Persistent storage of div states.
  */
-@PublicApi
 @Mockable
 class DivStateDatabase(
     context: Context,

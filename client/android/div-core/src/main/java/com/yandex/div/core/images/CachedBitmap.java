@@ -4,12 +4,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.core.annotations.PublicApi;
 
 /**
  * Provides cached {@link Bitmap}.
  */
-@PublicApi
 @Deprecated
 public class CachedBitmap {
 

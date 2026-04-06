@@ -1,7 +1,6 @@
 package com.yandex.div.core.downloader;
 
 import androidx.annotation.NonNull;
-import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.images.LoadReference;
 import com.yandex.div.core.view2.Div2View;
 
@@ -9,7 +8,6 @@ import com.yandex.div.core.view2.Div2View;
  * Downloads patches for Divs
  * A default implementation, [DefaultDivDownloader], is provided.
  */
-@PublicApi
 public interface DivDownloader {
 
     DivDownloader STUB = (divView, downloadUrl, callback) -> {

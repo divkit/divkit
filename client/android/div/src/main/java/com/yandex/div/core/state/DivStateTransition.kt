@@ -5,13 +5,11 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.view2.Div2View
 
 /**
  * Transition that excludes child RecyclerViews and doesn't break recycler's scrolls.
  */
-@PublicApi
 class DivStateTransition @JvmOverloads constructor(
     view: View,
     excludeDivView: Boolean = true

@@ -1,11 +1,8 @@
 package com.yandex.div.histogram
 
-import com.yandex.div.core.annotations.PublicApi
-
 /**
  * Holds configuration for rendering histograms.
  */
-@PublicApi
 class RenderConfiguration @JvmOverloads constructor(
     /**
      * [HistogramFilter] for measure histogram.

@@ -8,7 +8,6 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.DivDataTag;
-import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.images.LoadReference;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.DivViewState;
@@ -18,7 +17,6 @@ import com.yandex.div.json.expressions.ExpressionResolver;
 /**
  * Main class to interact with DivView and DivView2
  */
-@PublicApi
 public interface DivViewFacade {
 
     /**

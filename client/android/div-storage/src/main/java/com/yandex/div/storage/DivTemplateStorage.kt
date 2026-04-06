@@ -1,9 +1,7 @@
 package com.yandex.div.storage
 
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.annotations.PublicApi
 
-@PublicApi
 interface DivTemplateStorage {
 
     @WorkerThread

@@ -1,14 +1,12 @@
 package com.yandex.div.core
 
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div2.DivData
 
 /**
  * Allows handling of runtime errors and warnings.
  * For parsing errors use the [ParsingErrorLogger].
  */
-@PublicApi
 interface DivErrorsReporter {
 
     /**

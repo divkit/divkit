@@ -2,14 +2,11 @@ package com.yandex.div.core.font;
 
 import android.graphics.Typeface;
 import android.os.Build;
-
 import androidx.annotation.Nullable;
-import com.yandex.div.core.annotations.PublicApi;
 
 /**
  * Provides custom font typefaces.
  */
-@PublicApi
 public interface DivTypefaceProvider {
 
     interface Weight {

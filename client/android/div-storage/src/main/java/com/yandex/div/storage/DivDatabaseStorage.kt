@@ -3,7 +3,6 @@ package com.yandex.div.storage
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.storage.db.DatabaseOpenHelper
 import com.yandex.div.storage.db.TemplateDao
 import com.yandex.div.storage.db.TemplateDaoImpl
@@ -16,7 +15,6 @@ import java.io.Closeable
 /**
  * Persistent div storage backed by the database.
  */
-@PublicApi
 class DivDatabaseStorage @JvmOverloads constructor(
     context: Context,
     databaseName: String = "div.db"

@@ -4,12 +4,10 @@ package com.yandex.div.histogram
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.AnyThread
-import com.yandex.div.core.annotations.PublicApi
 
 /**
  * Executor for histograms reporting.
  */
-@PublicApi
 interface TaskExecutor {
     /**
      * Posts given [task] for execution.

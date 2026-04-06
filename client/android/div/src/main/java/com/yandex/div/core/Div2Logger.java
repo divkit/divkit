@@ -3,7 +3,6 @@ package com.yandex.div.core;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.view2.Div2View;
 import com.yandex.div.core.view2.logging.patch.PatchResult;
 import com.yandex.div.json.expressions.ExpressionResolver;
@@ -18,7 +17,6 @@ import com.yandex.div2.DivVisibilityAction;
 /**
  * Logs Div2 UI-events.
  */
-@PublicApi
 public interface Div2Logger {
 
     Div2Logger STUB = new Div2Logger() { };

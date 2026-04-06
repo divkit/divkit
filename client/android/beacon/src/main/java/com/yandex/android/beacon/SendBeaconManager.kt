@@ -3,14 +3,12 @@ package com.yandex.android.beacon
 import android.content.Context
 import android.net.Uri
 import com.yandex.android.net.CookieStorage
-import com.yandex.div.core.annotations.PublicApi
 import org.json.JSONObject
 
 /**
  * A service similar to W3C's sendBeacon function from web-page world. It accepts requests with
  * no payloads and zero byte responses and delivers them no matter how many retries it will take.
  */
-@PublicApi
 class SendBeaconManager(
     context: Context,
     configuration: SendBeaconConfiguration

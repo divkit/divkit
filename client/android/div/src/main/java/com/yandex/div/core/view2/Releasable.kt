@@ -1,12 +1,9 @@
 package com.yandex.div.core.view2
 
-import com.yandex.div.core.annotations.PublicApi
-
 /**
  * Implement this interface if you want to receive release view events.
  * Please consider using this interface.
  */
-@PublicApi
 interface Releasable {
 
     /**

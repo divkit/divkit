@@ -2,9 +2,7 @@ package com.yandex.div.core.widget
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import com.yandex.div.core.annotations.PublicApi
 
-@PublicApi
 interface DivViewDelegate {
 
     fun unscheduleDrawable(who: Drawable?)

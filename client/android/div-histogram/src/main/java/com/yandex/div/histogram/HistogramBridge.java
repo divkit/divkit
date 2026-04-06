@@ -1,14 +1,12 @@
 package com.yandex.div.histogram;
 
 import androidx.annotation.NonNull;
-import com.yandex.div.core.annotations.PublicApi;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Common interface to implement switchable histogram consumers for {@link HistogramRecorder}.
  */
-@PublicApi
 public interface HistogramBridge {
 
     /**

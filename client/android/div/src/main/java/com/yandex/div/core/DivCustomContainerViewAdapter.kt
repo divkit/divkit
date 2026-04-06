@@ -1,13 +1,11 @@
 package com.yandex.div.core
 
 import android.view.View
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
-@PublicApi
 interface DivCustomContainerViewAdapter {
 
     /**

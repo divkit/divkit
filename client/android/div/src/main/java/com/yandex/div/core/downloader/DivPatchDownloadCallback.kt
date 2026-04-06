@@ -1,13 +1,11 @@
 package com.yandex.div.core.downloader
 
 import androidx.annotation.MainThread
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div2.DivPatch
 
 /**
  * Div download callbacks.
  */
-@PublicApi
 interface DivPatchDownloadCallback {
 
     /**

@@ -6,7 +6,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
-import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
 /**
  * Handles URIs and payloads, that are triggered by click events in {@link Div2View}.
  */
-@PublicApi
 public class DivActionHandler {
 
     public static class DivActionReason {

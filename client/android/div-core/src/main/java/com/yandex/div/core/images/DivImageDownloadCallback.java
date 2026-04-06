@@ -2,13 +2,10 @@ package com.yandex.div.core.images;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import com.yandex.div.core.annotations.PublicApi;
 
-@PublicApi
 public class DivImageDownloadCallback {
 
     /**

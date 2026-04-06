@@ -2,9 +2,7 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.yandex.div.core.annotations.InternalApi;
-import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
@@ -25,18 +23,16 @@ import com.yandex.div.state.InMemoryDivStateCache;
 import com.yandex.yatagan.Module;
 import com.yandex.yatagan.Provides;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Named;
-
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
  * Create instance using {@link Builder} class.
  */
-@PublicApi
 @Module
 public class DivConfiguration {
 

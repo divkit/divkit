@@ -4,7 +4,6 @@ import android.net.Uri
 import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.DivPreloader.Companion.NO_CALLBACK
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.CompositeResult
@@ -15,7 +14,6 @@ import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 
-@PublicApi
 @Mockable
 internal class DivViewDataPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,

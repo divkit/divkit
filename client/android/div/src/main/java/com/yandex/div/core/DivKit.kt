@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.AnyThread
 import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.BuildConfig
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -14,7 +13,6 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.Log
 import com.yandex.div.logging.Severity
 
-@PublicApi
 class DivKit private constructor(
     context: Context,
     configuration: DivKitConfiguration

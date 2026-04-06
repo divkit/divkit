@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.variables
 
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
@@ -14,7 +13,6 @@ import com.yandex.div2.DivVariable
 import org.json.JSONArray
 import org.json.JSONObject
 
-@PublicApi
 object DivVariablesParser {
     /**
      * @param variablesArray json-array of variables for parsing.

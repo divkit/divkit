@@ -4,12 +4,10 @@ import android.view.ViewGroup
 import android.view.animation.Interpolator
 import androidx.transition.TransitionManager
 import com.yandex.div.core.animation.SpringInterpolator
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.SceneRootWatcher
 import javax.inject.Provider
 
-@PublicApi
 interface DivStateChangeListener {
 
     fun onDivAnimatedStateChanged(divView: Div2View)
@@ -22,7 +20,6 @@ interface DivStateChangeListener {
     }
 }
 
-@PublicApi
 class DefaultDivStateChangeListener @JvmOverloads constructor(
     private val rootViewProvider: Provider<ViewGroup?>,
     private val interpolator: Interpolator = SpringInterpolator()
