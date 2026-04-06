@@ -157,8 +157,14 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(isMuted: model.playbackConfig.isMuted)
     }
 
-    if let previewImage = model.preview {
-      preview.value.image = previewImage
+    if let preview = model.preview {
+      if !compare(preview, oldValue.preview) {
+        preview.requestImageWithCompletion { [weak self] image in
+          self?.updatePreview(image)
+        }
+      }
+    } else {
+      self.preview.value.image = nil
     }
 
     if let elapsedTime = model.elapsedTime?.value,
@@ -166,6 +172,11 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.seek(to: CMTime(value: elapsedTime))
       previousTime = elapsedTime
     }
+  }
+
+  private func updatePreview(_ image: Image?) {
+    preview.value.image = image
+    preview.value.frame = adjustPreviewFrame()
   }
 
   private func adjustPreviewFrame() -> CGRect {

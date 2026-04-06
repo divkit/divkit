@@ -29,17 +29,25 @@ public final class SVGImageHolderFactory: DivImageHolderFactory {
   }
 
   public func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
-    guard let url else {
-      return placeholder?.toImageHolder() ?? NilImageHolder()
+    let decoder: (
+      @Sendable (_ data: Data) -> Image?
+    )? = { [weak self] in
+      self?.svgDecoder.decode(data: $0)
     }
-    return RemoteImageHolder(
-      url: url,
-      placeholder: placeholder,
-      requester: requester,
-      imageProcessingQueue: imageProcessingQueue,
-      imageDecoder: { [weak self] in
-        self?.svgDecoder.decode(data: $0)
-      }
-    )
+
+    return if let url {
+      RemoteImageHolder(
+        url: url,
+        placeholder: placeholder,
+        requester: requester,
+        imageProcessingQueue: imageProcessingQueue,
+        imageDecoder: decoder
+      )
+    } else {
+      placeholder?.toAsyncDataImageHolder(
+        imageProcessingQueue: imageProcessingQueue,
+        decoder: decoder
+      ) ?? NilImageHolder()
+    }
   }
 }

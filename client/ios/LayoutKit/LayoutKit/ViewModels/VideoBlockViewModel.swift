@@ -5,7 +5,7 @@ public struct VideoBlockViewModel: Equatable {
   public let playbackConfig: PlaybackConfig
   public var elapsedTime: Binding<Int>?
   public var duration: Binding<Int>?
-  public let preview: Image?
+  public let preview: ImageHolder?
   public let resumeActions: [UserInterfaceAction]
   public let pauseActions: [UserInterfaceAction]
   public let bufferingActions: [UserInterfaceAction]
@@ -18,7 +18,7 @@ public struct VideoBlockViewModel: Equatable {
   public init(
     videoData: VideoData,
     playbackConfig: PlaybackConfig,
-    preview: Image? = nil,
+    preview: ImageHolder? = nil,
     elapsedTime: Binding<Int>? = nil,
     duration: Binding<Int>? = nil,
     resumeActions: [UserInterfaceAction] = [],

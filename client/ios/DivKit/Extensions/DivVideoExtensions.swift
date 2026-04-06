@@ -38,7 +38,13 @@ extension DivVideo: DivBlockModeling {
     let elapsedTime: Binding<Int>? = elapsedTimeVariable.flatMap {
       context.makeBinding(variableName: $0, defaultValue: 0)
     }
-    let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
+    let preview: ImageHolder = context
+      .imageHolderFactory.make(
+        nil,
+        resolvePreview(resolver)
+          .map { .imageData(ImageData(base64: $0)) }
+      )
+
     let videoData = VideoData(videos: videoSources?
       .compactMap { $0.makeVideo(resolver: resolver) } ?? []
     )
@@ -123,19 +129,4 @@ extension DivVideoScale {
       .fit
     }
   }
-}
-
-private func _makeImage(base64: String) -> Image? {
-  decode(base64: base64).flatMap(Image.init(data:))
-}
-
-fileprivate func decode(base64: String) -> Data? {
-  if let data = Data(base64Encoded: base64) {
-    return data
-  }
-  if let url = URL(string: base64),
-     let dataHoldingURL = try? Data(contentsOf: url) {
-    return dataHoldingURL
-  }
-  return nil
 }
