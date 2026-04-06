@@ -2,9 +2,7 @@
 agp = "8.12.3"
 android-lint = "31.12.3"  # agp + "23.0.0"
 androidsvg = "1.4"
-buildTimeTracker = "5.0.1"
 coil = "3.0.4"
-dokka = "1.8.20"
 exoplayer = "2.18.4"
 festReflect = "1.4.1"
 glide = "4.16.0"
@@ -120,16 +118,12 @@ androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", 
 appmetrica-lib = { module = "io.appmetrica.analytics:analytics", version.ref = "metrica" }
 appmetrica-plugin = { module = "io.appmetrica.analytics:gradle", version.ref = "metricaPlugin" }
 
-buildTimeTracker = { module = "com.asarkar.gradle:build-time-tracker", version.ref = "buildTimeTracker" }
-
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil-network-cachecontrol = { module = "io.coil-kt.coil3:coil-network-cache-control", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
-
-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 
