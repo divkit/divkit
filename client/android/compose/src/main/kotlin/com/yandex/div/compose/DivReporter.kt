@@ -1,6 +1,6 @@
 package com.yandex.div.compose
 
-import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.Log
 
 /**
@@ -10,7 +10,7 @@ import com.yandex.div.internal.Log
  *
  * @see DivComposeConfiguration
  */
-@PublicApi
+@ExperimentalApi
 open class DivReporter {
 
     open fun reportError(message: String) {

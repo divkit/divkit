@@ -7,8 +7,8 @@ import com.yandex.div.compose.context.DivLocalContext
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivContextComponent
 import com.yandex.div.compose.internal.DivDebugFeatures
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -27,7 +27,7 @@ import javax.inject.Inject
  *    val configuration = DivComposeConfiguration()
  *    val divContext = configuration.createContext(baseContext = activity)
  */
-@PublicApi
+@ExperimentalApi
 class DivContext @Inject @MainThread internal constructor(
     internal val component: DivContextComponent
 ) : ContextWrapper(component.baseContext) {

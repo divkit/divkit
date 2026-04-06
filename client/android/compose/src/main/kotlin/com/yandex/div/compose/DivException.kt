@@ -1,9 +1,9 @@
 package com.yandex.div.compose
 
-import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
  * Exception thrown when an unrecoverable error occurs in DivKit pipeline.
  */
-@PublicApi
-class DivException(message: String) : Exception(message)
+@ExperimentalApi
+class DivException internal constructor(message: String) : Exception(message)

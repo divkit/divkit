@@ -7,8 +7,8 @@ import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
@@ -28,7 +28,7 @@ import javax.inject.Named
  *    }
  */
 @Module
-@PublicApi
+@ExperimentalApi
 class DivComposeConfiguration(
     @get:Provides
     val actionHandler: DivExternalActionHandler = defaultActionHandler,

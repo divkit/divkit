@@ -9,6 +9,7 @@ import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivData
 
 /**
@@ -27,6 +28,7 @@ import com.yandex.div2.DivData
  * @param data the [DivData] describing the layout to render.
  * @param modifier the [Modifier] to be applied to the root layout.
  */
+@ExperimentalApi
 @Composable
 fun DivView(
     data: DivData,

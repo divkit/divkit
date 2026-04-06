@@ -1,13 +1,13 @@
 package com.yandex.div.compose.actions
 
-import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.annotations.ExperimentalApi
 import org.json.JSONObject
 
 /**
  * Data associated with a custom  DivKit action (action with `"type": "custom"`).
  */
-@PublicApi
-data class DivCustomActionData(
+@ExperimentalApi
+data class DivCustomActionData internal constructor(
     val id: String,
     val payload: JSONObject?
 )

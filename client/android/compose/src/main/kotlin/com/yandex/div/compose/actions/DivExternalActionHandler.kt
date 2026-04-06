@@ -1,6 +1,6 @@
 package com.yandex.div.compose.actions
 
-import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
  * Handler for actions that DivKit does not handle internally.
@@ -9,7 +9,7 @@ import com.yandex.div.core.annotations.PublicApi
  *
  * @see com.yandex.div.compose.DivComposeConfiguration
  */
-@PublicApi
+@ExperimentalApi
 interface DivExternalActionHandler {
 
     /**
