@@ -1,3 +1,13 @@
+## 32.44.0
+
+# Android Client:
+* Fixed ANR at `RuntimeStoreImpl` initialization.
+
+# iOS Client:
+* Fix blur effect during animations.
+* Fixed visibility action resolve with collection item builder.
+
+
 ## 32.43.0
 
 # Android Client:
