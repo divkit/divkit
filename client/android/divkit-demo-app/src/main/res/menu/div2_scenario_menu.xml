@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/div2_compose_renderer"
+        android:orderInCategory="50"
+        android:checkable="true"
+        app:showAsAction="never"
+        android:title="@string/compose_renderer" />
+
+    <item
         android:id="@+id/div2_perform_action"
         android:orderInCategory="200"
         app:showAsAction="never"

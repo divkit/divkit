@@ -27,4 +27,6 @@ class Preferences(context: Context) : DivkitDemoPreferences(context) {
     var limitImageBitmapSizeEnabled by BooleanPreference(true)
 
     var visualAssertionHandlerEnabled by BooleanPreference(BuildConfig.DEBUG)
+
+    var useComposeRenderer by BooleanPreference(false)
 }

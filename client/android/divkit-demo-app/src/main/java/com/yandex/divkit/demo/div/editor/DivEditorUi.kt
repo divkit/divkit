@@ -12,11 +12,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.expression.variables.DivVariablesParser
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.Assert
+import com.yandex.div2.DivData
+import com.yandex.div2.DivPatch
 import com.yandex.div2.DivSize
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.div.DemoRendererFacade
 import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorScreenshot.takeScreenshot
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
@@ -28,7 +30,9 @@ class DivEditorUi(
     private val metadataButton: FloatingActionButton,
     private val failedTextMessage: TextView,
     private val divContainer: ViewGroup,
-    private val div2View: Div2View,
+    private val divContext: Div2Context,
+    private val viewRenderer: DemoRendererFacade,
+    private val composeRenderer: DemoRendererFacade,
     private val div2Recycler: RecyclerView,
     private val div2Adapter: DivEditorAdapter,
     private val metadataHost: Div2MetadataBottomSheet.MetadataHost,
@@ -38,6 +42,22 @@ class DivEditorUi(
     var onDiv2ViewDrawnListener: ((bitmap: Bitmap) -> Unit)? = null
     var hasTemplates: Boolean = false
 
+    val activeRenderer: DemoRendererFacade
+        get() = if (useComposeRenderer) composeRenderer else viewRenderer
+
+    private val inactiveRenderer: DemoRendererFacade
+        get() = if (useComposeRenderer) viewRenderer else composeRenderer
+
+    var useComposeRenderer: Boolean = false
+        set(value) {
+            field = value
+            applyRendererVisibility()
+        }
+
+    private var isSingleCard: Boolean = false
+    private var lastDivData: DivData? = null
+    private var lastDivDataTag: DivDataTag? = null
+
     private val debounceOnViewDrawObserver = DebounceOnViewDrawObserver {
         updateRenderTime()
         activity.takeScreenshot { screenshot: Bitmap ->
@@ -46,35 +66,57 @@ class DivEditorUi(
     }
 
     init {
-        div2View.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            div2View.divData?.states?.firstOrNull { it.stateId == div2View.currentStateId }?.let {
-                val height = when (it.div.value().height) {
-                    is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
-                    else -> ViewGroup.LayoutParams.WRAP_CONTENT
-                }
-                if (divContainer.layoutParams.height == height) return@addOnLayoutChangeListener
-                divContainer.doOnPreDraw {
-                    divContainer.layoutParams.height = height
-                    divContainer.requestLayout()
-                }
-            }
+        viewRenderer.view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            val divData = viewRenderer.currentData ?: return@addOnLayoutChangeListener
+            divContainer.doOnPreDraw { adjustContainerHeight(divData) }
         }
     }
 
     fun updateState(newState: DivEditorState) {
         when (newState) {
-            is DivEditorState.InitialState -> {
-                showInitialState()
-            }
-            is DivEditorState.LoadingState -> {
-                showLoadingState()
-            }
-            is DivEditorState.DivReceivedState -> {
-                showDivReceivedState(newState)
-            }
-            is DivEditorState.FailedState -> {
-                showFailedState(newState)
-            }
+            is DivEditorState.InitialState -> showInitialState()
+            is DivEditorState.LoadingState -> showLoadingState()
+            is DivEditorState.DivReceivedState -> showDivReceivedState(newState)
+            is DivEditorState.FailedState -> showFailedState(newState)
+        }
+    }
+
+    fun setDivData(divData: DivData, tag: DivDataTag = DivDataTag(divData.logId)) {
+        isSingleCard = true
+        setRendererData(divData, tag)
+        applyRendererVisibility()
+    }
+
+    fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit) {
+        if (isSingleCard) {
+            activeRenderer.applyPatch(divPatch, errorCallback)
+        } else {
+            div2Adapter.applyPatch(divPatch, errorCallback)
+        }
+    }
+
+    private fun setRendererData(data: DivData, tag: DivDataTag) {
+        lastDivData = data
+        lastDivDataTag = tag
+        activeRenderer.setData(data, tag)
+    }
+
+    private fun applyRendererVisibility() {
+        if (!isSingleCard) return
+        inactiveRenderer.deactivate()
+        activeRenderer.activate(lastDivData, lastDivDataTag)
+        activeRenderer.currentData?.let { adjustContainerHeight(it) }
+    }
+
+    private fun adjustContainerHeight(divData: DivData) {
+        val rootHeight = divData.states.firstOrNull()?.div?.value()?.height
+        val containerHeight = when (rootHeight) {
+            is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
+            else -> ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+        if (divContainer.layoutParams.height != containerHeight) {
+            divContainer.layoutParams.height = containerHeight
+            divContainer.requestLayout()
         }
     }
 
@@ -125,16 +167,17 @@ class DivEditorUi(
         hideAll()
 
         tryDeclareContextVariables(state.rawDiv)
+        isSingleCard = state.isSingleCard
         if (state.isSingleCard) {
-            div2View.visibility = VISIBLE
+            val card = state.divDataList.first()
+            setRendererData(card, DivDataTag(card.logId))
             div2Recycler.visibility = GONE
             div2Adapter.clearList()
-            val card = state.divDataList.first()
-            div2View.setData(card, DivDataTag(card.logId))
+            applyRendererVisibility()
         } else {
             div2Recycler.visibility = VISIBLE
-            div2View.visibility = GONE
-            div2View.cleanup()
+            viewRenderer.cleanup()
+            composeRenderer.cleanup()
             div2Adapter.setList(state.divDataList)
             div2Recycler.viewTreeObserver.addOnDrawListener(debounceOnViewDrawObserver)
         }
@@ -148,13 +191,14 @@ class DivEditorUi(
         val result: List<Variable> = DivVariablesParser.parse(variables) { e ->
             Assert.fail("Error during parsing of variable", e)
         }
-
-        (div2View.context as Div2Context).divVariableController.declare(*result.toTypedArray())
+        divContext.divVariableController.declare(*result.toTypedArray())
     }
 
     private fun hideAll() {
         metadataButton.visibility = GONE
         failedTextMessage.visibility = GONE
+        viewRenderer.view.visibility = GONE
+        composeRenderer.view.visibility = GONE
         divContainer.viewTreeObserver.removeOnDrawListener(debounceOnViewDrawObserver)
     }
 }

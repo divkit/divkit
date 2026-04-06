@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +22,10 @@ import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.SafeAlertDialogBuilder
-import com.yandex.div.core.view2.Div2View
-import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.KLog
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.lottie.DivLottieExtensionHandler
@@ -35,7 +33,6 @@ import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
@@ -43,7 +40,6 @@ import com.yandex.divkit.demo.div.editor.DivEditorActivityStateKeeper
 import com.yandex.divkit.demo.div.editor.DivEditorLogger
 import com.yandex.divkit.demo.div.editor.DivEditorParsingErrorLogger
 import com.yandex.divkit.demo.div.editor.DivEditorPresenter
-import com.yandex.divkit.demo.div.editor.DivEditorState
 import com.yandex.divkit.demo.div.editor.DivEditorUi
 import com.yandex.divkit.demo.div.editor.DivEditorWebController
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
@@ -51,7 +47,6 @@ import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
 import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
-import com.yandex.divkit.demo.utils.applyPatchByConfig
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
@@ -64,7 +59,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.UUID
-import com.yandex.div.internal.KLog
 
 class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.MetadataHost {
 
@@ -74,12 +68,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private lateinit var editorStateKeeper: DivEditorActivityStateKeeper
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var divContext: Div2Context
+    private lateinit var divEditorUi: DivEditorUi
     private val actionHandler = DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = this@Div2ScenarioActivity })
     private val globalVariableController = DemoGlobalVariablesController()
     private val preferences by lazy { getSharedPreferences("div2", Context.MODE_PRIVATE) }
     private var json: String? = null
     private var url: String? = null
-    private lateinit var div2View: Div2View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,23 +144,33 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 
-        setupDiv2View()
+        val viewRenderer = Div2RendererFacade(binding.singleContainer, divContext, actionHandler)
+        val composeRenderer = ComposeRendererFacade(
+            binding.singleContainer,
+            divContext.divVariableController,
+            this
+        )
 
         with(binding.div2Recycler) {
             layoutManager = LinearLayoutManager(this@Div2ScenarioActivity, RecyclerView.VERTICAL, false)
             adapter = div2Adapter
         }
-        val divEditorUi = DivEditorUi(
+
+        divEditorUi = DivEditorUi(
             this,
             binding.metadataButton,
             binding.error,
             binding.singleContainer,
-            div2View,
+            divContext,
+            viewRenderer,
+            composeRenderer,
             binding.div2Recycler,
             div2Adapter,
             this,
             Container.flagPreferenceProvider.getExperimentFlag(Experiment.SHOW_RENDERING_TIME)
         )
+        divEditorUi.useComposeRenderer = Container.preferences.useComposeRenderer
+        updateToolbarTitle()
 
         val editorLogger = DivEditorLogger(this::setError)
         editorStateKeeper = ViewModelProvider(this)[DivEditorActivityStateKeeper::class.java]
@@ -195,14 +199,19 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         initDiv()
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.div2_scenario_menu, menu)
+        menu?.findItem(R.id.div2_compose_renderer)?.isChecked = divEditorUi.useComposeRenderer
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.div2_compose_renderer -> {
+                item.isChecked = !item.isChecked
+                toggleRenderer()
+                true
+            }
             R.id.div2_perform_action -> {
                 showActionDialog()
                 true
@@ -212,7 +221,11 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 true
             }
             R.id.div2_download_patch -> {
-                showDownloadDialog()
+                if (divEditorUi.useComposeRenderer) {
+                    showToast("Patches are not supported in Compose renderer")
+                } else {
+                    showDownloadDialog()
+                }
                 true
             }
             R.id.div2_load_div_json -> {
@@ -220,7 +233,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 true
             }
             R.id.div2_close_all_tooltips -> {
-                divContext.cancelTooltips()
+                divEditorUi.activeRenderer.dismissTooltips()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -255,7 +268,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                         return@launch
                     }
 
-                    div2View.setData(divData, DivDataTag(UUID.randomUUID().toString()))
+                    divEditorUi.setDivData(divData, DivDataTag(UUID.randomUUID().toString()))
                     showToast("New div json applied!")
                 }
             }
@@ -299,13 +312,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setPositiveButton("Perform action") { _, _ ->
                 val action = editText.text.toString()
                 preferences.edit().putString(KEY_DIV2_ACTION_URL, action).apply()
-                try {
-                    val env = DivParsingEnvironment(ParsingErrorLogger.LOG)
-                    val jsonObject = JSONObject(action)
-                    actionHandler.handleAction(DivAction(env, jsonObject), div2View, div2View.expressionResolver)
-                } catch (e: JSONException) {
-                    actionHandler.handleActionUrl(Uri.parse(action), div2View)
-                }
+                divEditorUi.activeRenderer.performAction(action)
             }
         adb.create().show()
     }
@@ -360,7 +367,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                         return@launch
                     }
 
-                    applyPatch(divPatch) {
+                    divEditorUi.applyPatch(divPatch) {
                         longToast("Error while applying patch!")
                     }
                 }
@@ -368,31 +375,18 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         adb.create().show()
     }
 
-    private fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit) {
-        if (isSingleCardState()) {
-            div2View.applyPatchByConfig(divPatch) {
-                if (!it) errorCallback()
-            }
+    private fun toggleRenderer() {
+        divEditorUi.useComposeRenderer = !divEditorUi.useComposeRenderer
+        Container.preferences.useComposeRenderer = divEditorUi.useComposeRenderer
+        updateToolbarTitle()
+    }
+
+    private fun updateToolbarTitle() {
+        binding.toolbar.title = if (divEditorUi.useComposeRenderer) {
+            getString(R.string.demo) + " (Compose)"
         } else {
-            div2Adapter.applyPatch(divPatch, errorCallback)
+            getString(R.string.demo)
         }
-    }
-
-    private fun isSingleCardState(): Boolean {
-        if (!this::editorStateKeeper.isInitialized) {
-            return false
-        }
-        val state = editorStateKeeper.state
-        return state is DivEditorState.DivReceivedState && state.isSingleCard
-    }
-
-    private fun setupDiv2View() {
-        div2View = Div2View(divContext)
-        div2View.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        binding.singleContainer.addView(div2View)
     }
 
     @WorkerThread
