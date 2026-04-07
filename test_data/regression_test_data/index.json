@@ -4211,6 +4211,25 @@
       ],
       "file": "input/input_cursor_position.json",
       "case_id": 496
+    },
+    {
+      "title": "Visibility action with local variable in url",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
+        "variables"
+      ],
+      "steps": [
+        "Wait for visibility action to trigger (less than 1 second)"
+      ],
+      "expected_results": [
+        "Text changes from 'Waiting for visibility action...' to 'Triggered from local variable!'"
+      ],
+      "file": "visibility_actions/visibility_action_with_local_variable_in_url.json"
     }
   ]
 }

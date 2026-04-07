@@ -1,0 +1,52 @@
+{
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "name": "result",
+        "type": "string",
+        "value": "Waiting for visibility action..."
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 20,
+            "right": 20,
+            "top": 20,
+            "bottom": 20
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "@{result}",
+              "font_size": 18
+            },
+            {
+              "type": "text",
+              "text": "Element with local variable in visibility action url",
+              "font_size": 16,
+              "variables": [
+                {
+                  "name": "local_value",
+                  "type": "string",
+                  "value": "Triggered from local variable!"
+                }
+              ],
+              "visibility_actions": [
+                {
+                  "log_id": "visibility_with_local_var",
+                  "url": "div-action://set_variable?name=result&value=@{local_value}",
+                  "visibility_duration": 800
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
