@@ -9,6 +9,13 @@ class TestReporter : DivReporter() {
     var lastError: String? = null
         private set
 
+    var lastWarning: String? = null
+        private set
+
+    override fun reportWarning(message: String) {
+        lastWarning = message
+    }
+
     override fun reportError(message: String) {
         lastError = message
 

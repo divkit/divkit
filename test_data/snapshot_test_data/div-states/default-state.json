@@ -37,13 +37,7 @@
                 },
                 "text_alignment_vertical": "center",
                 "text_alignment_horizontal": "center",
-                "text": "Nondefault state",
-                "actions": [
-                  {
-                    "log_id": "default state",
-                    "url": "div-action://set_state?state_id=0/state_container/default"
-                  }
-                ]
+                "text": "Nondefault state"
               }
             },
             {
@@ -58,17 +52,8 @@
                 },
                 "text_alignment_vertical": "center",
                 "text_alignment_horizontal": "center",
-                "text": "Default state",
-                "actions": [
-                  {
-                    "log_id": "nondefault state",
-                    "url": "div-action://set_state?state_id=0/state_container/nondefaut"
-                  }
-                ]
+                "text": "Default state"
               }
-            },
-            {
-              "state_id": "empty"
             }
           ]
         }
