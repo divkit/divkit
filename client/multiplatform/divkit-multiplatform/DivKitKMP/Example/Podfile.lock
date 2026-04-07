@@ -15,16 +15,16 @@ PODS:
   - DivKitKMP (32.38.0):
     - DivKit (= 32.38.0)
     - DivKitExtensions (= 32.38.0)
-  - VGSL (7.19.1):
-    - VGSLFundamentals (= 7.19.1)
-    - VGSLNetworking (= 7.19.1)
-    - VGSLUI (= 7.19.1)
-  - VGSLFundamentals (7.19.1)
-  - VGSLNetworking (7.19.1):
-    - VGSLFundamentals (= 7.19.1)
-    - VGSLUI (= 7.19.1)
-  - VGSLUI (7.19.1):
-    - VGSLFundamentals (= 7.19.1)
+  - VGSL (7.21.0):
+    - VGSLFundamentals (= 7.21.0)
+    - VGSLNetworking (= 7.21.0)
+    - VGSLUI (= 7.21.0)
+  - VGSLFundamentals (7.21.0)
+  - VGSLNetworking (7.21.0):
+    - VGSLFundamentals (= 7.21.0)
+    - VGSLUI (= 7.21.0)
+  - VGSLUI (7.21.0):
+    - VGSLFundamentals (= 7.21.0)
 
 DEPENDENCIES:
   - DivKitKMP (from `../`)
@@ -52,10 +52,10 @@ SPEC CHECKSUMS:
   DivKit_Serialization: c2fab65288397ea29bd91d3966c07d2d12ee608d
   DivKitExtensions: 08d57b3cab5ca255ae88f812168380a44b405fc1
   DivKitKMP: 28fa257455a5ea2815cc5f930831bb89d89679ac
-  VGSL: 11fa7ce04704742563023605ebae5f1f07650402
-  VGSLFundamentals: 06fafc043931efd4023be34bd98bec6df05a0080
-  VGSLNetworking: dfc9d7a2244def8272afc0ca1af6fd417ecbf7c6
-  VGSLUI: e4809e668479fb6c151970d1097a086b6c7c176b
+  VGSL: 0573c2b82b05aadcba4836398ce3778d271bfd13
+  VGSLFundamentals: 3a081684c1a5df5800bf88aca8a9bdff2c10cfd9
+  VGSLNetworking: 0ea8a335bc4f4eba3f6123ffe441cf1c08f267f2
+  VGSLUI: 249a16cccdb75f1a5a1733894d013bca76e27c5e
 
 PODFILE CHECKSUM: 4009ac52a15ffdedf1dc6002da52adfc1f079b30
 

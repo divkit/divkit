@@ -1,7 +1,7 @@
 #if os(iOS)
 import UIKit
 
-@_spi(Legacy) import DivKit
+import DivKit
 
 internal import VGSLUI
 internal import DivKitExtensions
@@ -29,13 +29,18 @@ internal import DivKitExtensions
     cardId: String
   ) -> UIView {
     let divView = DivView(divKitComponents: divkitComponents)
-    divView.setSource(
-      DivViewSource(
-        kind: .data(Data(jsonString.utf8)),
-        cardId: DivCardID(rawValue: cardId)
-      )
-    )
-    return DivKitKMPView(divView: divView)
+    let kmpView = DivKitKMPView(divView: divView)
+    kmpView.updateSourceIfNeeded(jsonString: jsonString, cardId: cardId)
+    return kmpView
+  }
+
+  @objc public func updateDivKitView(
+    _ view: UIView,
+    jsonString: String,
+    cardId: String
+  ) {
+    guard let kmpView = view as? DivKitKMPView else { return }
+    kmpView.updateSourceIfNeeded(jsonString: jsonString, cardId: cardId)
   }
 
   @objc public func getVariableValue(_ name: String) -> Any? {

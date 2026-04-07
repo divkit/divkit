@@ -43,13 +43,12 @@ internal class DivKitScopeImpl(
         jsonData: String,
         modifier: Modifier
     ) {
-        val view = remember(cardId, jsonData) {
-            divKitFacade.makeDivKitView(jsonString = jsonData, cardId = cardId)
-        }
-
         UIKitView(
             factory = {
-                view
+                divKitFacade.makeDivKitView(jsonString = jsonData, cardId = cardId)
+            },
+            update = { view ->
+                divKitFacade.updateDivKitView(view, jsonString = jsonData, cardId = cardId)
             },
             modifier = modifier,
             properties = UIKitInteropProperties(
