@@ -6,12 +6,15 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivPathUtils.statePath
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.core.DivTreeVisitor
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
+import com.yandex.div2.DivState
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -45,8 +48,19 @@ internal class DivStateManager @Inject constructor(
         return state
     }
 
-    fun getState(cardId: String, statePath: String): String? =
-        temporaryCache.getState(cardId, statePath) ?: cache.getState(cardId, statePath)
+    fun getState(
+        div: DivState,
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        path: String,
+    ): String? {
+        val cardId = divView.divTag.id
+        return div.stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
+            ?: temporaryCache.getState(cardId, path)
+            ?: cache.getState(cardId, path)
+            ?: div.defaultStateId?.evaluate(resolver)
+            ?: div.states.firstOrNull()?.stateId
+    }
 
     fun updateState(tag: DivDataTag, stateId: Long, temporary: Boolean) {
         if (DivDataTag.INVALID == tag) return

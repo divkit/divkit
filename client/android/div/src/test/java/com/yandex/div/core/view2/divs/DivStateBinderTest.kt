@@ -245,7 +245,7 @@ class DivStateBinderTest: DivBinderTest() {
     }
 
     private fun switchToState(stateId: String) {
-        whenever(stateManager.getState(cardId = CARD_ID, statePath = "0/state_container")).thenReturn(stateId)
+        whenever(stateManager.getState(div.value, divView, resolver, path = "0/state_container")).thenReturn(stateId)
     }
 
     private fun pathToState(stateId: String): DivStatePath {

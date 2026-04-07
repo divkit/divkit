@@ -2,7 +2,6 @@ package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds
@@ -140,20 +139,6 @@ internal class DivRuntimeVisitor @Inject constructor(
         }
     }
 
-    private fun getActiveStateId(
-        div: DivState,
-        divView: Div2View,
-        path: DivStatePath,
-        resolver: ExpressionResolverImpl,
-    ): String? {
-        return div.stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
-            ?: stateManager.getState(divView.cardId, path.statePath)
-            ?: div.defaultStateId?.evaluate(resolver)
-            ?: div.states.firstOrNull()?.stateId
-    }
-
-    private val Div2View.cardId get() = divTag.id
-
     private fun visitState(
         div: Div.State,
         divView: Div2View,
@@ -170,7 +155,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeStateId = getActiveStateId(div, divView, path, runtime.expressionResolver)
+        val activeStateId = stateManager.getState(div, divView, runtime.expressionResolver, path.statePath)
         div.states.forEach {
             val childDiv = it.div ?: return@forEach
             val childPath = path.append(path.lastDivId, it, it.stateId)
@@ -194,7 +179,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeTab = tabsCache.getSelectedTab(divView.cardId, path.fullPath)
+        val activeTab = tabsCache.getSelectedTab(divView.divTag.id, path.fullPath)
             ?: div.selectedTab.evaluate(runtime.expressionResolver).toIntSafely()
 
         val ids = div.items.getIds({ this.div })

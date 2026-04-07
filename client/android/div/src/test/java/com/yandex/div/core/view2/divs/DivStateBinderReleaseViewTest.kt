@@ -81,7 +81,8 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     @Test
     fun `change state release old views`() {
         stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
-        whenever(stateManager.getState(cardId = CARD_ID, statePath = "0/state_container")).thenReturn("second")
+        whenever(stateManager.getState(divOne.asDivState.value, divView, resolver, path = "0/state_container"))
+            .thenReturn("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
             .findStateLayout(DivStatePath.parse("0/state_container/first"))
             ?: throw AssertionError("failed to find state")

@@ -86,15 +86,18 @@ internal class DivStateBinder @Inject constructor(
         val oldDivState = view.div
         val oldResolver = view.bindingContext?.expressionResolver
 
+        val divView = context.divView
+        val resolver = context.expressionResolver
         val id = divValue.getId {
-            errorCollectors.getOrCreate(context.divView.dataTag, context.divView.divData)
+            errorCollectors.getOrCreate(divView.dataTag, divView.divData)
                 .logError(missingValue("id", path.toString()))
         }
         val oldState = divValue.states.find { it.stateId == view.stateId }
-            ?: divValue.getDefaultState(context.expressionResolver)
-        val currentStateId = getCurrentStateId(context, divValue, path, id)
+            ?: divValue.getDefaultState(resolver)
+        val statePath = "${path.statesString}/$id"
+        val currentStateId = stateManager.getState(divValue, divView, resolver, statePath)
         val newState = divValue.states.find { it.stateId == currentStateId }
-            ?: divValue.getDefaultState(context.expressionResolver)
+            ?: divValue.getDefaultState(resolver)
         if (oldState == null || newState == null) return
 
         val oldDiv = view.activeStateDiv
@@ -105,22 +108,6 @@ internal class DivStateBinder @Inject constructor(
 
         view.bindState(context, divValue, newState, oldDivState?.value, oldState, oldDiv, path, oldResolver, id)
     }
-
-    private fun getCurrentStateId(
-        context: BindingContext,
-        div: DivState,
-        path: DivStatePath,
-        id: String,
-    ): String? {
-        div.getStateIdVariableValue(context.expressionResolver)?.let { return it.toString() }
-
-        val cardId = context.divView.divTag.id
-        val statePath = "${path.statesString}/$id"
-        return stateManager.getState(cardId, statePath)
-    }
-
-    private fun DivState.getStateIdVariableValue(resolver: ExpressionResolver) =
-        stateIdVariable?.let { resolver.getVariable(it)?.getValue() }
 
     private fun DivStateLayout.bind(
         context: BindingContext,
