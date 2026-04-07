@@ -72,6 +72,22 @@ internal class BindingCriticalSection @Inject constructor() {
     }
 
     /**
+     * Transfers ownership of the critical section to the current thread.
+     *
+     * Used when a binding action is posted from a background thread to the main thread:
+     * the lock was entered on the background (binding) thread but the continuation runs
+     * on the main thread. Transferring ownership allows [BindingDispatcher.isBackgroundBindingInProgress]
+     * to correctly return `false` once the background work is done and only the main-thread
+     * continuation remains, preventing false-positive deadlock detection in [BindingDispatcher.withLock].
+     */
+    @AnyThread
+    fun transferToCurrentThread() {
+        synchronized(lock) {
+            holder = Thread.currentThread()
+        }
+    }
+
+    /**
      * Reserves the critical section for the specified thread.
      *
      * If the section is not held, it will be reserved for the given thread.
@@ -226,6 +242,7 @@ internal inline fun BindingCriticalSection.postBindingAction(crossinline action:
 
     try {
         UiThreadHandler.get().post {
+            transferToCurrentThread()
             try {
                 action()
             } finally {
