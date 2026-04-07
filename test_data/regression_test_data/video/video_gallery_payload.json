@@ -1,0 +1,267 @@
+{
+  "templates": {
+    "video_gallery": {
+      "type": "gallery",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 320
+      },
+      "item_spacing": 0
+    },
+    "video_card": {
+      "type": "video",
+      "height": {
+        "type": "fixed",
+        "value": 320
+      },
+      "repeatable": true,
+      "autostart": true,
+      "background": [
+        {
+          "type": "solid",
+          "color": "#fff"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "video_gallery",
+          "items": [
+            {
+              "type": "video_card",
+              "id": "video_1",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0a63cc3461c5d417e75e9ba1999154d0.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_2",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0b0e108af16652c853a977f381a8055c.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_3",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0b3bc92675c96c6fa5b654f8a94f36f7.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_4",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0b9771f77a918609b01271cfcef07a9a.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_5",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0bfbebe9317bca4c42a234b2785ed1f4.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_6",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/0e6a2a2132be7758c73c2850bb672448.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_7",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/1a4e880d6432f1178aee03fedcd88607.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_8",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/1b7896cab8b5bc194e31b76a8f1fb601.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_9",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/1e5d47d5f1df06eea3d527328e5296d6.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_10",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/1e22c2681d4e260cb5ade7f017d3bad0.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_11",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2aec4a43420cc243bb0586bc4e54f1e3.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_12",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2c168deebc02893d262273dc5e5918d2.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_13",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2ca47a94510166c7ce4c13985a2cf334.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_14",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2d26785012b2c4262eaba9b07c758f37.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_15",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2daec2e3f1a28aca506d1d6f565e66b5.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_16",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/2edd58c260288af29e38f1917a0143e5.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_17",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/3d90a41491baea0ac32741a0cb08eae0.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_18",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/3f3afe031e2c8c67c5a5cd68511e28ff.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_19",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4a06e8403fb7ad17cbf39e37f03c4597.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_20",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4a523b7f6540c9cafac13185b3861969.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_21",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4c43244b8d35084e3054de918a257150.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_22",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4df9a5d6e28a944e478e64536b547555.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_23",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4e84fa046586df8497f28099591a66e7.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_24",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4f407e82453617dce9a16669cf6fc255.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_25",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/4fd99a1f245377bb40dd8497f5fb907a.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_26",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5a28049ee8029da13aa0c822297c158f.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_27",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5af67bb0a51f28973788681a821fa363.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_28",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5b58d149d56a1d2a2cdd9b604281297a.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_29",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5bdd0ff6dd1da6ee6f1284257e01c8fc.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_30",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5c38c8d12f566a72ad4882d254ef24d7.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_31",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5cfd9ba937ee29b70b2feb4c402e7142.mp4"
+              }
+            },
+            {
+              "type": "video_card",
+              "id": "video_32",
+              "player_settings_payload": {
+                "url": "https://div-storage.s3.yandex.net/feed/5f83085085f6a50a129030115da43c46.mp4"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

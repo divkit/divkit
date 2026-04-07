@@ -155,6 +155,7 @@
 		8C2BFA5428C10EA000A16E9B /* RegressionTestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
 		8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */; };
 		8C2BFA5828C10F5B00A16E9B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5728C10F5B00A16E9B /* TestData.swift */; };
+		8C34FDDE2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34FDDD2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift */; };
 		8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */; };
 		8C38262B2AB46BB700264C17 /* PlaygroundReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */; };
 		8C38262D2AB46BF400264C17 /* PlaygroundPatchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */; };
@@ -459,6 +460,7 @@
 		8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionTestModel.swift; sourceTree = "<group>"; };
 		8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegressionTestView.swift; sourceTree = "<group>"; };
 		8C2BFA5728C10F5B00A16E9B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		8C34FDDD2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundPlayerFactory.swift; sourceTree = "<group>"; };
 		8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverAnyTests.swift; sourceTree = "<group>"; };
 		8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundReporter.swift; sourceTree = "<group>"; };
 		8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundPatchProvider.swift; sourceTree = "<group>"; };
@@ -1000,6 +1002,7 @@
 				8C440A012864C55400EF4175 /* Assets.xcassets */,
 				8C7EE1D328B777B9008A48E6 /* Info.plist */,
 				8C1A383128B61A2B00A047C8 /* AppComponents.swift */,
+				8C34FDDD2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift */,
 				8C4409FD2864C55400EF4175 /* DivKitPlaygroundApp.swift */,
 			);
 			path = DivKitPlayground;
@@ -1769,6 +1772,7 @@
 				8C1A377B28B4E3E700A047C8 /* Payload.swift in Sources */,
 				8C38262D2AB46BF400264C17 /* PlaygroundPatchProvider.swift in Sources */,
 				4356EDC12A6C54E40017205B /* PlaygroundJsonProvider.swift in Sources */,
+				8C34FDDE2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift in Sources */,
 				8C1A376D28B4DC2400A047C8 /* SettingsView.swift in Sources */,
 				8C1A378028B4E47900A047C8 /* WebPreviewSocket.swift in Sources */,
 				8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */,

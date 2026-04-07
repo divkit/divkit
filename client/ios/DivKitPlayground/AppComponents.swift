@@ -75,7 +75,7 @@ enum AppComponents {
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
       resourcesPreloader: DivDataResourcesPreloader(resourceRequester: cachedRequester),
-      playerFactory: DefaultPlayerFactory(itemsProvider: cachedRequester),
+      playerFactory: PlaygroundPlayerFactory(itemsProvider: cachedRequester),
       urlHandler: urlHandler,
       variablesStorage: variablesStorage
     )

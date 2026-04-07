@@ -2788,6 +2788,23 @@
       "file": "video/video_in_gallery.json"
     },
     {
+      "title": "Video with empty source",
+      "tags": [
+        "DivVideo",
+        "DivGallery"
+      ],
+      "platforms": [
+        "ios"
+      ],
+      "steps": [
+        "Scroll through the gallery"
+      ],
+      "expected_results": [
+        "Videos play using URL from player_settings_payload when video_sources is empty"
+      ],
+      "file": "video/video_gallery_payload.json"
+    },
+    {
       "title": "Video stream",
       "case_id": 152,
       "platforms": [
