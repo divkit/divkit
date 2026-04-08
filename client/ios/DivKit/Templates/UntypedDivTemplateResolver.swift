@@ -141,7 +141,7 @@ final class UntypedDivTemplateResolver {
     }
 
     for paramName in parameterNames {
-      if result[paramName] == nil, let value = linkSource[paramName] {
+      if let value = linkSource[paramName] {
         result[paramName] = value
       }
     }
