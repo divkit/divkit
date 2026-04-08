@@ -2802,7 +2802,8 @@
       "expected_results": [
         "Videos play using URL from player_settings_payload when video_sources is empty"
       ],
-      "file": "video/video_gallery_payload.json"
+      "file": "video/video_gallery_payload.json",
+      "case_id": 499
     },
     {
       "title": "Video stream",
@@ -4246,7 +4247,8 @@
       "expected_results": [
         "Text changes from 'Waiting for visibility action...' to 'Triggered from local variable!'"
       ],
-      "file": "visibility_actions/visibility_action_with_local_variable_in_url.json"
+      "file": "visibility_actions/visibility_action_with_local_variable_in_url.json",
+      "case_id": 500
     }
   ]
 }
