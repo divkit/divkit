@@ -1,3 +1,12 @@
+## 32.45.0
+
+# Android Client:
+* Fixed `Div2View` self locks at async bindng.
+
+# iOS Client:
+* Div-video `preview` strings (base64 image data, including `data:` URL form) are decoded on a background queue through the image holder pipeline instead of blocking layout on the main thread.
+
+
 ## 32.44.0
 
 # Android Client:
