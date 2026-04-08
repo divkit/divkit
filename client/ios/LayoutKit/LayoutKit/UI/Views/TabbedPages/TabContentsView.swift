@@ -73,8 +73,6 @@ final class TabContentsView: BlockView {
 
   private var scrolledPageIndex: CGFloat = 0
 
-  private var isAnimatingTransition = false
-
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { collectionView.asArray() }
   var effectiveBackgroundColor: UIColor? { backgroundView?.effectiveBackgroundColor }
 
@@ -201,9 +199,7 @@ final class TabContentsView: BlockView {
     collectionView.isScrollEnabled = model.scrollingEnabled
 
     if oldModel != model || layout == nil || state.selectedPageIndex != selectedPageIndex {
-      if !isAnimatingTransition {
-        updateSelectedPageIndexIfNeeded(state.selectedPageIndex)
-      }
+      updateSelectedPageIndexIfNeeded(state.selectedPageIndex)
       setNeedsLayout()
     }
   }
@@ -236,7 +232,6 @@ final class TabContentsView: BlockView {
   }
 
   private func updateContentOffset() {
-    isAnimatingTransition = true
     collectionView.setContentOffset(selectedPageContentOffset, animated: true)
   }
 
@@ -276,7 +271,6 @@ extension TabContentsView: UICollectionViewDelegate {
 
   func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     overscrollDelegate?.onDidEndScrollingAnimation(scrollView)
-    isAnimatingTransition = false
     delegate?.tabContentsViewDidEndAnimation()
     updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: false)
   }
