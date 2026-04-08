@@ -21,6 +21,8 @@ import kotlin.collections.Map
  * Fixed coordinates of the rotation axis.
  * 
  * Can be created using the method [pivotFixed].
+ * 
+ * Required parameters: `value, type`.
  */
 @Generated
 @ExposedCopyVisibility
