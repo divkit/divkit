@@ -13,9 +13,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextOverflow
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
+import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 
@@ -31,8 +32,7 @@ internal fun DivTextView(
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
 
     val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal)
-    val maxLines = data.maxLines?.observedValue()?.toInt()?.coerceAtLeast(1)
-        ?: Int.MAX_VALUE
+    val maxLines = data.maxLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
     val overflow = data.truncate.observedValue().toTextOverflow()
 
     val contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
@@ -72,7 +72,7 @@ private fun buildAnnotatedText(
         return AnnotatedString(text)
     }
 
-    val baseTextColorAlpha = data.textColor.observedValue().toColor().alpha
+    val baseTextColorAlpha = data.textColor.observedColorValue().alpha
     val density = LocalDensity.current
     val builder = AnnotatedString.Builder(text)
 
@@ -82,8 +82,8 @@ private fun buildAnnotatedText(
 
     if (ranges != null) {
         for (range in ranges) {
-            val start = range.start.observedValue().toInt()
-            val end = range.end?.observedValue()?.toInt() ?: text.length
+            val start = range.start.observedIntValue()
+            val end = range.end?.observedIntValue() ?: text.length
             val safeStart = start.coerceIn(0, text.length)
             val safeEnd = end.coerceIn(safeStart, text.length)
             if (safeStart >= safeEnd) continue

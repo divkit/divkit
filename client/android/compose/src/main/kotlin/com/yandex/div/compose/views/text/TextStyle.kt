@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.observeShadow
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 
@@ -18,7 +19,7 @@ internal fun DivText.observeTextStyle(
     fontSize: Long,
     textAlignmentHorizontal: DivAlignmentHorizontal
 ): TextStyle {
-    val textColor = textColor.observedValue().toColor()
+    val textColor = textColor.observedColorValue()
     val fontSizeUnit = fontSizeUnit.observedValue()
     val fontWeight = fontWeight?.observedValue()
     val fontWeightValue = fontWeightValue?.observedValue()

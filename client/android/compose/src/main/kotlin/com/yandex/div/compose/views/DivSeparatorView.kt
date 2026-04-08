@@ -46,4 +46,5 @@ internal fun DivSeparatorView(
         }
     }
 }
+
 private val COLOR_DEFAULT = Color(alpha = 0.078f, red = 0f, green = 0f, blue = 0f).toArgb()

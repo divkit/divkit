@@ -23,6 +23,8 @@ import coil3.request.transformations
 import coil3.transform.Transformation
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
+import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.utils.toAlignment
@@ -42,7 +44,6 @@ internal fun DivImageView(
     val scale = data.scale.observedValue()
     val contentAlignmentHorizontal = data.contentAlignmentHorizontal.observedValue()
     val contentAlignmentVertical = data.contentAlignmentVertical.observedValue()
-    val placeholderColor = data.placeholderColor.observedValue()
     val preview = data.preview?.observedValue()
     val tintColor = data.tintColor?.observedValue()
     val density = LocalDensity.current.density
@@ -67,8 +68,10 @@ internal fun DivImageView(
     }
 
     val backgroundModifier = if (!imageLoaded && previewModel == null) {
-        modifier.background(placeholderColor.toColor())
-    } else modifier
+        modifier.background(data.placeholderColor.observedColorValue())
+    } else {
+        modifier
+    }
 
     Box(modifier = backgroundModifier) {
         if (!imageLoaded && previewModel != null) {
@@ -108,12 +111,12 @@ private fun List<DivFilter>?.resolveTransformations(
     for (filter in this) {
         when (filter) {
             is DivFilter.Blur -> {
-                val radiusDp = filter.value.radius.observedValue().toFloat()
-                if (radiusDp > 0f) {
+                val radiusDp = filter.value.radius.observedIntValue()
+                if (radiusDp > 0) {
                     val transformation = BlurTransformation(context, radiusDp, density)
                     transformations += transformation
 
-                    if (radiusDp > transformation.maxRadius) {
+                    if (radiusDp > transformation.maxRadiusDp) {
                         reporter.reportWarning(
                             "The maximum supported blur radius is 25. Values exceeding this limit will be automatically downscaled"
                         )

@@ -6,6 +6,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeIsConstrained
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivGallery
@@ -19,8 +20,8 @@ internal fun DivGalleryView(
     val orientation = data.orientation.observedValue()
     val itemSpacingDp = data.itemSpacing.observedValue().toDp()
     val crossContentAlignment = data.crossContentAlignment.observedValue()
-    val columnCount = data.columnCount?.observedValue()?.toInt() ?: 1
-    val defaultItem = data.defaultItem.observedValue().toInt()
+    val columnCount = data.columnCount?.observedIntValue() ?: 1
+    val defaultItem = data.defaultItem.observedIntValue()
     val contentPadding = data.paddings.observeInsets()
 
     val items = data.items.orEmpty().filter {

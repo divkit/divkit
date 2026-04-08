@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
 import com.yandex.div.compose.utils.toColor
@@ -18,7 +19,7 @@ internal fun Modifier.backgrounds(value: List<DivBackground>): Modifier {
     value.forEach { background ->
         when (background) {
             is DivBackground.Solid ->
-                modifier = modifier.background(background.value.color.observedValue().toColor())
+                modifier = modifier.background(background.value.color.observedColorValue())
 
             is DivBackground.LinearGradient -> {
                 background.value.observeLinearGradient()?.let {

@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onVisibilityChanged
 import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div.compose.utils.divContext
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivDisappearAction
@@ -68,6 +69,6 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
 private fun shouldRegisterVisibilityCallback(action: DivSightAction): Boolean {
     return !divContext.component.visibilityActionTracker.isLimitReached(
         action = action,
-        limit = action.logLimit.observedValue().toInt()
+        limit = action.logLimit.observedIntValue()
     )
 }

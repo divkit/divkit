@@ -88,6 +88,5 @@ private fun DivSize.WrapContent.wrapContentSizeBounds(): Pair<Dp?, Dp?> {
 
 @Composable
 private fun DivSizeUnitValue.toDpSize(): Dp {
-    return value.observedValue().toFloat().toDp(unit.observedValue())
+    return value.observedValue().toDp(unit.observedValue())
 }
-

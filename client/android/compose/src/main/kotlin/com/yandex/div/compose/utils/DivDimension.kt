@@ -6,5 +6,5 @@ import com.yandex.div2.DivDimension
 
 @Composable
 internal fun DivDimension.observedValue(): Dp {
-    return value.observedValue().toFloat().toDp(unit.observedValue())
+    return value.observedFloatValue().toDp(unit.observedValue())
 }

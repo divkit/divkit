@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
+import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
@@ -38,7 +39,7 @@ internal fun Modifier.apply(
         .visibilityActions(data)
 
     val alphaValue = if (data.visibility.observedValue() == DivVisibility.VISIBLE) {
-        data.alpha.observedValue().toFloat()
+        data.alpha.observedFloatValue()
     } else {
         0f
     }

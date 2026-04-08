@@ -7,7 +7,7 @@ import com.yandex.div2.DivShadow
 
 @Composable
 internal fun DivShadow.observeShadow(alpha: Float): Shadow {
-    val shadowColor = color.observedValue().toColor()
+    val shadowColor = color.observedColorValue()
     val shadowAlpha = this.alpha.observedFloatValue()
     val blur = blur.observedValue().toDp().toPx()
     val offsetX = offset.x.observedValue().toPx()

@@ -11,8 +11,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.observeShadow
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div2.DivText
 
 @Composable
@@ -21,7 +21,7 @@ internal fun DivText.Range.observeSpanStyle(
     baseTextColorAlpha: Float,
     density: Density,
 ): SpanStyle {
-    val rangeColor = textColor?.observedValue()?.toColor()
+    val rangeColor = textColor?.observedColorValue()
     val rangeFontSize = fontSize?.observedValue()
     val rangeFontWeight = fontWeight?.observedValue()
     val rangeFontWeightValue = fontWeightValue?.observedValue()

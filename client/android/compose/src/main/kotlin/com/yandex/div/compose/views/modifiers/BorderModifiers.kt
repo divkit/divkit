@@ -16,8 +16,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder
@@ -55,7 +56,7 @@ private fun DivBorder.toShape(): Shape {
 
 @Composable
 private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
-    val color = stroke.color.observedValue().toColor()
+    val color = stroke.color.observedColorValue()
     val width = stroke.widthToDp()
     return when (stroke.style) {
         is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
@@ -65,8 +66,7 @@ private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): 
 
 @Composable
 private fun DivStroke.widthToDp(): Dp {
-    val widthValue = width.observedValue().toFloat()
-    return widthValue.toDp(unit.observedValue())
+    return width.observedFloatValue().toDp(unit.observedValue())
 }
 
 @Composable

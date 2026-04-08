@@ -18,27 +18,27 @@ import coil3.size.Size as CoilSize
 @Suppress("DEPRECATION")
 internal class BlurTransformation(
     private val context: Context,
-    private val radiusDp: Float,
+    private val radiusDp: Int,
     density: Float,
 ) : Transformation() {
 
     override val cacheKey: String = "blur_${radiusDp}_$density"
 
-    val maxRadius = 25f
+    val maxRadiusDp = 25f
 
     override suspend fun transform(input: Bitmap, size: CoilSize): Bitmap {
-        if (radiusDp <= 0f || input.width <= 0 || input.height <= 0) {
+        if (radiusDp <= 0 || input.width <= 0 || input.height <= 0) {
             return input
         }
 
         val mutableBitmap = input.copy(Bitmap.Config.ARGB_8888, true) ?: return input
 
-        if (radiusDp <= maxRadius) {
-            return applyRenderScriptBlur(mutableBitmap, radiusDp)
+        if (radiusDp <= maxRadiusDp) {
+            return applyRenderScriptBlur(mutableBitmap, radiusDp.toFloat())
         }
 
         val scaledBitmap = scaleBitmap(mutableBitmap)
-        val blurredScaled = applyRenderScriptBlur(scaleBitmap(mutableBitmap), maxRadius)
+        val blurredScaled = applyRenderScriptBlur(scaleBitmap(mutableBitmap), maxRadiusDp)
 
         val result = blurredScaled.scale(mutableBitmap.width, mutableBitmap.height)
 
@@ -74,10 +74,9 @@ internal class BlurTransformation(
     }
 
     private fun scaleBitmap(bitmap: Bitmap): Bitmap {
-        val scaleFactor = maxRadius / radiusDp
+        val scaleFactor = maxRadiusDp / radiusDp
         val scaledWidth = (bitmap.width * scaleFactor).toInt().coerceAtLeast(1)
         val scaledHeight = (bitmap.height * scaleFactor).toInt().coerceAtLeast(1)
-
         return bitmap.scale(scaledWidth, scaledHeight)
     }
 }

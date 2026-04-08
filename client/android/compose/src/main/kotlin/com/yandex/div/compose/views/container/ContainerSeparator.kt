@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div2.DivContainer
@@ -23,7 +23,7 @@ internal fun ContainerSeparator(
 ) {
     val style = separator.style as? DivDrawable.Shape ?: return
     val shapeDrawable = style.value
-    val color = shapeDrawable.color.observedValue().toColor()
+    val color = shapeDrawable.color.observedColorValue()
 
     val modifier = modifier.padding(separator.margins)
 

@@ -9,9 +9,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
@@ -43,7 +43,7 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
     val sep = this ?: return null
     val style = sep.style as? DivDrawable.Shape ?: return null
     val shapeDrawable = style.value
-    val color = shapeDrawable.color.observedValue().toColor()
+    val color = shapeDrawable.color.observedColorValue()
     val margins = sep.margins
 
     val marginStartDp = margins?.run { (start ?: left).observedValue().toDp() } ?: 0.dp

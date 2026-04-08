@@ -17,6 +17,7 @@ import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
+import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.horizontalPaddings
 import com.yandex.div.compose.utils.observedValue
@@ -108,7 +109,7 @@ private fun ColumnScope.makeVerticalChildModifier(
         // TODO: Needs warning match_parent child and wrap_content container.
         Modifier.height(IntrinsicSize.Max)
     childSize is DivSize.MatchParent ->
-        Modifier.weight(childSize.value.weight?.observedValue()?.toFloat() ?: 1f)
+        Modifier.weight(childSize.value.weight?.observedFloatValue() ?: 1f)
     childSize is DivSize.WrapContent && childSize.value.constrained?.observedValue() == true -> when {
         hasWeightedChildren ->
             Modifier.reduceMaxConstraint(weightedChildrenMargins, isWidth = false)

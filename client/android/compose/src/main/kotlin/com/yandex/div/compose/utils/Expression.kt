@@ -5,6 +5,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionList
@@ -29,6 +30,11 @@ internal fun <T : Any> Expression<T>.observedValue(): T {
         is Expression.ConstantExpression -> evaluate(expressionResolver)
         else -> asState().value
     }
+}
+
+@Composable
+internal fun Expression<Int>.observedColorValue(): Color {
+    return observedValue().toColor()
 }
 
 @Composable

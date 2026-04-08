@@ -19,5 +19,5 @@ internal fun DivSize.observeIsConstrained(): Boolean = when (this) {
 
 @Composable
 internal fun DivFixedSize.observedValue(): Dp {
-    return this.value.observedValue().toDp(this.unit.observedValue())
+    return value.observedValue().toDp(unit.observedValue())
 }

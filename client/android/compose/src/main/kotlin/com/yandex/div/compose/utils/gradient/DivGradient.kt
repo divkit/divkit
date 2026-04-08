@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toColor
@@ -18,14 +19,14 @@ import com.yandex.div2.DivRadialGradientRadius
 @Composable
 internal fun DivLinearGradient.observeLinearGradient(): Brush? {
     val angle = angle.observedValue().toFloat()
-    val points = colorMap?.map { it.position.observedValue().toFloat() to it.color.observedValue().toColor() }
+    val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
     val colorMap = resolveColorMap(points, colors) ?: return null
     return LinearGradientBrush(angle, colorMap.colors, colorMap.positions)
 }
 
 @Composable
 internal fun DivRadialGradient.observeRadialGradient(): Brush? {
-    val points = colorMap?.map { it.position.observedValue().toFloat() to it.color.observedValue().toColor() }
+    val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
     val colorMap = resolveColorMap(points, colors) ?: return null
     val centerX = centerX.observeCenter()
     val centerY = centerY.observeCenter()
