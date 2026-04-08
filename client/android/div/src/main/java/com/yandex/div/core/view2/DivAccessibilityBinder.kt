@@ -51,7 +51,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
             // Shortcut for empty accessibility binding
             if (enabled) {
-                view.applyMode()
+                view.applyMode(newDiv)
             }
             return
         }
@@ -167,7 +167,7 @@ internal class DivAccessibilityBinder @Inject constructor(
 
         val callback = { _: Any ->
             applyDescriptionAndHint(newDescription?.evaluate(resolver), newHint?.evaluate(resolver))
-            applyMode(newDiv.accessibility?.mode?.evaluate(resolver))
+            applyMode(newDiv, newDiv.accessibility?.mode?.evaluate(resolver))
         }
         subscriber.addSubscription(newDescription?.observe(resolver, callback))
         subscriber.addSubscription(newHint?.observe(resolver, callback))
@@ -195,19 +195,23 @@ internal class DivAccessibilityBinder @Inject constructor(
         if (!enabled) return
 
         val newMode = newDiv.accessibility?.mode
-        if (newMode.equalsToConstant(oldDiv?.accessibility?.mode)) return
+        if (newMode.equalsToConstant(oldDiv?.accessibility?.mode) &&
+            newDiv.accessibility?.type == oldDiv?.accessibility?.type) {
+            return
+        }
 
-        applyMode(newMode?.evaluate(resolver))
+        applyMode(newDiv, newMode?.evaluate(resolver))
 
         if (newMode.isConstantOrNull()) return
 
-        subscriber.addSubscription(newMode?.observe(resolver) { applyMode(it) })
+        subscriber.addSubscription(newMode?.observe(resolver) { applyMode(newDiv, it) })
     }
 
-    private fun View.applyMode(mode: DivAccessibility.Mode? = null) {
+    private fun View.applyMode(div: DivBase, mode: DivAccessibility.Mode? = null) {
         ViewCompat.setScreenReaderFocusable(this, mode == DivAccessibility.Mode.MERGE)
         importantForAccessibility = when {
             mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            div.accessibility?.type == DivAccessibility.Type.HEADER -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
             contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
             mode == DivAccessibility.Mode.MERGE -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
             this is DivImageView || this is DivGifImageView -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
