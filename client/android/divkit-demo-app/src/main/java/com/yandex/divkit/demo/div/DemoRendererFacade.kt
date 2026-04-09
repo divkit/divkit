@@ -10,7 +10,6 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivView as ComposeDivView
 import com.yandex.div.compose.DivContext as ComposeDivContext
-import com.yandex.div.compose.createContext
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -104,10 +103,13 @@ class ComposeRendererFacade(
     context: Context,
 ) : DemoRendererFacade {
 
-    private val composeDivContext: ComposeDivContext = DivComposeConfiguration(
-        fontFamilyProvider = ComposeFontFamilyProvider(context),
-        variableController = divVariableController,
-    ).createContext(baseContext = context)
+    private val composeDivContext = ComposeDivContext(
+        baseContext = context,
+        configuration = DivComposeConfiguration(
+            fontFamilyProvider = ComposeFontFamilyProvider(context),
+            variableController = divVariableController,
+        )
+    )
 
     private val composeView = ComposeView(composeDivContext).apply {
         layoutParams = ViewGroup.LayoutParams(

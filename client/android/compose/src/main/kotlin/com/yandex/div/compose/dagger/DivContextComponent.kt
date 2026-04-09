@@ -8,6 +8,7 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivViewContextStorage
+import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
@@ -45,6 +46,9 @@ internal interface DivContextComponent {
 
         @BindsInstance
         fun configuration(configuration: DivComposeConfiguration): Builder
+
+        @BindsInstance
+        fun debugConfiguration(configuration: DivDebugConfiguration): Builder
 
         fun build(): DivContextComponent
     }

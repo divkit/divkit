@@ -1,11 +1,13 @@
 package com.yandex.div.compose
 
+import android.content.Context
 import android.content.ContextWrapper
-import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.context.DivLocalContext
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivContextComponent
+import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
+import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
@@ -17,7 +19,6 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
-import javax.inject.Inject
 
 /**
  * An implementation of [android.content.Context] that must be used for composing [DivView]s.
@@ -25,12 +26,32 @@ import javax.inject.Inject
  * Example usage:
  *
  *    val configuration = DivComposeConfiguration()
- *    val divContext = configuration.createContext(baseContext = activity)
+ *    val divContext = DivContext(activity, configuration)
  */
 @ExperimentalApi
-class DivContext @Inject @MainThread internal constructor(
+class DivContext private constructor(
     internal val component: DivContextComponent
 ) : ContextWrapper(component.baseContext) {
+
+    /**
+     * Creates a [DivContext] with provided [DivComposeConfiguration].
+     */
+    constructor(
+        baseContext: Context,
+        configuration: DivComposeConfiguration
+    ) : this(createComponent(baseContext, configuration, DivDebugConfiguration()))
+
+    /**
+     * Creates a [DivContext] with provided [DivComposeConfiguration] and [DivDebugConfiguration].
+     *
+     * Do not use this constructor in production environment.
+     */
+    @InternalApi
+    constructor(
+        baseContext: Context,
+        configuration: DivComposeConfiguration,
+        debugConfiguration: DivDebugConfiguration
+    ) : this(createComponent(baseContext, configuration, debugConfiguration))
 
     @InternalApi
     @VisibleForTesting
@@ -111,4 +132,16 @@ class DivContext @Inject @MainThread internal constructor(
 
         return localComponent.context
     }
+}
+
+private fun createComponent(
+    baseContext: Context,
+    configuration: DivComposeConfiguration,
+    debugConfiguration: DivDebugConfiguration
+): DivContextComponent {
+    return `Yatagan$DivContextComponent`.builder()
+        .baseContext(baseContext)
+        .configuration(configuration)
+        .debugConfiguration(debugConfiguration)
+        .build()
 }

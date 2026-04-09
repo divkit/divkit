@@ -39,10 +39,13 @@ class DivViewRecompositionTest {
     private lateinit var divContext: DivContext
 
     @Before
-    fun setup() {
-        divContext = DivComposeConfiguration(
-            reporter = TestReporter()
-        ).createContext(baseContext = activity)
+    fun setUp() {
+        divContext = DivContext(
+            baseContext = activity,
+            configuration = DivComposeConfiguration(
+                reporter = TestReporter()
+            )
+        )
     }
 
     @Test

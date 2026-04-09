@@ -9,10 +9,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.DivLocalContext
 import com.yandex.div.compose.context.LocalDivContext
-import com.yandex.div.compose.createContext
 import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -147,11 +147,13 @@ class DivVariableControllerTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
-            val configuration = DivComposeConfiguration(
-                reporter = reporter,
-                variableController = variableController
+            val divContext = DivContext(
+                baseContext = LocalContext.current,
+                configuration = DivComposeConfiguration(
+                    reporter = reporter,
+                    variableController = variableController
+                )
             )
-            val divContext = configuration.createContext(baseContext = LocalContext.current)
             CompositionLocalProvider(
                 LocalContext provides divContext,
                 LocalDivContext provides localContext,

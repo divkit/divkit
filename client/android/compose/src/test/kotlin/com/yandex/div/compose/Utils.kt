@@ -4,6 +4,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -22,10 +23,15 @@ internal fun createExpressionResolver(
 
 fun ComposeContentTestRule.setContent(
     configuration: DivComposeConfiguration,
+    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
     data: DivData
 ) {
     setContent {
-        val divContext = configuration.createContext(baseContext = LocalContext.current)
+        val divContext = DivContext(
+            baseContext = LocalContext.current,
+            configuration = configuration,
+            debugConfiguration = debugConfiguration
+        )
         CompositionLocalProvider(LocalContext provides divContext) {
             DivView(data = data)
         }

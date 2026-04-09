@@ -42,11 +42,14 @@ class DivViewWithTriggersTest {
     private lateinit var divContext: DivContext
 
     @Before
-    fun setup() {
-        divContext = DivComposeConfiguration(
-            reporter = TestReporter(),
-            variableController = variableController
-        ).createContext(baseContext = activity)
+    fun setUp() {
+        divContext = DivContext(
+            baseContext = activity,
+            configuration = DivComposeConfiguration(
+                reporter = TestReporter(),
+                variableController = variableController
+            )
+        )
     }
 
     @Test

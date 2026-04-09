@@ -11,6 +11,8 @@ import javax.inject.Inject
 
 /**
  * Provides access to the features not intended to be used in production environment.
+ *
+ * @see com.yandex.div.compose.DivContext.debugFeatures
  */
 @DivContextScope
 @InternalApi

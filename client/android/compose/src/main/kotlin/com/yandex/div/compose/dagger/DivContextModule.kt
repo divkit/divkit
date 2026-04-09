@@ -43,7 +43,7 @@ internal object DivContextModule {
         context: Context,
         debugConfiguration: DivDebugConfiguration
     ): ImageLoader {
-        val debugImageLoader = debugConfiguration.imageLoaderProvider?.provide(context)
+        val debugImageLoader = debugConfiguration.imageLoaderProvider?.provide()
         if (debugImageLoader != null) {
             return debugImageLoader
         }

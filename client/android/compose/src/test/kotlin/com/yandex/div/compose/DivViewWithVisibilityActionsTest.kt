@@ -43,14 +43,15 @@ class DivViewWithVisibilityActionsTest {
         declare(counter, visibility)
     }
 
-    private val testScope = TestScope()
-
     private val configuration = DivComposeConfiguration(
-        debugConfiguration = DivDebugConfiguration(
-            coroutineScope = testScope
-        ),
         reporter = TestReporter(),
         variableController = variableController
+    )
+
+    private val testScope = TestScope()
+
+    private val debugConfiguration = DivDebugConfiguration(
+        coroutineScope = testScope
     )
 
     @Test
@@ -271,6 +272,7 @@ class DivViewWithVisibilityActionsTest {
     ) {
         rule.setContent(
             configuration = configuration,
+            debugConfiguration = debugConfiguration,
             data = data(content, variables = variables)
         )
     }

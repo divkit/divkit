@@ -10,7 +10,6 @@ import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.internal.ImageLoaderProvider
-import com.yandex.div.compose.createContext
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.DivParsingEnvironment
@@ -37,19 +36,22 @@ class DivComposeScreenshotActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageLoaderProvider = ImageLoaderProvider { context ->
-            ImageLoader.Builder(context = context)
+        val imageLoaderProvider = ImageLoaderProvider {
+            ImageLoader.Builder(context = this)
                 .allowHardware(false)
                 .eventListener(imageLoadingTracker)
                 .build()
         }
 
-        divContext = DivComposeConfiguration(
+        divContext = DivContext(
+            baseContext = this,
+            configuration = DivComposeConfiguration(
+                fontFamilyProvider = ComposeFontFamilyProvider(this)
+            ),
             debugConfiguration = DivDebugConfiguration(
                 imageLoaderProvider = imageLoaderProvider
-            ),
-            fontFamilyProvider = ComposeFontFamilyProvider(this),
-        ).createContext(baseContext = this)
+            )
+        )
 
         intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
             setDivData(DivAssetReader(this).read(it))

@@ -28,10 +28,13 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         val divData = testCase.parseDivData() ?: return
 
         val variableController = DivVariableController()
-        val divContext = DivComposeConfiguration(
-            reporter = Reporter(testCase.logger),
-            variableController = variableController
-        ).createContext(baseContext = getApplicationContext())
+        val divContext = DivContext(
+            baseContext = getApplicationContext(),
+            configuration = DivComposeConfiguration(
+                reporter = Reporter(testCase.logger),
+                variableController = variableController
+            )
+        )
 
         testCase.declareResultVariables(
             variables = divData.variables ?: emptyList(),

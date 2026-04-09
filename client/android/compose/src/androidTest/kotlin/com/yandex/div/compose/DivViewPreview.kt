@@ -20,8 +20,10 @@ import com.yandex.div2.DivEdgeInsets
 @Preview
 @Composable
 fun DivViewPreview() {
-    val divContext = DivComposeConfiguration()
-        .createContext(baseContext = LocalContext.current)
+    val divContext = DivContext(
+        baseContext = LocalContext.current,
+        configuration = DivComposeConfiguration()
+    )
     CompositionLocalProvider(LocalContext provides divContext) {
         DivView(data = testData)
     }
