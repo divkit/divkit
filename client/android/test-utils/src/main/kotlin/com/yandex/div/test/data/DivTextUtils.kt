@@ -3,6 +3,7 @@ package com.yandex.div.test.data
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivFunction
@@ -14,6 +15,7 @@ import com.yandex.div2.DivVisibility
 import com.yandex.div2.DivVisibilityAction
 
 fun text(
+    accessibility: DivAccessibility? = null,
     disappearActions: List<DivDisappearAction>? = null,
     id: String? = null,
     text: String,
@@ -23,6 +25,7 @@ fun text(
     visibilityActions: List<DivVisibilityAction>? = null
 ): Div {
     return text(
+        accessibility = accessibility,
         disappearActions = disappearActions,
         id = id,
         text = constant(text),
@@ -34,6 +37,7 @@ fun text(
 }
 
 fun text(
+    accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     disappearActions: List<DivDisappearAction>? = null,
     fontSize: Long = 12,
@@ -49,6 +53,7 @@ fun text(
 ): Div {
     return Div.Text(
         value = DivText(
+            accessibility = accessibility,
             action = action,
             disappearActions = disappearActions,
             functions = functions,

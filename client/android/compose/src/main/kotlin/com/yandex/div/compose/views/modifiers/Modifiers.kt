@@ -52,7 +52,7 @@ internal fun Modifier.apply(
     }
 
     data.border?.let {
-        modifier = modifier.divBorderClip(it)
+        modifier = modifier.borderClip(it)
     }
 
     data.background?.let {
@@ -60,8 +60,10 @@ internal fun Modifier.apply(
     }
 
     data.border?.let {
-        modifier = modifier.divBorderStroke(it)
+        modifier = modifier.borderStroke(it)
     }
+
+    modifier = modifier.accessibility(data)
 
     data.id?.let {
         modifier = modifier.testTag(it)
