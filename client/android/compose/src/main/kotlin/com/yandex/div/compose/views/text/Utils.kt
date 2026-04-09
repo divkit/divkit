@@ -17,17 +17,17 @@ import com.yandex.div2.DivSizeUnit
 internal fun fontFamily(
     fontFamily: String?,
     fontWeight: DivFontWeight?,
-    fontWeightValue: Long?,
+    fontWeightValue: Int?,
 ): FontFamily {
     val weight = fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal
     return fontFamilyProvider.getFontFamily(fontFamily, weight)
 }
 
 internal fun DivFontWeight?.toFontWeight(
-    fontWeightValue: Long?,
+    fontWeightValue: Int?,
 ): FontWeight? {
     if (fontWeightValue != null) {
-        return FontWeight(fontWeightValue.toInt().coerceIn(1, 1000))
+        return FontWeight(fontWeightValue.coerceIn(1, 1000))
     }
     return when (this) {
         DivFontWeight.LIGHT -> FontWeight.Light
@@ -38,7 +38,7 @@ internal fun DivFontWeight?.toFontWeight(
     }
 }
 
-internal fun Float.toTextUnit(unit: DivSizeUnit, density: Density): TextUnit {
+internal fun Int.toTextUnit(unit: DivSizeUnit, density: Density): TextUnit {
     return when (unit) {
         DivSizeUnit.SP -> this.sp
         DivSizeUnit.DP -> this.sp // DP and SP are the same at default font scale
@@ -46,9 +46,9 @@ internal fun Float.toTextUnit(unit: DivSizeUnit, density: Density): TextUnit {
     }
 }
 
-internal fun letterSpacing(letterSpacing: Double, fontSize: Long): TextUnit {
-    return if (letterSpacing != 0.0) {
-        (letterSpacing.toFloat() / fontSize).em
+internal fun letterSpacing(letterSpacing: Float, fontSize: Int): TextUnit {
+    return if (letterSpacing != 0f) {
+        (letterSpacing / fontSize).em
     } else {
         TextUnit.Unspecified
     }

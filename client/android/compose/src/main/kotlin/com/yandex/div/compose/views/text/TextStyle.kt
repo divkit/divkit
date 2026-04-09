@@ -11,26 +11,28 @@ import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedFloatValue
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 
 @Composable
 internal fun DivText.observeTextStyle(
-    fontSize: Long,
+    fontSize: Int,
     textAlignmentHorizontal: DivAlignmentHorizontal
 ): TextStyle {
     val textColor = textColor.observedColorValue()
     val fontSizeUnit = fontSizeUnit.observedValue()
     val fontWeight = fontWeight?.observedValue()
-    val fontWeightValue = fontWeightValue?.observedValue()
+    val fontWeightValue = fontWeightValue?.observedIntValue()
     val textAlignmentHorizontal = textAlignmentHorizontal.toTextAlign()
     val density = LocalDensity.current
 
     val shadow = textShadow?.observeShadow(textColor.alpha)
-    val lineHeight = lineHeight?.observedValue()?.toFloat()?.toTextUnit(fontSizeUnit, density)
-    val textSize = fontSize.toFloat().toTextUnit(fontSizeUnit, density)
+    val lineHeight = lineHeight?.observedIntValue()?.toTextUnit(fontSizeUnit, density)
+    val textSize = fontSize.toTextUnit(fontSizeUnit, density)
     val composeFontWeight = fontWeight.toFontWeight(fontWeightValue)
-    val letterSpacing = letterSpacing(letterSpacing.observedValue(), fontSize)
+    val letterSpacing = letterSpacing(letterSpacing.observedFloatValue(), fontSize)
     val textDecoration = textDecoration(
         strike.observedValue(),
         underline.observedValue()

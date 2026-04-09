@@ -13,30 +13,31 @@ import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedFloatValue
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div2.DivText
 
 @Composable
 internal fun DivText.Range.observeSpanStyle(
-    baseFontSize: Long,
+    baseFontSize: Int,
     baseTextColorAlpha: Float,
     density: Density,
 ): SpanStyle {
     val rangeColor = textColor?.observedColorValue()
-    val rangeFontSize = fontSize?.observedValue()
+    val rangeFontSize = fontSize?.observedIntValue()
     val rangeFontWeight = fontWeight?.observedValue()
-    val rangeFontWeightValue = fontWeightValue?.observedValue()
-    val rangeLetterSpacing = letterSpacing?.observedValue()
+    val rangeFontWeightValue = fontWeightValue?.observedIntValue()
+    val rangeLetterSpacing = letterSpacing?.observedFloatValue()
     val rangeStrike = strike?.observedValue()
     val rangeUnderline = underline?.observedValue()
     val rangeFontFamily = fontFamily?.observedValue()
 
     val spanFontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue)
     val spanTextDecoration = textDecoration(rangeStrike, rangeUnderline)
-    val spanFontSize = rangeFontSize?.toFloat()?.toTextUnit(fontSizeUnit.observedValue(), density)
+    val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit.observedValue(), density)
         ?: TextUnit.Unspecified
-    val effectiveFontSize = rangeFontSize ?: baseFontSize
     val spanLetterSpacing = rangeLetterSpacing?.let {
-        letterSpacing(it, effectiveFontSize)
+        letterSpacing(it, rangeFontSize ?: baseFontSize)
     } ?: TextUnit.Unspecified
     val spanFontFamily = fontFamily(rangeFontFamily, rangeFontWeight, rangeFontWeightValue)
     val spanShadow = textShadow?.observeShadow(baseTextColorAlpha)

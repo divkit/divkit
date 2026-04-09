@@ -26,7 +26,7 @@ internal fun DivTextView(
     data: DivText
 ) {
     val text = data.text.observedValue()
-    val fontSize = data.fontSize.observedValue()
+    val fontSize = data.fontSize.observedIntValue()
     val selectable = data.selectable.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
@@ -63,7 +63,7 @@ internal fun DivTextView(
 private fun buildAnnotatedText(
     text: String,
     data: DivText,
-    baseFontSize: Long,
+    baseFontSize: Int,
 ): AnnotatedString {
     val gradientBrush = data.observeTextGradient()
     val ranges = data.ranges
