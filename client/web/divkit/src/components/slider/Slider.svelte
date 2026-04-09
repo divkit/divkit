@@ -5,17 +5,19 @@
         borderRadius: 5,
         background: '#000'
     };
+
     const THUMB_MARK_SHAPES = [
         'rounded_rectangle',
         'circle'
     ];
+
     const TRACK_SHAPES = [
         'rounded_rectangle'
     ];
 </script>
 
 <script lang="ts">
-    import { getContext, onDestroy, onMount } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
 
     import css from './Slider.module.css';
 
@@ -35,11 +37,11 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { clamp } from '../../utils/clamp';
     import { correctNumber } from '../../utils/correctNumber';
-    import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
-    import { debounce } from '../../utils/debounce';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
+    import { fillTicks } from '../../utils/slider';
+    import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSliderData>;
@@ -135,7 +137,6 @@
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
         maxValue = correctNumber($jsonMaxValue, maxValue);
-        checkTicks();
     }
 
     let value = clamp($valueVariable || 0, minValue, maxValue);
@@ -171,25 +172,6 @@
         trackActiveStyle = correctDrawableStyle($jsonTrackActiveStyle, TRACK_SHAPES, trackActiveStyle);
     }
 
-    function fillTicks(from: number, to: number, minValue: number, maxValue: number, inside: boolean): number[] {
-        let res: number[] = [];
-
-        if (inside) {
-            for (let i = from; i < to; ++i) {
-                res.push((i - minValue) / (maxValue - minValue));
-            }
-        } else {
-            for (let i = minValue; i < from; ++i) {
-                res.push((i - minValue) / (maxValue - minValue));
-            }
-            for (let i = to; i < maxValue + 1; ++i) {
-                res.push((i - minValue) / (maxValue - minValue));
-            }
-        }
-
-        return res;
-    }
-
     $: {
         let newStyle = correctDrawableStyle($jsonMarkActiveStyle, THUMB_MARK_SHAPES, DEFAULT_DRAWABLE_STYLE);
 
@@ -199,9 +181,8 @@
     }
     $: if (markActiveStyle) {
         markActiveTicks = secondVariable ?
-            fillTicks(Math.min(value, value2), Math.max(value, value2) + 1, minValue, maxValue, true) :
+            fillTicks(Math.min(value, value2), Math.max(value, value2), minValue, maxValue, true) :
             fillTicks(minValue, value, minValue, maxValue, true);
-        checkTicks();
     } else {
         markActiveTicks = [];
     }
@@ -215,9 +196,8 @@
     }
     $: if (markInactiveStyle) {
         markInactiveTicks = secondVariable ?
-            fillTicks(Math.min(value, value2), Math.max(value, value2) + 1, minValue, maxValue, false) :
-            fillTicks(value + 1, maxValue + 1, minValue, maxValue, true);
-        checkTicks();
+            fillTicks(Math.min(value, value2), Math.max(value, value2), minValue, maxValue, false) :
+            fillTicks(value + 1, maxValue, minValue, maxValue, true);
     } else {
         markInactiveTicks = [];
     }
@@ -481,32 +461,6 @@
         }
     }
 
-    let isTicksWarning = false;
-
-    function checkTicks() {
-        if (!tracksInner) {
-            return;
-        }
-
-        const ticksCount = maxValue - minValue;
-        const activeTickWidth = markActiveStyle?.width || 0;
-        const inactiveTickWidth = markInactiveStyle?.width || 0;
-        const maxTickWidth = Math.max(activeTickWidth, inactiveTickWidth);
-
-        if (maxTickWidth * ticksCount >= tracksInner?.clientWidth) {
-            if (!isTicksWarning) {
-                componentContext.logError(wrapError(new Error('Slider ticks overlap each other'), {
-                    level: 'warn'
-                }));
-                isTicksWarning = true;
-            }
-        } else {
-            isTicksWarning = false;
-        }
-    }
-
-    const checkTicksDebounced = debounce(checkTicks, 50);
-
     $: if (componentContext.json && input) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
@@ -525,10 +479,6 @@
         }
     }
 
-    onMount(() => {
-        checkTicks();
-    });
-
     onDestroy(() => {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
@@ -536,8 +486,6 @@
         }
     });
 </script>
-
-<svelte:window on:resize={checkTicksDebounced} />
 
 {#if !hasError}
     <Outer
