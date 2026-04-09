@@ -1,0 +1,53 @@
+{
+  "description": "Template with link that overriden in intermediate template and in card",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "textRef": "ROOT",
+          "type": "root"
+        }
+      }
+    ]
+  },
+  "templates": {
+    "root": {
+      "type": "container",
+      "items": [
+        {
+          "textRef": "NESTED",
+          "type": "nested"
+        }
+      ]
+    },
+    "nested": {
+      "type": "text",
+      "$text": "textRef"
+    }
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "text": "ROOT",
+                "type": "text"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
