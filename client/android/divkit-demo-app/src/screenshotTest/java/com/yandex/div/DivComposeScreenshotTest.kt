@@ -50,6 +50,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 // div-text
                 "snapshot_test_data/div-text/all_attributes.json",
                 "snapshot_test_data/div-text/auto-ellipsize-by-max-lines.json",
+                "snapshot_test_data/div-text/composite-background.json",
                 "snapshot_test_data/div-text/corner-radius.json",
                 "snapshot_test_data/div-text/corners_radius.json",
                 "snapshot_test_data/div-text/corner-radius-clamp.json",
@@ -68,6 +69,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-text/gradient-color-text.json",
                 "snapshot_test_data/div-text/gradient-color-with-ranges.json",
                 "snapshot_test_data/div-text/gradient-color-with-text-color-priority.json",
+                "snapshot_test_data/div-text/image-background.json",
                 "snapshot_test_data/div-text/multiline-text.json",
                 "snapshot_test_data/div-text/one-line-text.json",
                 "snapshot_test_data/div-text/right-text-alignment.json",
@@ -156,6 +158,9 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-background/gradient-positions.json",
                 "snapshot_test_data/div-background/radial-gradient-positions.json",
                 "snapshot_test_data/div-background/radial-positions.json",
+                "snapshot_test_data/div-background/scale_stretch.json",
+                "snapshot_test_data/div-background/blur.json",
+                "snapshot_test_data/div-background/logical-position.json",
                 // div-radial-gradient
                 "snapshot_test_data/div-radial-gradient",
                 // div-transform
