@@ -10,6 +10,7 @@ import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivAction
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -23,11 +24,14 @@ class DictSetValueActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    private val actionHandler = actionHandlerEnvironment.createActionHandler(
-        dictSetValueActionHandler = DictSetValueActionHandler(
-            reporter = reporter
+    @Before
+    fun setUp() {
+        actionHandlerEnvironment.init(
+            dictSetValueActionHandler = DictSetValueActionHandler(
+                reporter = reporter
+            )
         )
-    )
+    }
 
     @Test
     fun `update key`() {
@@ -120,9 +124,7 @@ class DictSetValueActionHandlerTest {
         assertEquals("Variable is not a dict variable: var", reporter.lastError)
     }
 
-    private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
-    }
+    private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)
 }
 
 private fun assertDictsEqual(expected: JSONObject, actual: Variable.DictVariable) {

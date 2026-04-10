@@ -12,6 +12,7 @@ import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -25,11 +26,14 @@ class ArrayActionsHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    private val actionHandler = actionHandlerEnvironment.createActionHandler(
-        arrayActionsHandler = ArrayActionsHandler(
-            reporter = reporter
+    @Before
+    fun setUp() {
+        actionHandlerEnvironment.init(
+            arrayActionsHandler = ArrayActionsHandler(
+                reporter = reporter
+            )
         )
-    )
+    }
 
     @Test
     fun `insert value without index`() {
@@ -196,9 +200,7 @@ class ArrayActionsHandlerTest {
         assertEquals("Unable to set value in var: index (10) out of bounds", reporter.lastError)
     }
 
-    private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
-    }
+    private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)
 }
 
 private fun assertArraysEqual(expected: JSONArray, actual: Variable.ArrayVariable) {

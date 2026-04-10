@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.DivLocalScope
 import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -83,7 +84,7 @@ internal class DivTriggerStorage @Inject constructor(
     }
 
     private fun handle(actions: List<DivAction>) {
-        actionHandler.handle(actionHandlingContext, actions)
+        actionHandler.handle(actionHandlingContext, actions, source = DivActionSource.TRIGGER)
     }
 }
 

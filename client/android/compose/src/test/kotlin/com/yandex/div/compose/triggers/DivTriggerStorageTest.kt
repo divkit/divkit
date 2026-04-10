@@ -2,6 +2,7 @@ package com.yandex.div.compose.triggers
 
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -151,7 +152,7 @@ class DivTriggerStorageTest {
     }
 
     private fun verifyTriggered() {
-        verify(actionHandler).handle(actionHandlingContext, listOf(action))
+        verify(actionHandler).handle(actionHandlingContext, listOf(action), DivActionSource.TRIGGER)
         clearInvocations(actionHandler)
     }
 }

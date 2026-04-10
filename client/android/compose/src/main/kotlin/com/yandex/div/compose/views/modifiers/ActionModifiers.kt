@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
@@ -33,7 +34,7 @@ internal fun Modifier.actions(data: Div): Modifier {
     val actionHandler = divContext.component.actionHandler
     val actionHandlingContext = LocalDivContext.current.actionHandlingContext
     val onClick: () -> Unit = {
-        actionHandler.handle(actionHandlingContext, actions)
+        actionHandler.handle(actionHandlingContext, actions, source = DivActionSource.TAP)
     }
 
     return when (val name = actionParams.animation.name.observedValue()) {

@@ -11,6 +11,7 @@ import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,11 +25,14 @@ class UpdateStructureActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    private val actionHandler = actionHandlerEnvironment.createActionHandler(
-        updateStructureActionHandler = UpdateStructureActionHandler(
-            reporter = reporter
+    @Before
+    fun setUp() {
+        actionHandlerEnvironment.init(
+            updateStructureActionHandler = UpdateStructureActionHandler(
+                reporter = reporter
+            )
         )
-    )
+    }
 
     @Test
     fun `update dict top-level value`() {
@@ -275,9 +279,7 @@ class UpdateStructureActionHandlerTest {
         assertEquals("Position '99' is out of array bounds", reporter.lastError)
     }
 
-    private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
-    }
+    private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)
 }
 
 private fun assertArraysEqual(expected: JSONArray, actual: Variable.ArrayVariable) {

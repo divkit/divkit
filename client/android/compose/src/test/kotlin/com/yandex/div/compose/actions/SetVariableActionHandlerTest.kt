@@ -12,6 +12,7 @@ import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -25,11 +26,14 @@ class SetVariableActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    private val actionHandler = actionHandlerEnvironment.createActionHandler(
-        setVariableActionHandler = SetVariableActionHandler(
-            reporter = reporter
+    @Before
+    fun setUp() {
+        actionHandlerEnvironment.init(
+            setVariableActionHandler = SetVariableActionHandler(
+                reporter = reporter
+            )
         )
-    )
+    }
 
     @Test
     fun `set string variable`() {
@@ -177,7 +181,5 @@ class SetVariableActionHandlerTest {
         assertEquals("Failed to convert value to Long: invalid", reporter.lastError)
     }
 
-    private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
-    }
+    private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)
 }

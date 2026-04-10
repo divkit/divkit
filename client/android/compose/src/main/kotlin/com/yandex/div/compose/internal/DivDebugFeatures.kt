@@ -1,6 +1,7 @@
 package com.yandex.div.compose.internal
 
 import com.yandex.div.compose.actions.DivActionHandler
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.core.annotations.InternalApi
@@ -36,7 +37,8 @@ class DivDebugFeatures @Inject internal constructor(
         viewContextStorage.get(data)?.let {
             actionHandler.handle(
                 context = it.rootLocalContext.actionHandlingContext,
-                action = action
+                action = action,
+                source = DivActionSource.EXTERNAL
             )
         }
     }

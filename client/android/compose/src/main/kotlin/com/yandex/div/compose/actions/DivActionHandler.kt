@@ -22,17 +22,22 @@ internal class DivActionHandler @Inject constructor(
     private val updateStructureActionHandler: UpdateStructureActionHandler
 ) {
 
-    fun handle(context: DivActionHandlingContext, actions: List<DivAction>) {
-        actions.forEach { handle(context = context, action = it) }
+    fun handle(
+        context: DivActionHandlingContext,
+        actions: List<DivAction>,
+        source: DivActionSource
+    ) {
+        actions.forEach { handle(context = context, action = it, source = source) }
     }
 
-    fun handle(context: DivActionHandlingContext, action: DivAction) {
+    fun handle(context: DivActionHandlingContext, action: DivAction, source: DivActionSource) {
         handle(
             context = context,
             action = DivActionBase(
                 id = action.logId,
                 isEnabled = action.isEnabled,
                 payload = action.payload,
+                source = source,
                 typed = action.typed,
                 url = action.url
             )
@@ -46,6 +51,7 @@ internal class DivActionHandler @Inject constructor(
                 id = action.logId,
                 isEnabled = action.isEnabled,
                 payload = action.payload,
+                source = DivActionSource.VISIBILITY,
                 typed = action.typed,
                 url = action.url
             )
@@ -74,6 +80,7 @@ internal class DivActionHandler @Inject constructor(
                 action = DivActionData(
                     id = action.id.evaluate(expressionResolver),
                     payload = action.payload,
+                    source = action.source,
                     url = action.url.evaluate(expressionResolver)
                 )
             )
@@ -104,7 +111,8 @@ internal class DivActionHandler @Inject constructor(
                     context = context,
                     action = DivCustomActionData(
                         id = baseAction.id.evaluate(context.expressionResolver),
-                        payload = baseAction.payload
+                        payload = baseAction.payload,
+                        source = baseAction.source
                     )
                 )
 
@@ -157,6 +165,7 @@ private class DivActionBase(
     val id: Expression<String>,
     val isEnabled: Expression<Boolean>,
     val payload: JSONObject?,
+    val source: DivActionSource,
     val typed: DivActionTyped?,
     val url: Expression<Uri>?,
 )

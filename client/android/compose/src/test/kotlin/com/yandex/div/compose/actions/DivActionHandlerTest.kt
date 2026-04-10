@@ -8,6 +8,7 @@ import com.yandex.div2.DivAction
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -16,15 +17,23 @@ class DivActionHandlerTest {
     private val actionHandlerEnvironment = ActionHandlerEnvironment()
     private val externalActionHandler = TestExternalActionHandler()
 
-    private val actionHandler = actionHandlerEnvironment.createActionHandler(
-        externalActionHandler = externalActionHandler
-    )
+    @Before
+    fun setUp() {
+        actionHandlerEnvironment.init(
+            externalActionHandler = externalActionHandler
+        )
+    }
 
     @Test
     fun `not enabled action is not handled`() {
-        handle(action(isEnabled = false, typed = customAction()))
+        handle(
+            action(
+                isEnabled = false,
+                url = "custom://url"
+            )
+        )
 
-        assertNull(externalActionHandler.lastCustomAction)
+        assertNull(externalActionHandler.lastAction)
     }
 
     @Test
@@ -36,13 +45,15 @@ class DivActionHandlerTest {
                 id = "test",
                 payload = payload,
                 url = "custom://url"
-            )
+            ),
+            source = DivActionSource.TAP
         )
 
         assertEquals(
             DivActionData(
                 id = "test",
                 payload = payload,
+                source = DivActionSource.TAP,
                 url = "custom://url".toUri()
             ),
             externalActionHandler.lastAction
@@ -58,20 +69,22 @@ class DivActionHandlerTest {
                 id = "test",
                 payload = payload,
                 typed = customAction()
-            )
+            ),
+            source = DivActionSource.TRIGGER
         )
 
         assertEquals(
             DivCustomActionData(
                 id = "test",
-                payload = payload
+                payload = payload,
+                source = DivActionSource.TRIGGER
             ),
             externalActionHandler.lastCustomAction
         )
     }
 
-    private fun handle(action: DivAction) {
-        actionHandler.handle(context = actionHandlerEnvironment.context, action = action)
+    private fun handle(action: DivAction, source: DivActionSource = DivActionSource.EXTERNAL) {
+        actionHandlerEnvironment.handle(action, source)
     }
 }
 
