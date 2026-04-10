@@ -6,6 +6,8 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
+import com.yandex.div.core.expression.evaluation.DictEvaluator;
+import com.yandex.div.core.expression.evaluation.JSONObjectEvaluator;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
@@ -18,8 +20,10 @@ import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div.internal.core.VariableMutationHandler;
+import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div2.DivAction;
+import com.yandex.div2.DivActionTyped;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivSightAction;
 import com.yandex.div2.DivVisibilityAction;
@@ -91,17 +95,17 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
-        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, action.scopeId);
-        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
-
-        if (DivActionTypedHandlerProxy.handleAction(action, view, localResolver)) {
+        if (tryHandleCustomTypedAction(action, view, resolver, null, null)) {
+            return true;
+        }
+        if (DivActionTypedHandlerProxy.handleAction(action, view, resolver)) {
             return true;
         }
         Uri url = action.url != null ? action.url.evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleAction(action, (Div2View) view, localResolver);
+            return DivDownloadActionHandler.handleAction(action, (Div2View) view, resolver);
         }
-        return handleAction(url, view, localResolver);
+        return handleAction(action.scopeId, url, view, resolver);
     }
 
     /**
@@ -122,7 +126,8 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String actionUid
     ) {
-        return handleAction(action, view, resolver);
+        return tryHandleCustomTypedAction(action, view, resolver, actionUid, null) ||
+                handleAction(action, view, resolver);
     }
 
     /**
@@ -143,7 +148,8 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String reason
     ) {
-        return handleAction(action, view, resolver);
+        return tryHandleCustomTypedAction(action, view, resolver, null, reason) ||
+                handleAction(action, view, resolver);
     }
 
     /**
@@ -165,7 +171,8 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String actionUid,
             @NonNull String reason) {
-        return handleAction(action, view, resolver, actionUid);
+        return tryHandleCustomTypedAction(action, view, resolver, actionUid, reason) ||
+                handleAction(action, view, resolver, actionUid);
     }
 
     /**
@@ -219,17 +226,17 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
-        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, action.getScopeId());
-        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
-
-        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view, localResolver)) {
+        if (tryHandleCustomTypedAction(action, view, resolver, null)) {
+            return true;
+        }
+        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view, resolver)) {
             return true;
         }
         Uri url = action.getUrl() != null ? action.getUrl().evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, localResolver);
+            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, resolver);
         }
-        return handleAction(url, view, resolver);
+        return handleAction(action.getScopeId(), url, view, resolver);
     }
 
     /**
@@ -250,7 +257,7 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String actionUid
     ) {
-        return handleAction(action, view, resolver);
+        return handleAction((DivSightAction) action, view, resolver, actionUid);
     }
 
     /**
@@ -271,7 +278,7 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String actionUid
     ) {
-        return handleAction(action, view, resolver);
+        return handleAction((DivSightAction) action, view, resolver, actionUid);
     }
 
     /**
@@ -292,7 +299,8 @@ public class DivActionHandler {
             @NonNull ExpressionResolver resolver,
             @NonNull String actionUid
     ) {
-        return handleAction(action, view, resolver);
+        return tryHandleCustomTypedAction(action, view, resolver, actionUid) ||
+                handleAction(action, view, resolver);
     }
 
     /**
@@ -346,12 +354,33 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
-        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, scopeId);
-        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
-        return handleAction(uri, view, localResolver);
+        ExpressionResolver localResolver = getLocalResolver(scopeId, view, resolver);
+        return handleAction(scopeId, uri, view, localResolver);
     }
 
+    /**
+     * Handles custom div action with given payload.
+     *
+     * @param action full div action to handle
+     * @param scopeId id of div that denotes scope of given action
+     * @param view calling DivView
+     * @param actionUid action UUID string
+     * @param reason reason of div action call
+     * @param evaluatedPayload returns [action.payload] object with all expressions being evaluated.
+     *                         Param is null if [action.payload] not specified for action.
+     * @noinspection unused
+     */
+    public void handleCustomTypedAction(
+            @NonNull DivActionTyped action,
+            @Nullable String scopeId,
+            @NonNull DivViewFacade view,
+            @Nullable String actionUid,
+            @Nullable String reason,
+            @Nullable DictEvaluator evaluatedPayload
+    ) { /* not implemented */ }
+
     private boolean handleAction(
+            @Nullable String scopeId,
             @Nullable Uri uri,
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
@@ -362,13 +391,14 @@ public class DivActionHandler {
 
         //noinspection SimplifiableIfStatement
         if (SCHEME_DIV_ACTION.equals(uri.getScheme())) {
-            return handleActionInternal(uri, view, resolver);
+            return handleActionInternal(scopeId, uri, view, resolver);
         }
 
         return false;
     }
 
     private boolean handleActionInternal(
+            @Nullable String scopeId,
             @NonNull Uri uri,
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
@@ -424,8 +454,9 @@ public class DivActionHandler {
                                     view.getClass().getSimpleName()+") not supports variables!");
                 return false;
             }
+            ExpressionResolver localResolver = getLocalResolver(scopeId, view, resolver);
             try {
-                VariableMutationHandler.setVariable(div2View, name, value, resolver);
+                VariableMutationHandler.setVariable(div2View, name, value, localResolver);
             } catch (VariableMutationException e) {
                 Assert.fail("Variable '" + name + "' mutation failed: " + e.getMessage(), e);
                 return false;
@@ -482,19 +513,78 @@ public class DivActionHandler {
         return false;
     }
 
-    @Nullable
-    private static ExpressionResolver findExpressionResolverById(Div2View divView, @Nullable String id) {
-        if (id == null) {
-            return null;
-        }
+    @NonNull
+    private ExpressionResolver getLocalResolver(
+            @Nullable String scopeId,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        if (scopeId == null) return resolver;
 
-        View targetView = ViewLocator.findSingleViewWithTag(divView, id);
-        if (targetView instanceof DivHolderView) {
-            BindingContext bindingContext = ((DivHolderView<?>) targetView).getBindingContext();
-            if (bindingContext != null) {
-                return bindingContext.getExpressionResolver();
-            }
+        View targetView = ViewLocator.findSingleViewWithTag((Div2View) view, scopeId);
+        if (!(targetView instanceof DivHolderView)) return resolver;
+
+        BindingContext bindingContext = ((DivHolderView<?>) targetView).getBindingContext();
+        return bindingContext != null ? bindingContext.getExpressionResolver() : resolver;
+    }
+
+    private boolean tryHandleCustomTypedAction(
+            @NonNull DivAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @Nullable String actionUid,
+            @Nullable String reason
+    ) {
+        return tryHandleCustomTypedAction(
+                action.typed,
+                action.scopeId,
+                action.payload,
+                view,
+                resolver,
+                actionUid,
+                reason
+        );
+    }
+
+    private boolean tryHandleCustomTypedAction(
+            @NonNull DivSightAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @Nullable String actionUid
+    ) {
+        return tryHandleCustomTypedAction(
+                action.getTyped(),
+                action.getScopeId(),
+                action.getPayload(),
+                view,
+                resolver,
+                actionUid,
+                null
+        );
+    }
+
+    private boolean tryHandleCustomTypedAction(
+            @Nullable DivActionTyped action,
+            @Nullable String scopeId,
+            @Nullable JSONObject payload,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @Nullable String actionUid,
+            @Nullable String reason
+    ) {
+        if (!(action instanceof DivActionTyped.Custom)) return false;
+        handleCustomTypedAction(action, scopeId, view, actionUid, reason, payload != null
+                ? new JSONObjectEvaluator(payload, resolver, asLogger(view))
+                : null);
+        return true;
+    }
+
+    @NonNull
+    private ParsingErrorLogger asLogger(DivViewFacade view) {
+        if (view instanceof Div2View) {
+            Div2View div2View = (Div2View) view;
+            return div2View::logError;
         }
-        return null;
+        return ParsingErrorLogger.LOG;
     }
 }

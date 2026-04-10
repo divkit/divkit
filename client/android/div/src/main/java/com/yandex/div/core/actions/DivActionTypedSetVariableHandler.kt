@@ -1,5 +1,6 @@
 package com.yandex.div.core.actions
 
+import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
@@ -22,7 +23,7 @@ internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActio
     ): Boolean = when (action) {
 
         is DivActionTyped.SetVariable -> {
-            handleSetVariable(action, view, resolver)
+            handleSetVariable(scopeId, action, view, resolver)
             true
         }
 
@@ -30,10 +31,15 @@ internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActio
     }
 
     private fun handleSetVariable(
+        scopeId: String?,
         action: DivActionTyped.SetVariable,
         view: Div2View,
-        resolver: ExpressionResolver,
+        actionResolver: ExpressionResolver,
     ) {
+        val resolver = scopeId?.let {
+            ContainerFinder(scopeId).findContainer(view)?.expressionResolver
+        } ?: actionResolver
+
         val variableName = action.value.variableName.evaluate(resolver)
         val newValue = action.value.value.evaluate(resolver)
         VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->

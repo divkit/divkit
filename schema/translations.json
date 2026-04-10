@@ -96,8 +96,8 @@
     "ru": "Referer-ссылка для логирования."
   },
   "div_action_base_scope_id": {
-    "en": "The ID of the element within which the specified action will be performed.",
-    "ru": "Идентификатор элемента, в области видимости которого будет выполняться данное действие."
+    "en": "The ID of the element whose scope will be used for changing variable values when the action is performed.",
+    "ru": "Идентификатор элемента, в области видимости которого будут изменяться значения переменных при выполнении действия."
   },
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",

@@ -2,17 +2,13 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivRequestExecutor
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.core.DivItemBuilderResult
-import com.yandex.div.internal.core.DivTreeVisitor
-import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div.internal.variables.name
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
 import org.json.JSONObject
@@ -92,35 +88,4 @@ class DivActionTypedSubmitHandler @Inject constructor(
         }
     }
 
-    private class ContainerFinder(private val id: String) : DivTreeVisitor<Unit>() {
-
-        private val containers = mutableListOf<DivItemBuilderResult>()
-
-        fun findContainer(view: Div2View): DivItemBuilderResult? {
-            val data = view.divData ?: return null
-            visit(data, view.bindingContext)
-
-            if (containers.isEmpty()) {
-                view.logError(
-                    RuntimeException("Error resolving container. Elements that respond to id '$id' are not found.")
-                )
-                return null
-            }
-
-            if (containers.size > 1) {
-                view.logError(
-                    RuntimeException("Error resolving container. Found multiple elements that respond to id '$id'.")
-                )
-                return null
-            }
-
-            return containers.first()
-        }
-
-        override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
-            if (data.value().id == id) {
-                containers.add(data.toItemBuilderResult(context.expressionResolver))
-            }
-        }
-    }
 }

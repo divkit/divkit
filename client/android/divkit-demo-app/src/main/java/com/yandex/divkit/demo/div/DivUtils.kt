@@ -9,7 +9,9 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.expression.evaluation.DictEvaluator
 import com.yandex.div.core.experiments.Experiment
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
@@ -21,6 +23,8 @@ import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.Expression.Companion.constant
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
@@ -32,9 +36,15 @@ import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.video.m3.ExoDivPlayerFactory
+import com.yandex.div2.ColorValue
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivActionSetVariable
+import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import com.yandex.div2.DivTypedValue
+import com.yandex.div2.StrValue
+import com.yandex.div2.StrVariable
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
@@ -42,6 +52,7 @@ import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.demo.utils.lifecycleOwner
+import com.yandex.divkit.demo.utils.showToast
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
@@ -159,6 +170,42 @@ open class DemoDivActionHandler(private val uriHandler: DivkitDemoUriHandler) : 
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         return super.handleAction(action, view, resolver) || action.url != null &&
             handleActionUrl(action.url?.evaluate(resolver), view)
+    }
+
+    override fun handleCustomTypedAction(
+        action: DivActionTyped,
+        scopeId: String?,
+        view: DivViewFacade,
+        actionUid: String?,
+        reason: String?,
+        evaluatedPayload: DictEvaluator?
+    ) {
+        val divView = view as? Div2View ?: return
+        val payload: Map<String, Any?> = evaluatedPayload?.get()
+            ?.getOrNull()
+            ?: return
+
+        val type = payload["type"] ?: return
+        when (type) {
+            "change_color" -> {
+                val newColor = payload["color"] as String
+                divView.handleAction(
+                    DivAction(
+                        typed = DivActionTyped.SetVariable(
+                            DivActionSetVariable(
+                                value = DivTypedValue.Color(
+                                    ColorValue(constant(Color.parse(newColor).value))
+                                ),
+                                variableName = constant("color"))
+                        ),
+                        scopeId = scopeId,
+                        logId = constant("color change"),
+                    )
+
+                )
+            }
+            else -> view.view.context.showToast("No one can handle custom action with type '$type'")
+        }
     }
 
     private companion object {
