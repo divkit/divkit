@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.FloatRange
-import androidx.core.view.ViewCompat
 import androidx.transition.TransitionValues
 
 internal class Fade(
@@ -88,9 +87,10 @@ internal class Fade(
             return null
         }
 
+        val nonTransitionAlpha = view.alpha
         view.alpha = startAlpha
         return ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha).apply {
-            addListener(FadeAnimatorListener(view, view.alpha))
+            addListener(FadeAnimatorListener(view, nonTransitionAlpha))
         }
     }
 
@@ -103,7 +103,7 @@ internal class Fade(
 
         override fun onAnimationStart(animation: Animator) {
             view.visibility = View.VISIBLE
-            if (ViewCompat.hasOverlappingRendering(view) && view.layerType == View.LAYER_TYPE_NONE) {
+            if (view.hasOverlappingRendering() && view.layerType == View.LAYER_TYPE_NONE) {
                 isLayerTypeChanged = true
                 view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             }
