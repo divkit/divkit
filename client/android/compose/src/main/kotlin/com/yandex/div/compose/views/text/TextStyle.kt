@@ -4,22 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedIntValue
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 
 @Composable
 internal fun DivText.observeTextStyle(
     fontSize: Int,
-    textAlignmentHorizontal: DivAlignmentHorizontal
+    textAlignmentHorizontal: DivAlignmentHorizontal,
+    hyphens: Hyphens
 ): TextStyle {
     val textColor = textColor.observedColorValue()
     val fontSizeUnit = fontSizeUnit.observedValue()
@@ -47,6 +48,7 @@ internal fun DivText.observeTextStyle(
 
     return TextStyle(
         color = textColor,
+        hyphens = hyphens,
         fontSize = textSize,
         fontFamily = fontFamily,
         fontWeight = composeFontWeight,

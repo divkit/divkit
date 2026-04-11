@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextOverflow
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
@@ -30,8 +31,9 @@ internal fun DivTextView(
     val selectable = data.selectable.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
+    val hyphens = if (SOFT_HYPHEN in text) Hyphens.Auto else Hyphens.None
 
-    val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal)
+    val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal, hyphens)
     val maxLines = data.maxLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
     val overflow = data.truncate.observedValue().toTextOverflow()
 
@@ -114,3 +116,5 @@ private fun DivText.observeTextGradient(): Brush? {
         is DivTextGradient.Radial -> textGradient.value.observeRadialGradient()
     }
 }
+
+private const val SOFT_HYPHEN = '\u00AD'

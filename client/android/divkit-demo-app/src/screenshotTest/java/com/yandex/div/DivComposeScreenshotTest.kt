@@ -66,6 +66,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-text/empty-text-height.json",
                 "snapshot_test_data/div-text/fixed-size-with-paddings.json",
                 "snapshot_test_data/div-text/font_weight.json",
+                "snapshot_test_data/div-text/hyphenation.json",
                 "snapshot_test_data/div-text/gradient-color-text.json",
                 "snapshot_test_data/div-text/gradient-color-with-ranges.json",
                 "snapshot_test_data/div-text/gradient-color-with-text-color-priority.json",
