@@ -38,12 +38,6 @@ export function applyTemplate(
     let i;
     const newContext: TemplateContext = {};
 
-    for (i in templateContext) {
-        if (templateContext.hasOwnProperty(i)) {
-            newContext[i] = templateContext[i];
-        }
-    }
-
     for (i in json) {
         if (i === 'type' || i === '__proto__') {
             continue;
@@ -51,6 +45,12 @@ export function applyTemplate(
 
         if (json.hasOwnProperty(i)) {
             newContext[i] = json[i as keyof typeof json];
+        }
+    }
+
+    for (i in templateContext) {
+        if (templateContext.hasOwnProperty(i)) {
+            newContext[i] = templateContext[i];
         }
     }
 
