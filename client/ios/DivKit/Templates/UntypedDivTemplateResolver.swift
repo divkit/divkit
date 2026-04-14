@@ -76,6 +76,7 @@ final class UntypedDivTemplateResolver {
     linkSource: [String: Any]
   ) -> [String: Any] {
     var dict = dictionary
+    var consumedParams = Set<String>()
     let linkKeys = dict.keys.filter { $0.hasPrefix("$") }
     for linkKey in linkKeys {
       let key = String(linkKey.dropFirst())
@@ -83,12 +84,18 @@ final class UntypedDivTemplateResolver {
       guard let linkName = dict[linkKey] as? String else { continue }
       guard let value = linkSource[linkName] else { continue }
       dict[key] = value
+      consumedParams.insert(linkName)
+    }
+
+    var filteredLinkSource = linkSource
+    for name in consumedParams {
+      filteredLinkSource.removeValue(forKey: name)
     }
 
     var result: [String: Any] = [:]
     for (key, value) in dict {
       guard !key.hasPrefix("$") else { continue }
-      result[key] = resolveLinksInValue(value, linkSource: linkSource)
+      result[key] = resolveLinksInValue(value, linkSource: filteredLinkSource)
     }
     return result
   }

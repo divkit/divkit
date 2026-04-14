@@ -1,0 +1,59 @@
+{
+  "description": "Link with same reference name (itemsRef) defined in two templates",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "itemsRef"
+    },
+    "root": {
+      "type": "container",
+      "$items": "itemsRef"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "itemsRef": [
+            {
+              "type": "nested",
+              "itemsRef": [
+                {
+                  "type": "text",
+                  "text": "SAMPLE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "SAMPLE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
