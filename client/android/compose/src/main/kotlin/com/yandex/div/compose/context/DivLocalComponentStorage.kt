@@ -13,7 +13,7 @@ internal class DivLocalComponentStorage @Inject constructor() {
         return items[div]
     }
 
-    fun put(div: DivBase, context: DivLocalComponent) {
-        items[div] = context
+    fun put(div: DivBase, component: DivLocalComponent) {
+        items[div] = component
     }
 }
