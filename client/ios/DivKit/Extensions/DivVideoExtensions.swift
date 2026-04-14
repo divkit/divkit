@@ -38,12 +38,15 @@ extension DivVideo: DivBlockModeling {
     let elapsedTime: Binding<Int>? = elapsedTimeVariable.flatMap {
       context.makeBinding(variableName: $0, defaultValue: 0)
     }
-    let preview: ImageHolder = context
-      .imageHolderFactory.make(
+
+    let preview: ImageHolder? = if let data = resolvePreview(resolver) {
+      context.imageHolderFactory.make(
         nil,
-        resolvePreview(resolver)
-          .map { .imageData(ImageData(base64: $0)) }
+        .imageData(ImageData(base64: data))
       )
+    } else {
+      nil
+    }
 
     let videoData = VideoData(videos: videoSources?
       .compactMap { $0.makeVideo(resolver: resolver) } ?? []
