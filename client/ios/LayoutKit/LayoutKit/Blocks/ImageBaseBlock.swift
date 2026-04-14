@@ -32,6 +32,12 @@ public struct ImageBaseBlockState: ElementState, Equatable {
   }
 }
 
+extension ImageHolder {
+  fileprivate var currentImageSize: CGSize {
+    displaySize ?? placeholder?.size ?? .zero
+  }
+}
+
 extension ImageBaseBlock {
   public var intrinsicContentWidth: CGFloat {
     let imageSize = state.intrinsicContentSize ?? .zero
@@ -149,18 +155,6 @@ extension ImageBaseBlock {
 
   public func getImageHolders() -> [ImageHolder] {
     [imageHolder]
-  }
-}
-
-extension ImageHolder {
-  fileprivate var currentImageSize: CGSize {
-    if let image {
-      image.size
-    } else if let placeholder {
-      placeholder.size
-    } else {
-      .zero
-    }
   }
 }
 

@@ -7,6 +7,7 @@ final class CachedRemoteImageHolder: ImageHolder {
   private let wrapped: ImageHolder
 
   var placeholder: ImagePlaceholder? { wrapped.placeholder }
+  var displaySize: CGSize? { wrapped.displaySize }
 
   init(wrapped: ImageHolder) {
     self.wrapped = wrapped

@@ -49,11 +49,10 @@ public final class SVGDecoder {
       return nil
     }
     let scale = PlatformDescription.screenScale()
-    let size = CGSize(width: originSize.width * scale, height: originSize.height * scale)
-    let render = UIGraphicsImageRenderer(size: size)
+    let render = UIGraphicsImageRenderer(size: originSize)
     let image = render.image { context in
       let cgContext = context.cgContext
-      cgContext.translateBy(x: 0, y: size.height)
+      cgContext.translateBy(x: 0, y: originSize.height)
       cgContext.scaleBy(x: scale, y: -scale)
       CGContextDrawSVGDocument(cgContext, document)
     }
