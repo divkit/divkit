@@ -4,7 +4,6 @@
 -keepattributes *Annotation*,EnclosingMethod
 -keepattributes Signature
 -keepattributes SourceFile,LineNumberTable
--printseeds
 -renamesourcefileattribute SourceFile
 -repackageclasses ''
 -verbose
