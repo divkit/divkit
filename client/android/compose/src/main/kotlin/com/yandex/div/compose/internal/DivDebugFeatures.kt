@@ -26,7 +26,7 @@ class DivDebugFeatures @Inject internal constructor(
      * Returns [ExpressionResolver] associated with the given [DivData].
      */
     fun getExpressionResolver(data: DivData): ExpressionResolver? {
-        return viewContextStorage.get(data)?.rootLocalContext?.expressionResolver
+        return viewContextStorage.get(data)?.rootLocalComponent?.expressionResolver
     }
 
     /**
@@ -36,7 +36,7 @@ class DivDebugFeatures @Inject internal constructor(
     fun performAction(data: DivData, action: DivAction) {
         viewContextStorage.get(data)?.let {
             actionHandler.handle(
-                context = it.rootLocalContext.actionHandlingContext,
+                context = it.rootLocalComponent.actionHandlingContext,
                 action = action,
                 source = DivActionSource.EXTERNAL
             )

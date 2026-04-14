@@ -10,8 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.compose.context.DivLocalContext
-import com.yandex.div.compose.context.LocalDivContext
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -20,6 +20,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
@@ -30,15 +31,12 @@ class ExpressionUtilsTest {
 
     private val variableController = DivVariableController()
 
-    private val localContext = DivLocalContext(
-        actionHandlingContext = mock(),
-        expressionResolver = createExpressionResolver(
+    private val localComponent = mock<DivLocalComponent> {
+        on { expressionResolver } doReturn createExpressionResolver(
             variableController = variableController
-        ),
-        functionProvider = mock(),
-        triggerStorage = mock(),
-        variableController = variableController
-    )
+        )
+        on { variableController } doReturn variableController
+    }
 
     @Test
     fun `observed value changes when variable changes`() {
@@ -213,7 +211,7 @@ class ExpressionUtilsTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
-            CompositionLocalProvider(LocalDivContext provides localContext) {
+            CompositionLocalProvider(LocalComponent provides localComponent) {
                 content()
             }
         }

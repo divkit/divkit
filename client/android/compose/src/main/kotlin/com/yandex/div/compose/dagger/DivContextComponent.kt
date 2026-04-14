@@ -6,7 +6,6 @@ import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
@@ -31,25 +30,18 @@ internal interface DivContextComponent {
     val imageLoader: ImageLoader
     val reporter: DivReporter
     val viewContextStorage: DivViewContextStorage
-    val visibilityActionTracker: VisibilityActionTracker
 
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController
 
-    fun localComponent(): DivLocalComponent.Builder
+    fun viewComponent(): DivViewComponent.Builder
 
     @Component.Builder
     interface Builder {
-
-        @BindsInstance
-        fun baseContext(baseContext: Context): Builder
-
-        @BindsInstance
-        fun configuration(configuration: DivComposeConfiguration): Builder
-
-        @BindsInstance
-        fun debugConfiguration(configuration: DivDebugConfiguration): Builder
-
-        fun build(): DivContextComponent
+        fun build(
+            @BindsInstance baseContext: Context,
+            @BindsInstance configuration: DivComposeConfiguration,
+            @BindsInstance debugConfiguration: DivDebugConfiguration
+        ): DivContextComponent
     }
 }

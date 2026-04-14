@@ -2,7 +2,7 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.WithLocalDivContext
+import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.image.DivImageView
@@ -21,9 +21,9 @@ internal fun DivBlockView(
     modifier: Modifier = Modifier,
     applyMargins: Boolean = true,
 ) {
-    WithLocalDivContext(data.value()) {
+    WithLocalComponent(data.value()) {
         if (data.value().visibility.observedValue() == DivVisibility.GONE) {
-            return@WithLocalDivContext
+            return@WithLocalComponent
         }
 
         val modifier = modifier.apply(data, applyMargins = applyMargins)

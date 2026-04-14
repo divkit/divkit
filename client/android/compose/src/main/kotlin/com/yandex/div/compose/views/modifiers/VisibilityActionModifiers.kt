@@ -3,8 +3,8 @@ package com.yandex.div.compose.views.modifiers
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onVisibilityChanged
-import com.yandex.div.compose.context.LocalDivContext
-import com.yandex.div.compose.utils.divContext
+import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivBase
@@ -24,8 +24,8 @@ internal fun Modifier.visibilityActions(data: DivBase): Modifier {
 
 @Composable
 private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modifier {
-    val visibilityActionTracker = divContext.component.visibilityActionTracker
-    val actionHandlingContext = LocalDivContext.current.actionHandlingContext
+    val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
+    val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
@@ -46,8 +46,8 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
 
 @Composable
 private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifier {
-    val visibilityActionTracker = divContext.component.visibilityActionTracker
-    val actionHandlingContext = LocalDivContext.current.actionHandlingContext
+    val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
+    val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
@@ -67,7 +67,7 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
 
 @Composable
 private fun shouldRegisterVisibilityCallback(action: DivSightAction): Boolean {
-    return !divContext.component.visibilityActionTracker.isLimitReached(
+    return !LocalDivViewContext.current.visibilityActionTracker.isLimitReached(
         action = action,
         limit = action.logLimit.observedIntValue()
     )

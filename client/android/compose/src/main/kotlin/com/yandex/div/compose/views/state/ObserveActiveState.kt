@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.yandex.div.compose.context.LocalDivContext
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.utils.expressionResolver
 import com.yandex.div.compose.utils.observedVariableValue
 import com.yandex.div.compose.utils.reporter
@@ -16,7 +16,7 @@ internal fun DivState.observeActiveState(): DivState.State? {
     }
 
     val activeStateId = stateVariable?.let {
-        LocalDivContext.current.variableController.observedVariableValue(it)
+        LocalComponent.current.variableController.observedVariableValue(it)
     }
 
     val resolver = expressionResolver

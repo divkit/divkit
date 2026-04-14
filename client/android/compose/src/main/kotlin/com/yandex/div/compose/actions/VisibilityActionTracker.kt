@@ -1,6 +1,6 @@
 package com.yandex.div.compose.actions
 
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
@@ -10,7 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@DivContextScope
+@DivViewScope
 internal class VisibilityActionTracker @Inject constructor(
     private val actionHandler: DivActionHandler,
     private val coroutineScope: CoroutineScope

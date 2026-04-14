@@ -11,9 +11,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.context.DivLocalContext
-import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div.compose.createExpressionResolver
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import org.junit.Assert.assertEquals
@@ -21,6 +21,7 @@ import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
@@ -29,19 +30,16 @@ class DivVariableControllerTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val variableController = DivVariableController()
     private val reporter = TestReporter()
+    private val variableController = DivVariableController()
 
-    private val localContext = DivLocalContext(
-        actionHandlingContext = mock(),
-        expressionResolver = createExpressionResolver(
+    private val localComponent = mock<DivLocalComponent> {
+        on { expressionResolver } doReturn createExpressionResolver(
             reporter = reporter,
             variableController = variableController
-        ),
-        functionProvider = mock(),
-        triggerStorage = mock(),
-        variableController = variableController
-    )
+        )
+        on { variableController } doReturn variableController
+    }
 
     @Test
     fun `returns current value of string variable`() {
@@ -156,7 +154,7 @@ class DivVariableControllerTest {
             )
             CompositionLocalProvider(
                 LocalContext provides divContext,
-                LocalDivContext provides localContext,
+                LocalComponent provides localComponent,
             ) {
                 content()
             }
