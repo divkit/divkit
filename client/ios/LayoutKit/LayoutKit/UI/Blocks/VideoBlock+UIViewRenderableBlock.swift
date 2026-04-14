@@ -164,7 +164,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
         }
       }
     } else {
-      self.preview.value.image = nil
+      self.preview.currentValue?.image = nil
     }
 
     if let elapsedTime = model.elapsedTime?.value,
