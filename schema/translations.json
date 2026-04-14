@@ -179,6 +179,14 @@
     "en": "Specifies the end of the container as the scrolling end position.",
     "ru": "Указывает конец контейнера как конечную точку пролистывания."
   },
+  "div_action_scroll_destination_item_id": {
+    "en": "Specifies the element with the given `id` as the scrolling end position.",
+    "ru": "Указывает элемент с заданным `id` как конечную точку пролистывания."
+  },
+  "div_action_scroll_destination_item_id_value": {
+    "en": "Identifier of the container child element to scroll to.",
+    "ru": "Идентификатор дочернего элемента контейнера, к которому нужно пролистать."
+  },
   "div_action_scroll_destination_index": {
     "en": "Specifies the element with the given index as the scrolling end position.",
     "ru": "Указывает элемент с заданным индексом как конечную точку пролистывания."
@@ -212,8 +220,8 @@
     "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destination`."
   },
   "div_action_scroll_to_destination": {
-    "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
-    "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
+    "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
+    "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`item_id` — пролистывание до элемента с идентификатором, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
   },
   "div_action_set_state": {
     "en": "Applies a new appearance to the content in `div-state'.",

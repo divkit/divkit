@@ -70,6 +70,7 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
             is DivActionScrollDestination.Start -> {
                 viewController.scrollToStart(animated)
             }
+            is DivActionScrollDestination.ItemId -> NotImplementedError("")
         }
     }
 }

@@ -70,6 +70,27 @@
       "required": [
         "type"
       ]
+    },
+    "item_id_destination": {
+      "$description": "translations.json#/div_action_scroll_destination_item_id",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "item_id"
+          ]
+        },
+        "value": {
+          "$description": "translations.json#/div_action_scroll_destination_item_id_value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "platforms": []
     }
   },
   "anyOf": [
@@ -84,6 +105,9 @@
     },
     {
       "$ref": "#/definitions/end_destination"
+    },
+    {
+      "$ref": "#/definitions/item_id_destination"
     }
   ]
 }
