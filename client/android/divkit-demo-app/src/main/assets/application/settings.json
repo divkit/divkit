@@ -731,7 +731,7 @@
                             "items": [
                                 {
                                     "type": "settings_item_title",
-                                    "text": "Compose Renderer by default"
+                                    "text": "Compose Renderer (Demo and testing)"
                                 },
                                 {
                                     "type": "setting_switch_state",

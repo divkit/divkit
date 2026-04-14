@@ -18,7 +18,9 @@ import com.yandex.divkit.demo.div.editor.NaiveSSLContext
 import com.yandex.divkit.demo.div.histogram.DemoHistogramConfiguration
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.div.video.DemoVideoCustomImageCache
+import com.yandex.divkit.demo.regression.RegressionComposeViewCreator
 import com.yandex.divkit.demo.regression.RegressionDiv2ViewCreator
+import com.yandex.divkit.demo.regression.RegressionSwitchingViewCreator
 import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
@@ -111,9 +113,12 @@ internal object Container {
     val flagPreferenceProvider by lazy { FlagPreferenceProvider(context) }
 
     val regressionComponent by lazy {
+        val div2ViewCreator = RegressionDiv2ViewCreator(context)
+        val composeViewCreator = RegressionComposeViewCreator(context)
         `Yatagan$RegressionComponent`.builder().create(
             context = context,
-            viewCreator = RegressionDiv2ViewCreator(context)
+            div2ViewCreator = div2ViewCreator,
+            scenarioViewCreator = RegressionSwitchingViewCreator(div2ViewCreator, composeViewCreator),
         )
     }
 

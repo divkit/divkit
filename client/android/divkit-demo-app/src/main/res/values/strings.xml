@@ -33,5 +33,5 @@
     <string name="load_patch">Load patch</string>
     <string name="load_div_json">Load another div json</string>
     <string name="close_all_tooltips">Close all tooltips</string>
-    <string name="compose_renderer">Compose Renderer (Demo)</string>
+    <string name="compose_renderer">Compose Renderer (Demo and testing)</string>
 </resources>

@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.divkit.regression.data.Scenario
 import com.yandex.divkit.regression.databinding.ScenarioActivityBinding
-import com.yandex.divkit.regression.di.provideDiv2ViewCreator
+import com.yandex.divkit.regression.di.provideScenarioViewCreator
 import com.yandex.divkit.regression.di.provideScenariosRepository
 import com.yandex.divkit.regression.utils.shortMessage
 
@@ -31,7 +31,7 @@ private const val INVALID_POSITION = -1
 class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
     private lateinit var binding: ScenarioActivityBinding
     private val repository by lazy(LazyThreadSafetyMode.NONE) { provideScenariosRepository() }
-    private val div2ViewCreator by lazy(LazyThreadSafetyMode.NONE) { provideDiv2ViewCreator() }
+    private val scenarioViewCreator by lazy(LazyThreadSafetyMode.NONE) { provideScenarioViewCreator() }
     private val logging = mutableListOf<String>()
     private val logDelegate = ScenarioLogDelegate { message -> logging += message }
 
@@ -135,7 +135,7 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
             }
         }
         binding.singleContainer.isVisible = true
-        div2ViewCreator.createDiv2ViewByConfig(
+        scenarioViewCreator.createView(
             this,
             "regression_test_data/${scenario.file}",
             binding.singleContainer,

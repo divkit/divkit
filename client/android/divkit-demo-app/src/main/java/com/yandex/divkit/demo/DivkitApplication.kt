@@ -25,6 +25,9 @@ class DivkitApplication : Application(), HasRegressionTesting {
     override val regressionComponent: RegressionComponent
         get() = Container.regressionComponent
 
+    override val isComposeRendererEnabled: Boolean
+        get() = Container.preferences.useComposeRenderer
+
     override fun onCreate() {
         super.onCreate()
 

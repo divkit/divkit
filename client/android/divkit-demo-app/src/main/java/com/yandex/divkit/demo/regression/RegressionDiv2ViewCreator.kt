@@ -22,7 +22,6 @@ import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
-import org.json.JSONObject
 import java.util.concurrent.Executors
 
 class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
@@ -42,17 +41,9 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
         logDelegate: ScenarioLogDelegate,
         onBound: (Div2View) -> Unit
     ) {
-        val divContext = createContext(activity, parent, logDelegate)
-
-        val divJson = assetReader.read(scenarioPath)
-        when {
-            divJson.has("card") -> {
-                val templateJson = parseTemplates(divJson)
-                val cardJson = parseCard(divJson)
-                Div2ViewFactory(divContext, templateJson).createAndBindViewByConfig(cardJson, onBound)
-            }
-            else -> Div2ViewFactory(divContext).createAndBindViewByConfig(divJson, onBound)
-        }
+        val divContext = createDiv2Context(activity, parent, logDelegate)
+        val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
+        Div2ViewFactory(divContext, templatesJson).createAndBindViewByConfig(cardJson, onBound)
     }
 
     override fun createDiv2ViewSync(
@@ -61,20 +52,12 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
         parent: ViewGroup,
         logDelegate: ScenarioLogDelegate,
     ): Div2View {
-        val divContext = createContext(activity, parent, logDelegate)
-
-        val divJson = assetReader.read(scenarioPath)
-        return when {
-            divJson.has("card") -> {
-                val templateJson = parseTemplates(divJson)
-                val cardJson = parseCard(divJson)
-                Div2ViewFactory(divContext, templateJson).createAndBindViewSync(cardJson)
-            }
-            else -> Div2ViewFactory(divContext).createAndBindViewSync(divJson)
-        }
+        val divContext = createDiv2Context(activity, parent, logDelegate)
+        val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
+        return Div2ViewFactory(divContext, templatesJson).createAndBindViewSync(cardJson)
     }
 
-    private fun createContext(
+    private fun createDiv2Context(
         activity: Activity,
         parent: ViewGroup,
         logDelegate: ScenarioLogDelegate
@@ -105,15 +88,4 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
         }
     }
 
-    private fun parseTemplates(
-        divJson: JSONObject,
-    ): JSONObject? {
-        return divJson.optJSONObject("templates")
-    }
-
-    private fun parseCard(
-        divJson: JSONObject,
-    ): JSONObject {
-        return divJson.getJSONObject("card")
-    }
 }

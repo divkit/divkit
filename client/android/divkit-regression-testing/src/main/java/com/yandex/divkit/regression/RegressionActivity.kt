@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import com.yandex.div.internal.Assert
 import com.yandex.divkit.regression.databinding.RegressionActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
+import com.yandex.divkit.regression.di.provideIsComposeRendererEnabled
 import kotlinx.coroutines.flow.FlowCollector
 
 private const val TAG_FILTER_MENU_ID = 1
@@ -38,7 +39,7 @@ class RegressionActivity : AppCompatActivity() {
         binding = RegressionActivityBinding.inflate(layoutInflater)
 
         setSupportActionBar(binding.regressionToolbar)
-        binding.toolbarLayout.title = getString(R.string.regression_label)
+        updateToolbarTitle()
         val config: Configuration = resources.configuration
         val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             R.drawable.ic_back_rtl
@@ -77,6 +78,16 @@ class RegressionActivity : AppCompatActivity() {
         binding.scenarioFilter.doOnTextChanged { text, start, before, count ->
             regressionViewModel.updateFilter(text?.toString())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateToolbarTitle()
+    }
+
+    private fun updateToolbarTitle() {
+        val suffix = if (provideIsComposeRendererEnabled()) " (Compose)" else ""
+        binding.toolbarLayout.title = getString(R.string.regression_label) + suffix
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
