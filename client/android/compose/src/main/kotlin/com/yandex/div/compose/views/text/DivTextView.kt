@@ -35,7 +35,11 @@ internal fun DivTextView(
 
     val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal, hyphens)
     val maxLines = data.maxLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
-    val overflow = data.truncate.observedValue().toTextOverflow()
+    val overflow = if (data.maxLines != null) {
+        data.truncate.observedValue().toTextOverflow()
+    } else {
+        TextOverflow.Clip
+    }
 
     val contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
     val annotatedString = buildAnnotatedText(text, data, fontSize)

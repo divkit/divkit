@@ -18,7 +18,7 @@ internal fun DivGalleryView(
     data: DivGallery,
 ) {
     val orientation = data.orientation.observedValue()
-    val itemSpacingDp = data.itemSpacing.observedValue().toDp()
+    val itemSpacing = data.itemSpacing.observedValue().toDp()
     val crossContentAlignment = data.crossContentAlignment.observedValue()
     val columnCount = data.columnCount?.observedIntValue() ?: 1
     val defaultItem = data.defaultItem.observedIntValue()
@@ -34,8 +34,8 @@ internal fun DivGalleryView(
             items = items,
             orientation = orientation,
             columnCount = columnCount,
-            itemSpacingDp = itemSpacingDp,
-            crossSpacingDp = data.crossSpacing?.observedValue()?.toDp() ?: itemSpacingDp,
+            itemSpacing = itemSpacing,
+            crossSpacing = data.crossSpacing?.observedValue()?.toDp() ?: itemSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
             defaultItem = defaultItem,
@@ -48,7 +48,7 @@ internal fun DivGalleryView(
             modifier = if (isScrollable) modifier.constrainScrollAxis(isHorizontal) else modifier,
             items = items,
             orientation = orientation,
-            itemSpacingDp = itemSpacingDp,
+            itemSpacing = itemSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
             defaultItem = defaultItem,

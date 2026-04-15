@@ -1,6 +1,7 @@
 package com.yandex.divkit.demo.div.editor
 
 import android.graphics.Bitmap
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -30,6 +31,8 @@ class DivEditorUi(
     private val metadataButton: FloatingActionButton,
     private val failedTextMessage: TextView,
     private val divContainer: ViewGroup,
+    private val scrollView: View,
+    private val composeContainer: View,
     private val divContext: Div2Context,
     private val viewRenderer: DemoRendererFacade,
     private val composeRenderer: DemoRendererFacade,
@@ -106,6 +109,8 @@ class DivEditorUi(
         inactiveRenderer.deactivate()
         activeRenderer.activate(lastDivData, lastDivDataTag)
         activeRenderer.currentData?.let { adjustContainerHeight(it) }
+        scrollView.visibility = if (useComposeRenderer) GONE else VISIBLE
+        composeContainer.visibility = if (useComposeRenderer) VISIBLE else GONE
     }
 
     private fun adjustContainerHeight(divData: DivData) {

@@ -146,7 +146,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
         val viewRenderer = Div2RendererFacade(binding.singleContainer, divContext, actionHandler)
         val composeRenderer = ComposeRendererFacade(
-            binding.singleContainer,
+            binding.composeContainer,
             divContext.divVariableController,
             this
         )
@@ -161,6 +161,8 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             binding.metadataButton,
             binding.error,
             binding.singleContainer,
+            binding.scrollView2,
+            binding.composeContainer,
             divContext,
             viewRenderer,
             composeRenderer,

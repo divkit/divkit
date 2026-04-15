@@ -2,6 +2,8 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -10,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 
@@ -19,8 +22,8 @@ internal fun GalleryGridView(
     items: List<Div>,
     orientation: DivGallery.Orientation,
     columnCount: Int,
-    itemSpacingDp: Dp,
-    crossSpacingDp: Dp,
+    itemSpacing: Dp,
+    crossSpacing: Dp,
     crossContentAlignment: DivGallery.CrossContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
@@ -35,8 +38,8 @@ internal fun GalleryGridView(
             items = items,
             gridState = gridState,
             columnCount = columnCount,
-            itemSpacingDp = itemSpacingDp,
-            crossSpacingDp = crossSpacingDp,
+            itemSpacing = itemSpacing,
+            crossSpacing = crossSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
         )
@@ -45,8 +48,8 @@ internal fun GalleryGridView(
             items = items,
             gridState = gridState,
             columnCount = columnCount,
-            itemSpacingDp = itemSpacingDp,
-            crossSpacingDp = crossSpacingDp,
+            itemSpacing = itemSpacing,
+            crossSpacing = crossSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
         )
@@ -59,8 +62,8 @@ private fun GalleryLazyHorizontalGrid(
     items: List<Div>,
     gridState: LazyGridState,
     columnCount: Int,
-    itemSpacingDp: Dp,
-    crossSpacingDp: Dp,
+    itemSpacing: Dp,
+    crossSpacing: Dp,
     crossContentAlignment: DivGallery.CrossContentAlignment,
     contentPadding: PaddingValues,
 ) {
@@ -69,14 +72,15 @@ private fun GalleryLazyHorizontalGrid(
         modifier = modifier,
         state = gridState,
         contentPadding = contentPadding,
-        horizontalArrangement = Arrangement.spacedBy(itemSpacingDp),
-        verticalArrangement = Arrangement.spacedBy(crossSpacingDp),
+        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+        verticalArrangement = Arrangement.spacedBy(crossSpacing),
     ) {
         items(count = items.size) { index ->
-            GalleryChildItem(
+            ScrollableChildItem(
                 childDiv = items[index],
+                modifier = Modifier.fillMaxHeight(),
                 isHorizontal = true,
-                crossContentAlignment = crossContentAlignment,
+                crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
             )
         }
     }
@@ -88,8 +92,8 @@ private fun GalleryLazyVerticalGrid(
     items: List<Div>,
     gridState: LazyGridState,
     columnCount: Int,
-    itemSpacingDp: Dp,
-    crossSpacingDp: Dp,
+    itemSpacing: Dp,
+    crossSpacing: Dp,
     crossContentAlignment: DivGallery.CrossContentAlignment,
     contentPadding: PaddingValues,
 ) {
@@ -98,14 +102,15 @@ private fun GalleryLazyVerticalGrid(
         modifier = modifier,
         state = gridState,
         contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(itemSpacingDp),
-        horizontalArrangement = Arrangement.spacedBy(crossSpacingDp),
+        verticalArrangement = Arrangement.spacedBy(itemSpacing),
+        horizontalArrangement = Arrangement.spacedBy(crossSpacing),
     ) {
         items(count = items.size) { index ->
-            GalleryChildItem(
+            ScrollableChildItem(
                 childDiv = items[index],
+                modifier = Modifier.fillMaxWidth(),
                 isHorizontal = false,
-                crossContentAlignment = crossContentAlignment,
+                crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
             )
         }
     }

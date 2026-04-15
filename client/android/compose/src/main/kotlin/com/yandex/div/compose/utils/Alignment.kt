@@ -21,27 +21,28 @@ internal fun DivAlignmentVertical.toVerticalAlignment(): Alignment.Vertical =
 internal fun toAlignment(
     horizontal: DivAlignmentHorizontal,
     vertical: DivAlignmentVertical
-): Alignment {
-    return when (horizontal) {
-        DivAlignmentHorizontal.LEFT,
-        DivAlignmentHorizontal.START -> when (vertical) {
-            DivAlignmentVertical.TOP -> Alignment.TopStart
-            DivAlignmentVertical.CENTER,
-            DivAlignmentVertical.BASELINE -> Alignment.CenterStart
-            DivAlignmentVertical.BOTTOM -> Alignment.BottomStart
-        }
-        DivAlignmentHorizontal.CENTER -> when (vertical) {
-            DivAlignmentVertical.TOP -> Alignment.TopCenter
-            DivAlignmentVertical.CENTER,
-            DivAlignmentVertical.BASELINE -> Alignment.Center
-            DivAlignmentVertical.BOTTOM -> Alignment.BottomCenter
-        }
-        DivAlignmentHorizontal.RIGHT,
-        DivAlignmentHorizontal.END -> when (vertical) {
-            DivAlignmentVertical.TOP -> Alignment.TopEnd
-            DivAlignmentVertical.CENTER,
-            DivAlignmentVertical.BASELINE -> Alignment.CenterEnd
-            DivAlignmentVertical.BOTTOM -> Alignment.BottomEnd
-        }
+): Alignment = combineAlignment(
+    horizontal.toHorizontalAlignment(),
+    vertical.toVerticalAlignment(),
+)
+
+internal fun combineAlignment(
+    horizontal: Alignment.Horizontal,
+    vertical: Alignment.Vertical,
+): Alignment = when (horizontal) {
+    Alignment.Start -> when (vertical) {
+        Alignment.Top -> Alignment.TopStart
+        Alignment.CenterVertically -> Alignment.CenterStart
+        else -> Alignment.BottomStart
+    }
+    Alignment.CenterHorizontally -> when (vertical) {
+        Alignment.Top -> Alignment.TopCenter
+        Alignment.CenterVertically -> Alignment.Center
+        else -> Alignment.BottomCenter
+    }
+    else -> when (vertical) {
+        Alignment.Top -> Alignment.TopEnd
+        Alignment.CenterVertically -> Alignment.CenterEnd
+        else -> Alignment.BottomEnd
     }
 }

@@ -28,11 +28,12 @@ internal fun Modifier.width(
 ): Modifier {
     val align = horizontalAlignment?.toHorizontalAlignment() ?: Alignment.Start
     return when (width) {
-        is DivSize.MatchParent -> fillMaxWidth()
+        is DivSize.MatchParent -> applySizeBounds(width.value.minSize, width.value.maxSize, isWidth = true)
+            .fillMaxWidth()
         is DivSize.WrapContent -> {
             val isConstrained = width.value.constrained?.observedValue() == true
             wrapContentWidth(align = align, unbounded = !isConstrained)
-                .applyWrapContentWidthBounds(width)
+                .applySizeBounds(width.value.minSize, width.value.maxSize, isWidth = true)
         }
         is DivSize.Fixed -> wrapContentWidth(align = align, unbounded = true)
             .requiredWidth(width.value.observedValue())
@@ -46,44 +47,33 @@ internal fun Modifier.height(
 ): Modifier {
     val align = verticalAlignment?.toVerticalAlignment() ?: Alignment.Top
     return when (height) {
-        is DivSize.MatchParent -> fillMaxHeight()
+        is DivSize.MatchParent -> applySizeBounds(height.value.minSize, height.value.maxSize, isWidth = false)
+            .fillMaxHeight()
         is DivSize.WrapContent -> {
             val isConstrained = height.value.constrained?.observedValue() == true
             wrapContentHeight(align = align, unbounded = !isConstrained)
-                .applyWrapContentHeightBounds(height)
+                .applySizeBounds(height.value.minSize, height.value.maxSize, isWidth = false)
         }
         is DivSize.Fixed -> wrapContentHeight(align = align, unbounded = true)
             .requiredHeight(height.value.observedValue())
     }
 }
-@Composable
-private fun Modifier.applyWrapContentWidthBounds(size: DivSize.WrapContent): Modifier {
-    val (minWidth, maxWidth) = size.wrapContentSizeBounds()
-    if (minWidth == null && maxWidth == null) return this
-    return widthIn(
-        min = minWidth ?: Dp.Unspecified,
-        max = maxWidth ?: Dp.Unspecified,
-    )
-}
 
 @Composable
-private fun Modifier.applyWrapContentHeightBounds(size: DivSize.WrapContent): Modifier {
-    val (minHeight, maxHeight) = size.wrapContentSizeBounds()
-    if (minHeight == null && maxHeight == null) return this
-    return heightIn(
-        min = minHeight ?: Dp.Unspecified,
-        max = maxHeight ?: Dp.Unspecified,
-    )
-}
-
-@Composable
-private fun DivSize.WrapContent.wrapContentSizeBounds(): Pair<Dp?, Dp?> {
-    val minSize = value.minSize?.toDpSize()
-    val maxSize = value.maxSize?.toDpSize()
-    if (minSize != null && maxSize != null && minSize > maxSize) {
-        return null to null
+private fun Modifier.applySizeBounds(
+    minSize: DivSizeUnitValue?,
+    maxSize: DivSizeUnitValue?,
+    isWidth: Boolean,
+): Modifier {
+    val min = minSize?.toDpSize()
+    val max = maxSize?.toDpSize()
+    if (min == null && max == null) return this
+    if (min != null && max != null && min > max) return this
+    return if (isWidth) {
+        widthIn(min = min ?: Dp.Unspecified, max = max ?: Dp.Unspecified)
+    } else {
+        heightIn(min = min ?: Dp.Unspecified, max = max ?: Dp.Unspecified)
     }
-    return minSize to maxSize
 }
 
 @Composable
