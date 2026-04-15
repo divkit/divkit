@@ -1,0 +1,51 @@
+{
+  "definitions": {
+    "position": {
+      "type": "object",
+      "$description": "translations.json#/div_action_set_cursor_position_position",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "absolute"
+          ]
+        },
+        "start": {
+          "type": "integer"
+        },
+        "end": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "start"
+      ]
+    }
+  },
+  "type": "object",
+  "$description": "translations.json#/div_action_set_cursor_position",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set_cursor_position"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "$description": "translations.json#/div_action_set_cursor_position_id"
+    },
+    "position": {
+      "$ref": "#/definitions/position"
+    }
+  },
+  "platforms": [
+    "web"
+  ],
+  "required": [
+    "type",
+    "id",
+    "position"
+  ]
+}

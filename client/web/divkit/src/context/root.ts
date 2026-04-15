@@ -20,6 +20,7 @@ export interface ParentMethods {
 
 export interface FocusableMethods {
     focus: () => void;
+    setCursorPosition?: (start: number, end: number) => void;
 }
 
 export type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, opts?: {

@@ -136,6 +136,7 @@ internal class DivActionHandler @Inject constructor(
                 updateStructureActionHandler.handle(context, action.value)
 
             is DivActionTyped.Video -> notSupported()
+            is DivActionTyped.SetCursorPosition -> notSupported()
         }
     }
 

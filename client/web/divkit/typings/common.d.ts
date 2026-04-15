@@ -382,11 +382,21 @@ export interface ActionCustom {
     type: 'custom';
 }
 
+export interface ActionSetCursorPosition {
+    type: 'set_cursor_position';
+    id: string;
+    position: {
+        type: 'absolute';
+        start: number;
+        end?: number;
+    };
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
     ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo |
-    ActionUpdateStructure | ActionCustom;
+    ActionUpdateStructure | ActionCustom | ActionSetCursorPosition;
 
 export interface ActionBase {
     log_id: string;

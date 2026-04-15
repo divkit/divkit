@@ -1458,6 +1458,22 @@
                     } as (Action | VisibilityAction) & { url: string });
                     break;
                 }
+                case 'set_cursor_position': {
+                    const start = actionTyped.position?.start;
+                    const end = actionTyped.position?.end ?? start;
+                    const methods = actionTyped.id && focusableMap.get(actionTyped.id);
+
+                    if (methods && methods.setCursorPosition && typeof start === 'number' && typeof end === 'number' && actionTyped.position?.type === 'absolute') {
+                        methods.setCursorPosition(start, end);
+                    } else {
+                        log(wrapError(new Error('Incorrect set_cursor_position action'), {
+                            additional: {
+                                elementId: actionTyped.id
+                            }
+                        }));
+                    }
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {

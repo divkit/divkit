@@ -65,6 +65,9 @@
     },
     {
       "$ref": "div-action-custom.json"
+    },
+    {
+      "$ref": "div-action-set-cursor-position.json"
     }
   ]
 }

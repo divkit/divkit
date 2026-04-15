@@ -223,6 +223,18 @@
     "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
     "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`item_id` — пролистывание до элемента с идентификатором, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
   },
+  "div_action_set_cursor_position": {
+    "en": "Sets the cursor position in the specified input field.",
+    "ru": "Устанавливает позицию курсора в указанном поле ввода."
+  },
+  "div_action_set_cursor_position_id": {
+    "en": "ID of the input field.",
+    "ru": "ID поля ввода."
+  },
+  "div_action_set_cursor_position_position": {
+    "en": "Defines the cursor position. If `end` is not set, or if `end` is equal to `start`, it will just be the cursor position, if both are set and the values are different, part of the text will be selected. Use 0 to indicate the beginning of the text, -1 for the end.",
+    "ru": "Определяет позицию курсора. Если `end` не задано или если `end` равно `start` - будет просто позиция курсора, если оба заданы и значения разные - будет выделена часть текста. Для указания начала текста используйте 0, для конца - -1."
+  },
   "div_action_set_state": {
     "en": "Applies a new appearance to the content in `div-state'.",
     "ru": "Устанавливает новый внешний вид контента в `div-state`."

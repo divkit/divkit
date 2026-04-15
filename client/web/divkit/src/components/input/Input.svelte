@@ -669,7 +669,10 @@
                         input.focus();
                         setCursorPosition(value.length, value.length);
                     }
-                }
+                },
+                setCursorPosition(start, end) {
+                    setCursorPosition(start === -1 ? value.length : start, end === -1 ? value.length : end);
+                },
             });
         }
     }

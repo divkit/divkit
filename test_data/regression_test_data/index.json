@@ -4067,6 +4067,27 @@
       "file": "input/input_capture_focus.json"
     },
     {
+      "title": "Input with set_cursor_position actions",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivInput",
+        "DivAction"
+      ],
+      "steps": [
+        "Tap on all buttons one by one"
+      ],
+      "expected_results": [
+        "Input is focused",
+        "When pressing the 'to start' button, the cursor was moved to the beginning of the input",
+        "When pressing the 'to end' button, the cursor was moved to the end of the input",
+        "When pressing the 'to 7' button, the cursor was moved after the 7th character of the input.",
+        "When pressing the 'to 7-12' the selection range with the second word is entered (if the text has not been changed)"
+      ],
+      "file": "input/input_set_cursor_position.json"
+    },
+    {
       "title": "Submit action test",
       "case_id": 221,
       "platforms": [
