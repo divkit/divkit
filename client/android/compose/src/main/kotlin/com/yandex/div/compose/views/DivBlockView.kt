@@ -10,6 +10,7 @@ import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.views.input.DivInputView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div2.Div
@@ -32,6 +33,7 @@ internal fun DivBlockView(
             is Div.Container -> DivContainerView(modifier, data.value)
             is Div.Gallery -> DivGalleryView(modifier, data.value)
             is Div.Image -> DivImageView(modifier.applyPaddings(data), data.value)
+            is Div.Input -> DivInputView(modifier.applyPaddings(data), data.value)
             is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
             is Div.State -> DivStateView(modifier, data.value)
             is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
@@ -39,7 +41,6 @@ internal fun DivBlockView(
             is Div.GifImage -> NotSupported("gif")
             is Div.Grid -> NotSupported("grid")
             is Div.Indicator -> NotSupported("indicator")
-            is Div.Input -> NotSupported("input")
             is Div.Pager -> NotSupported("pager")
             is Div.Select -> NotSupported("select")
             is Div.Slider -> NotSupported("slider")
