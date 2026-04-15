@@ -7,6 +7,7 @@ import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.HistogramRecordConfiguration
 import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
+import com.yandex.div.storage.DivStorageComponent
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import java.util.concurrent.ExecutorService
@@ -34,6 +35,8 @@ interface DivKitComponent {
     val parsingHistogramReporter: DivParsingHistogramReporter
 
     val histogramReporterDelegate: HistogramReporterDelegate
+
+    val storageComponent: DivStorageComponent
 
     fun div2Component(): Div2Component.Builder
 

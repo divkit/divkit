@@ -2,8 +2,10 @@ package com.yandex.div.core
 
 import android.content.Context
 import androidx.annotation.AnyThread
+import androidx.annotation.IntDef
 import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.BuildConfig
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -32,7 +34,36 @@ class DivKit private constructor(
     val histogramReporterDelegate: HistogramReporterDelegate
         get() = component.histogramReporterDelegate
 
+    fun reset(@ResetFlag flags: Int = RESET_ALL, tags: List<DivDataTag> = emptyList()) {
+        if (flags and RESET_STORED_VARIABLES != 0) {
+            component.storageComponent.rawJsonRepository.remove { true }
+        }
+        if (flags and RESET_STORED_DIV_DATA != 0) {
+            component.storageComponent.repository.run {
+                if (tags.isEmpty()) {
+                    remove { true }
+                } else {
+                    remove { data -> tags.any { it.id == data.id } }
+                }
+            }
+        }
+    }
+
+    @IntDef(
+        flag = true,
+        value = [
+            RESET_ALL,
+            RESET_STORED_VARIABLES,
+            RESET_STORED_DIV_DATA,
+        ]
+    )
+    annotation class ResetFlag
+
     companion object {
+
+        const val RESET_ALL = 1 shl 0
+        const val RESET_STORED_VARIABLES = 1 shl 1
+        const val RESET_STORED_DIV_DATA = 1 shl 2
 
         private val DEFAULT_CONFIGURATION = DivKitConfiguration.Builder().build()
 
