@@ -295,8 +295,16 @@ class Div2View private constructor(
         data: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        setDataInternal(data, divData, tag)
+    ) {
+        if (data === divData) {
+            loadMedia()
+            onComplete?.invoke(true)
+            return
+        }
+
+        bindingDispatcher.runOnBindingThread(onComplete) {
+            setDataInternal(data, divData, tag)
+        }
     }
 
     @ExperimentalApi
@@ -305,8 +313,16 @@ class Div2View private constructor(
         oldDivData: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+    ) {
+        if (data === divData) {
+            loadMedia()
+            onComplete?.invoke(true)
+            return
+        }
+
+        bindingDispatcher.runOnBindingThread(onComplete) {
+            setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+        }
     }
 
     fun setData(
