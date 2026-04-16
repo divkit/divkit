@@ -81,7 +81,7 @@ data class Action internal constructor(
          */
         val referer: Property<Url>?,
         /**
-         * The ID of the element within which the specified action will be performed.
+         * The ID of the element whose scope will be used for changing variable values when the action is performed.
          */
         val scopeId: Property<String>?,
         /**
@@ -178,7 +178,7 @@ data class Action internal constructor(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -220,7 +220,7 @@ fun DivScope.action(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -260,7 +260,7 @@ fun DivScope.actionProps(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -300,7 +300,7 @@ fun TemplateScope.actionRefs(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -342,7 +342,7 @@ fun Action.override(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -384,7 +384,7 @@ fun Action.defer(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */

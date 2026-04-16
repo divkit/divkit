@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [OffsetDestination], [IndexDestination], [StartDestination], [EndDestination].
+ * Possible values: [OffsetDestination], [IndexDestination], [StartDestination], [EndDestination], [ItemIdDestination].
  */
 @Generated
 sealed interface ActionScrollDestination

@@ -78,7 +78,7 @@ data class VisibilityAction internal constructor(
          */
         val referer: Property<Url>?,
         /**
-         * The ID of the element within which the specified action will be performed.
+         * The ID of the element whose scope will be used for changing variable values when the action is performed.
          */
         val scopeId: Property<String>?,
         val typed: Property<ActionTyped>?,
@@ -123,7 +123,7 @@ data class VisibilityAction internal constructor(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -165,7 +165,7 @@ fun DivScope.visibilityAction(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -205,7 +205,7 @@ fun DivScope.visibilityActionProps(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -245,7 +245,7 @@ fun TemplateScope.visibilityActionRefs(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -287,7 +287,7 @@ fun VisibilityAction.override(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -329,7 +329,7 @@ fun VisibilityAction.defer(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
