@@ -189,10 +189,12 @@ zxing-core = { module = "com.google.zxing:core", version = "3.5.4" }
 zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = "4.3.0" }
 
 [plugins]
-apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
+android-application = { id = "com.android.application", version.ref = "agp" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }

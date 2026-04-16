@@ -2,8 +2,7 @@ import groovy.json.JsonOutput
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
     alias(libs.plugins.apiGenerator)
 }
 
