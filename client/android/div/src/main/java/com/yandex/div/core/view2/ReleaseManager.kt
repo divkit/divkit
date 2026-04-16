@@ -10,6 +10,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.internal.Log
+import java.util.WeakHashMap
 import javax.inject.Inject
 
 /**
@@ -20,18 +21,18 @@ import javax.inject.Inject
 internal class ReleaseManager @Inject constructor(
     private val runtimeStoreProvider: RuntimeStoreProvider,
 ) {
-    private val divToRelease = hashMapOf<LifecycleOwner, MutableSet<Div2View>>()
+
+    private val divToRelease = hashMapOf<LifecycleOwner, WeakHashMap<Div2View, Any>>()
     private val monitor = Any()
 
     private val observer = LifecycleEventObserver { source, event ->
         synchronized(monitor) {
             when (event) {
                 Lifecycle.Event.ON_DESTROY -> {
-                    divToRelease[source]?.forEach {
+                    divToRelease.remove(source)?.keys?.forEach {
                         it.cleanup()
                         runtimeStoreProvider.cleanupRuntime(it)
                     }
-                    divToRelease.remove(source)
                 }
                 else -> Unit
             }
@@ -63,14 +64,11 @@ internal class ReleaseManager @Inject constructor(
     }
 
     private fun addLifecycleListener(lifecycleOwner: LifecycleOwner, divView: Div2View) = synchronized(monitor) {
-        if (divToRelease.containsKey(lifecycleOwner)) {
-            divToRelease[lifecycleOwner]?.add(divView)
-        } else {
-            divToRelease[lifecycleOwner] = mutableSetOf(divView)
-            divView.runBindingAction {
-                lifecycleOwner.lifecycle.addObserver(observer)
-            }
+        val views = divToRelease.getOrPut(lifecycleOwner) {
+            divView.runBindingAction { lifecycleOwner.lifecycle.addObserver(observer) }
+            WeakHashMap<Div2View, Any>()
         }
+        views[divView] = Any()
     }
 
     companion object {
