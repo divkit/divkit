@@ -99,7 +99,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private let preview = Lazy(getter: {
     let view = UIImageView(image: nil)
-    view.contentMode = .scaleAspectFit
+    view.clipsToBounds = true
     view.backgroundColor = .black
     return view
   })
@@ -147,6 +147,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     if model.scale != oldValue.scale {
       videoView?.set(scale: model.scale)
+      if preview.currentValue != nil {
+        preview.value.contentMode = model.scale.previewContentMode
+      }
     }
 
     if !model.hasEqualVideoData(to: oldValue) {
@@ -176,11 +179,13 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private func updatePreview(_ image: Image?) {
     preview.value.image = image
+    preview.value.contentMode = model.scale.previewContentMode
     preview.value.frame = adjustPreviewFrame()
   }
 
   private func adjustPreviewFrame() -> CGRect {
-    guard let videoView,
+    guard model.scale == .fit,
+          let videoView,
           let videoRatio = videoView.videoRatio else {
       return videoView?.frame ?? .zero
     }
@@ -232,6 +237,16 @@ extension CGSize {
 extension [String: Any] {
   fileprivate func isEqual(to other: [String: Any]) -> Bool {
     NSDictionary(dictionary: self).isEqual(to: other)
+  }
+}
+
+extension VideoScale {
+  fileprivate var previewContentMode: UIView.ContentMode {
+    switch self {
+    case .fill: return .scaleAspectFill
+    case .fit: return .scaleAspectFit
+    case .noScale: return .center
+    }
   }
 }
 #endif
