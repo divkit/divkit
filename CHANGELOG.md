@@ -15,7 +15,6 @@
 
 # Web Client:
 * Added `set_cursor_position` action.
-* Changed the logic of redefining properties in templates in rare cases. This was done to match Android/iOS.
 * Updated `slider` ticks limits logic, the maximum number of ticks is now 1000.
 
 

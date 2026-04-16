@@ -121,7 +121,7 @@ describe('applyTemplate', () => {
                 text: 'def'
             },
             templateContext: {
-                text: 'abc'
+                text: 'def'
             }
         });
 
@@ -147,7 +147,7 @@ describe('applyTemplate', () => {
                 text: 'def'
             },
             templateContext: {
-                text: 'abc'
+                text: 'def'
             }
         });
 
@@ -237,12 +237,12 @@ describe('applyTemplate', () => {
                 type: 'text',
                 text: 'text',
                 smth: {
-                    val: 'def'
+                    val: 'abc'
                 },
                 val: 'abc'
             },
             templateContext: {
-                val: 'def'
+                val: 'abc'
             }
         });
 
