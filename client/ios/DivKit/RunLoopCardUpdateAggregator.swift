@@ -2,6 +2,7 @@ import Foundation
 import VGSL
 
 final class RunLoopCardUpdateAggregator {
+  private let lock = AllocatedUnfairLock()
   private var enabled: Bool = true
   private var batch: [DivCardUpdateReason] = []
   private let updateCardAction: ([DivCardUpdateReason]) -> Void
@@ -16,17 +17,22 @@ final class RunLoopCardUpdateAggregator {
   }
 
   func performWithNoUpdates(_ action: Action) {
-    Thread.assertIsMain()
-    enabled = false
+    lock.withLock {
+      enabled = false
+    }
     action()
-    enabled = true
+    lock.withLock {
+      enabled = true
+    }
   }
 
   func aggregate(_ reason: DivCardUpdateReason) {
-    Thread.assertIsMain()
-    guard enabled else { return }
-    let notScheduled = batch.isEmpty
-    batch.append(reason)
+    let notScheduled = lock.withLock {
+      guard enabled else { return false }
+      let notScheduled = batch.isEmpty
+      batch.append(reason)
+      return notScheduled
+    }
     if notScheduled {
       mainThreadAsyncRunner { [weak self] in
         self?.flushUpdateActions()
@@ -35,13 +41,18 @@ final class RunLoopCardUpdateAggregator {
   }
 
   func flushUpdateActions() {
-    let reasons = batch.merge()
-    batch = []
+    let reasons = lock.withLock {
+      let merged = batch.merge()
+      batch = []
+      return merged
+    }
     updateCardAction(reasons)
   }
 
   func forceUpdate() {
-    batch.append(.external)
+    lock.withLock {
+      batch.append(.external)
+    }
     flushUpdateActions()
   }
 }
