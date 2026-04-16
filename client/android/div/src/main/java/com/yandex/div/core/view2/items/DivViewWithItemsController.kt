@@ -42,6 +42,20 @@ internal class DivViewWithItemsController private constructor(private val view: 
         setCurrentItem(0, animated)
     }
 
+    @Throws(RuntimeException::class)
+    fun scrollToItemId(id: String, animated: Boolean = false) {
+        val indices = view.getIndicesOfItemWithId(id)
+
+        val exception = when {
+            indices.isEmpty() -> IllegalArgumentException("There are no items with id '$id'.")
+            indices.size > 1 -> IllegalArgumentException("There are several items with id '$id'.")
+            else -> null
+        }
+        exception?.let { throw RuntimeException("Failed to scroll to item with id.", it) }
+
+        setCurrentItem(indices.first(), animated)
+    }
+
     private fun createStrategy(overflow: String? = null): OverflowItemStrategy {
         return OverflowItemStrategy.create(
             overflow,

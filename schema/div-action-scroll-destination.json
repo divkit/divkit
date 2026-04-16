@@ -90,7 +90,9 @@
         "type",
         "value"
       ],
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     }
   },
   "anyOf": [

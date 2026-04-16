@@ -70,7 +70,14 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
             is DivActionScrollDestination.Start -> {
                 viewController.scrollToStart(animated)
             }
-            is DivActionScrollDestination.ItemId -> NotImplementedError("")
+            is DivActionScrollDestination.ItemId -> {
+                val itemId = destination.value.value.evaluate(resolver)
+                try {
+                    viewController.scrollToItemId(itemId, animated)
+                } catch (e: RuntimeException) {
+                    view.logError(e)
+                }
+            }
         }
     }
 }

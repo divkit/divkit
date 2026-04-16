@@ -53,6 +53,8 @@ internal class DivTabsAdapter(
     private val childStates = mutableMapOf<String, DivStatePath>()
     private var childIds: List<String> = emptyList()
 
+    val tabDivs get() = tabModels.map { it.value.div }
+
     var statePath
         get() = path
         set(value) {

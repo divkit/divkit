@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.items
 
 import android.net.Uri
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 
@@ -13,12 +14,14 @@ private const val AUTHORITY_SCROLL_BACKWARD = "scroll_backward"
 private const val AUTHORITY_SCROLL_TO_POSITION = "scroll_to_position"
 private const val AUTHORITY_SCROLL_TO_END = "scroll_to_end"
 private const val AUTHORITY_SCROLL_TO_START = "scroll_to_start"
+private const val AUTHORITY_SCROLL_TO_ITEM_ID = "scroll_to_item_id"
 
 private const val PARAM_ANIMATED = "animated"
 private const val PARAM_ITEM = "item"
 private const val PARAM_ID = "id"
 private const val PARAM_STEP = "step"
 private const val PARAM_OVERFLOW = "overflow"
+private const val PARAM_ITEM_ID = "item_id"
 
 /**
  * Action handler for handling change of current item.
@@ -35,7 +38,8 @@ internal object DivItemChangeActionHandler {
             AUTHORITY_SCROLL_TO_START,
             AUTHORITY_SCROLL_TO_END,
             AUTHORITY_SCROLL_TO_POSITION,
-            AUTHORITY_PREVIOUS_ITEM -> true
+            AUTHORITY_PREVIOUS_ITEM,
+            AUTHORITY_SCROLL_TO_ITEM_ID -> true
 
             else -> false
         }
@@ -62,6 +66,7 @@ internal object DivItemChangeActionHandler {
             AUTHORITY_SCROLL_TO_POSITION -> handleScrollTo(uri, animated, viewController)
             AUTHORITY_SCROLL_TO_END -> handleScrollToTheEnd(animated, viewController)
             AUTHORITY_SCROLL_TO_START -> handleScrollToTheStart(animated, viewController)
+            AUTHORITY_SCROLL_TO_ITEM_ID -> handleScrollToItemId(uri, animated, viewController, view)
             else -> false
         }
     }
@@ -78,7 +83,7 @@ internal object DivItemChangeActionHandler {
         }
         val item = try {
             rawItem.toInt()
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             KAssert.fail { "$rawItem is not a number" }
             return false
         }
@@ -152,11 +157,30 @@ internal object DivItemChangeActionHandler {
         return true
     }
 
+    private fun handleScrollToItemId(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController,
+        divView: DivViewFacade,
+    ): Boolean {
+        val id = uri.getQueryParameter(PARAM_ITEM_ID) ?: run {
+            KAssert.fail { "$PARAM_ITEM_ID is required to scroll to item with id" }
+            return false
+        }
+        try {
+            viewController.scrollToItemId(id, animated)
+        } catch (e: RuntimeException) {
+            (divView as? Div2View)?.logError(e)
+            return false
+        }
+        return true
+    }
+
     private fun Uri.getStepParam(default: Int = 1): Int {
         val rawStep = getQueryParameter(PARAM_STEP) ?: return default
         return try {
             rawStep.toInt()
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             KAssert.fail { "$rawStep is not a number" }
             default
         }
