@@ -1,3 +1,10 @@
+## 32.46.0 (April 20, 2026)
+
+* Added `set_cursor_position` action.
+* Changed the logic of redefining properties in templates in rare cases. This was done to match Android/iOS.
+* Updated `slider` ticks limits logic, the maximum number of ticks is now 1000.
+
+
 ## 32.43.0 (March 30, 2026)
 
 * Fixed an issue where `visibility_actions` were called inside a component with `visibility=invisible`.
