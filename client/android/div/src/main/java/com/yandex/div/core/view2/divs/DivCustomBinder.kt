@@ -49,11 +49,13 @@ internal class DivCustomBinder @Inject constructor(
         baseBinder.bindId(divView, view, null)
 
         val divValue = div.value
-        if (divCustomContainerViewAdapter.isCustomTypeSupported(divValue.customType)) {
-            bind(view, customView, oldDiv?.value, divValue, context,
-                { divCustomContainerViewAdapter.createView(divValue, divView, resolver, path) },
-                { divCustomContainerViewAdapter.bindView(it, divValue, divView, resolver, path) }
-            )
+        executeOnMainThreadBlocking {
+            if (divCustomContainerViewAdapter.isCustomTypeSupported(divValue.customType)) {
+                bind(view, customView, oldDiv?.value, divValue, context,
+                    { divCustomContainerViewAdapter.createView(divValue, divView, resolver, path) },
+                    { divCustomContainerViewAdapter.bindView(it, divValue, divView, resolver, path) }
+                )
+            }
         }
     }
 
