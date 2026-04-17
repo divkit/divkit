@@ -68,8 +68,6 @@ dependencies {
     implementation(libs.javax)
     compileOnly(libs.json)
 
-    "generatorImplementation"(libs.kotlin.stdlib)
-    "generatorImplementation"(libs.javax)
     "generatorCompileOnly"(libs.json)
     "generatorImplementation"(libs.kotlinpoet)
 
