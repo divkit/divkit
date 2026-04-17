@@ -1,0 +1,59 @@
+{
+  "description": "Two nested templates ('root' and 'nested') both declare '$items: items' — same link field AND same parameter name. Verifies that each template's 'items' parameter is scoped to that template: the outer root's 'items' value must not leak into the inner nested instance and overwrite its own 'items'.",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "items"
+    },
+    "root": {
+      "type": "container",
+      "$items": "items"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "items": [
+            {
+              "type": "nested",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "SAMPLE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "SAMPLE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

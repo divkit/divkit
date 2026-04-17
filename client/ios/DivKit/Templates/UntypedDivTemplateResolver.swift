@@ -80,11 +80,11 @@ final class UntypedDivTemplateResolver {
     let linkKeys = dict.keys.filter { $0.hasPrefix("$") }
     for linkKey in linkKeys {
       let key = String(linkKey.dropFirst())
-      guard dict[key] == nil else { continue }
       guard let linkName = dict[linkKey] as? String else { continue }
+      consumedParams.insert(linkName)
+      guard dict[key] == nil else { continue }
       guard let value = linkSource[linkName] else { continue }
       dict[key] = value
-      consumedParams.insert(linkName)
     }
 
     var filteredLinkSource = linkSource

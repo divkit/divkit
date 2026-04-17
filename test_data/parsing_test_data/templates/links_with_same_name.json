@@ -1,5 +1,5 @@
 {
-  "description": "Link with same name (items) defined in two templates",
+  "description": "Two templates ('nested_container' and 'row') each declare a '$items' link, but bind it to different parameter names ('content' and 'items'). Verifies that link resolution routes each template's 'items' field from its own declared parameter without cross-template interference.",
   "templates": {
     "root_container": {
       "type": "container"
