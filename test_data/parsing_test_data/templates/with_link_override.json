@@ -1,5 +1,5 @@
 {
-  "description": "Template with link that overriden in intermediate template and in card",
+  "description": "A '$text: textRef' link declared in the 'nested' template resolves against a 'textRef' value set at two levels: a default inside the intermediate 'root' template body and an override on the card itself. Verifies that the card-level value cascades down and wins over the intermediate template body's default.",
   "platforms": [
     "ios",
     "android"
