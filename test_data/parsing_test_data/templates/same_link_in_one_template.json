@@ -1,0 +1,47 @@
+{
+  "description": "Same ref name (content) used by top-level $-link ($text) and nested non-template $-link ($log_id in actions)",
+  "templates": {
+    "action_text": {
+      "type": "text",
+      "$text": "content",
+      "actions": [
+        {
+          "$log_id": "content",
+          "url": "action://do"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "action_text",
+          "content": "button"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "button",
+            "actions": [
+              {
+                "log_id": "button",
+                "url": "action://do"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

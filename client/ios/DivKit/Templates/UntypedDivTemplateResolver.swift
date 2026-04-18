@@ -76,35 +76,32 @@ final class UntypedDivTemplateResolver {
     linkSource: [String: Any]
   ) -> [String: Any] {
     var dict = dictionary
-    var consumedParams = Set<String>()
+    var linkFieldNames = Set<String>()
     let linkKeys = dict.keys.filter { $0.hasPrefix("$") }
     for linkKey in linkKeys {
       let key = String(linkKey.dropFirst())
+      linkFieldNames.insert(key)
       guard let linkName = dict[linkKey] as? String else { continue }
-      consumedParams.insert(linkName)
       guard dict[key] == nil else { continue }
       guard let value = linkSource[linkName] else { continue }
       dict[key] = value
     }
 
-    var filteredLinkSource = linkSource
-    for name in consumedParams {
-      filteredLinkSource.removeValue(forKey: name)
-    }
-
     var result: [String: Any] = [:]
     for (key, value) in dict {
       guard !key.hasPrefix("$") else { continue }
-      result[key] = resolveLinksInValue(value, linkSource: filteredLinkSource)
+      let childSource: [String: Any]? = linkFieldNames.contains(key) ? nil : linkSource
+      result[key] = resolveLinksInValue(value, linkSource: childSource)
     }
     return result
   }
 
   private func resolveLinksInValue(
     _ value: Any,
-    linkSource: [String: Any]
+    linkSource: [String: Any]?
   ) -> Any {
     if let dict = value as? [String: Any] {
+      let effectiveSource = linkSource ?? dict
       if let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
         var parameterNames = collectParameterNames(from: resolvedTemplate)
@@ -113,11 +110,11 @@ final class UntypedDivTemplateResolver {
         )
         return resolveInstanceLinks(
           in: dict,
-          linkSource: linkSource,
+          linkSource: effectiveSource,
           parameterNames: parameterNames
         )
       }
-      return resolveLinks(in: dict, linkSource: linkSource)
+      return resolveLinks(in: dict, linkSource: effectiveSource)
     }
     if let array = value as? [Any] {
       return array.map { resolveLinksInValue($0, linkSource: linkSource) }

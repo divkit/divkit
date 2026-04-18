@@ -1,0 +1,50 @@
+{
+  "description": "Same ref name (dir) consumed by parent $-link ($orientation) and needed by child template instance ($text)",
+  "templates": {
+    "labeled_container": {
+      "type": "container",
+      "$orientation": "dir",
+      "items": [
+        {
+          "type": "labeled_text"
+        }
+      ]
+    },
+    "labeled_text": {
+      "type": "text",
+      "$text": "dir"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "labeled_container",
+          "dir": "vertical"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "vertical"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
