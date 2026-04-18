@@ -32,6 +32,7 @@ internal fun DivBlockView(
 
         when (data) {
             is Div.Container -> DivContainerView(modifier, data.value)
+            is Div.Custom -> DivCustomView(modifier.applyPaddings(data), data.value)
             is Div.Gallery -> DivGalleryView(modifier, data.value)
             is Div.Image -> DivImageView(modifier.applyPaddings(data), data.value)
             is Div.Input -> DivInputView(modifier.applyPaddings(data), data.value)
@@ -39,7 +40,6 @@ internal fun DivBlockView(
             is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
             is Div.State -> DivStateView(modifier, data.value)
             is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
-            is Div.Custom -> NotSupported("custom")
             is Div.GifImage -> NotSupported("gif")
             is Div.Grid -> NotSupported("grid")
             is Div.Indicator -> NotSupported("indicator")

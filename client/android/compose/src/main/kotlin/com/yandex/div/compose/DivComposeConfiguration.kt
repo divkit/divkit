@@ -1,8 +1,12 @@
 package com.yandex.div.compose
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.yandex.div.compose.actions.DivExternalActionHandler
+import com.yandex.div.compose.custom.DivCustomEnvironment
+import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.dagger.Names
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -30,6 +34,9 @@ class DivComposeConfiguration(
     val actionHandler: DivExternalActionHandler = defaultActionHandler,
 
     @get:Provides
+    val customViewFactory: DivCustomViewFactory = defaultCustomViewFactory,
+
+    @get:Provides
     val fontFamilyProvider: DivFontFamilyProvider = defaultFontFamilyProvider,
 
     @get:Provides
@@ -41,6 +48,14 @@ class DivComposeConfiguration(
 )
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
+
+private val defaultCustomViewFactory = object : DivCustomViewFactory {
+    @Composable
+    override fun Content(
+        environment: DivCustomEnvironment,
+        modifier: Modifier,
+    ) = Unit
+}
 
 private val defaultFontFamilyProvider = object : DivFontFamilyProvider {
     override fun getFontFamily(fontFamilyName: String?, weight: FontWeight): FontFamily {
