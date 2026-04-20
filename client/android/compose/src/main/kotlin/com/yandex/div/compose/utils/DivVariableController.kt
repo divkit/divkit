@@ -9,13 +9,14 @@ import com.yandex.div.data.Variable
 
 @Composable
 internal fun DivVariableController.observedVariableValue(name: String): String? {
-    val variable = this.get(name)
+    val variable = get(name)
     if (variable == null) {
-        reporter.reportError("variable [$name] not found")
+        reportError("Variable [$name] not found")
         return null
     }
+
     if (variable !is Variable.StringVariable) {
-        reporter.reportError("variable [$name] is not a string variable")
+        reportError("Variable [$name] is not a string variable")
         return null
     }
 

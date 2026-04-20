@@ -18,8 +18,10 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
+import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,12 +32,28 @@ class DivViewTest {
     @get:Rule
     val rule = createComposeRule()
 
+    private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
     private val configuration = DivComposeConfiguration(
-        reporter = TestReporter(),
+        reporter = reporter,
         variableController = variableController
     )
+
+    @Test
+    fun `error is reported if data is empty`() {
+        reporter.failOnError = false
+
+        rule.setContent(
+            configuration = configuration,
+            data = DivData(
+                logId = "test",
+                states = emptyList()
+            )
+        )
+
+        assertEquals("Empty data", reporter.lastError)
+    }
 
     @Test
     fun `simple text is displayed`() {

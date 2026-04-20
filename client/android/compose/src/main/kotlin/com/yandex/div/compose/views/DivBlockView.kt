@@ -10,7 +10,7 @@ import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.input.DivInputView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.text.DivTextView
@@ -54,5 +54,5 @@ internal fun DivBlockView(
 
 @Composable
 private fun NotSupported(name: String) {
-    reporter.reportError("Element not supported: $name")
+    reportError("Element not supported: $name")
 }

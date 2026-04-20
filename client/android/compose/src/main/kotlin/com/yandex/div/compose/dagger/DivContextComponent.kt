@@ -5,7 +5,6 @@ import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.DivFontFamilyProvider
-import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.internal.DivDebugConfiguration
@@ -30,7 +29,6 @@ internal interface DivContextComponent {
     val debugFeatures: DivDebugFeatures
     val fontFamilyProvider: DivFontFamilyProvider
     val imageLoader: ImageLoader
-    val reporter: DivReporter
     val viewContextStorage: DivViewContextStorage
 
     @get:Named(Names.HOST_VARIABLES)

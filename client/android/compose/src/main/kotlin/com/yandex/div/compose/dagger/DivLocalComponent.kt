@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import com.yandex.div.compose.DivException
+import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.triggers.DivTriggerStorage
@@ -29,6 +30,7 @@ internal interface DivLocalComponent {
     val actionHandlingContext: DivActionHandlingContext
     val expressionResolver: ExpressionResolver
     val functionProvider: FunctionProviderDecorator
+    val reporter: DivReporter
     val triggerStorage: DivTriggerStorage
     val variableAdapter: DivVariableAdapter
     val variableController: DivVariableController

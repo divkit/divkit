@@ -7,7 +7,7 @@ import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.utils.divContext
-import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivData
@@ -34,17 +34,6 @@ fun DivView(
     data: DivData,
     modifier: Modifier = Modifier
 ) {
-    val states = data.states
-    if (states.size > 1) {
-        reporter.reportError("Multiple root states not supported")
-    }
-
-    val div = states.firstOrNull()?.div
-    if (div == null) {
-        reporter.reportError("Empty data")
-        return
-    }
-
     val viewContext = divContext.getViewContext(data)
     val localComponent = viewContext.rootLocalComponent
     localComponent.triggerStorage.observe()
@@ -52,6 +41,17 @@ fun DivView(
         LocalDivViewContext provides viewContext,
         LocalComponent provides localComponent
     ) {
+        val states = data.states
+        if (states.size > 1) {
+            reportError("Multiple root states not supported")
+        }
+
+        val div = states.firstOrNull()?.div
+        if (div == null) {
+            reportError("Empty data")
+            return@CompositionLocalProvider
+        }
+
         DivBlockView(
             data = div,
             modifier = modifier

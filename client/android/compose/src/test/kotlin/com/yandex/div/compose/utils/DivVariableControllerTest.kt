@@ -5,15 +5,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivComposeConfiguration
-import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import org.junit.Assert.assertEquals
@@ -21,8 +17,6 @@ import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivVariableControllerTest {
@@ -33,13 +27,10 @@ class DivVariableControllerTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
-    private val localComponent = mock<DivLocalComponent> {
-        on { expressionResolver } doReturn createExpressionResolver(
-            reporter = reporter,
-            variableController = variableController
-        )
-        on { variableController } doReturn variableController
-    }
+    private val localComponent = mockLocalComponent(
+        reporter = reporter,
+        variableController = variableController
+    )
 
     @Test
     fun `returns current value of string variable`() {
@@ -73,7 +64,7 @@ class DivVariableControllerTest {
             variableController.observedVariableValue("missing_var")
         }
 
-        assertEquals("variable [missing_var] not found", reporter.lastError)
+        assertEquals("Variable [missing_var] not found", reporter.lastError)
     }
 
     @Test
@@ -98,7 +89,7 @@ class DivVariableControllerTest {
             variableController.observedVariableValue("flag")
         }
 
-        assertEquals("variable [flag] is not a string variable", reporter.lastError)
+        assertEquals("Variable [flag] is not a string variable", reporter.lastError)
     }
 
     @Test
@@ -145,17 +136,7 @@ class DivVariableControllerTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
-            val divContext = DivContext(
-                baseContext = LocalContext.current,
-                configuration = DivComposeConfiguration(
-                    reporter = reporter,
-                    variableController = variableController
-                )
-            )
-            CompositionLocalProvider(
-                LocalContext provides divContext,
-                LocalComponent provides localComponent,
-            ) {
+            CompositionLocalProvider(LocalComponent provides localComponent) {
                 content()
             }
         }

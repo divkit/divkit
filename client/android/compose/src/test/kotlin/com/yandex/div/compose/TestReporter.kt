@@ -3,21 +3,29 @@ package com.yandex.div.compose
 import org.junit.Assert.fail
 
 class TestReporter : DivReporter() {
+    private val _errors = mutableListOf<String>()
+    private val _warnings = mutableListOf<String>()
 
     var failOnError = true
 
-    var lastError: String? = null
-        private set
+    val errors: List<String>
+        get() = _errors
 
-    var lastWarning: String? = null
-        private set
+    val warnings: List<String>
+        get() = _warnings
+
+    val lastError: String?
+        get() = errors.lastOrNull()
+
+    val lastWarning: String?
+        get() = warnings.lastOrNull()
 
     override fun reportWarning(message: String) {
-        lastWarning = message
+        _warnings.add(message)
     }
 
     override fun reportError(message: String) {
-        lastError = message
+        _errors.add(message)
 
         if (failOnError) {
             fail(message)
@@ -25,12 +33,14 @@ class TestReporter : DivReporter() {
     }
 
     override fun reportError(e: Exception) {
-        lastError = e.message
+        _errors.add(e.message ?: format(e))
 
         if (failOnError) {
             fail(format(e))
         }
     }
+
+    fun popErrors(): List<String> = errors.toList().also { _errors.clear() }
 }
 
 private fun format(e: Throwable): String {

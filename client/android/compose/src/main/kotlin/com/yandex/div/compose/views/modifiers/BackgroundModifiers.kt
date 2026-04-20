@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.reporter
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivNinePatchBackground
 
@@ -34,7 +34,7 @@ internal fun Modifier.backgrounds(value: List<DivBackground>): Modifier {
             }
 
             is DivBackground.NinePatch ->
-                reporter.reportError("Background not supported: ${DivNinePatchBackground.TYPE}")
+                reportError("Background not supported: ${DivNinePatchBackground.TYPE}")
         }
     }
     return modifier
