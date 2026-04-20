@@ -11,6 +11,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
@@ -1171,6 +1172,7 @@ class Div2View private constructor(
 
     override fun getConfig(): DivViewConfig = config
 
+    @AnyThread
     override fun getDivTag(): DivDataTag = dataTag
 
     override fun subscribe(

@@ -6,6 +6,8 @@ android {
             all {
                 jvmArgs '-noverify'
 
+                systemProperty 'robolectric.enabledSdks', '35'
+
                 testLogging {
                     events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
                 }
