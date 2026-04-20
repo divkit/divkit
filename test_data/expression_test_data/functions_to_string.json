@@ -267,6 +267,32 @@
       ]
     },
     {
+      "expression": "@{toString(dict_with_escaped_string)}",
+      "expected": {
+        "type": "string",
+        "value": "{\"backslash\":\"\\\\\",\"backspace\":\"\\b\",\"carriage_return\":\"\\r\",\"double_quote\":\"\\\"\",\"form_feed\":\"\\f\",\"forward_slash\":\"/\",\"newline\":\"\\n\",\"tab\":\"\\t\"}"
+      },
+      "variables": [
+        {
+          "name": "dict_with_escaped_string",
+          "type": "dict",
+          "value": {
+            "backslash": "\\",
+            "double_quote": "\"",
+            "forward_slash": "/",
+            "backspace": "\b",
+            "form_feed": "\f",
+            "newline": "\n",
+            "carriage_return": "\r",
+            "tab": "\t"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "expression": "@{toString('abc')}",
       "expected": {
         "type": "string",

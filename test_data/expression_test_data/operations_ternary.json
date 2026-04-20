@@ -28,11 +28,13 @@
       },
       "variables": [
         {
-            "name": "source",
-            "type": "array",
-            "value": [{
-                "text": "success"
-            }]
+          "name": "source",
+          "type": "array",
+          "value": [
+            {
+              "text": "success"
+            }
+          ]
         }
       ],
       "platforms": [

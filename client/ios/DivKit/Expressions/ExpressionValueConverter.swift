@@ -56,11 +56,18 @@ enum ExpressionValueConverter {
       dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
       return dateFormatter.string(from: date)
     case let array as DivArray:
-      return "[\(array.map { formatValue($0) }.joined(separator: ","))]"
+      return "[\(array.map { formatDictJsonValue($0) }.joined(separator: ","))]"
     case let dict as DivDictionary:
       let properties = dict
-        .keys.sorted()
-        .map { "\"\($0)\":\(formatValue(dict[$0] ?? "null"))" }
+        .keys
+        .sorted()
+        .map { key -> String in
+          let fragment = dict[key].map {
+            formatDictJsonValue($0)
+          } ?? "null"
+
+          return "\"\(key)\":\(fragment)"
+        }
         .joined(separator: ",")
       return "{\(properties)}"
     default:
@@ -157,12 +164,37 @@ func formatTypeForError(_ value: Any) -> String {
   return formatTypeForError(valueType)
 }
 
-private func formatValue(_ value: Any) -> String {
+/// JSON-like fragment for dict/array `stringify` (quoted string literals use
+/// `escapeForStringInterpolation`).
+private func formatDictJsonValue(_ value: Any) -> String {
+  let unwrapped = (value as? AnyHashable).map(\.base) ?? value
+  let encoder = JSONEncoder()
+  encoder.outputFormatting = .withoutEscapingSlashes
+
+  return if let scalar = jsonScalarString(unwrapped),
+            let data = try? encoder.encode(scalar),
+            let resultString = String(data: data, encoding: .utf8) {
+    resultString
+  } else {
+    ExpressionValueConverter.stringify(unwrapped)
+  }
+}
+
+/// String values inside dicts may be `String`, bridged `NSString`, `Substring`, `Character`, etc.
+/// Without this, `stringify` falls through to `default` and prints raw quotes / breaks JSON-like
+/// output.
+private func jsonScalarString(_ value: Any) -> String? {
   switch value {
-  case is String:
-    "\"\(value)\""
+  case let string as String:
+    string
+  case let nsString as NSString:
+    nsString as String
+  case let substring as Substring:
+    String(substring)
+  case let character as Character:
+    String(character)
   default:
-    ExpressionValueConverter.stringify(value)
+    nil
   }
 }
 

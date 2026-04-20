@@ -161,6 +161,32 @@
       ]
     },
     {
+      "expression": "val: @{dict_var}",
+      "expected": {
+        "type": "string",
+        "value": "val: {\"backslash\":\"\\\\\",\"backspace\":\"\\b\",\"carriage_return\":\"\\r\",\"double_quote\":\"\\\"\",\"form_feed\":\"\\f\",\"forward_slash\":\"/\",\"newline\":\"\\n\",\"tab\":\"\\t\"}"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "backslash": "\\",
+            "double_quote": "\"",
+            "forward_slash": "/",
+            "backspace": "\b",
+            "form_feed": "\f",
+            "newline": "\n",
+            "carriage_return": "\r",
+            "tab": "\t"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "expression": "@{url_var}",
       "expected": {
         "type": "url",

@@ -344,8 +344,7 @@
       "expression": "@{integerArray.filter(manyFunc)}",
       "expected": {
         "type": "array",
-        "value": [
-        ]
+        "value": []
       },
       "variables": [
         {
