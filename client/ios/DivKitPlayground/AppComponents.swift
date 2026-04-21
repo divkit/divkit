@@ -63,6 +63,7 @@ enum AppComponents {
         ShineExtensionHandler(),
         InputAutocorrectionExtensionHandler(),
         InputPropertiesExtensionHandler(),
+        RasterizeExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(
         initializeTriggerOnSet: false,
