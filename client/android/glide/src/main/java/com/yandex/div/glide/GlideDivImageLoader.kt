@@ -45,7 +45,13 @@ class GlideDivImageLoader @JvmOverloads constructor(
 
     override fun needLimitBitmapSize() = false
 
-    override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+    override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback) =
+        loadImage(imageUrl, callback, canLimitSize = true)
+
+    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback) =
+        loadImage(imageUrl, callback, canLimitSize = false)
+
+    private fun loadImage(imageUrl: String, callback: DivImageDownloadCallback, canLimitSize: Boolean): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         // create target to be able to cancel loading
         val target = createTarget<Drawable>()
@@ -53,7 +59,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
         // load result will be handled by RequestListener to get dataSource
         Glide.with(context).load(imageUri)
             .set(Option.memory(KEY_SVG), SvgDecoder.isSvg(imageUrl))
-            .limitImageBitmapSizeIfNeed()
+            .limitImageBitmapSizeIfNeed(canLimitSize)
             .listener(ImageRequestListener(callback))
             .into(target)
 
@@ -99,12 +105,10 @@ class GlideDivImageLoader @JvmOverloads constructor(
         }
     }
 
-    private fun <T : BaseRequestOptions<T>> BaseRequestOptions<T>.limitImageBitmapSizeIfNeed(): T =
-        if (limitImageBitmapSizeEnabled) {
-            override(maxDisplaySize, maxDisplaySize).centerInside()
-        } else {
-            override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-        }
+    private fun <T : BaseRequestOptions<T>> T.limitImageBitmapSizeIfNeed(canLimitSize: Boolean): T {
+        if (!limitImageBitmapSizeEnabled || !canLimitSize) return this
+        return override(maxDisplaySize, maxDisplaySize).optionalCenterInside()
+    }
 
     private companion object {
 
