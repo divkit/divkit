@@ -4,6 +4,7 @@ import androidx.annotation.AnyThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivErrorsReporter
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
@@ -20,7 +21,7 @@ internal class ErrorCollector(
 
     private val mutex = Any()
 
-    private val observers = mutableSetOf<ErrorObserver>()
+    private val observers = ObserverList<ErrorObserver>()
     private val runtimeErrors = mutableListOf<Throwable>()
     private var parsingErrors = emptyList<Throwable>()
     private var warnings = mutableListOf<Throwable>()
@@ -52,9 +53,11 @@ internal class ErrorCollector(
 
     private fun notifyObservers(): Unit = synchronized(mutex) {
         errorsAreValid = false
-        if (observers.isEmpty()) return
+        if (observers.isEmpty) return
         rebuildErrors()
-        observers.forEach { it(errors, warnings) }
+        observers.forEach { observer ->
+            observer.invoke(errors, warnings)
+        }
     }
 
     private fun rebuildErrors() {
@@ -66,10 +69,14 @@ internal class ErrorCollector(
     }
 
     fun observeAndGet(observer: ErrorObserver): Disposable = synchronized(mutex)  {
-        observers.add(observer)
+        observers.addObserver(observer)
         rebuildErrors()
         observer(errors, warnings)
-        return Disposable { observers.remove(observer) }
+        return Disposable {
+            synchronized(mutex) {
+                observers.removeObserver(observer)
+            }
+        }
     }
 
     fun attachParsingErrors(): Unit = synchronized(mutex)  {
