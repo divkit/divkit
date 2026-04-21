@@ -814,6 +814,12 @@
                 instance.scrollToEnd?.(actionTyped.animated ?? true);
                 break;
             }
+            case 'item_id': {
+                if (actionTyped.destination.value && typeof actionTyped.destination.value === 'string') {
+                    instance.scrollToItemId?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                }
+                break;
+            }
             default: {
                 log(wrapError(new Error('Unknown destination for "scroll_to" action'), {
                     additional: {
@@ -863,18 +869,21 @@
 
     function switchElementAction(
         type: 'set_current_item' | 'set_previous_item' | 'set_next_item' | 'scroll_to_start' |
-            'scroll_to_end' | 'scroll_backward' | 'scroll_forward' | 'scroll_to_position',
+            'scroll_to_end' | 'scroll_backward' | 'scroll_forward' | 'scroll_to_position' |
+            'scroll_to_item_id',
         id: string | null,
         {
             item,
             step,
             overflow,
-            animated
+            animated,
+            itemId
         }: {
             item?: string | null;
             step?: string | null;
             overflow?: string | null;
             animated?: string | null;
+            itemId?: string | null;
         }
     ): void {
         if (!id) {
@@ -941,6 +950,11 @@
                 return;
             case 'scroll_to_position':
                 instance.scrollToPosition?.(stepVal, isAnimated);
+                return;
+            case 'scroll_to_item_id':
+                if (itemId && typeof itemId === 'string') {
+                    instance.scrollToItemId?.(itemId, isAnimated);
+                }
                 return;
         }
     }
@@ -1503,11 +1517,13 @@
                     case 'scroll_backward':
                     case 'scroll_forward':
                     case 'scroll_to_position':
+                    case 'scroll_to_item_id':
                         switchElementAction(parts[1], params.get('id'), {
                             item: params.get('item'),
                             step: params.get('step'),
                             overflow: params.get('overflow'),
-                            animated: params.get('animated')
+                            animated: params.get('animated'),
+                            itemId: params.get('item_id')
                         });
                         break;
                     case 'set_variable':

@@ -361,8 +361,13 @@ export interface ActionScrollToDestinationEnd {
     type: 'end';
 }
 
+export interface ActionScrollToDestinationItemId {
+    type: 'item_id';
+    value: string;
+}
+
 export type ActionScrollToDestination = ActionScrollToDestinationOffset | ActionScrollToDestinationIndex |
-    ActionScrollToDestinationStart | ActionScrollToDestinationEnd;
+    ActionScrollToDestinationStart | ActionScrollToDestinationEnd | ActionScrollToDestinationItemId;
 
 export interface ActionScrollTo {
     type: 'scroll_to';

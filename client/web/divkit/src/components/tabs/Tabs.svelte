@@ -771,6 +771,27 @@
                         setSelected(clampIndex(selected + step, overflow || 'clamp'), false, animated || true);
                     }
                 },
+                scrollToItemId(itemId, animated) {
+                    const targetItems = items
+                        .map((it, index) => it.div?.id === itemId ? index : undefined)
+                        .filter(it => it !== undefined);
+
+                    if (targetItems.length === 1) {
+                        setSelected(targetItems[0], false, animated);
+                    } else if (!targetItems.length) {
+                        componentContext.logError(wrapError(new Error('There are no items with id'), {
+                            additional: {
+                                id: itemId
+                            }
+                        }));
+                    } else {
+                        componentContext.logError(wrapError(new Error('There are several items with id'), {
+                            additional: {
+                                id: itemId
+                            }
+                        }));
+                    }
+                },
             });
         }
     }

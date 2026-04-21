@@ -649,6 +649,27 @@
                         scrollToPagerItem(clampIndex(allToVisibleMap[currentItem] + step, overflow || 'clamp'), animated);
                     }
                 },
+                scrollToItemId(itemId, animated) {
+                    const targetItems = items
+                        .map((it, index) => it.json.id === itemId ? index : undefined)
+                        .filter(it => it !== undefined);
+
+                    if (targetItems.length === 1) {
+                        scrollToPagerItem(targetItems[0], animated);
+                    } else if (!targetItems.length) {
+                        componentContext.logError(wrapError(new Error('There are no items with id'), {
+                            additional: {
+                                id: itemId
+                            }
+                        }));
+                    } else {
+                        componentContext.logError(wrapError(new Error('There are several items with id'), {
+                            additional: {
+                                id: itemId
+                            }
+                        }));
+                    }
+                },
             }, 'warn');
         }
     }

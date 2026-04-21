@@ -13,4 +13,5 @@ export interface SwitchElements {
         overflow?: Overflow;
         animated?: boolean;
     }) => void;
+    scrollToItemId?: (itemId: string, animated: boolean) => void;
 }
