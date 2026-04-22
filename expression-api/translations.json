@@ -1780,6 +1780,10 @@
     "en": "Stored value name.",
     "ru": "Имя сохраненного значения."
   },
+  "getstoredarrayvalue_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the exception will be thrown.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет выброшено исключение."
+  },
   "getstoredbooleanvalue_string_boolean": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
@@ -1791,6 +1795,10 @@
   "getstoredbooleanvalue_string_boolean_arg1": {
     "en": "Fallback value.",
     "ru": "Резервное значение."
+  },
+  "getstoredbooleanvalue_string_boolean_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
   "getstoredcolorvalue_string_color": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
@@ -1804,6 +1812,10 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
+  "getstoredcolorvalue_string_color_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
   "getstoredcolorvalue_string_string": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
@@ -1816,6 +1828,10 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
+  "getstoredcolorvalue_string_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
   "getstoreddictvalue_string": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет выброшено исключение."
@@ -1823,6 +1839,10 @@
   "getstoreddictvalue_string_arg0": {
     "en": "Stored value name.",
     "ru": "Имя сохраненного значения."
+  },
+  "getstoreddictvalue_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the exception will be thrown.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет выброшено исключение."
   },
   "getstoredintegervalue_string_integer": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
@@ -1836,6 +1856,10 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
+  "getstoredintegervalue_string_integer_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
   "getstorednumbervalue_string_number": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
@@ -1847,6 +1871,10 @@
   "getstorednumbervalue_string_number_arg1": {
     "en": "Fallback value.",
     "ru": "Резервное значение."
+  },
+  "getstorednumbervalue_string_number_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
   "getstoredstringvalue_string_string": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
@@ -1860,6 +1888,10 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
+  "getstoredstringvalue_string_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
   "getstoredurlvalue_string_string": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
@@ -1872,6 +1904,10 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
+  "getstoredurlvalue_string_string_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
   "getstoredurlvalue_string_url": {
     "en": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует или имеет неправильный тип, будет возвращено значение по умолчанию."
@@ -1883,6 +1919,14 @@
   "getstoredurlvalue_string_url_arg1": {
     "en": "Fallback value.",
     "ru": "Резервное значение."
+  },
+  "getstoredurlvalue_string_url_string": {
+    "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
+    "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
+  },
+  "getstoredvalue_scope": {
+    "en": "Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.",
+    "ru": "Область хранения: `global` — не привязано к конкретной карточке; `card` — привязано к текущей карточке. На Android карточка задаётся с помощью `DivDataTag`, на iOS — параметром `cardId`, в Web значение области видимости передаётся в `Store`, получение переменных для этой области реализует разработчик, интегрирующий DivKit."
   },
   "getstringvalue_string_string": {
     "en": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",

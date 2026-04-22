@@ -434,6 +434,34 @@
       ]
     },
     {
+      "name": "getStoredIntegerValue",
+      "description": {
+        "$ref": "translations.json#/getstoredintegervalue_string_integer_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredintegervalue_string_integer_arg0"
+          }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getstoredintegervalue_string_integer_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "integer",
+      "platforms": []
+    },
+    {
       "name": "getStoredNumberValue",
       "description": {
         "$ref": "translations.json#/getstorednumbervalue_string_number"
@@ -461,6 +489,34 @@
       ]
     },
     {
+      "name": "getStoredNumberValue",
+      "description": {
+        "$ref": "translations.json#/getstorednumbervalue_string_number_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstorednumbervalue_string_number_arg0"
+          }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getstorednumbervalue_string_number_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "number",
+      "platforms": []
+    },
+    {
       "name": "getStoredStringValue",
       "description": {
         "$ref": "translations.json#/getstoredstringvalue_string_string"
@@ -486,6 +542,34 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "name": "getStoredStringValue",
+      "description": {
+        "$ref": "translations.json#/getstoredstringvalue_string_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredstringvalue_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredstringvalue_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "string",
+      "platforms": []
     },
     {
       "name": "getStoredUrlValue",
@@ -517,6 +601,34 @@
     {
       "name": "getStoredUrlValue",
       "description": {
+        "$ref": "translations.json#/getstoredurlvalue_string_url_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredurlvalue_string_url_arg0"
+          }
+        },
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getstoredurlvalue_string_url_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getStoredUrlValue",
+      "description": {
         "$ref": "translations.json#/getstoredurlvalue_string_string"
       },
       "arguments": [
@@ -540,6 +652,34 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "name": "getStoredUrlValue",
+      "description": {
+        "$ref": "translations.json#/getstoredurlvalue_string_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredurlvalue_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredurlvalue_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "url",
+      "platforms": []
     },
     {
       "name": "getStoredColorValue",
@@ -571,6 +711,34 @@
     {
       "name": "getStoredColorValue",
       "description": {
+        "$ref": "translations.json#/getstoredcolorvalue_string_color_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredcolorvalue_string_color_arg0"
+          }
+        },
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getstoredcolorvalue_string_color_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": []
+    },
+    {
+      "name": "getStoredColorValue",
+      "description": {
         "$ref": "translations.json#/getstoredcolorvalue_string_string"
       },
       "arguments": [
@@ -594,6 +762,34 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "name": "getStoredColorValue",
+      "description": {
+        "$ref": "translations.json#/getstoredcolorvalue_string_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredcolorvalue_string_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredcolorvalue_string_string_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": []
     },
     {
       "name": "getStoredBooleanValue",
@@ -623,6 +819,34 @@
       ]
     },
     {
+      "name": "getStoredBooleanValue",
+      "description": {
+        "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_arg0"
+          }
+        },
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_arg1"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "boolean",
+      "platforms": []
+    },
+    {
       "name": "getStoredArrayValue",
       "description": {
         "$ref": "translations.json#/getstoredarrayvalue_string"
@@ -643,6 +867,28 @@
       ]
     },
     {
+      "name": "getStoredArrayValue",
+      "description": {
+        "$ref": "translations.json#/getstoredarrayvalue_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredarrayvalue_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "array",
+      "platforms": []
+    },
+    {
       "name": "getStoredDictValue",
       "description": {
         "$ref": "translations.json#/getstoreddictvalue_string"
@@ -661,6 +907,28 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "getStoredDictValue",
+      "description": {
+        "$ref": "translations.json#/getstoreddictvalue_string_string"
+      },
+      "arguments": [
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoreddictvalue_string_arg0"
+          }
+        },
+        {
+          "type": "string",
+          "description": {
+            "$ref": "translations.json#/getstoredvalue_scope"
+          }
+        }
+      ],
+      "return_type": "dict",
+      "platforms": []
     }
   ]
 }

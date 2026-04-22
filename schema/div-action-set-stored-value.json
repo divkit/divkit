@@ -19,6 +19,15 @@
     "lifetime": {
       "$description": "translations.json#/div_action_set_stored_value_lifetime",
       "type": "integer"
+    },
+    "scope": {
+      "$description": "translations.json#/div_action_set_stored_value_scope",
+      "type": "string",
+      "enum": [
+        "global",
+        "card"
+      ],
+      "platforms": []
     }
   },
   "platforms": [

@@ -263,6 +263,10 @@
     "en": "Saved value.",
     "ru": "Сохраняемое значение."
   },
+  "div_action_set_stored_value_scope": {
+    "en": "Scope of the stored variable:<li>`global` — not bound to a specific card (available for any card);</li><li>`card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement saving variables for that scope.</li>/nDefault value for Android and iOS is `global'. For Web, the implementation depends entirely on the developer.",
+    "ru": "Область видимости сохраняемой переменной:<li>`global` — не привязана к конкретной карточке (доступна для любой);</li><li>`card` — привязана к текущей карточке. На Android карточка задаётся с помощью `DivDataTag`, на iOS — параметром `cardId`, в Web значение области видимости передаётся в `Store`, сохранение переменных для этой области реализует разработчик, интегрирующий DivKit.</li>/nЗначение по умолчанию для Android и iOS - `global`, для Web реализация полностью зависит от разработчика."
+  },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"
