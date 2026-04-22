@@ -107,7 +107,7 @@ public struct GalleryViewState: ElementState, Equatable {
     }
 
     return lhs.contentPosition == rhs.contentPosition
-      && lhs.itemsCount == lhs.itemsCount
+      && lhs.itemsCount == rhs.itemsCount
       && lhs.isScrolling == rhs.isScrolling
       && areScrollRangesEqual
       && lhs.animated == rhs.animated

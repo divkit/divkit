@@ -129,15 +129,19 @@ public final class GalleryView: BlockView {
     layoutReporter?.willLayoutSubviews()
     collectionView.frame = bounds
 
+    var shouldResync = false
     if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
       updateLayout(to: model)
       updateInfiniteScrollIfNeeded()
       setState(stateWithScrollRange, notifyingObservers: true)
+      shouldResync = true
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {
         updateContentOffset(to: state.contentPosition, animated: false)
       }
+    } else if shouldResync {
+      resyncPagerContentOffset()
     }
     deferredStateSetting = .idle
     layoutReporter?.didLayoutSubviews()
@@ -190,7 +194,8 @@ public final class GalleryView: BlockView {
 
     updateInfiniteScrollIfNeeded()
 
-    if oldState != self.state {
+    let willHandlePositionChange = oldState != self.state
+    if willHandlePositionChange {
       configureByNewState(
         oldContentPosition: oldState?.contentPosition,
         newLayout: oldModel?.path != model.path
@@ -283,10 +288,26 @@ public final class GalleryView: BlockView {
     case .default:
       scrollHandler.clearPager()
     case .autoPaging, .fixedPaging:
+      let initialPagerOffset: CGFloat? = if case let .paging(index) = state.contentPosition {
+        layout.contentOffset(pageIndex: index)
+      } else {
+        nil
+      }
       scrollHandler.configurePager(
         pageOrigins: layout.pageOrigins,
-        isHorizontal: model.direction.isHorizontal
+        isHorizontal: model.direction.isHorizontal,
+        initialContentOffset: initialPagerOffset
       )
+    }
+  }
+
+  private func resyncPagerContentOffset() {
+    guard let model,
+          !model.scrollMode.isDefault,
+          case .paging = state.contentPosition else { return }
+
+    collectionView.performWithDetachedDelegate {
+      updateContentOffset(to: state.contentPosition, animated: false)
     }
   }
 

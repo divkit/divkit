@@ -80,7 +80,11 @@ final class ScrollHandler {
     self.layout = layout
   }
 
-  func configurePager(pageOrigins: [CGFloat], isHorizontal: Bool) {
+  func configurePager(
+    pageOrigins: [CGFloat],
+    isHorizontal: Bool,
+    initialContentOffset: CGFloat? = nil
+  ) {
     if contentPager == nil {
       contentPager = ScrollableContentPager()
     }
@@ -89,7 +93,8 @@ final class ScrollHandler {
       withPagingEnabled: true,
       isHorizontal: isHorizontal
     )
-    contentPager?.setInitialOffset(pageOrigins.first ?? .zero)
+    let offset = initialContentOffset ?? pageOrigins.first ?? .zero
+    contentPager?.setInitialOffset(offset)
   }
 
   func clearPager() {

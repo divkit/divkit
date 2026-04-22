@@ -394,7 +394,7 @@ final class ScrollActionHandlerTests: XCTestCase {
     handleScrollBy(itemCount: 1)
 
     XCTAssertEqual(
-      pagerWithInfiniteScrollState(index: 5, itemCount: 5),
+      pagerWithInfiniteScrollState(index: 0, itemCount: 5),
       getState()
     )
     XCTAssertTrue(isUpdateCardCalled)

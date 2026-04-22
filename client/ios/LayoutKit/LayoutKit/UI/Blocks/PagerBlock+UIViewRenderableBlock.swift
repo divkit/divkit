@@ -138,15 +138,9 @@ extension PagerView: ElementStateObserver {
       return
     }
 
-    let currentPage = (Int(pageIndex.rounded()) - model.infiniteCorrection)
-    let currentPageNormalized = switch currentPage {
-    case 0..<model.itemsCountWithoutInfinite:
-      currentPage
-    case ..<0:
-      model.itemsCountWithoutInfinite - 1
-    default:
-      0
-    }
+    let rawRealPage = Int(pageIndex.rounded()) - model.infiniteCorrection
+    let lastPage = max(0, model.itemsCountWithoutInfinite - 1)
+    let currentPageNormalized = clamp(rawRealPage, min: 0, max: lastPage)
 
     setState(
       path: model.path,

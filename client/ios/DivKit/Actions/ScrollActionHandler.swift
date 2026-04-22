@@ -364,8 +364,14 @@ extension PagerViewState: CollectionTypeViewState {
 
   func normalizeCurrentIndex(overflow: OverflowMode, withIncrement increment: Int = 0) -> Int {
     let value = currentItemIndex + increment
-
-    return isInfiniteScrollable ? value : normalizeIndex(value: value, overflow: overflow)
+    if isInfiniteScrollable {
+      // Storage keeps real page indices 0 ..< numberOfPages only. Unchecked `value` used to write
+      // out-of-range pages; always using caller `overflow` with `.clamp` pinned the last page so
+      // `scroll_to` / scroll-by actions never advanced the carousel. Ring matches infinite pager
+      // UX.
+      return normalizeIndex(value: value, overflow: .ring)
+    }
+    return normalizeIndex(value: value, overflow: overflow)
   }
 }
 

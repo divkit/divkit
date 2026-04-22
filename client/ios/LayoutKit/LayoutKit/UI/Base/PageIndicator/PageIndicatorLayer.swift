@@ -5,6 +5,14 @@ import VGSL
 typealias Scale = (x: CGFloat, y: CGFloat)
 
 final class ScrollPageIndicatorLayer: CALayer {
+  override var bounds: CGRect {
+    didSet {
+      guard oldValue.size != bounds.size else { return }
+      _cachedParams = nil
+      setNeedsDisplay()
+    }
+  }
+
   @NSManaged var currentIndexPosition: CGFloat
   var numberOfPages = 0
   var configuration = PageIndicatorConfiguration(
