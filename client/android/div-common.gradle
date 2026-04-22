@@ -2,7 +2,6 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-allopen"
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {

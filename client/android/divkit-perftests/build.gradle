@@ -7,7 +7,6 @@ android {
     namespace = 'com.yandex.divkit.perftests'
 
     compileSdkVersion = rootProject.ext.compileSdkVersion
-    buildToolsVersion = rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

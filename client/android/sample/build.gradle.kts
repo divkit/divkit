@@ -11,7 +11,6 @@ android {
     }
 
     compileSdk = rootProject.ext["compileSdkVersion"] as Int
-    buildToolsVersion = rootProject.ext["buildToolsVersion"] as String
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
