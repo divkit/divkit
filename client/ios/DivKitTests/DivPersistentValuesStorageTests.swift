@@ -94,6 +94,38 @@ final class DivPersistentValuesStorageTests: XCTestCase {
     XCTAssertNil(stored)
   }
 
+  func test_reset_ClearsAllValues() {
+    storage.set(value: DivStoredValue(name: "str", value: "hello", type: .string, lifetimeInSec: 86400))
+    storage.set(value: DivStoredValue(name: "num", value: "42", type: .integer, lifetimeInSec: 86400))
+    storage.set(value: DivStoredValue(name: "flag", value: "true", type: .boolean, lifetimeInSec: 86400))
+
+    storage.clear()
+
+    let str: String? = storage.get(name: "str")
+    let num: Int? = storage.get(name: "num")
+    let flag: Bool? = storage.get(name: "flag")
+    XCTAssertNil(str)
+    XCTAssertNil(num)
+    XCTAssertNil(flag)
+  }
+
+  func test_reset_AllowsSettingNewValuesAfterReset() {
+    storage.set(value: DivStoredValue(name: "var", value: "old", type: .string, lifetimeInSec: 86400))
+    storage.clear()
+    storage.set(value: DivStoredValue(name: "var", value: "new", type: .string, lifetimeInSec: 86400))
+
+    XCTAssertEqual(storage.get(name: "var"), "new")
+  }
+
+  func test_reset_PersistsAcrossInstances() {
+    storage.set(value: DivStoredValue(name: "var", value: "value", type: .string, lifetimeInSec: 86400))
+    storage.clear()
+
+    let newStorage = makeStorage()
+    let stored: String? = newStorage.get(name: "var")
+    XCTAssertNil(stored)
+  }
+
   private func makeStorage() -> DivPersistentValuesStorage {
     DivPersistentValuesStorage(
       timestampProvider: Variable { self.currentTimestamp }

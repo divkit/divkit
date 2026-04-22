@@ -54,6 +54,7 @@
 		7E2DFACC2C7C808C0095775C /* Video.playground in Sources */ = {isa = PBXBuildFile; fileRef = 7E6B0EE02C732B7100914996 /* Video.playground */; };
 		7EE2ED6E2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */; };
 		891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */; };
+		891672382A5F6F9300121132 /* DivKitComponentsResetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891672392A5F6F9300121132 /* DivKitComponentsResetTests.swift */; };
 		896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896381842987C9D50064DDD4 /* RenderingTime.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
@@ -360,6 +361,7 @@
 		7E91B6282C7762FC00BB0DED /* LayoutKitPlaygroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutKitPlaygroundViewController.swift; sourceTree = "<group>"; };
 		7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivBaseExtensions+AccessibilityElementsStorageTests.swift"; sourceTree = "<group>"; };
 		891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivPersistentValuesStorageTests.swift; sourceTree = "<group>"; };
+		891672392A5F6F9300121132 /* DivKitComponentsResetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivKitComponentsResetTests.swift; sourceTree = "<group>"; };
 		896381842987C9D50064DDD4 /* RenderingTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingTime.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		89D02B1928C8EBC40041EC18 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
@@ -1102,6 +1104,7 @@
 				8C0DC7112865CA1100286F6B /* DivKitTests.swift */,
 				52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */,
 				891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */,
+				891672392A5F6F9300121132 /* DivKitComponentsResetTests.swift */,
 				8C7B1B302865C01C0036EF4C /* DivSerializationTests.swift */,
 				8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */,
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
@@ -1857,6 +1860,7 @@
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
 				8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */,
 				891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */,
+				891672382A5F6F9300121132 /* DivKitComponentsResetTests.swift in Sources */,
 				8C22BBBE2B037BA20076BAEB /* EntityWithRawArrayTemplate.swift in Sources */,
 				8CE488662B76F6BA00BDDAB9 /* DivDataParsingTests.swift in Sources */,
 				52CD80672A7122AA00B828B0 /* DivBaseExtensionsTests.swift in Sources */,

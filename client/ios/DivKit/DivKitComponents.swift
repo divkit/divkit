@@ -34,6 +34,9 @@ public final class DivKitComponents {
   public let variablesStorage: DivVariablesStorage
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
+  public let persistentValuesStorage: Clearable
+    
+  let persistentValuesStorageInternal = DivPersistentValuesStorage()
 
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
@@ -41,7 +44,6 @@ public final class DivKitComponents {
   private let functionsStorage: DivFunctionsStorage
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   private let layoutProviderHandler: DivLayoutProviderHandler
-  private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionHandler.UpdateCardAction
@@ -117,6 +119,8 @@ public final class DivKitComponents {
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
+    self.persistentValuesStorage = persistentValuesStorageInternal
+
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.extensionHandlers = extensionHandlers
     self.flagsInfo = flagsInfo
@@ -168,7 +172,7 @@ public final class DivKitComponents {
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
       customActionHandler: customActionHandler,
       urlHandler: urlHandler,
-      persistentValuesStorage: persistentValuesStorage,
+      persistentValuesStorage: persistentValuesStorageInternal,
       reporter: reporter,
       idToPath: idToPath,
       animatorController: animatorController,
@@ -180,7 +184,7 @@ public final class DivKitComponents {
       functionsStorage: functionsStorage,
       blockStateStorage: blockStateStorage,
       actionHandler: actionHandler,
-      persistentValuesStorage: persistentValuesStorage,
+      persistentValuesStorage: persistentValuesStorageInternal,
       flagsInfo: flagsInfo,
       reporter: reporter
     )
@@ -190,7 +194,7 @@ public final class DivKitComponents {
       functionsStorage: functionsStorage,
       actionHandler: actionHandler,
       updateCard: updateCard,
-      persistentValuesStorage: persistentValuesStorage,
+      persistentValuesStorage: persistentValuesStorageInternal,
       reporter: reporter
     )
 
@@ -334,7 +338,7 @@ public final class DivKitComponents {
       ),
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
-      persistentValuesStorage: persistentValuesStorage,
+      persistentValuesStorage: persistentValuesStorageInternal,
       tooltipViewFactory: DivTooltipViewFactory(
         divKitComponents: self,
         cardId: cardId
@@ -357,7 +361,7 @@ public final class DivKitComponents {
         path: cardId.path,
         variablesStorage: variablesStorage,
         functionsStorage: functionsStorage,
-        persistentValuesStorage: persistentValuesStorage,
+        persistentValuesStorage: persistentValuesStorageInternal,
         reporter: reporter
       )
       let divDataVariables = divData.variables?.extractDivVariableValues(resolver) ?? [:]

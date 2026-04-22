@@ -74,6 +74,12 @@ public final class DivPersistentValuesStorage {
   }
 }
 
+extension  DivPersistentValuesStorage: Clearable {
+  public func clear() {
+    reset()
+  }
+}
+
 private struct StoredValues: Equatable, Codable {
   let items: [String: StoredValue]
 }
