@@ -15,6 +15,7 @@ import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivActionPerformer
+import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
@@ -97,11 +98,15 @@ internal class DivVideoBinder @Inject constructor(
         div.applyPreview(resolver) { preview ->
             preview?.let {
                 with(previewImageView) {
-                    visibility = View.VISIBLE
                     when (it) {
                         is ImageRepresentation.PictureDrawable -> setImageDrawable(it.value)
                         is ImageRepresentation.Bitmap -> setImageBitmap(it.value)
+                        is ImageRepresentation.Error -> {
+                            bindingContext.divView.logWarning(it.value)
+                            return@let
+                        }
                     }
+                    visibility = View.VISIBLE
                 }
             }
             playerView.visibility = View.VISIBLE

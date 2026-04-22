@@ -351,6 +351,7 @@ internal class DivTabsBinder @Inject constructor(
                     onSuccess(drawable.toBitmap(), source)
 
                 override fun onError(e: Throwable?) {
+                    super.onError(e)
                     setTabDelimiter(null, 0, 0)
                 }
             }

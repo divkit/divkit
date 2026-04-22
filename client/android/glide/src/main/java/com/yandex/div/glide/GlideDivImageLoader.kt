@@ -20,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
+import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.svg.SvgDecoder
@@ -60,7 +61,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
         Glide.with(context).load(imageUri)
             .set(Option.memory(KEY_SVG), SvgDecoder.isSvg(imageUrl))
             .limitImageBitmapSizeIfNeed(canLimitSize)
-            .listener(ImageRequestListener(callback))
+            .listener(ImageRequestListener(imageUrl, callback))
             .into(target)
 
         return LoadReference {
@@ -80,6 +81,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
     }
 
     private class ImageRequestListener<T: Drawable>(
+        private val imageUrl: String,
         private val callback: DivImageDownloadCallback,
     ): RequestListener<T> {
 
@@ -89,7 +91,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
             target: Target<T>,
             isFirstResource: Boolean
         ): Boolean {
-            callback.onError(e)
+            callback.onError(e.toDivImageLoadError(imageUrl))
             return false
         }
 
@@ -125,7 +127,7 @@ class GlideDivImageLoader @JvmOverloads constructor(
                 options.get(Option.memory<Boolean>(KEY_SVG)) == true
 
             override fun decode(source: InputStream, width: Int, height: Int, options: Options) =
-                SvgDecoder.decode(source)?.let { SimpleResource(it) }
+                SimpleResource(SvgDecoder.decode(source))
         }
 
         private fun DataSource.toBitmapSource(): BitmapSource {

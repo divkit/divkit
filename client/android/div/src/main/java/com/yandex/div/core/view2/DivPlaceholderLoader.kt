@@ -34,8 +34,8 @@ internal class DivPlaceholderLoader @Inject constructor(
     ) {
         currentPreview?.let {
             enqueueDecoding(it, imageView, synchronous) { decoded ->
-                if (decoded == null) {
-                    errorCollector.logWarning(Throwable(PREVIEW_IS_NOT_BASE_64_IMAGE))
+                if (decoded is ImageRepresentation.Error) {
+                    errorCollector.logWarning(Throwable(PREVIEW_IS_NOT_BASE_64_IMAGE, decoded.value))
                     onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
                 } else {
                     onSetPreview(decoded)
@@ -48,7 +48,7 @@ internal class DivPlaceholderLoader @Inject constructor(
         preview: String,
         loadableImage: LoadableImage,
         synchronous: Boolean,
-        onDecoded: (ImageRepresentation?) -> Unit
+        onDecoded: (ImageRepresentation) -> Unit
     ) {
         loadableImage.getLoadingTask()?.cancel(true)
 
@@ -62,7 +62,7 @@ internal class DivPlaceholderLoader @Inject constructor(
 
     private fun String.decodeBase64(
         synchronous: Boolean,
-        onDecoded: (ImageRepresentation?) -> Unit
+        onDecoded: (ImageRepresentation) -> Unit
     ): Future<*>? {
         val decodeTask = DecodeBase64ImageTask(this, synchronous, onDecoded)
 

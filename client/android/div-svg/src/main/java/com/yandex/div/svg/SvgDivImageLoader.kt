@@ -5,9 +5,10 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
+import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
-import com.yandex.div.internal.KLog
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -36,20 +37,19 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
         val call = createCallOrNull(imageUrl)
 
         coroutineScope.launch {
-            withContext(Dispatchers.IO) {
-                val bytes = if (call == null) {
-                    getImageData(imageUrl)
-                } else {
-                    downloadImage(call)
-                } ?: return@withContext null
-
-                val drawable = SvgDecoder.decode(bytes.inputStream()) ?: return@withContext null
-                svgCacheManager.set(imageUrl, drawable)
-
-                drawable
-            }?.let {
-                callback.onSuccess(DivCachedImage.Drawable(it, BitmapSource.NETWORK))
-            } ?: callback.onError()
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    val bytes = call?.let { downloadImage(it) } ?: getImageData(imageUrl)
+                    SvgDecoder.decode(bytes.inputStream())
+                }
+            }.onSuccess {
+                svgCacheManager.set(imageUrl, it)
+                val image = DivCachedImage.Drawable(it, BitmapSource.NETWORK)
+                callback.onSuccess(image)
+            }.onFailure {
+                if (it is CancellationException) throw it
+                callback.onError(it.toDivImageLoadError(imageUrl))
+            }
         }
 
         return LoadReference {
@@ -65,27 +65,22 @@ public class SvgDivImageLoader(context: Context) : DivImageLoader {
         return httpClient.newCall(request)
     }
 
-    private fun downloadImage(call: Call): ByteArray? {
-        return try {
-            call.execute().body?.bytes()
-        } catch (e: Exception) {
-            KLog.e(TAG) { e.toString() }
-            null
-        }
+    private fun downloadImage(call: Call): ByteArray {
+        val response = call.execute()
+        if (!response.isSuccessful) throw IOException("Server response code ${response.code}")
+        val body = response.body ?: throw IOException("No response body received")
+        return body.bytes()
     }
 
-    private fun getImageData(imageUrl: String): ByteArray? {
+    private fun getImageData(imageUrl: String): ByteArray {
         val stream = try {
             val assetPath = imageUrl.removePrefix("file:///android_asset/")
             context.assets.open(assetPath)
         } catch (e: IOException) {
-            KLog.e(TAG) { e.toString() }
-            return null
+            throw IOException("File not found", e)
         }
         stream.use {
             return it.readBytes()
         }
     }
 }
-
-private const val TAG = "SvgDivImageLoader"

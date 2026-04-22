@@ -4,7 +4,6 @@ import android.graphics.drawable.PictureDrawable
 import com.caverock.androidsvg.SVG
 import com.caverock.androidsvg.SVGParseException
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.internal.KLog
 import java.io.InputStream
 
 @InternalApi
@@ -16,13 +15,9 @@ public object SvgDecoder {
         return imageUrl.substring(0, pathEndIndex).endsWith(".svg")
     }
 
-    public fun decode(source: InputStream): PictureDrawable? {
-        val svg = try {
-            SVG.getFromInputStream(source)
-        } catch (e: SVGParseException) {
-            KLog.e(TAG) { e.toString() }
-            return null
-        }
+    @Throws(SVGParseException::class)
+    public fun decode(source: InputStream): PictureDrawable {
+        val svg = SVG.getFromInputStream(source)
 
         if (svg.documentViewBox != null) return svg.toDrawable()
 
@@ -37,5 +32,3 @@ public object SvgDecoder {
 
     private fun SVG.toDrawable() = PictureDrawable(renderToPicture())
 }
-
-private const val TAG = "SvgDecoder"

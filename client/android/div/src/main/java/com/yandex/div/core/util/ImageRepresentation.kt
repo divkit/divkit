@@ -9,4 +9,6 @@ sealed interface ImageRepresentation {
     value class Bitmap(val value: android.graphics.Bitmap) : ImageRepresentation
     @JvmInline
     value class PictureDrawable(val value: android.graphics.drawable.PictureDrawable) : ImageRepresentation
+    @JvmInline
+    value class Error(val value: Exception): ImageRepresentation
 }

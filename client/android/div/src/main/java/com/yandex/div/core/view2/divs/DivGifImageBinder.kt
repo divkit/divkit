@@ -143,6 +143,7 @@ internal class DivGifImageBinder @Inject constructor(
                 }
 
                 override fun onError(e: Throwable?) {
+                    super.onError(e)
                     gifUrl = null
                 }
             }
@@ -183,8 +184,8 @@ internal class DivGifImageBinder @Inject constructor(
                     when (it) {
                         is ImageRepresentation.Bitmap -> setPreview(divView, it.value)
                         is ImageRepresentation.PictureDrawable -> setPreview(divView, it.value)
+                        is ImageRepresentation.Error -> Unit
                     }
-                    previewLoaded()
                 }
             }
         )
@@ -210,18 +211,17 @@ internal class DivGifImageBinder @Inject constructor(
                 override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
                     if (!isImageLoaded) {
                         setPreview(divView, bitmap)
-                        previewLoaded()
                     }
                 }
 
                 override fun onSuccess(drawable: Drawable, source: BitmapSource) {
                     if (!isImageLoaded) {
                         setPreview(divView, drawable)
-                        previewLoaded()
                     }
                 }
 
                 override fun onError(e: Throwable?) {
+                    super.onError(e)
                     previewUrl = null
                 }
             }
@@ -328,12 +328,14 @@ internal class DivGifImageBinder @Inject constructor(
             divView.runBindingAction {
                 setPreview(drawable)
             }
+            previewLoaded()
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, bitmap: Bitmap?) {
             divView.runBindingAction {
                 setPreview(bitmap)
             }
+            previewLoaded()
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, bitmap: Bitmap?) {

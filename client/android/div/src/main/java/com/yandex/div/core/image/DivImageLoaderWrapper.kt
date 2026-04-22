@@ -46,6 +46,11 @@ class DivImageLoaderWrapper @Inject constructor(
     }
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+        if (imageUrl == EMPTY_URL) {
+            callback.onCancel()
+            return LoadReference {}
+        }
+
         val modifiedUrl = getModifiedUrl(imageUrl)
         val loader = getProperLoader(modifiedUrl)
         val wrappedCallback = createLimitImageBitmapSizeCallback(loader, callback)
@@ -56,6 +61,11 @@ class DivImageLoaderWrapper @Inject constructor(
         imageUrl: String,
         callback: DivImageDownloadCallback
     ): LoadReference {
+        if (imageUrl == EMPTY_URL) {
+            callback.onCancel()
+            return LoadReference {}
+        }
+
         val modifiedUrl = getModifiedUrl(imageUrl)
         return getProperLoader(modifiedUrl).loadAnimatedImage(modifiedUrl, callback)
     }
@@ -163,5 +173,9 @@ class DivImageLoaderWrapper @Inject constructor(
 
             return bitmap.scale(newWidth, newHeight).toDrawable(context.resources)
         }
+    }
+
+    private companion object {
+        const val EMPTY_URL = "empty://"
     }
 }

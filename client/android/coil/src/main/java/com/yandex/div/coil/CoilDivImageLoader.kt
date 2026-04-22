@@ -26,6 +26,7 @@ import coil3.svg.SvgDecoder
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
+import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import okhttp3.OkHttpClient
@@ -115,7 +116,7 @@ class CoilDivImageLoader private constructor(
             .data(imageUri)
             .allowHardware(false)
             .limitImageBitmapSizeIfNeed()
-            .listener(RequestListener(context, callback))
+            .listener(RequestListener(imageUrl, context, callback))
             .build()
 
         val result = imageLoader.enqueue(request)
@@ -126,6 +127,7 @@ class CoilDivImageLoader private constructor(
     }
 
     private class RequestListener(
+        private val imageUrl: String,
         private val context: Context,
         private val callback: DivImageDownloadCallback,
     ): EventListener() {
@@ -137,7 +139,7 @@ class CoilDivImageLoader private constructor(
         }
 
         override fun onError(request: ImageRequest, result: ErrorResult) {
-            callback.onError(result.throwable)
+            callback.onError(result.throwable.toDivImageLoadError(imageUrl))
         }
     }
 

@@ -276,6 +276,8 @@ internal class DivImageBinder @Inject constructor(
                                 setPreview(bindingContext, it.value.toBitmap(), div)
                             }
                         }
+
+                        is ImageRepresentation.Error -> Unit
                     }
                 }
             }
@@ -386,6 +388,7 @@ internal class DivImageBinder @Inject constructor(
                 }
 
                 override fun onError(e: Throwable?) {
+                    super.onError(e)
                     this@applyImage.imageUrl = null
                 }
             }

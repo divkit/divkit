@@ -19,10 +19,12 @@ import com.yandex.div.core.image.ASSET_PREFIX
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
+import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThread
 import com.yandex.div.svg.SvgDecoder
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -33,6 +35,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import kotlin.math.max
 
@@ -89,7 +92,7 @@ class PicassoDivImageLoader(
         }
 
         val imageUri = Uri.parse(imageUrl)
-        val target = DownloadCallbackAdapter(callback)
+        val target = DownloadCallbackAdapter(imageUrl, callback)
         targets.addTarget(target)
 
         executeOnMainThread {
@@ -123,13 +126,11 @@ class PicassoDivImageLoader(
 
             val bytes = byteStream.use { it.readBytes() }
             when {
-                bytes.isEmpty() -> null
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
                     DivCachedImage.Drawable(decodeAnimatedDrawable(bytes), bitmapSource)
                 else -> {
-                    BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {
-                        DivCachedImage.Bitmap(it.scale(maxDisplaySize), bitmapSource)
-                    }
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    DivCachedImage.Bitmap(bitmap.scale(maxDisplaySize), bitmapSource)
                 }
             }
         }
@@ -138,7 +139,7 @@ class PicassoDivImageLoader(
     private fun loadImageBytes(
         imageUrl: String,
         callback: DivImageDownloadCallback,
-        decode: (InputStream, BitmapSource) -> DivCachedImage?,
+        decode: (InputStream, BitmapSource) -> DivCachedImage,
     ): LoadReference {
         targets.addTarget(targetStub)
         var loadReference: LoadReference = EMPTY_LOAD_REFERENCE
@@ -149,35 +150,49 @@ class PicassoDivImageLoader(
             }
         }
         coroutineScope.launch {
-            withContext(Dispatchers.IO) {
-                val (input, source) = call?.let { loadFromNetwork(it) ?: return@withContext null }
-                    ?: loadFromDisk(imageUrl) ?: return@withContext null
-                decode(input, source)
-            }?.let {
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    val (input, source) = call?.let { loadFromNetwork(it) } ?: loadFromDisk(imageUrl)
+                    decode(input, source)
+                }
+            }.onSuccess {
                 callback.onSuccess(it)
-            } ?: callback.onError()
+            }.onFailure {
+                if (it is CancellationException) throw it
+                callback.onError(it.toDivImageLoadError(imageUrl))
+            }
+
             targets.removeTarget(targetStub)
         }
 
         return loadReference
     }
 
-    private fun loadFromNetwork(call: Call): Pair<InputStream, BitmapSource>? {
-        val response = runCatching { call.execute() }.getOrNull() ?: return null
-        val byteStream = response.body?.byteStream() ?: return null
+    @Throws(IOException::class)
+    private fun loadFromNetwork(call: Call): Pair<InputStream, BitmapSource> {
+        val response = call.execute()
+        if (!response.isSuccessful) throw IOException("Server response code ${response.code}")
+        val byteStream = response.body?.byteStream() ?: throw IOException("No response body received")
         val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
         return byteStream to source
     }
 
-    private fun loadFromDisk(url: String): Pair<InputStream, BitmapSource>? {
+    @Throws(IOException::class)
+    private fun loadFromDisk(url: String): Pair<InputStream, BitmapSource> {
         val assetPath = url.removePrefix(ASSET_PREFIX)
-        val stream = runCatching { appContext.assets?.open(assetPath) }.getOrNull() ?: return null
+        val stream = try {
+            appContext.assets.open(assetPath)
+        } catch (e: IOException) {
+            throw IOException("File not found", e)
+        }
         return stream to BitmapSource.DISK
     }
 
+    @Throws
     private fun decodeSvgDrawable(source: InputStream, bitmapSource: BitmapSource) =
-        SvgDecoder.decode(source)?.let { DivCachedImage.Drawable(it, bitmapSource) }
+        DivCachedImage.Drawable(SvgDecoder.decode(source), bitmapSource)
 
+    @Throws
     @RequiresApi(Build.VERSION_CODES.P)
     private fun decodeAnimatedDrawable(bytes: ByteArray): Drawable {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -197,6 +212,7 @@ class PicassoDivImageLoader(
         }
     }
 
+    @Throws
     @RequiresApi(Build.VERSION_CODES.P)
     private fun decodeAnimatedDrawable(source: ImageDecoder.Source): Drawable {
         return ImageDecoder.decodeDrawable(source) { decoder, _, _ ->
@@ -239,7 +255,10 @@ class PicassoDivImageLoader(
         }
     }
 
-    private inner class DownloadCallbackAdapter(private val callback: DivImageDownloadCallback) : Target {
+    private inner class DownloadCallbackAdapter(
+        private val imageUrl: String,
+        private val callback: DivImageDownloadCallback
+    ) : Target {
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
             callback.onSuccess(DivCachedImage.Bitmap(bitmap, from.toBitmapSource()))
@@ -247,7 +266,7 @@ class PicassoDivImageLoader(
         }
 
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-            callback.onError(e)
+            callback.onError(e.toDivImageLoadError(imageUrl))
             targets.removeTarget(this)
         }
 
