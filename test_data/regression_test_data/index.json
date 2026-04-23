@@ -4118,7 +4118,8 @@
         "When pressing the 'to 7' button, the cursor was moved after the 7th character of the input.",
         "When pressing the 'to 7-12' the selection range with the second word is entered (if the text has not been changed)"
       ],
-      "file": "input/input_set_cursor_position.json"
+      "file": "input/input_set_cursor_position.json",
+      "case_id": 502
     },
     {
       "title": "Submit action test",
