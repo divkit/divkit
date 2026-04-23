@@ -716,7 +716,7 @@
         "web"
       ],
       "steps": [
-        "Turn on Screen reader",
+        "Enable Screen reader before installing the test application and opening the test case",
         "Set focus on text",
         "Listen to Screen reader",
         "Set focus on image in text",
@@ -1657,13 +1657,14 @@
         "android"
       ],
       "steps": [
-        "Check first item visibility logged",
+        "Open the pager screen",
+        "Verify that no item visibility log is produced for the initially displayed item",
         "Swipe to the next item",
-        "Check second item visibility logged"
+        "Check item visibility log"
       ],
       "expected_results": [
-        "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
-        "Second element logged, example logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
+        "No DemoDiv2Logger visibility log should be produced for the initially displayed first item",
+        "After swiping to the next item, DemoDiv2Logger should log selected actions, for example: logPagerChangePage(cardId = card, currentPageIndex = 1, scrollDirection = next)"
       ],
       "file": "visibility_actions/pager_selected_actions.json"
     },
@@ -1820,38 +1821,37 @@
         "DivTabs"
       ],
       "steps": [
-        "Check different combinations of tabs properties"
+        "Check different combinations of tabs properties."
       ],
       "expected_results": [
-        "'dynamic_height=DYNAMIC' - each tab has height equals content height",
-        "'dynamic_height=MAX_HEIGHT(for non-first-page)' - from the second tab each tab has height equals max tabs content height",
-        "'tab.line_height=10' - line spacing of tabs text equals 10",
-        "'tab.line_height=30' - line spacing of tabs text equals 30",
-        "'tab.theme=GREEN' - tabs become green",
-        "'tab.theme=RED' - tabs become red",
-        "'selected_tab=0' - set first tab",
-        "'selected_tab=1' - set second tab",
-        "'selected_tab=6' - set 'Page index 6' tab",
-        "'has_separator=0' - turn off horizontal delimiter",
-        "'has_separator=1' - turn on horizontal delimiter",
-        "'separator.color=RED' - set red delimiter color",
-        "'separator.color=BLUE' - set blue delimiter color",
-        "'separator_paddings.top=0' - padding of horizontal delimiter: top - 0",
-        "'separator_paddings.top=50' - padding of horizontal delimiter: top - 50",
-        "'separator_paddings.bottom=0' - padding of horizontal delimiter: bottom - 0",
-        "'separator_paddings.bottom=50' - padding of horizontal delimiter: bottom - 50",
-        "'separator_paddings.left=0' - padding of horizontal delimiter: left - 0",
-        "'separator_paddings.left=50' - padding of horizontal delimiter: left - 50",
-        "'separator_paddings.right=0' - padding of horizontal delimiter: right - 0",
-        "'separator_paddings.right=50' - padding of horizontal delimiter: right - 50",
-        "'title_paddings.top=0' - padding of tabs container: top - 0",
-        "'title_paddings.top=50' - padding of tabs container: top - 50",
-        "'title_paddings.bottom=0' - padding of tabs container: bottom - 0",
-        "'title_paddings.bottom=50' - padding of tabs container: bottom - 50",
-        "'title_paddings.left=0' - padding of tabs container: left - 0",
-        "'title_paddings.left=50' - padding of tabs container: left - 50",
-        "'title_paddings.right=0' - padding of tabs container: right - 0",
-        "'title_paddings.right=50' - padding of tabs container: right - 50"
+        "'dynamic_height = DYNAMIC' - each tab height matches its content height.",
+        "'dynamic_height = MAX_HEIGHT (for non-first-page)' - starting from the second tab, each tab height matches the maximum tab content height.",
+        "'tab.line_height = 20' - the line spacing of the tab text is 20.",
+        "'tab.line_height = 30' - the line spacing of the tab text is 30.",
+        "'tab.theme = YELLOW' - the tabs become yellow.",
+        "'tab.theme = PURPLE' - the tabs become purple.",
+        "'selected_tab = 7' - the 'Page index 7' tab becomes selected.",
+        "'selected_tab = 1' - the 'Page index 1' tab becomes selected.",
+        "'has_separator = true' - the horizontal separator is shown.",
+        "'has_separator = false' - the horizontal separator is hidden.",
+        "'separator.color = YELLOW' - the separator color becomes yellow.",
+        "'separator.color = PURPLE' - the separator color becomes purple.",
+        "'separator_paddings.top = 0' - the top padding of the horizontal separator is 0.",
+        "'separator_paddings.top = 20' - the top padding of the horizontal separator is 20.",
+        "'separator_paddings.bottom = 0' - the bottom padding of the horizontal separator is 0.",
+        "'separator_paddings.bottom = 20' - the bottom padding of the horizontal separator is 20.",
+        "'separator_paddings.left = 0' - the left padding of the horizontal separator is 0.",
+        "'separator_paddings.left = 50' - the left padding of the horizontal separator is 50.",
+        "'separator_paddings.right = 0' - the right padding of the horizontal separator is 0.",
+        "'separator_paddings.right = 50' - the right padding of the horizontal separator is 50.",
+        "'title_paddings.top = 0' - the top padding of the tabs container is 0.",
+        "'title_paddings.top = 20' - the top padding of the tabs container is 20.",
+        "'title_paddings.bottom = 0' - the bottom padding of the tabs container is 0.",
+        "'title_paddings.bottom = 20' - the bottom padding of the tabs container is 20.",
+        "'title_paddings.left = 0' - the left padding of the tabs container is 0.",
+        "'title_paddings.left = 50' - the left padding of the tabs container is 50.",
+        "'title_paddings.right = 0' - the right padding of the tabs container is 0.",
+        "'title_paddings.right = 50' - the right padding of the tabs container is 50."
       ],
       "file": "variables/div_tabs.json"
     },
@@ -1886,6 +1886,30 @@
       "case_id": 69,
       "tags": [
         "DivIndicator"
+      ],
+      "steps": [
+        "1. Open the case 'Variables' in DivIndicator.",
+        "2. Swipe through the gallery from start to finish.",
+        "3. Click all the buttons in the second column of properties one by one.",
+        "4. Click the 'Reset state' button."
+      ],
+      "expected_results": [
+        "1. The case is opened.",
+        "2. When switching pages, the active dot in the indicator moves accordingly.",
+        "3. 'active item color = YELLOW' — the first indicator element turns yellow.",
+        "'active item scale = x2' — the first indicator element doubles in size.",
+        "'inactive item color = YELLOW' — all inactive indicator elements turn yellow.",
+        "'scale of furthest items = x0.3' — the last indicator element becomes 3 times smaller.",
+        "'animation of page change = WORM' — the indicator elements, starting from the second one, shift to the left closer to the first element.",
+        "'space between items = 30dp' — the space between the indicator elements increases.",
+        "'item width = 15dp' — the indicator elements become wider.",
+        "'item height = 15dp' — the indicator elements become taller.",
+        "'corners radius = 2dp' — the corner radius of the indicator elements decreases, making them more square.",
+        "'corners radius = 4dp' — the corner radius of the indicator elements increases, making them more rounded.",
+        "'indicator width = 150dp' — the indicator becomes narrower.",
+        "'indicator width = 300dp' — the indicator becomes wider.",
+        "'size unit = sp' — the size unit on the buttons changes, while the indicator itself does not change.",
+        "4. The indicator appearance returns to its initial state from step 1."
       ],
       "file": "variables/div_indicator.json"
     },
@@ -2218,12 +2242,16 @@
         "android"
       ],
       "steps": [
-        "Press 'Change data'"
+        "Press 'Change data to DST with root flag'",
+        "Press 'Change data to SRC'",
+        "Press 'Change data to DST without root flag'",
+        "Press 'Change data to SRC'"
       ],
       "expected_results": [
-        "First - there should be animation, there are only old triggers",
-        "Second - there should be no animation, the old 'state_change' is rubbed with an empty list of new ones",
-        "Third - there should be an animation, the old 'none' is rubbed by the new 'state_change'"
+        "After pressing 'Change data to DST with root flag', new elements should appear with animation and the 'Change data to SRC' button should be shown",
+        "After pressing 'Change data to SRC', the elements should disappear with animation and the initial two buttons should be shown",
+        "After pressing 'Change data to DST without root flag', new elements should appear without animation and the 'Change data to SRC' button should be shown",
+        "After pressing 'Change data to SRC', the elements should disappear without animation and the initial two buttons should be shown"
       ],
       "file": "animations/transition/transition_triggers_data_change_src.json"
     },
@@ -2364,7 +2392,7 @@
         "ios"
       ],
       "expected_results": [
-        "Gallery with seven cards playing different rive animations"
+        "Gallery with six cards playing different rive animations"
       ],
       "file": "animations/rive/rive_gallery.json",
       "case_id": 467
@@ -3746,13 +3774,18 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
-        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
-        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+        "Run the test with the \"Complex Rebind\" flag disabled, then repeat with the flag enabled",
+        "Tap \"Do\" and then \"UnDo\"",
+        "Tap \"Next\", then tap \"Do\" and \"UnDo\"",
+        "Tap \"Next\" again, then tap \"Do\" and \"UnDo\""
       ],
       "expected_results": [
-        "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "After tapping \"Do\", the layout should change",
+        "After tapping \"UnDo\", the layout should return to the previous state",
+        "After tapping \"Next\", the entire layout should be replaced",
+        "After each full layout replacement, \"Do\" and \"UnDo\" should still correctly apply and revert small patch rebinds",
+        "No crashes, asserts, or parsing errors should occur",
+        "The behavior should be identical with the \"Complex Rebind\" flag disabled and enabled"
       ],
       "file": "rebind/tabs/un_added.json"
     },
