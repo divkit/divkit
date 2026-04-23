@@ -58,9 +58,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     )
 
     playerSignal = player?.signal.addObserver { [weak self] event in
-      onMainThread {
-        guard let self else { return }
+      guard let self else { return }
 
+      let action = {
         switch event {
         case let .currentTimeUpdate(time):
           self.model.elapsedTime?.value = Int(time)
@@ -88,6 +88,16 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
           self.preview.currentValue?.isHidden = true
         case let .durationUpdate(duration):
           self.model.duration?.value = duration
+        }
+      }
+
+      if window == nil {
+        onMainThread {
+          action()
+        }
+      } else {
+        onMainThreadAsync {
+          action()
         }
       }
     }
@@ -243,9 +253,9 @@ extension [String: Any] {
 extension VideoScale {
   fileprivate var previewContentMode: UIView.ContentMode {
     switch self {
-    case .fill: return .scaleAspectFill
-    case .fit: return .scaleAspectFit
-    case .noScale: return .center
+    case .fill: .scaleAspectFill
+    case .fit: .scaleAspectFit
+    case .noScale: .center
     }
   }
 }
