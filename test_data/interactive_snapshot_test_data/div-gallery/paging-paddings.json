@@ -84,7 +84,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_next_item?id=gallery",
+          "url": "div-action://set_next_item?id=gallery&animated=false",
           "log_id": "scroll_forward"
         }
       ],
@@ -93,7 +93,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://scroll_to_end?id=gallery",
+          "url": "div-action://scroll_to_end?id=gallery&animated=false",
           "log_id": "scroll_to_end"
         }
       ],

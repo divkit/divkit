@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.items
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.annotation.VisibleForTesting
+import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.yandex.div.core.view2.divs.availableHeight
 import com.yandex.div.core.view2.divs.availableWidth
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
+import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -73,9 +75,20 @@ internal sealed class DivViewWithItems {
      */
     internal class PagingGallery(view: DivRecyclerView, direction: Direction) : Gallery(view, direction) {
 
-        override var currentItem: Int
-            get() = view.currentItem(direction)
-            set(value) = checkItem(value, itemCount) { view.smoothScrollToPosition(value) }
+        override fun createSmoothScroller(): RecyclerView.SmoothScroller {
+            return object : DivSmoothScroller(view) {
+                override fun calculateDtToFit(
+                    viewStart: Int, viewEnd: Int,
+                    boxStart: Int, boxEnd: Int,
+                    snapPreference: Int
+                ): Int {
+                    val itemSpacing = view.pagerSnapStartHelper?.itemSpacing ?: return 0
+                    val isHorizontal = (view.adapter as? DivGalleryAdapter)?.orientation == RecyclerView.HORIZONTAL
+                    val size = if (isHorizontal) view.width else view.height
+                    return (size - viewStart - viewEnd + itemSpacing) / 2
+                }
+            }
+        }
     }
 
     /**
@@ -91,18 +104,18 @@ internal sealed class DivViewWithItems {
             get() = view.currentItem(direction)
             set(value) {
                 checkItem(value, itemCount) {
-                    val smoothScroller = object : LinearSmoothScroller(view.context) {
-                        private val MILLISECONDS_PER_INCH = 50f // default is 25f, bigger - slower
-                        override fun getHorizontalSnapPreference() = SNAP_TO_START
-                        override fun getVerticalSnapPreference() = SNAP_TO_START
-                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                            return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
-                        }
-                    }
+                    val smoothScroller = createSmoothScroller()
                     smoothScroller.targetPosition = value
                     view.layoutManager?.startSmoothScroll(smoothScroller)
                 }
             }
+
+        protected open fun createSmoothScroller(): RecyclerView.SmoothScroller {
+            return object : DivSmoothScroller(view) {
+                override fun getHorizontalSnapPreference() = SNAP_TO_START
+                override fun getVerticalSnapPreference() = SNAP_TO_START
+            }
+        }
 
         override val itemCount: Int
             get() = view.itemCount
@@ -117,8 +130,25 @@ internal sealed class DivViewWithItems {
 
         override fun setCurrentItemNoAnimation(index: Int) {
             checkItem(index, itemCount) {
-                view.scrollToPosition(index)
+                view.pagerSnapStartHelper?.snapToPosition(index, waitForLayout = true)
+                    ?: view.scrollToPosition(index)
             }
+        }
+
+        private fun PagerSnapStartHelper.snapToPosition(position: Int, waitForLayout: Boolean) {
+            val layoutManager = view.layoutManager ?: return
+            layoutManager.findViewByPosition(position)?.let { target ->
+                val offset = calculateDistanceToFinalSnap(layoutManager, target)
+                view.scrollBy(offset[0], offset[1])
+                return
+            }
+
+            if (!waitForLayout) return
+
+            view.doOnNextLayout {
+                snapToPosition(position, waitForLayout = false)
+            }
+            view.scrollToPosition(position)
         }
 
         override fun getIndicesOfItemWithId(id: String): List<Int> {
@@ -203,6 +233,16 @@ internal sealed class DivViewWithItems {
                 is DivTabsLayout -> Tabs(view)
                 else -> null
             }
+        }
+    }
+
+    private open class DivSmoothScroller(view: RecyclerView): LinearSmoothScroller(view.context) {
+
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics) =
+            MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+
+        companion object {
+            private const val MILLISECONDS_PER_INCH = 50f // default is 25f, bigger - slower
         }
     }
 }

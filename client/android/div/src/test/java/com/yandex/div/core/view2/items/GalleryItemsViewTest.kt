@@ -160,11 +160,13 @@ class GalleryItemsViewTest {
             on { resources } doReturn mock()
         }
         whenever(view.layoutManager).thenReturn(layoutManager)
+        val scrollCaptor = argumentCaptor<LinearSmoothScroller>()
         val underTest = createUnderTest(drv = view)
 
         underTest.currentItem = 5
 
-        verify(view).smoothScrollToPosition(5)
+        verify(layoutManager).startSmoothScroll(scrollCaptor.capture())
+        Assert.assertEquals(5, scrollCaptor.firstValue.targetPosition)
     }
 
     @Test
