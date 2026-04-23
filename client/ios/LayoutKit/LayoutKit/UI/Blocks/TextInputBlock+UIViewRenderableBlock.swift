@@ -435,8 +435,19 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     let attributedText = text.with(typo: typo)
     multiLineInput.attributedText = attributedText
     if let selectedRange = singleLineInput.selectedTextRange {
+      let shouldResetRange = maskedViewModel == nil && text != singleLineInput.attributedText?
+        .string
       singleLineInput.attributedText = attributedText
-      singleLineInput.selectedTextRange = selectedRange
+
+      if shouldResetRange {
+        let endPosition = singleLineInput.endOfDocument
+        singleLineInput.selectedTextRange = singleLineInput.textRange(
+          from: endPosition,
+          to: endPosition
+        )
+      } else {
+        singleLineInput.selectedTextRange = selectedRange
+      }
     }
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.defaultTextAttributes = typo.attributes
