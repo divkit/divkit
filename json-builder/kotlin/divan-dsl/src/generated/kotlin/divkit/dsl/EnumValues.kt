@@ -115,6 +115,14 @@ object RingEnumValue : EnumValue("ring"),
     ActionScrollBy.Overflow
 
 @Generated
+object GlobalEnumValue : EnumValue("global"),
+    ActionSetStoredValue.Scope
+
+@Generated
+object CardEnumValue : EnumValue("card"),
+    ActionSetStoredValue.Scope
+
+@Generated
 object GetEnumValue : EnumValue("get"),
     ActionSubmit.Request.Method
 
@@ -677,6 +685,14 @@ val DivScope.clamp: ClampEnumValue
 @Generated
 val DivScope.ring: RingEnumValue
     get() = RingEnumValue
+
+@Generated
+val DivScope.global: GlobalEnumValue
+    get() = GlobalEnumValue
+
+@Generated
+val DivScope.card: CardEnumValue
+    get() = CardEnumValue
 
 @Generated
 val DivScope.get: GetEnumValue
