@@ -73,7 +73,7 @@ final class UntypedDivTemplateResolver {
 
   private func resolveLinks(
     in dictionary: [String: Any],
-    linkSource: [String: Any]
+    linkSource: [String: Any]?
   ) -> [String: Any] {
     var dict = dictionary
     var linkFieldNames = Set<String>()
@@ -83,7 +83,7 @@ final class UntypedDivTemplateResolver {
       linkFieldNames.insert(key)
       guard let linkName = dict[linkKey] as? String else { continue }
       guard dict[key] == nil else { continue }
-      guard let value = linkSource[linkName] else { continue }
+      guard let value = linkSource?[linkName] else { continue }
       dict[key] = value
     }
 
@@ -101,8 +101,8 @@ final class UntypedDivTemplateResolver {
     linkSource: [String: Any]?
   ) -> Any {
     if let dict = value as? [String: Any] {
-      let effectiveSource = linkSource ?? dict
-      if let type = dict["type"] as? String,
+      if let linkSource,
+         let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
         var parameterNames = collectParameterNames(from: resolvedTemplate)
         parameterNames.formUnion(
@@ -110,11 +110,11 @@ final class UntypedDivTemplateResolver {
         )
         return resolveInstanceLinks(
           in: dict,
-          linkSource: effectiveSource,
+          linkSource: linkSource,
           parameterNames: parameterNames
         )
       }
-      return resolveLinks(in: dict, linkSource: effectiveSource)
+      return resolveLinks(in: dict, linkSource: linkSource)
     }
     if let array = value as? [Any] {
       return array.map { resolveLinksInValue($0, linkSource: linkSource) }

@@ -1,0 +1,67 @@
+{
+  "description": "A 'nested' template declares '$items: items' as a parameter and is placed inside the card's own data under the 'root' template's '$items' slot.",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "items"
+    },
+    "root": {
+      "type": "container",
+      "$items": "items"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "nested",
+                  "items": []
+                },
+                {
+                  "text": "SAMPLE",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "container",
+                    "items": []
+                  },
+                  {
+                    "text": "SAMPLE",
+                    "type": "text"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
