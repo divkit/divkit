@@ -1,0 +1,112 @@
+{
+  "card": {
+    "log_id": "pager_click_propagation",
+    "variables": [
+      {
+        "name": "result_text",
+        "type": "string",
+        "value": "not_clicked"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "id": "clickable_parent",
+              "orientation": "vertical",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "actions": [
+                {
+                  "log_id": "parent_click",
+                  "url": "div-action://set_variable?name=result_text&value=parent_clicked"
+                }
+              ],
+              "items": [
+                {
+                  "type": "pager",
+                  "id": "test_pager",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 200
+                  },
+                  "layout_mode": {
+                    "type": "percentage",
+                    "page_width": {
+                      "type": "percentage",
+                      "value": 100
+                    }
+                  },
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Page 1",
+                      "font_size": 20,
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "Page 2",
+                      "font_size": 20,
+                      "text_alignment_horizontal": "center",
+                      "text_alignment_vertical": "center",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "result_label",
+              "text": "@{result_text}",
+              "font_size": 16,
+              "text_color": "#000000",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "top": 16,
+                "left": 16
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

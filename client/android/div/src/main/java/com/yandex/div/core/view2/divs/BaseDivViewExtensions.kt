@@ -400,3 +400,21 @@ private fun wrapsSize(size: Int?): Boolean {
 internal val View.availableWidth get() = (width - paddingLeft - paddingRight).coerceAtLeast(0)
 
 internal val View.availableHeight get() = (height - paddingTop - paddingBottom).coerceAtLeast(0)
+
+internal fun View.performClickOnAncestors(): Boolean {
+    var current: View = this
+    do {
+        current = current.parent as? ViewGroup ?: return false
+        if (current.parent == null) return false
+    } while (!current.performClick())
+    return true
+}
+
+internal fun View.performLongClickOnAncestors(): Boolean {
+    var current: View = this
+    do {
+        current = current.parent as? ViewGroup ?: return false
+        if (current.parent == null) return false
+    } while (!current.performLongClick())
+    return true
+}

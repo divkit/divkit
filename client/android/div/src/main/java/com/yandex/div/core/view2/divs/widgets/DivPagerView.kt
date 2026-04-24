@@ -2,7 +2,9 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
+import com.yandex.div.core.view2.divs.performClickOnAncestors
+import com.yandex.div.core.view2.divs.performLongClickOnAncestors
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
@@ -76,6 +80,26 @@ internal class DivPagerView @JvmOverloads constructor(
         }
 
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
+
+    private val parentClickGestureDetector = GestureDetector(context,
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent): Boolean = true
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                if (isClickable) return performClick()
+                if (hasClickableChildAt(e.x, e.y)) return false
+                return performClickOnAncestors()
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                if (isLongClickable) {
+                    performLongClick()
+                } else if (!hasLongClickableChildAt(e.x, e.y)) {
+                    performLongClickOnAncestors()
+                }
+            }
+        }
+    )
 
     internal var currentItem: Int
         get() = viewPager.currentItem
@@ -148,6 +172,11 @@ internal class DivPagerView @JvmOverloads constructor(
         changePageCallbacksForIndicators.clear()
     }
 
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        parentClickGestureDetector.onTouchEvent(event)
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         val intercepted =
             onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event)
@@ -168,6 +197,31 @@ internal class DivPagerView @JvmOverloads constructor(
             parent = parent.parent as? View ?: return null
         }
         return null
+    }
+
+    private fun hasClickableChildAt(x: Float, y: Float): Boolean {
+        return findViewWithPropertyAt(this, x.toInt(), y.toInt(), View::isClickable)
+    }
+
+    private fun hasLongClickableChildAt(x: Float, y: Float): Boolean {
+        return findViewWithPropertyAt(this, x.toInt(), y.toInt(), View::isLongClickable)
+    }
+
+    private val hitRect = Rect()
+
+    private fun findViewWithPropertyAt(
+        viewGroup: ViewGroup, x: Int, y: Int, predicate: (View) -> Boolean
+    ): Boolean {
+        for (i in viewGroup.childCount - 1 downTo 0) {
+            val child = viewGroup.getChildAt(i)
+            child.getHitRect(hitRect)
+            if (!hitRect.contains(x, y)) continue
+            if (predicate(child)) return true
+            if (child is ViewGroup && findViewWithPropertyAt(child, x - hitRect.left, y - hitRect.top, predicate)) {
+                return true
+            }
+        }
+        return false
     }
 
     internal fun interface OnItemsUpdatedCallback {

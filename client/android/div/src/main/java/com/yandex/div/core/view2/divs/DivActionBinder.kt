@@ -40,17 +40,7 @@ internal class DivActionBinder @Inject constructor(
     @ExperimentFlag(IGNORE_ACTION_MENU_ITEMS_ENABLED) private val shouldIgnoreActionMenuItems: Boolean,
 ) {
 
-    private val passToParentLongClickListener: (View) -> Boolean = { view ->
-        var isLongClickHandled = false
-        var currentView: View = view
-        do {
-            currentView = currentView.parent as? ViewGroup ?: break
-            if (currentView.parent == null) break
-            isLongClickHandled = currentView.performLongClick()
-        } while (!isLongClickHandled)
-
-        isLongClickHandled
-    }
+    private val passToParentLongClickListener: (View) -> Boolean = View::performLongClickOnAncestors
 
     fun bindDivActions(
         context: BindingContext,
