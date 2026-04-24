@@ -210,6 +210,22 @@
             }
         }
     }, {
+        "id": "action_scroll_to_item_id",
+        "name": "Typed action <code>scroll_to</code> with destination <code>item_id</code> and action url <code>scroll_to_item_id</code>",
+        "compat": {
+            "android": {
+                "version_added": "32.46.0"
+            }
+        }
+    }, {
+        "id": "action_typed_set_cursor_position",
+        "name": "Typed action <code>set_cursor_position</code>",
+        "compat": {
+            "web": {
+                "version_added": "32.46.0"
+            }
+        }
+    }, {
         "id": "action_typed_set_stored_value",
         "name": "Typed action <code>set_stored_value</code>",
         "compat": {
@@ -330,6 +346,9 @@
             },
             "ios": {
                 "version_added": "32.38.0"
+            },
+            "android": {
+                "version_added": "32.46.0"
             }
         }
     }]
