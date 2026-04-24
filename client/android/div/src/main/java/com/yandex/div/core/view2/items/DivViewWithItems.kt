@@ -182,7 +182,8 @@ internal sealed class DivViewWithItems {
 
         override fun getIndicesOfItemWithId(id: String): List<Int> {
             val adapter = view.viewPager.adapter as? DivPagerAdapter ?: return emptyList()
-            return adapter.itemsToShow.getIndicesWithId(id) { div }
+            return adapter.visibleItems.getIndicesWithId(id) { div }
+                .map { adapter.getPosition(it) }
         }
     }
 
