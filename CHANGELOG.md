@@ -1,3 +1,24 @@
+## 32.47.0
+
+# Android Client:
+* Added image loading errors reporting.
+* Fixed `ConcurrentModificationException` at ErrorCollector.notifyObservers() call.
+* Fixed an issue where `div-custom` binding was called on a background thread.
+* Fixed loading of animated images in `.webp` format by `GlideDivImageLoader`.
+
+# iOS Client:
+* Added `RasterizeExtensionHandler` to fix offscreen rendering issues in overlap containers.
+* Also reduced redundant full-card refreshes when only the pager size changes, and made automatic page changes on an infinite carousel more reliable.
+* Fixed VideoBlock preview size.
+* Fixed an issue on iOS where programmatic text updates left the caret at its previous position; the caret now moves to the end of the line.
+* Fixed infinite `div-pager`: after rotating the screen the carousel could freeze between pages or show the wrong page; it now stays aligned and flips correctly. The same applies to paging gallery when its size changes (e.g. rotation).
+* Supported reset of persistent variables and data in `DivKitComponents`.
+* When a dictionary is turned into a string in expressions (for example `@{dict}` or `toString(dict)`), string keys and values are serialized with JSON-style escaping for special characters.
+
+# Web Client:
+* Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
+
+
 ## 32.46.0
 
 # Android Client:

@@ -1,3 +1,8 @@
+## 32.47.0 (April 27, 2026)
+
+* Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
+
+
 ## 32.46.0 (April 20, 2026)
 
 * Added `set_cursor_position` action.
