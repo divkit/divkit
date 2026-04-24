@@ -42,10 +42,6 @@ tasks.named("sourcesJar") {
     dependsOn("generateFunctionProvider")
 }
 
-tasks.register("test${project.property("testVariant").toString().replaceFirstChar { it.uppercase() }}UnitTest") {
-    dependsOn("test")
-}
-
 tasks.register<Jar>("replJar") {
     dependsOn("testClasses")
     from(buildDir.dir("classes/kotlin/test"))

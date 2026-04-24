@@ -84,19 +84,12 @@ allprojects {
     }
 }
 
-tasks.register('unitTests')
-final def testTaskName = "test${project.property('testVariant').capitalize()}UnitTest"
-
 subprojects {
     tasks.withType(Test).configureEach {
         // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
         maxParallelForks = 1
         maxHeapSize = "4g"
         failOnNoDiscoveredTests = false
-    }
-
-    unitTests.configure {
-        dependsOn tasks.matching { task -> task.name == testTaskName || task.name == 'lint' }
     }
 
     configurations.configureEach {
