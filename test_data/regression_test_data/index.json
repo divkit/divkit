@@ -4102,6 +4102,7 @@
     {
       "title": "Input with set_cursor_position actions",
       "platforms": [
+        "android",
         "web"
       ],
       "tags": [

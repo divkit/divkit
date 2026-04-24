@@ -41,6 +41,7 @@
     }
   },
   "platforms": [
+    "android",
     "web"
   ],
   "required": [
