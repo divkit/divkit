@@ -151,26 +151,6 @@ tasks.register('reportBuildNumber') {
     }
 }
 
-tasks.register('assembleDemoDebug') {
-    dependsOn ":divkit-demo-app:assembleDebug"
-}
-
-tasks.register('assembleDemoDebugBundle') {
-    dependsOn ":divkit-demo-app:bundleDebug"
-}
-
-tasks.register('assembleDemoRelease') {
-    dependsOn ":divkit-demo-app:assembleRelease"
-}
-
-tasks.register('assembleDemoReleaseBundle') {
-    dependsOn ":divkit-demo-app:bundleRelease"
-}
-
-tasks.register('finalVerification') {
-    dependsOn unitTests
-}
-
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
     apply from: it
 }
