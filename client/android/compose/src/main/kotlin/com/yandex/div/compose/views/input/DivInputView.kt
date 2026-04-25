@@ -5,14 +5,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.utils.observeBaseTextStyle
 import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivInput
 
 @Composable
@@ -20,8 +19,7 @@ internal fun DivInputView(
     modifier: Modifier,
     data: DivInput,
 ) {
-    // TODO: Make bind between Compose state and div variables.
-    val binding = remember { mutableStateOf("") }
+    val textState = mutableStateFromVariable(data.textVariable, defaultValue = "")
 
     val fontSize = data.fontSize.observedIntValue()
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
@@ -54,8 +52,8 @@ internal fun DivInputView(
 
     Box(modifier = modifier, contentAlignment = contentAlignment) {
         BasicTextField(
-            value = binding.value,
-            onValueChange = { binding.value = it },
+            value = textState.value,
+            onValueChange = { textState.value = it },
             textStyle = textStyle,
             singleLine = singleLine,
             maxLines = maxLines,
@@ -65,7 +63,7 @@ internal fun DivInputView(
             keyboardOptions = keyboardOptions(keyboardType, enterKeyType, autocapitalization),
             decorationBox = { innerTextField ->
                 Box(Modifier.fillMaxWidth(), contentAlignment = textAlignmentHorizontal.toTextAlignment()) {
-                    if (binding.value.isEmpty() && hintText != null) {
+                    if (textState.value.isEmpty() && hintText != null) {
                         BasicText(
                             text = hintText,
                             style = textStyle.copy(color = hintColor),

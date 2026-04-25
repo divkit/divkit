@@ -9,8 +9,8 @@ import coil3.request.allowHardware
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
@@ -74,6 +74,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
         setContentView(
             LinearLayout(divContext).apply {
+                view.removeAutofocusForOldApis()
                 addView(view)
             }
         )

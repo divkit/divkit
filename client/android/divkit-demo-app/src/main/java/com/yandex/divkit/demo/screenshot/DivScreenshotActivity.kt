@@ -122,12 +122,6 @@ class DivScreenshotActivity : AppCompatActivity() {
         applyConfiguration()
     }
 
-    private fun View.removeAutofocusForOldApis() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            isFocusableInTouchMode = true
-        }
-    }
-
     private fun ViewGroup.hideCursor() {
         for (child in children) {
             if (child is EditText) {

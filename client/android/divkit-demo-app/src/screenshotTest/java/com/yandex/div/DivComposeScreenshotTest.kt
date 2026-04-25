@@ -256,6 +256,12 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-transform",
                 // div-state
                 "snapshot_test_data/div-states",
+                // div-input
+                "snapshot_test_data/div-input/all-attributes.json",
+                "snapshot_test_data/div-input/min-height.json",
+                "snapshot_test_data/div-input/text-alignment-property.json",
+                "snapshot_test_data/div-input/text-alignment-property-single-line.json",
+                "snapshot_test_data/div-input/without-text.json",
             ).expandDirectories()
 
             //TODO: to be stabilized
