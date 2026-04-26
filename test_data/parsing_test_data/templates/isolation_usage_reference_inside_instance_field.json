@@ -1,0 +1,83 @@
+{
+  "description": "Two template definitions each independently declare '$color: background_color'. A usage of one template sits inside the other template's usage under an instance-provided field (the outer usage's 'items', which the outer template definition does not provide). Verifies parameter cascade stops at the instance-provided boundary: the inner usage's own reference value for 'background_color' is preserved and the outer's does not leak in.",
+  "templates": {
+    "root": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    },
+    "button": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "background_color": "#F00",
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "button",
+                  "background_color": "#0f0",
+                  "text": "SAMPLE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#F00"
+              }
+            ],
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#0f0"
+                      }
+                    ],
+                    "text": "SAMPLE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

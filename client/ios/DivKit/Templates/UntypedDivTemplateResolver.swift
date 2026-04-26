@@ -31,7 +31,12 @@ final class UntypedDivTemplateResolver {
     }
     merged["type"] = templateToType[templateName] ?? templateName
 
-    return resolveLinks(in: merged, linkSource: dictionary)
+    return resolveLinks(
+      in: merged,
+      linkSource: dictionary,
+      cascadeAllowed: true,
+      instanceProvidedKeys: Set(dictionary.keys)
+    )
   }
 
   private func resolveTemplate(named templateName: TemplateName)
@@ -73,7 +78,9 @@ final class UntypedDivTemplateResolver {
 
   private func resolveLinks(
     in dictionary: [String: Any],
-    linkSource: [String: Any]?
+    linkSource: [String: Any]?,
+    cascadeAllowed: Bool,
+    instanceProvidedKeys: Set<String> = []
   ) -> [String: Any] {
     var dict = dictionary
     var linkFieldNames = Set<String>()
@@ -90,18 +97,27 @@ final class UntypedDivTemplateResolver {
     var result: [String: Any] = [:]
     for (key, value) in dict {
       guard !key.hasPrefix("$") else { continue }
-      let childSource: [String: Any]? = linkFieldNames.contains(key) ? nil : linkSource
-      result[key] = resolveLinksInValue(value, linkSource: childSource)
+      let isLinked = linkFieldNames.contains(key)
+      let isInstanceProvided = instanceProvidedKeys.contains(key)
+      let childLinkSource: [String: Any]? = isLinked ? nil : linkSource
+      let childCascadeAllowed = cascadeAllowed && !isLinked && !isInstanceProvided
+      result[key] = resolveLinksInValue(
+        value,
+        linkSource: childLinkSource,
+        cascadeAllowed: childCascadeAllowed
+      )
     }
     return result
   }
 
   private func resolveLinksInValue(
     _ value: Any,
-    linkSource: [String: Any]?
+    linkSource: [String: Any]?,
+    cascadeAllowed: Bool
   ) -> Any {
     if let dict = value as? [String: Any] {
-      if let linkSource,
+      if cascadeAllowed,
+         let linkSource,
          let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
         var parameterNames = collectParameterNames(from: resolvedTemplate)
@@ -114,10 +130,12 @@ final class UntypedDivTemplateResolver {
           parameterNames: parameterNames
         )
       }
-      return resolveLinks(in: dict, linkSource: linkSource)
+      return resolveLinks(in: dict, linkSource: linkSource, cascadeAllowed: cascadeAllowed)
     }
     if let array = value as? [Any] {
-      return array.map { resolveLinksInValue($0, linkSource: linkSource) }
+      return array.map {
+        resolveLinksInValue($0, linkSource: linkSource, cascadeAllowed: cascadeAllowed)
+      }
     }
     return value
   }
