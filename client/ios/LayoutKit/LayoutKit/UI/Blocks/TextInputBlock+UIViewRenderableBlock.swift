@@ -592,7 +592,9 @@ extension TextInputBlockView {
 
     startListeningTap()
     if selectAllOnFocus {
-      view.selectAll(nil)
+      onMainThreadAsync {
+        view.selectAll(nil)
+      }
     }
     onFocus()
   }
