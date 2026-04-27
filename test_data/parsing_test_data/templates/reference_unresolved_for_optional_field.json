@@ -1,0 +1,35 @@
+{
+  "description": "A reference definition points to a source name the usage does not provide, for an optional field. Verifies an unresolved reference on an optional field is silently ignored.",
+  "templates": {
+    "styled_text": {
+      "type": "text",
+      "$id": "missing_id"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "styled_text",
+          "text": "Hello"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello"
+          }
+        }
+      ]
+    }
+  }
+}

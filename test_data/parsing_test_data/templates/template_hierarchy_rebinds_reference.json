@@ -1,0 +1,45 @@
+{
+  "description": "A three-level template hierarchy (grand_parent → parent → child) where each derived template rebinds the parent's reference definition to a different source name. The usage supplies all three source fields; only the deepest rebinding must drive the resolved value.",
+  "templates": {
+    "grand_parent": {
+      "type": "text",
+      "$text": "ref_a"
+    },
+    "parent": {
+      "type": "grand_parent",
+      "$text": "ref_b"
+    },
+    "child": {
+      "type": "parent",
+      "$text": "ref_c"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "child",
+          "ref_a": "A",
+          "ref_b": "B",
+          "ref_c": "C"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "C"
+          }
+        }
+      ]
+    }
+  }
+}

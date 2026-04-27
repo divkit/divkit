@@ -1,0 +1,59 @@
+{
+  "description": "Two template definitions ('root' and 'nested') both declare the same reference '$items: items' — identical reference field and identical source name. A usage of one is nested inside the other via the card's own data. Verifies scope isolation: each template's reference is scoped to its own usage, and the outer usage's items do not overwrite the inner usage's items.",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "items"
+    },
+    "root": {
+      "type": "container",
+      "$items": "items"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "items": [
+            {
+              "type": "nested",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "SAMPLE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "SAMPLE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

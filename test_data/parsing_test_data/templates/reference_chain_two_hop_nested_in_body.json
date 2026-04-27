@@ -1,0 +1,48 @@
+{
+  "description": "A two-hop reference chain via nested usage: a template usage inside another template's body declares its own reference definition that points to a card field, while the used template has its own reference definition for a different field (with a literal default). Verifies the two-hop chain does not propagate and the affected item is dropped with an error.",
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "font_size": 14,
+      "$text": "text_value"
+    },
+    "list_item": {
+      "type": "container",
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "base_text",
+          "$text_value": "title"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "list_item",
+          "title": "Resolved through chain"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": []
+          }
+        }
+      ]
+    }
+  }
+}

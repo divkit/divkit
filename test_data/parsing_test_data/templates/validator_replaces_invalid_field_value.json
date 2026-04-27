@@ -1,0 +1,32 @@
+{
+  "description": "Not a template test — verifies that an invalid field value (div-text.font_size = -1) is replaced by the field's default and reported as an error.",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Hello",
+          "font_size": -1
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello",
+            "font_size": 12
+          }
+        }
+      ]
+    }
+  }
+}

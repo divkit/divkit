@@ -1,0 +1,36 @@
+{
+  "description": "A template usage supplies both a direct value for a field and a reference value for that field's reference definition. Verifies that the usage's direct value wins — the reference substitution is skipped when the field is already populated.",
+  "templates": {
+    "linked_text": {
+      "type": "text",
+      "$text": "content"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "linked_text",
+          "content": "From content",
+          "text": "Direct value"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Direct value"
+          }
+        }
+      ]
+    }
+  }
+}

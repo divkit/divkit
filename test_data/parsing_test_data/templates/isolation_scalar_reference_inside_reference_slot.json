@@ -1,0 +1,60 @@
+{
+  "description": "Scalar counterpart of isolation_items_inside_reference_slot: a nested template usage with its own reference value ('textRef: \"INNER\"') sits inside the card's data under the parent template's '$items' reference slot, wrapped in a plain container whose own 'textRef: \"OUTER\"' must not leak in. Verifies parameter cascade does not cross the reference-slot boundary for a non-items, non-empty value.",
+  "templates": {
+    "root": {
+      "type": "container",
+      "$items": "items"
+    },
+    "nested": {
+      "type": "text",
+      "$text": "textRef"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "items": [
+            {
+              "type": "container",
+              "textRef": "OUTER",
+              "items": [
+                {
+                  "type": "nested",
+                  "textRef": "INNER"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "INNER"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

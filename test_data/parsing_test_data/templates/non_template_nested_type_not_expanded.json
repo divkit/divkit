@@ -1,0 +1,40 @@
+{
+  "description": "A template name ('button') collides with the value of a 'type' field inside a non-Div nested property (accessibility.type). Verifies the resolver does not treat that non-Div dict as a template usage.",
+  "templates": {
+    "button": {
+      "type": "text",
+      "accessibility": {
+        "type": "button"
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "button",
+          "text": "Click me"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Click me",
+            "accessibility": {
+              "type": "button"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

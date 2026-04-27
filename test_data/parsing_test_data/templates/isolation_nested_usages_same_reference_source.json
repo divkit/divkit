@@ -1,0 +1,59 @@
+{
+  "description": "Two template definitions both declare '$items: itemsRef' — identical source name, distinct from the field name. A usage of one is nested inside the other via the card's own data. Verifies each reference resolves from its own usage's 'itemsRef', preserving scope despite the source-name collision.",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "itemsRef"
+    },
+    "root": {
+      "type": "container",
+      "$items": "itemsRef"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "itemsRef": [
+            {
+              "type": "nested",
+              "itemsRef": [
+                {
+                  "type": "text",
+                  "text": "SAMPLE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "SAMPLE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

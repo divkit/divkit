@@ -1,0 +1,60 @@
+{
+  "description": "A reference definition lives inside a plain (non-template) nested dict embedded in a template's body — an element of an 'images' array. Verifies the reference still resolves against the outer instance despite the intermediate plain-dict layers.",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "image_start": 5,
+          "type": "root_container"
+        }
+      }
+    ]
+  },
+  "templates": {
+    "title_text": {
+      "type": "text"
+    },
+    "root_container": {
+      "type": "container",
+      "items": [
+        {
+          "text": "Title",
+          "images": [
+            {
+              "$start": "image_start",
+              "url": "https://yastatic.net/s3/home/divkit/chess.png"
+            }
+          ],
+          "type": "title_text"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "text": "Title",
+                "images": [
+                  {
+                    "start": 5,
+                    "url": "https://yastatic.net/s3/home/divkit/chess.png"
+                  }
+                ],
+                "type": "text"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

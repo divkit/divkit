@@ -1,0 +1,57 @@
+{
+  "description": "A template definition declares reference definitions at multiple depths: top-level ($text), inside a nested object ($top in paddings), and inside an array element ($url in actions[]). Verifies all references resolve against the usage's reference values.",
+  "templates": {
+    "title": {
+      "type": "text",
+      "$text": "title",
+      "paddings": {
+        "$top": "top_padding",
+        "bottom": 10
+      },
+      "actions": [
+        {
+          "log_id": "test_action",
+          "$url": "action_url"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "title",
+          "title": "Hello!",
+          "top_padding": 20,
+          "action_url": "action://url"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!",
+            "paddings": {
+              "top": 20,
+              "bottom": 10
+            },
+            "actions": [
+              {
+                "log_id": "test_action",
+                "url": "action://url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

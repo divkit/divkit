@@ -1,0 +1,57 @@
+{
+  "description": "A template usage inside another template's body declares its own reference definition that points to a field on the outer instance, and the used template has its own reference definition for the same slot. Verifies that a two-hop reference chain (instance field → usage reference → definition reference) does not propagate: only the single-hop sibling resolves, the chained item is dropped with an error.",
+  "templates": {
+    "header": {
+      "type": "text",
+      "$text": "header_text"
+    },
+    "card": {
+      "type": "container",
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "header",
+          "$header_text": "title"
+        },
+        {
+          "type": "text",
+          "$text": "subtitle"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "card",
+          "title": "Card Title",
+          "subtitle": "Card Subtitle"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "Card Subtitle"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

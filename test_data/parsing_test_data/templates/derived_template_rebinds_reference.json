@@ -1,0 +1,40 @@
+{
+  "description": "A derived template (via 'type: <parent>') rebinds the parent's reference definition to a different source name. Verifies the derived template's reference wins over the parent's.",
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "$text": "content"
+    },
+    "titled_text": {
+      "type": "base_text",
+      "$text": "title"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "titled_text",
+          "content": "From content",
+          "title": "From title"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "From title"
+          }
+        }
+      ]
+    }
+  }
+}

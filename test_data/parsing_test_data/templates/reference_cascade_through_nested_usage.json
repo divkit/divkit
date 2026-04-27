@@ -1,0 +1,48 @@
+{
+  "description": "A template usage inside another template's body declares a reference definition whose source name matches a field on the card instance. Verifies that the reference value on the outer instance cascades through two levels of template usage to drive the inner template's field.",
+  "templates": {
+    "inner_template": {
+      "type": "image",
+      "$image_url": "image"
+    },
+    "outer_template": {
+      "type": "container",
+      "items": [
+        {
+          "type": "inner_template"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "outer_template",
+          "image": "https://image.url"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "image",
+                "image_url": "https://image.url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

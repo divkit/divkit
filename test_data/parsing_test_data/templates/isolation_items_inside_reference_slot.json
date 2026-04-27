@@ -1,0 +1,67 @@
+{
+  "description": "A template usage with its own explicit 'items: []' sits inside the card's data under the parent template's '$items' reference slot. Verifies parameter cascade stops at the reference-slot boundary: the inner usage's own items are preserved (and later dropped by the container validator, yielding '{type: container}').",
+  "templates": {
+    "nested": {
+      "type": "container",
+      "$items": "items"
+    },
+    "root": {
+      "type": "container",
+      "$items": "items"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "root",
+          "items": [
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "nested",
+                  "items": []
+                },
+                {
+                  "text": "SAMPLE",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "container",
+                    "items": []
+                  },
+                  {
+                    "text": "SAMPLE",
+                    "type": "text"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
