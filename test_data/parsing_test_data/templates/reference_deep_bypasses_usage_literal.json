@@ -1,0 +1,114 @@
+{
+  "description": "A template usage supplies a literal field whose name matches the source of a deep (non-top-level) reference definition inside the template body. Verifies two things simultaneously: the usage's literal is preserved on the expanded middle-level dict (it is not consumed as a formal parameter value), and the deep reference still resolves against the outer card instance rather than the usage's same-named literal (the literal does not shadow the deep reference).",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "background": [
+            {
+              "type": "solid",
+              "color": "#f00"
+            }
+          ],
+          "type": "root"
+        }
+      }
+    ]
+  },
+  "templates": {
+    "root": {
+      "type": "container",
+      "items": [
+        {
+          "type": "nested",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0f0"
+            }
+          ]
+        }
+      ]
+    },
+    "nested": {
+      "type": "container",
+      "items": [
+        {
+          "type": "container",
+          "margins": {
+            "top": 100,
+            "bottom": 100,
+            "left": 100,
+            "right": 100
+          },
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "$background": "background"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#f00"
+              }
+            ],
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "container",
+                    "margins": {
+                      "top": 100,
+                      "bottom": 100,
+                      "left": 100,
+                      "right": 100
+                    },
+                    "width": {
+                      "type": "fixed",
+                      "value": 100
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 100
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#f00"
+                      }
+                    ]
+                  }
+                ],
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#0f0"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
