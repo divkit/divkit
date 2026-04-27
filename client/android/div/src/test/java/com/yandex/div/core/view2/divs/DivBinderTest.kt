@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import androidx.transition.TransitionSet
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.DivCustomContainerViewAdapter
@@ -82,9 +81,7 @@ open class DivBinderTest {
         whenever(divView.releaseViewVisitor) doReturn this
     }
 
-    private val transitionBuilder = mock<DivTransitionBuilder> {
-        on { buildTransitions(fromDiv = anyOrNull(), toDiv = anyOrNull(), any(), any()) } doReturn TransitionSet()
-    }
+    private val transitionBuilder = mock<DivTransitionBuilder>()
 
     private val viewIdProvider = DivViewIdProvider()
 

@@ -8,24 +8,31 @@ import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
+private typealias Converter<T> = (DivItemBuilderResult) -> T
+
 /**
  * Gets a sequence for visiting this [Div] and all its children.
  */
-internal fun Div.walk(resolver: ExpressionResolver): DivTreeWalk {
-    return DivTreeWalk(this, resolver)
-}
+internal fun <T> Div.walk(
+    resolver: ExpressionResolver,
+    converter: Converter<T?>,
+): DivTreeWalk<T> = DivTreeWalk(this, resolver, converter)
 
-internal class DivTreeWalk private constructor(
+internal fun Div.walk(resolver: ExpressionResolver) = walk(resolver) { it }
+
+internal class DivTreeWalk<T> private constructor(
     private val root: Div,
     private val resolver: ExpressionResolver,
     private val onEnter: ((Div) -> Boolean)?,
     private val onLeave: ((Div) -> Unit)?,
-    private val maxDepth: Int = Int.MAX_VALUE
-) : Sequence<DivItemBuilderResult> {
+    private val converter: Converter<T?>,
+    private val maxDepth: Int = Int.MAX_VALUE,
+) : Sequence<T> {
 
-    internal constructor(root: Div, resolver: ExpressionResolver) : this(root, resolver, null, null)
+    internal constructor(root: Div, resolver: ExpressionResolver, converter: Converter<T?>) :
+        this(root, resolver, null, null, converter)
 
-    override fun iterator(): Iterator<DivItemBuilderResult> = DivTreeWalkIterator(root, resolver)
+    override fun iterator(): Iterator<T> = DivTreeWalkIterator(root, resolver, converter)
 
     /**
      * Sets a [predicate], that is called on any entered container div (div-container, div-gallery, etc.)
@@ -33,16 +40,16 @@ internal class DivTreeWalk private constructor(
      *
      * If the [predicate] returns `false` the div is not entered and neither it nor its children are visited.
      */
-    fun onEnter(predicate: (Div) -> Boolean): DivTreeWalk {
-        return DivTreeWalk(root, resolver, onEnter = predicate, onLeave = onLeave, maxDepth = maxDepth)
+    fun onEnter(predicate: (Div) -> Boolean): DivTreeWalk<T> {
+        return DivTreeWalk(root, resolver, onEnter = predicate, onLeave = onLeave, converter, maxDepth = maxDepth)
     }
 
     /**
      * Sets a callback [function], that is called on any left container div after its children are visited,
      * and after it is visited itself.
      */
-    fun onLeave(function: (Div) -> Unit): DivTreeWalk {
-        return DivTreeWalk(root, resolver, onEnter = onEnter, onLeave = function, maxDepth = maxDepth)
+    fun onLeave(function: (Div) -> Unit): DivTreeWalk<T> {
+        return DivTreeWalk(root, resolver, onEnter = onEnter, onLeave = function, converter, maxDepth = maxDepth)
     }
 
     /**
@@ -53,18 +60,19 @@ internal class DivTreeWalk private constructor(
      * With a value of 1, walker visits only the origin div and all its immediate children,
      * with a value of 2 also grandchildren, etc.
      */
-    fun maxDepth(depth: Int): DivTreeWalk {
+    fun maxDepth(depth: Int): DivTreeWalk<T> {
         if (depth <= 0) {
             throw IllegalArgumentException("depth must be positive, but was $depth.")
         }
 
-        return DivTreeWalk(root, resolver, onEnter, onLeave, depth)
+        return DivTreeWalk(root, resolver, onEnter, onLeave, converter, depth)
     }
 
     private inner class DivTreeWalkIterator(
         private val root: Div,
-        private val resolver: ExpressionResolver
-    ) : AbstractIterator<DivItemBuilderResult>() {
+        private val resolver: ExpressionResolver,
+        private val converter: Converter<T?>,
+    ) : AbstractIterator<T>() {
 
         private val stack = ArrayDeque<Node>().apply {
             addLast(node(root.toItemBuilderResult(resolver)))
@@ -72,11 +80,13 @@ internal class DivTreeWalk private constructor(
 
         override fun computeNext() {
             val nextItem = nextItem()
-            if (nextItem != null) {
-                setNext(nextItem)
-            } else {
+            if (nextItem == null) {
                 done()
+                return
             }
+
+            converter(nextItem)?.let { setNext(it) }
+                ?: computeNext()
         }
 
         private fun nextItem(): DivItemBuilderResult? {

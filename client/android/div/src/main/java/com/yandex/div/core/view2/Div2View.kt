@@ -51,8 +51,10 @@ import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.SceneRootWatcher
+import com.yandex.div.core.view2.animations.TransitionData
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
+import com.yandex.div.core.view2.animations.toTransitionData
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.drawShadow
@@ -81,7 +83,6 @@ import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
@@ -1082,10 +1083,8 @@ class Div2View private constructor(
         }
 
         val transition = viewComponent.transitionBuilder.buildTransitions(
-            from = oldDiv?.let { itemSequenceForTransition(oldData, it, oldExpressionResolver) },
-            to = newDiv?.let { itemSequenceForTransition(newData, it, expressionResolver) },
-            fromResolver = oldExpressionResolver,
-            toResolver = expressionResolver
+            from = oldDiv?.let { transitionSequence(oldData, it, oldExpressionResolver, isIncoming = false) },
+            to = newDiv?.let { transitionSequence(newData, it, expressionResolver, isIncoming = true) },
         )
 
         if (transition.transitionCount == 0) {
@@ -1101,28 +1100,28 @@ class Div2View private constructor(
         return transition
     }
 
-    private fun itemSequenceForTransition(
+    private fun transitionSequence(
         divData: DivData?,
         div: Div,
-        resolver: ExpressionResolver
-    ): Sequence<DivItemBuilderResult> {
+        resolver: ExpressionResolver,
+        isIncoming: Boolean,
+    ): Sequence<TransitionData> {
         val selectors = ArrayDeque<DivTransitionSelector>().apply {
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
 
-        return div.walk(resolver)
-            .onEnter { div ->
-                if (div is Div.State) selectors.addLast(div.value.transitionAnimationSelector.evaluate(resolver))
-                true
-            }
-            .onLeave { div ->
-                if (div is Div.State) selectors.removeLast()
-            }
-            .filter { item ->
-                item.div.value().transitionTriggers?.allowsTransitionsOnDataChange()
+        return div.walk(resolver) { item ->
+            item.toTransitionData(isIncoming) { div ->
+                div.transitionTriggers?.allowsTransitionsOnDataChange()
                     ?: selectors.lastOrNull()?.allowsTransitionsOnDataChange()
                     ?: false
             }
+        }.onEnter { div ->
+            if (div is Div.State) selectors.addLast(div.value.transitionAnimationSelector.evaluate(resolver))
+            true
+        }.onLeave { div ->
+            if (div is Div.State) selectors.removeLast()
+        }
     }
 
     fun startDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext {

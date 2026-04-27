@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.AnimationSet
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -35,11 +36,14 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.animations.DivTransition
 import com.yandex.div.core.view2.animations.Fade
 import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.SceneRootWatcher
+import com.yandex.div.core.view2.animations.TransitionData
 import com.yandex.div.core.view2.animations.VerticalTranslation
 import com.yandex.div.core.view2.animations.allowsTransitionsOnStateChange
+import com.yandex.div.core.view2.animations.toTransitionData
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -47,6 +51,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
 import com.yandex.div2.Div
@@ -106,7 +111,7 @@ internal class DivStateBinder @Inject constructor(
             view.bind(context, divValue, oldDivState?.value, newState, path)
         }
 
-        view.bindState(context, divValue, newState, oldDivState?.value, oldState, oldDiv, path, oldResolver, id)
+        view.bindState(context, divValue, oldDivState?.value, newState, oldState, oldDiv, path, oldResolver, id)
     }
 
     private fun DivStateLayout.bind(
@@ -141,10 +146,8 @@ internal class DivStateBinder @Inject constructor(
 
     private fun DivStateLayout.bindState(
         bindingContext: BindingContext,
-        div: DivState,
-        newState: DivState.State,
-        oldDivState: DivState?,
-        oldState: DivState.State?,
+        divState: DivState, oldDivState: DivState?,
+        newState: DivState.State, oldState: DivState.State,
         oldDiv: Div?,
         path: DivStatePath,
         oldResolver: ExpressionResolver?,
@@ -165,10 +168,23 @@ internal class DivStateBinder @Inject constructor(
         if (stateId != newState.stateId) {
             incoming = newStateDiv?.let { getIncomingView(reusableIncomingView, it, resolver) }
 
-            replaceViewsAnimated(bindingContext, div, newState, oldState, incoming, outgoing)?.let { transition ->
-                TransitionManager.endTransitions(this)
-                SceneRootWatcher.watchFor(this, transition)
-                TransitionManager.beginDelayedTransition(this, transition)
+            val (sceneRoot, parentTransitions) = outgoing?.let {
+                oldState.div?.value()?.transitionChange?.let { transitionChange ->
+                    findTopWrapContentParent(listOf(DivTransition.Change(transitionChange)))
+                }
+            } ?: (this to null)
+
+            replaceViewsAnimated(
+                divState,
+                newState, oldState,
+                incoming, outgoing,
+                resolver, oldResolver,
+                parentTransitions,
+                divView,
+            )?.let { transition ->
+                TransitionManager.endTransitions(sceneRoot)
+                SceneRootWatcher.watchFor(sceneRoot, transition)
+                TransitionManager.beginDelayedTransition(sceneRoot, transition)
             }
             releaseAndRemoveChildren(divView)
             incoming?.let {
@@ -176,7 +192,7 @@ internal class DivStateBinder @Inject constructor(
                 newStateDiv?.let { viewBinder.get().bind(bindingContext, incoming, it, currentPath) }
             }
             if (outgoing != null) {
-                divView.divTransitionHandler.runTransitions(root = this, endTransitions = false)
+                divView.divTransitionHandler.runTransitions(root = sceneRoot, endTransitions = false)
             }
         } else if (newStateDivValue != null) {
             val areDivsReplaceable = outgoing != null && oldResolver != null &&
@@ -197,7 +213,7 @@ internal class DivStateBinder @Inject constructor(
             // I can't explain this. It's black magic.
             outgoing.startAnimation(AnimationSet(false))
             // Sometimes we receive same state and do not want to untrack visibility actions
-            if (oldDivState != div || newState != oldState) {
+            if (oldDivState != divState || newState != oldState) {
                 divView.unbindViewFromDiv(outgoing)
                 if (oldDiv != null && oldResolver != null) {
                     // We pass null instead of outgoing view to mark previous state as invisible
@@ -240,8 +256,31 @@ internal class DivStateBinder @Inject constructor(
         this.path = currentPath
 
         if (outgoing != null) {
-            runtimeVisitor.createAndAttachRuntimesToState(divView, div, path, resolver)
+            runtimeVisitor.createAndAttachRuntimesToState(divView, divState, path, resolver)
         }
+    }
+
+    private fun ViewGroup.findTopWrapContentParent(
+        changeTransition: List<DivTransition.Change>,
+        childItems: Sequence<TransitionData>? = null,
+        childHasFixedWidth: Boolean = false,
+        childHasFixedHeight: Boolean = false,
+    ): Pair<ViewGroup, Sequence<TransitionData>?> {
+        val lp = layoutParams ?: return this to childItems
+        val hasFixedWidth = childHasFixedWidth || (lp.width != WRAP_CONTENT && lp.width != WRAP_CONTENT_CONSTRAINED)
+        val hasFixedHeight = childHasFixedHeight || (lp.height != WRAP_CONTENT && lp.height != WRAP_CONTENT_CONSTRAINED)
+        if (hasFixedWidth && hasFixedHeight) return this to childItems
+
+        val divHolder = asDivHolderView ?: return this to childItems
+        val div = divHolder.div ?: return this to childItems
+        val id = div.value().id ?: return this to childItems
+        val resolver = divHolder.bindingContext?.expressionResolver ?: return this to childItems
+
+        val item = sequenceOf(TransitionData(id, changeTransition, resolver))
+        val items = childItems?.let { item + it } ?: item
+
+        val parent = parent as? ViewGroup ?: return this to items
+        return parent.findTopWrapContentParent(changeTransition, items, hasFixedWidth, hasFixedHeight)
     }
 
     private fun getIncomingView(reusableIncomingView: View?, div: Div, resolver: ExpressionResolver) =
@@ -320,81 +359,78 @@ internal class DivStateBinder @Inject constructor(
     }
 
     private fun replaceViewsAnimated(
-        context: BindingContext,
         divState: DivState,
-        incomingState: DivState.State,
-        outgoingState: DivState.State?,
-        incoming: View?,
-        outgoing: View?
+        incomingState: DivState.State, outgoingState: DivState.State,
+        incoming: View?, outgoing: View?,
+        resolver: ExpressionResolver, oldResolver: ExpressionResolver?,
+        parentItems: Sequence<TransitionData>?,
+        divView: Div2View,
     ): Transition? {
-        val oldResolver = outgoing?.bindingContext?.expressionResolver
-            ?: return setupAnimation(context, incomingState, outgoingState, incoming, outgoing)
+        oldResolver ?: return setupAnimation(incomingState, outgoingState, incoming, outgoing, resolver, null)
 
-        val resolver = context.expressionResolver
         return if (divState.allowsTransitionsOnStateChange(resolver)
-            && (outgoingState?.div?.containsStateInnerTransitions(oldResolver) == true
+            && (outgoingState.div?.containsStateInnerTransitions(oldResolver) == true
                 || incomingState.div?.containsStateInnerTransitions(resolver) == true)) {
             setupTransitions(
-                context.divView.viewComponent.transitionBuilder,
-                context.divView.viewComponent.stateTransitionHolder,
-                incomingState,
-                outgoingState,
-                resolver,
-                oldResolver
+                divView.viewComponent.transitionBuilder,
+                divView.viewComponent.stateTransitionHolder,
+                incomingState, outgoingState,
+                resolver, oldResolver,
+                parentItems
             )
         } else {
-            setupAnimation(context, incomingState, outgoingState, incoming, outgoing)
+            setupAnimation(incomingState, outgoingState, incoming, outgoing, resolver, oldResolver)
         }
     }
 
     private fun View.createLayoutParams() {
-        layoutParams = DivLayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        layoutParams = DivLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT)
     }
 
     private fun setupTransitions(
         transitionBuilder: DivTransitionBuilder,
         transitionHolder: DivStateTransitionHolder,
-        incomingState: DivState.State,
-        outgoingState: DivState.State?,
-        incomingResolver: ExpressionResolver,
-        outgoingResolver: ExpressionResolver,
+        incomingState: DivState.State, outgoingState: DivState.State,
+        incomingResolver: ExpressionResolver, outgoingResolver: ExpressionResolver,
+        parentTransitions: Sequence<TransitionData>?,
     ) : Transition? {
         if (incomingState == outgoingState) {
             return null
         }
 
+        val outgoingTransitions = outgoingState.toTransitionSequence(outgoingResolver, isIncoming = false)
+        val from = when {
+            parentTransitions == null -> outgoingTransitions
+            outgoingTransitions == null -> parentTransitions
+            else -> parentTransitions + outgoingTransitions
+        }
         val transition = transitionBuilder.buildTransitions(
-            from = outgoingState?.div?.walk(outgoingResolver)
-                ?.onEnter { div -> div !is Div.State }
-                ?.filter { item ->
-                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
-                },
-            to = incomingState.div?.walk(incomingResolver)
-                ?.onEnter { div -> div !is Div.State }
-                ?.filter { item ->
-                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
-                },
-            fromResolver = outgoingResolver,
-            toResolver = incomingResolver
+            from = from,
+            to = incomingState.toTransitionSequence(incomingResolver, isIncoming = true)
         )
 
         transitionHolder.append(transition)
         return transition
     }
 
+    private fun DivState.State.toTransitionSequence(
+        resolver: ExpressionResolver,
+        isIncoming: Boolean
+    ): Sequence<TransitionData>? {
+        return div?.walk(resolver) { item ->
+            item.toTransitionData(isIncoming) { div ->
+                div.transitionTriggers?.allowsTransitionsOnStateChange() ?: true
+            }
+        }?.onEnter { div -> div !is Div.State }
+    }
+
     private fun setupAnimation(
-        context: BindingContext,
-        incomingState: DivState.State,
-        outgoingState: DivState.State?,
-        incoming: View?,
-        outgoing: View?
+        incomingState: DivState.State, outgoingState: DivState.State,
+        incoming: View?, outgoing: View?,
+        resolver: ExpressionResolver, outResolver: ExpressionResolver?,
     ): Transition? {
-        val resolver = context.expressionResolver
         val animationIn = incomingState.animationIn
-        val animationOut = outgoingState?.animationOut
+        val animationOut = outgoingState.animationOut
         if (animationIn != null || animationOut != null ) {
             val transition = TransitionSet()
             if (animationIn != null && incoming != null) {
@@ -416,7 +452,6 @@ internal class DivStateBinder @Inject constructor(
                 }
             }
 
-            val outResolver = outgoing?.bindingContext?.expressionResolver
             if (animationOut != null && outResolver != null) {
                 val animationsOut = if (animationOut.name.evaluate(outResolver) != DivAnimation.Name.SET) {
                     listOf(animationOut)

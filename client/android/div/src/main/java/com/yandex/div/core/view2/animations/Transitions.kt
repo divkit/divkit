@@ -3,26 +3,9 @@ package com.yandex.div.core.view2.animations
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import androidx.transition.TransitionSet
-
-internal operator fun TransitionSet.plusAssign(transition: Transition) {
-    addTransition(transition)
-}
-
-internal operator fun TransitionSet.plusAssign(transitions: Iterable<Transition>) {
-    transitions.forEach { transition ->
-        addTransition(transition)
-    }
-}
-
-internal operator fun TransitionSet.minusAssign(transition: Transition) {
-    removeTransition(transition)
-}
-
-internal operator fun TransitionSet.minusAssign(transitions: Iterable<Transition>) {
-    transitions.forEach { transition ->
-        removeTransition(transition)
-    }
-}
+import androidx.transition.Visibility
+import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div2.DivBase
 
 internal inline fun TransitionSet.forEach(crossinline block: (Transition) -> Unit) {
     val count = transitionCount
@@ -57,4 +40,28 @@ internal fun Transition.enumerateTargetIds(): List<Int> {
         targetIds.addAll(transition.targetIds)
     }
     return targetIds.toList()
+}
+
+internal inline fun DivItemBuilderResult.toTransitionData(
+    isIncoming: Boolean,
+    allowsTransitions: (DivBase) -> Boolean,
+): TransitionData? {
+    val div = div.value()
+
+    if (!allowsTransitions(div)) return null
+
+    val id = div.id ?: return null
+
+    if (isIncoming) {
+        return div.transitionIn?.let {
+            val transition = DivTransition.Appearance(it, Visibility.MODE_IN)
+            TransitionData(id, listOf(transition), expressionResolver)
+        }
+    }
+
+    val transitionChange = div.transitionChange?.let { DivTransition.Change(it) }
+    val transitionOut = div.transitionOut?.let { DivTransition.Appearance(it, Visibility.MODE_OUT) }
+
+    if (transitionChange == null && transitionOut == null) return null
+    return TransitionData(id, listOfNotNull(transitionChange, transitionOut), expressionResolver)
 }

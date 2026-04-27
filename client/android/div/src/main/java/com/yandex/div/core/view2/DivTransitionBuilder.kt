@@ -11,26 +11,23 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.util.androidInterpolator
-import com.yandex.div.core.util.walk
+import com.yandex.div.core.view2.animations.DivTransition
 import com.yandex.div.core.view2.animations.Fade
 import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.Slide
-import com.yandex.div.core.view2.animations.plusAssign
+import com.yandex.div.core.view2.animations.TransitionData
 import com.yandex.div.core.view2.divs.toPx
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivChangeTransition
 import com.yandex.div2.DivSlideTransition
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.math.max
 
 @DivViewScope
 @Mockable
 internal class DivTransitionBuilder @Inject constructor(
-    @Named(Names.CONTEXT) private val context: Context,
+    @param:Named(Names.CONTEXT) private val context: Context,
     private val viewIdProvider: DivViewIdProvider
 ) {
 
@@ -38,116 +35,42 @@ internal class DivTransitionBuilder @Inject constructor(
         get() = context.resources.displayMetrics
 
     fun buildTransitions(
-        fromDiv: Div?,
-        toDiv: Div?,
-        fromResolver: ExpressionResolver,
-        toResolver: ExpressionResolver,
+        from: Sequence<TransitionData>?,
+        to: Sequence<TransitionData>?,
     ): TransitionSet {
-        return buildTransitions(
-            from = fromDiv?.walk(fromResolver),
-            to = toDiv?.walk(fromResolver),
-            fromResolver,
-            toResolver
-        )
-    }
-
-    fun buildTransitions(
-        from: Sequence<DivItemBuilderResult>?,
-        to: Sequence<DivItemBuilderResult>?,
-        fromResolver: ExpressionResolver,
-        toResolver: ExpressionResolver,
-    ): TransitionSet {
-        val transitionSet = TransitionSet().apply {
-            ordering = TransitionSet.ORDERING_TOGETHER
-        }
-
-        if (from != null) {
-            transitionSet += buildOutgoingTransitions(from, fromResolver)
-        }
-
-        if (from != null && to != null) {
-            transitionSet += buildChangeTransitions(from, fromResolver)
-        }
-
-        if (to != null) {
-            transitionSet += buildIncomingTransitions(to, toResolver)
-        }
-
+        val transitionSet = TransitionSet()
+        transitionSet.ordering = TransitionSet.ORDERING_TOGETHER
+        from?.forEach { transitionSet.addData(it) }
+        to?.forEach { transitionSet.addData(it) }
         return transitionSet
     }
 
-    private fun buildOutgoingTransitions(
-        itemSequence: Sequence<DivItemBuilderResult>,
-        resolver: ExpressionResolver
-    ): List<Transition> {
-        val transitions = mutableListOf<Transition>()
-
-        itemSequence.forEach { item ->
-            val id = item.div.value().id
-            val outgoingTransition = item.div.value().transitionOut
-            if (id != null && outgoingTransition != null) {
-                val transition = outgoingTransition.toAndroidTransition(Visibility.MODE_OUT, resolver).apply {
-                    addTarget(viewIdProvider.getViewId(id))
-                }
-                transitions += transition
-            }
+    private fun TransitionSet.addData(data: TransitionData) {
+        val id = viewIdProvider.getViewId(data.viewId)
+        data.transitions.forEach {
+            val transition = it.toAndroidTransition(data.resolver)
+            transition.addTarget(id)
+            addTransition(transition)
         }
-
-        return transitions
-    }
-
-    private fun buildChangeTransitions(
-        itemSequence: Sequence<DivItemBuilderResult>,
-        resolver: ExpressionResolver
-    ): List<Transition> {
-        val transitions = mutableListOf<Transition>()
-
-        itemSequence.forEach { item ->
-            val id = item.div.value().id
-            val changeTransition = item.div.value().transitionChange
-            if (id != null && changeTransition != null) {
-                val transition = changeTransition.toAndroidTransition(resolver).apply {
-                    addTarget(viewIdProvider.getViewId(id))
-                }
-                transitions += transition
-            }
-        }
-
-        return transitions
-    }
-
-    private fun buildIncomingTransitions(
-        itemSequence: Sequence<DivItemBuilderResult>,
-        resolver: ExpressionResolver
-    ): List<Transition> {
-        val transitions = mutableListOf<Transition>()
-
-        itemSequence.forEach { item ->
-            val id = item.div.value().id
-            val incomingTransition = item.div.value().transitionIn
-            if (id != null && incomingTransition != null) {
-                val transition = incomingTransition.toAndroidTransition(Visibility.MODE_IN, resolver).apply {
-                    addTarget(viewIdProvider.getViewId(id))
-                }
-                transitions += transition
-            }
-        }
-
-        return transitions
     }
 
    fun createAndroidTransition(
        divAppearanceTransition: DivAppearanceTransition?,
        @Visibility.Mode transitionMode: Int,
        resolver: ExpressionResolver
-   ): Transition? {
-       if (divAppearanceTransition == null) return null
+   ): Transition? = divAppearanceTransition?.toAndroidTransition(transitionMode, resolver)
 
-       return divAppearanceTransition.toAndroidTransition(transitionMode, resolver)
-   }
+    private fun DivTransition.toAndroidTransition(resolver: ExpressionResolver): Transition {
+        return when (this) {
+            is DivTransition.Appearance -> value.toAndroidTransition(mode, resolver)
+            is DivTransition.Change -> value.toAndroidTransition(resolver)
+        }
+    }
 
-    private fun DivAppearanceTransition.toAndroidTransition(@Visibility.Mode transitionMode: Int,
-                                                            resolver: ExpressionResolver): Transition {
+    private fun DivAppearanceTransition.toAndroidTransition(
+        @Visibility.Mode transitionMode: Int,
+        resolver: ExpressionResolver,
+    ): Transition {
         return when (this) {
             is DivAppearanceTransition.Set -> {
                 TransitionSet().apply {
