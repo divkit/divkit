@@ -7,7 +7,23 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivActionAnimatorStart
+import com.yandex.div2.DivActionAnimatorStopTemplate
+import com.yandex.div2.DivActionClearFocus
+import com.yandex.div2.DivActionCopyToClipboard
+import com.yandex.div2.DivActionDownload
+import com.yandex.div2.DivActionFocusElement
+import com.yandex.div2.DivActionHideTooltip
+import com.yandex.div2.DivActionScrollBy
+import com.yandex.div2.DivActionScrollTo
+import com.yandex.div2.DivActionSetCursorPosition
+import com.yandex.div2.DivActionSetState
+import com.yandex.div2.DivActionSetStoredValue
+import com.yandex.div2.DivActionShowTooltip
+import com.yandex.div2.DivActionSubmit
+import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
+import com.yandex.div2.DivActionVideo
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
 import javax.inject.Inject
@@ -93,8 +109,8 @@ internal class DivActionHandler @Inject constructor(
         baseAction: DivActionBase
     ) {
         when (action) {
-            is DivActionTyped.AnimatorStart -> notSupported()
-            is DivActionTyped.AnimatorStop -> notSupported()
+            is DivActionTyped.AnimatorStart -> notSupported(DivActionAnimatorStart.TYPE)
+            is DivActionTyped.AnimatorStop -> notSupported(DivActionAnimatorStopTemplate.TYPE)
             is DivActionTyped.ArrayInsertValue ->
                 arrayActionsHandler.handle(context, action.value)
 
@@ -104,8 +120,8 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ArraySetValue ->
                 arrayActionsHandler.handle(context, action.value)
 
-            is DivActionTyped.ClearFocus -> notSupported()
-            is DivActionTyped.CopyToClipboard -> notSupported()
+            is DivActionTyped.ClearFocus -> notSupported(DivActionClearFocus.TYPE)
+            is DivActionTyped.CopyToClipboard -> notSupported(DivActionCopyToClipboard.TYPE)
             is DivActionTyped.Custom ->
                 externalActionHandler.handleCustomAction(
                     context = context,
@@ -119,24 +135,24 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.DictSetValue ->
                 dictSetValueActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Download -> notSupported()
-            is DivActionTyped.FocusElement -> notSupported()
-            is DivActionTyped.HideTooltip -> notSupported()
-            is DivActionTyped.ScrollBy -> notSupported()
-            is DivActionTyped.ScrollTo -> notSupported()
-            is DivActionTyped.SetState -> notSupported()
-            is DivActionTyped.SetStoredValue -> notSupported()
+            is DivActionTyped.Download -> notSupported(DivActionDownload.TYPE)
+            is DivActionTyped.FocusElement -> notSupported(DivActionFocusElement.TYPE)
+            is DivActionTyped.HideTooltip -> notSupported(DivActionHideTooltip.TYPE)
+            is DivActionTyped.ScrollBy -> notSupported(DivActionScrollBy.TYPE)
+            is DivActionTyped.ScrollTo -> notSupported(DivActionScrollTo.TYPE)
+            is DivActionTyped.SetCursorPosition -> notSupported(DivActionSetCursorPosition.TYPE)
+            is DivActionTyped.SetState -> notSupported(DivActionSetState.TYPE)
+            is DivActionTyped.SetStoredValue -> notSupported(DivActionSetStoredValue.TYPE)
             is DivActionTyped.SetVariable ->
                 setVariableActionHandler.handle(context, action.value)
 
-            is DivActionTyped.ShowTooltip -> notSupported()
-            is DivActionTyped.Submit -> notSupported()
-            is DivActionTyped.Timer -> notSupported()
+            is DivActionTyped.ShowTooltip -> notSupported(DivActionShowTooltip.TYPE)
+            is DivActionTyped.Submit -> notSupported(DivActionSubmit.TYPE)
+            is DivActionTyped.Timer -> notSupported(DivActionTimer.TYPE)
             is DivActionTyped.UpdateStructure ->
                 updateStructureActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Video -> notSupported()
-            is DivActionTyped.SetCursorPosition -> notSupported()
+            is DivActionTyped.Video -> notSupported(DivActionVideo.TYPE)
         }
     }
 
@@ -145,20 +161,20 @@ internal class DivActionHandler @Inject constructor(
         action: DivUntypedAction
     ) {
         when (action) {
-            is DivUntypedAction.HideTooltip -> notSupported()
-            is DivUntypedAction.SetState -> notSupported()
-            is DivUntypedAction.SetStoredValue -> notSupported()
+            is DivUntypedAction.HideTooltip -> notSupported("hide_tooltip")
+            is DivUntypedAction.SetState -> notSupported("set_state")
+            is DivUntypedAction.SetStoredValue -> notSupported("set_stored_value")
             is DivUntypedAction.SetVariable ->
                 setVariableActionHandler.handle(context, action)
 
-            is DivUntypedAction.ShowTooltip -> notSupported()
-            is DivUntypedAction.Timer -> notSupported()
-            is DivUntypedAction.Video -> notSupported()
+            is DivUntypedAction.ShowTooltip -> notSupported("show_tooltip")
+            is DivUntypedAction.Timer -> notSupported("timer")
+            is DivUntypedAction.Video -> notSupported("video")
         }
     }
 
-    private fun notSupported() {
-        reporter.reportError("Action not supported")
+    private fun notSupported(name: String) {
+        reporter.reportError("Action not supported: $name")
     }
 }
 
