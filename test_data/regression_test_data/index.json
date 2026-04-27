@@ -28,6 +28,9 @@
         "Animations",
         "DivGifImage"
       ],
+      "steps": [
+        "Check the animation of elements"
+      ],
       "expected_results": [
         "Both animated WebP images are displayed and animated correctly"
       ],
@@ -655,10 +658,12 @@
         "android"
       ],
       "steps": [
-        "Switch focus"
+        "Tap the buttons",
+        "Tap the buttons again"
       ],
       "expected_results": [
-        "Elements focus changes in order to switch"
+        "The text on the buttons becomes bold",
+        "The bold text style is removed"
       ],
       "file": "focus.json",
       "case_id": 444
@@ -820,13 +825,13 @@
         "web"
       ],
       "steps": [
-        "Turn on Screen reader",
-        "Focus on items from top to bottom"
+        "Turn on the Screen Reader",
+        "Move focus through the items from top to bottom"
       ],
       "expected_results": [
-        "Focus on 5-th item",
-        "Услышим 'Это Элемент 5'",
-        "При выключенном Screen reader на каждой кнопке при тапе должно появляться меню с названием этой кнопки"
+        "Focus lands on the 5th item",
+        "We hear 'Это Элемент 5'",
+        "When the Screen Reader is turned off, tapping each button should open a menu with the name of that button"
       ],
       "file": "accessibility/mode/exclude.json",
       "case_id": 449
@@ -954,8 +959,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears changing the transparency"
@@ -972,8 +977,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears changing the transparency starting or ending with transparency = 0.5"
@@ -990,8 +995,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears changing the scale"
@@ -1008,8 +1013,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears changing the scale starting or ending with scale = 0.75"
@@ -1026,8 +1031,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears sliding from under the top edge of the card"
@@ -1044,8 +1049,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'Show'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears sliding from under the top edge of the card, but not reaching it"
@@ -1062,8 +1067,8 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'GO'",
-        "After image appears press 'GO BACK'"
+        "Press button with text 'SHOW'",
+        "After image appears press 'Hide'"
       ],
       "expected_results": [
         "Image should appears and disappears changing transparency and sliding from center to edge"
@@ -1304,6 +1309,9 @@
         "Animations",
         "lottie"
       ],
+      "steps": [
+        "Check the animation"
+      ],
       "expected_results": [
         "Spinner changes spin direction 3 times and stops"
       ],
@@ -1320,6 +1328,9 @@
       "tags": [
         "Animations",
         "lottie"
+      ],
+      "steps": [
+        "Check the animation"
       ],
       "expected_results": [
         "Infinite spinner animation."
@@ -1406,6 +1417,9 @@
       ],
       "tags": [
         "Animators"
+      ],
+      "steps": [
+        "Check the animation"
       ],
       "expected_results": [
         "Gradients's positions should changes dynamically."
