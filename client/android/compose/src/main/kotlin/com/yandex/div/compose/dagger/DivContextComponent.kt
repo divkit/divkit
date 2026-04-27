@@ -7,6 +7,7 @@ import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.DivViewContextStorage
+import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -25,8 +26,9 @@ internal interface DivContextComponent {
 
     val actionHandler: DivActionHandler
     val baseContext: Context
-    val customViewFactory: DivCustomViewFactory
+    val customViewFactories: Map<String, DivCustomViewFactory>
     val debugFeatures: DivDebugFeatures
+    val extensionHandlers: Map<String, DivExtensionHandler>
     val fontFamilyProvider: DivFontFamilyProvider
     val imageLoader: ImageLoader
     val viewContextStorage: DivViewContextStorage

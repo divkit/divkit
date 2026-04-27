@@ -7,8 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.divkit.demo.div.ChronometerViewFactory
+import com.yandex.divkit.demo.div.CustomContainerViewFactory
+import com.yandex.divkit.demo.div.CustomTextViewFactory
+import com.yandex.divkit.demo.div.NestedScrollViewFactory
 import com.yandex.div.compose.DivView as ComposeDivView
-import com.yandex.divkit.demo.div.DemoComposeCustomViewFactory
 import com.yandex.divkit.demo.font.ComposeFontFamilyProvider
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 
@@ -22,19 +25,27 @@ class RegressionComposeViewCreator(context: Context) {
     ) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
-        val composeDivContext = DivContext(
+        val divContext = DivContext(
             baseContext = activity,
             configuration = DivComposeConfiguration(
                 actionHandler = RegressionComposeActionHandler(assetReader, divData),
+                customViewFactories = mapOf(
+                    "old_custom_card_1" to CustomTextViewFactory(text = "Hi! I'm old card!"),
+                    "old_custom_card_2" to CustomTextViewFactory(text = "Hi! I'm old as well!"),
+                    "custom_card_with_min_size" to CustomTextViewFactory(text = "Text is placed in frame"),
+                    "new_custom_card_1" to ChronometerViewFactory(),
+                    "new_custom_card_2" to ChronometerViewFactory(),
+                    "new_custom_container_1" to CustomContainerViewFactory(),
+                    "nested_scroll_view" to NestedScrollViewFactory()
+                ),
                 fontFamilyProvider = ComposeFontFamilyProvider(activity),
-                customViewFactory = DemoComposeCustomViewFactory()
             )
         )
-        val composeView = ComposeView(composeDivContext).apply {
+        val view = ComposeView(divContext).apply {
             setContent {
                 ComposeDivView(data = divData.value)
             }
         }
-        onBound(composeView)
+        onBound(view)
     }
 }

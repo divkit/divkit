@@ -6,6 +6,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivText
@@ -40,6 +41,7 @@ fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     disappearActions: List<DivDisappearAction>? = null,
+    extensions: List<DivExtension>? = null,
     fontSize: Long = 12,
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
@@ -56,6 +58,7 @@ fun text(
             accessibility = accessibility,
             action = action,
             disappearActions = disappearActions,
+            extensions = extensions,
             functions = functions,
             fontSize = constant(fontSize),
             height = height,

@@ -7,7 +7,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
 /**
- * Rendering context for a `div-custom` element.
+ * Context for composing a `div-custom` element.
  *
  * Passed to [DivCustomViewFactory.Content] and provides access to the current
  * [DivCustom] data, the [ExpressionResolver] that should be used to resolve
@@ -16,8 +16,9 @@ import com.yandex.div2.DivCustom
  */
 @ExperimentalApi
 class DivCustomEnvironment internal constructor(
-    val div: DivCustom,
+    val data: DivCustom,
     val expressionResolver: ExpressionResolver,
+    val modifier: Modifier,
     val items: @Composable () -> Unit,
     val item: @Composable (index: Int, modifier: Modifier) -> Unit,
 )
