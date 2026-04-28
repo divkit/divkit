@@ -66,10 +66,12 @@ class ExpressionResolverImplTest {
     }
 
     private val failFastLogger = ParsingErrorLogger { e -> throw e }
-    private val silentLogger = ParsingErrorLogger { e -> e.printStackTrace() }
+    private val silentLogger = ParsingErrorLogger { }
+
     private val variableController = DivVariableController().apply {
         declare(*globalVariables.values.toTypedArray())
     }
+
     private val externalVariables = VariableControllerImpl(
         viewProvider = { mock() }
     ).apply {
@@ -351,7 +353,8 @@ class ExpressionResolverImplTest {
     fun `on expression changed callback called when variable declared`() {
         val expression = mutableExpression(
             rawExpression = "@{none_var}",
-            typeHelper = TYPE_HELPER_INT
+            typeHelper = TYPE_HELPER_INT,
+            logger = silentLogger
         )
 
         var declaredValue = 0L

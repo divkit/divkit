@@ -31,6 +31,7 @@ private val ANDROID_INTERNAL_OR_FINAL_RESOURCES_PUBLIC_METHODS = setOf(
     "getStateListAnimatorCache()",
     "hasOverrideDisplayAdjustments()",
     "loadComplexColor(TypedValue, int, Theme)",
+    "loadXmlResourceParser(String, int, int, String, boolean)",
     "newTheme()",
     "preloadFonts(int)",
     "setCallbacks(UpdateCallbacks)",
@@ -55,9 +56,13 @@ class ResourcesWrapperTest {
     }
 }
 
-private fun <T> Class<T>.getOverridablePublicMethodSignatures() = declaredMethods
-    .filter {
-        Modifier.isPublic(it.modifiers) && !Modifier.isStatic(it.modifiers) && !it.isSynthetic
-    }.map { it.signature() }
+private fun <T> Class<T>.getOverridablePublicMethodSignatures(): Set<String> {
+    return declaredMethods
+        .filter {
+            Modifier.isPublic(it.modifiers) && !Modifier.isStatic(it.modifiers) && !it.isSynthetic
+        }
+        .map { it.signature() }
+        .toSet()
+}
 
 private fun Method.signature() = "$name(${parameterTypes.joinToString { it.simpleName }})"

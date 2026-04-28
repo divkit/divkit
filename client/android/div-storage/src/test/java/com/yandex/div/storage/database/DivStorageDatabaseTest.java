@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.yandex.div.storage.DivStorageImpl;
-import com.yandex.div.storage.templates.RawTemplateData;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,12 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import kotlin.ExceptionsKt;
-import kotlin.collections.CollectionsKt;
 
 @SuppressWarnings("KotlinInternalInJava")
 @RunWith(RobolectricTestRunner.class)
@@ -43,7 +37,8 @@ public class DivStorageDatabaseTest {
 
     private DivStorageImpl mStorage;
     private AndroidDatabaseOpenHelper mHelper;
-    private DatabaseOpenHelperProvider mProvider = spy(new DatabaseOpenHelperProvider() {
+
+    private final DatabaseOpenHelperProvider mProvider = spy(new DatabaseOpenHelperProvider() {
         @Override
         @NonNull
         public DatabaseOpenHelper provide(@NonNull Context context,
@@ -117,22 +112,5 @@ public class DivStorageDatabaseTest {
         verify(mProvider, times(1)).provide(
           any(), eq("test-db-div-storage.db"), eq(DB_VERSION), any(), any()
         );
-    }
-
-
-    @NonNull
-    private Map<String, byte[]> toMap(@NonNull List<RawTemplateData> templates) {
-        Map<String, byte[]> result = new HashMap<>();
-        for (RawTemplateData template : templates) {
-            result.put(template.getHash(), template.getData());
-        }
-        return result;
-    }
-
-    private void assertErrorsIsEmpty(List<? extends Exception> errors) {
-        String msg = CollectionsKt.joinToString(
-                errors, ", ", "", "", -1, "...", ExceptionsKt::stackTraceToString
-        );
-        Assert.assertTrue(msg, errors.isEmpty());
     }
 }

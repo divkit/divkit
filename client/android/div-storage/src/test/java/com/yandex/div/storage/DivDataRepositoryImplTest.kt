@@ -206,12 +206,10 @@ class DivDataRepositoryImplTest {
         underTest.get(ids)
 
         assertEquals(5, errors.allValues.size)
-
     }
 
     private fun getStorageException(id: String): StorageException =
             object : StorageException(cardId = id) {}
 
-    private fun getRestoredRawData(id: String): DivStorage.RestoredRawData =
-            DivStorage.RestoredRawData(id, mock(), mock(), id)
+    private fun getRestoredRawData(id: String) = RestoredRawData(id, mock(), mock(), id)
 }

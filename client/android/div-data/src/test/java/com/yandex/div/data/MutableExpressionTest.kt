@@ -6,6 +6,7 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
 import org.junit.Assert
+import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -14,20 +15,18 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 /**
  * Tests for [Expression.MutableExpression]
  */
-@Config(sdk = [28])
 @RunWith(RobolectricTestRunner::class)
 class MutableExpressionTest {
-    private val failFastLogger = ParsingErrorLogger { e -> throw e }
-    private val silentLogger = ParsingErrorLogger { e -> e.printStackTrace() }
+    private val failFastLogger = ParsingErrorLogger { e -> fail(e.message) }
+    private val silentLogger = ParsingErrorLogger { }
+
     private val resolver = mock<ExpressionResolver> {
         on { get<Any, Any>(any(), any(), any(), anyOrNull(), any(), any(), any()) } doReturn null
     }
-
 
     @Test
     fun `once resolved expression cannot be resolved last valid value is used`() {
