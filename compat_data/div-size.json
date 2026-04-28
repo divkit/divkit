@@ -8,9 +8,7 @@
                 "partial_implementation": true,
                 "notes": "Supported only in <code>container</code> with <code>orientation</code>=<code>overlap</code> and in <code>pager</code>"
             }, {
-                "version_added": "32.20.0",
-                "partial_implementation": true,
-                "notes": "Supported only in <code>container</code> without wrap, in <code>pager</code> and <code>gallery</code>"
+                "version_added": "32.20.0"
             }],
             "web": {
                 "version_added": "32.29.0"
