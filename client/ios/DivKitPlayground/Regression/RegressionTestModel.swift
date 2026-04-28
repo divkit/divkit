@@ -29,7 +29,14 @@ struct RegressionTestsModel: Decodable {
 }
 
 struct RegressionTestModel: Decodable, Hashable {
+  enum Platform: String, Decodable {
+    case android
+    case ios
+    case web
+  }
+
   private enum CodingKeys: String, CodingKey {
+    case caseId = "case_id"
     case expectedResults = "expected_results"
     case file
     case platforms
@@ -59,6 +66,7 @@ struct RegressionTestModel: Decodable, Hashable {
     }
   }
 
+  let caseId: Int?
   let expectedResults: [String]
   let platforms: [Platform]
   let steps: [String]
@@ -90,6 +98,8 @@ struct RegressionTestModel: Decodable, Hashable {
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
+
+    caseId = try? container.decode(Int.self, forKey: .caseId)
 
     do {
       title = try container.decode(String.self, forKey: .title)
@@ -124,10 +134,14 @@ struct RegressionTestModel: Decodable, Hashable {
     platforms = (try? container.decodeIfPresent([Platform].self, forKey: .platforms)) ?? [.ios]
     tags = (try? container.decodeIfPresent([String].self, forKey: .tags)) ?? []
   }
-}
 
-enum Platform: String, Decodable {
-  case android
-  case ios
-  case web
+  init(caseId: Int?, title: String, url: URL) {
+    self.caseId = caseId
+    self.title = title
+    self.url = url
+    self.expectedResults = []
+    self.platforms = [.ios]
+    self.steps = []
+    self.tags = []
+  }
 }

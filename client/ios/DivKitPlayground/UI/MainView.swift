@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MainView: View {
+  @StateObject private var router = AppRouter(tests: TestData.regressionTests)
+
   @AppStorage(UserPreferences.isRTLEnabledKey)
   var isRTLEnabled: Bool = UserPreferences.isRTLEnabledDefault
 
@@ -9,15 +11,18 @@ struct MainView: View {
   }
 
   var body: some View {
-    if #available(iOS 16.0, *) {
-      NavigationStack {
-        contentView
-      }
-    } else {
-      NavigationView {
-        contentView
+    Group {
+      if #available(iOS 16.0, *) {
+        NavigationStack {
+          contentView
+        }
+      } else {
+        NavigationView {
+          contentView
+        }
       }
     }
+    .onOpenURL { router.handle($0) }
   }
 
   private var contentView: some View {
@@ -51,9 +56,39 @@ struct MainView: View {
         SettingsView()
       }
       .frame(height: 80)
+
+      NavigationLink(
+        destination: deepLinkRegressionTestDestination,
+        isActive: Binding(
+          get: { router.pendingRegressionTest != nil },
+          set: { if !$0 { router.pendingRegressionTest = nil } }
+        )
+      ) { EmptyView() }
+
+      NavigationLink(
+        destination: deepLinkPlaygroundDestination,
+        isActive: Binding(
+          get: { router.pendingPlaygroundURL != nil },
+          set: { if !$0 { router.pendingPlaygroundURL = nil } }
+        )
+      ) { EmptyView() }
     }
     .padding(EdgeInsets(top: 46, leading: 20, bottom: 20, trailing: 20))
     .navigationBarHidden(true)
+  }
+
+  @ViewBuilder
+  private var deepLinkRegressionTestDestination: some View {
+    if let test = router.pendingRegressionTest {
+      RegressionTestView(model: test, divViewProvider: makeDivViewProvider())
+    }
+  }
+
+  @ViewBuilder
+  private var deepLinkPlaygroundDestination: some View {
+    if let url = router.pendingPlaygroundURL {
+      PlaygroundView(url: url, divViewProvider: makeDivViewProvider())
+    }
   }
 
   private func makeDivViewProvider() -> DivViewProvider {

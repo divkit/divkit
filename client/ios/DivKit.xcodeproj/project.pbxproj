@@ -86,6 +86,12 @@
 		8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378728B5143200A047C8 /* DivViewProvider.swift */; };
 		8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */; };
 		8C1A383228B61A2B00A047C8 /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A383128B61A2B00A047C8 /* AppComponents.swift */; };
+		AB0000010000000000000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
+		AB0000040000000000000001 /* AppLogger.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* AppLogger.swift */; };
+		AB0000040000000000000002 /* RegressionFile.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
+		AB0000040000000000000003 /* RegressionTestModel.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
+		AB0000040000000000000004 /* AppRouter.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
+		AB0000040000000000000006 /* AppRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000040000000000000005 /* AppRouterTests.swift */; };
 		8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */; };
 		8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */; };
 		8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */; };
@@ -391,6 +397,8 @@
 		8C1A378728B5143200A047C8 /* DivViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewProvider.swift; sourceTree = "<group>"; };
 		8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundView.swift; sourceTree = "<group>"; };
 		8C1A383128B61A2B00A047C8 /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
+		AB0000010000000000000002 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		AB0000040000000000000005 /* AppRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterTests.swift; sourceTree = "<group>"; };
 		8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivStateManagementTests.swift; sourceTree = "<group>"; };
 		8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumWithDefaultTypeTemplate.swift; sourceTree = "<group>"; };
 		8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithJsonPropertyTemplate.swift; sourceTree = "<group>"; };
@@ -1005,6 +1013,7 @@
 				8C7EE1D328B777B9008A48E6 /* Info.plist */,
 				8C1A383128B61A2B00A047C8 /* AppComponents.swift */,
 				8C34FDDD2F7F14A300DD6652 /* PlaygroundPlayerFactory.swift */,
+				AB0000010000000000000002 /* AppRouter.swift */,
 				8C4409FD2864C55400EF4175 /* DivKitPlaygroundApp.swift */,
 			);
 			path = DivKitPlayground;
@@ -1102,6 +1111,7 @@
 				7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */,
 				8C1233AA2C32F08600F534DC /* DivFontProviderTests.swift */,
 				8C0DC7112865CA1100286F6B /* DivKitTests.swift */,
+				AB0000040000000000000005 /* AppRouterTests.swift */,
 				52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */,
 				891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */,
 				891672392A5F6F9300121132 /* DivKitComponentsResetTests.swift */,
@@ -1770,6 +1780,7 @@
 				8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */,
 				8C4504DC28B3AA30005712FD /* SamplesView.swift in Sources */,
 				8C1A383228B61A2B00A047C8 /* AppComponents.swift in Sources */,
+				AB0000010000000000000001 /* AppRouter.swift in Sources */,
 				8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */,
 				8CD907BB2A4C8AF3001C4B7B /* StringUtils.swift in Sources */,
 				8C1A377B28B4E3E700A047C8 /* Payload.swift in Sources */,
@@ -1933,6 +1944,11 @@
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
 				8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */,
+				AB0000040000000000000001 /* AppLogger.swift in Sources (Tests) */,
+				AB0000040000000000000002 /* RegressionFile.swift in Sources (Tests) */,
+				AB0000040000000000000003 /* RegressionTestModel.swift in Sources (Tests) */,
+				AB0000040000000000000004 /* AppRouter.swift in Sources (Tests) */,
+				AB0000040000000000000006 /* AppRouterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
