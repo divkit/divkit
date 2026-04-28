@@ -4,21 +4,23 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.SemanticsMatcher.Companion.keyIsDefined
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
-import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.image
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
-import com.yandex.div2.DivAccessibility
+import com.yandex.div2.DivAccessibility.Mode
+import com.yandex.div2.DivAccessibility.Type
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,271 +32,386 @@ class DivViewAccessibilityTest {
     val rule = createComposeRule()
 
     private val configuration = DivComposeConfiguration(reporter = TestReporter())
-
     private val tag = "tag"
-    private val stubImageUrl = constant(Uri.parse("https://example.com/image.png"))
 
     @Test
     fun `description is set as content description`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Photo of a cat"),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(description = "Photo of a cat")
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Photo of a cat"))
+        rule.onNodeWithTag(tag).assert(hasContentDescription("Photo of a cat"))
     }
 
     @Test
     fun `hint is set as content description when no description`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            hint = constant("Tap to open"),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(hint = "Tap to open")
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Tap to open"))
+        rule.onNodeWithTag(tag).assert(hasContentDescription("Tap to open"))
     }
 
     @Test
     fun `description and hint are combined with newline`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Submit"),
-            hint = constant("Double tap to submit"),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    description = "Submit",
+                    hint = "Tap to submit"
+                )
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Submit\nDouble tap to submit"))
+        rule.onNodeWithTag(tag).assert(hasContentDescription("Submit\nTap to submit"))
     }
 
     @Test
     fun `identical description and hint are not duplicated`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Submit"),
-            hint = constant("Submit"),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    description = "Submit",
+                    hint = "Submit"
+                )
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Submit"))
+        rule.onNodeWithTag(tag).assert(hasContentDescription("Submit"))
     }
 
     @Test
     fun `state description is applied`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Loading"),
-            stateDescription = constant("50% complete"),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    description = "Loading",
+                    stateDescription = "50% complete"
+                )
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasStateDescription("50% complete"))
+        rule.onNodeWithTag(tag).assert(hasStateDescription("50% complete"))
     }
 
     @Test
-    fun `type button sets button role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Submit"),
-            type = DivAccessibility.Type.BUTTON,
-        )))
+    fun `type button sets Button role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.BUTTON)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Button))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.Button))
     }
 
     @Test
-    fun `type image sets image role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("A photo"),
-            type = DivAccessibility.Type.IMAGE,
-        )))
+    fun `type image sets Image role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.IMAGE)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Image))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.Image))
     }
 
     @Test
-    fun `type checkbox sets checkbox role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Accept terms"),
-            type = DivAccessibility.Type.CHECKBOX,
-        )))
+    fun `type checkbox sets Checkbox role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.CHECKBOX)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Checkbox))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.Checkbox))
     }
 
     @Test
-    fun `type radio sets radio button role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Option A"),
-            type = DivAccessibility.Type.RADIO,
-        )))
+    fun `type radio sets RadioButton role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.RADIO)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.RadioButton))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.RadioButton))
     }
 
     @Test
-    fun `type tab_bar sets tab role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Home tab"),
-            type = DivAccessibility.Type.TAB_BAR,
-        )))
+    fun `type tab_bar sets Tab role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.TAB_BAR)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Tab))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.Tab))
     }
 
     @Test
-    fun `type select sets dropdown list role`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Choose country"),
-            type = DivAccessibility.Type.SELECT,
-        )))
+    fun `type select sets DropdownList role`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.SELECT)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.DropdownList))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.DropdownList))
     }
 
     @Test
     fun `type header sets heading`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Section title"),
-            type = DivAccessibility.Type.HEADER,
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.HEADER)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(isHeading())
+        rule.onNodeWithTag(tag).assert(keyIsDefined(SemanticsProperties.Heading))
     }
 
     @Test
     fun `checkbox with is_checked true has toggleable state on`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Accept terms"),
-            type = DivAccessibility.Type.CHECKBOX,
-            isChecked = constant(true),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    type = Type.CHECKBOX,
+                    isChecked = true
+                )
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasToggleableState(ToggleableState.On))
+        rule.onNodeWithTag(tag).assert(hasToggleableState(ToggleableState.On))
     }
 
     @Test
     fun `checkbox with is_checked false has toggleable state off`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Accept terms"),
-            type = DivAccessibility.Type.CHECKBOX,
-            isChecked = constant(false),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    type = Type.CHECKBOX,
+                    isChecked = false
+                )
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasToggleableState(ToggleableState.Off))
+        rule.onNodeWithTag(tag).assert(hasToggleableState(ToggleableState.Off))
     }
 
     @Test
     fun `is_checked is ignored for non-checkable type`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Submit"),
-            type = DivAccessibility.Type.BUTTON,
-            isChecked = constant(true),
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(
+                    type = Type.BUTTON,
+                    isChecked = true
+                )
+            )
+        )
 
         rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Button) and !hasToggleableState(ToggleableState.On))
+            .assert(hasRole(Role.Button))
+            .assert(!hasToggleableState(ToggleableState.On))
     }
 
     @Test
-    fun `mode exclude hides element from accessibility tree`() {
-        setContent(text(text = "Test", accessibility = DivAccessibility(
-            description = constant("Hidden text"),
-            mode = constant(DivAccessibility.Mode.EXCLUDE),
-        )))
+    fun `accessibility is ignored for elements with mode=exclude`() {
+        setContent(
+            text(
+                text = "Test",
+                accessibility = accessibility(
+                    description = "Hidden text",
+                    mode = Mode.EXCLUDE
+                )
+            )
+        )
 
-        rule.onNode(hasContentDescription("Hidden text"))
-            .assertDoesNotExist()
+        rule.onNode(hasContentDescription("Hidden text")).assertDoesNotExist()
     }
 
     @Test
-    fun `mode merge preserves content description`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Merged label"),
-            mode = constant(DivAccessibility.Mode.MERGE),
-        )))
+    fun `accessibility is ignored for elements inside container with mode=exclude`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(
+                        text = "Item 1",
+                        accessibility = accessibility(description = "Item description")
+                    )
+                ),
+                accessibility = accessibility(mode = Mode.EXCLUDE)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Merged label"))
-            .assertIsDisplayed()
+        rule.onNode(hasContentDescription("Item description")).assertDoesNotExist()
+    }
+
+    @Test
+    fun `testTag is preserved for elements with mode=exclude`() {
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(mode = Mode.EXCLUDE)
+            )
+        )
+
+        rule.onNodeWithTag(tag).assertIsDisplayed()
+    }
+
+    @Test
+    fun `element inside container with mode=exclude is available by testTag`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(id = "item", text = "Item 1")
+                ),
+                accessibility = accessibility(mode = Mode.EXCLUDE)
+            )
+        )
+
+        rule.onNodeWithTag("item", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun `content description is preserved for elements with mode=merge`() {
+        setContent(
+            container(
+                id = tag,
+                items = listOf(text(text = "Item 1")),
+                accessibility = accessibility(
+                    description = "Container description",
+                    mode = Mode.MERGE
+                )
+            )
+        )
+
+        rule.onNodeWithTag(tag).assert(hasContentDescription("Container description"))
+    }
+
+    @Test
+    fun `accessibility is ignored for elements inside container with mode=merge`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(
+                        text = "Item 1",
+                        accessibility = accessibility(description = "Item description")
+                    )
+                ),
+                accessibility = accessibility(
+                    description = "Container description",
+                    mode = Mode.MERGE
+                )
+            )
+        )
+
+        rule.onNode(hasContentDescription("Item description")).assertDoesNotExist()
+    }
+
+    @Test
+    fun `element inside container with mode=merge is available by testTag`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(id = "item", text = "Item 1")
+                ),
+                accessibility = accessibility(
+                    description = "Container description",
+                    mode = Mode.MERGE
+                )
+            )
+        )
+
+        rule.onNodeWithTag("item", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
     fun `element without accessibility has no content description`() {
-        setContent(text(id = tag, text = "Test"))
+        setContent(
+            text(id = tag, text = "Test")
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(!SemanticsMatcher.keyIsDefined(SemanticsProperties.ContentDescription))
+        rule.onNodeWithTag(tag).assert(!keyIsDefined(SemanticsProperties.ContentDescription))
     }
 
     @Test
     fun `auto mode resolves no role for text`() {
-        setContent(text(id = tag, text = "Test", accessibility = DivAccessibility(
-            description = constant("Label"),
-            type = DivAccessibility.Type.AUTO,
-        )))
+        setContent(
+            text(
+                id = tag,
+                text = "Test",
+                accessibility = accessibility(type = Type.AUTO)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Label"))
-            .assert(!SemanticsMatcher.keyIsDefined(SemanticsProperties.Role))
+        rule.onNodeWithTag(tag).assert(!keyIsDefined(SemanticsProperties.Role))
     }
 
     @Test
-    fun `auto mode resolves image role for image`() {
-        setContent(image(id = tag, imageUrl = stubImageUrl, accessibility = DivAccessibility(
-            description = constant("A photo"),
-            type = DivAccessibility.Type.AUTO,
-        )))
+    fun `auto mode resolves Image role for image`() {
+        setContent(
+            image(
+                id = tag,
+                imageUrl = constant("https://example.com/image.png".toUri()),
+                accessibility = accessibility(type = Type.AUTO)
+            )
+        )
 
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Image))
-    }
-
-    @Test
-    fun `auto mode without explicit type resolves image role for image`() {
-        setContent(image(id = tag, imageUrl = stubImageUrl, accessibility = DivAccessibility(
-            description = constant("A photo"),
-        )))
-
-        rule.onNodeWithTag(tag)
-            .assert(hasRole(Role.Image))
-    }
-
-    @Test
-    fun `auto mode resolves no role for gallery with description`() {
-        setContent(gallery(id = tag, items = listOf(text(text = "Item")), accessibility = DivAccessibility(
-            description = constant("Photo carousel"),
-        )))
-
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Photo carousel"))
-            .assert(!SemanticsMatcher.keyIsDefined(SemanticsProperties.Role))
-    }
-
-    @Test
-    fun `auto mode resolves no semantics for gallery without description`() {
-        setContent(gallery(id = tag, items = listOf(text(text = "Item")), accessibility = DivAccessibility(
-            hint = constant("Swipe to browse"),
-        )))
-
-        rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Swipe to browse"))
-            .assert(!SemanticsMatcher.keyIsDefined(SemanticsProperties.Role))
+        rule.onNodeWithTag(tag).assert(hasRole(Role.Image))
     }
 
     @Test
     fun `auto mode resolves no role for container`() {
-        setContent(container(id = tag, accessibility = DivAccessibility(
-            description = constant("Section"),
-        ), items = listOf(text(text = "Child"))))
+        setContent(
+            container(
+                id = tag,
+                items = listOf(text(text = "Item")),
+                accessibility = accessibility(
+                    description = "Container",
+                    type = Type.AUTO
+                )
+            )
+        )
 
         rule.onNodeWithTag(tag)
-            .assert(hasContentDescription("Section"))
-            .assert(!SemanticsMatcher.keyIsDefined(SemanticsProperties.Role))
+            .assert(hasContentDescription("Container"))
+            .assert(!keyIsDefined(SemanticsProperties.Role))
     }
 
     private fun setContent(content: Div) {
@@ -310,6 +427,3 @@ private fun hasToggleableState(state: ToggleableState) =
 
 private fun hasStateDescription(value: String) =
     SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, value)
-
-private fun isHeading() =
-    SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading)

@@ -20,7 +20,7 @@ import com.yandex.div2.DivVisibility
 @Composable
 internal fun Modifier.apply(
     div: Div,
-    applyMargins: Boolean = true,
+    applyMargins: Boolean = true
 ): Modifier {
     val data = div.value()
 
@@ -63,13 +63,11 @@ internal fun Modifier.apply(
         modifier = modifier.borderStroke(it)
     }
 
-    modifier = modifier.accessibility(data)
-
     data.id?.let {
         modifier = modifier.testTag(it)
     }
 
-    return modifier
+    return modifier.accessibility(data)
 }
 
 @Composable
