@@ -38,7 +38,7 @@ internal class BlurTransformation(
         }
 
         val scaledBitmap = scaleBitmap(mutableBitmap)
-        val blurredScaled = applyRenderScriptBlur(scaleBitmap(mutableBitmap), maxRadiusDp)
+        val blurredScaled = applyRenderScriptBlur(scaledBitmap, maxRadiusDp)
 
         val result = blurredScaled.scale(mutableBitmap.width, mutableBitmap.height)
 
