@@ -8,6 +8,7 @@ import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.images.ImageRequestListener
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -31,6 +32,7 @@ internal interface DivContextComponent {
     val extensionHandlers: Map<String, DivExtensionHandler>
     val fontFamilyProvider: DivFontFamilyProvider
     val imageLoader: ImageLoader
+    val imageRequestListener: ImageRequestListener
     val viewContextStorage: DivViewContextStorage
 
     @get:Named(Names.HOST_VARIABLES)

@@ -35,30 +35,30 @@ class ExpressionUtilsTest {
         variableController.declare(variable)
 
         val expression = intExpression("@{counter}")
-        var observedValue by mutableLongStateOf(0L)
+        var observedValue by mutableStateOf(0)
 
         setContent {
-            observedValue = expression.observedValue()
+            observedValue = expression.observedIntValue()
         }
 
-        assertEquals(1L, observedValue)
+        assertEquals(1, observedValue)
 
         variable.set(2)
         composeRule.waitForIdle()
 
-        assertEquals(2L, observedValue)
+        assertEquals(2, observedValue)
     }
 
     @Test
     fun `observed value has default value if expression is null`() {
-        val expression: Expression<Long>? = null
-        var observedValue by mutableLongStateOf(0L)
+        val expression: Expression<Int>? = null
+        var observedValue by mutableStateOf(0)
 
         setContent {
             observedValue = expression.observedValue(10)
         }
 
-        assertEquals(10L, observedValue)
+        assertEquals(10, observedValue)
     }
 
     @Test
@@ -68,21 +68,21 @@ class ExpressionUtilsTest {
 
         val expression = intExpression("@{counter}")
         var showExpression by mutableStateOf(true)
-        var observedValue by mutableLongStateOf(0L)
+        var observedValue by mutableStateOf(0)
 
         setContent {
             if (showExpression) {
-                observedValue = expression.observedValue()
+                observedValue = expression.observedIntValue()
             }
         }
 
-        assertEquals(1L, observedValue)
+        assertEquals(1, observedValue)
 
         showExpression = false
         variable.set(2)
         composeRule.waitForIdle()
 
-        assertEquals(1L, observedValue)
+        assertEquals(1, observedValue)
     }
 
     @Test
@@ -107,6 +107,26 @@ class ExpressionUtilsTest {
         }
 
         assertEquals("Hello, world! \\", observedValue)
+    }
+
+    @Test
+    fun `observedValue() with transform yields transformed value`() {
+        val counter = Variable.IntegerVariable("counter", 1)
+        variableController.declare(counter)
+
+        val expression = intExpression("@{counter}")
+        var observedValue by mutableStateOf("")
+
+        setContent {
+            observedValue = expression.observedValue(transform = { "counter = $it" })
+        }
+
+        assertEquals("counter = 1", observedValue)
+
+        counter.set(2)
+        composeRule.waitForIdle()
+
+        assertEquals("counter = 2", observedValue)
     }
 
     @Test

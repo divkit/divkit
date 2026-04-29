@@ -10,11 +10,13 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.images.ImageRequestParams
+import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
+import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
-import com.yandex.div.compose.views.image.buildImageRequest
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div.compose.views.image.toContentScale
 import com.yandex.div2.DivImageBackground
@@ -22,23 +24,26 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
-    val imageUrl = data.imageUrl.observedValue()
-    val imageAlpha = data.alpha.observedValue().toFloat()
-    val scale = data.scale.observedValue()
-    val alignHorizontal = data.contentAlignmentHorizontal.observedValue()
-    val alignVertical = data.contentAlignmentVertical.observedValue()
-
     val context = divContext
     val density = LocalDensity.current.density
-    val filterTransformations = data.filters.resolveTransformations(context, density)
 
-    val model = buildImageRequest(context, imageUrl, scale, filterTransformations)
+    val imageAlpha = data.alpha.observedFloatValue()
+    val scale = data.scale.observedValue()
     val contentScale = scale.toContentScale(density)
-    val alignment = toAlignment(alignHorizontal, alignVertical)
 
+    val alignment = toAlignment(
+        data.contentAlignmentHorizontal.observedValue(),
+        data.contentAlignmentVertical.observedValue()
+    )
+
+    val imageRequestParams = ImageRequestParams(
+        data = data.imageUrl.observedValue(),
+        scale = scale,
+        transformations = data.filters.resolveTransformations(context, density)
+    )
     val painter = rememberAsyncImagePainter(
-        model = model,
-        imageLoader = imageLoader,
+        model = context.rememberImageRequest(imageRequestParams),
+        imageLoader = imageLoader
     )
 
     return drawBehind {

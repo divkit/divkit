@@ -12,10 +12,22 @@ import com.yandex.div.json.expressions.ExpressionList
 
 @Composable
 internal fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
+    val expressionResolver = expressionResolver
     return when (this) {
         null -> defaultValue
         is Expression.ConstantExpression -> evaluate(expressionResolver)
-        else -> asState(defaultValue).value
+        else -> {
+            val state = remember(this, expressionResolver) {
+                mutableStateOf(defaultValue)
+            }
+
+            DisposableEffect(this, expressionResolver) {
+                val disposable = observeAndGet(expressionResolver) { state.value = it }
+                onDispose { disposable.close() }
+            }
+
+            state.value
+        }
     }
 }
 
@@ -26,9 +38,21 @@ internal fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float 
 
 @Composable
 internal fun <T : Any> Expression<T>.observedValue(): T {
+    val expressionResolver = expressionResolver
     return when (this) {
         is Expression.ConstantExpression -> evaluate(expressionResolver)
-        else -> asState().value
+        else -> {
+            val state = remember(this, expressionResolver) {
+                mutableStateOf(evaluate(expressionResolver))
+            }
+
+            DisposableEffect(this, expressionResolver) {
+                val disposable = observe(expressionResolver) { state.value = it }
+                onDispose { disposable.close() }
+            }
+
+            state.value
+        }
     }
 }
 
@@ -48,29 +72,27 @@ internal fun Expression<Double>.observedFloatValue(): Float {
 }
 
 @Composable
-private fun <T : Any> Expression<T>.asState(): State<T> {
-    val resolver = expressionResolver
-    val state = remember(this, resolver) { mutableStateOf(evaluate(resolver)) }
+internal fun <T : Any, R> Expression<T>.observedValue(transform: (T) -> R): R {
+    val expressionResolver = expressionResolver
+    return when (this) {
+        is Expression.ConstantExpression ->
+            remember(this, expressionResolver) {
+                transform(evaluate(expressionResolver))
+            }
 
-    DisposableEffect(this, resolver) {
-        val disposable = observe(resolver) { state.value = it }
-        onDispose { disposable.close() }
+        else -> {
+            val state = remember(this, expressionResolver) {
+                mutableStateOf(transform(evaluate(expressionResolver)))
+            }
+
+            DisposableEffect(this, expressionResolver) {
+                val disposable = observe(expressionResolver) { state.value = transform(it) }
+                onDispose { disposable.close() }
+            }
+
+            state.value
+        }
     }
-
-    return state
-}
-
-@Composable
-private fun <T : Any> Expression<T>.asState(defaultValue: T): State<T> {
-    val resolver = expressionResolver
-    val state = remember(this, resolver) { mutableStateOf(defaultValue) }
-
-    DisposableEffect(this, resolver) {
-        val disposable = observeAndGet(resolver) { state.value = it }
-        onDispose { disposable.close() }
-    }
-
-    return state
 }
 
 @Composable
