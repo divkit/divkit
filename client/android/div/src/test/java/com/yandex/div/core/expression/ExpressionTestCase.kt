@@ -8,7 +8,6 @@ data class ExpressionTestCase(
     val expression: String,
     val variables: List<JSONObject>,
     val functions: List<JSONObject>,
-    val platform: List<String>,
     val expectedType: String,
     val expectedValue: Any,
     val expectedWarnings: List<String>,

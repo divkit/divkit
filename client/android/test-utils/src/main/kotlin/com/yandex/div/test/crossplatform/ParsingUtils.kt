@@ -55,11 +55,11 @@ object ParsingUtils {
     }
 }
 
-val JSONObject.platforms: List<String>
-    get() = getJSONArray("platforms").map { it as String }
+val JSONObject.platforms: List<String>?
+    get() = optJSONArray("platforms")?.map { it as String }
 
 val JSONObject.isForAndroid: Boolean
-    get() = platforms.contains("android")
+    get() = platforms?.contains("android") ?: true
 
 fun JSONArray?.toObjectList(): List<JSONObject> {
     if (this == null) {

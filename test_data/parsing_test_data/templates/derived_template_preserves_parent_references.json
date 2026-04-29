@@ -1,5 +1,9 @@
 {
   "description": "A derived template inherits a parent template whose body contains reference definitions inside nested structures. Verifies that inherited references from the parent and the derived template's own references all resolve against the usage's reference values.",
+  "platforms": [
+    "ios",
+    "web"
+  ],
   "templates": {
     "base_text": {
       "type": "text",

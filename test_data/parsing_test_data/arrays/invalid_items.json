@@ -1,5 +1,11 @@
 {
   "description": "Invalid item in array (transition_triggers) is ignored",
+  "platforms": [
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no \"parsing\" process on the web"
+  },
   "card": {
     "log_id": "test",
     "states": [

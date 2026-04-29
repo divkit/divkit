@@ -1,5 +1,12 @@
 {
   "description": "Number value in integer property (div-text.font_size)",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no \"parsing\" process on the web"
+  },
   "card": {
     "log_id": "test",
     "states": [

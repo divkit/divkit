@@ -27,14 +27,14 @@
         "state_id": 0,
         "div": {
           "type": "root",
-          "background_color": "#F00",
+          "background_color": "#FFFF0000",
           "items": [
             {
               "type": "container",
               "items": [
                 {
                   "type": "button",
-                  "background_color": "#0f0",
+                  "background_color": "#FF00FF00",
                   "text": "SAMPLE"
                 }
               ]
@@ -55,7 +55,7 @@
             "background": [
               {
                 "type": "solid",
-                "color": "#F00"
+                "color": "#FFFF0000"
               }
             ],
             "items": [
@@ -67,7 +67,7 @@
                     "background": [
                       {
                         "type": "solid",
-                        "color": "#0f0"
+                        "color": "#FF00FF00"
                       }
                     ],
                     "text": "SAMPLE"

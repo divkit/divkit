@@ -1,5 +1,12 @@
 {
   "description": "All properties with expressions are parsed correctly",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no \"parsing\" process on the web"
+  },
   "card": {
     "log_id": "test",
     "states": [
@@ -14,8 +21,7 @@
           "text_color": "@{text_color}",
           "actions": [
             {
-              "log_id": "test_action",
-              "params": "@{action_params}"
+              "log_id": "@{action_log_id}"
             }
           ]
         }
@@ -37,8 +43,7 @@
             "text_color": "@{text_color}",
             "actions": [
               {
-                "log_id": "test_action",
-                "params": "@{action_params}"
+                "log_id": "@{action_log_id}"
               }
             ]
           }

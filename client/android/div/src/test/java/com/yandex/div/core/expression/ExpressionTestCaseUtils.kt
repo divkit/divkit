@@ -10,7 +10,6 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.isForAndroid
 import com.yandex.div.test.crossplatform.parseDateTime
-import com.yandex.div.test.crossplatform.platforms
 import com.yandex.div.test.crossplatform.toObjectList
 import com.yandex.div2.DivData
 import com.yandex.div2.DivEvaluableType
@@ -64,7 +63,6 @@ object ExpressionTestCaseUtils {
                 json.getString(CASE_EXPRESSION_VALUE_FIELD),
                 json.optJSONArray(CASE_VARIABLES_FIELD).toObjectList(),
                 json.optJSONArray(CASE_FUNCTIONS_FIELD).toObjectList(),
-                json.platforms,
                 json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).type,
                 json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).getValue(),
                 json.optJSONArray(CASE_EXPECTED_WARNINGS_FIELD)?.map { it as String } ?: emptyList(),

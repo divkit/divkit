@@ -774,7 +774,7 @@ public class JsonPropertyParser {
             @Nullable final List<V> list,
             @NonNull final Function1<V, R> converter
     ) {
-        if (list != null && !list.isEmpty()) {
+        if (list != null) {
             int length = list.size();
             JSONArray array = new JSONArray();
             for (int i = 0; i < length; i++) {
@@ -796,7 +796,7 @@ public class JsonPropertyParser {
             @Nullable final List<V> list,
             @NonNull final Lazy<Serializer<JSONObject, V>> serializer
     ) {
-        if (list != null && !list.isEmpty()) {
+        if (list != null) {
             int length = list.size();
             JSONArray array = new JSONArray();
 

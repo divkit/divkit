@@ -1,5 +1,11 @@
 {
   "description": "String value in boolean_int property (div-text.auto_ellipsize)",
+  "platforms": [
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no \"parsing\" process on the web"
+  },
   "card": {
     "log_id": "test",
     "states": [

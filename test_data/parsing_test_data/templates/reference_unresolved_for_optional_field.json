@@ -1,5 +1,9 @@
 {
   "description": "A reference definition points to a source name the usage does not provide, for an optional field. Verifies an unresolved reference on an optional field is silently ignored.",
+  "platforms": [
+    "ios",
+    "web"
+  ],
   "templates": {
     "styled_text": {
       "type": "text",

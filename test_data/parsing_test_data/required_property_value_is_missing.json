@@ -1,5 +1,12 @@
 {
   "description": "Object with missing required property (div-action.log_id) is ignored",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "unsupported_platforms": {
+    "web": "There is no \"parsing\" process on the web"
+  },
   "card": {
     "log_id": "test",
     "states": [

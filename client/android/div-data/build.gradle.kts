@@ -22,6 +22,9 @@ dependencies {
 
     api(libs.androidx.core)
 
+    testImplementation(project(":test-utils"))
+
+    testImplementation(libs.json)
     testImplementation(libs.kotlin.reflect)
 }
 
