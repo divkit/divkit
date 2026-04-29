@@ -2,7 +2,7 @@
 agp = "8.12.3"
 android-lint = "31.12.3"  # agp + "23.0.0"
 androidsvg = "1.4"
-coil = "3.0.4"
+coil = "3.1.0"
 exoplayer = "2.18.4"
 festReflect = "1.4.1"
 glide = "4.16.0"
