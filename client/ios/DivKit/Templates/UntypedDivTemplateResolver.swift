@@ -35,8 +35,7 @@ final class UntypedDivTemplateResolver {
       in: merged,
       linkSource: dictionary,
       cascadeAllowed: true,
-      instanceProvidedKeys: Set(dictionary.keys),
-      expanding: [templateName]
+      instanceProvidedKeys: Set(dictionary.keys)
     )
   }
 
@@ -81,8 +80,7 @@ final class UntypedDivTemplateResolver {
     in dictionary: [String: Any],
     linkSource: [String: Any]?,
     cascadeAllowed: Bool,
-    instanceProvidedKeys: Set<String> = [],
-    expanding: Set<String> = []
+    instanceProvidedKeys: Set<String> = []
   ) -> [String: Any] {
     var dict = dictionary
     var linkFieldNames = Set<String>()
@@ -106,8 +104,7 @@ final class UntypedDivTemplateResolver {
       result[key] = resolveLinksInValue(
         value,
         linkSource: childLinkSource,
-        cascadeAllowed: childCascadeAllowed,
-        expanding: expanding
+        cascadeAllowed: childCascadeAllowed
       )
     }
     return result
@@ -116,46 +113,119 @@ final class UntypedDivTemplateResolver {
   private func resolveLinksInValue(
     _ value: Any,
     linkSource: [String: Any]?,
-    cascadeAllowed: Bool,
-    expanding: Set<String>
+    cascadeAllowed: Bool
   ) -> Any {
     if let dict = value as? [String: Any] {
       if cascadeAllowed,
          let linkSource,
          let type = dict["type"] as? String,
-         !expanding.contains(type),
          let resolvedTemplate = resolveTemplate(named: type).value {
-        var merged = resolvedTemplate
-        for (key, value) in dict {
-          merged[key] = value
-        }
-        merged["type"] = templateToType[type] ?? type
-        return resolveLinks(
-          in: merged,
+        var parameterNames = collectParameterNames(from: resolvedTemplate)
+        parameterNames.formUnion(
+          collectParameterNames(from: dict, excludingKeys: parameterNames)
+        )
+        return resolveInstanceLinks(
+          in: dict,
           linkSource: linkSource,
-          cascadeAllowed: true,
-          instanceProvidedKeys: Set(dict.keys),
-          expanding: expanding.union([type])
+          parameterNames: parameterNames
         )
       }
-      return resolveLinks(
-        in: dict,
-        linkSource: linkSource,
-        cascadeAllowed: cascadeAllowed,
-        expanding: expanding
-      )
+      return resolveLinks(in: dict, linkSource: linkSource, cascadeAllowed: cascadeAllowed)
     }
     if let array = value as? [Any] {
       return array.map {
-        resolveLinksInValue(
-          $0,
-          linkSource: linkSource,
-          cascadeAllowed: cascadeAllowed,
-          expanding: expanding
-        )
+        resolveLinksInValue($0, linkSource: linkSource, cascadeAllowed: cascadeAllowed)
       }
     }
     return value
+  }
+
+  private func resolveInstanceLinks(
+    in dictionary: [String: Any],
+    linkSource: [String: Any],
+    parameterNames: Set<String>
+  ) -> [String: Any] {
+    var dict = dictionary
+    let linkKeys = dict.keys.filter { $0.hasPrefix("$") }
+    for linkKey in linkKeys {
+      let key = String(linkKey.dropFirst())
+      guard dict[key] == nil else { continue }
+      guard !parameterNames.contains(key) else { continue }
+      guard let linkName = dict[linkKey] as? String else { continue }
+      guard let value = linkSource[linkName] else { continue }
+      dict[key] = value
+    }
+
+    var result: [String: Any] = [:]
+    for (key, value) in dict {
+      guard !key.hasPrefix("$") else { continue }
+      result[key] = value
+    }
+
+    for paramName in parameterNames {
+      if let value = linkSource[paramName] {
+        result[paramName] = value
+      }
+    }
+
+    return result
+  }
+
+  private func collectParameterNames(from dict: [String: Any]) -> Set<String> {
+    var visited = Set<TemplateName>()
+    return collectParameterNames(from: dict, excludingKeys: [], visited: &visited)
+  }
+
+  private func collectParameterNames(
+    from dict: [String: Any],
+    excludingKeys: Set<String>
+  ) -> Set<String> {
+    var visited = Set<TemplateName>()
+    return collectParameterNames(from: dict, excludingKeys: excludingKeys, visited: &visited)
+  }
+
+  private func collectParameterNames(
+    from dict: [String: Any],
+    excludingKeys: Set<String> = [],
+    visited: inout Set<TemplateName>
+  ) -> Set<String> {
+    var names = Set<String>()
+    for (key, value) in dict {
+      if key.hasPrefix("$"), let name = value as? String {
+        names.insert(name)
+      }
+      guard !excludingKeys.contains(key) else { continue }
+      if let nestedDict = value as? [String: Any] {
+        names.formUnion(collectParameterNamesResolvingTemplates(
+          from: nestedDict, visited: &visited
+        ))
+      }
+      if let array = value as? [Any] {
+        for element in array {
+          if let elementDict = element as? [String: Any] {
+            names.formUnion(collectParameterNamesResolvingTemplates(
+              from: elementDict, visited: &visited
+            ))
+          }
+        }
+      }
+    }
+    return names
+  }
+
+  private func collectParameterNamesResolvingTemplates(
+    from dict: [String: Any],
+    visited: inout Set<TemplateName>
+  ) -> Set<String> {
+    if let type = dict["type"] as? String,
+       !visited.contains(type),
+       let resolvedTemplate = resolveTemplate(named: type).value {
+      visited.insert(type)
+      var names = collectParameterNames(from: dict, visited: &visited)
+      names.formUnion(collectParameterNames(from: resolvedTemplate, visited: &visited))
+      return names
+    }
+    return collectParameterNames(from: dict, visited: &visited)
   }
 }
 
