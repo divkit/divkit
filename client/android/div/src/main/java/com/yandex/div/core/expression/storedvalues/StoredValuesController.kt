@@ -19,10 +19,13 @@ import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryException
 import com.yandex.div.storage.rawjson.RawJson
+import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.yatagan.Lazy
 import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
+
+internal const val CARD_PREFIX = "card_"
 
 private const val STORED_VALUE_ID_PREFIX = "stored_value_"
 private const val KEY_EXPIRATION_TIME = "expiration_time"
@@ -43,12 +46,23 @@ internal class StoredValuesController @Inject constructor(
 
     fun getStoredValue(
         name: String,
-        errorCollector: ErrorCollector? = null,
+        errorCollector: ErrorCollector,
+        dataTag: String,
+        scope: String,
     ): StoredValue? {
-        val storedValueId = STORED_VALUE_ID_PREFIX + name
+        val divScope = DivActionSetStoredValue.Scope.fromString(scope) ?: run {
+            errorCollector.logError(
+                RuntimeException(
+                    "Failed to get stored value '$name'",
+                    IllegalArgumentException("Unknown scope '$scope'")
+                )
+            )
+            return null
+        }
+        val storedValueId = name.toStoredValueId(divScope, dataTag)
         val repositoryResult = rawJsonRepository.get(listOf(storedValueId))
 
-        errorCollector?.logRepositoryErrors(repositoryResult.errors)
+        errorCollector.logRepositoryErrors(repositoryResult.errors)
         val jsonStoredValue = repositoryResult.resultData.firstOrNull()?.data ?: return null
 
         if (isStoredValueExpiredV2(jsonStoredValue) || isStoredValueExpiredV1(jsonStoredValue)) {
@@ -110,19 +124,19 @@ internal class StoredValuesController @Inject constructor(
         errors.forEach { error -> logError(error) }
     }
 
-    private fun ErrorCollector?.logUnknownType(name: String, unknownType: String) {
+    private fun ErrorCollector.logUnknownType(name: String, unknownType: String) {
         val declarationException = StoredValueDeclarationException(
             message = "Stored value '$name' declaration failed because of unknown type '$unknownType'"
         )
-        this?.logError(declarationException)
+        logError(declarationException)
     }
 
-    private fun ErrorCollector?.logDeclarationFailed(name: String, cause: Throwable? = null) {
+    private fun ErrorCollector.logDeclarationFailed(name: String, cause: Throwable? = null) {
         val declarationException = StoredValueDeclarationException(
             message = "Stored value '$name' declaration failed: ${cause?.message}",
             cause = cause,
         )
-        this?.logError(declarationException)
+        logError(declarationException)
     }
 
     @Throws(JSONException::class)
@@ -156,5 +170,13 @@ internal class StoredValuesController @Inject constructor(
             put(KEY_VALUE, value)
         }
         return json
+    }
+
+    private fun String.toStoredValueId(scope: DivActionSetStoredValue.Scope, dataTag: String): String {
+        val valueId = STORED_VALUE_ID_PREFIX + this
+        return when (scope) {
+            DivActionSetStoredValue.Scope.GLOBAL -> valueId
+            DivActionSetStoredValue.Scope.CARD -> CARD_PREFIX + dataTag + "_" + valueId
+        }
     }
 }

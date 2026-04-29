@@ -1796,7 +1796,7 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
-  "getstoredbooleanvalue_string_boolean_string": {
+  "getstoredbooleanvalue_string_string_boolean": {
     "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
@@ -1812,7 +1812,7 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
-  "getstoredcolorvalue_string_color_string": {
+  "getstoredcolorvalue_string_string_color": {
     "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
@@ -1856,7 +1856,7 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
-  "getstoredintegervalue_string_integer_string": {
+  "getstoredintegervalue_string_string_integer": {
     "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
@@ -1872,7 +1872,7 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
-  "getstorednumbervalue_string_number_string": {
+  "getstorednumbervalue_string_string_number": {
     "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },
@@ -1920,7 +1920,7 @@
     "en": "Fallback value.",
     "ru": "Резервное значение."
   },
-  "getstoredurlvalue_string_url_string": {
+  "getstoredurlvalue_string_string_url": {
     "en": "Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.",
     "ru": "Возвращает сохраненное значение по его имени. Если значение не существует в пределах заданной области видимости или имеет неправильный тип, будет возвращено значение по умолчанию."
   },

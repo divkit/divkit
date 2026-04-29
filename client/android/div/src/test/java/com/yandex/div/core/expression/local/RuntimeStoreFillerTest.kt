@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.local
 
 import android.graphics.Color
 import android.net.Uri
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.json.expressions.Expression
@@ -54,6 +55,7 @@ import org.mockito.kotlin.verify
 
 class RuntimeStoreFillerTest {
 
+    private val dataTag = DivDataTag("test")
     private val store: RuntimeStoreImpl = mock<RuntimeStoreImpl> {
         on { putRuntime(any(), any(), anyOrNull()) } doAnswer {
             runtimePaths.add(it.arguments[1] as String)
@@ -65,7 +67,7 @@ class RuntimeStoreFillerTest {
     }
     private val rootRuntime = ExpressionsRuntime(createResolver(""))
     private val runtimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { createRootRuntime(any(), any(), any()) } doReturn rootRuntime
+        on { createRootRuntime(any(), any(), any(), any()) } doReturn rootRuntime
         on { createChildRuntime(any(), any(), any(), any()) } doAnswer {
             val path = it.arguments[0] as String
             ExpressionsRuntime(createResolver(path))
@@ -89,7 +91,7 @@ class RuntimeStoreFillerTest {
         val states = listOf(DivData.State(container1, 0), DivData.State(container2, 1))
         val data = createData(states)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertEquals(5, runtimePaths.size)
     }
@@ -103,7 +105,7 @@ class RuntimeStoreFillerTest {
         val container2 = createContainer(items = listOf(text1, text2, container1))
         val data = data(content = container2)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertEquals(6, runtimePaths.size)
     }
@@ -113,7 +115,7 @@ class RuntimeStoreFillerTest {
         val text = createText("root_id")
         val data = data(content = text)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(2, "", "0:root_id")
     }
@@ -123,7 +125,7 @@ class RuntimeStoreFillerTest {
         val text = createText()
         val data = data(content = text)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(2, "", "0")
     }
@@ -134,7 +136,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = listOf(text))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0", "0/text_id")
     }
@@ -145,7 +147,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = listOf(text))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0", "0/child#0")
     }
@@ -157,7 +159,7 @@ class RuntimeStoreFillerTest {
         val gallery = createGallery(items = listOf(text1, text2))
         val data = data(content = gallery)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/item1", "0/child#1")
     }
@@ -169,7 +171,7 @@ class RuntimeStoreFillerTest {
         val pager = createPager(items = listOf(text1, text2))
         val data = data(content = pager)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/page1", "0/child#1")
     }
@@ -181,7 +183,7 @@ class RuntimeStoreFillerTest {
         val grid = Div.Grid(DivGrid(columnCount = Expression.constant(2), items = listOf(text1, text2)))
         val data = data(content = grid)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/item1", "0/child#1")
     }
@@ -194,7 +196,7 @@ class RuntimeStoreFillerTest {
         val tabs = Div.Tabs(DivTabs(items = items))
         val data = data(content = tabs)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/tab1", "0/child#1")
     }
@@ -207,7 +209,7 @@ class RuntimeStoreFillerTest {
         val state = Div.State(DivState(id = "state_id", states = states))
         val data = data(content = state)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0:state_id", "0:state_id/text1", "0:state_id/state1")
     }
@@ -219,7 +221,7 @@ class RuntimeStoreFillerTest {
         val custom = Div.Custom(DivCustom(customType = "custom", id = "custom_id", items = listOf(text1, text2)))
         val data = data(content = custom)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0:custom_id", "0:custom_id/custom_item1", "0:custom_id/child#1")
     }
@@ -249,7 +251,7 @@ class RuntimeStoreFillerTest {
         ))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(11, "", "0:container_id", "0:container_id/image_id", "0:container_id/gif_id",
             "0:container_id/separator_id", "0:container_id/indicator_id", "0:container_id/slider_id",
@@ -266,7 +268,7 @@ class RuntimeStoreFillerTest {
         val outerContainer = createContainer(items = listOf(innerContainer, text3))
         val data = data(content = outerContainer)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(6, "", "0", "0/inner", "0/inner/text1", "0/inner/child#1", "0/text3")
     }
@@ -279,7 +281,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer("container", listOf(text1, text2, text3))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(5, "", "0:container", "0:container/duplicate#0", "0:container/duplicate#1",
             "0:container/duplicate#2")
@@ -288,7 +290,7 @@ class RuntimeStoreFillerTest {
     @Test
     fun `fillStore returns root runtime`() {
         val data = data(content = createText())
-        val result = underTest.fillStore(store, data)
+        val result = underTest.fillStore(store, data, dataTag)
         assertSame(rootRuntime, result)
     }
 
@@ -296,7 +298,7 @@ class RuntimeStoreFillerTest {
     fun `create runtime for container with null items`() {
         val data = data(content = createContainer())
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(2, "", "0")
     }
@@ -306,7 +308,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = emptyList())
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(2, "", "0")
     }
@@ -317,7 +319,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = listOf(text))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0", "0/var_div")
         verify(runtimeProvider).createChildRuntime(any(), eq(text), any(), any())
@@ -329,7 +331,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = listOf(text))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0", "0/var_div")
         verify(runtimeProvider).createChildRuntime(any(), eq(text), any(), any())
@@ -341,7 +343,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(items = listOf(text))
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0", "0/var_div")
         verify(runtimeProvider, never()).createChildRuntime(any(), eq(text), any(), any())
@@ -353,7 +355,7 @@ class RuntimeStoreFillerTest {
         val container = createContainer(builder = builder)
         val data = data(content = container)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/built_item", "0/child#1")
     }
@@ -364,7 +366,7 @@ class RuntimeStoreFillerTest {
         val gallery = createGallery(builder = builder)
         val data = data(content = gallery)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/built_item", "0/child#1")
     }
@@ -375,7 +377,7 @@ class RuntimeStoreFillerTest {
         val pager = createPager(builder = builder)
         val data = data(content = pager)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(4, "", "0", "0/built_item", "0/child#1")
     }
@@ -392,7 +394,7 @@ class RuntimeStoreFillerTest {
         ))
         val data = data(content = state)
 
-        underTest.fillStore(store, data)
+        underTest.fillStore(store, data, dataTag)
 
         assertPaths(3, "", "0:state_id", "0:state_id/only_child")
     }

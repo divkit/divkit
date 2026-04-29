@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression.local
 
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
@@ -26,10 +27,10 @@ class RuntimeStoreImplTest {
     private val childRuntime = ExpressionsRuntime(resolver)
 
     private val runtimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { createRootRuntime(any(), any(), any()) } doReturn rootRuntime
+        on { createRootRuntime(any(), any(), any(), any()) } doReturn rootRuntime
         on { createChildRuntime(any(), any(), any(), any()) } doReturn childRuntime
     }
-    private val underTest = RuntimeStoreImpl(mock(), runtimeProvider, mock()).apply {
+    private val underTest = RuntimeStoreImpl(mock(), DivDataTag("test"), runtimeProvider, mock()).apply {
         putRuntime(rootRuntime, "", null)
     }
 

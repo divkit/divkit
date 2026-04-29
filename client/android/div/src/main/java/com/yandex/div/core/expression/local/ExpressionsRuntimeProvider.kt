@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.FunctionProvider
+import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -38,14 +39,16 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     fun createRootRuntime(
         data: DivData,
+        dataTag: String,
         errorCollector: ErrorCollector,
         runtimeStore: RuntimeStore,
     ): ExpressionsRuntime {
         val variableController = VariableControllerImpl(runtimeStore.viewProvider)
         variableController.addSource(divVariableController.variableSource)
 
-        val storedValueProvider = StoredValueProvider { storedValueName ->
-            storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
+        val storedValueProvider = object : ScopedStoredValueProvider {
+            override fun get(name: String, scope: String) =
+                storedValuesController.getStoredValue(name, errorCollector, dataTag, scope)?.getValue()
         }
         var functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
         val functions = data.functions

@@ -44,7 +44,7 @@ internal class RuntimeStoreProvider @Inject constructor(
             return store
         }
 
-        return RuntimeStoreImpl(data, runtimeProvider, errorCollector).also { store ->
+        return RuntimeStoreImpl(data, tag, runtimeProvider, errorCollector).also { store ->
             runtimeStores[tag.id] = store
             div2View?.let { store.attachView(it) }
         }

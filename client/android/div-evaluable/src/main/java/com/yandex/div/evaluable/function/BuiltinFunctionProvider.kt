@@ -211,6 +211,16 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetStoredUrlValueWithUrlFallback)
         registry.register(GetStoredArrayValue)
         registry.register(GetStoredDictValue)
+        registry.register(GetScopedStoredIntegerValue)
+        registry.register(GetScopedStoredNumberValue)
+        registry.register(GetScopedStoredStringValue)
+        registry.register(GetScopedStoredColorValueString)
+        registry.register(GetScopedStoredColorValue)
+        registry.register(GetScopedStoredBooleanValue)
+        registry.register(GetScopedStoredUrlValueWithStringFallback)
+        registry.register(GetScopedStoredUrlValueWithUrlFallback)
+        registry.register(GetScopedStoredArrayValue)
+        registry.register(GetScopedStoredDictValue)
 
         // Dict functions legacy
         registry.register(GetDictInteger)

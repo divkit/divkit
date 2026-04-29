@@ -212,6 +212,7 @@ class JSONObjectEvaluatorTest {
             input = payload,
             resolver = runtimeProvider.createRootRuntime(
                 data,
+                "test",
                 errorCollector,
                 runtimeStore
             ).expressionResolver,

@@ -91,6 +91,7 @@ class EvaluableMultiplatformTest(
 
         val rootRuntime = runtimeProvider.createRootRuntime(
             data = testDivData,
+            dataTag = "test",
             errorCollector = errorCollector,
             runtimeStore = runtimeStore,
         )

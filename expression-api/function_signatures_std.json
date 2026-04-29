@@ -436,7 +436,7 @@
     {
       "name": "getStoredIntegerValue",
       "description": {
-        "$ref": "translations.json#/getstoredintegervalue_string_integer_string"
+        "$ref": "translations.json#/getstoredintegervalue_string_string_integer"
       },
       "arguments": [
         {
@@ -446,20 +446,22 @@
           }
         },
         {
-          "type": "integer",
-          "description": {
-            "$ref": "translations.json#/getstoredintegervalue_string_integer_arg1"
-          }
-        },
-        {
           "type": "string",
           "description": {
             "$ref": "translations.json#/getstoredvalue_scope"
           }
+        },
+        {
+          "type": "integer",
+          "description": {
+            "$ref": "translations.json#/getstoredintegervalue_string_integer_arg1"
+          }
         }
       ],
       "return_type": "integer",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredNumberValue",
@@ -491,7 +493,7 @@
     {
       "name": "getStoredNumberValue",
       "description": {
-        "$ref": "translations.json#/getstorednumbervalue_string_number_string"
+        "$ref": "translations.json#/getstorednumbervalue_string_string_number"
       },
       "arguments": [
         {
@@ -501,20 +503,22 @@
           }
         },
         {
-          "type": "number",
-          "description": {
-            "$ref": "translations.json#/getstorednumbervalue_string_number_arg1"
-          }
-        },
-        {
           "type": "string",
           "description": {
             "$ref": "translations.json#/getstoredvalue_scope"
           }
+        },
+        {
+          "type": "number",
+          "description": {
+            "$ref": "translations.json#/getstorednumbervalue_string_number_arg1"
+          }
         }
       ],
       "return_type": "number",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredStringValue",
@@ -558,18 +562,20 @@
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredstringvalue_string_string_arg1"
+            "$ref": "translations.json#/getstoredvalue_scope"
           }
         },
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredvalue_scope"
+            "$ref": "translations.json#/getstoredstringvalue_string_string_arg1"
           }
         }
       ],
       "return_type": "string",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredUrlValue",
@@ -601,7 +607,7 @@
     {
       "name": "getStoredUrlValue",
       "description": {
-        "$ref": "translations.json#/getstoredurlvalue_string_url_string"
+        "$ref": "translations.json#/getstoredurlvalue_string_string_url"
       },
       "arguments": [
         {
@@ -611,20 +617,22 @@
           }
         },
         {
-          "type": "url",
-          "description": {
-            "$ref": "translations.json#/getstoredurlvalue_string_url_arg1"
-          }
-        },
-        {
           "type": "string",
           "description": {
             "$ref": "translations.json#/getstoredvalue_scope"
           }
+        },
+        {
+          "type": "url",
+          "description": {
+            "$ref": "translations.json#/getstoredurlvalue_string_url_arg1"
+          }
         }
       ],
       "return_type": "url",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredUrlValue",
@@ -668,18 +676,20 @@
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredurlvalue_string_string_arg1"
+            "$ref": "translations.json#/getstoredvalue_scope"
           }
         },
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredvalue_scope"
+            "$ref": "translations.json#/getstoredurlvalue_string_string_arg1"
           }
         }
       ],
       "return_type": "url",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredColorValue",
@@ -711,7 +721,7 @@
     {
       "name": "getStoredColorValue",
       "description": {
-        "$ref": "translations.json#/getstoredcolorvalue_string_color_string"
+        "$ref": "translations.json#/getstoredcolorvalue_string_string_color"
       },
       "arguments": [
         {
@@ -721,20 +731,22 @@
           }
         },
         {
-          "type": "color",
-          "description": {
-            "$ref": "translations.json#/getstoredcolorvalue_string_color_arg1"
-          }
-        },
-        {
           "type": "string",
           "description": {
             "$ref": "translations.json#/getstoredvalue_scope"
           }
+        },
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/getstoredcolorvalue_string_color_arg1"
+          }
         }
       ],
       "return_type": "color",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredColorValue",
@@ -778,18 +790,20 @@
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredcolorvalue_string_string_arg1"
+            "$ref": "translations.json#/getstoredvalue_scope"
           }
         },
         {
           "type": "string",
           "description": {
-            "$ref": "translations.json#/getstoredvalue_scope"
+            "$ref": "translations.json#/getstoredcolorvalue_string_string_arg1"
           }
         }
       ],
       "return_type": "color",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredBooleanValue",
@@ -821,7 +835,7 @@
     {
       "name": "getStoredBooleanValue",
       "description": {
-        "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_string"
+        "$ref": "translations.json#/getstoredbooleanvalue_string_string_boolean"
       },
       "arguments": [
         {
@@ -831,20 +845,22 @@
           }
         },
         {
-          "type": "boolean",
-          "description": {
-            "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_arg1"
-          }
-        },
-        {
           "type": "string",
           "description": {
             "$ref": "translations.json#/getstoredvalue_scope"
           }
+        },
+        {
+          "type": "boolean",
+          "description": {
+            "$ref": "translations.json#/getstoredbooleanvalue_string_boolean_arg1"
+          }
         }
       ],
       "return_type": "boolean",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredArrayValue",
@@ -886,7 +902,9 @@
         }
       ],
       "return_type": "array",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "getStoredDictValue",
@@ -928,7 +946,9 @@
         }
       ],
       "return_type": "dict",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

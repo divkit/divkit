@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression.local
 
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.asImpl
@@ -18,8 +19,8 @@ internal class RuntimeStoreFiller(
     private val errorCollector: ErrorCollector,
 ) {
 
-    fun fillStore(store: RuntimeStoreImpl, data: DivData): ExpressionsRuntime {
-        val runtime = runtimeProvider.createRootRuntime(data, errorCollector, store)
+    fun fillStore(store: RuntimeStoreImpl, data: DivData, tag: DivDataTag): ExpressionsRuntime {
+        val runtime = runtimeProvider.createRootRuntime(data, tag.id, errorCollector, store)
         store.putRuntime(runtime, "", null)
         data.states.forEach { state ->
             val path = DivStatePath.fromState(state)

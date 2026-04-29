@@ -6,6 +6,7 @@ import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_CONVERT_TO_URL
+import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
@@ -13,229 +14,183 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigDecimal
 
-internal object GetStoredIntegerValue : Function() {
-
+internal abstract class GetStoredIntegerValueBase : GetStoredValue<Long>() {
     override val name = "getStoredIntegerValue"
-
-    override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.INTEGER), // fallback
-    )
-
     override val resultType = EvaluableType.INTEGER
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = args[1] as Long
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Long
-
-        return storedValue ?: fallbackValue
-    }
-
 }
 
-internal object GetStoredNumberValue : Function() {
+internal object GetStoredIntegerValue : GetStoredIntegerValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.INTEGER), // fallback
+    )
+}
 
+internal object GetScopedStoredIntegerValue : GetStoredIntegerValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.INTEGER), // fallback
+    )
+    override val hasScope = true
+}
+
+internal abstract class GetStoredNumberValueBase : GetStoredValue<Number>() {
     override val name = "getStoredNumberValue"
-
-    override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.NUMBER), // fallback
-    )
-
     override val resultType = EvaluableType.NUMBER
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = args[1] as Number
-        val storedValue = if (evaluationContext.storedValueProvider.get(storedValueName) is Long)
-            null
-        else
-            evaluationContext.storedValueProvider.get(storedValueName) as? Number
-
-        return storedValue ?: fallbackValue
-    }
-
+    override fun Any?.convert(fallback: () -> Number) = (if (this is Long) null else this as? Number) ?: fallback()
 }
 
-internal object GetStoredStringValue : Function() {
+internal object GetStoredNumberValue : GetStoredNumberValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.NUMBER), // fallback
+    )
+}
 
+internal object GetScopedStoredNumberValue : GetStoredNumberValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.NUMBER), // fallback
+    )
+    override val hasScope = true
+}
+
+internal abstract class GetStoredStringValueBase : GetStoredValue<String>() {
     override val name = "getStoredStringValue"
-
-    override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.STRING), // fallback
-    )
-
     override val resultType = EvaluableType.STRING
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = args[1] as String
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? String
-
-        return storedValue ?: fallbackValue
-    }
-
 }
 
-internal object GetStoredColorValueString : Function() {
-
-    override val name = "getStoredColorValue"
-
+internal object GetStoredStringValue : GetStoredStringValueBase() {
     override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.STRING), // fallback
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // fallback
     )
-
-    override val resultType = EvaluableType.COLOR
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = Color.parse(args[1] as String)
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Color
-
-        return storedValue ?: fallbackValue
-    }
-
 }
 
-internal object GetStoredColorValue : Function() {
-
-    override val name = "getStoredColorValue"
-
+internal object GetScopedStoredStringValue : GetStoredStringValueBase() {
     override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.COLOR), // fallback
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.STRING), // fallback
     )
-
-    override val resultType = EvaluableType.COLOR
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = args[1] as Color
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Color
-
-        return storedValue ?: fallbackValue
-    }
-
+    override val hasScope = true
 }
 
-internal object GetStoredBooleanValue : Function() {
+internal abstract class GetStoredColorValueBase : GetStoredValue<Color>() {
+    override val name = "getStoredColorValue"
+    override val resultType = EvaluableType.COLOR
+}
 
+internal object GetStoredColorValueString : GetStoredColorValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+    )
+    override fun List<Any>.getFallback() = Color.parse(get(1) as String)
+}
+
+internal object GetScopedStoredColorValueString : GetStoredColorValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+    )
+    override val hasScope = true
+    override fun List<Any>.getFallback() = Color.parse(get(2) as String)
+}
+
+internal object GetStoredColorValue : GetStoredColorValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.COLOR), // fallback
+    )
+}
+
+internal object GetScopedStoredColorValue : GetStoredColorValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.COLOR), // fallback
+    )
+    override val hasScope = true
+}
+
+internal abstract class GetStoredBooleanValueBase : GetStoredValue<Boolean>() {
     override val name = "getStoredBooleanValue"
-
-    override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING), // stored value name
-            FunctionArgument(type = EvaluableType.BOOLEAN), // fallback
-    )
-
     override val resultType = EvaluableType.BOOLEAN
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val fallbackValue = args[1] as Boolean
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Boolean
-
-        return storedValue ?: fallbackValue
-    }
-
 }
 
-internal object GetStoredUrlValueWithStringFallback : Function() {
+internal object GetStoredBooleanValue : GetStoredBooleanValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.BOOLEAN), // fallback
+    )
+}
 
+internal object GetScopedStoredBooleanValue : GetStoredBooleanValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.BOOLEAN), // fallback
+    )
+    override val hasScope = true
+}
+
+internal abstract class GetStoredUrlValueBase : GetStoredValue<Url>() {
     override val name = "getStoredUrlValue"
+    override val resultType = EvaluableType.URL
+}
+
+internal object GetStoredUrlValueWithStringFallback : GetStoredUrlValueBase() {
 
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.STRING), // stored value name
         FunctionArgument(type = EvaluableType.STRING), // fallback
     )
 
-    override val resultType = EvaluableType.URL
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val urlString = args[1] as String
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Url
-        return storedValue
-            ?: urlString.safeConvertToUrl()
-            ?: throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_URL)
+    override fun List<Any>.getFallback(): Url {
+        return (get(1) as String).safeConvertToUrl()
+            ?: throwExceptionOnFunctionEvaluationFailed(name, this, REASON_CONVERT_TO_URL)
     }
-
 }
 
-internal object GetStoredUrlValueWithUrlFallback: Function() {
+internal object GetScopedStoredUrlValueWithStringFallback : GetStoredUrlValueBase() {
 
-    override val name = "getStoredUrlValue"
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+    )
 
+    override val hasScope = true
+
+    override fun List<Any>.getFallback(): Url {
+        return (get(2) as String).safeConvertToUrl()
+            ?: throwExceptionOnFunctionEvaluationFailed(name, this, REASON_CONVERT_TO_URL)
+    }
+}
+
+internal object GetStoredUrlValueWithUrlFallback: GetStoredUrlValueBase() {
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.STRING), // stored value name
         FunctionArgument(type = EvaluableType.URL), // fallback
     )
+}
 
-    override val resultType = EvaluableType.URL
-
-    override val isPure = false
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val storedValueName = args[0] as String
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Url
-        return storedValue ?: (args[1] as Url)
-    }
-
+internal object GetScopedStoredUrlValueWithUrlFallback : GetStoredUrlValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // stored value name
+        FunctionArgument(type = EvaluableType.STRING), // scope
+        FunctionArgument(type = EvaluableType.URL), // fallback
+    )
+    override val hasScope = true
 }
 
 internal abstract class GetStoredComplexValue<T : Any> : Function() {
     override val isPure = false
-    override val declaredArgs = listOf(
-        FunctionArgument(type = EvaluableType.STRING),
-    )
+    open val hasScope = false
 
     @Suppress("UNCHECKED_CAST")
     override fun evaluate(
@@ -244,8 +199,13 @@ internal abstract class GetStoredComplexValue<T : Any> : Function() {
         args: List<Any>
     ): Any {
         val storedValueName = args[0] as String
-        val storedValue = evaluationContext.storedValueProvider.get(storedValueName)
-            ?: throwExceptionOnFunctionEvaluationFailed(name, args, "Missing value.")
+
+        val storedValue = if (hasScope && evaluationContext.storedValueProvider is ScopedStoredValueProvider) {
+            val scope = args[1] as String
+            evaluationContext.storedValueProvider.get(storedValueName, scope)
+        } else {
+            evaluationContext.storedValueProvider.get(storedValueName)
+        } ?: throwExceptionOnFunctionEvaluationFailed(name, args, "Missing value.")
 
         return storedValue as? T
             ?: throwWrongTypeException(name, args, resultType, storedValue)
@@ -263,12 +223,69 @@ internal abstract class GetStoredComplexValue<T : Any> : Function() {
     }
 }
 
-internal object GetStoredArrayValue : GetStoredComplexValue<JSONArray>() {
+internal abstract class GetStoredArrayValueBase : GetStoredComplexValue<JSONArray>() {
     override val name = "getStoredArrayValue"
     override val resultType = EvaluableType.ARRAY
 }
 
-internal object GetStoredDictValue : GetStoredComplexValue<JSONObject>() {
+internal object GetStoredArrayValue : GetStoredArrayValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING),
+    )
+}
+
+internal object GetScopedStoredArrayValue: GetStoredArrayValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING),
+        FunctionArgument(type = EvaluableType.STRING),
+    )
+    override val hasScope = true
+}
+
+internal abstract class GetStoredDictValueBase : GetStoredComplexValue<JSONObject>() {
     override val name = "getStoredDictValue"
     override val resultType = EvaluableType.DICT
+}
+
+internal object GetStoredDictValue : GetStoredDictValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING),
+    )
+}
+
+internal object GetScopedStoredDictValue : GetStoredDictValueBase() {
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING),
+        FunctionArgument(type = EvaluableType.STRING),
+    )
+    override val hasScope = true
+}
+
+@Suppress("UNCHECKED_CAST")
+internal abstract class GetStoredValue<T: Any>: Function() {
+
+    override val isPure = false
+
+    protected open val hasScope: Boolean = false
+    protected val fallbackIndex = if (hasScope) 2 else 1
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val storedValueName = args[0] as String
+        val fallback = { args.getFallback() }
+
+        if (!hasScope || evaluationContext.storedValueProvider !is ScopedStoredValueProvider) {
+            return evaluationContext.storedValueProvider.get(storedValueName).convert(fallback)
+        }
+
+        val scope = args[2] as String
+        return evaluationContext.storedValueProvider.get(storedValueName, scope).convert(fallback)
+    }
+
+    protected open fun Any?.convert(fallback: () -> T): T = this as? T ?: fallback()
+
+    protected open fun List<Any>.getFallback() = get(fallbackIndex) as T
 }
