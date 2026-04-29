@@ -57,25 +57,26 @@ class GlideDivImageLoader @JvmOverloads constructor(
         val target = createTarget<Drawable>()
 
         // load result will be handled by RequestListener to get dataSource
-        Glide.with(context).load(imageUri)
+        val requestManager = Glide.with(context)
+        requestManager.load(imageUri)
             .set(Option.memory(KEY_SVG), SvgDecoder.isSvg(imageUrl))
             .limitImageBitmapSizeIfNeed(canLimitSize)
             .listener(ImageRequestListener(callback))
             .into(target)
 
         return LoadReference {
-            Glide.with(context).clear(target)
+            requestManager.clear(target)
         }
     }
 
     @Deprecated("This method is not used in DivKit")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
-
-        Glide.with(context).asBitmap().load(imageUri).into(imageView)
+        val requestManager = Glide.with(context)
+        requestManager.asBitmap().load(imageUri).into(imageView)
 
         return LoadReference {
-            Glide.with(context).clear(imageView)
+            requestManager.clear(imageView)
         }
     }
 
