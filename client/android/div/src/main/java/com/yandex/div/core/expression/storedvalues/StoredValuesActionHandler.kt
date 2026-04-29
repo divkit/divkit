@@ -9,6 +9,7 @@ import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.toBoolean
+import com.yandex.div2.DivActionSetStoredValue
 
 private const val AUTHORITY_SET_STORED_VALUE = "set_stored_value"
 
@@ -16,6 +17,7 @@ private const val PARAM_NAME = "name"
 private const val PARAM_VALUE = "value"
 private const val PARAM_LIFETIME = "lifetime"
 private const val PARAM_TYPE = "type"
+private const val PARAM_SCOPE = "scope"
 
 internal object StoredValuesActionHandler {
 
@@ -24,8 +26,7 @@ internal object StoredValuesActionHandler {
 
     @JvmStatic
     fun handleAction(uri: Uri, view: DivViewFacade): Boolean {
-        val div2View = if (view is Div2View) view else null
-        if (div2View == null) {
+        val div2View = view as? Div2View ?: run {
             KAssert.fail { "Handler view is not instance of Div2View" }
             return false
         }
@@ -36,23 +37,45 @@ internal object StoredValuesActionHandler {
         val type = uri.getParam(forName = PARAM_TYPE)
             ?.run { StoredValue.Type.fromString(this) }
             ?: return false
+        val scope = uri.getParam(forName = PARAM_SCOPE)?.let { scope ->
+            DivActionSetStoredValue.Scope.fromString(scope) ?: run {
+                div2View.logError(
+                    StoredValueDeclarationException(
+                        "Value $name stored with default scope",
+                        IllegalArgumentException("Unknown scope '$scope'")
+                    )
+                )
+                null
+            }
+        }
 
         val storedValue = try {
             createStoredValue(type, name, value)
         } catch (e: StoredValueDeclarationException) {
-            KAssert.fail {"Stored value '$name' declaration failed: ${e.message}" }
+            KAssert.fail { "Stored value '$name' declaration failed: ${e.message}" }
             return false
         }
-        return executeAction(storedValue, lifetime, div2View)
+        return executeAction(storedValue, lifetime, div2View, scope)
     }
 
-    fun executeAction(storedValue: StoredValue, lifetime: Long, div2View: Div2View): Boolean {
+    fun executeAction(
+        storedValue: StoredValue,
+        lifetime: Long,
+        div2View: Div2View,
+        scope: DivActionSetStoredValue.Scope?,
+    ): Boolean {
         val storedValuesController = div2View.div2Component.storedValuesController
         val errorCollector = div2View.viewComponent.errorCollectors.getOrCreate(
             div2View.divTag,
             div2View.divData
         )
-        return storedValuesController.setStoredValue(storedValue, lifetime, errorCollector)
+        return storedValuesController.setStoredValue(
+            storedValue,
+            lifetime,
+            scope ?: DivActionSetStoredValue.Scope.GLOBAL,
+            div2View.divTag.id,
+            errorCollector
+        )
     }
 
     private fun Uri.getParam(forName: String): String? {

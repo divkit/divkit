@@ -35,9 +35,10 @@ internal class DivActionTypedSetStoredValueHandler @Inject constructor() : DivAc
     ) {
         val name = action.name.evaluate(resolver)
         val lifetime = action.lifetime.evaluate(resolver)
+        val scope = action.scope?.evaluate(resolver)
         val storedValue = createStoredValue(action.value, name, resolver)
 
-        StoredValuesActionHandler.executeAction(storedValue, lifetime, view)
+        StoredValuesActionHandler.executeAction(storedValue, lifetime, view, scope)
     }
 
     private fun createStoredValue(

@@ -25,15 +25,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
 
-internal const val CARD_PREFIX = "card_"
-
-private const val STORED_VALUE_ID_PREFIX = "stored_value_"
-private const val KEY_EXPIRATION_TIME = "expiration_time"
-private const val KEY_TIMESTAMP = "timestamp"
-private const val KEY_LIFETIME = "lifetime"
-private const val KEY_TYPE = "type"
-private const val KEY_VALUE = "value"
-
 @Mockable
 @DivScope
 internal class StoredValuesController @Inject constructor(
@@ -105,18 +96,20 @@ internal class StoredValuesController @Inject constructor(
     fun setStoredValue(
         storedValue: StoredValue,
         lifetime: Long,
-        errorCollector: ErrorCollector? = null,
+        scope: DivActionSetStoredValue.Scope,
+        dataTag: String,
+        errorCollector: ErrorCollector,
     ): Boolean {
         val rawPayload = RawJsonRepository.Payload(
             jsons = listOf(
                 RawJson(
-                    id = STORED_VALUE_ID_PREFIX + storedValue.name,
+                    id = storedValue.name.toStoredValueId(scope, dataTag),
                     data = storedValue.toJSONObject(lifetime)
                 )
             )
         )
         val repositoryResult = rawJsonRepository.put(rawPayload)
-        errorCollector?.logRepositoryErrors(repositoryResult.errors)
+        errorCollector.logRepositoryErrors(repositoryResult.errors)
         return repositoryResult.errors.isEmpty()
     }
 
@@ -172,11 +165,21 @@ internal class StoredValuesController @Inject constructor(
         return json
     }
 
-    private fun String.toStoredValueId(scope: DivActionSetStoredValue.Scope, dataTag: String): String {
-        val valueId = STORED_VALUE_ID_PREFIX + this
-        return when (scope) {
-            DivActionSetStoredValue.Scope.GLOBAL -> valueId
-            DivActionSetStoredValue.Scope.CARD -> CARD_PREFIX + dataTag + "_" + valueId
+    companion object {
+        private const val CARD_PREFIX = "card_"
+        private const val STORED_VALUE_ID_PREFIX = "stored_value_"
+        private const val KEY_EXPIRATION_TIME = "expiration_time"
+        private const val KEY_TIMESTAMP = "timestamp"
+        private const val KEY_LIFETIME = "lifetime"
+        private const val KEY_TYPE = "type"
+        private const val KEY_VALUE = "value"
+
+        private fun String.toStoredValueId(scope: DivActionSetStoredValue.Scope, dataTag: String): String {
+            val valueId = STORED_VALUE_ID_PREFIX + this
+            return when (scope) {
+                DivActionSetStoredValue.Scope.GLOBAL -> valueId
+                DivActionSetStoredValue.Scope.CARD -> CARD_PREFIX + dataTag + "_" + valueId
+            }
         }
     }
 }
