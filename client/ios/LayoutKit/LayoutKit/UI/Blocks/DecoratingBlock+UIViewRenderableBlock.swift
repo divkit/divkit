@@ -515,7 +515,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     guard bounds.width > 0 && bounds.height > 0 else { return }
     if bounds.width < 44 || bounds.height < 44 {
       renderingDelegate?.reportRenderingError(
-        message: "Touchable view is too small: \(bounds.size), \(model.child)",
+        message: "Touchable view is too small: \(bounds.size)",
         isWarning: true,
         path: model.path ?? UIElementPath("")
       )
