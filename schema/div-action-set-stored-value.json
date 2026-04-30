@@ -27,7 +27,9 @@
         "global",
         "card"
       ],
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     }
   },
   "platforms": [
