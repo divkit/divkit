@@ -13,7 +13,7 @@ enum DivActionIntent: Hashable {
   case scroll(id: String, mode: ScrollMode)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
-  case setStoredValue(DivStoredValue)
+  case setStoredValue(DivStoredValue, DivStoredValueScope)
 
   static let scheme = "div-action"
 
@@ -99,10 +99,10 @@ enum DivActionIntent: Hashable {
       }
       self = .video(id: id, action: action)
     case "set_stored_value":
-      guard let storedValue = url.storedValue else {
+      guard let (storedValue, scope) = url.storedValue else {
         return nil
       }
-      self = .setStoredValue(storedValue)
+      self = .setStoredValue(storedValue, scope)
     default:
       return nil
     }
@@ -200,7 +200,7 @@ extension URL {
     queryParamValue(forName: "step").flatMap(Int.init)
   }
 
-  fileprivate var storedValue: DivStoredValue? {
+  fileprivate var storedValue: (DivStoredValue, DivStoredValueScope)? {
     guard let name = getParam(forName: "name"),
           let value = getParam(forName: "value"),
           let lifetime = getParam(forName: "lifetime").flatMap(Int.init),
@@ -211,6 +211,7 @@ extension URL {
       DivKitLogger.error("Unsupported stored value type: \(typeStr)")
       return nil
     }
+    let scope = getParam(forName: "scope").flatMap(DivStoredValueScope.init) ?? .global
     let storedValue = DivStoredValue(
       name: name,
       value: value,
@@ -221,7 +222,7 @@ extension URL {
       DivKitLogger.error("Incorrect value: \(value) for type: \(type)")
       return nil
     }
-    return storedValue
+    return (storedValue, scope)
   }
 
   fileprivate func getParam(forName name: String) -> String? {

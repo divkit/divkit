@@ -14,7 +14,7 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
   }
 
   override func tearDown() {
-    persistentValuesStorage.reset()
+    persistentValuesStorage.clear()
   }
 
   func test_SetStringValue() {
@@ -134,13 +134,60 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
     )
   }
 
-  private func handle(_ action: DivActionSetStoredValue) {
+  func test_SetCardScopedValue() {
+    handle(
+      action(
+        name: "name",
+        value: .stringValue(StringValue(value: .value("card value"))),
+        scope: .card
+      )
+    )
+
+    XCTAssertEqual(
+      persistentValuesStorage.get(name: "name", cardId: cardId),
+      "card value"
+    )
+    XCTAssertNil(persistentValuesStorage.get(name: "name", cardId: nil))
+  }
+
+  func test_SetCardScopedValue_IsolatedPerPathCardId() {
+    let otherCard = DivCardID(rawValue: "other_stored_card")
+    let setName = "per_path_key"
+    handle(
+      action(
+        name: setName,
+        value: .stringValue(StringValue(value: .value("from_default"))),
+        scope: .card
+      ),
+      path: cardId.path
+    )
+    handle(
+      action(
+        name: setName,
+        value: .stringValue(StringValue(value: .value("from_other"))),
+        scope: .card
+      ),
+      path: otherCard.path
+    )
+
+    XCTAssertEqual(
+      persistentValuesStorage.get(name: setName, cardId: cardId) as String?,
+      "from_default"
+    )
+    XCTAssertEqual(
+      persistentValuesStorage.get(name: setName, cardId: otherCard) as String?,
+      "from_other"
+    )
+    XCTAssertNil(persistentValuesStorage.get(name: setName, cardId: nil) as String?)
+  }
+
+  private func handle(_ action: DivActionSetStoredValue, path: UIElementPath = cardId.path) {
     handler.handle(
       divAction(
         logId: "action_id",
         typed: .divActionSetStoredValue(action)
       ),
-      path: cardId.path,
+      path: path,
       source: .callback,
       sender: nil
     )
@@ -152,12 +199,21 @@ private let cardId = DivBlockModelingContext.testCardId
 private func action(
   name: String,
   value: DivTypedValue,
-  lifetime: Int = 1000
+  lifetime: Int = 1000,
+  scope: DivStoredValueScope? = nil
 ) -> DivActionSetStoredValue {
   DivActionSetStoredValue(
     lifetime: .value(lifetime),
     name: .value(name),
-    value: value
+    value: value,
+    scope: scope.map {
+      switch $0 {
+      case .global:
+        return .value("global")
+      case .card:
+        return .value("card")
+      }
+    }
   )
 }
 

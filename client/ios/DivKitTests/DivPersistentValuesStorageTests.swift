@@ -126,6 +126,44 @@ final class DivPersistentValuesStorageTests: XCTestCase {
     XCTAssertNil(stored)
   }
 
+  func test_cardScope_IsolatedByCardId() {
+    let cardA = DivCardID(rawValue: "card-a")
+    let cardB = DivCardID(rawValue: "card-b")
+    storage.set(
+      value: DivStoredValue(name: "k", value: "a", type: .string, lifetimeInSec: 86400),
+      cardId: cardA
+    )
+    storage.set(
+      value: DivStoredValue(name: "k", value: "b", type: .string, lifetimeInSec: 86400),
+      cardId: cardB
+    )
+
+    XCTAssertEqual(storage.get(name: "k", cardId: cardA), "a")
+    XCTAssertEqual(storage.get(name: "k", cardId: cardB), "b")
+    XCTAssertNil(storage.get(name: "k", cardId: nil))
+  }
+
+  func test_globalScope_UsesPlainKey_BackwardsCompatible() {
+    storage.set(
+      value: DivStoredValue(name: "k", value: "g", type: .string, lifetimeInSec: 86400)
+    )
+    XCTAssertEqual(storage.get(name: "k"), "g")
+  }
+
+  func test_clearForCardId_RemovesOnlyCardScopedKeys() {
+    let cardId = DivCardID(rawValue: "c1")
+    storage.set(value: DivStoredValue(name: "g", value: "global", type: .string, lifetimeInSec: 86400))
+    storage.set(
+      value: DivStoredValue(name: "x", value: "card", type: .string, lifetimeInSec: 86400),
+      cardId: cardId
+    )
+
+    storage.clear(cardId: cardId)
+
+    XCTAssertEqual(storage.get(name: "g"), "global")
+    XCTAssertNil(storage.get(name: "x", cardId: cardId))
+  }
+
   private func makeStorage() -> DivPersistentValuesStorage {
     DivPersistentValuesStorage(
       timestampProvider: Variable { self.currentTimestamp }

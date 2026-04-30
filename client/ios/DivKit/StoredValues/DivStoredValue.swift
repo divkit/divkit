@@ -1,5 +1,10 @@
 import Foundation
 
+public enum DivStoredValueScope: String, Hashable, Sendable, Decodable {
+  case global
+  case card
+}
+
 struct DivStoredValue: Hashable {
   enum ValueType: String, Codable {
     case string

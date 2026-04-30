@@ -9,6 +9,7 @@ public final class DivActionSetStoredValue: Sendable {
   public let lifetime: Expression<Int>
   public let name: Expression<String>
   public let value: DivTypedValue
+  public let scope: Expression<String>?
 
   public func resolveLifetime(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(lifetime)
@@ -18,22 +19,35 @@ public final class DivActionSetStoredValue: Sendable {
     resolver.resolveString(name)
   }
 
+  public func resolveScope(_ resolver: ExpressionResolver) -> DivStoredValueScope {
+    guard let scope else {
+      return .global
+    }
+    guard let raw = resolver.resolveString(scope) else {
+      return .global
+    }
+    return DivStoredValueScope(rawValue: raw.lowercased()) ?? .global
+  }
+
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       lifetime: try dictionary.getExpressionField("lifetime", context: context),
       name: try dictionary.getExpressionField("name", context: context),
-      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }, context: context)
+      value: try dictionary.getField("value", transform: { (dict: [String: Any]) in try DivTypedValue(dictionary: dict, context: context) }, context: context),
+      scope: try dictionary.getOptionalExpressionField("scope", context: context)
     )
   }
 
   init(
     lifetime: Expression<Int>,
     name: Expression<String>,
-    value: DivTypedValue
+    value: DivTypedValue,
+    scope: Expression<String>? = nil
   ) {
     self.lifetime = lifetime
     self.name = name
     self.value = value
+    self.scope = scope
   }
 }
 
@@ -43,7 +57,8 @@ extension DivActionSetStoredValue: Equatable {
     guard
       lhs.lifetime == rhs.lifetime,
       lhs.name == rhs.name,
-      lhs.value == rhs.value
+      lhs.value == rhs.value,
+      lhs.scope == rhs.scope
     else {
       return false
     }
@@ -60,6 +75,9 @@ extension DivActionSetStoredValue: Serializable {
     result["lifetime"] = lifetime.toValidSerializationValue()
     result["name"] = name.toValidSerializationValue()
     result["value"] = value.toDictionary()
+    if let scope {
+      result["scope"] = scope.toValidSerializationValue()
+    }
     return result
   }
 }

@@ -177,7 +177,8 @@ public final class DivActionHandler {
     let cardId = path.cardId
     let expressionResolver = ExpressionResolver(
       functionsProvider: FunctionsProvider(
-        persistentValuesStorage: persistentValuesStorage
+        persistentValuesStorage: persistentValuesStorage,
+        cardId: cardId
       ),
       customFunctionsStorageProvider: { [weak functionsStorage] in
         functionsStorage?.getStorage(path: path, contains: $0)
@@ -364,8 +365,9 @@ public final class DivActionHandler {
         context.updateCard(.state(cardId))
       case let .timer(timerId, action):
         timerActionHandler.handle(cardId: cardId, timerId: timerId, action: action)
-      case let .setStoredValue(storedValue):
-        persistentValuesStorage.set(value: storedValue)
+      case let .setStoredValue(storedValue, scope):
+        let scopeCardId: DivCardID? = scope == .card ? cardId : nil
+        persistentValuesStorage.set(value: storedValue, cardId: scopeCardId)
       }
       return
     }

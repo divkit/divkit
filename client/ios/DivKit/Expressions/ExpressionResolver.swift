@@ -38,7 +38,8 @@ public final class ExpressionResolver {
   ) {
     self.init(
       functionsProvider: FunctionsProvider(
-        persistentValuesStorage: persistentValuesStorage
+        persistentValuesStorage: persistentValuesStorage,
+        cardId: nil
       ),
       customFunctionsStorageProvider: { _ in nil },
       variableValueProvider: variableValueProvider,
@@ -66,7 +67,8 @@ public final class ExpressionResolver {
     reporter: DivReporter
   ) {
     self.functionsProvider = FunctionsProvider(
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      cardId: path.cardId
     )
     self.customFunctionsStorageProvider = {
       functionsStorage?.getStorage(path: path, contains: $0)

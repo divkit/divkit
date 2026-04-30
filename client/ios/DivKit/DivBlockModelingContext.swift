@@ -162,7 +162,8 @@ public struct DivBlockModelingContext {
     self.extensionHandlers = extensionHandlers
     self.layoutProviderHandler = layoutProviderHandler
     self.functionsProvider = FunctionsProvider(
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      cardId: path.cardId
     )
     self.idToPath = idToPath ?? IdToPath()
     self.animatorController = animatorController

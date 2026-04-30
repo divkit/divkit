@@ -460,7 +460,8 @@
       ],
       "return_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -517,7 +518,8 @@
       ],
       "return_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -574,7 +576,8 @@
       ],
       "return_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -631,7 +634,8 @@
       ],
       "return_type": "url",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -688,7 +692,8 @@
       ],
       "return_type": "url",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -745,7 +750,8 @@
       ],
       "return_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -802,7 +808,8 @@
       ],
       "return_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -859,7 +866,8 @@
       ],
       "return_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -903,7 +911,8 @@
       ],
       "return_type": "array",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -947,7 +956,8 @@
       ],
       "return_type": "dict",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

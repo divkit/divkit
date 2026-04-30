@@ -14,13 +14,16 @@ final class SetStoredValueActionHandler {
       return
     }
 
+    let scope = action.resolveScope(expressionResolver)
+    let cardId: DivCardID? = scope == .card ? context.cardId : nil
     persistentValuesStorage.set(
       value: DivStoredValue(
         name: name,
         value: ExpressionValueConverter.stringify(value),
         type: type,
         lifetimeInSec: lifetime
-      )
+      ),
+      cardId: cardId
     )
   }
 }

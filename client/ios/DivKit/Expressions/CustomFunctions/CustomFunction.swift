@@ -40,7 +40,8 @@ final class CustomFunction: SimpleFunction {
     )
     let resolver = ExpressionResolver(
       functionsProvider: FunctionsProvider(
-        persistentValuesStorage: DivPersistentValuesStorage()
+        persistentValuesStorage: DivPersistentValuesStorage(),
+        cardId: nil
       ),
       customFunctionsStorageProvider: context.customFunctionsStorageProvider,
       variableValueProvider: { [weak self] name in

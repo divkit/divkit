@@ -24,7 +24,8 @@ private func makeTestCases() -> [(String, SignatureTestCase)] {
 
 private func runTest(_ testCase: SignatureTestCase) {
   let functionsProvider = FunctionsProvider(
-    persistentValuesStorage: DivPersistentValuesStorage()
+    persistentValuesStorage: DivPersistentValuesStorage(),
+    cardId: nil
   )
   let functionName = testCase.functionName
   let functions = testCase.isMethod ? FunctionsProvider.methods : functionsProvider.functions

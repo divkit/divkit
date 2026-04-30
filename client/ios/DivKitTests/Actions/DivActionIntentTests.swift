@@ -118,12 +118,10 @@ struct DivActionIntentTests {
   func setStoredValue_String() {
     #expect(
       intent("div-action://set_stored_value?name=var&value=value&type=string&lifetime=100") ==
-        .setStoredValue(DivStoredValue(
-          name: "var",
-          value: "value",
-          type: .string,
-          lifetimeInSec: 100
-        ))
+        .setStoredValue(
+          DivStoredValue(name: "var", value: "value", type: .string, lifetimeInSec: 100),
+          .global
+        )
     )
   }
 
@@ -131,12 +129,10 @@ struct DivActionIntentTests {
   func setStoredValue_Boolean() {
     #expect(
       intent("div-action://set_stored_value?name=var&value=true&type=boolean&lifetime=100") ==
-        .setStoredValue(DivStoredValue(
-          name: "var",
-          value: "true",
-          type: .boolean,
-          lifetimeInSec: 100
-        ))
+        .setStoredValue(
+          DivStoredValue(name: "var", value: "true", type: .boolean, lifetimeInSec: 100),
+          .global
+        )
     )
   }
 
@@ -144,12 +140,10 @@ struct DivActionIntentTests {
   func setStoredValue_Bool() {
     #expect(
       intent("div-action://set_stored_value?name=var&value=true&type=bool&lifetime=100") ==
-        .setStoredValue(DivStoredValue(
-          name: "var",
-          value: "true",
-          type: .bool,
-          lifetimeInSec: 100
-        ))
+        .setStoredValue(
+          DivStoredValue(name: "var", value: "true", type: .bool, lifetimeInSec: 100),
+          .global
+        )
     )
   }
 
@@ -171,6 +165,28 @@ struct DivActionIntentTests {
   func setStoredValue_WithoutLifetimeReturnsNil() {
     #expect(
       intent("div-action://set_stored_value?name=var&value=value&type=string") == nil
+    )
+  }
+
+  @Test
+  func setStoredValue_ScopeGlobal() {
+    #expect(
+      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=global") ==
+        .setStoredValue(
+          DivStoredValue(name: "var", value: "v", type: .string, lifetimeInSec: 100),
+          .global
+        )
+    )
+  }
+
+  @Test
+  func setStoredValue_ScopeCard() {
+    #expect(
+      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=card") ==
+        .setStoredValue(
+          DivStoredValue(name: "var", value: "v", type: .string, lifetimeInSec: 100),
+          .card
+        )
     )
   }
 }

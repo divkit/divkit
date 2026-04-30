@@ -26,7 +26,8 @@ struct ExpressionResolverTests {
 
     lazy var expressionResolver = ExpressionResolver(
       functionsProvider: FunctionsProvider(
-        persistentValuesStorage: DivPersistentValuesStorage()
+        persistentValuesStorage: DivPersistentValuesStorage(),
+        cardId: nil
       ),
       customFunctionsStorageProvider: { _ in nil },
       variableValueProvider: { [unowned self] in
@@ -572,6 +573,58 @@ struct ExpressionResolverTests {
     )
 
     #expect(variables == ["outer_var_value", "inner_var_string value"])
+  }
+}
+
+@Suite("GetStoredCardScope")
+struct GetStoredCardScopeExpressionTests {
+  private let cardA = DivCardID(rawValue: "stored_scope_card_a")
+  private let cardB = DivCardID(rawValue: "stored_scope_card_b")
+
+  @Test
+  func getStoredStringValue_cardScope_usesFunctionsProviderCardId() {
+    let storage = DivPersistentValuesStorage()
+    defer { storage.clear() }
+    storage.set(
+      value: DivStoredValue(name: "k", value: "alpha", type: .string, lifetimeInSec: 1000),
+      cardId: cardA
+    )
+    storage.set(
+      value: DivStoredValue(name: "k", value: "beta", type: .string, lifetimeInSec: 1000),
+      cardId: cardB
+    )
+
+    let expr = "@{getStoredStringValue('k', 'card', 'fb')}"
+    #expect(resolver(storage: storage, cardId: cardA).resolveString(expression(expr)) == "alpha")
+    #expect(resolver(storage: storage, cardId: cardB).resolveString(expression(expr)) == "beta")
+  }
+
+  @Test
+  func getStoredStringValue_globalScope_readsSameKeyForBothCardProviders() {
+    let storage = DivPersistentValuesStorage()
+    defer { storage.clear() }
+    storage.set(
+      value: DivStoredValue(name: "g", value: "global_only", type: .string, lifetimeInSec: 1000)
+    )
+
+    let ternaryGlobal = "@{getStoredStringValue('g', 'global', 'fb')}"
+    #expect(resolver(storage: storage, cardId: cardA).resolveString(expression(ternaryGlobal)) == "global_only")
+    #expect(resolver(storage: storage, cardId: cardB).resolveString(expression(ternaryGlobal)) == "global_only")
+
+    let binaryImplicitGlobal = "@{getStoredStringValue('g', 'fb')}"
+    #expect(resolver(storage: storage, cardId: cardA).resolveString(expression(binaryImplicitGlobal)) == "global_only")
+  }
+
+  private func resolver(storage: DivPersistentValuesStorage, cardId: DivCardID) -> ExpressionResolver {
+    ExpressionResolver(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: storage,
+        cardId: cardId
+      ),
+      customFunctionsStorageProvider: { _ in nil },
+      variableValueProvider: { _ in nil },
+      errorTracker: { _ in }
+    )
   }
 }
 

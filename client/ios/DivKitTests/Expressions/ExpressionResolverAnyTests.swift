@@ -13,7 +13,8 @@ struct ExpressionResolverAnyTests {
 
     lazy var expressionResolver = ExpressionResolver(
       functionsProvider: FunctionsProvider(
-        persistentValuesStorage: DivPersistentValuesStorage()
+        persistentValuesStorage: DivPersistentValuesStorage(),
+        cardId: nil
       ),
       customFunctionsStorageProvider: { _ in nil },
       variableValueProvider: { [unowned self] in

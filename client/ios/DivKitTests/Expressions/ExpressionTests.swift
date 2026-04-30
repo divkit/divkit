@@ -119,7 +119,10 @@ private struct ExpressionTestCase: Decodable {
     }
     self.variables = variables.extractDivVariableValues(
       ExpressionResolver(
-        functionsProvider: FunctionsProvider(persistentValuesStorage: DivPersistentValuesStorage()),
+        functionsProvider: FunctionsProvider(
+            persistentValuesStorage: DivPersistentValuesStorage(),
+            cardId: nil
+        ),
         customFunctionsStorageProvider: { _ in nil },
         variableValueProvider: { _ in nil },
         errorTracker: { XCTFail($0.description) }
@@ -161,7 +164,8 @@ private struct ExpressionTestCase: Decodable {
     errorTracker: ExpressionErrorTracker? = nil
   ) -> ExpressionResolver {
     let functionsProvider = FunctionsProvider(
-      persistentValuesStorage: DivPersistentValuesStorage()
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      cardId: nil
     )
     for function in functions {
       functionsProvider.functions.addFunction(function.name, function)

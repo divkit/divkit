@@ -12,9 +12,13 @@ final class FunctionsProvider {
   }()
 
   lazy var functions: [String: Function] =
-    lock.withLock {
+    lock.withLock { [weak self] in
+      guard let self else { return [:] }
       var functions = staticFunctions
-      functions.addGetStoredValueFunctions(persistentValuesStorage.get)
+      functions.addGetStoredValueFunctions({ name, scope in
+        let storageCardId: DivCardID? = (scope == .global) ? nil : self.cardId
+        return self.persistentValuesStorage.get(name: name, cardId: storageCardId)
+      })
       return functions
     }
 
@@ -58,12 +62,15 @@ final class FunctionsProvider {
   }
 
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let cardId: DivCardID?
   private let lock = AllocatedUnfairLock()
 
   init(
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    cardId: DivCardID?
   ) {
     self.persistentValuesStorage = persistentValuesStorage
+    self.cardId = cardId
   }
 }
 

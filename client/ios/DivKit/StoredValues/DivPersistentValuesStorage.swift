@@ -23,9 +23,10 @@ public final class DivPersistentValuesStorage {
     removeOutdatedStoredValues()
   }
 
-  func set(value: DivStoredValue) {
+  func set(value: DivStoredValue, cardId: DivCardID? = nil) {
+    let key = storageKey(name: value.name, cardId: cardId)
     var items = storage.value.items
-    items[value.name] = StoredValue(
+    items[key] = StoredValue(
       timestamp: timestampProvider.value,
       value: value.value,
       type: value.type,
@@ -34,10 +35,11 @@ public final class DivPersistentValuesStorage {
     storage.value = StoredValues(items: items)
   }
 
-  func get<T>(name: String) -> T? {
+  func get<T>(name: String, cardId: DivCardID? = nil) -> T? {
+    let key = storageKey(name: name, cardId: cardId)
     let items = storage.value.items
     let currentTimestamp = timestampProvider.value
-    guard let storedValue = items[name] else {
+    guard let storedValue = items[key] else {
       return nil
     }
     let elapsedTimeInSec = (currentTimestamp - storedValue.timestamp) / 1000
@@ -57,6 +59,13 @@ public final class DivPersistentValuesStorage {
     return value
   }
 
+  func clearValues(forCardId cardId: DivCardID) {
+    let prefix = cardScopedKeyPrefix(cardId: cardId)
+    var items = storage.value.items
+    items = items.filter { !$0.key.hasPrefix(prefix) }
+    storage.value = StoredValues(items: items)
+  }
+
   func reset() {
     storage.value = StoredValues(items: [:])
   }
@@ -74,9 +83,13 @@ public final class DivPersistentValuesStorage {
   }
 }
 
-extension  DivPersistentValuesStorage: Clearable {
+extension DivPersistentValuesStorage: Clearable {
   public func clear() {
     reset()
+  }
+
+  public func clear(cardId: DivCardID) {
+    clearValues(forCardId: cardId)
   }
 }
 
@@ -150,3 +163,14 @@ extension DivStoredValue {
     variable != nil
   }
 }
+
+private func cardScopedKeyPrefix(cardId: DivCardID) -> String {
+  "\(cardKeyPrefix)\(cardId.rawValue)"
+}
+private func storageKey(name: String, cardId: DivCardID?) -> String {
+  guard let cardId else { // global scope
+    return name
+  }
+  return "\(cardScopedKeyPrefix(cardId: cardId))\(name)"
+}
+private let cardKeyPrefix = "card_"
