@@ -1,12 +1,15 @@
 package com.yandex.div.compose.views.input
 
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
 
@@ -65,4 +68,15 @@ internal fun keyboardOptions(
         imeAction = action,
         capitalization = capitalization,
     )
+}
+
+@Composable
+internal fun rememberRegex(pattern: String): Regex? {
+    val reporter = LocalComponent.current.reporter
+
+    return remember(pattern) {
+        runCatching { Regex(pattern) }
+            .onFailure { reporter.reportError("Invalid regex pattern '$pattern'") }
+            .getOrNull()
+    }
 }
