@@ -13,6 +13,8 @@ extension WrapperBlock {
 
   public var isEmpty: Bool { child.isEmpty }
 
+  public var accessibilityChildren: [AccessibilityContaining] { [child] }
+
   public var reuseId: String {
     child.reuseId
   }

@@ -12,6 +12,10 @@ public final class TabsBlock: BlockWithTraits {
     model.contentsModel.path
   }
 
+  public var accessibilityChildren: [AccessibilityContaining] {
+    model.contentsModel.pages.map(\.block)
+  }
+
   public var intrinsicContentWidth: CGFloat {
     if case let .fixed(value) = widthTrait {
       return value

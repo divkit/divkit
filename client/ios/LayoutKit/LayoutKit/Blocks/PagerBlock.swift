@@ -23,6 +23,8 @@ public final class PagerBlock: BlockWithTraits {
     gallery.path
   }
 
+  public var accessibilityChildren: [AccessibilityContaining] { gallery.items.map(\.content) }
+
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):

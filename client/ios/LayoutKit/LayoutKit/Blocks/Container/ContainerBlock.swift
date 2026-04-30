@@ -106,6 +106,8 @@ public final class ContainerBlock: BlockWithLayout {
 
   private var cached = CachedSizes()
 
+  public var accessibilityChildren: [AccessibilityContaining] { children.map(\.content) }
+
   public var isVerticallyResizable: Bool { heightTrait.isResizable }
   public var isHorizontallyResizable: Bool { widthTrait.isResizable }
 

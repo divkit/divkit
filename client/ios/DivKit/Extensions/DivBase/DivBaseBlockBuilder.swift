@@ -187,6 +187,7 @@ final class DivBaseBlockBuilder {
     let accessibilityElement = (div.accessibility ?? DivAccessibility()).resolve(
       expressionResolver,
       id: context.currentDivId,
+      block: block,
       customParams: customAccessibilityParams
     )
 

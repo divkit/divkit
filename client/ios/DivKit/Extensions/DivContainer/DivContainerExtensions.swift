@@ -9,9 +9,6 @@ extension DivContainer: DivBlockModeling {
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: self,
-      customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
-        resolveAccessibilityDescription(context)
-      },
       applyPaddings: false,
       clipToBounds: resolveClipToBounds(context.expressionResolver)
     )

@@ -18,6 +18,8 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
   public let heightTrait: LayoutTrait
   public let children: [Child]
 
+  public var accessibilityChildren: [AccessibilityContaining] { children.map(\.content) }
+
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(width):

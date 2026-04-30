@@ -14,6 +14,8 @@ public final class GalleryBlock: BlockWithTraits {
     model.path
   }
 
+  public var accessibilityChildren: [AccessibilityContaining] { model.items.map(\.content) }
+
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):

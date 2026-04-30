@@ -1,5 +1,6 @@
 @testable import DivKit
 import DivKitTestsSupport
+import LayoutKit
 import VGSL
 import XCTest
 
@@ -159,6 +160,7 @@ extension DivAccessibility {
     resolve(
       DivBlockModelingContext.default.expressionResolver,
       id: id,
+      block: EmptyBlock.zeroSized,
       customParams: CustomAccessibilityParams(
         defaultTraits: defaultTraits,
         descriptionProvider: customDescriptionProvider

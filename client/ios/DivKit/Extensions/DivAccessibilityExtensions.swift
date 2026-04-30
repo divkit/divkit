@@ -1,12 +1,15 @@
+import LayoutKit
 import VGSL
 
 extension DivAccessibility {
   func resolve(
     _ expressionResolver: ExpressionResolver,
     id: String?,
+    block: AccessibilityContaining,
     customParams: CustomAccessibilityParams
   ) -> AccessibilityElement {
-    if resolveMode(expressionResolver) == .exclude {
+    let mode = resolveMode(expressionResolver)
+    if mode == .exclude {
       return AccessibilityElement(
         traits: .none,
         strings: AccessibilityElement.Strings(label: nil),
@@ -19,6 +22,10 @@ extension DivAccessibility {
       label = customDescriptionProvider()
     } else if let description = resolveDescription(expressionResolver) {
       label = description
+    }
+    if mode == .merge, (label ?? "").isEmpty,
+       let merged = block.mergedAccessibilityLabel {
+      label = merged
     }
     if label == nil, type != .auto {
       label = ""

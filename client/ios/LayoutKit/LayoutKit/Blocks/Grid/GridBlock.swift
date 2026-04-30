@@ -79,6 +79,8 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
   private var cachedIntrinsicWidth: CGFloat?
   private var cachedIntrinsicHeight: (width: CGFloat, height: CGFloat)?
 
+  public var accessibilityChildren: [AccessibilityContaining] { items.map(\.contents) }
+
   public var intrinsicContentWidth: CGFloat {
     if case let .fixed(value) = widthTrait {
       return value
