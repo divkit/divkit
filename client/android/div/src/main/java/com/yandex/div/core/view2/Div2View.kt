@@ -973,9 +973,11 @@ class Div2View private constructor(
 
         currentState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
-        getChildAt(0)?.clearTreeAnimations()
 
-        val isReplaceable = DivComparator.areDivsReplaceable(
+        val rootView: View? = getChildAt(0)
+        rootView?.clearTreeAnimations()
+
+        val isReplaceable = rootView != null && DivComparator.areDivsReplaceable(
                 currentState?.div,
                 newState.div,
                 expressionResolver,
