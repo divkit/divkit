@@ -139,6 +139,22 @@
             "ios",
             "web"
           ]
+        },
+        "press_start_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_actionable_press_start_actions",
+          "platforms": []
+        },
+        "press_end_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_actionable_press_end_actions",
+          "platforms": []
         }
       }
     }
