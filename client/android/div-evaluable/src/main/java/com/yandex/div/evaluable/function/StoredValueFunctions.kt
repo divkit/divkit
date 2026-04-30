@@ -267,7 +267,7 @@ internal abstract class GetStoredValue<T: Any>: Function() {
     override val isPure = false
 
     protected open val hasScope: Boolean = false
-    protected val fallbackIndex = if (hasScope) 2 else 1
+    protected val fallbackIndex get() = if (hasScope) 2 else 1
 
     override fun evaluate(
         evaluationContext: EvaluationContext,
@@ -281,7 +281,7 @@ internal abstract class GetStoredValue<T: Any>: Function() {
             return evaluationContext.storedValueProvider.get(storedValueName).convert(fallback)
         }
 
-        val scope = args[2] as String
+        val scope = args[1] as String
         return evaluationContext.storedValueProvider.get(storedValueName, scope).convert(fallback)
     }
 
