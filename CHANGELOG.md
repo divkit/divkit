@@ -4,6 +4,7 @@
 * Added `getStoredValue` functions with scope.
 * Added `scope` parameter to `set_stored_value` action.
 * Added `set_cursor_position` typed action support.
+* Fixed NullPointerException at DivBinder.bind(BindingContext, View, Div, DivStatePath) when Div2View has no children.
 * Fixed `transition_change` animations on views with `wrap_content` size.
 * Fixed click and long click actions not being triggered on pager's parent elements. Tap and long press events on DivPagerView are now properly propagated up the view hierarchy to the nearest clickable ancestor.
 * Fixed snapping after scroll actions in gallery with `scroll_mode` `paging`.
