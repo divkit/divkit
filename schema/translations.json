@@ -2935,6 +2935,10 @@
     "en": "Actions performed when playback is paused.",
     "ru": "Действия, которые выполняются при приостановке воспроизведения."
   },
+  "div_video_playback_speed": {
+    "en": "Playback speed as a multiplier of the normal rate. For example, `1.0` is normal speed, `2.0` is twice as fast, and `0.5` is half speed. Must be a positive number.",
+    "ru": "Скорость воспроизведения как множитель относительно нормальной. Например, `1.0` — обычная скорость, `2.0` — вдвое быстрее, `0.5` — вдвое медленнее. Должно быть положительным числом."
+  },
   "div_video_player_settings_payload": {
     "en": "Additional information that can be used in the player.",
     "ru": "Дополнительная информация, которая может быть использована внутри плеера."

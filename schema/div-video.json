@@ -105,6 +105,12 @@
           "$ref": "div-video-scale.json",
           "default_value": "fit",
           "$description": "translations.json#/div_video_scale"
+        },
+        "playback_speed": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "1.0",
+          "description": "translations.json#/div_video_playback_speed",
+          "platforms": []
         }
       }
     }
