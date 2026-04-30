@@ -17,6 +17,7 @@ import com.yandex.div.compose.utils.imageLoader
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div.compose.views.image.toContentScale
 import com.yandex.div2.DivImageBackground
@@ -45,6 +46,7 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         model = context.rememberImageRequest(imageRequestParams),
         imageLoader = imageLoader
     )
+    painter.observeNetworkRestoration()
 
     return drawBehind {
         val srcSize = painter.intrinsicSize

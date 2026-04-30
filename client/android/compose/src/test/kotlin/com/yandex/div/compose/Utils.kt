@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -26,7 +27,8 @@ internal fun createExpressionResolver(
 
 internal fun mockLocalComponent(
     reporter: DivReporter = TestReporter(),
-    variableController: DivVariableController = DivVariableController()
+    variableController: DivVariableController = DivVariableController(),
+    networkRestorationController: NetworkRestorationController? = null,
 ): DivLocalComponent {
     val resolver = createExpressionResolver(
         reporter = reporter,
@@ -36,6 +38,9 @@ internal fun mockLocalComponent(
         on { expressionResolver } doReturn resolver
         on { this.reporter } doReturn reporter
         on { this.variableController } doReturn variableController
+        networkRestorationController?.let {
+            on { this.networkRestorationController } doReturn it
+        }
     }
 }
 

@@ -7,6 +7,7 @@ import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.DivVariableAdapter
@@ -30,6 +31,7 @@ internal interface DivLocalComponent {
     val actionHandlingContext: DivActionHandlingContext
     val expressionResolver: ExpressionResolver
     val functionProvider: FunctionProviderDecorator
+    val networkRestorationController: NetworkRestorationController
     val reporter: DivReporter
     val triggerStorage: DivTriggerStorage
     val variableAdapter: DivVariableAdapter

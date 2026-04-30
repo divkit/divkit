@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.image
 
 import android.util.Base64
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,8 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
-import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.images.ImageRequestParams
+import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
@@ -78,10 +80,13 @@ internal fun DivImageView(
 
     Box(modifier = backgroundModifier) {
         if (!isImageLoaded && previewRequest != null) {
-            AsyncImage(
-                modifier = Modifier.fillMaxSize(),
+            val previewPainter = rememberAsyncImagePainter(
                 model = previewRequest,
                 imageLoader = imageLoader,
+            )
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = previewPainter,
                 contentDescription = null,
                 contentScale = contentScale,
                 alignment = alignment,
@@ -89,17 +94,21 @@ internal fun DivImageView(
             )
         }
 
-        AsyncImage(
-            modifier = Modifier.fillMaxSize(),
+        val imagePainter = rememberAsyncImagePainter(
             model = imageRequest,
             imageLoader = imageLoader,
-            contentDescription = null,
-            contentScale = contentScale,
-            alignment = alignment,
-            colorFilter = colorFilter,
             onSuccess = {
                 isImageLoaded = true
             }
+        )
+        imagePainter.observeNetworkRestoration()
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = imagePainter,
+            contentDescription = null,
+            contentScale = contentScale,
+            alignment = alignment,
+            colorFilter = colorFilter
         )
     }
 }
