@@ -262,6 +262,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-input/text-alignment-property.json",
                 "snapshot_test_data/div-input/text-alignment-property-single-line.json",
                 "snapshot_test_data/div-input/without-text.json",
+                // div-switch
+                "snapshot_test_data/div-switch",
             ).expandDirectories()
 
             //TODO: to be stabilized
