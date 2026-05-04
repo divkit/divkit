@@ -3,6 +3,7 @@ package com.yandex.div.core.view2
 import android.graphics.Outline
 import android.view.ViewGroup
 import androidx.core.view.allViews
+import com.yandex.div.core.util.binding.postBindingAction
 import com.yandex.div.internal.util.UiThreadHandler
 
 /**
@@ -38,12 +39,5 @@ internal inline fun Div2View.runBindingAction(crossinline action: () -> Unit) {
 
 private inline fun Div2View.postBindingAction(crossinline action: () -> Unit) {
     val criticalSection = viewComponent.bindingCriticalSection
-    val handle = criticalSection.enter()
-    UiThreadHandler.postOnMainThread {
-        try {
-            action()
-        } finally {
-            criticalSection.exit(handle)
-        }
-    }
+    criticalSection.postBindingAction(action)
 }
