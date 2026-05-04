@@ -14,23 +14,22 @@ internal class ErrorCollectors @Inject constructor(
 ) {
     private val collectors = mutableMapOf<String, MutableList<ErrorCollector>>()
 
-    fun getOrCreate(tag: DivDataTag, divData: DivData?): ErrorCollector = synchronized(collectors) {
-        val bucket = collectors.getOrPut(tag.id) { mutableListOf() }
-        return bucket.find { it.divData === divData }?.let { existingCollector ->
-            existingCollector.attachParsingErrors()
-            existingCollector
-        } ?: run {
-            ErrorCollector(divData, tag, errorsReporter).also { newCollector ->
-                bucket.add(newCollector)
-                newCollector.attachParsingErrors()
-            }
+    fun getOrCreate(tag: DivDataTag, divData: DivData?): ErrorCollector {
+        val collector = synchronized(collectors) {
+            val bucket = collectors.getOrPut(tag.id) { mutableListOf() }
+            bucket.find { it.divData === divData }
+                ?: ErrorCollector(divData, tag, errorsReporter).also { bucket.add(it) }
         }
+        collector.attachParsingErrors()
+        return collector
     }
 
-    fun getOrNull(tag: DivDataTag, divData: DivData?): ErrorCollector? = synchronized(collectors) {
-        return collectors[tag.id]?.find { it.divData === divData }?.apply {
-            attachParsingErrors()
+    fun getOrNull(tag: DivDataTag, divData: DivData?): ErrorCollector? {
+        val collector = synchronized(collectors) {
+            collectors[tag.id]?.find { it.divData === divData }
         }
+        collector?.attachParsingErrors()
+        return collector
     }
 
     fun reset(tags: List<DivDataTag>) {
