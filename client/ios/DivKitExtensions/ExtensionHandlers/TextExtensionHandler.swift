@@ -7,10 +7,6 @@ public final class TextExtensionHandler: DivExtensionHandler {
 
   private let text: String?
 
-  public var accessibilityElement: AccessibilityElement? {
-    .none(label: text)
-  }
-
   public init(
     id: String,
     text: String?
@@ -33,5 +29,16 @@ public final class TextExtensionHandler: DivExtensionHandler {
     }
 
     return newTextBlock
+  }
+
+  public func applyAfterBaseProperties(
+    to block: Block,
+    div: DivBase,
+    context _: DivBlockModelingContext
+  ) -> Block {
+    guard div is DivText, let text else { return block }
+    return block.addingDecorations(
+      accessibilityElement: .none(label: text)
+    )
   }
 }

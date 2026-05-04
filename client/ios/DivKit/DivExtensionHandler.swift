@@ -13,7 +13,7 @@ import LayoutKit
 /// the block, respectively.
 /// The basic properties include properties from
 /// [`DivBase`](https://github.com/divkit/divkit/blob/main/schema/div-base.json).
-public protocol DivExtensionHandler: AccessibilityContaining {
+public protocol DivExtensionHandler {
   /// A unique identifier for the extension.
   var id: String { get }
 
