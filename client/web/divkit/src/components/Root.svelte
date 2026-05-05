@@ -102,6 +102,7 @@
     export let json: Partial<DivJson> = {};
     export let platform: Platform = 'auto';
     export let theme: Theme = 'system';
+    export let themeVariableName: string | undefined = undefined;
     export let globalVariablesController: GlobalVariablesController | undefined = undefined;
     export let mix = '';
     export let customization: Customization = {};
@@ -137,20 +138,25 @@
 
     let currentTheme: 'light' | 'dark' = 'light';
     let themeQuery: MediaQueryList | null = null;
-    $: if (theme === 'light' || theme === 'dark') {
-        currentTheme = theme;
-    } else if (theme === 'system') {
-        if (typeof matchMedia !== 'undefined') {
-            if (!themeQuery) {
-                themeQuery = matchMedia('(prefers-color-scheme: dark)');
-                themeQuery.addListener(themeQueryListener);
+    let themeVariable: Variable | undefined;
+    themeInit();
+
+    function themeInit(): void {
+        if (theme === 'light' || theme === 'dark') {
+            currentTheme = theme;
+        } else if (theme === 'system') {
+            if (typeof matchMedia !== 'undefined') {
+                if (!themeQuery) {
+                    themeQuery = matchMedia('(prefers-color-scheme: dark)');
+                    themeQuery.addListener(themeQueryListener);
+                }
+                currentTheme = themeQuery.matches ? 'dark' : 'light';
+            } else {
+                currentTheme = 'light';
             }
-            currentTheme = themeQuery.matches ? 'dark' : 'light';
         } else {
-            currentTheme = 'light';
+            logError(wrapError(new Error('Unsupported theme')));
         }
-    } else {
-        logError(wrapError(new Error('Unsupported theme')));
     }
 
     $: if (currentTheme) {
@@ -169,6 +175,7 @@
 
     export function setTheme(newTheme: Theme): void {
         theme = newTheme;
+        themeInit();
     }
 
     export function getDebugVariables() {
@@ -1894,18 +1901,20 @@
     }
 
     function updateTheme(): void {
-        if (!palette) {
-            return;
+        if (palette) {
+            const list = palette[currentTheme];
+            list.forEach(item => {
+                const varInstance = variables.get(item.name);
+
+                if (varInstance) {
+                    varInstance.setValue(item.color);
+                }
+            });
         }
 
-        const list = palette[currentTheme];
-        list.forEach(item => {
-            const varInstance = variables.get(item.name);
-
-            if (varInstance) {
-                varInstance.setValue(item.color);
-            }
-        });
+        if (themeVariable) {
+            themeVariable.setValue(currentTheme);
+        }
     }
 
     function getBuiltinProtocols(): Set<string> {
@@ -2538,18 +2547,36 @@
         }
     }
 
-    function declVariable(variable: DivVariable): void {
+    function declVariable(variable: DivVariable): Variable | undefined {
         const varInstance = constructVariable(variable);
 
         if (varInstance) {
             localVariables.set(variable.name, varInstance);
             variables.set(variable.name, varInstance);
         }
+
+        return varInstance;
     }
 
     for (const [varName, variable] of globalVariables) {
         if (!variables.has(varName)) {
             variables.set(varName, variable);
+        }
+    }
+
+    if (themeVariableName) {
+        if (variables.has(themeVariableName)) {
+            logError(wrapError(new Error('Duplicate variable'), {
+                additional: {
+                    name: themeVariableName
+                }
+            }));
+        } else {
+            themeVariable = declVariable({
+                name: themeVariableName,
+                type: 'string',
+                value: currentTheme
+            });
         }
     }
 

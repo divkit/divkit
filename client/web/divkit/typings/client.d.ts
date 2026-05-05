@@ -31,8 +31,8 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     extensions?: Map<string, DivExtensionClass>;
-    /** @deprecated */
     theme?: Theme;
+    themeVariableName?: string;
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;

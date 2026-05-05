@@ -37,6 +37,7 @@ export function render(opts: {
     typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     theme?: Theme;
+    themeVariableName?: string;
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;

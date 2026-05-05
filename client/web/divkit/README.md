@@ -415,11 +415,17 @@ Object, optional.
 
 A provider for implementing a custom video player. On the server side, the `videoPlayerProvider` must contain the `template` property, which is a string or a markup provider function for the video player. On the client side, the `videoPlayerProvider` must contain an `instance` function that creates an instance of the player.
 
-#### theme (DEPRECATED)
+#### theme
 
 `system` | `light` | `dark`
 
-The default value is `system`. Affects variables in `palette`.
+The default value is `system`. Affects variables in `palette` and the `themeVariableName` variable.
+
+#### themeVariableName
+
+String, optional.
+
+When set, this property creates a variable that stores the current theme (`light` or `dark`).
 
 
 ### Palette support (DEPRECATED)

@@ -1,5 +1,5 @@
 import Root from './components/Root.svelte';
-import type { Customization, Direction, DivJson, ErrorCallback, Platform, TypefaceProvider, VideoPlayerProviderServer } from '../typings/common';
+import type { Customization, Direction, DivJson, ErrorCallback, Platform, Theme, TypefaceProvider, VideoPlayerProviderServer } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
 import type { Store } from '../typings/store';
@@ -14,6 +14,8 @@ export function render(opts: {
     onError?: ErrorCallback;
     typefaceProvider?: TypefaceProvider;
     platform?: Platform;
+    theme?: Theme;
+    themeVariableName?: string;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     direction?: Direction;
     store?: Store;

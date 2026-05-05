@@ -5,7 +5,8 @@ import type {
     Customization,
     TypefaceProvider,
     Direction,
-    VideoPlayerProviderServer
+    VideoPlayerProviderServer,
+    Theme
 } from './common';
 import type { CustomComponentDescription } from './custom';
 import type { Store } from './store';
@@ -14,6 +15,8 @@ export function render(opts: {
     json: DivJson;
     id: string;
     platform?: Platform;
+    theme?: Theme;
+    themeVariableName?: string;
     mix?: string;
     customization?: Customization;
     builtinProtocols?: string[];

@@ -4210,7 +4210,8 @@
     {
       "title": "Color scheme dependent color animator",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animators"
