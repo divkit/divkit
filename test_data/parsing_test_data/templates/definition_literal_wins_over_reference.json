@@ -1,5 +1,9 @@
 {
   "description": "A template definition declares both a literal value and a reference definition for the same field. Verifies the literal wins — the reference substitution is skipped when the field is already populated — even when the usage supplies a reference value.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "templates": {
     "conflicted": {
       "type": "text",

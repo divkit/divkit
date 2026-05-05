@@ -1,5 +1,9 @@
 {
   "description": "A reference declared on the leaf template resolves against a reference value declared at two levels: a default on the usage site inside an intermediate template's body, and a card-level override on the outer instance. Verifies the card-level value cascades down through template-body content and overrides the intermediate body's default.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "card": {
     "log_id": "test",
     "states": [

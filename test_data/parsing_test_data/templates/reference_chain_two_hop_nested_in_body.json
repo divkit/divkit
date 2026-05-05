@@ -1,5 +1,9 @@
 {
   "description": "A two-hop reference chain via nested usage: a template usage inside another template's body declares its own reference definition that points to a card field, while the used template has its own reference definition for a different field (with a literal default). Verifies the two-hop chain does not propagate and the affected item is dropped with an error.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "templates": {
     "base_text": {
       "type": "text",

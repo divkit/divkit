@@ -1,5 +1,9 @@
 {
   "description": "A template usage inside another template's body declares its own reference definition that points to a field on the outer instance, and the used template has its own reference definition for the same slot. Verifies that a two-hop reference chain (instance field → usage reference → definition reference) does not propagate: only the single-hop sibling resolves, the chained item is dropped with an error.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "templates": {
     "header": {
       "type": "text",

@@ -1,5 +1,9 @@
 {
   "description": "Not a template test — verifies that an invalid field value (div-text.font_size = -1) is replaced by the field's default and reported as an error.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "card": {
     "log_id": "test",
     "states": [
