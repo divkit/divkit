@@ -1,5 +1,6 @@
 export type StoreTypes = 'string' | 'number' | 'boolean';
 export type StoreAllTypes = 'string' | 'integer' | 'number' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
+export type StoreScope = 'global' | 'card';
 
 export interface Store {
     /**
@@ -32,10 +33,12 @@ export interface Store {
      * Fetches primitive from the store
      * @param name
      * @param type Expected value tpye
+     * @param scope Value scope
      */
     get?(
         name: string,
-        type: StoreAllTypes
+        type: StoreAllTypes,
+        scope?: StoreScope
     ): object | string | bigint | number | boolean | undefined;
 
     /**
@@ -44,11 +47,13 @@ export interface Store {
      * @param type Value type (for example, can be url)
      * @param value
      * @param lifetime Value lifetime in seconds
+     * @param scope Value scope
      */
     set?(
         name: string,
         type: StoreAllTypes,
         value: object | string | bigint | number | boolean,
-        lifetime: number
+        lifetime: number,
+        scope?: StoreScope
     ): void;
 }

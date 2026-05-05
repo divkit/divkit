@@ -1,3 +1,4 @@
+import type { StoreScope } from './store';
 import type { Variable } from './variables';
 
 export type Subscriber<T> = (value: T) => void;
@@ -303,6 +304,7 @@ export interface ActionStore {
     name: string;
     value: TypedValue;
     lifetime: number;
+    scope?: StoreScope;
 }
 
 export interface ActionSetState {

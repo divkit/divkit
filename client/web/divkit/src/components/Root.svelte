@@ -64,7 +64,7 @@
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
     import type { ComponentContext, StateSetter } from '../types/componentContext';
-    import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
+    import type { Store, StoreAllTypes, StoreScope, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
@@ -1173,12 +1173,14 @@
         });
     }
 
+    // eslint-disable-next-line max-params
     function callSetStoredValue(
         componentContext: ComponentContext | undefined,
         name: string | null | undefined,
         value: object | string | bigint | number | boolean | null | undefined,
         type: string | null | undefined,
-        lifetime: string | number | null | undefined
+        lifetime: string | number | null | undefined,
+        scope?: string | null | undefined
     ): void {
         const log = componentContext?.logError || logError;
         if (!store) {
@@ -1201,8 +1203,12 @@
             val = val === 'true' || val === '1';
         }
 
+        const scopeValue: StoreScope | undefined = (scope === 'global' || scope === 'card') ?
+            scope :
+            undefined;
+
         if (store.set) {
-            store.set(name, type as StoreAllTypes, val, Number(lifetime));
+            store.set(name, type as StoreAllTypes, val, Number(lifetime), scopeValue);
         } else if (store.setValue) {
             if (!AVAIL_SET_STORED_TYPES.has(type)) {
                 log(wrapError(new Error('Incorrect stored type')));
@@ -1447,7 +1453,8 @@
                         actionTyped.name,
                         actionTyped.value?.value,
                         actionTyped.value?.type,
-                        actionTyped.lifetime
+                        actionTyped.lifetime,
+                        actionTyped.scope
                     );
                     break;
                 }
@@ -1584,7 +1591,14 @@
                         callHideTooltip(params.get('id'), componentContext);
                         break;
                     case 'set_stored_value': {
-                        callSetStoredValue(componentContext, params.get('name'), params.get('value'), params.get('type'), params.get('lifetime'));
+                        callSetStoredValue(
+                            componentContext,
+                            params.get('name'),
+                            params.get('value'),
+                            params.get('type'),
+                            params.get('lifetime'),
+                            params.get('scope')
+                        );
                         break;
                     }
                     default:

@@ -28,7 +28,8 @@
         "card"
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   },

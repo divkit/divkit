@@ -461,7 +461,8 @@
       "return_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -519,7 +520,8 @@
       "return_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -577,7 +579,8 @@
       "return_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -635,7 +638,8 @@
       "return_type": "url",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -693,7 +697,8 @@
       "return_type": "url",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -751,7 +756,8 @@
       "return_type": "color",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -809,7 +815,8 @@
       "return_type": "color",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -867,7 +874,8 @@
       "return_type": "boolean",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -912,7 +920,8 @@
       "return_type": "array",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -957,7 +966,8 @@
       "return_type": "dict",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
