@@ -477,17 +477,15 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     )
     maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
       guard let self, let range else { return }
-      DispatchQueue.main.async {
-        self.multiLineInput.selectedRange = range
-        if let textFieldPosition = self.singleLineInput.position(
-          from: self.singleLineInput.beginningOfDocument,
-          offset: range.location
-        ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
-          self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
-            from: textFieldPosition,
-            to: textFieldPosition
-          )
-        }
+      multiLineInput.selectedRange = range
+      if let textFieldPosition = singleLineInput.position(
+        from: singleLineInput.beginningOfDocument,
+        offset: range.location
+      ), singleLineInput.selectedTextRange?.start != textFieldPosition {
+        singleLineInput.selectedTextRange = singleLineInput.textRange(
+          from: textFieldPosition,
+          to: textFieldPosition
+        )
       }
     }.dispose(in: disposePool)
     maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
@@ -498,11 +496,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     maskedViewModel?.$formattedText.currentAndNewValues
       .addObserver { [weak self] input in
         guard let self else { return }
-        DispatchQueue.main.async {
-          self.setTextData(input)
-          self.textValue.value = input
-          self.updateHintVisibility()
-        }
+        setTextData(input)
+        textValue.value = input
+        updateHintVisibility()
       }.dispose(in: disposePool)
   }
 
