@@ -134,6 +134,14 @@
             }
         }
     }, {
+        "id": "fn_stored_scope",
+        "name": "<code>scope</code> parameter in <code>getStored*Value</code> functions",
+        "compat": {
+            "android": {
+                "version_added": "32.48.0"
+            }
+        }
+    }, {
         "id": "fn_pi",
         "name": "<code>pi</code> function",
         "compat": {

@@ -226,6 +226,9 @@
         "compat": {
             "web": {
                 "version_added": "32.46.0"
+            },
+            "android": {
+                "version_added": "32.48.0"
             }
         }
     }, {
@@ -254,6 +257,14 @@
             },
             "web": {
                 "version_added": "31.0.0"
+            }
+        }
+    }, {
+        "id": "action_set_stored_value_scope",
+        "name": "<code>scope</code> parameter in <code>set_stored_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "32.48.0"
             }
         }
     }, {
