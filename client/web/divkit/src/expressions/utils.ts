@@ -36,6 +36,19 @@ export function dateToString(date: Date): string {
     ].join(':');
 }
 
+function stringifySortReplacer(key: string, value: unknown): unknown {
+    if (value && value instanceof Object && !Array.isArray(value)) {
+        return Object.keys(value)
+            .sort()
+            .reduce<Record<string, unknown>>((sorted, key) => {
+                sorted[key] = value[key as keyof typeof value];
+                return sorted;
+            }, {});
+    }
+
+    return value;
+}
+
 export function valToString(val: EvalValue, stringifyComplex: boolean): string {
     if (val.type === 'string') {
         return val.value;
@@ -64,7 +77,7 @@ export function valToString(val: EvalValue, stringifyComplex: boolean): string {
     } else if (val.type === 'url') {
         return val.value;
     } else if ((val.type === 'dict' || val.type === 'array') && stringifyComplex) {
-        return JSON.stringify(val.value);
+        return JSON.stringify(val.value, stringifySortReplacer);
     } else if (val.type === 'dict') {
         return '<dict>';
     } else if (val.type === 'array') {
