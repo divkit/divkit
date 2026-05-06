@@ -93,6 +93,9 @@ extension DivSlider: DivBlockModeling {
       layoutDirection: context.layoutDirection
     )
 
+    let pressStartActions = pressStartActions?.uiActions(context: context) ?? []
+    let pressEndActions = pressEndActions?.uiActions(context: context) ?? []
+
     let sliderModel = SliderModel(
       firstThumb: firstThumb,
       secondThumb: secondThumb,
@@ -102,7 +105,9 @@ extension DivSlider: DivBlockModeling {
       ranges: makeRanges(ranges, with: context),
       layoutDirection: context.layoutDirection,
       path: context.path,
-      isEnabled: resolveIsEnabled(expressionResolver)
+      isEnabled: resolveIsEnabled(expressionResolver),
+      pressStartActions: pressStartActions,
+      pressEndActions: pressEndActions
     )
     return SliderBlock(
       sliderModel: sliderModel,

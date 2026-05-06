@@ -427,6 +427,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
   public let maxValue: Field<Expression<Int>>? // default value: 100
   public let minValue: Field<Expression<Int>>? // default value: 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let pressEndActions: Field<[DivActionTemplate]>?
+  public let pressStartActions: Field<[DivActionTemplate]>?
   public let ranges: Field<[RangeTemplate]>?
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -479,6 +481,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValue: dictionary.getOptionalExpressionField("max_value"),
       minValue: dictionary.getOptionalExpressionField("min_value"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      pressEndActions: dictionary.getOptionalArray("press_end_actions", templateToType: templateToType),
+      pressStartActions: dictionary.getOptionalArray("press_start_actions", templateToType: templateToType),
       ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
@@ -532,6 +536,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     maxValue: Field<Expression<Int>>? = nil,
     minValue: Field<Expression<Int>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    pressEndActions: Field<[DivActionTemplate]>? = nil,
+    pressStartActions: Field<[DivActionTemplate]>? = nil,
     ranges: Field<[RangeTemplate]>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
@@ -582,6 +588,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     self.maxValue = maxValue
     self.minValue = minValue
     self.paddings = paddings
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.ranges = ranges
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -633,6 +641,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     let maxValueValue = { parent?.maxValue?.resolveOptionalValue(context: context) ?? .noValue }()
     let minValueValue = { parent?.minValue?.resolveOptionalValue(context: context) ?? .noValue }()
     let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let pressEndActionsValue = { parent?.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let pressStartActionsValue = { parent?.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let rangesValue = { parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
@@ -682,6 +692,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -748,6 +760,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValue: { maxValueValue.value }(),
       minValue: { minValueValue.value }(),
       paddings: { paddingsValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -804,6 +818,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     var maxValueValue: DeserializationResult<Expression<Int>> = { parent?.maxValue?.value() ?? .noValue }()
     var minValueValue: DeserializationResult<Expression<Int>> = { parent?.minValue?.value() ?? .noValue }()
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var pressEndActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var pressStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var rangesValue: DeserializationResult<[DivSlider.Range]> = .noValue
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
@@ -935,6 +951,16 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         _ = {
           if key == "paddings" {
            paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+          }
+        }()
+        _ = {
+          if key == "press_end_actions" {
+           pressEndActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressEndActionsValue)
+          }
+        }()
+        _ = {
+          if key == "press_start_actions" {
+           pressStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressStartActionsValue)
           }
         }()
         _ = {
@@ -1178,6 +1204,16 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.pressEndActions?.link {
+           pressEndActionsValue = pressEndActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.pressStartActions?.link {
+           pressStartActionsValue = pressStartActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.ranges?.link {
            rangesValue = rangesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSliderTemplate.RangeTemplate.self) })
           }
@@ -1332,6 +1368,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       _ = { layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressEndActionsValue = pressEndActionsValue.merged(with: { parent.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressStartActionsValue = pressStartActionsValue.merged(with: { parent.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { rangesValue = rangesValue.merged(with: { parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { secondaryValueAccessibilityValue = secondaryValueAccessibilityValue.merged(with: { parent.secondaryValueAccessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -1376,6 +1414,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -1442,6 +1482,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValue: { maxValueValue.value }(),
       minValue: { minValueValue.value }(),
       paddings: { paddingsValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -1503,6 +1545,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValue: maxValue ?? mergedParent.maxValue,
       minValue: minValue ?? mergedParent.minValue,
       paddings: paddings ?? mergedParent.paddings,
+      pressEndActions: pressEndActions ?? mergedParent.pressEndActions,
+      pressStartActions: pressStartActions ?? mergedParent.pressStartActions,
       ranges: ranges ?? mergedParent.ranges,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
@@ -1559,6 +1603,8 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       maxValue: merged.maxValue,
       minValue: merged.minValue,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      pressEndActions: merged.pressEndActions?.tryResolveParent(templates: templates),
+      pressStartActions: merged.pressStartActions?.tryResolveParent(templates: templates),
       ranges: merged.ranges?.tryResolveParent(templates: templates),
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,

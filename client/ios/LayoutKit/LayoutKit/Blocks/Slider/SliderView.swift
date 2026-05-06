@@ -281,6 +281,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
         activeThumb = .first
       }
       updateProgress(currentValue)
+      sliderModel.pressStartActions.perform(sendingFrom: self)
     case .changed:
       thumbAnimator?.stopAnimation(true)
       updateProgress(currentValue)
@@ -294,6 +295,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       updateProgress(
         sliderModel.nearestValue(currentValue)
       )
+      sliderModel.pressEndActions.perform(sendingFrom: self)
       layoutIfNeeded()
     @unknown default: break
     }

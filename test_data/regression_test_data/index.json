@@ -633,6 +633,28 @@
       "file": "slider_is_enabled.json"
     },
     {
+      "title": "Slider callbacks",
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Slider",
+        "DivAction"
+      ],
+      "steps": [
+        "Press and hold the slider thumb",
+        "Release the slider thumb",
+        "Drag the slider to another tick and repeat press and release"
+      ],
+      "expected_results": [
+        "While the thumb is pressed, the cirlce fill animates to red",
+        "On release, the cirlce fill animates back to yellow",
+        "Slider value changes as usual when dragging"
+      ],
+      "file": "slider_callbacks.json"
+    },
+    {
       "title": "Root state switching",
       "case_id": 35,
       "automated": [

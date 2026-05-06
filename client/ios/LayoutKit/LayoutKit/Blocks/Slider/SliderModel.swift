@@ -103,7 +103,9 @@ public struct SliderModel: Equatable {
       marksConfiguration: .empty,
       ranges: [],
       layoutDirection: .leftToRight,
-      isEnabled: true
+      isEnabled: true,
+      pressStartActions: [],
+      pressEndActions: []
     )
   }
 
@@ -116,6 +118,8 @@ public struct SliderModel: Equatable {
   public let layoutDirection: UserInterfaceLayoutDirection
   public let path: UIElementPath?
   public let isEnabled: Bool
+  public let pressStartActions: [UserInterfaceAction]
+  public let pressEndActions: [UserInterfaceAction]
 
   private let marksModelConfiguration: MarksConfigurationModel
 
@@ -183,7 +187,9 @@ public struct SliderModel: Equatable {
     ranges: [RangeModel],
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     path: UIElementPath? = nil,
-    isEnabled: Bool = true
+    isEnabled: Bool = true,
+    pressStartActions: [UserInterfaceAction],
+    pressEndActions: [UserInterfaceAction]
   ) {
     self.firstThumb = firstThumb
     self.secondThumb = secondThumb
@@ -194,6 +200,8 @@ public struct SliderModel: Equatable {
     self.layoutDirection = layoutDirection
     self.path = path
     self.isEnabled = isEnabled
+    self.pressStartActions = pressStartActions
+    self.pressEndActions = pressEndActions
   }
 
   public static func ==(lhs: SliderModel, rhs: SliderModel) -> Bool {
@@ -204,7 +212,9 @@ public struct SliderModel: Equatable {
       lhs.marksConfiguration == rhs.marksConfiguration &&
       lhs.ranges == rhs.ranges &&
       lhs.path == rhs.path &&
-      lhs.isEnabled == rhs.isEnabled
+      lhs.isEnabled == rhs.isEnabled &&
+      lhs.pressStartActions == rhs.pressStartActions &&
+      lhs.pressEndActions == rhs.pressEndActions
   }
 
   func nearestValue(_ currentValue: CGFloat) -> CGFloat {

@@ -152,6 +152,8 @@ public final class DivSlider: DivBase, Sendable {
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
   public let paddings: DivEdgeInsets?
+  public let pressEndActions: [DivAction]?
+  public let pressStartActions: [DivAction]?
   public let ranges: [Range]?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -255,6 +257,8 @@ public final class DivSlider: DivBase, Sendable {
       maxValue: try dictionary.getOptionalExpressionField("max_value", context: context),
       minValue: try dictionary.getOptionalExpressionField("min_value", context: context),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
+      pressEndActions: try dictionary.getOptionalArray("press_end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      pressStartActions: try dictionary.getOptionalArray("press_start_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       ranges: try dictionary.getOptionalArray("ranges", transform: { (dict: [String: Any]) in try? DivSlider.Range(dictionary: dict, context: context) }),
       reuseId: try dictionary.getOptionalExpressionField("reuse_id", context: context),
       rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),
@@ -307,6 +311,8 @@ public final class DivSlider: DivBase, Sendable {
     maxValue: Expression<Int>? = nil,
     minValue: Expression<Int>? = nil,
     paddings: DivEdgeInsets? = nil,
+    pressEndActions: [DivAction]? = nil,
+    pressStartActions: [DivAction]? = nil,
     ranges: [Range]? = nil,
     reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
@@ -356,6 +362,8 @@ public final class DivSlider: DivBase, Sendable {
     self.maxValue = maxValue ?? .value(100)
     self.minValue = minValue ?? .value(0)
     self.paddings = paddings
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.ranges = ranges
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -435,68 +443,74 @@ extension DivSlider: Equatable {
     guard
       lhs.minValue == rhs.minValue,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges
+      lhs.pressEndActions == rhs.pressEndActions
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
+      lhs.pressStartActions == rhs.pressStartActions,
+      lhs.ranges == rhs.ranges,
+      lhs.reuseId == rhs.reuseId
+    else {
+      return false
+    }
+    guard
       lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
     else {
       return false
     }
     guard
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
       lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle
+      lhs.thumbTextStyle == rhs.thumbTextStyle,
+      lhs.thumbValueVariable == rhs.thumbValueVariable
     else {
       return false
     }
     guard
-      lhs.thumbValueVariable == rhs.thumbValueVariable,
       lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
-      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -532,6 +546,8 @@ extension DivSlider: Serializable {
     result["max_value"] = maxValue.toValidSerializationValue()
     result["min_value"] = minValue.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
+    result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
+    result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
     result["ranges"] = ranges?.map { $0.toDictionary() }
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()

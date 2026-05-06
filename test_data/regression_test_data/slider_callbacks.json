@@ -1,0 +1,184 @@
+{
+  "card": {
+    "log_id": "slider_press_card",
+    "variables": [
+      {
+        "name": "thumb",
+        "type": "integer",
+        "value": 1
+      },
+      {
+        "name": "circle_fill",
+        "type": "color",
+        "value": "#FFCC00"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "min_value": 0,
+              "max_value": 2,
+              "thumb_value_variable": "thumb",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFFFFF",
+                "stroke": {
+                  "color": "#E6E6E6",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "circle",
+                  "radius": {
+                    "type": "fixed",
+                    "value": 14
+                  }
+                }
+              },
+              "tick_mark_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 4
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 10
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 2
+                  }
+                }
+              },
+              "tick_mark_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#33000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 4
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 10
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 2
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 4
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#22000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 4
+                  }
+                }
+              },
+              "press_start_actions": [
+                {
+                  "log_id": "circle_to_red",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "circle_fill",
+                    "value": {
+                      "type": "color",
+                      "value": "#f00"
+                    }
+                  }
+                }
+              ],
+              "press_end_actions": [
+                {
+                  "log_id": "circle_to_red",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "circle_fill",
+                    "value": {
+                      "type": "color",
+                      "value": "#FFCC00"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "circle",
+              "orientation": "overlap",
+              "width": {
+                "type": "fixed",
+                "value": 160
+              },
+              "height": {
+                "type": "fixed",
+                "value": 160
+              },
+              "margins": {
+                "top": 32
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "@{circle_fill}"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 80
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
