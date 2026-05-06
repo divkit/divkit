@@ -1,3 +1,21 @@
+## 32.49.0
+
+# iOS Client:
+* Do not log model.child.view in renderingDelegate "Touchable view is too small" error.
+* Fixed accessibility mode merge, to respect inactive states and gone blocks.
+* Fixed caret jumping on fast typing in masked text input.
+* Fixed simultaneous long tap and pan gestures recognition in gallery.
+* Supported get/set stored values by cardId.
+* TriggerUpdate boolean flag added to DivVariablesStorage.append.
+
+# Web Client:
+* Added suuport for the `scope` value in the `set_stored_value` action.
+* Added the `themeVariableName` configuration property, which creates a variable that stores the current theme (`light` or `dark`).
+* Fixed accessibility type = `image`.
+* Fixed sorting of `dict` values when converting to a string.
+* The `theme` configuration property is no longer deprecated.
+
+
 ## 32.48.0
 
 # Android Client:
