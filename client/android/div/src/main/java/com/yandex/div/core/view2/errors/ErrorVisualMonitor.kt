@@ -84,4 +84,8 @@ internal class ErrorVisualMonitor @Inject constructor(
             debugView = DebugView(root, divView, debugViewModelProvider, typefaceProvider)
         }
     }
+
+    fun onAttach() = debugViewModelProvider.onViewAttached()
+
+    fun onDetach() = debugViewModelProvider.onViewDetached()
 }

@@ -8,16 +8,15 @@ import android.content.Intent
 import android.os.TransactionTooLargeException
 import android.widget.Toast
 import androidx.core.net.toUri
-import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.util.hotreload.HotReloadController
+import com.yandex.div.core.util.hotreload.HotReloadStatus
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.util.hotreload.HotReloadController
-import com.yandex.div.core.util.hotreload.HotReloadStatus
 import com.yandex.div.core.view2.errors.LogcatErrorDumper
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.UiThreadHandler
@@ -40,12 +39,18 @@ internal class DebugViewModelProvider(
     private val hotReloadController: HotReloadController,
 ) {
     private var hotReloadObserver: Disposable? = null
-    private var dataTag: DivDataTag? = null
+    private var binding: Binding? = null
 
     fun bind(binding: Binding) {
-        dataTag = binding.tag
+        if (!visualErrorsEnabled) return
+
+        this.binding = binding
         existingSubscription?.close()
-        existingSubscription = errorCollectors
+        existingSubscription = observeErrors(binding)
+    }
+
+    private fun observeErrors(binding: Binding): Disposable {
+        return errorCollectors
             .getOrCreate(binding.tag, binding.data)
             .observeAndGet(updateOnErrors)
     }
@@ -57,22 +62,17 @@ internal class DebugViewModelProvider(
     private var existingSubscription: Disposable? = null
 
     private val updateOnErrors = { errors: List<Throwable>, warnings: List<Throwable> ->
-        if (visualErrorsEnabled) {
-            this.currentErrors.apply {
-                clear()
-                val reversedErrors = errors.toMutableList()
-                reversedErrors.reverse()
-                addAll(reversedErrors)
-            }
-            this.currentWarnings.apply {
-                clear()
-                val reversedWarnings = warnings.toMutableList()
-                reversedWarnings.reverse()
-                addAll(reversedWarnings)
-            }
-            state = state.copy(errors = errors, warnings = warnings)
-            logcatErrorDumper.logErrors(currentErrors, currentWarnings, dataTag)
-        }
+        currentErrors.addToTop(errors)
+        currentWarnings.addToTop(warnings)
+        state = state.copy(errors = errors, warnings = warnings)
+        logcatErrorDumper.logErrors(currentErrors, currentWarnings, binding?.tag)
+    }
+
+    private fun MutableList<Throwable>.addToTop(elements: List<Throwable>) {
+        clear()
+        val reversedList = elements.toMutableList()
+        reversedList.reverse()
+        addAll(reversedList)
     }
 
     private fun toViewModel(state: State): DebugViewModel {
@@ -371,6 +371,17 @@ internal class DebugViewModelProvider(
     private fun notifyObservers() {
         val viewModel = toViewModel(state)
         observers.forEach { it.invoke(viewModel) }
+    }
+
+    fun onViewDetached() {
+        existingSubscription?.close()
+        existingSubscription = null
+    }
+
+    fun onViewAttached() {
+        if (existingSubscription != null) return
+        val binding = binding ?: return
+        existingSubscription = observeErrors(binding)
     }
 }
 

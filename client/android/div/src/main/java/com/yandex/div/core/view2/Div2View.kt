@@ -724,6 +724,7 @@ class Div2View private constructor(
         reportBindingFinishedRunnable?.onAttach()
         divTimerEventDispatcher?.onAttach(this)
         layoutProviderBinder.onAttach()
+        viewComponent.errorMonitor.onAttach()
     }
 
     override fun onDetachedFromWindow() {
@@ -733,6 +734,7 @@ class Div2View private constructor(
         viewComponent.animatorController.onDetachedFromWindow()
         runtimeStore.onDetachedFromWindow(this)
         layoutProviderBinder.onDetach()
+        viewComponent.errorMonitor.onDetach()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
