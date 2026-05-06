@@ -18,10 +18,29 @@ public protocol TooltipActionPerformer {
   /// tooltip.
   func showTooltip(info: TooltipInfo)
 
+  /// Shows a tooltip with the provided `TooltipInfo` and reports whether it was actually
+  /// displayed.
+  ///
+  /// The returned value resolves once the tooltip is on screen or the attempt is provably done
+  /// (no presenter, no matching anchor view, or a tooltip with the same id is already showing).
+  /// The `duration`-based auto-hide, if any, runs independently and does not delay the result.
+  ///
+  /// - Parameter info: The `TooltipInfo` containing the necessary information to display the
+  /// tooltip.
+  /// - Returns: `true` if the tooltip was shown, `false` otherwise.
+  func showTooltipAsync(info: TooltipInfo) async -> Bool
+
   /// Hides the tooltip identified by the given `id`.
   ///
   /// - Parameter id: The identifier of the tooltip to hide.
   func hideTooltip(id: String)
+}
+
+extension TooltipActionPerformer {
+  public func showTooltipAsync(info: TooltipInfo) async -> Bool {
+    showTooltip(info: info)
+    return true
+  }
 }
 
 #if os(iOS)
@@ -117,45 +136,13 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltip(info: TooltipInfo) {
-    guard !showingTooltips.keys.contains(info.id) else { return }
+    guard let prep = prepareShow(info: info) else { return }
+    Task { @MainActor in _ = await completeShow(info: info, prep: prep) }
+  }
 
-    guard let (constraint, coordinateSpace) = presenter.prepare() else { return }
-
-    Task { @MainActor in
-      guard let tooltip = await existingAnchorViews.compactMap(
-        concurrencyLimit: 1,
-        transform: {
-          await $0?.makeTooltip(id: info.id, in: constraint, relativeTo: coordinateSpace)
-        }
-      ).first else { return }
-
-      let view = TooltipContainerView(
-        tooltip: tooltip,
-        handleAction: handleAction,
-        onCloseAction: { [weak self] in
-          guard let self else { return }
-          showingTooltips.removeValue(forKey: tooltip.params.id)
-          let hasRemainingModals = !showingTooltips.values.filter(\.isModal).isEmpty
-          presenter.onClosed(tooltipID: tooltip.params.id, hasRemainingModals: hasRemainingModals)
-        },
-        getViewById: { [weak self] in
-          self?.viewsById[$0]?.view
-        }
-      )
-
-      presenter.present(view, for: tooltip)
-
-      view.animateAppear()
-
-      UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
-
-      showingTooltips[info.id] = view
-      let duration = tooltip.params.duration
-      if !duration.isZero {
-        try await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
-        hideTooltip(id: tooltip.params.id)
-      }
-    }
+  public func showTooltipAsync(info: TooltipInfo) async -> Bool {
+    guard let prep = prepareShow(info: info) else { return false }
+    return await completeShow(info: info, prep: prep)
   }
 
   public func hideTooltip(id: String) {
@@ -200,6 +187,58 @@ public class DefaultTooltipManager: TooltipManager {
       reset()
     }
     previousOrientation = orientation
+  }
+
+  private func prepareShow(
+    info: TooltipInfo
+  ) -> (constraint: CGRect, coordinateSpace: UIView?)? {
+    guard !showingTooltips.keys.contains(info.id) else { return nil }
+    return presenter.prepare()
+  }
+
+  @MainActor
+  private func completeShow(
+    info: TooltipInfo,
+    prep: (constraint: CGRect, coordinateSpace: UIView?)
+  ) async -> Bool {
+    let (constraint, coordinateSpace) = prep
+
+    guard let tooltip = await existingAnchorViews.compactMap(
+      concurrencyLimit: 1,
+      transform: {
+        await $0?.makeTooltip(id: info.id, in: constraint, relativeTo: coordinateSpace)
+      }
+    ).first else { return false }
+
+    let view = TooltipContainerView(
+      tooltip: tooltip,
+      handleAction: handleAction,
+      onCloseAction: { [weak self] in
+        guard let self else { return }
+        showingTooltips.removeValue(forKey: tooltip.params.id)
+        let hasRemainingModals = !showingTooltips.values.filter(\.isModal).isEmpty
+        presenter.onClosed(tooltipID: tooltip.params.id, hasRemainingModals: hasRemainingModals)
+      },
+      getViewById: { [weak self] in
+        self?.viewsById[$0]?.view
+      }
+    )
+
+    presenter.present(view, for: tooltip)
+
+    view.animateAppear()
+
+    UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
+
+    showingTooltips[info.id] = view
+
+    let duration = tooltip.params.duration
+    if !duration.isZero {
+      try? await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
+      hideTooltip(id: tooltip.params.id)
+    }
+
+    return true
   }
 }
 
@@ -257,6 +296,7 @@ public final class DefaultTooltipManager: TooltipManager {
   public init() {}
 
   public func showTooltip(info _: TooltipInfo) {}
+  public func showTooltipAsync(info _: TooltipInfo) async -> Bool { false }
   public func hideTooltip(id _: String) {}
 }
 #endif
