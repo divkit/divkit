@@ -124,6 +124,8 @@
         if (customAccessibility?.type && SUPPORTED_ACCESSIBILITY_TYPES.has(customAccessibility.type)) {
             if (customAccessibility.type === 'header') {
                 role = 'heading';
+            } else if (customAccessibility.type === 'image') {
+                role = 'img';
             } else {
                 role = customAccessibility.type;
             }
