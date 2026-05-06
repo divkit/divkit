@@ -68,23 +68,8 @@ class ImageNetworkRestorationTest {
     }
 
     @Test
-    fun `restarts on HTTP 504`() = expectRestart {
-        httpErrorResult(it, code = 504)
-    }
-
-    @Test
-    fun `restarts on HTTP 408`() = expectRestart {
-        httpErrorResult(it, code = 408)
-    }
-
-    @Test
-    fun `does not restart on HTTP 500`() = expectNoRestart {
-        httpErrorResult(it, code = 500)
-    }
-
-    @Test
-    fun `does not restart on HTTP 404`() = expectNoRestart {
-        httpErrorResult(it, code = 404)
+    fun `restarts on HTTP error result`() = expectRestart {
+        httpErrorResult(it)
     }
 
     @Test
@@ -201,10 +186,10 @@ class ImageNetworkRestorationTest {
             throwable = UnknownHostException("offline"),
         )
 
-    private fun httpErrorResult(request: ImageRequest, code: Int): ErrorResult =
+    private fun httpErrorResult(request: ImageRequest): ErrorResult =
         ErrorResult(
             image = null,
             request = request,
-            throwable = HttpException(NetworkResponse().copy(code = code)),
+            throwable = HttpException(NetworkResponse()),
         )
 }

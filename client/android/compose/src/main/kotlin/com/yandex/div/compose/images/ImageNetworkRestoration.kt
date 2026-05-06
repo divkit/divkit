@@ -38,10 +38,8 @@ private fun Throwable?.isNetworkConnectivityError(): Boolean {
             is ConnectException,
             is SocketTimeoutException,
             is SocketException,
-            is InterruptedIOException -> return true
-            is HttpException -> {
-                if (cause.response.code == 408 || cause.response.code == 504) return true
-            }
+            is InterruptedIOException,
+            is HttpException -> return true
         }
         cause = cause.cause
     }
