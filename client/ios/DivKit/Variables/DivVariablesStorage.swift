@@ -102,7 +102,8 @@ public final class DivVariablesStorage {
   /// Does not affect global variables.
   public func set(
     cardId: DivCardID,
-    variables: DivVariables
+    variables: DivVariables,
+    triggerUpdate: Bool = true
   ) {
     let localStorage = lock.withLock {
       let path = cardId.path
@@ -115,14 +116,16 @@ public final class DivVariablesStorage {
     }
 
     let oldValues = localStorage.values
-    localStorage.replaceAll(variables, notifyObservers: true)
+    localStorage.replaceAll(variables, notifyObservers: triggerUpdate)
 
     let changedVariables = makeChangedVariables(old: oldValues, new: variables)
     if changedVariables.isEmpty {
       return
     }
 
-    notify(ChangeEvent(.local(cardId, changedVariables)))
+    if triggerUpdate {
+      notify(ChangeEvent(.local(cardId, changedVariables)))
+    }
   }
 
   /// Adds new card variables.
@@ -130,7 +133,8 @@ public final class DivVariablesStorage {
   public func append(
     variables newVariables: DivVariables,
     for cardId: DivCardID,
-    replaceExisting: Bool = true
+    replaceExisting: Bool = true,
+    triggerUpdate: Bool = true
   ) {
     let oldVariables = lock.withLock {
       localStorages[cardId.path]?.values ?? [:]
@@ -138,7 +142,7 @@ public final class DivVariablesStorage {
     let resultVariables = replaceExisting ?
       oldVariables + newVariables :
       newVariables + oldVariables
-    set(cardId: cardId, variables: resultVariables)
+    set(cardId: cardId, variables: resultVariables, triggerUpdate: triggerUpdate)
   }
 
   /// Deprecated. Use ``DivVariableStorage`` for global variables.
