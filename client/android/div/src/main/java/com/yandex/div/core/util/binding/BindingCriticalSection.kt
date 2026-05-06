@@ -241,7 +241,7 @@ internal inline fun BindingCriticalSection.postBindingAction(crossinline action:
     var posted = false
 
     try {
-        UiThreadHandler.get().post {
+        UiThreadHandler.postOnMainThread {
             transferToCurrentThread()
             try {
                 action()
