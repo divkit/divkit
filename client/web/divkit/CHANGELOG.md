@@ -1,3 +1,12 @@
+## 32.49.0 (May 11, 2026)
+
+* Added suuport for the `scope` value in the `set_stored_value` action.
+* Added the `themeVariableName` configuration property, which creates a variable that stores the current theme (`light` or `dark`).
+* Fixed accessibility type = `image`.
+* Fixed sorting of `dict` values when converting to a string.
+* The `theme` configuration property is no longer deprecated.
+
+
 ## 32.47.0 (April 27, 2026)
 
 * Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
