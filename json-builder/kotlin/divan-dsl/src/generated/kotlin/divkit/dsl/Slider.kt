@@ -57,6 +57,8 @@ data class Slider internal constructor(
             maxValue = additive.maxValue ?: properties.maxValue,
             minValue = additive.minValue ?: properties.minValue,
             paddings = additive.paddings ?: properties.paddings,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             ranges = additive.ranges ?: properties.ranges,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -175,6 +177,14 @@ data class Slider internal constructor(
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
+        /**
+         * Actions performed after clicking/tapping an element.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed at the start of a click/tap on an element.
+         */
+        val pressStartActions: Property<List<Action>>?,
         /**
          * Section style.
          */
@@ -313,6 +323,8 @@ data class Slider internal constructor(
             result.tryPutProperty("max_value", maxValue)
             result.tryPutProperty("min_value", minValue)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("ranges", ranges)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -515,6 +527,8 @@ data class Slider internal constructor(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -567,6 +581,8 @@ fun DivScope.slider(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Slider.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -617,6 +633,8 @@ fun DivScope.slider(
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -669,6 +687,8 @@ fun DivScope.slider(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -721,6 +741,8 @@ fun DivScope.sliderProps(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Slider.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -770,6 +792,8 @@ fun DivScope.sliderProps(
     maxValue = valueOrNull(maxValue),
     minValue = valueOrNull(minValue),
     paddings = valueOrNull(paddings),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     ranges = valueOrNull(ranges),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -821,6 +845,8 @@ fun DivScope.sliderProps(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -873,6 +899,8 @@ fun TemplateScope.sliderRefs(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -922,6 +950,8 @@ fun TemplateScope.sliderRefs(
     maxValue = maxValue,
     minValue = minValue,
     paddings = paddings,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     ranges = ranges,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -973,6 +1003,8 @@ fun TemplateScope.sliderRefs(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1025,6 +1057,8 @@ fun Slider.override(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Slider.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1075,6 +1109,8 @@ fun Slider.override(
         maxValue = valueOrNull(maxValue) ?: properties.maxValue,
         minValue = valueOrNull(minValue) ?: properties.minValue,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         ranges = valueOrNull(ranges) ?: properties.ranges,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -1127,6 +1163,8 @@ fun Slider.override(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1179,6 +1217,8 @@ fun Slider.defer(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1229,6 +1269,8 @@ fun Slider.defer(
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1281,6 +1323,8 @@ fun Slider.defer(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1333,6 +1377,8 @@ fun Slider.modify(
     maxValue: Property<Int>? = null,
     minValue: Property<Int>? = null,
     paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
     ranges: Property<List<Slider.Range>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
@@ -1383,6 +1429,8 @@ fun Slider.modify(
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1461,6 +1509,8 @@ fun Slider.evaluate(
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
         paddings = properties.paddings,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         ranges = properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1513,6 +1563,8 @@ fun Slider.evaluate(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1565,6 +1617,8 @@ fun Component<Slider>.override(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Slider.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1616,6 +1670,8 @@ fun Component<Slider>.override(
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1668,6 +1724,8 @@ fun Component<Slider>.override(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1720,6 +1778,8 @@ fun Component<Slider>.defer(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1771,6 +1831,8 @@ fun Component<Slider>.defer(
         maxValue = maxValue,
         minValue = minValue,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1850,6 +1912,8 @@ fun Component<Slider>.evaluate(
         maxValue = maxValue,
         minValue = minValue,
         paddings = null,
+        pressEndActions = null,
+        pressStartActions = null,
         ranges = null,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1902,6 +1966,8 @@ fun Component<Slider>.evaluate(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges Section style.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1954,6 +2020,8 @@ fun Component<Slider>.modify(
     maxValue: Property<Int>? = null,
     minValue: Property<Int>? = null,
     paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
     ranges: Property<List<Slider.Range>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
@@ -2005,6 +2073,8 @@ fun Component<Slider>.modify(
         maxValue = maxValue,
         minValue = minValue,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,

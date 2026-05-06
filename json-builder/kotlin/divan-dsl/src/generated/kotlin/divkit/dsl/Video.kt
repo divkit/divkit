@@ -62,6 +62,7 @@ data class Video internal constructor(
             muted = additive.muted ?: properties.muted,
             paddings = additive.paddings ?: properties.paddings,
             pauseActions = additive.pauseActions ?: properties.pauseActions,
+            playbackSpeed = additive.playbackSpeed ?: properties.playbackSpeed,
             playerSettingsPayload = additive.playerSettingsPayload ?: properties.playerSettingsPayload,
             preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
             preview = additive.preview ?: properties.preview,
@@ -195,6 +196,11 @@ data class Video internal constructor(
          */
         val pauseActions: Property<List<Action>>?,
         /**
+         * translations.json#/div_video_playback_speed
+         * Default value: `1.0`.
+         */
+        val playbackSpeed: Property<Double>?,
+        /**
          * Additional information that can be used in the player.
          */
         val playerSettingsPayload: Property<Map<String, Any>>?,
@@ -317,6 +323,7 @@ data class Video internal constructor(
             result.tryPutProperty("muted", muted)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("pause_actions", pauseActions)
+            result.tryPutProperty("playback_speed", playbackSpeed)
             result.tryPutProperty("player_settings_payload", playerSettingsPayload)
             result.tryPutProperty("preload_required", preloadRequired)
             result.tryPutProperty("preview", preview)
@@ -371,6 +378,7 @@ data class Video internal constructor(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -422,6 +430,7 @@ fun DivScope.video(
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
+    playbackSpeed: Double? = null,
     playerSettingsPayload: Map<String, Any>? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
@@ -472,6 +481,7 @@ fun DivScope.video(
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
         pauseActions = valueOrNull(pauseActions),
+        playbackSpeed = valueOrNull(playbackSpeed),
         playerSettingsPayload = valueOrNull(playerSettingsPayload),
         preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
@@ -524,6 +534,7 @@ fun DivScope.video(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -575,6 +586,7 @@ fun DivScope.videoProps(
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
+    playbackSpeed: Double? = null,
     playerSettingsPayload: Map<String, Any>? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
@@ -624,6 +636,7 @@ fun DivScope.videoProps(
     muted = valueOrNull(muted),
     paddings = valueOrNull(paddings),
     pauseActions = valueOrNull(pauseActions),
+    playbackSpeed = valueOrNull(playbackSpeed),
     playerSettingsPayload = valueOrNull(playerSettingsPayload),
     preloadRequired = valueOrNull(preloadRequired),
     preview = valueOrNull(preview),
@@ -675,6 +688,7 @@ fun DivScope.videoProps(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -726,6 +740,7 @@ fun TemplateScope.videoRefs(
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
+    playbackSpeed: ReferenceProperty<Double>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
@@ -775,6 +790,7 @@ fun TemplateScope.videoRefs(
     muted = muted,
     paddings = paddings,
     pauseActions = pauseActions,
+    playbackSpeed = playbackSpeed,
     playerSettingsPayload = playerSettingsPayload,
     preloadRequired = preloadRequired,
     preview = preview,
@@ -826,6 +842,7 @@ fun TemplateScope.videoRefs(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -877,6 +894,7 @@ fun Video.override(
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
+    playbackSpeed: Double? = null,
     playerSettingsPayload: Map<String, Any>? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
@@ -927,6 +945,7 @@ fun Video.override(
         muted = valueOrNull(muted) ?: properties.muted,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         pauseActions = valueOrNull(pauseActions) ?: properties.pauseActions,
+        playbackSpeed = valueOrNull(playbackSpeed) ?: properties.playbackSpeed,
         playerSettingsPayload = valueOrNull(playerSettingsPayload) ?: properties.playerSettingsPayload,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         preview = valueOrNull(preview) ?: properties.preview,
@@ -979,6 +998,7 @@ fun Video.override(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -1030,6 +1050,7 @@ fun Video.defer(
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
+    playbackSpeed: ReferenceProperty<Double>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
@@ -1080,6 +1101,7 @@ fun Video.defer(
         muted = muted ?: properties.muted,
         paddings = paddings ?: properties.paddings,
         pauseActions = pauseActions ?: properties.pauseActions,
+        playbackSpeed = playbackSpeed ?: properties.playbackSpeed,
         playerSettingsPayload = playerSettingsPayload ?: properties.playerSettingsPayload,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
@@ -1132,6 +1154,7 @@ fun Video.defer(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -1183,6 +1206,7 @@ fun Video.modify(
     muted: Property<Boolean>? = null,
     paddings: Property<EdgeInsets>? = null,
     pauseActions: Property<List<Action>>? = null,
+    playbackSpeed: Property<Double>? = null,
     playerSettingsPayload: Property<Map<String, Any>>? = null,
     preloadRequired: Property<Boolean>? = null,
     preview: Property<String>? = null,
@@ -1233,6 +1257,7 @@ fun Video.modify(
         muted = muted ?: properties.muted,
         paddings = paddings ?: properties.paddings,
         pauseActions = pauseActions ?: properties.pauseActions,
+        playbackSpeed = playbackSpeed ?: properties.playbackSpeed,
         playerSettingsPayload = playerSettingsPayload ?: properties.playerSettingsPayload,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
@@ -1266,6 +1291,7 @@ fun Video.modify(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -1283,6 +1309,7 @@ fun Video.evaluate(
     autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     muted: ExpressionProperty<Boolean>? = null,
+    playbackSpeed: ExpressionProperty<Double>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
@@ -1317,6 +1344,7 @@ fun Video.evaluate(
         muted = muted ?: properties.muted,
         paddings = properties.paddings,
         pauseActions = properties.pauseActions,
+        playbackSpeed = playbackSpeed ?: properties.playbackSpeed,
         playerSettingsPayload = properties.playerSettingsPayload,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
@@ -1369,6 +1397,7 @@ fun Video.evaluate(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -1420,6 +1449,7 @@ fun Component<Video>.override(
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
+    playbackSpeed: Double? = null,
     playerSettingsPayload: Map<String, Any>? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
@@ -1471,6 +1501,7 @@ fun Component<Video>.override(
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
         pauseActions = valueOrNull(pauseActions),
+        playbackSpeed = valueOrNull(playbackSpeed),
         playerSettingsPayload = valueOrNull(playerSettingsPayload),
         preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
@@ -1523,6 +1554,7 @@ fun Component<Video>.override(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -1574,6 +1606,7 @@ fun Component<Video>.defer(
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
+    playbackSpeed: ReferenceProperty<Double>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
@@ -1625,6 +1658,7 @@ fun Component<Video>.defer(
         muted = muted,
         paddings = paddings,
         pauseActions = pauseActions,
+        playbackSpeed = playbackSpeed,
         playerSettingsPayload = playerSettingsPayload,
         preloadRequired = preloadRequired,
         preview = preview,
@@ -1658,6 +1692,7 @@ fun Component<Video>.defer(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -1675,6 +1710,7 @@ fun Component<Video>.evaluate(
     autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     muted: ExpressionProperty<Boolean>? = null,
+    playbackSpeed: ExpressionProperty<Double>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
@@ -1710,6 +1746,7 @@ fun Component<Video>.evaluate(
         muted = muted,
         paddings = null,
         pauseActions = null,
+        playbackSpeed = playbackSpeed,
         playerSettingsPayload = null,
         preloadRequired = preloadRequired,
         preview = preview,
@@ -1762,6 +1799,7 @@ fun Component<Video>.evaluate(
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
+ * @param playbackSpeed translations.json#/div_video_playback_speed
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
@@ -1813,6 +1851,7 @@ fun Component<Video>.modify(
     muted: Property<Boolean>? = null,
     paddings: Property<EdgeInsets>? = null,
     pauseActions: Property<List<Action>>? = null,
+    playbackSpeed: Property<Double>? = null,
     playerSettingsPayload: Property<Map<String, Any>>? = null,
     preloadRequired: Property<Boolean>? = null,
     preview: Property<String>? = null,
@@ -1864,6 +1903,7 @@ fun Component<Video>.modify(
         muted = muted,
         paddings = paddings,
         pauseActions = pauseActions,
+        playbackSpeed = playbackSpeed,
         playerSettingsPayload = playerSettingsPayload,
         preloadRequired = preloadRequired,
         preview = preview,
