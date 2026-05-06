@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation(project(":assertion"))
     implementation(project(":div-core"))
+    implementation(project(":div-data"))
     implementation(project(":utils"))
 
     implementation(libs.androidx.appcompat) {

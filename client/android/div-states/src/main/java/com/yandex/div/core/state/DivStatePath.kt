@@ -1,9 +1,7 @@
 package com.yandex.div.core.state
 
 import androidx.annotation.VisibleForTesting
-import com.yandex.div.core.expression.local.ChildPathUnitCache
-import com.yandex.div.core.state.DivPathUtils.getId
-import com.yandex.div.core.state.DivStatePath.Companion.parse
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivState
@@ -19,11 +17,11 @@ import kotlin.math.min
  * **Note:** after integer top_level_state_id goes pairs of ```id->state_id``` of nested DivState's
  * ignoring other Divs.
  */
-data class DivStatePath @VisibleForTesting internal constructor(
+data class DivStatePath @VisibleForTesting @InternalApi constructor(
     val topLevelStateId: Long,
     private val states: List<Pair<String, String>> = listOf(),
     internal val path: List<String> = listOf(topLevelStateId.toString()),
-    internal val containsOnlyStates: Boolean = false,
+    private val containsOnlyStates: Boolean = false,
 ) {
 
     val lastStateId: String?
@@ -41,10 +39,13 @@ data class DivStatePath @VisibleForTesting internal constructor(
                 .statesString + "/" + states.last().divId
         }
 
-    internal val lastDivId: String get() = path.last()
+    @InternalApi
+    val lastDivId: String get() = path.last()
 
-    internal val fullPath by lazy { path.joinToString("/") }
-    internal val statesString by lazy {
+    @InternalApi
+    val fullPath by lazy { path.joinToString("/") }
+    @InternalApi
+    val statesString by lazy {
         if (states.isNotEmpty()) {
             "$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
         } else {
@@ -59,13 +60,23 @@ data class DivStatePath @VisibleForTesting internal constructor(
         return append(divId, null, stateId)
     }
 
-    internal fun append(divId: String, state: DivState.State?, stateIdFallback: String): DivStatePath {
+    @InternalApi
+    fun append(divId: String, state: DivState.State?, stateIdFallback: String): DivStatePath {
         val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {
             addAll(states)
             add(divId to (state?.stateId ?: stateIdFallback))
         }
         val stateDivId = state?.div?.value()?.id ?: state?.stateId ?: stateIdFallback
         return DivStatePath(topLevelStateId, newStates, createFullPath(stateDivId))
+    }
+
+    @InternalApi
+    fun lastStateEquals(other: DivStatePath): Boolean {
+        return if (other.containsOnlyStates) {
+            this.pathToLastState == other.pathToLastState
+        } else {
+            this.parentState().fullPath == other.parentState().fullPath
+        }
     }
 
     fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
@@ -84,7 +95,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
      * to 0/first_state/first_div/second_state/second_div will return 0/first_state/first_div.
      * Root states returns itself.
      */
-    fun parentState() : DivStatePath {
+    fun parentState(): DivStatePath {
         if (isRootPath()) {
             return this
         }
@@ -139,19 +150,25 @@ data class DivStatePath @VisibleForTesting internal constructor(
 
         fun fromState(stateId: Long) = DivStatePath(stateId, mutableListOf())
 
-        internal fun fromState(state: DivData.State) = fromRootDiv(state.stateId, state.div)
+        @InternalApi
+        fun fromState(state: DivData.State) = fromRootDiv(state.stateId, state.div)
 
-        internal fun fromRootDiv(stateId: Long, div: Div): DivStatePath {
-            val path = listOf(stateId.toString() + (div.getId()?.let { ":$it" } ?: ""))
+        @InternalApi
+        fun fromRootDiv(stateId: Long, div: Div): DivStatePath {
+            val divIdSegment = div.value().let { base ->
+                if (base is DivState) base.divId ?: base.id else base.id
+            }
+            val path = listOf(stateId.toString() + (divIdSegment?.let { ":$it" } ?: ""))
             return DivStatePath(stateId, emptyList(), path)
         }
 
         /**
          * Search for shared ancestor for two [DivStatePath]. So path equal to
-         * 0/first_state/first_div/second_state/second_div and 0/first_state/first_div/third_state/som_div
+         * 0/first_state/first_div/second_state/second_div and 0/first_state/first_div/third_state/some_div
          * will have shared [DivStatePath] equal to 0/first_state/first_div.
          */
-        internal fun lowestCommonAncestor(somePath: DivStatePath, otherPath: DivStatePath): DivStatePath? {
+        @InternalApi
+        fun lowestCommonAncestor(somePath: DivStatePath, otherPath: DivStatePath): DivStatePath? {
             if (somePath.topLevelStateId != otherPath.topLevelStateId) {
                 return null
             }
@@ -162,6 +179,30 @@ data class DivStatePath @VisibleForTesting internal constructor(
                 somePath.path.extractStates(sharedPairs, true),
                 somePath.containsOnlyStates || otherPath.containsOnlyStates
             )
+        }
+
+        @InternalApi
+        fun alphabeticalComparator(): Comparator<DivStatePath> {
+            return Comparator { lhs, rhs ->
+                if (lhs.topLevelStateId != rhs.topLevelStateId) {
+                    return@Comparator (lhs.topLevelStateId - rhs.topLevelStateId).toInt()
+                }
+
+                val minSize = min(lhs.states.size, rhs.states.size)
+                for (i in 0 until minSize) {
+                    val lhsPair = lhs.states[i]
+                    val rhsPair = rhs.states[i]
+                    val divIdComparison = lhsPair.divId.compareTo(rhsPair.divId)
+                    if (divIdComparison != 0) {
+                        return@Comparator divIdComparison
+                    }
+                    val stateIdComparison = lhsPair.stateId.compareTo(rhsPair.stateId)
+                    if (stateIdComparison != 0) {
+                        return@Comparator stateIdComparison
+                    }
+                }
+                return@Comparator lhs.states.size - rhs.states.size
+            }
         }
 
         private fun findSharedPairs(somePath: DivStatePath, otherPath: DivStatePath): List<Pair<String, String>> {
@@ -187,29 +228,6 @@ data class DivStatePath @VisibleForTesting internal constructor(
                 if (get(i) == state.divId && get(i + 1) == state.stateId) return i + 1
             }
             return size
-        }
-
-        internal fun alphabeticalComparator(): Comparator<DivStatePath> {
-            return Comparator { lhs, rhs ->
-                if (lhs.topLevelStateId != rhs.topLevelStateId) {
-                    return@Comparator (lhs.topLevelStateId - rhs.topLevelStateId).toInt()
-                }
-
-                val minSize = min(lhs.states.size, rhs.states.size)
-                for (i in 0 until minSize) {
-                    val lhsPair = lhs.states[i]
-                    val rhsPair = rhs.states[i]
-                    val divIdComparison = lhsPair.divId.compareTo(rhsPair.divId)
-                    if (divIdComparison != 0) {
-                        return@Comparator divIdComparison
-                    }
-                    val stateIdComparison = lhsPair.stateId.compareTo(rhsPair.stateId)
-                    if (stateIdComparison != 0) {
-                        return@Comparator stateIdComparison
-                    }
-                }
-                return@Comparator lhs.states.size - rhs.states.size
-            }
         }
     }
 }

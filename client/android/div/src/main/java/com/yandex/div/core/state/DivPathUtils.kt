@@ -27,7 +27,7 @@ internal object DivPathUtils {
         if (this !is ViewGroup) {
             return null
         }
-        if (this is DivStateLayout && this.path.lastStateEquals(path)) {
+        if (this is DivStateLayout && this.path?.lastStateEquals(path) == true) {
             return this
         }
 
@@ -47,14 +47,6 @@ internal object DivPathUtils {
             }
         }
         return candidate
-    }
-
-    private fun DivStatePath?.lastStateEquals(other: DivStatePath): Boolean {
-        return if (other.containsOnlyStates) {
-            this?.pathToLastState == other.pathToLastState
-        } else {
-            this?.parentState()?.fullPath == other.parentState().fullPath
-        }
     }
 
     /**
