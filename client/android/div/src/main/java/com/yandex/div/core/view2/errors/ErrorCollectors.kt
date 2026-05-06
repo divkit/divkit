@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.errors
 
+import androidx.annotation.AnyThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.annotations.Mockable
@@ -14,6 +15,7 @@ internal class ErrorCollectors @Inject constructor(
 ) {
     private val collectors = mutableMapOf<String, MutableList<ErrorCollector>>()
 
+    @AnyThread
     fun getOrCreate(tag: DivDataTag, divData: DivData?): ErrorCollector {
         val collector = synchronized(collectors) {
             val bucket = collectors.getOrPut(tag.id) { mutableListOf() }
@@ -24,6 +26,7 @@ internal class ErrorCollectors @Inject constructor(
         return collector
     }
 
+    @AnyThread
     fun getOrNull(tag: DivDataTag, divData: DivData?): ErrorCollector? {
         val collector = synchronized(collectors) {
             collectors[tag.id]?.find { it.divData === divData }
@@ -32,7 +35,8 @@ internal class ErrorCollectors @Inject constructor(
         return collector
     }
 
-    fun reset(tags: List<DivDataTag>) {
+    @AnyThread
+    fun reset(tags: List<DivDataTag>): Unit = synchronized(collectors)  {
         if (tags.isEmpty()) {
             collectors.clear()
         } else {
