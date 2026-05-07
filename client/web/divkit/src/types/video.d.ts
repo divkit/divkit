@@ -20,6 +20,7 @@ export interface DivVideoData extends DivBaseData {
     player_settings_payload?: Record<string, unknown>;
     aspect?: DivAspect;
     scale?: VideoScale;
+    playback_speed?: number;
 }
 
 export interface VideoElements {

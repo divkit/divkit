@@ -2819,6 +2819,22 @@
       "file": "video/video_with_controls.json"
     },
     {
+      "title": "Video with playback speed",
+      "tags": [
+        "DivVideo"
+      ],
+      "platforms": [
+        "web"
+      ],
+      "steps": [
+        "Change playback speed"
+      ],
+      "expected_results": [
+        "The video playback speed changes accordingly"
+      ],
+      "file": "video/video_with_playback_speed.json"
+    },
+    {
       "title": "Video with controls and typed actions",
       "case_id": 180,
       "tags": [

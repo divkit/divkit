@@ -110,7 +110,9 @@
           "$ref": "common.json#/positive_number",
           "default_value": "1.0",
           "description": "translations.json#/div_video_playback_speed",
-          "platforms": []
+          "platforms": [
+            "web"
+          ]
         }
       }
     }

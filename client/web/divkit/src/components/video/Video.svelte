@@ -20,6 +20,7 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { genClassName } from '../../utils/genClassName';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
 
     export let componentContext: ComponentContext<DivVideoData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -38,6 +39,7 @@
     let preload = false;
     let poster: string | undefined = undefined;
     let scale = 'fit';
+    let playbackSpeed = 1;
     let aspectPaddingBottom = '0';
     let isAbsolute = false;
     let elapsedVariableUnsubscriber: Unsubscriber | undefined;
@@ -103,6 +105,7 @@
         preload = false;
         poster = undefined;
         scale = 'fit';
+        playbackSpeed = 1;
         isAbsolute = false;
         shouldUseVideoProvider = Boolean(videoPlayerProvider);
     }
@@ -153,6 +156,7 @@
     $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
     $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
     $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
+    $: jsonPlaybackSpeed = componentContext.getDerivedFromVars(componentContext.json.playback_speed);
     $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
     $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
 
@@ -176,6 +180,10 @@
 
     $: {
         scale = videoSize($jsonScale) || scale;
+    }
+
+    $: {
+        playbackSpeed = correctPositiveNumber($jsonPlaybackSpeed, playbackSpeed);
     }
 
     $: {
@@ -243,6 +251,14 @@
     $: style = {
         'object-fit': scale
     };
+
+    $: if (videoElem) {
+        try {
+            videoElem.playbackRate = playbackSpeed;
+        } catch (err) {
+            // do nothing
+        }
+    }
 
     function onTimeUpdate(): void {
         if (videoElem) {

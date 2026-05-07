@@ -1,0 +1,251 @@
+{
+  "templates": {
+    "control_button": {
+      "type": "image",
+      "aspect": {
+        "ratio": 1
+      },
+      "scale": "fit",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "video",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "speed",
+        "type": "integer",
+        "value": 100
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "video",
+              "id": "bears_video",
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                  "mime_type": "video/mp4"
+                }
+              ],
+              "preload_required": true,
+              "repeatable": true,
+              "autostart": true,
+              "muted": true,
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ],
+              "playback_speed": "@{speed / 100.0}"
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 30000,
+              "min_value": 0,
+              "thumb_value_variable": "video_time",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Playback speed: @{speed / 100.0}"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 1000,
+              "min_value": 10,
+              "thumb_value_variable": "speed",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
+                  "margins": {
+                    "right": 20
+                  },
+                  "actions": [
+                    {
+                      "log_id": "rewind",
+                      "url": "div-action://set_variable?name=video_time&value=0"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
+                  "margins": {
+                    "right": 16
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "play",
+                      "url": "div-action://video?id=bears_video&action=start"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "pause",
+                      "url": "div-action://video?id=bears_video&action=pause"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
