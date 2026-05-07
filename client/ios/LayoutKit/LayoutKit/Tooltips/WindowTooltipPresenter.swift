@@ -11,7 +11,7 @@ final class WindowTooltipPresenter: TooltipPresenter {
     setupIfNeeded()
     guard let tooltipWindowManager else { return nil }
     let modalWindow = tooltipWindowManager.modalWindow
-    return (modalWindow.bounds.inset(by: modalWindow.safeAreaInsets), nil)
+    return (modalWindow.bounds, nil)
   }
 
   func present(_ view: TooltipContainerView, for tooltip: DefaultTooltipManager.Tooltip) {
