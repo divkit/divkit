@@ -8,6 +8,7 @@ import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
+import com.yandex.div.core.expression.storedvalues.StoredValuesController.Companion.isStoredForCard
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
@@ -36,7 +37,13 @@ class DivKit private constructor(
 
     fun reset(@ResetFlag flags: Int = RESET_ALL, tags: List<DivDataTag> = emptyList()) {
         if (flags and RESET_STORED_VARIABLES != 0) {
-            component.storageComponent.rawJsonRepository.remove { true }
+            component.storageComponent.rawJsonRepository.run {
+                if (tags.isEmpty()) {
+                    remove { true }
+                } else {
+                    remove { json -> tags.any { json.isStoredForCard(it.id) } }
+                }
+            }
         }
         if (flags and RESET_STORED_DIV_DATA != 0) {
             component.storageComponent.repository.run {
@@ -61,9 +68,10 @@ class DivKit private constructor(
 
     companion object {
 
-        const val RESET_ALL = 1 shl 0
-        const val RESET_STORED_VARIABLES = 1 shl 1
-        const val RESET_STORED_DIV_DATA = 1 shl 2
+        const val RESET_STORED_VARIABLES = 1 shl 0
+        const val RESET_STORED_DIV_DATA = 1 shl 1
+
+        const val RESET_ALL = RESET_STORED_VARIABLES or RESET_STORED_DIV_DATA
 
         private val DEFAULT_CONFIGURATION = DivKitConfiguration.Builder().build()
 

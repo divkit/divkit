@@ -1,11 +1,14 @@
 package com.yandex.div.core.expression.storedvalues
 
+import com.yandex.div.core.expression.storedvalues.StoredValuesController.Companion.isStoredForCard
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.StoredValue
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryResult
+import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div2.DivActionSetStoredValue.Scope
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor
@@ -64,4 +67,26 @@ class StoredValuesControllerTest {
     private fun checkStoredValueId(expected: String) {
         Assert.assertEquals(expected, payload.firstValue.jsons.first().id)
     }
+
+    @Test
+    fun `stored for card returns true when scope equals to card id`() {
+        Assert.assertTrue("card_unique_tag_stored_value_name".toJson().isStoredForCard(DATA_TAG))
+    }
+
+    @Test
+    fun `stored for card returns true when scope is empty and value has no scope`() {
+        Assert.assertTrue("stored_value_name".toJson().isStoredForCard(""))
+    }
+
+    @Test
+    fun `stored for card returns false when scope does not equal to card id`() {
+        Assert.assertFalse("card_new_tag_stored_value_name".toJson().isStoredForCard(DATA_TAG))
+    }
+
+    @Test
+    fun `stored for card returns false when scope is empty and value has scope`() {
+        Assert.assertFalse("card_unique_tag_stored_value_name".toJson().isStoredForCard(""))
+    }
+
+    private fun String.toJson() = RawJson(this, JSONObject())
 }

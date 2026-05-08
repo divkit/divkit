@@ -174,11 +174,20 @@ internal class StoredValuesController @Inject constructor(
         private const val KEY_TYPE = "type"
         private const val KEY_VALUE = "value"
 
+        fun RawJson.isStoredForCard(dataTag: String): Boolean {
+            return when {
+                dataTag.isEmpty() -> !id.startsWith(CARD_PREFIX)
+                else -> id.startsWith(dataTag.withPrefix)
+            }
+        }
+
+        private val String.withPrefix get() = CARD_PREFIX + this + "_"
+
         private fun String.toStoredValueId(scope: DivActionSetStoredValue.Scope, dataTag: String): String {
             val valueId = STORED_VALUE_ID_PREFIX + this
             return when (scope) {
                 DivActionSetStoredValue.Scope.GLOBAL -> valueId
-                DivActionSetStoredValue.Scope.CARD -> CARD_PREFIX + dataTag + "_" + valueId
+                DivActionSetStoredValue.Scope.CARD -> dataTag.withPrefix + valueId
             }
         }
     }
