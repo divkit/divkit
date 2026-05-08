@@ -264,6 +264,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-input/without-text.json",
                 // div-switch
                 "snapshot_test_data/div-switch",
+                // div-select
+                "snapshot_test_data/div-select",
             ).expandDirectories()
 
             //TODO: to be stabilized
