@@ -107,5 +107,6 @@ private val ignoredFiles = listOf(
     "property_string_value_from_variable.json",
     "property_url_value_from_dict.json",
     "property_without_setter.json",
+    "set_stored_value_scope.json",
     "wrap_content_constraints_warning.json",
 )
