@@ -44,7 +44,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            val suite = listOf(
+            return listOf(
                 // div-separator
                 "snapshot_test_data/div-separator",
                 // div-text
@@ -266,21 +266,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-switch",
                 // div-select
                 "snapshot_test_data/div-select",
-            ).expandDirectories()
-
-            //TODO: to be stabilized
-            val flakyTests = listOf(
-                "snapshot_test_data/div-container/horizontal-orientation-bottom-horizontal-alignment.json",
-                "snapshot_test_data/div-container/horizontal-orientation-space-around-alignment.json",
-                "snapshot_test_data/div-container/horizontal-orientation-space-evenly-alignment.json",
-                "snapshot_test_data/div-container/size_unit.json",
-            ).expandDirectories().toSet()
-
-            val resultSuite = (suite - flakyTests)
-            Assert.assertEquals("Looks like there are outdated flaky tests",
-                resultSuite.size, suite.size - flakyTests.size)
-
-            return resultSuite.withEscapedParameter()
+            ).expandDirectories().withEscapedParameter()
         }
 
         private fun List<String>.expandDirectories(): List<String> {
