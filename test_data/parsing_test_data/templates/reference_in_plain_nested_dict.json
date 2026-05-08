@@ -1,9 +1,5 @@
 {
   "description": "A reference definition lives inside a plain (non-template) nested dict embedded in a template's body — an element of an 'images' array. Verifies the reference still resolves against the outer instance despite the intermediate plain-dict layers.",
-  "platforms": [
-    "ios",
-    "web"
-  ],
   "card": {
     "log_id": "test",
     "states": [

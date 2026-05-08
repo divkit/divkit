@@ -1,9 +1,5 @@
 {
   "description": "A template usage inside another template's body declares a reference definition whose source name matches a field on the card instance. Verifies that the reference value on the outer instance cascades through two levels of template usage to drive the inner template's field.",
-  "platforms": [
-    "ios",
-    "web"
-  ],
   "templates": {
     "inner_template": {
       "type": "image",

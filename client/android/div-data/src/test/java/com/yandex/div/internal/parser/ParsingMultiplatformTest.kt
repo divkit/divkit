@@ -12,9 +12,9 @@ import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.robolectric.ParameterizedRobolectricTestRunner
 
-@RunWith(Parameterized::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 class ParsingMultiplatformTest(testCaseParsingResult: ParsingResult<ParsingTestCase>) {
 
     private val testCase = testCaseParsingResult.getOrThrow()
@@ -83,10 +83,10 @@ class ParsingMultiplatformTest(testCaseParsingResult: ParsingResult<ParsingTestC
         throw Exception("DivData comparison failed for path '$path', expected='$expected', actual='$actual'")
 
     companion object {
-        @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
-        fun cases(): List<ParsingResult<ParsingTestCase>> {
-            return parseFiles("parsing_test_data") { file, jsonString ->
+        // Store parsed test cases to prevent multiple parsing by
+        // ParameterizedRobolectricTestRunner
+        private val cases: List<ParsingResult<ParsingTestCase>> = run {
+            parseFiles("parsing_test_data") { file, jsonString ->
                 val json = JSONObject(jsonString)
                 if (!json.isForAndroid) return@parseFiles emptyList()
 
@@ -99,5 +99,10 @@ class ParsingMultiplatformTest(testCaseParsingResult: ParsingResult<ParsingTestC
                 listOf(result)
             }
         }
+
+        @JvmStatic
+        @Suppress("unused")
+        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+        fun cases() = cases
     }
 }

@@ -1,9 +1,5 @@
 {
   "description": "A template definition declares reference definitions at multiple depths: top-level ($text), inside a nested object ($top in paddings), and inside an array element ($url in actions[]). Verifies all references resolve against the usage's reference values.",
-  "platforms": [
-    "ios",
-    "web"
-  ],
   "templates": {
     "title": {
       "type": "text",

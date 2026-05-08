@@ -1,9 +1,5 @@
 {
   "description": "A single template definition reuses the same reference source name ('content') at two depths: a top-level $text and a nested $log_id inside actions[]. Verifies both sites receive the same value from the usage's reference value.",
-  "platforms": [
-    "ios",
-    "web"
-  ],
   "templates": {
     "action_text": {
       "type": "text",
