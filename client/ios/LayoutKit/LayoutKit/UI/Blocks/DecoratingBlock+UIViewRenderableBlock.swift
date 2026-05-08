@@ -102,7 +102,7 @@ extension LongTapActions {
   }
 }
 
-private final class DecoratingView: UIView, BlockViewProtocol, VisibleBoundsTrackingContainer,
+private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsTrackingContainer,
   TooltipProtocol {
   enum HighlightState {
     case normal
@@ -168,7 +168,7 @@ private final class DecoratingView: UIView, BlockViewProtocol, VisibleBoundsTrac
     }
   }
 
-  private var isHighlighted = false {
+  override var isHighlighted: Bool {
     didSet {
       guard oldValue != isHighlighted else {
         return
@@ -178,7 +178,7 @@ private final class DecoratingView: UIView, BlockViewProtocol, VisibleBoundsTrac
     }
   }
 
-  private var isEnabled = true {
+  override var isEnabled: Bool {
     didSet {
       guard oldValue != isEnabled else {
         return
@@ -348,21 +348,18 @@ private final class DecoratingView: UIView, BlockViewProtocol, VisibleBoundsTrac
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
-    isHighlighted = true
     applyActionAnimation(state: .highlighted)
     model.pressStartActions?.asArray().perform(sendingFrom: self)
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
-    isHighlighted = false
     applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
-    isHighlighted = false
     applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
@@ -496,7 +493,6 @@ private final class DecoratingView: UIView, BlockViewProtocol, VisibleBoundsTrac
         target: self,
         action: #selector(handleLongPress)
       )
-      longPressRecognizer?.delegate = self
     }
 
     if model.shouldHandleHover, hoverRecognizer == nil {
@@ -652,7 +648,7 @@ extension DecoratingView {
     captureFocusIfNeeded()
 
     if let longTapActions = model.longTapActions {
-      isHighlighted = false
+      cancelTracking(with: nil)
       switch longTapActions {
       case let .actions(actions):
         actions.forEach { $0.perform(sendingFrom: self) }
@@ -677,15 +673,6 @@ extension DecoratingView {
 
 extension DecoratingView: TooltipAnchorView {
   var tooltips: [BlockTooltip] { model.tooltips }
-}
-
-extension DecoratingView: UIGestureRecognizerDelegate {
-  func gestureRecognizer(
-    _ gestureRecognizer: UIGestureRecognizer,
-    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-  ) -> Bool {
-    gestureRecognizer === longPressRecognizer && otherGestureRecognizer is UIPanGestureRecognizer
-  }
 }
 
 extension DecoratingView.HighlightState {
