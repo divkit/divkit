@@ -233,6 +233,7 @@
           "$description": "translations.json#/div_text_image_alignment_vertical",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },

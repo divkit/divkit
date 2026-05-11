@@ -378,8 +378,20 @@ extension DivText.Image {
       holder: context.imageHolderFactory.make(resolveUrl(expressionResolver)),
       location: location,
       tintColor: resolveTintColor(expressionResolver),
-      tintMode: resolveTintMode(expressionResolver).tintMode
+      tintMode: resolveTintMode(expressionResolver).tintMode,
+      verticalAlignment: resolveAlignmentVertical(expressionResolver).inlineImageAlignment
     )
+  }
+}
+
+extension DivTextAlignmentVertical {
+  fileprivate var inlineImageAlignment: TextBlock.InlineImage.VerticalAlignment {
+    switch self {
+    case .top: .top
+    case .center: .center
+    case .bottom: .bottom
+    case .baseline: .baseline
+    }
   }
 }
 

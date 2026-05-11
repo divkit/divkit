@@ -5,24 +5,34 @@ import VGSL
 
 public final class TextBlock: BlockWithTraits {
   public struct InlineImage: Equatable {
+    public enum VerticalAlignment {
+      case top
+      case center
+      case bottom
+      case baseline
+    }
+
     public let size: CGSize
     public let holder: ImageHolder
     public let location: Int
     public let tintColor: Color?
     public let tintMode: TintMode
+    public let verticalAlignment: VerticalAlignment
 
     public init(
       size: CGSize,
       holder: ImageHolder,
       location: Int,
       tintColor: Color? = nil,
-      tintMode: TintMode = .sourceIn
+      tintMode: TintMode = .sourceIn,
+      verticalAlignment: VerticalAlignment = .center
     ) {
       self.size = size
       self.holder = holder
       self.location = location
       self.tintColor = tintColor
       self.tintMode = tintMode
+      self.verticalAlignment = verticalAlignment
     }
   }
 
@@ -235,6 +245,7 @@ extension TextBlock.InlineImage {
   public static func ==(lhs: TextBlock.InlineImage, rhs: TextBlock.InlineImage) -> Bool {
     lhs.size == rhs.size
       && lhs.location == rhs.location
+      && lhs.verticalAlignment == rhs.verticalAlignment
       && compare(lhs.holder, rhs.holder)
   }
 }
@@ -286,23 +297,27 @@ private func setImagePlaceholders(
     let neighbouringParagraphStyle: NSParagraphStyle?
     if !string.isEmpty {
       let neighbouringCharPosition = max(0, image.location - 1)
-      let fontAttributeValue = string.attribute(
-        .font,
-        at: neighbouringCharPosition,
-        effectiveRange: nil
-      )
-      let neighbouringFont = (fontAttributeValue as? Font)
-        ?? Font.systemFontWithDefaultSize()
-      let currentMidY = attachment.bounds.midY
-      let desiredMidY = (neighbouringFont.ascender + neighbouringFont.descender) / 2
-      attachment.bounds.origin.y = desiredMidY - currentMidY
-
+      if image.verticalAlignment == .baseline {
+        attachment.bounds.origin.y = 0
+      } else {
+        let fontAttributeValue = string.attribute(
+          .font,
+          at: neighbouringCharPosition,
+          effectiveRange: nil
+        )
+        let neighbouringFont = (fontAttributeValue as? Font)
+          ?? Font.systemFontWithDefaultSize()
+        let currentMidY = attachment.bounds.midY
+        let desiredMidY = (neighbouringFont.ascender + neighbouringFont.descender) / 2
+        attachment.bounds.origin.y = desiredMidY - currentMidY
+      }
       neighbouringParagraphStyle = string.attribute(
         .paragraphStyle,
         at: neighbouringCharPosition,
         effectiveRange: nil
       ) as? NSParagraphStyle
     } else {
+      attachment.bounds.origin.y = 0
       neighbouringParagraphStyle = nil
     }
     attachment.image = image.tintColorImage
@@ -329,17 +344,32 @@ private func setImagePlaceholders(
       Unmanaged.passUnretained(attachment).toOpaque()
     )!
 
+    let attachmentRange = NSRange(
+      location: image.location,
+      length: attachmentString.length
+    )
+
     // NB: inserting string already with attributes
     // would keep attributes of neighbouring subranges
     // which is undesired (for instance, in case of forced line height for text)
     result.insert(attachmentString, at: image.location)
-    let paragraphAttributes = [
-      NSAttributedString.Key.paragraphStyle: neighbouringParagraphStyle,
-    ].compactMapValues { $0 }
-    result.setAttributes(
-      [.attachment: attachment, .ctRunDelegate: runDelegate] + paragraphAttributes,
-      range: NSRange(location: image.location, length: attachmentString.length)
-    )
+    var attributes: [NSAttributedString.Key: Any] = [
+      .attachment: attachment,
+      .ctRunDelegate: runDelegate,
+    ]
+    if image.verticalAlignment != .center {
+      attributes[RangeVerticalAlignmentAttribute.Key] = RangeVerticalAlignmentAttribute(
+        verticalAlignment: image.verticalAlignment.attributeAlignment,
+        range: CFRange(
+          location: attachmentRange.location,
+          length: attachmentRange.length
+        )
+      )
+    }
+    if let neighbouringParagraphStyle {
+      attributes[.paragraphStyle] = neighbouringParagraphStyle
+    }
+    result.setAttributes(attributes, range: attachmentRange)
   }
 
   return (result, attachments)
@@ -363,5 +393,16 @@ extension TextBlock.InlineImage {
     let holderImage = holder.image
     guard let tintColor else { return holderImage }
     return holderImage?.redrawn(withTintColor: tintColor, tintMode: tintMode)
+  }
+}
+
+extension TextBlock.InlineImage.VerticalAlignment {
+  fileprivate var attributeAlignment: RangeVerticalAlignmentAttribute.VerticalAlignment {
+    switch self {
+    case .top: .top
+    case .center: .center
+    case .bottom: .bottom
+    case .baseline: .baseline
+    }
   }
 }

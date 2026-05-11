@@ -2,6 +2,7 @@
   "description": "Images with vertical alignment",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {
