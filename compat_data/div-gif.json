@@ -1,17 +1,19 @@
 {
-    "features": [{
-        "id": "gif_preview_url",
-        "name": "Gif image property <code>preview_url</code>",
-        "compat": {
-            "android": {
-                "version_added": "32.28.0"
-            },
-            "ios": {
-                "version_added": "32.28.0"
-            },
-            "web": {
-                "version_added": "32.30.0"
-            }
+  "features": [
+    {
+      "id": "gif_preview_url",
+      "name": "Gif image property <code>preview_url</code>",
+      "compat": {
+        "android": {
+          "version_added": "32.28.0"
+        },
+        "ios": {
+          "version_added": "32.28.0"
+        },
+        "web": {
+          "version_added": "32.30.0"
         }
-    }]
+      }
+    }
+  ]
 }

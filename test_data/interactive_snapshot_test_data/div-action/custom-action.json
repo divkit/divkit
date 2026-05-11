@@ -1,64 +1,64 @@
 {
-    "description": "Typed custom actions",
-    "platforms": [
-        "android"
-    ],
-    "div_data": {
-        "card": {
-            "log_id": "logId",
+  "description": "Typed custom actions",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "logId",
+      "variables": [
+        {
+          "name": "target_color",
+          "type": "color",
+          "value": "#FF0000"
+        }
+      ],
+      "states": [
+        {
+          "div": {
+            "type": "text",
+            "id": "local_color_holder",
             "variables": [
-                {
-                    "name": "target_color",
-                    "type": "color",
-                    "value": "#FF0000"
-                }
+              {
+                "name": "color",
+                "type": "color",
+                "value": "#000000"
+              }
             ],
-            "states": [
-                {
-                    "div": {
-                        "type": "text",
-                        "id": "local_color_holder",
-                        "variables": [
-                            {
-                              "name": "color",
-                              "type": "color",
-                              "value": "#000000"
-                            }
-                        ],
-                        "text": "Change text color",
-                        "font_size": 16,
-                        "text_color": "@{color}",
-                        "paddings": {
-                            "left": 8,
-                            "top": 8,
-                            "right": 8,
-                            "bottom": 8
-                        }
-                    },
-                    "state_id": 0
-                }
-            ]
+            "text": "Change text color",
+            "font_size": 16,
+            "text_color": "@{color}",
+            "paddings": {
+              "left": 8,
+              "top": 8,
+              "right": 8,
+              "bottom": 8
+            }
+          },
+          "state_id": 0
         }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
     },
-    "steps": [
+    {
+      "div_actions": [
         {
-            "expected_screenshot": "step0.png"
-        },
-        {
-            "div_actions": [
-                {
-                    "log_id": "change_color",
-                    "scope_id": "local_color_holder",
-                    "typed": {
-                        "type": "custom"
-                    },
-                    "payload": {
-                        "type": "change_color",
-                        "color": "@{target_color}"
-                    }
-                }
-            ],
-            "expected_screenshot": "step1.png"
+          "log_id": "change_color",
+          "scope_id": "local_color_holder",
+          "typed": {
+            "type": "custom"
+          },
+          "payload": {
+            "type": "change_color",
+            "color": "@{target_color}"
+          }
         }
-    ]
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
 }

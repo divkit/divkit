@@ -1,8 +1,10 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "strictNullChecks": true
-    },
-    "include": ["."],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strictNullChecks": true
+  },
+  "include": [
+    "."
+  ]
 }

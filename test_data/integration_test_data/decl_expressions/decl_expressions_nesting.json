@@ -21,11 +21,13 @@
           "div": {
             "type": "text",
             "text": "text",
-            "variables": [{
-              "name": "val",
-              "type": "integer",
-              "value": "@{val * 2}"
-            }],
+            "variables": [
+              {
+                "name": "val",
+                "type": "integer",
+                "value": "@{val * 2}"
+              }
+            ],
             "variable_triggers": [
               {
                 "condition": "@{step == 0}",

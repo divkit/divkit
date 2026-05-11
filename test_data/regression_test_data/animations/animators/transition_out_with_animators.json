@@ -68,19 +68,19 @@
           "id": "animator_scope",
           "variables": [
             {
-                "name": "background_color",
-                "type": "color",
-                "value": "#23F"
+              "name": "background_color",
+              "type": "color",
+              "value": "#23F"
             }
           ],
           "animators": [
             {
-                "type": "color_animator",
-                "id": "background_animator",
-                "duration": 1000,
-                "start_value": "#23F",
-                "end_value": "#2DC75C",
-                "variable_name": "background_color"
+              "type": "color_animator",
+              "id": "background_animator",
+              "duration": 1000,
+              "start_value": "#23F",
+              "end_value": "#2DC75C",
+              "variable_name": "background_color"
             }
           ],
           "orientation": "vertical",
@@ -168,18 +168,18 @@
                     "type": "set_variable",
                     "variable_name": "current_state",
                     "value": {
-                        "type": "string",
-                        "value": "@{(current_state == 'state1') ? 'state2' : 'state1'}"
+                      "type": "string",
+                      "value": "@{(current_state == 'state1') ? 'state2' : 'state1'}"
                     }
                   }
                 },
                 {
-                    "log_id": "start_animator",
-                    "scope_id": "animator_scope",
-                    "typed": {
-                        "type": "animator_start",
-                        "animator_id": "background_animator"
-                    }
+                  "log_id": "start_animator",
+                  "scope_id": "animator_scope",
+                  "typed": {
+                    "type": "animator_start",
+                    "animator_id": "background_animator"
+                  }
                 }
               ]
             }

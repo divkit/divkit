@@ -35,10 +35,12 @@
               "type": "text",
               "text": "50dp width",
               "font_size": 16,
-              "background": [{
-                "type": "solid",
-                "color": "#9ed9ff"
-              }]
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#9ed9ff"
+                }
+              ]
             }
           ]
         }

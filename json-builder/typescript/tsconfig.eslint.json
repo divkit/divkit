@@ -1,6 +1,6 @@
 {
-    "extends": "./tsconfig",
-    "include": [
-      "test"
-    ]
+  "extends": "./tsconfig",
+  "include": [
+    "test"
+  ]
 }
