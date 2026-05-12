@@ -17,7 +17,9 @@ extension GenericViewBlock {
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
-    (view as! GenericView).content = content.value
+    let genericView = view as! GenericView
+    genericView.content = content.value
+    genericView.exclusiveTouchEnabled = isExclusiveTouch
   }
 }
 
@@ -34,7 +36,30 @@ private final class GenericView: UIView, BlockViewProtocol, VisibleBoundsTrackin
     }
   }
 
+  var exclusiveTouchEnabled = false {
+    didSet {
+      guard oldValue != exclusiveTouchEnabled else { return }
+      tapAbsorber.isEnabled = exclusiveTouchEnabled
+    }
+  }
+
+  private let tapAbsorber = UITapGestureRecognizer()
+
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    tapAbsorber.addTarget(self, action: #selector(absorbTap))
+    tapAbsorber.delegate = self
+    tapAbsorber.cancelsTouchesInView = false
+    tapAbsorber.isEnabled = false
+    addGestureRecognizer(tapAbsorber)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override func layoutSubviews() {
     super.layoutSubviews()
@@ -48,6 +73,25 @@ private final class GenericView: UIView, BlockViewProtocol, VisibleBoundsTrackin
     } else {
       return result
     }
+  }
+
+  @objc private func absorbTap() {}
+}
+
+extension GenericView: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer
+  ) -> Bool {
+    guard gestureRecognizer === tapAbsorber else { return false }
+    guard let otherTap = otherGestureRecognizer as? UITapGestureRecognizer,
+          otherTap.numberOfTapsRequired == 1
+    else { return false }
+    guard let otherView = otherTap.view,
+          otherView !== self,
+          isDescendant(of: otherView)
+    else { return false }
+    return true
   }
 }
 

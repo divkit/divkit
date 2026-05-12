@@ -37,6 +37,7 @@ public final class GenericViewBlock: BlockWithTraits {
   public let content: Lazy<Content>
   public let width: Trait
   public let height: Trait
+  public let isExclusiveTouch: Bool
 
   public var widthTrait: LayoutTrait { width.layoutTrait }
   public var heightTrait: LayoutTrait { height.layoutTrait }
@@ -56,41 +57,57 @@ public final class GenericViewBlock: BlockWithTraits {
   public init(
     lazyContent: Lazy<Content>,
     width: Trait,
-    height: Trait
+    height: Trait,
+    isExclusiveTouch: Bool = false
   ) {
     self.content = lazyContent
     self.width = width
     self.height = height
+    self.isExclusiveTouch = isExclusiveTouch
   }
 
   public convenience init(
     content: Content,
     width: Trait,
-    height: Trait
+    height: Trait,
+    isExclusiveTouch: Bool = false
   ) {
     self.init(
       lazyContent: Lazy<Content>(
         onMainThreadGetter: { content }
       ),
       width: width,
-      height: height
+      height: height,
+      isExclusiveTouch: isExclusiveTouch
     )
   }
 
   public convenience init(
     view: ViewType,
     width: CGFloat? = nil,
-    height: CGFloat? = nil
+    height: CGFloat? = nil,
+    isExclusiveTouch: Bool = false
   ) {
-    self.init(content: .view(view), width: width.trait, height: height.trait)
+    self.init(
+      content: .view(view),
+      width: width.trait,
+      height: height.trait,
+      isExclusiveTouch: isExclusiveTouch
+    )
   }
 
   public convenience init(
     layer: LayerType,
     width: CGFloat? = nil,
-    height: CGFloat? = nil
+    height: CGFloat? = nil,
+    isExclusiveTouch: Bool = false
   ) {
-    self.init(content: .layer(layer), width: width.trait, height: height.trait)
+    self.init(
+      content: .layer(layer),
+      width: width.trait,
+      height: height.trait,
+      isExclusiveTouch: isExclusiveTouch
+    )
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -106,8 +123,10 @@ public final class GenericViewBlock: BlockWithTraits {
       return false
     }
 
-    return content.currentValue === other.content.currentValue && width == other
-      .width && height == other.height
+    return content.currentValue === other.content.currentValue
+      && width == other.width
+      && height == other.height
+      && isExclusiveTouch == other.isExclusiveTouch
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }
