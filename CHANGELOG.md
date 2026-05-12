@@ -1,5 +1,8 @@
 ## 32.49.0
 
+# Android Client:
+* Fixed `IllegalStateException` at BindingCriticalSection.reserveFor() call.
+
 # iOS Client:
 * Do not log model.child.view in renderingDelegate "Touchable view is too small" error.
 * Fixed accessibility mode merge, to respect inactive states and gone blocks.
