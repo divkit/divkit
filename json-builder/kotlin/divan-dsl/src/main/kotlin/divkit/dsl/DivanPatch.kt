@@ -12,7 +12,17 @@ class DivanPatch internal constructor(
     val templates: Map<String, Div>,
     @JsonIgnore
     val supplements: Map<SupplementKey<*>, Supplement>,
-)
+) {
+    fun copy(
+        patch: Patch = this.patch,
+        templates: Map<String, Div> = this.templates,
+        supplements: Map<SupplementKey<*>, Supplement> = this.supplements,
+    ): DivanPatch = DivanPatch(
+        patch = patch,
+        templates = templates,
+        supplements = supplements,
+    )
+}
 
 fun divanPatch(init: DivScope.() -> Patch): DivanPatch {
     val scope = DivScope()
