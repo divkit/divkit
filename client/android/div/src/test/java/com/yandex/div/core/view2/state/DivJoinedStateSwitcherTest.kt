@@ -6,6 +6,7 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.findDivState
+import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View

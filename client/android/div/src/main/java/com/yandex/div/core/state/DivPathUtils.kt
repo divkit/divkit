@@ -176,6 +176,22 @@ internal object DivPathUtils {
     fun Div.getId() = value().run { if (this is DivState) getId() else id }
 
     val DivStatePath.statePath get() = "$statesString/$lastDivId"
+
+    internal fun DivStatePath.Companion.fromState(state: DivData.State): DivStatePath =
+        fromRootDiv(state.stateId, state.div)
+
+    internal fun DivStatePath.Companion.fromRootDiv(stateId: Long, div: Div): DivStatePath {
+        val divIdSegment = div.value().let { base ->
+            if (base is DivState) base.divId ?: base.id else base.id
+        }
+        return fromState(stateId, divIdSegment)
+    }
+
+    internal fun DivStatePath.append(divId: String, state: DivState.State?, stateIdFallback: String): DivStatePath {
+        val stateId = state?.stateId ?: stateIdFallback
+        val stateDivId = state?.div?.value()?.id ?: stateId
+        return append(divId, stateId, stateDivId)
+    }
 }
 
 internal class StateConflictException(message: String, cause: Throwable? = null) : Exception(message, cause)

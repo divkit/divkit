@@ -2,6 +2,7 @@ package com.yandex.div.core.state
 
 import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.core.path
+import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.compactPathList
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.view2.divs.UnitTestData

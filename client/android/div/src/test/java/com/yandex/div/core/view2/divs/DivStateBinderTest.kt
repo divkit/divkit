@@ -3,6 +3,8 @@ package com.yandex.div.core.view2.divs
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.state.DivPathUtils.append
+import com.yandex.div.core.state.DivPathUtils.fromRootDiv
 import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivBinder

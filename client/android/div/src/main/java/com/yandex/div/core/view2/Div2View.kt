@@ -40,6 +40,7 @@ import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivVideoActionHandler
+import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher

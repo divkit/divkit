@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.state
 
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.state.DivPathUtils.compactPathList
+import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext

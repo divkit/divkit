@@ -1,5 +1,7 @@
 package com.yandex.div.internal.core
 
+import com.yandex.div.core.state.DivPathUtils.append
+import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds

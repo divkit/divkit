@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivPathUtils.statePath
