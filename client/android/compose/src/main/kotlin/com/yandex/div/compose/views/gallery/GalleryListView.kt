@@ -26,7 +26,7 @@ internal fun GalleryListView(
     items: List<Div>,
     orientation: DivGallery.Orientation,
     itemSpacing: Dp,
-    crossContentAlignment: DivGallery.CrossContentAlignment,
+    crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
@@ -93,7 +93,7 @@ private fun NonScrollableGalleryView(
     items: List<Div>,
     orientation: DivGallery.Orientation,
     itemSpacing: Dp,
-    crossContentAlignment: DivGallery.CrossContentAlignment,
+    crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
 ) {
     when (orientation) {

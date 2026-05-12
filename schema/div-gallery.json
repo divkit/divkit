@@ -5,6 +5,16 @@
       "generate_optional_arguments": false
     }
   },
+  "definitions": {
+    "content_alignment": {
+      "type": "string",
+      "enum": [
+        "start",
+        "center",
+        "end"
+      ]
+    }
+  },
   "allOf": [
     {
       "$ref": "div-base.json"
@@ -19,12 +29,7 @@
         },
         "cross_content_alignment": {
           "$description": "translations.json#/div_gallery_cross_content_alignment",
-          "type": "string",
-          "enum": [
-            "start",
-            "center",
-            "end"
-          ],
+          "$ref": "#/definitions/content_alignment",
           "default_value": "start"
         },
         "column_count": {
@@ -124,6 +129,11 @@
             "android",
             "ios"
           ]
+        },
+        "scroll_content_alignment": {
+          "$description": "translations.json#/div_gallery_scroll_content_alignment",
+          "$ref": "#/definitions/content_alignment",
+          "platforms": []
         }
       }
     }

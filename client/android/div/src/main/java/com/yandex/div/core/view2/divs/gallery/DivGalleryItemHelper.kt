@@ -257,40 +257,40 @@ internal interface DivGalleryItemHelper {
         private fun calculateOffset(
             totalSpace: Int,
             decoratedMeasurement: Int,
-            crossContentAlignment: DivGallery.CrossContentAlignment
+            crossContentAlignment: DivGallery.ContentAlignment
         ): Int {
             val availableSpace = totalSpace - decoratedMeasurement
 
             return when (crossContentAlignment) {
-                DivGallery.CrossContentAlignment.START -> 0
-                DivGallery.CrossContentAlignment.CENTER -> availableSpace / 2
-                DivGallery.CrossContentAlignment.END -> availableSpace
+                DivGallery.ContentAlignment.START -> 0
+                DivGallery.ContentAlignment.CENTER -> availableSpace / 2
+                DivGallery.ContentAlignment.END -> availableSpace
             }
         }
 
         private inline fun <T : Any> Expression<T>?.evaluateAlignment(
             resolver: ExpressionResolver,
-            parentAlignment: Expression<DivGallery.CrossContentAlignment>,
-            asCrossContentAlignment: T.() -> DivGallery.CrossContentAlignment
-        ): DivGallery.CrossContentAlignment {
+            parentAlignment: Expression<DivGallery.ContentAlignment>,
+            asCrossContentAlignment: T.() -> DivGallery.ContentAlignment
+        ): DivGallery.ContentAlignment {
             return this?.evaluate(resolver)?.asCrossContentAlignment() ?: parentAlignment.evaluate(resolver)
         }
 
-        private fun DivAlignmentHorizontal.asCrossContentAlignment(): DivGallery.CrossContentAlignment {
+        private fun DivAlignmentHorizontal.asCrossContentAlignment(): DivGallery.ContentAlignment {
             return when (this) {
-                DivAlignmentHorizontal.LEFT -> DivGallery.CrossContentAlignment.START
-                DivAlignmentHorizontal.CENTER -> DivGallery.CrossContentAlignment.CENTER
-                DivAlignmentHorizontal.RIGHT -> DivGallery.CrossContentAlignment.END
-                DivAlignmentHorizontal.START -> DivGallery.CrossContentAlignment.START
-                DivAlignmentHorizontal.END -> DivGallery.CrossContentAlignment.END
+                DivAlignmentHorizontal.LEFT -> DivGallery.ContentAlignment.START
+                DivAlignmentHorizontal.CENTER -> DivGallery.ContentAlignment.CENTER
+                DivAlignmentHorizontal.RIGHT -> DivGallery.ContentAlignment.END
+                DivAlignmentHorizontal.START -> DivGallery.ContentAlignment.START
+                DivAlignmentHorizontal.END -> DivGallery.ContentAlignment.END
             }
         }
 
-        private fun DivAlignmentVertical.asCrossContentAlignment(): DivGallery.CrossContentAlignment {
+        private fun DivAlignmentVertical.asCrossContentAlignment(): DivGallery.ContentAlignment {
             return when (this) {
-                DivAlignmentVertical.TOP, DivAlignmentVertical.BASELINE -> DivGallery.CrossContentAlignment.START
-                DivAlignmentVertical.CENTER -> DivGallery.CrossContentAlignment.CENTER
-                DivAlignmentVertical.BOTTOM -> DivGallery.CrossContentAlignment.END
+                DivAlignmentVertical.TOP, DivAlignmentVertical.BASELINE -> DivGallery.ContentAlignment.START
+                DivAlignmentVertical.CENTER -> DivGallery.ContentAlignment.CENTER
+                DivAlignmentVertical.BOTTOM -> DivGallery.ContentAlignment.END
             }
         }
     }

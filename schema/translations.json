@@ -1171,6 +1171,10 @@
     "en": "If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.",
     "ru": "При включенном параметре галерея не будет передавать жест скролла родительскому элементу."
   },
+  "div_gallery_scroll_content_alignment": {
+    "en": "Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>",
+    "ru": "Выравнивание элементов по оси скролла. В галерее без постраничного скролла применяется при вызове экшенов скролла. В горизонтальных галереях:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li></p><p>В вертикальных галереях:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li> Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга. По умолчанию:<li>`start` — в галерее без постраничного скролла;</li><li>`center` — в галерее с постраничным скроллом.</li>"
+  },
   "div_gallery_scroll_mode": {
     "en": "Scroll type: `default` — continuous, `paging` — page-by-page.",
     "ru": "Тип скролла: `default` — непрерывный, `paging` — постраничный."

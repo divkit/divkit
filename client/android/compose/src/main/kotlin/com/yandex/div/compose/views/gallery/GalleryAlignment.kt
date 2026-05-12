@@ -4,15 +4,15 @@ import androidx.compose.ui.Alignment
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
 import com.yandex.div2.DivGallery
 
-internal fun DivGallery.CrossContentAlignment.toVerticalAlignment(): Alignment.Vertical =
+internal fun DivGallery.ContentAlignment.toVerticalAlignment(): Alignment.Vertical =
     toCrossAxisAlignment().toVerticalAlignment()
 
-internal fun DivGallery.CrossContentAlignment.toHorizontalAlignment(): Alignment.Horizontal =
+internal fun DivGallery.ContentAlignment.toHorizontalAlignment(): Alignment.Horizontal =
     toCrossAxisAlignment().toHorizontalAlignment()
 
-internal fun DivGallery.CrossContentAlignment.toCrossAxisAlignment(): CrossAxisAlignment =
+internal fun DivGallery.ContentAlignment.toCrossAxisAlignment(): CrossAxisAlignment =
     when (this) {
-        DivGallery.CrossContentAlignment.START -> CrossAxisAlignment.START
-        DivGallery.CrossContentAlignment.CENTER -> CrossAxisAlignment.CENTER
-        DivGallery.CrossContentAlignment.END -> CrossAxisAlignment.END
+        DivGallery.ContentAlignment.START -> CrossAxisAlignment.START
+        DivGallery.ContentAlignment.CENTER -> CrossAxisAlignment.CENTER
+        DivGallery.ContentAlignment.END -> CrossAxisAlignment.END
     }

@@ -24,7 +24,7 @@ internal fun GalleryGridView(
     columnCount: Int,
     itemSpacing: Dp,
     crossSpacing: Dp,
-    crossContentAlignment: DivGallery.CrossContentAlignment,
+    crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
 ) {
@@ -64,7 +64,7 @@ private fun GalleryLazyHorizontalGrid(
     columnCount: Int,
     itemSpacing: Dp,
     crossSpacing: Dp,
-    crossContentAlignment: DivGallery.CrossContentAlignment,
+    crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
 ) {
     LazyHorizontalGrid(
@@ -94,7 +94,7 @@ private fun GalleryLazyVerticalGrid(
     columnCount: Int,
     itemSpacing: Dp,
     crossSpacing: Dp,
-    crossContentAlignment: DivGallery.CrossContentAlignment,
+    crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
 ) {
     LazyVerticalGrid(
