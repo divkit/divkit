@@ -42,6 +42,7 @@ import javax.inject.Inject
 @DivViewScope
 internal class BindingCriticalSection @Inject constructor() {
 
+    private var reserver: Thread? = null
     private var holder: Thread? = null
     private var entranceCounter = 0
     private val waiters = mutableListOf<Thread>()
@@ -72,13 +73,35 @@ internal class BindingCriticalSection @Inject constructor() {
     }
 
     /**
+     * Indicates whether the critical section is currently reserved for any thread.
+     */
+    val isReserved: Boolean
+        @AnyThread get() {
+            return synchronized(lock) {
+                reserver != null
+            }
+        }
+
+    /**
+     * Checks if the critical section is reserved for the specified thread.
+     *
+     * @param thread The thread to check
+     * @return `true` if the critical section is reserved for the specified thread, `false` otherwise
+     */
+    @AnyThread
+    fun isReservedFor(thread: Thread): Boolean {
+        return synchronized(lock) {
+            reserver == thread
+        }
+    }
+
+    /**
      * Transfers ownership of the critical section to the current thread.
      *
      * Used when a binding action is posted from a background thread to the main thread:
      * the lock was entered on the background (binding) thread but the continuation runs
-     * on the main thread. Transferring ownership allows [BindingDispatcher.isBackgroundBindingInProgress]
-     * to correctly return `false` once the background work is done and only the main-thread
-     * continuation remains, preventing false-positive deadlock detection in [BindingDispatcher.withLock].
+     * on the main thread. Transferring ownership ensures that re-entrant [enter] calls
+     * from the main thread during the continuation succeed instead of parking indefinitely.
      */
     @AnyThread
     fun transferToCurrentThread() {
@@ -99,11 +122,7 @@ internal class BindingCriticalSection @Inject constructor() {
     @AnyThread
     fun reserveFor(thread: Thread) {
         synchronized(lock) {
-            when (holder) {
-                null -> holder = thread
-                thread -> Unit
-                else -> throw IllegalStateException("Critical section is held by $holder")
-            }
+            reserver = thread
         }
     }
 
@@ -122,7 +141,7 @@ internal class BindingCriticalSection @Inject constructor() {
                 throw IllegalStateException("Cannot cancel reservation: critical section has already been entered")
             }
 
-            holder = null
+            reserver = null
 
             waiters.toList().forEach { waiter ->
                 LockSupport.unpark(waiter)
@@ -143,25 +162,25 @@ internal class BindingCriticalSection @Inject constructor() {
     @AnyThread
     @Throws(InterruptedException::class)
     fun enter(): Disposable {
-        val currentThread = Thread.currentThread()
-
         while (true) {
             synchronized(lock) {
+                val thread = reserver ?: Thread.currentThread()
                 when (holder) {
                     null -> {
-                        holder = currentThread
+                        holder = thread
+                        reserver = null
                         entranceCounter = 1
                         return EntranceHandle(this)
                     }
 
-                    currentThread -> {
+                    thread -> {
                         entranceCounter++
                         return EntranceHandle(this)
                     }
 
                     else -> {
-                        if (currentThread !in waiters) {
-                            waiters.add(currentThread)
+                        if (thread !in waiters) {
+                            waiters.add(thread)
                         }
                     }
                 }
@@ -170,7 +189,7 @@ internal class BindingCriticalSection @Inject constructor() {
             LockSupport.park()
 
             synchronized(lock) {
-                waiters.remove(currentThread)
+                waiters.remove(Thread.currentThread())
             }
 
             if (Thread.interrupted()) {

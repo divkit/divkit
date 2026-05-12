@@ -16,7 +16,7 @@ internal class BindingDispatcher @Inject constructor(
     val isBackgroundBindingInProgress: Boolean
         get() {
             val bindingThread = executor.bindingThread ?: return false
-            return criticalSection.isHeldBy(bindingThread)
+            return criticalSection.isHeldBy(bindingThread) || criticalSection.isReservedFor(bindingThread)
         }
 
     /**
