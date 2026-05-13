@@ -44,19 +44,26 @@ open class SliderView @JvmOverloads constructor(
         fun onThumbSecondaryValueChanged(value: Float?) = Unit
     }
 
-    private val listeners = ObserverList<ChangedListener>()
+    internal interface TouchListener {
+        fun onPressStart()
+        fun onPressEnd()
+    }
+
+    private val thumbChangeListeners = ObserverList<ChangedListener>()
 
     private fun notifyThumbChangedListeners(prevValue: Float?, newValue: Float) {
         if (prevValue != newValue) {
-            listeners.forEach { it.onThumbValueChanged(newValue) }
+            thumbChangeListeners.forEach { it.onThumbValueChanged(newValue) }
         }
     }
 
     private fun notifyThumbSecondaryChangedListeners(prevValue: Float?, newValue: Float?) {
         if (prevValue != newValue) {
-            listeners.forEach { it.onThumbSecondaryValueChanged(newValue) }
+            thumbChangeListeners.forEach { it.onThumbSecondaryValueChanged(newValue) }
         }
     }
+
+    private var touchListener: TouchListener? = null
 
     private var sliderAnimator: ValueAnimator? = null
     private var prevThumbValue: Float = DEFAULT_MIN_VALUE
@@ -343,10 +350,18 @@ open class SliderView @JvmOverloads constructor(
     private val activeRange = ActiveRange()
 
     fun addOnThumbChangedListener(listener: ChangedListener) {
-        listeners.addObserver(listener)
+        thumbChangeListeners.addObserver(listener)
     }
 
-    fun clearOnThumbChangedListener() = listeners.clear()
+    fun clearOnThumbChangedListener() = thumbChangeListeners.clear()
+
+    internal fun setTouchListener(listener: TouchListener) {
+        touchListener = listener
+    }
+
+    internal fun removeTouchListener() {
+        touchListener = null
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val desiredWidth = suggestedMinimumWidth + paddingLeft + paddingRight
@@ -509,6 +524,7 @@ open class SliderView @JvmOverloads constructor(
 
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
+                touchListener?.onPressStart()
                 thumbOnTouch = getClosestThumb(touchPosition)
                 setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animationEnabled)
                 prevX = ev.x
@@ -531,9 +547,11 @@ open class SliderView @JvmOverloads constructor(
                 return true
             }
             MotionEvent.ACTION_UP -> {
+                touchListener?.onPressEnd()
                 setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animationEnabled)
                 return true
             }
+            MotionEvent.ACTION_CANCEL -> touchListener?.onPressEnd()
             else -> Unit
         }
         return false

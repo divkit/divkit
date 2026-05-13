@@ -78,7 +78,8 @@
 
         <activity
             android:name=".DummyActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".div.GalleryFeedTestActivity"

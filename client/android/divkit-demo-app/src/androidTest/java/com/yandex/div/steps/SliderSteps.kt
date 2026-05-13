@@ -21,6 +21,8 @@ import androidx.test.rule.ActivityTestRule
 import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.view.ViewAssertions.hasChangedPosition
 import com.yandex.div.view.ViewAssertions.hasNotChangedPosition
+import com.yandex.div.view.actions.pressDown
+import com.yandex.div.view.actions.pressUp
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div.view.scrollTo
 import com.yandex.div.view.swipeUp
@@ -43,6 +45,8 @@ internal fun doubleDefaultSlider(f: SliderSteps.() -> Unit) = f(SliderSteps(Slid
 
 internal fun doubleWithDivisionsSlider(f: SliderSteps.() -> Unit) =
     f(SliderSteps(SliderViews.doubleWithDivisionsSlider))
+
+private const val PRESS_ACTIONS_X_COORDINATE = 100f
 
 internal open class SliderSteps(
     private val sliderView: ViewInteraction
@@ -76,6 +80,16 @@ internal open class SliderSteps(
     fun swipeUp(): Unit = step("Swipe slider view upwards") {
         sliderView.swipeUp()
     }
+
+    fun pressThumbDown(position: Float = PRESS_ACTIONS_X_COORDINATE): Unit =
+        step("Press down on slider at $position px from left edge") {
+            sliderView.perform(pressDown(position))
+        }
+
+    fun releaseThumbUp(position: Float = PRESS_ACTIONS_X_COORDINATE): Unit =
+        step("Release slider interaction at $position px from left edge") {
+            sliderView.perform(pressUp(position))
+        }
 
     fun assert(f: SliderAssertions.() -> Unit) = f(SliderAssertions(this, sliderView))
 }

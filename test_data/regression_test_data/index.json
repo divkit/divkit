@@ -635,6 +635,7 @@
     {
       "title": "Slider callbacks",
       "platforms": [
+        "android",
         "ios",
         "web"
       ],

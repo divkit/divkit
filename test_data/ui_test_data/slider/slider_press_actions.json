@@ -1,0 +1,126 @@
+{
+  "card": {
+    "log_id": "slider_press_status",
+    "variables": [
+      {
+        "name": "thumb_value",
+        "type": "integer",
+        "value": 50
+      },
+      {
+        "name": "status_text",
+        "type": "string",
+        "value": "Slider idle"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "@{status_text}",
+              "font_size": 16,
+              "text_alignment_horizontal": "center",
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "min_value": 0,
+              "max_value": 100,
+              "thumb_value_variable": "thumb_value",
+              "press_start_actions": [
+                {
+                  "log_id": "slider_press_start",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "status_text",
+                    "value": {
+                      "type": "string",
+                      "value": "Holding slider"
+                    }
+                  }
+                }
+              ],
+              "press_end_actions": [
+                {
+                  "log_id": "slider_press_end",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "status_text",
+                    "value": {
+                      "type": "string",
+                      "value": "Released slider"
+                    }
+                  }
+                }
+              ],
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#FFFFFF",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 28
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 28
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 14
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#33000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

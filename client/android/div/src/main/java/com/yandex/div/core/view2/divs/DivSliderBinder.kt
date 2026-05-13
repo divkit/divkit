@@ -3,6 +3,8 @@ package com.yandex.div.core.view2.divs
 import android.util.DisplayMetrics
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
@@ -11,6 +13,7 @@ import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toDrawable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
@@ -39,6 +42,7 @@ internal class DivSliderBinder @Inject constructor(
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val errorCollectors: ErrorCollectors,
     private val horizontalInterceptionAngle: Float,
+    private val actionPerformer: DivActionPerformer,
     @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
 ) : DivViewBinder<Div.Slider, DivSlider, DivSliderView>(baseBinder) {
 
@@ -50,8 +54,9 @@ internal class DivSliderBinder @Inject constructor(
         oldDiv: DivSlider?,
         path: DivStatePath
     ) {
+        val divView = bindingContext.divView
         val expressionResolver = bindingContext.expressionResolver
-        errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
+        errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         interceptionAngle = horizontalInterceptionAngle
 
@@ -80,6 +85,8 @@ internal class DivSliderBinder @Inject constructor(
         setupTickMarks(div, expressionResolver)
 
         setupRanges(div, expressionResolver)
+
+        setupTouchListener(div, expressionResolver, divView)
     }
 
     private fun DivSliderView.setupThumb(
@@ -371,6 +378,23 @@ internal class DivSliderBinder @Inject constructor(
             applyInactiveTrackStyle(Unit)
             observeDrawable(trackInactiveStyle, resolver, applyInactiveTrackStyle)
         }
+    }
+
+    private fun DivSliderView.setupTouchListener(div: DivSlider, resolver: ExpressionResolver, divView: Div2View) {
+        removeTouchListener()
+        if (div.pressStartActions.isNullOrEmpty() && div.pressEndActions.isNullOrEmpty()) return
+
+        setTouchListener(object : SliderView.TouchListener {
+            override fun onPressStart() {
+                val actions = div.pressStartActions ?: return
+                actionPerformer.performActions(divView, resolver, actions, DivActionReason.PRESS)
+            }
+
+            override fun onPressEnd() {
+                val actions = div.pressEndActions ?: return
+                actionPerformer.performActions(divView, resolver, actions, DivActionReason.RELEASE)
+            }
+        })
     }
 
     private companion object {
