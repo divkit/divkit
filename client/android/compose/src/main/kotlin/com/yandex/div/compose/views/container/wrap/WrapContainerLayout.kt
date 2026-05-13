@@ -16,18 +16,18 @@ import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.views.container.adaptiveContainerPadding
 import com.yandex.div.compose.views.container.observeHorizontalChildAlignment
-import com.yandex.div.compose.views.container.resolveSeparatorVisibility
 import com.yandex.div.compose.views.container.observeVerticalChildAlignment
+import com.yandex.div.compose.views.container.resolveSeparatorVisibility
 import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
 import com.yandex.div.compose.views.container.visibleItems
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivContainer
 
 @OptIn(ExperimentalLayoutApi::class)

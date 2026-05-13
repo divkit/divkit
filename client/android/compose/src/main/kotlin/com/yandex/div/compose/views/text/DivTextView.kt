@@ -12,11 +12,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextOverflow
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedIntValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient

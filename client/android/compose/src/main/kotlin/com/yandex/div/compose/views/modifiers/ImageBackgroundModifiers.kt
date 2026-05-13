@@ -10,14 +10,14 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
+import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div.compose.views.image.toContentScale
 import com.yandex.div2.DivImageBackground

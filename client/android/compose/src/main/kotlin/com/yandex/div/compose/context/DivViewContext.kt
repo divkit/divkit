@@ -13,8 +13,6 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
-import kotlin.collections.forEach
-import kotlin.collections.orEmpty
 
 internal class DivViewContext(
     data: DivData,

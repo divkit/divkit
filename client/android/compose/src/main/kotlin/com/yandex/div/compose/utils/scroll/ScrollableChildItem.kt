@@ -3,7 +3,7 @@ package com.yandex.div.compose.utils.scroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div2.Div
 

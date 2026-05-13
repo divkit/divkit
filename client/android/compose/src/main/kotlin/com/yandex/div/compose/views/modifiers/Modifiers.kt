@@ -8,11 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivVisibility

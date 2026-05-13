@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onVisibilityChanged
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.utils.observedIntValue
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction

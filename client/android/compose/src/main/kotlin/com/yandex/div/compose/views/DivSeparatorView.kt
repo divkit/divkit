@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSeparator.DelimiterStyle.Orientation

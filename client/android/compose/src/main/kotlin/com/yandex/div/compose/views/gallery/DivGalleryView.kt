@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeIsConstrained
-import com.yandex.div.compose.utils.observedIntValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivVisibility

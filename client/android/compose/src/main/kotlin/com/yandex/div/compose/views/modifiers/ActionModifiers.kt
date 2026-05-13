@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedIntValue
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.Div

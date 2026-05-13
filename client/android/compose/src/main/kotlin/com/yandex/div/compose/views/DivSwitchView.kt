@@ -6,8 +6,8 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivSwitch
 

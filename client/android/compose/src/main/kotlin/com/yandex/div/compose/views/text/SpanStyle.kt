@@ -10,11 +10,11 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeShadow
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div2.DivText
 
 @Composable

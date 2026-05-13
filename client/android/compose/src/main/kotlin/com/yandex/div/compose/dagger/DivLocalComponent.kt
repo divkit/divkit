@@ -17,7 +17,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
-import kotlin.collections.orEmpty
 
 @DivLocalScope
 @Component(

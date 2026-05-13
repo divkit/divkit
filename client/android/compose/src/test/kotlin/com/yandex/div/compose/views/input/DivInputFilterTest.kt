@@ -12,9 +12,9 @@ import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.data.Variable
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.booleanExpression
-import com.yandex.div.test.data.expression as stringExpression
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.expression
 import com.yandex.div2.DivInputFilter
 import com.yandex.div2.DivInputFilterExpression
 import com.yandex.div2.DivInputFilterRegex
@@ -32,6 +32,7 @@ class DivInputFilterTest {
 
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
+
     private val localComponent = mockLocalComponent(
         reporter = reporter,
         variableController = variableController,
@@ -42,7 +43,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[0-9]+")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(regexFilter("[0-9]+"))
+            )
         }
 
         filtered?.value = "12345"
@@ -57,7 +61,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[0-9]+")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(regexFilter("[0-9]+"))
+            )
         }
 
         filtered?.value = "123"
@@ -74,7 +81,13 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex(".*[0-9].*"), regex(".{3,}")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(
+                    regexFilter(".*[0-9].*"),
+                    regexFilter(".{3,}")
+                )
+            )
         }
 
         filtered?.value = "ab1"
@@ -91,7 +104,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(expression(true)))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(expressionFilter(true))
+            )
         }
 
         filtered?.value = "anything"
@@ -105,7 +121,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("initial")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(expression(false)))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(expressionFilter(false))
+            )
         }
 
         filtered?.value = "anything"
@@ -119,7 +138,13 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[a-z]+"), expression(true)))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(
+                    regexFilter("[a-z]+"),
+                    expressionFilter(true)
+                )
+            )
         }
 
         filtered?.value = "hello"
@@ -136,7 +161,13 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[a-z]+"), expression(false)))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(
+                    regexFilter("[a-z]+"),
+                    expressionFilter(false)
+                )
+            )
         }
 
         filtered?.value = "hello"
@@ -150,7 +181,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[0-9]+")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(regexFilter("[0-9]+"))
+            )
         }
 
         source.value = "999"
@@ -164,7 +198,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[0-9]+")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(regexFilter("[0-9]+"))
+            )
         }
 
         filtered?.value = "111"
@@ -182,7 +219,10 @@ class DivInputFilterTest {
         val source = mutableStateOf("")
         var filtered: MutableState<String>? = null
         setContent {
-            filtered = rememberFilteredState(source, listOf(regex("[invalid")))
+            filtered = rememberFilteredState(
+                source = source,
+                filters = listOf(regexFilter("[invalid"))
+            )
         }
 
         filtered?.value = "anything"
@@ -201,7 +241,7 @@ class DivInputFilterTest {
         setContent {
             filtered = rememberFilteredState(
                 source,
-                listOf(DivInputFilter.Regex(DivInputFilterRegex(pattern = stringExpression("@{pattern}"))))
+                listOf(DivInputFilter.Regex(DivInputFilterRegex(pattern = expression("@{pattern}"))))
             )
         }
 
@@ -232,7 +272,13 @@ class DivInputFilterTest {
         setContent {
             filtered = rememberFilteredState(
                 source,
-                listOf(DivInputFilter.Expression(DivInputFilterExpression(condition = booleanExpression("@{allow}"))))
+                listOf(
+                    DivInputFilter.Expression(
+                        DivInputFilterExpression(
+                            condition = booleanExpression("@{allow}")
+                        )
+                    )
+                )
             )
         }
 
@@ -251,11 +297,11 @@ class DivInputFilterTest {
         assertEquals("third", filtered?.value)
     }
 
-    private fun regex(pattern: String): DivInputFilter =
-        DivInputFilter.Regex(DivInputFilterRegex(pattern = Expression.constant(pattern)))
+    private fun regexFilter(pattern: String): DivInputFilter =
+        DivInputFilter.Regex(DivInputFilterRegex(pattern = constant(pattern)))
 
-    private fun expression(condition: Boolean): DivInputFilter =
-        DivInputFilter.Expression(DivInputFilterExpression(condition = Expression.constant(condition)))
+    private fun expressionFilter(condition: Boolean): DivInputFilter =
+        DivInputFilter.Expression(DivInputFilterExpression(condition = constant(condition)))
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {

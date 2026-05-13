@@ -3,24 +3,23 @@ package com.yandex.div.compose.views
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.dagger.WithLocalComponent
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.expressionResolver
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.image.DivImageView
-import com.yandex.div.compose.views.pager.DivPagerView
+import com.yandex.div.compose.views.input.DivInputView
 import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
-import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.views.input.DivInputView
+import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
-import kotlin.collections.orEmpty
 
 @Composable
 internal fun DivBlockView(

@@ -3,6 +3,9 @@ package com.yandex.div.compose.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivShadow
 
 @Composable

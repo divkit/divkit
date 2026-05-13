@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSizeUnit

@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx

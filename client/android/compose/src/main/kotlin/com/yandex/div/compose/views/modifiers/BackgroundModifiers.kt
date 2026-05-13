@@ -3,9 +3,9 @@ package com.yandex.div.compose.views.modifiers
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.compose.utils.observedColorValue
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivNinePatchBackground

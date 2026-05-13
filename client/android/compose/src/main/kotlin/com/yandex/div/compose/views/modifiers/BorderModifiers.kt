@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedFloatValue
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder

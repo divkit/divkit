@@ -11,10 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeBaseTextStyle
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedIntValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivAlignmentHorizontal

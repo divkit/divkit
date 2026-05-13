@@ -7,6 +7,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.text.fontFamily
 import com.yandex.div.compose.views.text.letterSpacing
 import com.yandex.div.compose.views.text.toFontWeight

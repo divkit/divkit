@@ -12,7 +12,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAccessibility.Mode
 import com.yandex.div2.DivAccessibility.Type

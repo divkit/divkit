@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivInputFilter
 
 @Composable

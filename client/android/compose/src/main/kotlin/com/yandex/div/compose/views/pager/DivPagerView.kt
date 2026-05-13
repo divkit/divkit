@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.Div

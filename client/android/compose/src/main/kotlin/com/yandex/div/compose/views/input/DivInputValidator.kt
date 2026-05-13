@@ -1,7 +1,7 @@
 package com.yandex.div.compose.views.input
 
 import androidx.compose.runtime.Composable
-import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.variables.mutableStateFromBooleanVariable
 import com.yandex.div2.DivInputValidator
 

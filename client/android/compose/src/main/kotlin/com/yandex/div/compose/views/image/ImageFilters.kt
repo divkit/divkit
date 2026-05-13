@@ -3,7 +3,7 @@ package com.yandex.div.compose.views.image
 import android.content.Context
 import androidx.compose.runtime.Composable
 import coil3.transform.Transformation
-import com.yandex.div.compose.utils.observedIntValue
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.reportWarning
 import com.yandex.div2.DivFilter

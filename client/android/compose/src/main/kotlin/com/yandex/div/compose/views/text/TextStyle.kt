@@ -3,9 +3,9 @@ package com.yandex.div.compose.views.text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.Hyphens
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeBaseTextStyle
 import com.yandex.div.compose.utils.observeShadow
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 

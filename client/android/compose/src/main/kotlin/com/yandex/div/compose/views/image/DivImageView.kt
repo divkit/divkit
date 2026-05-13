@@ -15,13 +15,13 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.expressions.observedColorValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.imageLoader
-import com.yandex.div.compose.utils.observedColorValue
-import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
