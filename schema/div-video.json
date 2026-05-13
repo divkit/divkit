@@ -111,6 +111,7 @@
           "default_value": "1.0",
           "description": "translations.json#/div_video_playback_speed",
           "platforms": [
+            "android",
             "web"
           ]
         }

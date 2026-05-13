@@ -43,6 +43,7 @@ internal class ExoDivPlayer(
 
     private var lastUnmutedVolume = VOLUME_FULL
     private var isMuted = config.isMuted
+    private var playbackSpeed = config.playbackSpeed
 
     private var targetResolutionArea = 0
     private var reportSourceError = false
@@ -111,6 +112,7 @@ internal class ExoDivPlayer(
             reportSourceError = true
         }
         player.volume = if (isMuted) VOLUME_MUTED else VOLUME_FULL
+        player.setPlaybackSpeed(playbackSpeed)
 
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(playerActivityCallback)
     }
@@ -138,6 +140,7 @@ internal class ExoDivPlayer(
 
     private fun setConfig(config: DivPlayerPlaybackConfig) {
         setMuted(config.isMuted)
+        setPlaybackSpeed(config.playbackSpeed)
         player.repeatMode = if (config.repeatable) {
             Player.REPEAT_MODE_ONE
         } else {
@@ -183,6 +186,13 @@ internal class ExoDivPlayer(
 
         player.volume = if (muted) VOLUME_MUTED else lastUnmutedVolume
         isMuted = muted
+    }
+
+    override fun setPlaybackSpeed(speed: Float) {
+        if (playbackSpeed == speed) return
+
+        player.setPlaybackSpeed(speed)
+        playbackSpeed = speed
     }
 
     override fun addObserver(observer: DivPlayer.Observer) {

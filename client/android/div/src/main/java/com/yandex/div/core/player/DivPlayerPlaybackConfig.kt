@@ -10,4 +10,5 @@ data class DivPlayerPlaybackConfig(
     val isMuted: Boolean = false,
     val repeatable: Boolean = false,
     val payload: JSONObject? = null,
+    val playbackSpeed: Float = 1f,
 )

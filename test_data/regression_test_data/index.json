@@ -2824,6 +2824,7 @@
         "DivVideo"
       ],
       "platforms": [
+        "android",
         "web"
       ],
       "steps": [

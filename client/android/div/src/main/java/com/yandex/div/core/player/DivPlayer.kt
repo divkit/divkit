@@ -55,6 +55,8 @@ interface DivPlayer {
 
     fun setMuted(muted: Boolean) = Unit
 
+    fun setPlaybackSpeed(speed: Float) = Unit
+
     fun play() = Unit
 
     fun pause() = Unit

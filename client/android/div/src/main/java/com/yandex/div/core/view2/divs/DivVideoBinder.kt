@@ -119,6 +119,7 @@ internal class DivVideoBinder @Inject constructor(
 
         observeElapsedTime(div, bindingContext, player, path)
         observeMuted(div, resolver, player)
+        observePlaybackSpeed(div, resolver, player)
         observeScale(div, resolver, playerView, previewImageView)
         observeSource(div, resolver, player, bindingContext.divView)
 
@@ -207,6 +208,18 @@ internal class DivVideoBinder @Inject constructor(
         addVideoSubscription(
             div.muted.observeAndGet(resolver) {
                 player.setMuted(it)
+            }
+        )
+    }
+
+    private fun DivVideoView.observePlaybackSpeed(
+        div: DivVideo,
+        resolver: ExpressionResolver,
+        player: DivPlayer,
+    ) {
+        addVideoSubscription(
+            div.playbackSpeed.observeAndGet(resolver) {
+                player.setPlaybackSpeed(it.toFloat())
             }
         )
     }
@@ -308,6 +321,7 @@ internal class DivVideoBinder @Inject constructor(
         isMuted = muted.evaluate(resolver),
         repeatable = repeatable.evaluate(resolver),
         payload = playerSettingsPayload?.evaluate(resolver),
+        playbackSpeed = playbackSpeed.evaluate(resolver).toFloat(),
     )
 
     private fun Div2View.logSourceError(div: DivVideo) {
