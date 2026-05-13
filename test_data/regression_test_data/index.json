@@ -653,7 +653,8 @@
         "On release, the cirlce fill animates back to yellow",
         "Slider value changes as usual when dragging"
       ],
-      "file": "slider_callbacks.json"
+      "file": "slider_callbacks.json",
+      "case_id": 508
     },
     {
       "title": "Root state switching",
@@ -2834,7 +2835,8 @@
       "expected_results": [
         "The video playback speed changes accordingly"
       ],
-      "file": "video/video_with_playback_speed.json"
+      "file": "video/video_with_playback_speed.json",
+      "case_id": 509
     },
     {
       "title": "Video with controls and typed actions",
