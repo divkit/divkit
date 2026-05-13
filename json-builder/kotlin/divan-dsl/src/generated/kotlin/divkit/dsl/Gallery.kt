@@ -327,7 +327,7 @@ data class Gallery internal constructor(
 
     /**
      * Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
-     * 
+     *
      * Possible values: [start], [center], [end].
      */
     @Generated
@@ -335,7 +335,7 @@ data class Gallery internal constructor(
 
     /**
      * Gallery orientation.
-     * 
+     *
      * Possible values: [horizontal], [vertical].
      */
     @Generated
@@ -343,7 +343,7 @@ data class Gallery internal constructor(
 
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
-     * 
+     *
      * Possible values: [paging], [default].
      */
     @Generated
@@ -351,7 +351,7 @@ data class Gallery internal constructor(
 
     /**
      * Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
-     * 
+     *
      * Possible values: [none], [auto].
      */
     @Generated
