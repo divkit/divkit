@@ -6,7 +6,7 @@ import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.size.Size
 import coil3.transform.Transformation
-import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.context.divContext
 import com.yandex.div2.DivImageScale
 
 internal data class ImageRequestParams(
@@ -16,9 +16,10 @@ internal data class ImageRequestParams(
 )
 
 @Composable
-internal fun DivContext.rememberImageRequest(params: ImageRequestParams): ImageRequest {
+internal fun rememberImageRequest(params: ImageRequestParams): ImageRequest {
+    val context = divContext
     return remember(params) {
-        ImageRequest.Builder(this)
+        ImageRequest.Builder(context)
             .data(params.data)
             .transformations(params.transformations)
             .apply {
@@ -26,7 +27,7 @@ internal fun DivContext.rememberImageRequest(params: ImageRequestParams): ImageR
                     size(Size.ORIGINAL)
                 }
             }
-            .listener(component.imageRequestListener)
+            .listener(context.component.imageRequestListener)
             .build()
     }
 }

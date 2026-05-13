@@ -2,11 +2,11 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
-import com.yandex.div.compose.utils.divContext
-import com.yandex.div.compose.utils.expressionResolver
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView

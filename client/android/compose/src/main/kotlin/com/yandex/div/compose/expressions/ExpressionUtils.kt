@@ -5,7 +5,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.yandex.div.compose.utils.expressionResolver
+import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.json.expressions.Expression
 

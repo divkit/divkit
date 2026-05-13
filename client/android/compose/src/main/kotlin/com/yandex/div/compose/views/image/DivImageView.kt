@@ -15,13 +15,12 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
-import com.yandex.div.compose.utils.divContext
-import com.yandex.div.compose.utils.imageLoader
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
@@ -51,7 +50,7 @@ internal fun DivImageView(
         scale = scale,
         transformations = transformations
     )
-    val imageRequest = context.rememberImageRequest(imageRequestParams)
+    val imageRequest = rememberImageRequest(imageRequestParams)
 
     var isImageLoaded by remember(imageRequestParams) { mutableStateOf(false) }
 
@@ -63,7 +62,7 @@ internal fun DivImageView(
     val previewRequest = if (preview == null) {
         null
     } else {
-        context.rememberImageRequest(
+        rememberImageRequest(
             ImageRequestParams(
                 data = preview,
                 scale = scale,
@@ -77,6 +76,8 @@ internal fun DivImageView(
     } else {
         modifier
     }
+
+    val imageLoader = context.component.imageLoader
 
     Box(modifier = backgroundModifier) {
         if (!isImageLoaded && previewRequest != null) {

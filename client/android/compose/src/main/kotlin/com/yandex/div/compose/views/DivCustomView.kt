@@ -2,9 +2,9 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.custom.DivCustomEnvironment
-import com.yandex.div.compose.utils.divContext
-import com.yandex.div.compose.utils.expressionResolver
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivCustom
 

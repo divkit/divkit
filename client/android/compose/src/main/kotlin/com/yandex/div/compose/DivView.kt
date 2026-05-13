@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.triggers.observe
-import com.yandex.div.compose.utils.divContext
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.core.annotations.ExperimentalApi

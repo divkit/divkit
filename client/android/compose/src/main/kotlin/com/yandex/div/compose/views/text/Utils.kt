@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.yandex.div.compose.utils.fontFamilyProvider
+import com.yandex.div.compose.context.divContext
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivSizeUnit
@@ -20,7 +20,7 @@ internal fun fontFamily(
     fontWeightValue: Int?,
 ): FontFamily {
     val weight = fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal
-    return fontFamilyProvider.getFontFamily(fontFamily, weight)
+    return divContext.component.fontFamilyProvider.getFontFamily(fontFamily, weight)
 }
 
 internal fun DivFontWeight?.toFontWeight(

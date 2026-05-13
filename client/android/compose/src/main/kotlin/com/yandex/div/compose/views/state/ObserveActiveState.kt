@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.yandex.div.compose.utils.expressionResolver
+import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.reportWarning
 import com.yandex.div.compose.utils.variables.mutableStateFromStringVariable

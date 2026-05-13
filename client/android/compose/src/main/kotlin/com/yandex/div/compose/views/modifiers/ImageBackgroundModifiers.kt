@@ -10,13 +10,12 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
-import com.yandex.div.compose.utils.divContext
-import com.yandex.div.compose.utils.imageLoader
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div.compose.views.image.toContentScale
@@ -43,8 +42,8 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         transformations = data.filters.resolveTransformations(context, density)
     )
     val painter = rememberAsyncImagePainter(
-        model = context.rememberImageRequest(imageRequestParams),
-        imageLoader = imageLoader
+        model = rememberImageRequest(imageRequestParams),
+        imageLoader = context.component.imageLoader
     )
     painter.observeNetworkRestoration()
 
