@@ -297,6 +297,88 @@ class DivVariableMutableStateTest {
         assertEquals("variable [flag] not found", reporter.lastError)
     }
 
+    @Test
+    fun `integer state has initial variable value`() {
+        variableController.declare(Variable.IntegerVariable("count", 42))
+        var state: MutableState<Long>? = null
+
+        setContent {
+            state = mutableStateFromIntegerVariable("count")
+        }
+
+        assertEquals(42L, state?.value)
+    }
+
+    @Test
+    fun `integer state is null when variable not found`() {
+        reporter.failOnError = false
+        var state: MutableState<Long>? = null
+
+        setContent {
+            state = mutableStateFromIntegerVariable("nonexistent")
+        }
+
+        assertNull(state)
+    }
+
+    @Test
+    fun `integer state assignment updates variable`() {
+        val variable = Variable.IntegerVariable("count", 0)
+        variableController.declare(variable)
+        var state: MutableState<Long>? = null
+
+        setContent {
+            state = mutableStateFromIntegerVariable("count")
+        }
+
+        state?.let { it.value = 100 }
+        composeRule.waitForIdle()
+
+        assertEquals(100L, variable.getValue())
+        assertEquals(100L, state?.value)
+    }
+
+    @Test
+    fun `integer state updates on external change`() {
+        val variable = Variable.IntegerVariable("count", 0)
+        variableController.declare(variable)
+        var state: MutableState<Long>? = null
+
+        setContent {
+            state = mutableStateFromIntegerVariable("count")
+        }
+
+        variable.set(7)
+        composeRule.waitForIdle()
+
+        assertEquals(7L, state?.value)
+    }
+
+    @Test
+    fun `integer state reports error for non-integer variable`() {
+        reporter.failOnError = false
+        variableController.declare(Variable.StringVariable("count", "value"))
+
+        setContent {
+            mutableStateFromIntegerVariable("count")
+        }
+
+        assertEquals("variable [count] is not an integer variable", reporter.lastError)
+    }
+
+    @Test
+    fun `integer state default`() {
+        reporter.failOnError = false
+        var state: MutableState<Long>? = null
+
+        setContent {
+            state = mutableStateFromVariable("count", 5L)
+        }
+
+        assertEquals(5L, state?.value)
+        assertEquals("variable [count] not found", reporter.lastError)
+    }
+
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
             CompositionLocalProvider(LocalComponent provides localComponent) {
