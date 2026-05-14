@@ -1,3 +1,22 @@
+## 32.50.0
+
+# Android Client:
+* Added `playback_speed` support in `video`.
+* Added `press_start_actions` and `press_end_actions` support in `slider`.
+* Added stored values reset for particular `DivDataTag`.
+* Fixed `is_playing: false` being ignored on initial bind of `lottie` extension.
+
+# iOS Client:
+* Text images vertical alignment support.
+* The ability to trigger actions when the user interacts with the slider has been implemented.
+
+# Web Client:
+* Added support for the `playback_speed` parameter in the `video` component.
+
+# Kotlin JSON Builder:
+* Added `DivanPatch.copy()` for creating modified patch instances.
+
+
 ## 32.49.0
 
 # Android Client:

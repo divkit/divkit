@@ -1,3 +1,8 @@
+## 32.50.0 (May 18, 2026)
+
+* Added support for the `playback_speed` parameter in the `video` component.
+
+
 ## 32.49.0 (May 11, 2026)
 
 * Added suuport for the `scope` value in the `set_stored_value` action.
