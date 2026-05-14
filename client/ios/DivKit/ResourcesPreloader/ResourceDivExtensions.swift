@@ -1,6 +1,48 @@
 import Foundation
 
 extension Div {
+  /// Extracts image URLs that have static (non-expression) values.
+  /// Does not require `ExpressionResolver` — safe to call before card context is set up.
+  func makeStaticImageURLs() -> [URL] {
+    var urls: [URL] = []
+
+    if let backgrounds = value.background {
+      for background in backgrounds {
+        if case .divImageBackground(let bg) = background,
+           case .value(let url) = bg.imageUrl {
+          urls.append(url)
+        }
+      }
+    }
+
+    switch self {
+    case .divImage(let d):
+      if case .value(let url) = d.imageUrl { urls.append(url) }
+    case .divGifImage(let d):
+      if case .value(let url) = d.gifUrl { urls.append(url) }
+    case .divText(let d):
+      d.images?.forEach {
+        if case .value(let url) = $0.url { urls.append(url) }
+      }
+    case .divContainer,
+         .divCustom,
+         .divGallery,
+         .divGrid,
+         .divIndicator,
+         .divInput,
+         .divPager,
+         .divSelect,
+         .divSeparator,
+         .divSlider,
+         .divState,
+         .divSwitch,
+         .divVideo,
+         .divTabs:
+      break
+    }
+    return urls
+  }
+
   func makeImageURLs(
     with expressionResolver: ExpressionResolver,
     filter: ResourcePreloadFilter = .all
@@ -154,5 +196,12 @@ extension DivBackground {
     case .divNinePatchBackground, .divLinearGradient, .divRadialGradient, .divSolidBackground:
       false
     }
+  }
+}
+
+extension DivData {
+  /// Traverses the full AST and returns all statically-resolvable image URLs.
+  func staticImageURLs() -> [URL] {
+    flatMap { $0.makeStaticImageURLs() }.flatMap { $0 }
   }
 }

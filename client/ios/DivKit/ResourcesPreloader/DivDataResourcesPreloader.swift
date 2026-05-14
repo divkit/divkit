@@ -14,6 +14,17 @@ public final class DivDataResourcesPreloader {
     self.resourceRequester = resourceRequester
   }
 
+  public func downloadStaticResources(
+    for divData: DivData,
+    maxPrefetchedImageCount: Int? = nil
+  ) {
+    let urls = divData.staticImageURLs()
+    let urlsToFetch = maxPrefetchedImageCount.map { urls.prefix($0) } ?? urls[...]
+    for url in urlsToFetch {
+      _ = resourceRequester.getData(from: url) { _ in }
+    }
+  }
+
   public func downloadResources(
     for divData: DivData,
     filter: ResourcePreloadFilter,

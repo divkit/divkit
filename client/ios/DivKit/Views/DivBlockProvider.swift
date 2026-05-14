@@ -251,6 +251,7 @@ final class DivBlockProvider {
     }
 
     if let resourcesPreloader = divKitComponents.resourcesPreloader {
+      resourcesPreloader.downloadStaticResources(for: divData, maxPrefetchedImageCount: 50)
       resourcesPreloader.downloadResources(
         for: divData,
         filter: .onlyRequired,
