@@ -711,8 +711,26 @@ private let contentAnimationDuration = UIStyles.AnimationDuration.touchHighlight
 extension BlurEffect {
   fileprivate func cast() -> UIBlurEffect.Style {
     switch self {
+    case .extraLight: .extraLight
     case .light: .light
     case .dark: .dark
+    case .regular: .regular
+    case .prominent: .prominent
+    case .systemUltraThinMaterial: .systemUltraThinMaterial
+    case .systemThinMaterial: .systemThinMaterial
+    case .systemMaterial: .systemMaterial
+    case .systemThickMaterial: .systemThickMaterial
+    case .systemChromeMaterial: .systemChromeMaterial
+    case .systemUltraThinMaterialLight: .systemUltraThinMaterialLight
+    case .systemThinMaterialLight: .systemThinMaterialLight
+    case .systemMaterialLight: .systemMaterialLight
+    case .systemThickMaterialLight: .systemThickMaterialLight
+    case .systemChromeMaterialLight: .systemChromeMaterialLight
+    case .systemUltraThinMaterialDark: .systemUltraThinMaterialDark
+    case .systemThinMaterialDark: .systemThinMaterialDark
+    case .systemMaterialDark: .systemMaterialDark
+    case .systemThickMaterialDark: .systemThickMaterialDark
+    case .systemChromeMaterialDark: .systemChromeMaterialDark
     }
   }
 }
