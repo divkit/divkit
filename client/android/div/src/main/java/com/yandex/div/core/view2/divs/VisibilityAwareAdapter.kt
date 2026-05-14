@@ -13,12 +13,19 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     val items: List<DivItemBuilderResult>
         get() = itemList
 
+    /**
+     * Items that occupy a slot in the recycler.
+     *
+     * Includes both [DivVisibility.VISIBLE] and [DivVisibility.INVISIBLE] items, since the latter
+     * must reserve layout space (mirrors `View.INVISIBLE` behavior applied by `DivBaseBinder`).
+     * Only [DivVisibility.GONE] items are excluded.
+     */
     val visibleItems: List<DivItemBuilderResult>
         get() = buildVisibleItemList()
 
     private val itemList = initialItems.toMutableList()
     private val visibleItemList = mutableListOf<DivItemBuilderResult>()
-    private val itemVisibilityList = initialItems.map { item -> item.isVisible }.toMutableList()
+    private val itemReservesSpaceList = initialItems.map { item -> item.reservesSpace }.toMutableList()
     private var isVisibleItemListValid = false
 
     override val subscriptions = mutableListOf<Disposable>()
@@ -31,27 +38,11 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         if (!isVisibleItemListValid) {
             visibleItemList.clear()
             itemList.mapIndexedNotNullTo(visibleItemList) { index, item ->
-                if (itemVisibilityList[index]) item else null
+                if (itemReservesSpaceList[index]) item else null
             }
             isVisibleItemListValid = true
         }
         return visibleItemList
-    }
-
-    fun addItem(
-        position: Int,
-        item: DivItemBuilderResult,
-        visibility: DivVisibility = item.visibility
-    ) {
-        val isVisible = visibility == DivVisibility.VISIBLE
-
-        itemList.add(position, item)
-        itemVisibilityList.add(position, isVisible)
-        isVisibleItemListValid = false
-
-        if (isVisible) {
-            notifyVisibleItemInserted(position)
-        }
     }
 
     fun addItems(
@@ -59,12 +50,11 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         items: Collection<DivItemBuilderResult>
     ) {
         itemList.addAll(position, items)
-        itemVisibilityList.addAll(position, items.map { item -> item.isVisible })
+        itemReservesSpaceList.addAll(position, items.map { item -> item.reservesSpace })
         isVisibleItemListValid = false
 
         items.forEachIndexed { index, item ->
-            val isVisible = item.visibility == DivVisibility.VISIBLE
-            if (isVisible) {
+            if (item.reservesSpace) {
                 notifyVisibleItemInserted(position + index)
             }
         }
@@ -75,28 +65,28 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         item: DivItemBuilderResult,
         visibility: DivVisibility = item.visibility
     ) {
-        val isVisible = visibility == DivVisibility.VISIBLE
-        val wasVisible = itemVisibilityList[position]
+        val reservesSpace = visibility != DivVisibility.GONE
+        val wasReservingSpace = itemReservesSpaceList[position]
 
         itemList[position] = item
-        itemVisibilityList[position] = isVisible
-        if (isVisible || wasVisible) {
+        itemReservesSpaceList[position] = reservesSpace
+        if (reservesSpace || wasReservingSpace) {
             isVisibleItemListValid = false
         }
 
         when {
-            wasVisible && !isVisible -> notifyVisibleItemRemoved(position)
-            !wasVisible && isVisible -> notifyVisibleItemInserted(position)
-            wasVisible && isVisible -> notifyVisibleItemChanged(position)
+            wasReservingSpace && !reservesSpace -> notifyVisibleItemRemoved(position)
+            !wasReservingSpace && reservesSpace -> notifyVisibleItemInserted(position)
+            wasReservingSpace && reservesSpace -> notifyVisibleItemChanged(position)
         }
     }
 
     fun removeItem(position: Int) {
         itemList.removeAt(position)
-        val isVisible = itemVisibilityList.removeAt(position)
+        val wasReservingSpace = itemReservesSpaceList.removeAt(position)
         isVisibleItemListValid = false
 
-        if (isVisible) {
+        if (wasReservingSpace) {
             notifyVisibleItemRemoved(position)
         }
     }
@@ -104,7 +94,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     private fun visiblePositionOf(position: Int): Int {
         var visiblePosition = 0
         for (i in 0 until position) {
-            if (itemVisibilityList[i]) visiblePosition++
+            if (itemReservesSpaceList[i]) visiblePosition++
         }
         return visiblePosition
     }
@@ -122,16 +112,16 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     }
 
     private fun updateItemVisibility(position: Int, visibility: DivVisibility = itemList[position].visibility) {
-        val isVisible = visibility == DivVisibility.VISIBLE
-        val wasVisible = itemVisibilityList[position]
-        if (isVisible == wasVisible) {
+        val reservesSpace = visibility != DivVisibility.GONE
+        val wasReservingSpace = itemReservesSpaceList[position]
+        if (reservesSpace == wasReservingSpace) {
             return
         }
 
-        itemVisibilityList[position] = isVisible
+        itemReservesSpaceList[position] = reservesSpace
         isVisibleItemListValid = false
 
-        if (wasVisible) {
+        if (wasReservingSpace) {
             notifyVisibleItemRemoved(position)
         } else {
             notifyVisibleItemInserted(position)
@@ -154,5 +144,5 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
 private val DivItemBuilderResult.visibility: DivVisibility
     get() = div.value().visibility.evaluate(expressionResolver)
 
-private val DivItemBuilderResult.isVisible: Boolean
-    get() = visibility == DivVisibility.VISIBLE
+private val DivItemBuilderResult.reservesSpace: Boolean
+    get() = visibility != DivVisibility.GONE
