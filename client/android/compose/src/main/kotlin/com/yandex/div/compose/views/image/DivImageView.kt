@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.image
 
-import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,8 +18,10 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
+import com.yandex.div.compose.images.decodePreview
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.images.toContentScale
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
@@ -47,7 +48,6 @@ internal fun DivImageView(
 
     val imageRequestParams = ImageRequestParams(
         data = data.imageUrl.observedValue(),
-        scale = scale,
         transformations = transformations
     )
     val imageRequest = rememberImageRequest(imageRequestParams)
@@ -65,7 +65,6 @@ internal fun DivImageView(
         rememberImageRequest(
             ImageRequestParams(
                 data = preview,
-                scale = scale,
                 transformations = transformations
             )
         )
@@ -112,17 +111,6 @@ internal fun DivImageView(
             colorFilter = colorFilter
         )
     }
-}
-
-private fun decodePreview(data: String): ByteArray {
-    return Base64.decode(
-        if (data.startsWith("data:")) {
-            data.substring(data.indexOf(',') + 1)
-        } else {
-            data
-        },
-        Base64.DEFAULT
-    )
 }
 
 private fun toColorFilter(tintColor: Int, tintMode: DivBlendMode): ColorFilter {

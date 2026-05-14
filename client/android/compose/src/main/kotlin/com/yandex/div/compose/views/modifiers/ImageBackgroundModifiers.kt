@@ -14,11 +14,11 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.compose.images.observeNetworkRestoration
+import com.yandex.div.compose.images.toContentScale
 import com.yandex.div.compose.views.image.resolveTransformations
-import com.yandex.div.compose.views.image.toContentScale
 import com.yandex.div2.DivImageBackground
 import kotlin.math.roundToInt
 
@@ -38,7 +38,6 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
 
     val imageRequestParams = ImageRequestParams(
         data = data.imageUrl.observedValue(),
-        scale = scale,
         transformations = data.filters.resolveTransformations(context, density)
     )
     val painter = rememberAsyncImagePainter(
