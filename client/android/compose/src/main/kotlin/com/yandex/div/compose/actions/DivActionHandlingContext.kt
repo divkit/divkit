@@ -1,9 +1,11 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Context passed to action handlers. Provides access to DivKit components
@@ -12,5 +14,6 @@ import javax.inject.Inject
 @DivLocalScope
 @ExperimentalApi
 class DivActionHandlingContext @Inject internal constructor(
+    @param:Named(Names.CARD_ID) val cardId: String,
     val expressionResolver: ExpressionResolver
 )

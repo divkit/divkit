@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.ExperimentalApi
  */
 @ExperimentalApi
 enum class DivActionSource {
+    DISAPPEAR,
     EXTERNAL,
     TAP,
     TRIGGER,

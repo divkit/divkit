@@ -64,7 +64,7 @@ class DivContext private constructor(
 
         return DivViewContext(
             data = data,
-            component = component.viewComponent().build()
+            component = component.viewComponent().build(cardId = data.logId)
         ).also {
             component.viewContextStorage.put(data, it)
         }

@@ -24,6 +24,7 @@ import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionVideo
+import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
 import javax.inject.Inject
@@ -50,8 +51,8 @@ internal class DivActionHandler @Inject constructor(
         handle(
             context = context,
             action = DivActionBase(
-                id = action.logId,
                 isEnabled = action.isEnabled,
+                logId = action.logId,
                 payload = action.payload,
                 source = source,
                 typed = action.typed,
@@ -64,10 +65,14 @@ internal class DivActionHandler @Inject constructor(
         handle(
             context = context,
             action = DivActionBase(
-                id = action.logId,
                 isEnabled = action.isEnabled,
+                logId = action.logId,
                 payload = action.payload,
-                source = DivActionSource.VISIBILITY,
+                source = if (action is DivDisappearAction) {
+                    DivActionSource.DISAPPEAR
+                } else {
+                    DivActionSource.VISIBILITY
+                },
                 typed = action.typed,
                 url = action.url
             )
@@ -85,8 +90,8 @@ internal class DivActionHandler @Inject constructor(
             return
         }
 
-        val url = action.url?.evaluate(expressionResolver) ?: return
-        if (url.isDivAction) {
+        val url = action.url?.evaluate(expressionResolver)
+        if (url?.isDivAction == true) {
             DivUntypedAction.parse(url)?.let {
                 handle(context = context, action = it)
             }
@@ -94,10 +99,10 @@ internal class DivActionHandler @Inject constructor(
             externalActionHandler.handle(
                 context = context,
                 action = DivActionData(
-                    id = action.id.evaluate(expressionResolver),
+                    id = action.logId.evaluate(expressionResolver),
                     payload = action.payload,
                     source = action.source,
-                    url = action.url.evaluate(expressionResolver)
+                    url = url
                 )
             )
         }
@@ -126,7 +131,7 @@ internal class DivActionHandler @Inject constructor(
                 externalActionHandler.handleCustomAction(
                     context = context,
                     action = DivCustomActionData(
-                        id = baseAction.id.evaluate(context.expressionResolver),
+                        id = baseAction.logId.evaluate(context.expressionResolver),
                         payload = baseAction.payload,
                         source = baseAction.source
                     )
@@ -179,8 +184,8 @@ internal class DivActionHandler @Inject constructor(
 }
 
 private class DivActionBase(
-    val id: Expression<String>,
     val isEnabled: Expression<Boolean>,
+    val logId: Expression<String>,
     val payload: JSONObject?,
     val source: DivActionSource,
     val typed: DivActionTyped?,

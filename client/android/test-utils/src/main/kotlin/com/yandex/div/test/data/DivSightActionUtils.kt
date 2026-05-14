@@ -7,6 +7,7 @@ import com.yandex.div2.DivVisibilityAction
 
 fun visibilityAction(
     delayMs: Long = 800,
+    id: String = "test",
     isEnabled: Boolean = true,
     limit: Int = 1,
     percentage: Int = 50,
@@ -15,7 +16,7 @@ fun visibilityAction(
 ): DivVisibilityAction {
     return DivVisibilityAction(
         isEnabled = constant(isEnabled),
-        logId = constant("test"),
+        logId = constant(id),
         logLimit = constant(limit.toLong()),
         typed = typed,
         url = url?.let { constant(it.toUri()) },

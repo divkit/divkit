@@ -4,6 +4,8 @@ import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.customAction
+import com.yandex.div.test.data.disappearAction
+import com.yandex.div.test.data.visibilityAction
 import com.yandex.div2.DivAction
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -34,6 +36,24 @@ class DivActionHandlerTest {
         )
 
         assertNull(externalActionHandler.lastAction)
+    }
+
+    @Test
+    fun `empty action is passed to the external action handler`() {
+        handle(
+            action(id = "test"),
+            source = DivActionSource.TAP
+        )
+
+        assertEquals(
+            DivActionData(
+                id = "test",
+                payload = null,
+                source = DivActionSource.TAP,
+                url = null
+            ),
+            externalActionHandler.lastAction
+        )
     }
 
     @Test
@@ -80,6 +100,46 @@ class DivActionHandlerTest {
                 source = DivActionSource.TRIGGER
             ),
             externalActionHandler.lastCustomAction
+        )
+    }
+
+    @Test
+    fun `unhandled visibility action is passed to the external action handler`() {
+        actionHandlerEnvironment.handle(
+            visibilityAction(
+                id = "test",
+                url = "custom://url"
+            )
+        )
+
+        assertEquals(
+            DivActionData(
+                id = "test",
+                payload = null,
+                source = DivActionSource.VISIBILITY,
+                url = "custom://url".toUri()
+            ),
+            externalActionHandler.lastAction
+        )
+    }
+
+    @Test
+    fun `unhandled disappear action is passed to the external action handler`() {
+        actionHandlerEnvironment.handle(
+            disappearAction(
+                id = "test",
+                url = "custom://url"
+            )
+        )
+
+        assertEquals(
+            DivActionData(
+                id = "test",
+                payload = null,
+                source = DivActionSource.DISAPPEAR,
+                url = "custom://url".toUri()
+            ),
+            externalActionHandler.lastAction
         )
     }
 
