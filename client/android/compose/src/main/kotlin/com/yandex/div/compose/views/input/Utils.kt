@@ -7,8 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
@@ -18,18 +16,6 @@ internal fun DivAlignmentHorizontal.toTextAlignment(): Alignment {
         DivAlignmentHorizontal.CENTER -> Alignment.TopCenter
         DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> Alignment.TopEnd
         DivAlignmentHorizontal.LEFT, DivAlignmentHorizontal.START -> Alignment.TopStart
-    }
-}
-
-internal fun DivInput.KeyboardType.toVisualTransformation(): VisualTransformation {
-    return when (this) {
-        DivInput.KeyboardType.PASSWORD -> PasswordVisualTransformation()
-        DivInput.KeyboardType.SINGLE_LINE_TEXT,
-        DivInput.KeyboardType.MULTI_LINE_TEXT,
-        DivInput.KeyboardType.URI,
-        DivInput.KeyboardType.NUMBER,
-        DivInput.KeyboardType.EMAIL,
-        DivInput.KeyboardType.PHONE -> VisualTransformation.None
     }
 }
 

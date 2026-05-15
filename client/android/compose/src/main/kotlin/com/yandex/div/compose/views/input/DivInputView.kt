@@ -5,18 +5,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.yandex.div.compose.utils.observeBaseTextStyle
 import com.yandex.div.compose.utils.toAlignment
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
 
@@ -49,11 +50,9 @@ private fun InputView(
     textStyle: TextStyle,
     textAlignmentHorizontal: DivAlignmentHorizontal,
 ) {
-    val filters = data.filters?.takeIf { data.mask == null }
-    val source = mutableStateFromVariable(data.textVariable, defaultValue = "")
-    var text by rememberFilteredState(source, filters)
+    val state = data.rememberDivInputState()
 
-    data.validators?.validate(text)
+    data.validators?.validate(state.text.text)
 
     val keyboardType = data.keyboardType.observedValue()
     val singleLine = keyboardType != DivInput.KeyboardType.MULTI_LINE_TEXT
@@ -64,16 +63,21 @@ private fun InputView(
     val hintText = data.hintText?.observedValue()
     val hintColor = data.hintColor.observedColorValue()
 
+    val visualTransformation = state.rememberVisualTransformation(keyboardType)
+    val rendersOnEmptyInput = remember(visualTransformation) {
+        visualTransformation.filter(AnnotatedString("")).text.text.isNotEmpty()
+    }
+
     Box(modifier = modifier, contentAlignment = contentAlignment) {
         BasicTextField(
-            value = text,
-            onValueChange = { text = it },
+            value = state.text,
+            onValueChange = state.onValueChange,
             textStyle = textStyle,
             singleLine = singleLine,
             maxLines = maxLines,
             enabled = data.isEnabled.observedValue(),
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = keyboardType.toVisualTransformation(),
+            visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions(
                 keyboardType,
                 data.enterKeyType.observedValue(),
@@ -83,7 +87,7 @@ private fun InputView(
                 DecorationBox(
                     innerTextField = innerTextField,
                     textAlignmentHorizontal = textAlignmentHorizontal,
-                    text = text,
+                    showHint = state.text.text.isEmpty() && !rendersOnEmptyInput,
                     hintText = hintText,
                     hintColor = hintColor,
                     textStyle = textStyle,
@@ -95,17 +99,29 @@ private fun InputView(
 }
 
 @Composable
+private fun DivInputState.rememberVisualTransformation(
+    keyboardType: DivInput.KeyboardType
+): VisualTransformation {
+    val passwordTransformation = remember { PasswordVisualTransformation() }
+    return if (keyboardType == DivInput.KeyboardType.PASSWORD) {
+        passwordTransformation
+    } else {
+        visualTransformation
+    }
+}
+
+@Composable
 private fun DecorationBox(
     innerTextField: @Composable () -> Unit,
     textAlignmentHorizontal: DivAlignmentHorizontal,
-    text: String,
+    showHint: Boolean,
     hintText: String?,
     hintColor: Color,
     textStyle: TextStyle,
     maxLines: Int,
 ) {
     Box(Modifier.fillMaxWidth(), contentAlignment = textAlignmentHorizontal.toTextAlignment()) {
-        if (text.isEmpty() && hintText != null) {
+        if (showHint && hintText != null) {
             BasicText(
                 text = hintText,
                 style = textStyle.copy(color = hintColor),

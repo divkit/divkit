@@ -90,6 +90,7 @@ class DivComposeInteractiveScreenshotTest(
                 "interactive_snapshot_test_data/div-action/set-variable.json",
                 "interactive_snapshot_test_data/div-container/base-properties.json",
                 "interactive_snapshot_test_data/div-container/visibility.json",
+                "interactive_snapshot_test_data/div-input/fixed_length_input_mask.json",
                 "interactive_snapshot_test_data/div-text/text-properties.json",
             ).withEscapedParameter()
         }

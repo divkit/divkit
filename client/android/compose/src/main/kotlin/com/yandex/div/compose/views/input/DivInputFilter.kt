@@ -40,9 +40,8 @@ private fun List<DivInputFilter>.buildFilter(): (String) -> Boolean {
             }
         }
     }
-
-    return { value ->
-        regexes.all { it.matches(value) } && conditions.all { it }
+    return remember(regexes, conditions) {
+        { value -> regexes.all { it.matches(value) } && conditions.all { it } }
     }
 }
 
