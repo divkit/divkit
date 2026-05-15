@@ -5,6 +5,7 @@ import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
+import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -20,6 +21,9 @@ internal class DivViewContext(
 ) {
 
     val rootLocalComponent: DivLocalComponent
+
+    val pagerStateStorage: DivPagerStateStorage
+        get() = component.pagerStateStorage
 
     val visibilityActionTracker: VisibilityActionTracker
         get() = component.visibilityActionTracker

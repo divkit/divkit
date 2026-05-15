@@ -31,8 +31,6 @@ internal fun DivPagerView(
         return
     }
 
-    // TODO: register pager scroll state
-
     PagerView(
         modifier = modifier,
         items = items,
@@ -58,6 +56,7 @@ private fun PagerView(
         val viewportSize = with(density) { viewportSizePx.intValue.toDp() }
 
         PagerContent(
+            id = data.id,
             items = items,
             isHorizontal = isHorizontal,
             itemSpacing = data.itemSpacing.observedValue(),
