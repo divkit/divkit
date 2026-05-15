@@ -80,6 +80,74 @@ final class DivBlockStateStorageTests: XCTestCase {
     XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
   }
 
+  func test_PendingState_Peek_WhenEmpty_IsNil() {
+    XCTAssertNil(storage.peekPendingState(path(cardId: "card_id", path: "0/id")))
+  }
+
+  func test_PendingState_Take_WhenEmpty_IsNil() {
+    XCTAssertNil(storage.takePendingState(path(cardId: "card_id", path: "0/id")))
+  }
+
+  func test_PendingState_SetById_ReadByPath() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    let value = storage.peekPendingState(path(cardId: "card_id", path: "0/id")) as? State
+    XCTAssertEqual(value, state1)
+  }
+
+  func test_PendingState_Take_ClearsTheSlot() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    _ = storage.takePendingState(path(cardId: "card_id", path: "0/id"))
+    XCTAssertNil(storage.peekPendingState(path(cardId: "card_id", path: "0/id")))
+  }
+
+  func test_PendingState_Set_AlsoUpdatesRegularState() {
+    storage.setState(id: "id", cardId: "card_id", state: state1)
+    storage.setPendingState(id: "id", cardId: "card_id", state: state2)
+    XCTAssertEqual(storage.getState("id", cardId: "card_id"), state2)
+    let pending = storage.peekPendingState(path(cardId: "card_id", path: "0/id")) as? State
+    XCTAssertEqual(pending, state2)
+  }
+
+  func test_PendingState_NotOverwritten_BySetStateByPath() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state2)
+    let pending = storage.peekPendingState(path(cardId: "card_id", path: "0/id")) as? State
+    XCTAssertEqual(pending, state1)
+  }
+
+  func test_PendingState_LastWriteWins() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    storage.setPendingState(id: "id", cardId: "card_id", state: state2)
+    let pending = storage.peekPendingState(path(cardId: "card_id", path: "0/id")) as? State
+    XCTAssertEqual(pending, state2)
+  }
+
+  func test_PendingState_Emits_StateUpdatesPipe() {
+    var updatesCounter = 0
+    storage.stateUpdates.addObserver { _ in
+      updatesCounter += 1
+    }.dispose(in: disposePool)
+
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+
+    XCTAssertEqual(updatesCounter, 1)
+  }
+
+  func test_PendingState_ClearedBy_Reset() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    storage.reset()
+    XCTAssertNil(storage.peekPendingState(path(cardId: "card_id", path: "0/id")))
+  }
+
+  func test_PendingState_ClearedBy_ResetByCardId() {
+    storage.setPendingState(id: "id", cardId: "card_id", state: state1)
+    storage.setPendingState(id: "id", cardId: "other_card", state: state2)
+    storage.reset(cardId: "card_id")
+    XCTAssertNil(storage.peekPendingState(path(cardId: "card_id", path: "0/id")))
+    let other = storage.peekPendingState(path(cardId: "other_card", path: "0/id")) as? State
+    XCTAssertEqual(other, state2)
+  }
+
   func test_PreventUpdatePipeWhenSettingSameState() {
     var updatesCounter = 0
     storage.stateUpdates.addObserver { _ in

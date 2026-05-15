@@ -140,7 +140,7 @@ final class ScrollActionHandler {
       size: range,
       overflow: overflow
     )
-    blockStateStorage.setState(
+    blockStateStorage.setPendingState(
       id: id,
       cardId: cardId,
       state: GalleryViewState(
@@ -259,7 +259,7 @@ final class ScrollActionHandler {
     clampedIndex: Int,
     animated: Bool
   ) {
-    blockStateStorage.setState(
+    blockStateStorage.setPendingState(
       id: id,
       cardId: cardId,
       state: state.makeState(clampedIndex, animated)
