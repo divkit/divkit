@@ -25,8 +25,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.coreKtx)
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.ui.compose)
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
     implementation(libs.yatagan.api.compiled)

@@ -21,11 +21,6 @@ internal fun mutableStateFromVariable(variableName: String, defaultValue: Boolea
 }
 
 @Composable
-internal fun mutableStateFromVariable(variableName: String, defaultValue: Long): MutableState<Long> {
-    return mutableStateFromIntegerVariable(variableName) ?: remember { mutableStateOf(defaultValue) }
-}
-
-@Composable
 internal fun mutableStateFromStringVariable(variableName: String): MutableState<String>? {
     return rememberVariableMutableState(
         variableName = variableName,
@@ -45,18 +40,6 @@ internal fun mutableStateFromBooleanVariable(variableName: String): MutableState
         validate = { variable ->
             if (variable is Variable.BooleanVariable) null
             else "variable [$variableName] is not a boolean variable"
-        },
-    )
-}
-
-@Composable
-internal fun mutableStateFromIntegerVariable(variableName: String): MutableState<Long>? {
-    return rememberVariableMutableState(
-        variableName = variableName,
-        readValue = { it.getValue() as Long },
-        validate = { variable ->
-            if (variable is Variable.IntegerVariable) null
-            else "variable [$variableName] is not an integer variable"
         },
     )
 }

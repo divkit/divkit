@@ -107,7 +107,6 @@ androidx-media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls
 androidx-media3-exoplayer-rtsp = { module = "androidx.media3:media3-exoplayer-rtsp", version.ref = "androidx-media3" }
 androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-exoplayer-smoothstreaming", version.ref = "androidx-media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
-androidx-media3-ui-compose = { module = "androidx.media3:media3-ui-compose-material3", version = "1.10.0" }
 
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 androidx-test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }

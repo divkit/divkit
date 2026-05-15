@@ -266,8 +266,6 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-switch",
                 // div-select
                 "snapshot_test_data/div-select",
-                // div-video
-                "snapshot_test_data/div-video",
             ).expandDirectories().withEscapedParameter()
         }
 

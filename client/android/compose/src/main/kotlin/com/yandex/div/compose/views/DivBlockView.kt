@@ -17,7 +17,6 @@ import com.yandex.div.compose.views.modifiers.applyPaddings
 import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.text.DivTextView
-import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
@@ -98,12 +97,12 @@ private fun BaseView(
         is Div.State -> DivStateView(modifier, data.value)
         is Div.Switch -> DivSwitchView(modifier.applyPaddings(data), data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
-        is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
         is Div.GifImage -> NotSupported("gif")
         is Div.Grid -> NotSupported("grid")
         is Div.Indicator -> NotSupported("indicator")
         is Div.Slider -> NotSupported("slider")
         is Div.Tabs -> NotSupported("tabs")
+        is Div.Video -> NotSupported("video")
     }
 }
 
