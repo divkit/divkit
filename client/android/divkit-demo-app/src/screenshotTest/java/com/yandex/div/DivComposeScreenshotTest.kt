@@ -10,7 +10,6 @@ import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.DIV_SCREENSHOT_CASE_EXTENSION
 import com.yandex.test.screenshot.Screenshot
-import org.junit.Assert
 import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
@@ -266,6 +265,9 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-switch",
                 // div-select
                 "snapshot_test_data/div-select",
+                // div-grid
+                "snapshot_test_data/div-grid",
+                "snapshot_test_data/div-grid/examples",
             ).expandDirectories().withEscapedParameter()
         }
 
