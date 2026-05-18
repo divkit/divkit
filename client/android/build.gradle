@@ -112,6 +112,7 @@ apiValidation {
     ignoredProjects += [
         "api-generator-test",
         "compose",
+        "compose-lottie",
         "divkit-benchmark-app",
         "divkit-demo-app",
         "divkit-perftests",

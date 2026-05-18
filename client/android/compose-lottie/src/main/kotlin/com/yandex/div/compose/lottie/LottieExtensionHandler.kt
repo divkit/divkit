@@ -1,0 +1,86 @@
+package com.yandex.div.compose.lottie
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.extensions.DivExtensionEnvironment
+import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div.internal.lottie.LottieData
+import com.yandex.div.internal.lottie.LottieExtensionParams
+import com.yandex.div.internal.lottie.LottieExtensionParamsParser
+import com.yandex.div.internal.lottie.LottieRepeatMode
+import org.json.JSONObject
+
+/**
+ * [DivExtensionHandler] that allows to use Lottie animations inside
+ * [com.yandex.div.compose.DivView]s.
+ */
+@ExperimentalApi
+class LottieExtensionHandler(
+    private val assetMapper: (String) -> String? = { null },
+    private val rawResMapper: (String) -> Int? = { null },
+    private val reporter: DivReporter
+) : DivExtensionHandler {
+
+    private val parser = LottieExtensionParamsParser(
+        assetMapper = assetMapper,
+        rawResMapper = rawResMapper,
+        reportError = { reporter.reportError(it) }
+    )
+
+    @Composable
+    override fun Content(
+        environment: DivExtensionEnvironment,
+        content: @Composable (modifier: Modifier) -> Unit
+    ) {
+        val paramsJson = environment.extension.params
+        val params = remember(paramsJson) { parseParams(paramsJson, environment) } ?: return
+        val composition by rememberLottieComposition(params.data.toCompositionSpec())
+        LottieAnimation(
+            modifier = environment.modifier,
+            composition = composition,
+            isPlaying = params.isPlaying.observedValue(true),
+            iterations = params.iterations,
+            restartOnPlay = false,
+            reverseOnRepeat = params.repeatMode == LottieRepeatMode.REVERSE
+        )
+    }
+
+    private fun parseParams(
+        params: JSONObject?,
+        environment: DivExtensionEnvironment
+    ): LottieExtensionParams? {
+        if (params == null) {
+            environment.reporter.reportError("Params required for Lottie extension handler")
+            return null
+        }
+
+        return parser.parse(params, environment.expressionResolver)
+    }
+}
+
+private val LottieExtensionParams.iterations: Int
+    get() {
+        return when {
+            repeatCount == -1 -> LottieConstants.IterateForever
+            repeatCount <= 0 -> 1
+            else -> repeatCount
+        }
+    }
+
+private fun LottieData.toCompositionSpec(): LottieCompositionSpec {
+    return when (this) {
+        is LottieData.Asset -> LottieCompositionSpec.Asset(assetName)
+        is LottieData.Json -> LottieCompositionSpec.JsonString(json)
+        is LottieData.RawRes -> LottieCompositionSpec.RawRes(id)
+        is LottieData.Url -> LottieCompositionSpec.Url(url)
+    }
+}

@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.lottie.LottieExtensionHandler
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
@@ -25,6 +27,7 @@ class RegressionComposeViewCreator(context: Context) {
     ) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
+        val reporter = DivReporter()
         val divContext = DivContext(
             baseContext = activity,
             configuration = DivComposeConfiguration(
@@ -38,7 +41,13 @@ class RegressionComposeViewCreator(context: Context) {
                     "new_custom_container_1" to CustomContainerViewFactory(),
                     "nested_scroll_view" to NestedScrollViewFactory()
                 ),
+                extensionHandlers = mapOf(
+                    "lottie" to LottieExtensionHandler(
+                        reporter = reporter
+                    )
+                ),
                 fontFamilyProvider = ComposeFontFamilyProvider(activity),
+                reporter = reporter
             )
         )
         val view = ComposeView(divContext).apply {

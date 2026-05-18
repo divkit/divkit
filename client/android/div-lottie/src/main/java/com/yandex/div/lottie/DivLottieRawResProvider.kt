@@ -30,10 +30,15 @@ interface DivLottieRawResProvider {
     fun provideAssetFolder(): String? = "/"
 
     companion object {
+        @Deprecated("Will be removed in next major release")
         const val HTTP_SCHEME = "http"
+        @Deprecated("Will be removed in next major release")
         const val HTTPS_SCHEME = "https"
+        @Deprecated("Will be removed in next major release")
         const val RES_SCHEME = "res"
+        @Deprecated("Will be removed in next major release")
         const val ASSET_SCHEME = "asset"
+        @Deprecated("Will be removed in next major release")
         const val DIVKIT_ASSET_SCHEME = "divkit-asset"
 
         val STUB = object : DivLottieRawResProvider {

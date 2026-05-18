@@ -13,6 +13,7 @@ import com.airbnb.lottie.*
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
+import com.yandex.div.internal.lottie.LottieData
 
 /**
  * LottieAnimationView implements only happy flow scenario, so this is custom view
@@ -131,10 +132,6 @@ internal class LottieController(
         buildDrawingCacheDepth--
     }
 
-    fun setIgnoreDisabledSystemAnimations(ignore: Boolean) {
-        lottieDrawable.setIgnoreDisabledSystemAnimations(ignore)
-    }
-
     fun enableMergePathsForKitKatAndAbove(enable: Boolean) {
         lottieDrawable.enableMergePathsForKitKatAndAbove(enable)
     }
@@ -248,17 +245,9 @@ internal class LottieController(
         enableOrDisableHardwareLayer()
     }
 
-    fun setSafeMode(safeMode: Boolean) {
-        lottieDrawable.setSafeMode(safeMode)
-    }
-
     fun setRenderMode(renderMode: RenderMode) {
         this.renderMode = renderMode
         enableOrDisableHardwareLayer()
-    }
-
-    fun setApplyingOpacityToLayersEnabled(isApplyingOpacityToLayersEnabled: Boolean) {
-        lottieDrawable.isApplyingOpacityToLayersEnabled = isApplyingOpacityToLayersEnabled
     }
 
     @SuppressLint("RestrictedApi")
@@ -298,7 +287,7 @@ internal class LottieController(
         }
     }
 
-    inner class LottieImageTransformer(
+    class LottieImageTransformer(
         private val externalDrawable: Drawable?
     ) : LoadableImageView.ImageTransformer {
         override fun transform(drawable: Drawable?): Drawable? = externalDrawable

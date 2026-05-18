@@ -2,106 +2,72 @@ package com.yandex.div.lottie
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.preload.UriPreloadResult
-import com.yandex.div.internal.Assert
-import com.yandex.div.lottie.DivLottieRawResProvider.Companion.ASSET_SCHEME
-import com.yandex.div.lottie.DivLottieRawResProvider.Companion.DIVKIT_ASSET_SCHEME
-import com.yandex.div.lottie.DivLottieRawResProvider.Companion.HTTPS_SCHEME
-import com.yandex.div.lottie.DivLottieRawResProvider.Companion.HTTP_SCHEME
-import com.yandex.div.lottie.DivLottieRawResProvider.Companion.RES_SCHEME
-import org.json.JSONObject
+import com.yandex.div.internal.lottie.LottieData
 
 internal class DivLottieCompositionRepository(
-    private val rawResProvider: DivLottieRawResProvider,
     private val networkCache: DivLottieNetworkCache,
     private val logger: DivLottieLogger,
 ) {
-
-    private fun modifyLottieUrl(lottieUrl: String): String {
-        val path = lottieUrl.removePrefix("${DIVKIT_ASSET_SCHEME}://")
-        return if (path.startsWith(DEFAULT_ASSET_FOLDER)) {
-            path
-        } else {
-            "$DEFAULT_ASSET_FOLDER${path.removePrefix("/")}"
-        }
-    }
 
     internal fun receiveLottieComposition(
         data: LottieData,
         context: Context
     ): LottieResult<LottieComposition> {
         return when (data) {
-            is LottieData.External -> receiveExternalComposition(context, data.url)
-            is LottieData.Embedded -> receiveEmbeddedComposition(data.json)
+            is LottieData.Asset ->
+                LottieCompositionFactory.fromAssetSync(context, data.assetName)
+
+            is LottieData.Json ->
+                LottieCompositionFactory.fromJsonStringSync(
+                    data.json,
+                    Integer.toHexString(data.json.hashCode())
+                )
+
+            is LottieData.RawRes ->
+                LottieCompositionFactory.fromRawResSync(context, data.id, data.url)
+
+            is LottieData.Url -> getComposition(context, data.url)
         }
     }
 
-    internal fun preloadLottieComposition(url: Uri, onComplete: (PreloadResult) -> Unit = {  }) {
-        when (url.scheme) {
-            HTTP_SCHEME, HTTPS_SCHEME -> {
-                val supported = networkCache.cacheComposition(url.toString()) { error ->
-                    onComplete(UriPreloadResult(url, error))
-                }
-                if (!supported) {
-                    logger.fail("Lottie preloading works unstable! " +
-                            "Please implement DivLottieNetworkCache.cacheComposition(String, onComplete)!")
-                    networkCache.cacheComposition(url.toString())
-                    onComplete(UriPreloadResult(url, null))
-                }
+    internal fun preloadLottieComposition(url: Uri, onComplete: (PreloadResult) -> Unit) {
+        if (url.isHttp) {
+            val supported = networkCache.cacheComposition(url.toString()) { error ->
+                onComplete(UriPreloadResult(url, error))
             }
-
-            RES_SCHEME, ASSET_SCHEME, DIVKIT_ASSET_SCHEME -> {
+            if (!supported) {
+                logger.fail(
+                    "Lottie preloading works unstable. Implement DivLottieNetworkCache.cacheComposition(String, onComplete)."
+                )
+                networkCache.cacheComposition(url.toString())
                 onComplete(UriPreloadResult(url, null))
             }
-
-            else -> {
-                logger.fail("Unsupported scheme '${url.scheme}'. Preloading skipped!")
-                onComplete(UriPreloadResult(url, null))
-            }
+        } else {
+            onComplete(UriPreloadResult(url, null))
         }
     }
 
-    private fun receiveExternalComposition(context: Context, url: String): LottieResult<LottieComposition> {
-        return when (Uri.parse(url).scheme) {
-            HTTP_SCHEME, HTTPS_SCHEME -> {
-                networkCache.loadCached(url)
-                    ?.let { LottieCompositionFactory.fromJsonStringSync(it, url) }
-                    ?: LottieCompositionFactory.fromUrlSync(context, url, url)
-            }
-            RES_SCHEME -> {
-                val rawRes = rawResProvider.provideRes(url)
-                if (rawRes == null) {
-                    LottieResult(IllegalArgumentException("Failed to map $url to internal resource"))
-                } else {
-                    LottieCompositionFactory.fromRawResSync(context, rawRes, url)
-                }
-            }
-            ASSET_SCHEME -> {
-                val assetFileAddress = rawResProvider.provideAssetFile(url)
-                if (assetFileAddress == null) {
-                    LottieResult(IllegalArgumentException("Failed to map $url to internal resource"))
-                } else {
-                    LottieCompositionFactory.fromAssetSync(context, assetFileAddress)
-                }
-            }
-            DIVKIT_ASSET_SCHEME -> {
-                val assetFileAddress = modifyLottieUrl(url)
-                LottieCompositionFactory.fromAssetSync(context, assetFileAddress)
-            }
-            else -> LottieResult(IllegalArgumentException("Failed to retrieve lottie json from $url"))
+    private fun getComposition(context: Context, url: String): LottieResult<LottieComposition> {
+        return if (url.toUri().isHttp) {
+            networkCache.loadCached(url)
+                ?.let { LottieCompositionFactory.fromJsonStringSync(it, url) }
+                ?: LottieCompositionFactory.fromUrlSync(context, url, url)
+        } else {
+            LottieResult(IllegalArgumentException("Failed to retrieve lottie json from $url"))
         }
-    }
-
-    companion object {
-        private const val DEFAULT_ASSET_FOLDER = "divkit/"
-    }
-
-    @Suppress("DEPRECATION")
-    private fun receiveEmbeddedComposition(json: JSONObject): LottieResult<LottieComposition> {
-        return LottieCompositionFactory.fromJsonSync(json, Integer.toHexString(json.hashCode()))
     }
 }
+
+private val Uri.isHttp: Boolean
+    get() {
+        return when (scheme) {
+            "http", "https" -> true
+            else -> false
+        }
+    }

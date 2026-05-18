@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -69,7 +70,8 @@ private fun BaseViewWithExtensions(
         environment = DivExtensionEnvironment(
             extension = extension,
             expressionResolver = expressionResolver,
-            modifier = modifier
+            modifier = modifier,
+            reporter = LocalComponent.current.reporter
         ),
         content = { modifier ->
             BaseViewWithExtensions(
