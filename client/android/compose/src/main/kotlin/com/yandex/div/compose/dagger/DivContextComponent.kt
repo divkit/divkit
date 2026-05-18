@@ -3,11 +3,12 @@ package com.yandex.div.compose.dagger
 import android.content.Context
 import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
-import com.yandex.div.compose.DivFontFamilyProvider
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.font.DivFontFamilyCache
+import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.images.ImageRequestListener
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
@@ -30,7 +31,8 @@ internal interface DivContextComponent {
     val customViewFactories: Map<String, DivCustomViewFactory>
     val debugFeatures: DivDebugFeatures
     val extensionHandlers: Map<String, DivExtensionHandler>
-    val fontFamilyProvider: DivFontFamilyProvider
+    val fontSourceProvider: DivFontSourceProvider
+    val fontFamilyCache: DivFontFamilyCache
     val imageLoader: ImageLoader
     val imageRequestListener: ImageRequestListener
     val viewContextStorage: DivViewContextStorage

@@ -15,6 +15,11 @@ import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeShadow
+import com.yandex.div.compose.text.letterSpacing
+import com.yandex.div.compose.text.rememberFontFamily
+import com.yandex.div.compose.text.textDecoration
+import com.yandex.div.compose.text.toFontWeight
+import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div2.DivText
 
 @Composable
@@ -31,6 +36,8 @@ internal fun DivText.Range.observeSpanStyle(
     val rangeStrike = strike?.observedValue()
     val rangeUnderline = underline?.observedValue()
     val rangeFontFamily = fontFamily?.observedValue()
+    val rangeFontFeatureSettings = fontFeatureSettings?.observedValue()
+    val rangeFontVariationSettings = fontVariationSettings?.observedValue()
 
     val spanFontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue)
     val spanTextDecoration = textDecoration(rangeStrike, rangeUnderline)
@@ -39,7 +46,12 @@ internal fun DivText.Range.observeSpanStyle(
     val spanLetterSpacing = rangeLetterSpacing?.let {
         letterSpacing(it, rangeFontSize ?: baseFontSize)
     } ?: TextUnit.Unspecified
-    val spanFontFamily = fontFamily(rangeFontFamily, rangeFontWeight, rangeFontWeightValue)
+    val spanFontFamily = rememberFontFamily(
+        fontFamily = rangeFontFamily,
+        fontWeight = rangeFontWeight,
+        fontWeightValue = rangeFontWeightValue,
+        fontVariationSettings = rangeFontVariationSettings,
+    )
     val spanShadow = textShadow?.observeShadow(baseTextColorAlpha)
 
     val spanBrush = rangeColor?.let { SolidColorShaderBrush(it) }
@@ -52,6 +64,7 @@ internal fun DivText.Range.observeSpanStyle(
         letterSpacing = spanLetterSpacing,
         textDecoration = spanTextDecoration,
         shadow = spanShadow,
+        fontFeatureSettings = rangeFontFeatureSettings?.takeIf { it.isNotBlank() },
     )
 }
 

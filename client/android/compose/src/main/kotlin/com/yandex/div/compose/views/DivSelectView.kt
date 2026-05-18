@@ -17,7 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.observeBaseTextStyle
+import com.yandex.div.compose.text.observeBaseTextStyle
 import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivSelect
@@ -40,6 +40,7 @@ internal fun DivSelectView(
         fontFamily = data.fontFamily,
         letterSpacing = data.letterSpacing,
         lineHeight = data.lineHeight,
+        fontVariationSettings = data.fontVariationSettings
     )
     val displayText = options.firstOrNull { it.value == valueState.value }?.displayText
 

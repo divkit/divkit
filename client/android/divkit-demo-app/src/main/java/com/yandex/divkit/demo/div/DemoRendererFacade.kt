@@ -19,7 +19,7 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
-import com.yandex.divkit.demo.font.ComposeFontFamilyProvider
+import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.divkit.demo.utils.applyPatchByConfig
 import org.json.JSONException
 import org.json.JSONObject
@@ -106,7 +106,7 @@ class ComposeRendererFacade(
     private val composeDivContext = ComposeDivContext(
         baseContext = context,
         configuration = DivComposeConfiguration(
-            fontFamilyProvider = ComposeFontFamilyProvider(context),
+            fontSourceProvider = ComposeFontSourceProvider(),
             variableController = divVariableController,
         )
     )

@@ -2,6 +2,7 @@ package com.yandex.div.compose.dagger
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.AssetManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
@@ -18,6 +19,10 @@ import kotlinx.coroutines.SupervisorJob
 
 @Module
 internal object DivContextModule {
+
+    @DivContextScope
+    @Provides
+    fun provideAssetManager(context: Context): AssetManager = context.assets
 
     @DivContextScope
     @Provides

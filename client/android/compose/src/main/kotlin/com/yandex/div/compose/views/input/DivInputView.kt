@@ -16,7 +16,7 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.yandex.div.compose.utils.observeBaseTextStyle
+import com.yandex.div.compose.text.observeBaseTextStyle
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
@@ -36,6 +36,7 @@ internal fun DivInputView(modifier: Modifier, data: DivInput) {
         letterSpacing = data.letterSpacing,
         lineHeight = data.lineHeight,
         textAlignmentHorizontal = textAlignmentHorizontal,
+        fontVariationSettings = data.fontVariationSettings
     )
     val contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
 

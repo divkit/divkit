@@ -17,7 +17,7 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
-import com.yandex.divkit.demo.font.ComposeFontFamilyProvider
+import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import org.json.JSONObject
 
 /**
@@ -46,7 +46,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         divContext = DivContext(
             baseContext = this,
             configuration = DivComposeConfiguration(
-                fontFamilyProvider = ComposeFontFamilyProvider(this)
+                fontSourceProvider = ComposeFontSourceProvider()
             ),
             debugConfiguration = DivDebugConfiguration(
                 imageLoaderProvider = imageLoaderProvider

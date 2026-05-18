@@ -13,8 +13,8 @@ import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
 import com.yandex.divkit.demo.div.NestedScrollViewFactory
+import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.div.compose.DivView as ComposeDivView
-import com.yandex.divkit.demo.font.ComposeFontFamilyProvider
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 
 class RegressionComposeViewCreator(context: Context) {
@@ -46,7 +46,7 @@ class RegressionComposeViewCreator(context: Context) {
                         reporter = reporter
                     )
                 ),
-                fontFamilyProvider = ComposeFontFamilyProvider(activity),
+                fontSourceProvider = ComposeFontSourceProvider(),
                 reporter = reporter
             )
         )

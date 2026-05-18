@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.Hyphens
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.observeBaseTextStyle
 import com.yandex.div.compose.utils.observeShadow
+import com.yandex.div.compose.text.observeBaseTextStyle
+import com.yandex.div.compose.text.textDecoration
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 
@@ -25,6 +26,8 @@ internal fun DivText.observeTextStyle(
         fontFamily = fontFamily,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
+        fontFeatureSettings = fontFeatureSettings,
+        fontVariationSettings = fontVariationSettings,
     )
 
     val shadow = textShadow?.observeShadow(baseStyle.color.alpha)

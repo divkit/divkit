@@ -1,24 +1,26 @@
-package com.yandex.div.compose.utils
+package com.yandex.div.compose.text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.em
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.views.text.fontFamily
-import com.yandex.div.compose.views.text.letterSpacing
-import com.yandex.div.compose.views.text.toFontWeight
-import com.yandex.div.compose.views.text.toTextUnit
+import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivFontWeight
+import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivSizeUnit
+import org.json.JSONObject
 
 @Composable
 internal fun observeBaseTextStyle(
@@ -31,18 +33,26 @@ internal fun observeBaseTextStyle(
     fontFamily: Expression<String>?,
     letterSpacing: Expression<Double>,
     lineHeight: Expression<Long>?,
+    fontFeatureSettings: Expression<String>? = null,
+    fontVariationSettings: Expression<JSONObject>? = null,
 ): TextStyle {
     val color = textColor.observedColorValue()
     val sizeUnit = fontSizeUnit.observedValue()
     val weight = fontWeight?.observedValue()
     val weightValue = fontWeightValue?.observedIntValue()
+    val variationSettings = fontVariationSettings?.observedValue()
     val density = LocalDensity.current
 
     val textSize = fontSize.toTextUnit(sizeUnit, density)
     val resolvedLineHeight = lineHeight?.observedIntValue()?.toTextUnit(sizeUnit, density)
     val resolvedFontWeight = weight.toFontWeight(weightValue)
     val resolvedLetterSpacing = letterSpacing(letterSpacing.observedFloatValue(), fontSize)
-    val resolvedFontFamily = fontFamily(fontFamily?.observedValue(), weight, weightValue)
+    val resolvedFontFamily = rememberFontFamily(
+        fontFamily = fontFamily?.observedValue(),
+        fontWeight = weight,
+        fontWeightValue = weightValue,
+        fontVariationSettings = variationSettings,
+    )
     val textAlign = textAlignmentHorizontal.toTextAlign()
     val lineHeightStyle = lineHeightStyle(resolvedLineHeight, textSize)
 
@@ -56,6 +66,7 @@ internal fun observeBaseTextStyle(
         lineHeight = resolvedLineHeight ?: TextUnit.Unspecified,
         lineHeightStyle = lineHeightStyle,
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
     )
 }
 
@@ -80,5 +91,45 @@ private fun DivAlignmentHorizontal.toTextAlign(): TextAlign {
         DivAlignmentHorizontal.LEFT, DivAlignmentHorizontal.START -> TextAlign.Start
         DivAlignmentHorizontal.CENTER -> TextAlign.Center
         DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> TextAlign.End
+    }
+}
+
+internal fun DivFontWeight?.toFontWeight(
+    fontWeightValue: Int?,
+): FontWeight? {
+    if (fontWeightValue != null) {
+        return FontWeight(fontWeightValue.coerceIn(1, 1000))
+    }
+    return when (this) {
+        DivFontWeight.LIGHT -> FontWeight.Light
+        DivFontWeight.REGULAR -> FontWeight.Normal
+        DivFontWeight.MEDIUM -> FontWeight.Medium
+        DivFontWeight.BOLD -> FontWeight.Bold
+        null -> null
+    }
+}
+
+internal fun letterSpacing(letterSpacing: Float, fontSize: Int): TextUnit {
+    return if (letterSpacing != 0f) {
+        (letterSpacing / fontSize).em
+    } else {
+        TextUnit.Unspecified
+    }
+}
+
+internal fun textDecoration(
+    strike: DivLineStyle?,
+    underline: DivLineStyle?,
+): TextDecoration? {
+    val hasStrike = strike == DivLineStyle.SINGLE
+    val hasUnderline = underline == DivLineStyle.SINGLE
+    return when {
+        hasStrike && hasUnderline -> TextDecoration.combine(
+            listOf(TextDecoration.LineThrough, TextDecoration.Underline)
+        )
+        hasStrike -> TextDecoration.LineThrough
+        hasUnderline -> TextDecoration.Underline
+        strike != null || underline != null -> TextDecoration.None
+        else -> null
     }
 }
