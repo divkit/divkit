@@ -7,6 +7,7 @@
 * Fixed `is_playing: false` being ignored on initial bind of `lottie` extension.
 
 # iOS Client:
+* Fixed an issue where the first `transition_out` animation inside a pager (or other view that creates cells lazily) was skipped on initial visibility change.
 * Text images vertical alignment support.
 * The ability to trigger actions when the user interacts with the slider has been implemented.
 
