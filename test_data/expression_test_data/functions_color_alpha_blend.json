@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "expression": "@{alphaBlend(toColor('#00000000'), toColor('#FFFFFF'))}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFF"
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{alphaBlend(toColor('#FF0000'), toColor('#00FF0000'))}",
+      "expected": {
+        "type": "color",
+        "value": "#FF0000"
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{alphaBlend(toColor('#FF0000'), toColor('#800000FF'))}",
+      "expected": {
+        "type": "color",
+        "value": "#FF7F0080"
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{alphaBlend(toColor('#80646464'), toColor('#8000FF00'))}",
+      "expected": {
+        "type": "color",
+        "value": "#C021CB21"
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ]
+}

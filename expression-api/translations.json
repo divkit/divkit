@@ -556,6 +556,18 @@
     "en": "Number value of blue in range 0.0 to 1.0.",
     "ru": "Числовое значение синего цвета в диапазоне от 0.0 до 1.0."
   },
+  "alphablend_color_color": {
+    "en": "Blends two colors by alpha channel. Returns color.",
+    "ru": "Смешивает два цвета по альфа-каналу. Возвращает цвет."
+  },
+  "alphablend_color_color_arg0": {
+    "en": "Background color.",
+    "ru": "Цвет фона."
+  },
+  "alphablend_color_color_arg1": {
+    "en": "Foreground color.",
+    "ru": "Цвет переднего плана."
+  },
   "setcoloralpha_color_number": {
     "en": "Sets alpha value of argument color. Returns color.",
     "ru": "Устанавливает значение альфа-канала для аргумента цвета. Возвращает цвет."

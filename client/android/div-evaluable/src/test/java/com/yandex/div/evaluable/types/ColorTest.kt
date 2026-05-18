@@ -1,9 +1,17 @@
 package com.yandex.div.evaluable.types
 
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.ExpressionContext
+import com.yandex.div.evaluable.function.ColorAlphaBlend
 import org.junit.Assert
 import org.junit.Test
+import org.mockito.kotlin.mock
 
 class ColorTest {
+    private val mockEvaluationContext = EvaluationContext(
+        mock(), mock(), mock(), mock(),
+    )
+    private val mockExpressionContext = ExpressionContext(mock())
 
     private val testColor9Digits = "#FF001122"
     private val testColor7Digits = "#001122"
@@ -51,4 +59,29 @@ class ColorTest {
     fun `error parsing invalid color with wrong character`() {
         Color.parse(invalidColorStringWrongCharacters)
     }
+
+    @Test
+    fun `check compositeColors`() {
+        val transparentBg = "#00000000".color
+        val opaqueFg = "#FFFFFF".color
+        Assert.assertEquals("#FFFFFF".color, ColorAlphaBlend.invoke(transparentBg, opaqueFg))
+
+        val opaqueBg = "#FF0000".color
+        val transparentFg = "#00FF0000".color
+        Assert.assertEquals("#FF0000".color, ColorAlphaBlend.invoke(opaqueBg, transparentFg))
+
+        val redBg = "#FF0000".color
+        val blueFg = "#800000FF".color
+        Assert.assertEquals("#FF7F0080".color, ColorAlphaBlend.invoke(redBg, blueFg))
+
+        val semiTransparentBg = "#80646464".color
+        val semiTransparentFg = "#8000FF00".color
+        Assert.assertEquals("#C021CB21".color, ColorAlphaBlend.invoke(semiTransparentBg, semiTransparentFg))
+    }
+
+    private fun ColorAlphaBlend.invoke(background: Color, foreground: Color): Color {
+        return invoke(mockEvaluationContext, mockExpressionContext, listOf(background, foreground)) as Color
+    }
+
+    private val String.color get() = Color.parse(this)
 }

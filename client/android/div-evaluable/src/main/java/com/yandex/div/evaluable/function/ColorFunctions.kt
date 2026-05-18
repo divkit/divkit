@@ -296,6 +296,63 @@ internal object ColorRgb : Function() {
     }
 }
 
+internal object ColorAlphaBlend : Function() {
+
+    override val name = "alphaBlend"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.COLOR),
+        FunctionArgument(type = EvaluableType.COLOR),
+    )
+
+    override val resultType = EvaluableType.COLOR
+
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val background = (args[0] as Color)
+        val foreground = (args[1] as Color)
+        return compositeColors(background, foreground)
+    }
+}
+
+private fun compositeColors(bg: Color, fg: Color): Color {
+    val fgAlpha = fg.alpha()
+    val bgAlpha = bg.alpha()
+    val resultAlpha = compositeAlpha(fgAlpha, bgAlpha)
+
+    val r = compositeComponent(
+        bg.red(), bgAlpha,
+        fg.red(), fgAlpha,
+        resultAlpha
+    )
+    val g = compositeComponent(
+        bg.green(), bgAlpha,
+        fg.green(), fgAlpha,
+        resultAlpha
+    )
+    val b = compositeComponent(
+        bg.blue(), bgAlpha,
+        fg.blue(), fgAlpha,
+        resultAlpha
+    )
+
+    return Color.argb(resultAlpha, r, g, b)
+}
+
+private fun compositeAlpha(backgroundAlpha: Int, foregroundAlpha: Int): Int {
+    return 0xFF - (((0xFF - backgroundAlpha) * (0xFF - foregroundAlpha)) / 0xFF)
+}
+
+private fun compositeComponent(bgC: Int, bgA: Int, fgC: Int, fgA: Int, a: Int): Int {
+    if (a == 0) return 0
+    return ((0xFF * fgC * fgA) + (bgC * bgA * (0xFF - fgA))) / (a * 0xFF)
+}
+
 @Throws(IllegalArgumentException::class)
 internal fun Int.toColorFloatComponentValue(): Double {
     if (this !in 0..255) throw IllegalArgumentException("Value out of channel range 0..255")

@@ -5,6 +5,7 @@ extension [String: Function] {
   mutating func addColorFunctions() {
     addFunction("argb", _argb)
     addFunction("rgb", _rgb)
+    addFunction("alphaBlend", _alphaBlend)
 
     for channel in Channel.allCases {
       addFunction("getColor\(channel.description)", _getColor(channel: channel))
@@ -36,6 +37,42 @@ private let _rgb = FunctionTernary { red, green, blue in
     throw valueOutOfRangeError()
   }
   return Color(red: red, green: green, blue: blue, alpha: 1)
+}
+
+private let _alphaBlend = FunctionBinary<Color, Color, Color> { background, foreground in
+  compositeColors(background: background, foreground: foreground)
+}
+
+private func compositeColors(background: Color, foreground: Color) -> Color {
+  let bgA = Int(background.intAlpha)
+  let bgR = Int(background.intRed)
+  let bgG = Int(background.intGreen)
+  let bgB = Int(background.intBlue)
+  let fgA = Int(foreground.intAlpha)
+  let fgR = Int(foreground.intRed)
+  let fgG = Int(foreground.intGreen)
+  let fgB = Int(foreground.intBlue)
+
+  let resultAlpha = compositeAlpha(backgroundAlpha: bgA, foregroundAlpha: fgA)
+  let r = compositeComponent(bgC: bgR, bgA: bgA, fgC: fgR, fgA: fgA, a: resultAlpha)
+  let g = compositeComponent(bgC: bgG, bgA: bgA, fgC: fgG, fgA: fgA, a: resultAlpha)
+  let b = compositeComponent(bgC: bgB, bgA: bgA, fgC: fgB, fgA: fgA, a: resultAlpha)
+
+  return Color(
+    red: CGFloat(r) / 255,
+    green: CGFloat(g) / 255,
+    blue: CGFloat(b) / 255,
+    alpha: CGFloat(resultAlpha) / 255
+  )
+}
+
+private func compositeAlpha(backgroundAlpha: Int, foregroundAlpha: Int) -> Int {
+  0xFF - (((0xFF - backgroundAlpha) * (0xFF - foregroundAlpha)) / 0xFF)
+}
+
+private func compositeComponent(bgC: Int, bgA: Int, fgC: Int, fgA: Int, a: Int) -> Int {
+  if a == 0 { return 0 }
+  return ((0xFF * fgC * fgA) + (bgC * bgA * (0xFF - fgA))) / (a * 0xFF)
 }
 
 private func _getColor(channel: Channel) -> Function {

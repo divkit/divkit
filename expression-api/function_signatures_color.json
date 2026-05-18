@@ -420,6 +420,31 @@
       ]
     },
     {
+      "name": "alphaBlend",
+      "description": {
+        "$ref": "translations.json#/alphablend_color_color"
+      },
+      "arguments": [
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/alphablend_color_color_arg0"
+          }
+        },
+        {
+          "type": "color",
+          "description": {
+            "$ref": "translations.json#/alphablend_color_color_arg1"
+          }
+        }
+      ],
+      "return_type": "color",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
       "name": "rgb",
       "description": {
         "$ref": "translations.json#/rgb_number_number_number"

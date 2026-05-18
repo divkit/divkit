@@ -98,6 +98,8 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(ColorArgb)
         registry.register(ColorRgb)
 
+        registry.register(ColorAlphaBlend)
+
         // Datetime functions
         registry.register(ParseUnixTime)
         registry.register(ParseUnixTimeAsLocal)
