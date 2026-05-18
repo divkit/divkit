@@ -5,8 +5,10 @@
 * Added `press_start_actions` and `press_end_actions` support in `slider`.
 * Added stored values reset for particular `DivDataTag`.
 * Fixed `is_playing: false` being ignored on initial bind of `lottie` extension.
+* Fixed an issue where `pager` and `gallery` items with `visibility: invisible` were removed from layout instead of reserving space.
 
 # iOS Client:
+* Fixed an issue where a scroll action on a gallery, pager or tabs could be ignored if it was triggered before the previous scroll animation finished.
 * Fixed an issue where the first `transition_out` animation inside a pager (or other view that creates cells lazily) was skipped on initial visibility change.
 * Text images vertical alignment support.
 * The ability to trigger actions when the user interacts with the slider has been implemented.
