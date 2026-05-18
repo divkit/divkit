@@ -370,7 +370,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    guard model != self.model || observer !== self.observer else {
+    guard model != self.model
+      || observer !== self.observer
+      || self.renderingDelegate !== renderingDelegate else {
       return
     }
     let oldModel = self.model
@@ -381,7 +383,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
     }
 
-    let shouldUpdateChildView = model.child !== self.model?.child || self.observer !== observer
+    let shouldUpdateChildView = model.child !== self.model?.child
+      || self.observer !== observer
+      || self.renderingDelegate !== renderingDelegate
     self.model = model
     self.observer = observer
     self.renderingDelegate = renderingDelegate
