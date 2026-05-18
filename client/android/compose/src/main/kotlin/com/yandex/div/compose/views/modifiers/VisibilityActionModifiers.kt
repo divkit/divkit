@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onVisibilityChanged
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
@@ -30,8 +29,7 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
-            modifier = modifier.onVisibilityChanged(
-                minDurationMs = action.visibilityDuration.observedValue(),
+            modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f
             ) {
                 visibilityActionTracker.onVisibilityChanged(
@@ -52,8 +50,8 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
-            modifier = modifier.onVisibilityChanged(
-                minFractionVisible = action.visibilityPercentage.observedValue() / 100f
+            modifier = modifier.onDivVisibilityChanged(
+                minFractionVisible = action.visibilityPercentage.observedValue() / 100f,
             ) {
                 visibilityActionTracker.onVisibilityChanged(
                     context = actionHandlingContext,

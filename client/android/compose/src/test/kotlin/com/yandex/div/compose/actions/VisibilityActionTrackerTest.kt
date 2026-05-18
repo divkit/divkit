@@ -35,34 +35,91 @@ class VisibilityActionTrackerTest {
     )
 
     @Test
-    fun `onVisibilityChanged() triggers visibility action when view becomes visible`() {
-        val action = visibilityAction()
+    fun `onVisibilityChanged() triggers visibility action after delay`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 500)
 
         tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        wait(300)
+
+        verifyNoActionsHandled()
+
+        wait(200)
 
         verifyHandled(action)
     }
 
     @Test
-    fun `onVisibilityChanged() does not trigger visibility action when limit is reached`() {
-        val action = visibilityAction(limit = 3)
+    fun `onVisibilityChanged() does not trigger visibility action when limit is reached`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 100, limit = 3)
 
         repeat(5) {
             tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+            wait(100)
         }
 
         verifyHandled(action, times = 3)
     }
 
     @Test
-    fun `onVisibilityChanged() triggers visibility action every time if limit is zero`() {
-        val action = visibilityAction(limit = 0)
+    fun `onVisibilityChanged() triggers visibility action every time if limit is zero`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 100, limit = 0)
 
         repeat(5) {
             tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+            wait(100)
         }
 
         verifyHandled(action, times = 5)
+    }
+
+    @Test
+    fun `onVisibilityChanged() schedules multiple visibility actions`() = testScope.runTest {
+        val action1 = visibilityAction(delayMs = 250, id = "action1")
+        val action2 = visibilityAction(delayMs = 500, id = "action2")
+
+        tracker.onVisibilityChanged(actionHandlingContext, action1, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action2, isVisible = true)
+        wait(300)
+
+        verifyHandled(action1)
+
+        wait(300)
+
+        verifyHandled(action2)
+    }
+
+    @Test
+    fun `onVisibilityChanged() reschedules visibility action`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 500)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        wait(250)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        wait(250)
+
+        verifyNoActionsHandled()
+
+        wait(250)
+
+        verifyHandled(action)
+    }
+
+    @Test
+    fun `onVisibilityChanged() does not affect other actions when reschedules visibility action`() = testScope.runTest {
+        val action1 = visibilityAction(delayMs = 500, id = "action1")
+        val action2 = visibilityAction(delayMs = 500, id = "action2")
+
+        tracker.onVisibilityChanged(actionHandlingContext, action1, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action2, isVisible = true)
+        wait(250)
+        tracker.onVisibilityChanged(actionHandlingContext, action1, isVisible = true)
+        wait(250)
+
+        verifyHandled(action2)
+
+        wait(250)
+
+        verifyHandled(action1)
     }
 
     @Test
@@ -87,22 +144,24 @@ class VisibilityActionTrackerTest {
     }
 
     @Test
-    fun `isLimitReached() is true if limit reached`() {
-        val action = visibilityAction(limit = 3)
+    fun `isLimitReached() is true if limit reached`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 100, limit = 3)
 
         repeat(3) {
             tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+            wait(100)
         }
 
         assertTrue(tracker.isLimitReached(action, limit = 3))
     }
 
     @Test
-    fun `isLimitReached() is false if limit not reached`() {
-        val action = visibilityAction(limit = 5)
+    fun `isLimitReached() is false if limit not reached`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 100, limit = 5)
 
         repeat(3) {
             tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+            wait(100)
         }
 
         assertFalse(tracker.isLimitReached(action, limit = 5))

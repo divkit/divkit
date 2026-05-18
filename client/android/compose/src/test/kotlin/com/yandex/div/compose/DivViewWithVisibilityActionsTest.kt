@@ -8,9 +8,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.text
@@ -38,9 +41,10 @@ class DivViewWithVisibilityActionsTest {
 
     private val counter = Variable.IntegerVariable("counter", 0)
     private val visibility = Variable.StringVariable("visibility", "visible")
+    val viewHeight = Variable.IntegerVariable("view_height", 0)
 
     private val variableController = DivVariableController().apply {
-        declare(counter, visibility)
+        declare(counter, visibility, viewHeight)
     }
 
     private val configuration = DivComposeConfiguration(
@@ -68,11 +72,11 @@ class DivViewWithVisibilityActionsTest {
 
         advanceTimeBy(250)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 0")
+        assertEquals(0L, counter.getValue())
 
         advanceTimeBy(250)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
     }
 
     @Test
@@ -90,16 +94,16 @@ class DivViewWithVisibilityActionsTest {
 
         advanceTimeBy(500)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
 
         hideCounter()
         showCounter()
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
 
         advanceTimeBy(500)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 2")
+        assertEquals(2L, counter.getValue())
     }
 
     @Test
@@ -122,11 +126,11 @@ class DivViewWithVisibilityActionsTest {
 
         advanceTimeBy(250)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 0")
+        assertEquals(0L, counter.getValue())
 
         advanceTimeBy(250)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
     }
 
     @Test
@@ -143,7 +147,7 @@ class DivViewWithVisibilityActionsTest {
         )
 
         repeat(5) {
-            rule.onNodeWithTag("counter").assertTextEquals("counter = ${min(it, 3)}")
+            assertEquals(min(it, 3).toLong(), counter.getValue())
             hideCounter()
             showCounter()
             advanceTimeBy(500)
@@ -164,7 +168,7 @@ class DivViewWithVisibilityActionsTest {
         )
 
         repeat(5) {
-            rule.onNodeWithTag("counter").assertTextEquals("counter = $it")
+            assertEquals(it.toLong(), counter.getValue())
             hideCounter()
             showCounter()
             advanceTimeBy(500)
@@ -266,6 +270,233 @@ class DivViewWithVisibilityActionsTest {
         assertEquals(1L, counter.getValue())
     }
 
+    @Test
+    fun `visibility action with percentage is not triggered when view appears below threshold`() {
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = constant(200),
+                        ),
+                        visibilityActions = listOf(
+                            visibilityAction(
+                                delayMs = 500,
+                                percentage = 50,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        advanceTimeBy(500)
+
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `visibility action with percentage is triggered when view crosses threshold`() {
+        viewHeight.set(200)
+
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = intExpression("@{view_height}"),
+                        ),
+                        visibilityActions = listOf(
+                            visibilityAction(
+                                delayMs = 500,
+                                percentage = 60,
+                                limit = 0,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        advanceTimeBy(500)
+        assertEquals(0L, counter.getValue())
+
+        updateHeight(70)
+
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `visibility action with percentage is cancelled when view drops below threshold`() {
+        viewHeight.set(100)
+
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = intExpression("@{view_height}"),
+                        ),
+                        visibilityActions = listOf(
+                            visibilityAction(
+                                delayMs = 500,
+                                percentage = 60,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        advanceTimeBy(300)
+
+        updateHeight(200)
+
+        advanceTimeBy(200)
+        assertEquals(0L, counter.getValue())
+
+        updateHeight(100)
+
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `disappear action with percentage is not triggered when view stays above threshold`() {
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = constant(200),
+                        ),
+                        disappearActions = listOf(
+                            disappearAction(
+                                delayMs = 500,
+                                percentage = 40,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        advanceTimeBy(500)
+        assertEquals(0L, counter.getValue())
+    }
+
+    @Test
+    fun `disappear action with percentage is triggered when view crosses threshold`() {
+        viewHeight.set(100)
+
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = intExpression("@{view_height}"),
+                        ),
+                        disappearActions = listOf(
+                            disappearAction(
+                                delayMs = 500,
+                                percentage = 40,
+                                limit = 0,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        advanceTimeBy(500)
+        assertEquals(0L, counter.getValue())
+
+        updateHeight(300)
+
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `disappear action with percentage is cancelled when view goes back above threshold`() {
+        viewHeight.set(100)
+
+        setContent(
+            container(
+                id = "viewport",
+                height = fixed(
+                    value = constant(100),
+                ),
+                items = listOf(
+                    text(
+                        id = "counter",
+                        text = expression("counter = @{counter}"),
+                        height = fixed(
+                            value = intExpression("@{view_height}"),
+                        ),
+                        disappearActions = listOf(
+                            disappearAction(
+                                delayMs = 500,
+                                percentage = 51,
+                                typed = incrementCounterAction()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        updateHeight(200)
+
+        advanceTimeBy(300)
+
+        updateHeight(100)
+
+        advanceTimeBy(200)
+        assertEquals(0L, counter.getValue())
+
+        updateHeight(200)
+
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
     private fun setContent(
         content: Div,
         variables: List<DivVariable>? = null
@@ -288,6 +519,13 @@ class DivViewWithVisibilityActionsTest {
         withAutoAdvance {
             visibility.set("gone")
             rule.onNodeWithTag("counter").assertDoesNotExist()
+        }
+    }
+
+    private fun updateHeight(height: Int) {
+        withAutoAdvance {
+            viewHeight.set(height.toLong())
+            rule.onNodeWithTag("counter").assertIsDisplayed()
         }
     }
 

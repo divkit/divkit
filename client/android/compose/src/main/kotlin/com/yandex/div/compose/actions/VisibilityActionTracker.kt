@@ -1,6 +1,7 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.internal.util.duration
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
@@ -16,7 +17,7 @@ internal class VisibilityActionTracker @Inject constructor(
     private val coroutineScope: CoroutineScope
 ) {
     private val counter = mutableMapOf<DivSightAction, Int>()
-    private val pendingActions = mutableMapOf<DivDisappearAction, Job>()
+    private val pendingActions = mutableMapOf<DivSightAction, Job>()
 
     fun isLimitReached(action: DivSightAction, limit: Int): Boolean {
         return limit > 0 && ((counter[action] ?: 0) >= limit)
@@ -27,8 +28,10 @@ internal class VisibilityActionTracker @Inject constructor(
         action: DivVisibilityAction,
         isVisible: Boolean
     ) {
-        if (isVisible) {
-            triggerIfNeeded(context, action)
+        if (!isVisible) {
+            cancelAction(action)
+        } else {
+            scheduleAction(context, action)
         }
     }
 
@@ -59,17 +62,17 @@ internal class VisibilityActionTracker @Inject constructor(
 
     private fun scheduleAction(
         context: DivActionHandlingContext,
-        action: DivDisappearAction
+        action: DivSightAction
     ) {
         cancelAction(action)
         pendingActions[action] = coroutineScope.launch {
-            delay(action.disappearDuration.evaluate(context.expressionResolver))
+            delay(action.duration.evaluate(context.expressionResolver))
             pendingActions.remove(action)
             triggerIfNeeded(context, action)
         }
     }
 
-    private fun cancelAction(action: DivDisappearAction) {
+    private fun cancelAction(action: DivSightAction) {
         pendingActions.remove(action)?.cancel()
     }
 }

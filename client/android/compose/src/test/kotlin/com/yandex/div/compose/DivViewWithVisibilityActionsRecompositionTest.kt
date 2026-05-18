@@ -4,7 +4,6 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -23,6 +22,7 @@ import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -80,18 +80,18 @@ class DivViewWithVisibilityActionsRecompositionTest {
 
         setContent(data)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 0")
+        assertEquals(0L, counter.getValue())
         advanceTimeBy(500)
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
 
         activity.setContentView(View(activity))
         setContent(data)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
         advanceTimeBy(500)
 
         repeat(5) {
-            rule.onNodeWithTag("counter").assertTextEquals("counter = 2")
+            assertEquals(2L, counter.getValue())
             hideCounter()
             showCounter()
             advanceTimeBy(500)
@@ -113,9 +113,9 @@ class DivViewWithVisibilityActionsRecompositionTest {
 
         setContent(data)
 
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 0")
+        assertEquals(0L, counter.getValue())
         advanceTimeBy(500)
-        rule.onNodeWithTag("counter").assertTextEquals("counter = 1")
+        assertEquals(1L, counter.getValue())
 
         activity.setContentView(View(activity))
         divContext.clearViewContext(data)
@@ -123,7 +123,7 @@ class DivViewWithVisibilityActionsRecompositionTest {
         setContent(data)
 
         repeat(5) {
-            rule.onNodeWithTag("counter").assertTextEquals("counter = ${min(it, 3)}")
+            assertEquals(min(it, 3).toLong(), counter.getValue())
             hideCounter()
             showCounter()
             advanceTimeBy(500)
@@ -138,6 +138,7 @@ class DivViewWithVisibilityActionsRecompositionTest {
                 }
             }
         )
+        showCounter()
     }
 
     private fun showCounter() {

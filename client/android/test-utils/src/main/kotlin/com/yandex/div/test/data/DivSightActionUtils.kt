@@ -30,6 +30,7 @@ fun disappearAction(
     id: String = "test",
     isEnabled: Boolean = true,
     limit: Int = 1,
+    percentage: Int = 0,
     typed: DivActionTyped? = null,
     url: String? = null,
 ): DivDisappearAction {
@@ -39,6 +40,7 @@ fun disappearAction(
         logId = constant(id),
         logLimit = constant(limit.toLong()),
         typed = typed,
-        url = url?.let { constant(it.toUri()) }
+        url = url?.let { constant(it.toUri()) },
+        visibilityPercentage = constant(percentage.toLong())
     )
 }

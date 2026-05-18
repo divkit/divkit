@@ -14,7 +14,7 @@ import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.bindingContext
-import com.yandex.div.core.view2.divs.duration
+import com.yandex.div.internal.util.duration
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
