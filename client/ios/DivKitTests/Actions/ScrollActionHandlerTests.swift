@@ -9,6 +9,10 @@ final class ScrollActionHandlerTests: XCTestCase {
 
   private var isUpdateCardCalled = false
 
+  private var elementPath: UIElementPath {
+    cardId.path + "element_id"
+  }
+
   override func setUp() {
     handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
@@ -447,6 +451,46 @@ final class ScrollActionHandlerTests: XCTestCase {
     XCTAssertTrue(isUpdateCardCalled)
   }
 
+  func test_ScrollTo_PendingTarget_NotClobberedByObserverWrite_Gallery() {
+    setState(galleryState(index: 2, itemCount: 5))
+
+    handleScrollTo(indexDestination(0))
+
+    blockStateStorage.setState(
+      path: elementPath,
+      state: GalleryViewState(
+        contentPosition: .paging(index: 1.7),
+        itemsCount: 5,
+        isScrolling: true,
+        animated: true
+      )
+    )
+
+    XCTAssertEqual(galleryState(index: 0, itemCount: 5), getState())
+  }
+
+  func test_ScrollTo_PendingTarget_NotClobberedByObserverWrite_Pager() {
+    setState(pagerState(index: 2, itemCount: 5))
+
+    handleScrollTo(indexDestination(0))
+
+    blockStateStorage.setState(
+      path: elementPath,
+      state: PagerViewState(numberOfPages: 5, currentPage: 1, animated: true)
+    )
+
+    XCTAssertEqual(pagerState(index: 0, itemCount: 5), getState())
+  }
+
+  func test_ScrollTo_TwoActionsBeforeRebuild_LastWins() {
+    setState(galleryState(index: 0, itemCount: 5))
+
+    handleScrollTo(indexDestination(3))
+    handleScrollTo(indexDestination(1))
+
+    XCTAssertEqual(galleryState(index: 1, itemCount: 5), getState())
+  }
+
   private func handleScrollTo(_ destination: DivActionScrollDestination, animated: Bool = true) {
     handler.handle(
       divAction(
@@ -491,7 +535,10 @@ final class ScrollActionHandlerTests: XCTestCase {
   }
 
   private func getState<T: ElementState>() -> T {
-    blockStateStorage.getState("element_id", cardId: cardId)!
+    if let pending: T = blockStateStorage.peekPendingState(elementPath) as? T {
+      return pending
+    }
+    return blockStateStorage.getState("element_id", cardId: cardId)!
   }
 
   private func setState(_ state: ElementState) {
