@@ -21,6 +21,7 @@ internal fun buildMaskedText(
     var rawIdx = 0
     var patIdx = 0
     rawToFormatted[0] = 0
+    var advanceCursorPastStatics = false
 
     while (patIdx < pattern.length) {
         val patChar = pattern[patIdx]
@@ -28,18 +29,21 @@ internal fun buildMaskedText(
             out.append(patChar)
             formattedToRaw.add(rawIdx)
             patIdx++
+            if (advanceCursorPastStatics) rawToFormatted[rawIdx] = out.length
         } else if (rawIdx < raw.length) {
             out.append(raw[rawIdx])
             rawIdx++
             patIdx++
             rawToFormatted[rawIdx] = out.length
             formattedToRaw.add(rawIdx)
+            advanceCursorPastStatics = true
         } else {
             val placeholder = placeholderForPosition?.invoke(patIdx)
             if (placeholder != null) {
                 out.append(placeholder)
                 formattedToRaw.add(rawIdx)
                 patIdx++
+                advanceCursorPastStatics = false
             } else {
                 break
             }

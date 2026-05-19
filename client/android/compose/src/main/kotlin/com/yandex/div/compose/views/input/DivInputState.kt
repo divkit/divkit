@@ -10,7 +10,9 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.views.input.mask.rememberCurrencyInputState
 import com.yandex.div.compose.views.input.mask.rememberFixedLengthInputState
+import com.yandex.div.compose.views.input.mask.rememberPhoneInputState
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
 
@@ -18,6 +20,8 @@ import com.yandex.div2.DivInputMask
 internal fun DivInput.rememberDivInputState(): DivInputState {
     return when (val mask = mask) {
         is DivInputMask.FixedLength -> mask.value.rememberFixedLengthInputState(textVariable)
+        is DivInputMask.Phone -> mask.value.rememberPhoneInputState(textVariable)
+        is DivInputMask.Currency -> mask.value.rememberCurrencyInputState(textVariable)
         else -> rememberPlainInputState()
     }
 }
