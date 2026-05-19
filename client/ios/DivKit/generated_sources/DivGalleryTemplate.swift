@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 public final class DivGalleryTemplate: TemplateValue, Sendable {
-  public typealias CrossContentAlignment = DivGallery.CrossContentAlignment
+  public typealias ContentAlignment = DivGallery.ContentAlignment
 
   public typealias Orientation = DivGallery.Orientation
 
@@ -24,7 +24,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
   public let border: Field<DivBorderTemplate>?
   public let columnCount: Field<Expression<Int>>? // constraint: number > 0
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let crossContentAlignment: Field<Expression<CrossContentAlignment>>? // default value: start
+  public let crossContentAlignment: Field<Expression<ContentAlignment>>? // default value: start
   public let crossSpacing: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
@@ -43,6 +43,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let scrollContentAlignment: Field<Expression<ContentAlignment>>?
   public let scrollMode: Field<Expression<ScrollMode>>? // default value: default
   public let scrollbar: Field<Expression<Scrollbar>>? // default value: none
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -91,6 +92,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
+      scrollContentAlignment: dictionary.getOptionalExpressionField("scroll_content_alignment"),
       scrollMode: dictionary.getOptionalExpressionField("scroll_mode"),
       scrollbar: dictionary.getOptionalExpressionField("scrollbar"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -121,7 +123,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     border: Field<DivBorderTemplate>? = nil,
     columnCount: Field<Expression<Int>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
-    crossContentAlignment: Field<Expression<CrossContentAlignment>>? = nil,
+    crossContentAlignment: Field<Expression<ContentAlignment>>? = nil,
     crossSpacing: Field<Expression<Int>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
@@ -140,6 +142,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     restrictParentScroll: Field<Expression<Bool>>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
+    scrollContentAlignment: Field<Expression<ContentAlignment>>? = nil,
     scrollMode: Field<Expression<ScrollMode>>? = nil,
     scrollbar: Field<Expression<Scrollbar>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -186,6 +189,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     self.restrictParentScroll = restrictParentScroll
     self.reuseId = reuseId
     self.rowSpan = rowSpan
+    self.scrollContentAlignment = scrollContentAlignment
     self.scrollMode = scrollMode
     self.scrollbar = scrollbar
     self.selectedActions = selectedActions
@@ -233,6 +237,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     let restrictParentScrollValue = { parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
+    let scrollContentAlignmentValue = { parent?.scrollContentAlignment?.resolveOptionalValue(context: context) ?? .noValue }()
     let scrollModeValue = { parent?.scrollMode?.resolveOptionalValue(context: context) ?? .noValue }()
     let scrollbarValue = { parent?.scrollbar?.resolveOptionalValue(context: context) ?? .noValue }()
     let selectedActionsValue = { parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -278,6 +283,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scrollContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_content_alignment", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
       scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -324,6 +330,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScroll: { restrictParentScrollValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
+      scrollContentAlignment: { scrollContentAlignmentValue.value }(),
       scrollMode: { scrollModeValue.value }(),
       scrollbar: { scrollbarValue.value }(),
       selectedActions: { selectedActionsValue.value }(),
@@ -357,7 +364,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnCountValue: DeserializationResult<Expression<Int>> = { parent?.columnCount?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
-    var crossContentAlignmentValue: DeserializationResult<Expression<DivGallery.CrossContentAlignment>> = { parent?.crossContentAlignment?.value() ?? .noValue }()
+    var crossContentAlignmentValue: DeserializationResult<Expression<DivGallery.ContentAlignment>> = { parent?.crossContentAlignment?.value() ?? .noValue }()
     var crossSpacingValue: DeserializationResult<Expression<Int>> = { parent?.crossSpacing?.value() ?? .noValue }()
     var defaultItemValue: DeserializationResult<Expression<Int>> = { parent?.defaultItem?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
@@ -376,6 +383,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = { parent?.restrictParentScroll?.value() ?? .noValue }()
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
+    var scrollContentAlignmentValue: DeserializationResult<Expression<DivGallery.ContentAlignment>> = { parent?.scrollContentAlignment?.value() ?? .noValue }()
     var scrollModeValue: DeserializationResult<Expression<DivGallery.ScrollMode>> = { parent?.scrollMode?.value() ?? .noValue }()
     var scrollbarValue: DeserializationResult<Expression<DivGallery.Scrollbar>> = { parent?.scrollbar?.value() ?? .noValue }()
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -535,6 +543,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
           if key == "row_span" {
            rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
+          }
+        }()
+        _ = {
+          if key == "scroll_content_alignment" {
+           scrollContentAlignmentValue = deserialize(__dictValue).merged(with: scrollContentAlignmentValue)
           }
         }()
         _ = {
@@ -758,6 +771,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.scrollContentAlignment?.link {
+           scrollContentAlignmentValue = scrollContentAlignmentValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.scrollMode?.link {
            scrollModeValue = scrollModeValue.merged(with: { deserialize(__dictValue) })
           }
@@ -896,6 +914,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scrollContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_content_alignment", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
       scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -942,6 +961,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScroll: { restrictParentScrollValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
+      scrollContentAlignment: { scrollContentAlignmentValue.value }(),
       scrollMode: { scrollModeValue.value }(),
       scrollbar: { scrollbarValue.value }(),
       selectedActions: { selectedActionsValue.value }(),
@@ -999,6 +1019,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
+      scrollContentAlignment: scrollContentAlignment ?? mergedParent.scrollContentAlignment,
       scrollMode: scrollMode ?? mergedParent.scrollMode,
       scrollbar: scrollbar ?? mergedParent.scrollbar,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -1051,6 +1072,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       restrictParentScroll: merged.restrictParentScroll,
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
+      scrollContentAlignment: merged.scrollContentAlignment,
       scrollMode: merged.scrollMode,
       scrollbar: merged.scrollbar,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

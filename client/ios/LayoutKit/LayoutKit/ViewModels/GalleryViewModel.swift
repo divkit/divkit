@@ -71,6 +71,7 @@ public struct GalleryViewModel: Equatable {
   public let infiniteScroll: Bool
   public let scrollbar: Scrollbar
   public let transformation: ElementsTransformation?
+  public let scrollAlignment: Alignment
 
   let removedItemsIndices: Set<Int>
 
@@ -98,7 +99,8 @@ public struct GalleryViewModel: Equatable {
     bounces: Bool = true,
     infiniteScroll: Bool = false,
     scrollbar: Scrollbar = .none,
-    transformation: ElementsTransformation? = nil
+    transformation: ElementsTransformation? = nil,
+    scrollAlignment: Alignment? = nil
   ) {
     self.init(
       items: blocks.map { Item(crossAlignment: crossAlignment, content: $0) },
@@ -115,7 +117,8 @@ public struct GalleryViewModel: Equatable {
       bounces: bounces,
       infiniteScroll: infiniteScroll,
       scrollbar: scrollbar,
-      transformation: transformation
+      transformation: transformation,
+      scrollAlignment: scrollAlignment
     )
   }
 
@@ -134,7 +137,8 @@ public struct GalleryViewModel: Equatable {
     bounces: Bool = true,
     infiniteScroll: Bool = false,
     scrollbar: Scrollbar = .none,
-    transformation: ElementsTransformation? = nil
+    transformation: ElementsTransformation? = nil,
+    scrollAlignment: Alignment? = nil
   ) {
     validateContent(of: items, with: direction)
 
@@ -165,6 +169,15 @@ public struct GalleryViewModel: Equatable {
     self.infiniteScroll = infiniteScroll
     self.scrollbar = scrollbar
     self.transformation = transformation
+
+    self.scrollAlignment = scrollAlignment ?? {
+      switch scrollMode {
+      case .default:
+        .leading
+      case .autoPaging, .fixedPaging:
+        .center
+      }
+    }()
   }
 
   public func modifying(

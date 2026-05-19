@@ -6,7 +6,7 @@ import VGSL
 
 public final class DivGallery: DivBase, Sendable {
   @frozen
-  public enum CrossContentAlignment: String, CaseIterable, Sendable {
+  public enum ContentAlignment: String, CaseIterable, Sendable {
     case start = "start"
     case center = "center"
     case end = "end"
@@ -40,7 +40,7 @@ public final class DivGallery: DivBase, Sendable {
   public let border: DivBorder?
   public let columnCount: Expression<Int>? // constraint: number > 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let crossContentAlignment: Expression<CrossContentAlignment> // default value: start
+  public let crossContentAlignment: Expression<ContentAlignment> // default value: start
   public let crossSpacing: Expression<Int>? // constraint: number >= 0
   public let defaultItem: Expression<Int> // constraint: number >= 0; default value: 0
   public let disappearActions: [DivDisappearAction]?
@@ -59,6 +59,7 @@ public final class DivGallery: DivBase, Sendable {
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
+  public let scrollContentAlignment: Expression<ContentAlignment>?
   public let scrollMode: Expression<ScrollMode> // default value: default
   public let scrollbar: Expression<Scrollbar> // default value: none
   public let selectedActions: [DivAction]?
@@ -96,8 +97,8 @@ public final class DivGallery: DivBase, Sendable {
     resolver.resolveNumeric(columnSpan)
   }
 
-  public func resolveCrossContentAlignment(_ resolver: ExpressionResolver) -> CrossContentAlignment {
-    resolver.resolveEnum(crossContentAlignment) ?? CrossContentAlignment.start
+  public func resolveCrossContentAlignment(_ resolver: ExpressionResolver) -> ContentAlignment {
+    resolver.resolveEnum(crossContentAlignment) ?? ContentAlignment.start
   }
 
   public func resolveCrossSpacing(_ resolver: ExpressionResolver) -> Int? {
@@ -126,6 +127,10 @@ public final class DivGallery: DivBase, Sendable {
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(rowSpan)
+  }
+
+  public func resolveScrollContentAlignment(_ resolver: ExpressionResolver) -> ContentAlignment? {
+    resolver.resolveEnum(scrollContentAlignment)
   }
 
   public func resolveScrollMode(_ resolver: ExpressionResolver) -> ScrollMode {
@@ -194,6 +199,7 @@ public final class DivGallery: DivBase, Sendable {
       restrictParentScroll: try dictionary.getOptionalExpressionField("restrict_parent_scroll", context: context),
       reuseId: try dictionary.getOptionalExpressionField("reuse_id", context: context),
       rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),
+      scrollContentAlignment: try dictionary.getOptionalExpressionField("scroll_content_alignment", context: context),
       scrollMode: try dictionary.getOptionalExpressionField("scroll_mode", context: context),
       scrollbar: try dictionary.getOptionalExpressionField("scrollbar", context: context),
       selectedActions: try dictionary.getOptionalArray("selected_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
@@ -223,7 +229,7 @@ public final class DivGallery: DivBase, Sendable {
     border: DivBorder?,
     columnCount: Expression<Int>?,
     columnSpan: Expression<Int>?,
-    crossContentAlignment: Expression<CrossContentAlignment>?,
+    crossContentAlignment: Expression<ContentAlignment>?,
     crossSpacing: Expression<Int>?,
     defaultItem: Expression<Int>?,
     disappearActions: [DivDisappearAction]?,
@@ -242,6 +248,7 @@ public final class DivGallery: DivBase, Sendable {
     restrictParentScroll: Expression<Bool>?,
     reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
+    scrollContentAlignment: Expression<ContentAlignment>?,
     scrollMode: Expression<ScrollMode>?,
     scrollbar: Expression<Scrollbar>?,
     selectedActions: [DivAction]?,
@@ -287,6 +294,7 @@ public final class DivGallery: DivBase, Sendable {
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.reuseId = reuseId
     self.rowSpan = rowSpan
+    self.scrollContentAlignment = scrollContentAlignment
     self.scrollMode = scrollMode ?? .value(.default)
     self.scrollbar = scrollbar ?? .value(.none)
     self.selectedActions = selectedActions
@@ -374,40 +382,41 @@ extension DivGallery: Equatable {
     }
     guard
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollMode == rhs.scrollMode,
-      lhs.scrollbar == rhs.scrollbar
+      lhs.scrollContentAlignment == rhs.scrollContentAlignment,
+      lhs.scrollMode == rhs.scrollMode
     else {
       return false
     }
     guard
+      lhs.scrollbar == rhs.scrollbar,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -451,6 +460,7 @@ extension DivGallery: Serializable {
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
+    result["scroll_content_alignment"] = scrollContentAlignment?.toValidSerializationValue()
     result["scroll_mode"] = scrollMode.toValidSerializationValue()
     result["scrollbar"] = scrollbar.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

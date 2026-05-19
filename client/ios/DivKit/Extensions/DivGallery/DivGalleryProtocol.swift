@@ -24,7 +24,8 @@ extension DivGalleryProtocol {
     infiniteScroll: Bool = false,
     layoutMode: PagerBlock.LayoutMode? = nil,
     scrollbar: GalleryViewModel.Scrollbar = .none,
-    transformation: ElementsTransformation? = nil
+    transformation: ElementsTransformation? = nil,
+    scrollAlignment: Alignment? = nil
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     var children: [GalleryViewModel.Item]
@@ -84,7 +85,8 @@ extension DivGalleryProtocol {
       columnCount: columnCount ?? 1,
       infiniteScroll: infiniteScroll,
       scrollbar: scrollbar,
-      transformation: transformation
+      transformation: transformation,
+      scrollAlignment: scrollAlignment
     )
   }
 

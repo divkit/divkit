@@ -27,7 +27,8 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       defaultCrossAlignment: resolveCrossContentAlignment(expressionResolver).blockAlignment,
       scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
       columnCount: resolveColumnCount(expressionResolver),
-      scrollbar: resolveScrollbar(expressionResolver).blockScrollbar
+      scrollbar: resolveScrollbar(expressionResolver).blockScrollbar,
+      scrollAlignment: resolveScrollContentAlignment(expressionResolver).map(\.blockAlignment)
     )
     return try GalleryBlock(
       model: model,
@@ -110,7 +111,7 @@ extension DivGallery.ScrollMode {
   }
 }
 
-extension DivGallery.CrossContentAlignment {
+extension DivGallery.ContentAlignment {
   fileprivate var blockAlignment: Alignment {
     switch self {
     case .start: .leading

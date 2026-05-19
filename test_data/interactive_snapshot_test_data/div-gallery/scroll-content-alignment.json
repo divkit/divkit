@@ -1,0 +1,462 @@
+{
+  "description": "Gallery scroll_content_alignment: start, center, end with default and paging scroll modes",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "section_header": {
+        "type": "text",
+        "font_size": 16,
+        "font_weight": "bold",
+        "text_color": "#888",
+        "paddings": {
+          "left": 10,
+          "right": 10,
+          "top": 14,
+          "bottom": 2
+        }
+      },
+      "text_block": {
+        "type": "text",
+        "width": {
+          "type": "fixed",
+          "value": 150
+        },
+        "height": {
+          "type": "fixed",
+          "value": 80
+        },
+        "border": {
+          "corner_radius": 6
+        },
+        "font_size": 20,
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "background": [
+          {
+            "type": "solid",
+            "color": "@{active_item == item_index ? '#a8d4a0' : '#d8d8d8'}"
+          }
+        ],
+        "$item_index": "index_var_name"
+      },
+      "demo_gallery": {
+        "type": "gallery",
+        "default_item": 1,
+        "items": [
+          {
+            "type": "text_block",
+            "text": "Item 0",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 0 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "text": "Item 1",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 1 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "text": "Item 2",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 2 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "text": "Item 3",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 3 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "text": "Item 4",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 4 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "text": "Item 5",
+            "background": [
+              {
+                "type": "solid",
+                "color": "@{active_item == 5 ? '#a8d4a0' : '#d8d8d8'}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "variables": [
+        {
+          "name": "active_item",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "section_header",
+                "text": "scroll_mode = default, scroll_alignment = start"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_default_start",
+                "scroll_mode": "default",
+                "scroll_content_alignment": "start"
+              },
+              {
+                "type": "section_header",
+                "text": "scroll_mode = paging, scroll_alignment = start"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_paging_start",
+                "scroll_mode": "paging",
+                "scroll_content_alignment": "start"
+              },
+              {
+                "type": "section_header",
+                "text": "scroll_mode = default, scroll_alignment = center"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_default_center",
+                "scroll_mode": "default",
+                "scroll_content_alignment": "center"
+              },
+              {
+                "type": "section_header",
+                "text": "scroll_mode = paging, scroll_alignment = center"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_paging_center",
+                "scroll_mode": "paging",
+                "scroll_content_alignment": "center"
+              },
+              {
+                "type": "section_header",
+                "text": "scroll_mode = default, scroll_alignment = end"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_default_end",
+                "scroll_mode": "default",
+                "scroll_content_alignment": "end"
+              },
+              {
+                "type": "section_header",
+                "text": "scroll_mode = paging, scroll_alignment = end"
+              },
+              {
+                "type": "demo_gallery",
+                "id": "g_paging_end",
+                "scroll_mode": "paging",
+                "scroll_content_alignment": "end"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_active_0",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "active_item",
+            "value": {
+              "type": "integer",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_default_start/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_start/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_default_center/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_center/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_default_end/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_end/scrollTo0",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_active_2",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "active_item",
+            "value": {
+              "type": "integer",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_default_start/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_start/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_default_center/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_center/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_default_end/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_end/scrollTo2",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 2
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_active_5",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "active_item",
+            "value": {
+              "type": "integer",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_default_start/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_start/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_start",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_default_center/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_center/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_center",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_default_end/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_default_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        },
+        {
+          "log_id": "g_paging_end/scrollToLast",
+          "typed": {
+            "type": "scroll_to",
+            "id": "g_paging_end",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 5
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    }
+  ]
+}

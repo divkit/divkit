@@ -84,6 +84,7 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
     case .vertical:
       max(0, contentSize.height - boundsSize.height)
     }
+
     return min(maxOffset, page.origin + page.size * fractionalIndex)
   }
 
@@ -143,11 +144,16 @@ extension GalleryViewModel {
       frames.enumerated().map { index, frame in
         let frameOrigin = frame.origin.dimension(in: direction)
 
-        let origin: CGFloat = switch scrollMode {
-        case .default:
+        let frameWidth = frame.size.dimension(in: direction)
+        let origin: CGFloat = switch (scrollMode, scrollAlignment) {
+        case (.default, .leading):
           frameOrigin - firstFrameOrigin
-        case .autoPaging, .fixedPaging:
-          max(0, frameOrigin - (pageSize - frame.size.dimension(in: direction)) / 2)
+        case (.autoPaging, .leading), (.fixedPaging, .leading):
+          frameOrigin
+        case (_, .center):
+          max(0, frameOrigin - (pageSize - frameWidth) / 2)
+        case (_, .trailing):
+          max(0, frameOrigin - (pageSize - frameWidth))
         }
 
         return (origin, index)
@@ -193,9 +199,7 @@ extension GalleryViewModel {
 
   fileprivate func pageSize(fitting size: CGSize?) -> CGFloat {
     switch scrollMode {
-    case .default:
-      0
-    case .autoPaging:
+    case .autoPaging, .default:
       size?.dimension(in: direction) ?? 0
     case let .fixedPaging(pageSize: value):
       value

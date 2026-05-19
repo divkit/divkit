@@ -302,6 +302,7 @@ public func divGallery(
     restrictParentScroll: nil,
     reuseId: nil,
     rowSpan: nil,
+    scrollContentAlignment: nil,
     scrollMode: nil,
     scrollbar: nil,
     selectedActions: nil,

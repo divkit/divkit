@@ -240,6 +240,7 @@ extension DivGallery {
       restrictParentScroll: restrictParentScroll,
       reuseId: reuseId,
       rowSpan: rowSpan,
+      scrollContentAlignment: scrollContentAlignment,
       scrollMode: scrollMode,
       scrollbar: scrollbar,
       selectedActions: selectedActions,

@@ -1,297 +1,275 @@
-@testable import LayoutKit
+import Foundation
+@testable @preconcurrency import LayoutKit
+import Testing
 import VGSL
-import XCTest
 
-final class GalleryViewLayoutTests: XCTestCase {
-  func test_ProducesEqualToModelBlocksCountNumberOfFrames() {
+@Suite
+struct GalleryViewLayoutTests {
+  @Test
+  func producesEqualToModelBlocksCountNumberOfFrames() {
     let model = Blocks.horizontalCenterModel
-
     let layout = GalleryViewLayout(model: model)
-
-    XCTAssertEqual(layout.blockFrames.count, model.items.count)
+    #expect(layout.blockFrames.count == model.items.count)
   }
 
-  func test_WhenHasHorizontalDirection_ProducesSummaryWidthAndBlockMaximumHeightContentSizePlusCrossInsets(
+  @Test
+  func whenHasHorizontalDirection_producesSummaryWidthAndBlockMaximumHeightContentSizePlusCrossInsets(
   ) {
     let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel)
-
-    XCTAssertEqual(layout.contentSize.width, Blocks.contentAxialSize)
-    XCTAssertEqual(layout.contentSize.height, Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
+    #expect(layout.contentSize.width == Blocks.contentAxialSize)
+    #expect(layout.contentSize.height == Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
   }
 
-  func test_WhenDoesNotHaveBounds_AndHorizontalDirection_AppliesResizableBlockHeightToOtherBlocksMaximumHeight(
-  ) {
+  @Test
+  func whenDoesNotHaveBounds_andHorizontalDirection_appliesResizableBlockHeightToOtherBlocksMaximumHeight(
+  ) throws {
     let model = Blocks.horizontalCenterModel
-
     let layout = GalleryViewLayout(model: model)
-
-    if let index = model.items.firstIndex(where: { $0.content.isVerticallyResizable }) {
-      XCTAssertEqual(layout.blockFrames[index].height, Blocks.contentCrossMaxSize)
-    } else {
-      XCTFail()
-    }
+    let index = try #require(model.items.firstIndex(where: { $0.content.isVerticallyResizable }))
+    #expect(layout.blockFrames[index].height == Blocks.contentCrossMaxSize)
   }
 
-  func test_WhenHasBounds_AndHorizontalDirection_AppliesResizableBlockHeightToInsetedBoundsHeight() {
+  @Test
+  func whenHasBounds_andHorizontalDirection_appliesResizableBlockHeightToInsetedBoundsHeight(
+  ) throws {
     let model = Blocks.horizontalCenterModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let height = boundsSize.height - Blocks.fixedInsets.sum
-    if let index = model.items.firstIndex(where: { $0.content.isVerticallyResizable }) {
-      XCTAssertEqual(layout.blockFrames[index].height, height)
-    } else {
-      XCTFail()
-    }
+    let index = try #require(model.items.firstIndex(where: { $0.content.isVerticallyResizable }))
+    #expect(layout.blockFrames[index].height == height)
   }
 
-  func test_WhenHasVerticalDirection_ProducesSummaryHeightAndBlockMaximumWidthContentSizePlusCrossInsets(
+  @Test
+  func whenHasVerticalDirection_producesSummaryHeightAndBlockMaximumWidthContentSizePlusCrossInsets(
   ) {
     let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)
-
-    XCTAssertEqual(layout.contentSize.width, Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
-    XCTAssertEqual(layout.contentSize.height, Blocks.contentAxialSize)
+    #expect(layout.contentSize.width == Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
+    #expect(layout.contentSize.height == Blocks.contentAxialSize)
   }
 
-  func test_WhenDoesNotHaveBounds_AndVerticalDirection_AppliesResizableBlockWidthToOtherBlocksMaximumWidth(
-  ) {
+  @Test
+  func whenDoesNotHaveBounds_andVerticalDirection_appliesResizableBlockWidthToOtherBlocksMaximumWidth(
+  ) throws {
     let model = Blocks.verticalCenterModel
-
     let layout = GalleryViewLayout(model: model)
-
-    if let index = model.items.firstIndex(where: { $0.content.isHorizontallyResizable }) {
-      XCTAssertEqual(layout.blockFrames[index].width, Blocks.contentCrossMaxSize)
-    } else {
-      XCTFail()
-    }
+    let index = try #require(model.items.firstIndex(where: { $0.content.isHorizontallyResizable }))
+    #expect(layout.blockFrames[index].width == Blocks.contentCrossMaxSize)
   }
 
-  func test_WhenHasBounds_AndVerticalDirection_AppliesResizableBlockWidthToInsetedBoundsWidth() {
+  @Test
+  func whenHasBounds_andVerticalDirection_appliesResizableBlockWidthToInsetedBoundsWidth() throws {
     let model = Blocks.verticalCenterModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
-    if let index = model.items.firstIndex(where: { $0.content.isHorizontallyResizable }) {
-      XCTAssertEqual(layout.blockFrames[index].width, boundsSize.width - Blocks.fixedInsets.sum)
-    } else {
-      XCTFail()
-    }
+    let index = try #require(model.items.firstIndex(where: { $0.content.isHorizontallyResizable }))
+    #expect(layout.blockFrames[index].width == boundsSize.width - Blocks.fixedInsets.sum)
   }
 
-  func test_WhenHasResizableAxialInsets_AndHorizontalDirection_CalculatesContentSizeFittingProvidedSize(
+  @Test
+  func whenHasResizableAxialInsets_andHorizontalDirection_calculatesContentSizeFittingProvidedSize(
   ) {
     let model = Blocks.horizontalResizableModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedSize = Blocks.contentAxialSizeWithoutSideGaps + boundsSize.width - Blocks
       .resizableInsets.maxViewportSize
-    XCTAssertEqual(layout.contentSize.width, expectedSize)
+    #expect(layout.contentSize.width == expectedSize)
   }
 
-  func test_WhenHasResizableAxialInsets_AndVerticalDirection_CalculatesContentSizeFittingProvidedSize(
-  ) {
+  @Test
+  func whenHasResizableAxialInsets_andVerticalDirection_calculatesContentSizeFittingProvidedSize() {
     let model = Blocks.verticalResizableModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedSize = Blocks.contentAxialSizeWithoutSideGaps + boundsSize.height - Blocks
       .resizableInsets.maxViewportSize
-    XCTAssertEqual(layout.contentSize.height, expectedSize)
+    #expect(layout.contentSize.height == expectedSize)
   }
 
-  func test_WhenHasResizableAxialInsets_AndHorizontalDirection_ProducesSideGapsFittingProvidedSize(
-  ) {
+  @Test
+  func whenHasResizableAxialInsets_andHorizontalDirection_producesSideGapsFittingProvidedSize() {
     let model = Blocks.horizontalResizableModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedInsetValue = (boundsSize.width - Blocks.resizableInsets.maxViewportSize) / 2
-    XCTAssertEqual(layout.blockFrames.first?.minX, expectedInsetValue)
-    XCTAssertEqual(layout.blockFrames.last?.maxX, layout.contentSize.width - expectedInsetValue)
+    #expect(layout.blockFrames.first?.minX == expectedInsetValue)
+    #expect(layout.blockFrames.last?.maxX == layout.contentSize.width - expectedInsetValue)
   }
 
-  func test_WhenHasResizableAxialInsets_AndVerticalDirection_ProducesSideGapsFittingProvidedSize() {
+  @Test
+  func whenHasResizableAxialInsets_andVerticalDirection_producesSideGapsFittingProvidedSize() {
     let model = Blocks.verticalResizableModel
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedInsetValue = (boundsSize.height - Blocks.resizableInsets.maxViewportSize) / 2
-    XCTAssertEqual(layout.blockFrames.first?.minY, expectedInsetValue)
-    XCTAssertEqual(layout.blockFrames.last?.maxY, layout.contentSize.height - expectedInsetValue)
+    #expect(layout.blockFrames.first?.minY == expectedInsetValue)
+    #expect(layout.blockFrames.last?.maxY == layout.contentSize.height - expectedInsetValue)
   }
 
-  func test_WhenHasResizableCrossInsets_AndVerticalDirection_ProducesSideGapsFittingProvidedSize() {
+  @Test
+  func whenHasResizableCrossInsets_andVerticalDirection_producesSideGapsFittingProvidedSize() {
     let model = Blocks.makeModel(
       direction: .vertical,
       metrics: .resizableCross,
       crossAlignment: .leading
     )
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedInsetValue = (boundsSize.width - Blocks.resizableInsets.maxViewportSize) / 2
-    XCTAssertEqual(layout.blockFrames.first?.minX, expectedInsetValue)
-    XCTAssertEqual(layout.blockFrames.first?.maxX, layout.contentSize.width - expectedInsetValue)
+    #expect(layout.blockFrames.first?.minX == expectedInsetValue)
+    #expect(layout.blockFrames.first?.maxX == layout.contentSize.width - expectedInsetValue)
   }
 
-  func test_WhenHasResizableCrossInsets_AndHorizontalDirection_ProducesSideGapsFittingProvidedSize(
-  ) {
+  @Test
+  func whenHasResizableCrossInsets_andHorizontalDirection_producesSideGapsFittingProvidedSize() {
     let model = Blocks.makeModel(
       direction: .horizontal,
       metrics: .resizableCross,
       crossAlignment: .leading
     )
-
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-
     let expectedInsetValue = (boundsSize.height - Blocks.resizableInsets.maxViewportSize) / 2
-    XCTAssertEqual(layout.blockFrames.first?.minY, expectedInsetValue)
-    XCTAssertEqual(layout.blockFrames.first?.maxY, layout.contentSize.height - expectedInsetValue)
+    #expect(layout.blockFrames.first?.minY == expectedInsetValue)
+    #expect(layout.blockFrames.first?.maxY == layout.contentSize.height - expectedInsetValue)
   }
 
-  func test_WhenHasHorizontalDirection_StartsLeftEdgeAtFirstGapAndFinishesRightEdgeBeforeLastGap() {
+  @Test
+  func whenHasHorizontalDirection_startsLeftEdgeAtFirstGapAndFinishesRightEdgeBeforeLastGap() {
     let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel)
-
-    XCTAssertEqual(layout.blockFrames.first?.minX, Blocks.gapSize)
-    XCTAssertEqual(layout.blockFrames.last?.maxX, Blocks.gapSize + Blocks.framesAxialSize)
+    #expect(layout.blockFrames.first?.minX == Blocks.gapSize)
+    #expect(layout.blockFrames.last?.maxX == Blocks.gapSize + Blocks.framesAxialSize)
   }
 
-  func test_WhenHasHorizontalDirection_AndCenterVerticalAlignment_LayoutFramesAroundInsetedVerticalCenter(
+  @Test
+  func whenHasHorizontalDirection_andCenterVerticalAlignment_layoutFramesAroundInsetedVerticalCenter(
   ) {
     let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel, boundsSize: boundsSize)
-
     let center = floor(
-      Blocks.fixedInsets
-        .leading + (boundsSize.height - Blocks.fixedInsets.sum) / 2
+      Blocks.fixedInsets.leading + (boundsSize.height - Blocks.fixedInsets.sum) / 2
     )
-    XCTAssert(layout.blockFrames.allSatisfy { $0.midY.isApproximatelyEqualTo(center) })
+    #expect(layout.blockFrames.allSatisfy { $0.midY.isApproximatelyEqualTo(center) })
   }
 
-  func test_WhenHasHorizontalDirection_AndLeadingVerticalAlignment_LayoutFramesAboveCrossInsets() {
+  @Test
+  func whenHasHorizontalDirection_andLeadingVerticalAlignment_layoutFramesAboveCrossInsets() {
     let layout = GalleryViewLayout(model: Blocks.horizontalTrailingModel, boundsSize: boundsSize)
-
     let trailing = boundsSize.height - Blocks.fixedInsets.trailing
-    XCTAssert(layout.blockFrames.allSatisfy { $0.maxY.isApproximatelyEqualTo(trailing) })
+    #expect(layout.blockFrames.allSatisfy { $0.maxY.isApproximatelyEqualTo(trailing) })
   }
 
-  func test_WhenHasHorizontalDirection_AndTrailingVerticalAlignment_LayoutFramesBelowCrossInsets() {
+  @Test
+  func whenHasHorizontalDirection_andTrailingVerticalAlignment_layoutFramesBelowCrossInsets() {
     let layout = GalleryViewLayout(model: Blocks.horizontalLeadingModel, boundsSize: boundsSize)
-
-    XCTAssert(
-      layout.blockFrames
-        .allSatisfy { $0.minY.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
+    #expect(
+      layout.blockFrames.allSatisfy { $0.minY.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
     )
   }
 
-  func test_WhenHasVerticalDirection_AndCenterHorizontalAlignment_LayoutFramesAroundInsetedHorizontalCenter(
+  @Test
+  func whenHasVerticalDirection_andCenterHorizontalAlignment_layoutFramesAroundInsetedHorizontalCenter(
   ) {
     let layout = GalleryViewLayout(model: Blocks.verticalCenterModel, boundsSize: boundsSize)
-
     let center = floor(Blocks.fixedInsets.leading + (boundsSize.width - Blocks.fixedInsets.sum) / 2)
-    XCTAssert(layout.blockFrames.allSatisfy { $0.midX.isApproximatelyEqualTo(center) })
+    #expect(layout.blockFrames.allSatisfy { $0.midX.isApproximatelyEqualTo(center) })
   }
 
-  func test_WhenHasVerticalDirection_AndLeadingHorizontalAlignment_LayoutFramesAtLeadingOfCrossInset(
-  ) {
+  @Test
+  func whenHasVerticalDirection_andLeadingHorizontalAlignment_layoutFramesAtLeadingOfCrossInset() {
     let layout = GalleryViewLayout(model: Blocks.verticalLeadingModel, boundsSize: boundsSize)
-
-    XCTAssert(
-      layout.blockFrames
-        .allSatisfy { $0.minX.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
+    #expect(
+      layout.blockFrames.allSatisfy { $0.minX.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
     )
   }
 
-  func test_WhenHasVerticalDirection_AndTrailingHorizontalAlignment_LayoutFramesAtTrailingOfCrossInset(
-  ) {
+  @Test
+  func whenHasVerticalDirection_andTrailingHorizontalAlignment_layoutFramesAtTrailingOfCrossInset() {
     let layout = GalleryViewLayout(model: Blocks.verticalTrailingModel, boundsSize: boundsSize)
-
     let trailing = boundsSize.width - Blocks.fixedInsets.trailing
-    XCTAssert(layout.blockFrames.allSatisfy { $0.maxX.isApproximatelyEqualTo(trailing) })
+    #expect(layout.blockFrames.allSatisfy { $0.maxX.isApproximatelyEqualTo(trailing) })
   }
 
-  func test_WhenHasVerticalDirection_StartsHeightAtFirstGapAndFinishesBeforeLastGap() {
+  @Test
+  func whenHasVerticalDirection_startsHeightAtFirstGapAndFinishesBeforeLastGap() {
     let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)
-
-    XCTAssertEqual(layout.blockFrames.first?.minY, Blocks.gapSize)
-    XCTAssertEqual(layout.blockFrames.last?.maxY, Blocks.gapSize + Blocks.framesAxialSize)
+    #expect(layout.blockFrames.first?.minY == Blocks.gapSize)
+    #expect(layout.blockFrames.last?.maxY == Blocks.gapSize + Blocks.framesAxialSize)
   }
 
-  func test_WhenHasPagingModel_ReturnsLastIndexForLastPageOrigin() {
+  @Test
+  func whenHasPagingModel_returnsLastIndexForLastPageOrigin() {
     let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
     let index = layout.blockFrames.count - 1
     let offset = layout.blockPages[index].origin
-
     let pageIndex = layout.pageIndex(forContentOffset: offset)
-
-    XCTAssertEqual(pageIndex, CGFloat(index), accuracy: accuracy)
+    #expect(
+      pageIndex.isApproximatelyEqualTo(
+        CGFloat(index),
+        withAccuracy: accuracy
+      )
+    )
   }
 
-  func test_WhenHasPagingModel_ReturnsZeroIndexForOffsetOutOfRange() {
+  @Test
+  func whenHasPagingModel_returnsZeroIndexForOffsetOutOfRange() {
     let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
-
-    XCTAssertEqual(layout.pageIndex(forContentOffset: -1), 0, accuracy: accuracy)
-    XCTAssertEqual(layout.pageIndex(forContentOffset: .infinity), 0, accuracy: accuracy)
+    #expect(layout.pageIndex(forContentOffset: -1).isApproximatelyEqualTo(
+      0,
+      withAccuracy: accuracy
+    ))
+    #expect(layout.pageIndex(forContentOffset: .infinity).isApproximatelyEqualTo(
+      0,
+      withAccuracy: accuracy
+    ))
   }
 
-  func test_WhenHasFixedPagingModel_ReturnsInitialOffsetForReverseConversion() {
+  @Test
+  func whenHasFixedPagingModel_returnsInitialOffsetForReverseConversion() {
     let layout = GalleryViewLayout(model: Blocks.fixedPagingModel, boundsSize: boundsSize)
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
     let foundOffset = layout.contentOffset(pageIndex: pageIndex)
-
-    XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
+    #expect(offset.isApproximatelyEqualTo(foundOffset, withAccuracy: accuracy))
   }
 
-  func test_WhenHasAutoPagingModel_ReturnsInitialOffsetForReverseConversion() {
+  @Test
+  func whenHasAutoPagingModel_returnsInitialOffsetForReverseConversion() {
     let layout = GalleryViewLayout(model: Blocks.autoPagingModel, boundsSize: boundsSize)
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
     let foundOffset = layout.contentOffset(pageIndex: pageIndex)
-
-    XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
+    #expect(offset.isApproximatelyEqualTo(foundOffset, withAccuracy: accuracy))
   }
 
-  func test_WhenHasAutoPagingModel_ReturnsMaxOffsetForLastPage() {
+  @Test
+  func whenHasAutoPagingModel_returnsMaxOffsetForLastPage() {
     let layout = GalleryViewLayout(model: Blocks.autoPagingModel, boundsSize: boundsSize)
-    let offset = layout.contentOffset(
-      pageIndex: CGFloat(layout.blockPages.count - 1)
-    )
+    let offset = layout.contentOffset(pageIndex: CGFloat(layout.blockPages.count - 1))
     let maxOffset = layout.contentSize.width - boundsSize.width
-
-    XCTAssertEqual(maxOffset, offset, accuracy: accuracy)
+    #expect(maxOffset.isApproximatelyEqualTo(offset, withAccuracy: accuracy))
   }
 
-  func test_WhenHasPagingModel_DetectsContainingGreaterOrEqualMinimumAndLowerMaximumWithAccuracy() {
+  @Test
+  func whenHasPagingModel_detectsContainingGreaterOrEqualMinimumAndLowerMaximumWithAccuracy(
+  ) throws {
     let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
-
-    if let page = layout.blockPages.first {
-      let below = page.origin - .leastNonzeroMagnitude
-      let middle = page.origin + page.size / 2
-      let upper = page.origin + page.size - .leastNonzeroMagnitude
-
-      XCTAssertTrue(page.contains(below))
-      XCTAssertTrue(page.contains(middle))
-      XCTAssertFalse(page.contains(upper))
-    } else {
-      XCTFail()
-    }
+    let page = try #require(layout.blockPages.first)
+    let below = page.origin - .leastNonzeroMagnitude
+    let middle = page.origin + page.size / 2
+    let upper = page.origin + page.size - .leastNonzeroMagnitude
+    #expect(page.contains(below))
+    #expect(page.contains(middle))
+    #expect(!page.contains(upper))
   }
 
-  func test_WhenHasPagingModel_ContainsContinuousPages() {
+  @Test
+  func whenHasPagingModel_containsContinuousPages() {
     let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
-
     let totalSpace = (1..<layout.blockPages.count).reduce(CGFloat(0)) { result, index in
       let page = layout.blockPages[index - 1]
       let nextPage = layout.blockPages[index]
       return result + nextPage.origin - (page.origin + page.size)
     }
-    XCTAssertEqual(totalSpace, 0, accuracy: accuracy)
+    #expect(totalSpace.isApproximatelyEqualTo(0, withAccuracy: accuracy))
   }
 
-  func test_Horizontal_ResizableHeightContent() {
+  @Test
+  func horizontal_resizableHeightContent() {
     let layout = GalleryViewLayout(
       model: GalleryViewModel(
         blocks: [
@@ -307,11 +285,11 @@ final class GalleryViewLayoutTests: XCTestCase {
       ),
       boundsSize: CGSize(width: 100, height: 200)
     )
-
-    XCTAssertEqual(layout.blockFrames[0].height, 200)
+    #expect(layout.blockFrames[0].height == 200)
   }
 
-  func test_Vertical_ResizbaleWidthContent() {
+  @Test
+  func vertical_resizableWidthContent() {
     let layout = GalleryViewLayout(
       model: GalleryViewModel(
         blocks: [
@@ -326,8 +304,137 @@ final class GalleryViewLayoutTests: XCTestCase {
       ),
       boundsSize: CGSize(width: 100, height: 200)
     )
+    #expect(layout.blockFrames[0].width == 100)
+  }
 
-    XCTAssertEqual(layout.blockFrames[0].width, 100)
+  // MARK: - Parametrized scrollAlignment tests
+
+  @Test(
+    "Leading scroll alignment: item's leading edge aligns with the viewport's leading edge",
+    arguments: pagingScrollModes
+  )
+  func leadingScrollAlignment_itemLeadingEdgeMatchesViewportLeadingEdge(
+    scrollMode: GalleryViewModel.ScrollMode
+  ) {
+    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .leading)
+    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
+    for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
+      #expect(frame.minX.isApproximatelyEqualTo(page.origin, withAccuracy: accuracy))
+    }
+  }
+
+  @Test(
+    "Center scroll alignment: item is centered in the viewport",
+    arguments: pagingScrollModes
+  )
+  func centerScrollAlignment_itemCenteredInViewport(
+    scrollMode: GalleryViewModel.ScrollMode
+  ) {
+    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .center)
+    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
+    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsWidth: boundsSize.width)
+    for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
+      let viewportCenter = page.origin + pageSize / 2
+      #expect(frame.midX.isApproximatelyEqualTo(viewportCenter, withAccuracy: accuracy))
+    }
+  }
+
+  @Test(
+    "Trailing scroll alignment: item's trailing edge aligns with the viewport's trailing edge",
+    arguments: pagingScrollModes
+  )
+  func trailingScrollAlignment_itemTrailingEdgeMatchesViewportTrailingEdge(
+    scrollMode: GalleryViewModel.ScrollMode
+  ) {
+    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .trailing)
+    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
+    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsWidth: boundsSize.width)
+    for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
+      // Skip pages clamped to origin 0: the geometric invariant only holds
+      // when the frame is far enough from the content start.
+      guard frame.minX >= pageSize - frame.width else { continue }
+      let viewportTrailingEdge = page.origin + pageSize
+      #expect(frame.maxX.isApproximatelyEqualTo(viewportTrailingEdge, withAccuracy: accuracy))
+    }
+  }
+
+  @Test(
+    "Page count equals frame count for each paging mode and scrollAlignment",
+    arguments: pagingScrollModes, scrollAlignments
+  )
+  func pageCount_equalsFrameCount(
+    scrollMode: GalleryViewModel.ScrollMode,
+    alignment: Alignment
+  ) {
+    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: alignment)
+    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
+    #expect(layout.blockPages.count == layout.blockFrames.count)
+  }
+
+  @Test(
+    "Roundtrip pageIndex→contentOffset→pageIndex is stable for each paging mode and scrollAlignment",
+    arguments: pagingScrollModes, scrollAlignments
+  )
+  func roundtrip_pageIndexToContentOffsetToPageIndex_isStable(
+    scrollMode: GalleryViewModel.ScrollMode,
+    alignment: Alignment
+  ) throws {
+    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: alignment)
+    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
+    let page = try #require(layout.blockPages.dropFirst().first)
+    let offset = page.origin + page.size / 2
+    let pageIndex = layout.pageIndex(forContentOffset: offset)
+    let recoveredOffset = layout.contentOffset(pageIndex: pageIndex)
+    #expect(offset.isApproximatelyEqualTo(recoveredOffset, withAccuracy: accuracy))
+  }
+
+  @Test(
+    "For items narrower than the viewport, trailing alignment has the smallest page origin and leading the largest",
+    arguments: pagingScrollModes
+  )
+  func scrollAlignment_pageOriginsOrdered_forNarrowItems(
+    scrollMode: GalleryViewModel.ScrollMode
+  ) throws {
+    let leadingLayout = GalleryViewLayout(
+      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .leading),
+      boundsSize: boundsSize
+    )
+    let centerLayout = GalleryViewLayout(
+      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .center),
+      boundsSize: boundsSize
+    )
+    let trailingLayout = GalleryViewLayout(
+      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .trailing),
+      boundsSize: boundsSize
+    )
+    // Use the last page: it maps to a 1pt-wide resizable block (narrower than the 64pt viewport),
+    // so the ordering trailing < center < leading holds regardless of scroll mode.
+    let leadingOrigin = try #require(leadingLayout.blockPages.last).origin
+    let centerOrigin = try #require(centerLayout.blockPages.last).origin
+    let trailingOrigin = try #require(trailingLayout.blockPages.last).origin
+    #expect(trailingOrigin < centerOrigin)
+    #expect(centerOrigin < leadingOrigin)
+  }
+}
+
+// MARK: - Test data
+
+private let pagingScrollModes: [GalleryViewModel.ScrollMode] = [
+  .autoPaging(inertionEnabled: true),
+  .fixedPaging(pageSize: boundsSize.width),
+]
+
+private let scrollAlignments: [Alignment] = [.leading, .center, .trailing]
+
+private func pageSizeFor(
+  scrollMode: GalleryViewModel.ScrollMode,
+  boundsWidth: CGFloat
+) -> CGFloat {
+  switch scrollMode {
+  case .autoPaging, .default:
+    boundsWidth
+  case let .fixedPaging(pageSize):
+    pageSize
   }
 }
 
@@ -394,7 +501,9 @@ private enum Blocks {
     direction: ScrollDirection = .horizontal,
     metrics: GalleryViewMetrics = .fixed,
     crossAlignment: Alignment = .center,
-    scrollMode: GalleryViewModel.ScrollMode = .default
+    scrollMode: GalleryViewModel.ScrollMode = .default,
+    scrollAlignment: Alignment? = nil,
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   ) -> GalleryViewModel {
     let resizableBlock = direction.isHorizontal ? verticallyResizable : horizontallyResizable
 
@@ -402,13 +511,16 @@ private enum Blocks {
       [Block](repeating: small, times: try! UInt(value: smallCount)) +
       [Block](repeating: resizableBlock, times: try! UInt(value: resizableCount))
 
+    let items = blocks.map { GalleryViewModel.Item(crossAlignment: crossAlignment, content: $0) }
+
     return GalleryViewModel(
-      blocks: blocks,
+      items: items,
+      layoutDirection: layoutDirection,
       metrics: metrics,
       scrollMode: scrollMode,
       path: UIElementPath("model"),
       direction: direction,
-      crossAlignment: crossAlignment
+      scrollAlignment: scrollAlignment
     )
   }
 }
