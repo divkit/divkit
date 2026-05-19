@@ -3,18 +3,17 @@ package com.yandex.div.core.view2.divs.gallery
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.forEach
 import androidx.core.view.marginStart
 import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
-import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.core.DivItemBuilderResult
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
@@ -22,8 +21,8 @@ import com.yandex.div2.DivGallery
 @Suppress("FunctionName")
 internal interface DivGalleryItemHelper {
     val bindingContext: BindingContext
-    val view: RecyclerView
-    val div: DivGallery
+    val view: DivRecyclerView
+    val crossContentAlignment: DivGallery.ContentAlignment
 
     val childrenToRelayout: MutableSet<View>
 
@@ -70,14 +69,13 @@ internal interface DivGalleryItemHelper {
 
         val childItem = (child.getTag(R.id.div_gallery_item_index) as Int?)?.let {
             getItemDiv(it)
-        }
-        val childDiv = childItem?.div?.value()
-        val resolver = childItem?.expressionResolver ?: bindingContext.expressionResolver
-        val parentAlignment = div.crossContentAlignment
-        val horizontalOffset = if (orientation == RecyclerView.VERTICAL) {
-            val alignment = childDiv?.alignmentHorizontal.evaluateAlignment(resolver, parentAlignment) {
-                asCrossContentAlignment()
-            }
+        } ?: return finishLayoutDecoratedWithMargins(child, left, top, right, bottom, isRelayoutingChildren)
+
+        val childDiv = childItem.div.value()
+        val resolver = childItem.expressionResolver
+        val horizontalOffset = if (!isHorizontal) {
+            val alignment =
+                childDiv.alignmentHorizontal?.evaluate(resolver)?.asCrossContentAlignment() ?: crossContentAlignment
             calculateOffset(
                 actualContentWidth,
                 right - left,
@@ -87,10 +85,9 @@ internal interface DivGalleryItemHelper {
             0
         }
 
-        val verticalOffset = if (orientation == RecyclerView.HORIZONTAL) {
-            val alignment = childDiv?.alignmentVertical.evaluateAlignment(resolver, parentAlignment) {
-                asCrossContentAlignment()
-            }
+        val verticalOffset = if (isHorizontal) {
+            val alignment =
+                childDiv.alignmentVertical?.evaluate(resolver)?.asCrossContentAlignment() ?: crossContentAlignment
             calculateOffset(
                 actualContentHeight,
                 bottom - top,
@@ -100,13 +97,25 @@ internal interface DivGalleryItemHelper {
             0
         }
 
-        superLayoutDecoratedWithMargins(
+        finishLayoutDecoratedWithMargins(
             child,
             left + horizontalOffset,
             top + verticalOffset,
             right + horizontalOffset,
-            bottom + verticalOffset
+            bottom + verticalOffset,
+            isRelayoutingChildren
         )
+    }
+
+    private fun finishLayoutDecoratedWithMargins(
+        child: View,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int,
+        isRelayoutingChildren: Boolean
+    ) {
+        superLayoutDecoratedWithMargins(child, left, top, right, bottom)
         trackVisibilityAction(child)
         if (!isRelayoutingChildren) {
             childrenToRelayout.remove(child)
@@ -118,63 +127,39 @@ internal interface DivGalleryItemHelper {
     fun firstVisibleItemPosition(): Int
     fun lastVisibleItemPosition(): Int
     fun width(): Int
-    fun instantScrollToPosition(position: Int, scrollPosition: ScrollPosition)
-    fun instantScrollToPositionWithOffset(position: Int, offset: Int, scrollPosition: ScrollPosition)
+    fun instantScrollToPosition(position: Int, offset: Int)
     fun getLayoutManagerOrientation(): Int
 
-    fun instantScroll(
-        position: Int,
-        scrollPosition: ScrollPosition = ScrollPosition.DEFAULT,
-        offset: Int = 0
-    ) {
-        view.doOnActualLayout {
-            if (position == 0) {
-                val fixedOffset = if (isHorizontal && view.isLayoutRtl()) offset else -offset
-                view.scrollBy(fixedOffset, fixedOffset)
-                return@doOnActualLayout
-            }
+    fun instantScroll(position: Int, offset: Int = 0) {
+        if (trySnapToPosition(position, offset)) return
 
-            view.scrollBy(-view.scrollX, -view.scrollY)
-
-            var targetView: View? = view.layoutManager?.findViewByPosition(position)
-
-            while (
-                (targetView == null) &&
-                (view.canScrollVertically(1) || view.canScrollHorizontally(1))
-            ) {
-                view.layoutManager?.requestLayout()
-                targetView = view.layoutManager?.findViewByPosition(position)
-                if (targetView != null) break
-                view.scrollBy(view.width, view.height)
-            }
-
-            if (targetView == null) return@doOnActualLayout
-
-            when (scrollPosition) {
-                ScrollPosition.CENTER -> {
-                    val childCoords = intArrayOf(0, 0)
-                    val parentCoords = intArrayOf(0, 0)
-
-                    view.getLocationOnScreen(parentCoords)
-                    targetView.getLocationOnScreen(childCoords)
-
-                    val startOffset = childCoords[0] - parentCoords[0]
-                    val topOffset = childCoords[1] - parentCoords[1]
-
-                    val centerX = (targetView.width - view.width) / 2 + startOffset
-                    val centerY = (targetView.height - view.height) / 2 + topOffset
-                    view.scrollBy(centerX, centerY)
-                }
-
-                ScrollPosition.DEFAULT -> {
-                    var startGap = targetView.scrollOffset - offset
-                    if (view.isLayoutRtl()) {
-                        startGap = -startGap
-                    }
-                    view.scrollBy(startGap, startGap)
-                }
-            }
+        view.doOnNextLayout {
+            trySnapToPosition(position, offset)
         }
+        view.scrollToPosition(position)
+    }
+
+    fun trySnapToPosition(position: Int, offset: Int): Boolean {
+        val layoutManager = toLayoutManager()
+        val target = layoutManager.findViewByPosition(position) ?: return false
+
+        trySnapToPosition(target, offset)
+        return true
+    }
+
+    fun trySnapToPosition(target: View, offset: Int) {
+        if (offset == 0) {
+            val distance = view.snapHelper.calculateDistanceToFinalSnap(toLayoutManager(), target)
+            view.scrollBy(distance[0], distance[1])
+            return
+        }
+
+        val distance = if (isHorizontal && view.isLayoutRtl()) {
+            offset - target.scrollOffset
+        } else {
+            target.scrollOffset - offset
+        }
+        view.scrollBy(distance, distance)
     }
 
     private val isHorizontal get() = getLayoutManagerOrientation() == RecyclerView.HORIZONTAL
@@ -266,14 +251,6 @@ internal interface DivGalleryItemHelper {
                 DivGallery.ContentAlignment.CENTER -> availableSpace / 2
                 DivGallery.ContentAlignment.END -> availableSpace
             }
-        }
-
-        private inline fun <T : Any> Expression<T>?.evaluateAlignment(
-            resolver: ExpressionResolver,
-            parentAlignment: Expression<DivGallery.ContentAlignment>,
-            asCrossContentAlignment: T.() -> DivGallery.ContentAlignment
-        ): DivGallery.ContentAlignment {
-            return this?.evaluate(resolver)?.asCrossContentAlignment() ?: parentAlignment.evaluate(resolver)
         }
 
         private fun DivAlignmentHorizontal.asCrossContentAlignment(): DivGallery.ContentAlignment {

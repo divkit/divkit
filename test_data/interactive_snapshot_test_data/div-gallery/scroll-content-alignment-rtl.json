@@ -1,6 +1,7 @@
 {
   "description": "Gallery scroll_content_alignment: start, center, end with default and paging scroll modes and RTL layout direction",
   "platforms": [
+    "android",
     "ios"
   ],
   "configuration": {

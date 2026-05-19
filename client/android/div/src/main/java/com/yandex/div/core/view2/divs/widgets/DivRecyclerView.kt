@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
@@ -17,8 +18,8 @@ import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.asDivHolderView
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
+import com.yandex.div.core.view2.divs.gallery.DivGallerySnapHelper
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
-import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
@@ -57,7 +58,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
     var scrollMode = ScrollMode.DEFAULT
-    var pagerSnapStartHelper: PagerSnapStartHelper? = null
+    val snapHelper = DivGallerySnapHelper()
     private var needFling = false
     private var beforeScrollFocusPosition = NO_POSITION
 
@@ -245,14 +246,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
             MotionEvent.ACTION_UP -> {
                 if (scrollMode == ScrollMode.PAGING && needFling) {
                     val layoutManager = this.layoutManager ?: return eventResult
-                    val pagerSnapStartHelper = this.pagerSnapStartHelper ?: return eventResult
-
-                    val snapView =
-                        pagerSnapStartHelper.findSnapView(layoutManager) ?: return eventResult
-                    val position = pagerSnapStartHelper.calculateDistanceToFinalSnap(
-                        layoutManager,
-                        snapView
-                    )
+                    val snapView = snapHelper.findSnapView(layoutManager) ?: return eventResult
+                    val position = snapHelper.calculateDistanceToFinalSnap(layoutManager, snapView)
 
                     if (position.size < 2 || (position[0] == 0 && position[1] == 0)) return eventResult
                     smoothScrollBy(position[0], position[1])
@@ -278,7 +273,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
     }
 
     override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
-        if (child != null && child.visibility == VISIBLE) {
+        if (child?.isVisible == true) {
             child.drawShadow(canvas)
         }
         return super.drawChild(canvas, child, drawingTime)

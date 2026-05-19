@@ -6,7 +6,6 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
-import com.yandex.div.core.view2.divs.gallery.ScrollPosition
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
@@ -64,10 +63,7 @@ class DivGalleryBinderTest : DivBinderTest() {
     fun `keep scroll position on rebind`() {
         underTest.bindView(bindingContext, recyclerView, div, rootPath())
 
-        (recyclerView.layoutManager as? DivLinearLayoutManager)!!.instantScrollToPosition(
-            DEFAULT_ITEM + 1,
-            ScrollPosition.DEFAULT
-        )
+        (recyclerView.layoutManager as? DivLinearLayoutManager)!!.instantScrollToPosition(DEFAULT_ITEM + 1, 0)
         underTest.bindView(bindingContext, recyclerView, div, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
@@ -116,12 +112,7 @@ class DivGalleryBinderTest : DivBinderTest() {
         var position: Int = RecyclerView.NO_POSITION
 
         @Implementation
-        fun instantScrollToPosition(position: Int, scrollPosition: ScrollPosition) {
-            this.position = position
-        }
-
-        @Implementation
-        fun instantScrollToPositionWithOffset(position: Int, offset: Int, scrollPosition: ScrollPosition) {
+        fun instantScrollToPosition(position: Int, offset: Int) {
             this.position = position
         }
     }

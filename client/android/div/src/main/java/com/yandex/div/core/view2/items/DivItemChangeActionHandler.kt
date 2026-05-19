@@ -4,7 +4,6 @@ import android.net.Uri
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
-import com.yandex.div.json.expressions.ExpressionResolver
 
 private const val AUTHORITY_SET_CURRENT_ITEM = "set_current_item"
 private const val AUTHORITY_NEXT_ITEM = "set_next_item"
@@ -46,16 +45,14 @@ internal object DivItemChangeActionHandler {
     }
 
     @JvmStatic
-    fun handleAction(uri: Uri, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
+    fun handleAction(uri: Uri, view: DivViewFacade): Boolean {
         val id = uri.getQueryParameter(PARAM_ID)
         if (id == null) {
             KAssert.fail { "$PARAM_ID param is required to set item" }
             return false
         }
         val authority = uri.authority
-        val viewController =
-            DivViewWithItemsController.create(id, view, resolver, direction(authority))
-                ?: return false
+        val viewController = DivViewWithItemsController.create(id, view, direction(authority)) ?: return false
         val animated = uri.getQueryParameter(PARAM_ANIMATED)?.toBoolean() ?: true
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM -> handleSetCurrentItem(uri, animated, viewController)

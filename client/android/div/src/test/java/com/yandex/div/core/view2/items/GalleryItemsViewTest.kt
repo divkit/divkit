@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.items
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -31,10 +32,13 @@ class GalleryItemsViewTest {
     private val layoutManager = mock<LinearLayoutManager> {
         on { itemCount } doReturn ITEM_COUNT
     }
+    private val resources = mock<Resources> {
+        on { displayMetrics } doReturn mock()
+    }
     private val recyclerView = mock<DivRecyclerView> {
         on { layoutManager } doReturn layoutManager
         on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT)
-        on { resources } doReturn mock()
+        on { resources } doReturn resources
     }
 
     private val underTest = createUnderTest()
@@ -157,7 +161,7 @@ class GalleryItemsViewTest {
     fun `set current item on snapping recycler view`() {
         val view = mock<DivRecyclerView> {
             on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING)
-            on { resources } doReturn mock()
+            on { resources } doReturn resources
         }
         whenever(view.layoutManager).thenReturn(layoutManager)
         val scrollCaptor = argumentCaptor<LinearSmoothScroller>()
@@ -197,7 +201,7 @@ class GalleryItemsViewTest {
     private fun createUnderTest(
         drv: DivRecyclerView = recyclerView,
         direction: Direction = Direction.NEXT
-    ) = DivViewWithItems.create(drv, mock()) { direction }!!
+    ) = DivViewWithItems.create(drv) { direction }!!
 
     private fun createDivGallery(scrollMode: DivGallery.ScrollMode) =
         Div.Gallery(DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList()))

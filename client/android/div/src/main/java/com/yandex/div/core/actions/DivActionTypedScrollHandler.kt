@@ -41,7 +41,7 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
         val overflow = DivActionScrollBy.Overflow.toString(action.overflow.evaluate(resolver))
         val animated = action.animated.evaluate(resolver)
 
-        val viewController = DivViewWithItemsController.create(id, view, resolver) ?: return
+        val viewController = DivViewWithItemsController.create(id, view) ?: return
         viewController.changeCurrentItemByStep(overflow, step, animated)
         viewController.scrollByOffset(overflow, offset, animated)
     }
@@ -53,7 +53,7 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
     ) {
         val id = action.id.evaluate(resolver)
         val animated = action.animated.evaluate(resolver)
-        val viewController = DivViewWithItemsController.create(id, view, resolver) ?: return
+        val viewController = DivViewWithItemsController.create(id, view) ?: return
 
         when(val destination = action.destination) {
             is DivActionScrollDestination.Offset -> {

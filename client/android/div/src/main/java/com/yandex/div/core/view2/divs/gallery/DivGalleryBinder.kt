@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
@@ -25,6 +26,7 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import javax.inject.Inject
@@ -62,6 +64,8 @@ internal class DivGalleryBinder @Inject constructor(
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         addSubscription(div.scrollMode.observe(resolver, reusableObserver))
+        addSubscription(div.crossContentAlignment.observe(resolver, reusableObserver))
+        div.scrollContentAlignment?.let { addSubscription(it.observe(resolver, reusableObserver)) }
         addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
         addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
         div.columnCount?.let { addSubscription(it.observe(resolver, reusableObserver)) }
@@ -99,58 +103,62 @@ internal class DivGalleryBinder @Inject constructor(
         val columnCount = div.columnCount?.evaluate(resolver)?.toIntSafely() ?: 1
 
         adapter.columnCount = columnCount
-        val crossSpacing = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver).dpToPxF(metrics)
+        val itemSpacing = div.itemSpacing.evaluate(resolver).dpToPx(metrics)
+        val crossSpacing = div.crossSpacing?.evaluate(resolver)?.dpToPxF(metrics) ?: itemSpacing.toFloat()
         adapter.crossSpacing = crossSpacing
         clipChildren = false
         setItemDecoration(
             if (columnCount == 1)
                 PaddingItemDecoration(
-                    midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
+                    midItemPadding = itemSpacing,
                     orientation = orientation
                 )
             else
                 PaddingItemDecoration(
-                    midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
+                    midItemPadding = itemSpacing,
                     crossItemPadding = crossSpacing.roundToInt(),
                     orientation = orientation
                 )
         )
 
         val scrollMode = div.scrollMode.evaluate(resolver).also { scrollMode = it }
-        when (scrollMode) {
-            DivGallery.ScrollMode.DEFAULT -> pagerSnapStartHelper?.attachToRecyclerView(null)
-            DivGallery.ScrollMode.PAGING -> {
-                val itemSpacing = div.itemSpacing.evaluate(resolver).dpToPx(resources.displayMetrics)
-
-                val helper = pagerSnapStartHelper?.also { it.itemSpacing = itemSpacing } ?:
-                    PagerSnapStartHelper(itemSpacing).also { pagerSnapStartHelper = it }
-
-                helper.attachToRecyclerView(this)
-            }
+        snapHelper.itemSpacing = itemSpacing
+        snapHelper.alignment = div.scrollContentAlignment?.evaluate(resolver) ?: when (scrollMode) {
+            DivGallery.ScrollMode.DEFAULT -> DivGallery.ContentAlignment.START
+            DivGallery.ScrollMode.PAGING -> DivGallery.ContentAlignment.CENTER
         }
+        when (scrollMode) {
+            DivGallery.ScrollMode.DEFAULT -> snapHelper.attachToRecyclerView(null)
+            DivGallery.ScrollMode.PAGING -> snapHelper.attachToRecyclerView(this)
+        }
+        val crossContentAlignment = div.crossContentAlignment.evaluate(resolver)
 
         // Added as a workaround for a bug in R8 that leads to replacing the
         // DivGalleryItemHelper type with DivGridLayoutManager, resulting in
         // casting DivLinearLayoutManager to DivGridLayoutManager exception.
         val itemHelper: DivGalleryItemHelper = if (columnCount == 1) {
-            DivLinearLayoutManager(context, this, div, orientation)
+            DivLinearLayoutManager(context, this, orientation, crossContentAlignment)
         } else {
-            DivGridLayoutManager(context, this, div, orientation)
+            DivGridLayoutManager(
+                context,
+                this,
+                orientation,
+                crossContentAlignment,
+                columnCount,
+                itemSpacing,
+                crossSpacing.toInt()
+            )
         }
         layoutManager = itemHelper.toLayoutManager()
 
         scrollInterceptionAngle = recyclerScrollInterceptionAngle
         clearOnScrollListeners()
         context.divView.currentState?.let { state ->
+            val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@let
             val id = div.id ?: div.hashCode().toString()
-            val galleryState = state.getBlockState(id) as? GalleryState
-            val position = galleryState?.visibleItemIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
-            val offset = galleryState?.scrollOffset ?: when {
-                position != 0 -> 0
-                orientation == RecyclerView.HORIZONTAL -> paddingStart
-                else -> paddingTop
-            }
-            scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
+            val (position, offset) = state.getPositionAndOffset(id)
+                ?: getPositionAndOffset(div, resolver, orientation)
+            itemHelper.instantScrollToPosition(position.coerceAtMost(itemCount - 1), offset)
             addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
         addOnScrollListener(DivGalleryScrollListener(context, this, itemHelper, div))
@@ -167,18 +175,21 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.scrollToPositionInternal(
-        position: Int,
-        offset: Int,
-        scrollPosition: ScrollPosition
-    ) {
-        val layoutManager = layoutManager as? DivGalleryItemHelper ?: return
-        if (offset == 0 && position == 0) {
-            // Show left or top padding on first position without any snapping
-            layoutManager.instantScrollToPosition(position, scrollPosition)
-        } else {
-            layoutManager.instantScrollToPositionWithOffset(position, offset, scrollPosition)
+    private fun DivViewState.getPositionAndOffset(id: String) =
+        (getBlockState(id) as? GalleryState)?.let { it.visibleItemIndex to it.scrollOffset }
+
+    private fun DivRecyclerView.getPositionAndOffset(
+        div: DivGallery,
+        resolver: ExpressionResolver,
+        @RecyclerView.Orientation orientation: Int,
+    ): Pair<Int, Int> {
+        val position = div.defaultItem.evaluate(resolver).toIntSafely()
+        val offset = when {
+            position != 0 -> 0
+            orientation == RecyclerView.HORIZONTAL -> paddingStart
+            else -> paddingTop
         }
+        return position to offset
     }
 
     private fun DivRecyclerView.setItemDecoration(decoration: RecyclerView.ItemDecoration) {

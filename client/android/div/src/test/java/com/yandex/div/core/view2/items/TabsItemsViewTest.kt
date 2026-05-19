@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.items
 
+import android.content.res.Resources
 import androidx.viewpager.widget.PagerAdapter
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
@@ -21,9 +22,12 @@ class TabsItemsViewTest {
     private val viewPager = mock<ScrollableViewPager> {
         on { adapter } doReturn adapter
     }
+    private val resources = mock<Resources> {
+        on { displayMetrics } doReturn mock()
+    }
     private val tabsLayout = mock<DivTabsLayout> {
         on { viewPager } doReturn viewPager
-        on { resources } doReturn mock()
+        on { resources } doReturn resources
     }
     private val underTest = DivViewWithItems.Tabs(tabsLayout)
 

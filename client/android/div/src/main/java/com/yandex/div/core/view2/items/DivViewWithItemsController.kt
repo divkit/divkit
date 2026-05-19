@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.items
 
 import android.view.View
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSizeUnit
 
 internal class DivViewWithItemsController private constructor(private val view: DivViewWithItems) {
@@ -72,11 +71,10 @@ internal class DivViewWithItemsController private constructor(private val view: 
         fun create(
             id: String,
             view: DivViewFacade,
-            resolver: ExpressionResolver,
             direction: Direction = Direction.NEXT
         ): DivViewWithItemsController? {
             val targetView = view.view.findViewWithTag<View>(id) ?: return null
-            val viewWithItems = DivViewWithItems.create(targetView, resolver) { direction } ?: return null
+            val viewWithItems = DivViewWithItems.create(targetView) { direction } ?: return null
             return DivViewWithItemsController(viewWithItems)
         }
 

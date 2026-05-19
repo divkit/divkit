@@ -134,6 +134,7 @@
           "$description": "translations.json#/div_gallery_scroll_content_alignment",
           "$ref": "#/definitions/content_alignment",
           "platforms": [
+            "android",
             "ios"
           ]
         }

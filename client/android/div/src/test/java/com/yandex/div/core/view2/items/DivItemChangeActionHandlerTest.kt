@@ -64,7 +64,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=3"),
             view,
-            resolver,
         )
 
         assertTrue(result)
@@ -76,7 +75,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
             view,
-            resolver,
         )
 
         assertTrue(result)
@@ -88,7 +86,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID"),
             view,
-            resolver,
         )
 
         assertTrue(result)
@@ -100,7 +97,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item"),
             view,
-            resolver,
         )
 
         assertFalse(result)
@@ -113,7 +109,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
             view,
-            resolver,
         )
 
         assertFalse(result)
@@ -126,7 +121,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
             view,
-            resolver,
         )
 
         assertFalse(result)
@@ -137,7 +131,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID"),
             view,
-            resolver,
         )
 
         assertFalse(result)
@@ -148,7 +141,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=bar"),
             view,
-            resolver,
         )
 
         assertFalse(result)
@@ -159,7 +151,8 @@ class DivItemChangeActionHandlerTest {
         whenever(divItemsView.itemCount).thenReturn(CURRENT_ITEM + 1)
 
         val result = DivItemChangeActionHandler.handleAction(
-            Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"), view, resolver
+            Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"),
+            view,
         )
 
         assertTrue(result)
@@ -173,7 +166,6 @@ class DivItemChangeActionHandlerTest {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID&overflow=ring"),
             view,
-            resolver,
         )
 
         assertTrue(result)

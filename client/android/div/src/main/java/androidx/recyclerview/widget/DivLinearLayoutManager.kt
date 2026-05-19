@@ -4,14 +4,14 @@ import android.view.View
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
-import com.yandex.div.core.view2.divs.gallery.ScrollPosition
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div2.DivGallery
 
 internal class DivLinearLayoutManager(
     override val bindingContext: BindingContext,
-    override val view: RecyclerView,
-    override val div: DivGallery,
-    @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL
+    override val view: DivRecyclerView,
+    @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
+    override val crossContentAlignment: DivGallery.ContentAlignment,
 ) : LinearLayoutManager(view.context, orientation, false), DivGalleryItemHelper {
 
     override val childrenToRelayout = HashSet<View>()
@@ -81,7 +81,24 @@ internal class DivLinearLayoutManager(
 
     override fun firstCompletelyVisibleItemPosition(): Int = findFirstCompletelyVisibleItemPosition()
 
+    override fun findFirstCompletelyVisibleItemPosition() = findCompletelyVisibleItemPosition(0, itemCount - 1)
+
     override fun lastCompletelyVisibleItemPosition(): Int = findLastCompletelyVisibleItemPosition()
+
+    override fun findLastCompletelyVisibleItemPosition() = findCompletelyVisibleItemPosition(itemCount - 1, 0)
+
+    private fun findCompletelyVisibleItemPosition(fromIndex: Int, toIndex: Int): Int {
+        val isHorizontal = orientation == RecyclerView.HORIZONTAL
+        val parentSize = if (isHorizontal) view.width else view.height
+        val range = if (fromIndex <= toIndex) fromIndex .. toIndex else fromIndex downTo toIndex
+        for (i in range) {
+            val child = getChildAt(i) ?: continue
+            val childStart = if (isHorizontal) child.left else child.top
+            val childEnd = if (isHorizontal) child.right else child.bottom
+            if (childStart >= 0 && childEnd <= parentSize) return getPosition(child)
+        }
+        return RecyclerView.NO_POSITION
+    }
 
     override fun firstVisibleItemPosition(): Int = findFirstVisibleItemPosition()
 
@@ -95,18 +112,5 @@ internal class DivLinearLayoutManager(
 
     override fun getLayoutManagerOrientation(): Int = orientation
 
-    override fun instantScrollToPosition(
-        position: Int,
-        scrollPosition: ScrollPosition
-    ) {
-        instantScroll(position, scrollPosition)
-    }
-
-    override fun instantScrollToPositionWithOffset(
-        position: Int,
-        offset: Int,
-        scrollPosition: ScrollPosition
-    ) {
-        instantScroll(position, scrollPosition, offset)
-    }
+    override fun instantScrollToPosition(position: Int, offset: Int) = instantScroll(position, offset)
 }

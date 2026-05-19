@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.items
 
+import android.content.res.Resources
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -21,9 +22,12 @@ class PagerItemsViewTest {
         }
     }
 
+    private val resources = mock<Resources> {
+        on { displayMetrics } doReturn mock()
+    }
     private val view = mock<DivPagerView> {
         on { viewPager } doReturn viewPager
-        on { resources } doReturn mock()
+        on { resources } doReturn resources
     }
 
     private val underTest = DivViewWithItems.Pager(view)

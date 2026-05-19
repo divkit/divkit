@@ -2,13 +2,15 @@ package com.yandex.div.core;
 
 import android.net.Uri;
 import android.view.View;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
+import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.evaluation.DictEvaluator;
 import com.yandex.div.core.expression.evaluation.JSONObjectEvaluator;
-import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.PathFormatException;
@@ -27,6 +29,7 @@ import com.yandex.div2.DivActionTyped;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivSightAction;
 import com.yandex.div2.DivVisibilityAction;
+
 import org.json.JSONObject;
 
 /**
@@ -505,7 +508,7 @@ public class DivActionHandler {
 
             return div2View.applyVideoCommand(id, command, resolver);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
-            return DivItemChangeActionHandler.handleAction(uri, view, resolver);
+            return DivItemChangeActionHandler.handleAction(uri, view);
         } else if (StoredValuesActionHandler.canHandle(action)) {
             return StoredValuesActionHandler.handleAction(uri, view);
         }

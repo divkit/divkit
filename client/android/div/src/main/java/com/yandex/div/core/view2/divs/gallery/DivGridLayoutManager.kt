@@ -4,32 +4,27 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
 internal class DivGridLayoutManager(
     override val bindingContext: BindingContext,
-    override val view: RecyclerView,
-    override val div: DivGallery,
-    @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL
-) : StaggeredGridLayoutManager (
-        div.columnCount?.evaluate(bindingContext.expressionResolver)?.toIntSafely() ?: 1,
-    orientation
-), DivGalleryItemHelper {
+    override val view: DivRecyclerView,
+    @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
+    override val crossContentAlignment: DivGallery.ContentAlignment,
+    columnCount: Int,
+    val itemSpacing: Int,
+    val crossSpacing: Int,
+) : StaggeredGridLayoutManager(columnCount, orientation),
+    DivGalleryItemHelper {
 
     override val childrenToRelayout = HashSet<View>()
 
     override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems.getOrNull(position)
-
-    private val itemSpacing
-        get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
-
-    val crossSpacing
-        get() = div.crossSpacing?.evaluate(bindingContext.expressionResolver)?.dpToPx(view.resources.displayMetrics)
-            ?: itemSpacing
 
     private fun spacingByOrientation(alongOrientation: Int) =
         if (alongOrientation == orientation) itemSpacing else crossSpacing
@@ -156,18 +151,28 @@ internal class DivGridLayoutManager(
 
     override fun getLayoutManagerOrientation(): Int = orientation
 
-    override fun instantScrollToPosition(
-        position: Int,
-        scrollPosition: ScrollPosition
-    ) {
-        instantScroll(position, scrollPosition)
-    }
+    override fun instantScrollToPosition(position: Int, offset: Int) {
+        view.doOnActualLayout {
+            val isRtl = orientation == RecyclerView.HORIZONTAL && view.isLayoutRtl()
+            if (position == 0) {
+                val fixedOffset = if (isRtl) offset else -offset
+                view.scrollBy(fixedOffset, fixedOffset)
+                return@doOnActualLayout
+            }
 
-    override fun instantScrollToPositionWithOffset(
-        position: Int,
-        offset: Int,
-        scrollPosition: ScrollPosition
-    ) {
-        instantScroll(position, scrollPosition, offset)
+            val direction = if (isRtl) -1 else 1
+            view.scrollBy(-view.scrollX * direction, -view.scrollY)
+
+            var targetView = findViewByPosition(position)
+
+            while (targetView == null && (view.canScrollVertically(1) || view.canScrollHorizontally(direction))) {
+                requestLayout()
+                targetView = findViewByPosition(position)
+                if (targetView != null) break
+                view.scrollBy(view.width * direction, view.height)
+            }
+
+            targetView?.let { trySnapToPosition(it, offset) }
+        }
     }
 }
