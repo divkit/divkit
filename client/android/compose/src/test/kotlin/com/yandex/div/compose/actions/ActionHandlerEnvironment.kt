@@ -2,6 +2,7 @@ package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.createExpressionResolver
+import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivSightAction
@@ -10,6 +11,7 @@ import org.mockito.kotlin.mock
 internal class ActionHandlerEnvironment {
     val reporter = TestReporter()
     val variableController = DivVariableController()
+    val stateStorage = DivStateStorage()
 
     val expressionResolver = createExpressionResolver(
         reporter = reporter,
@@ -18,7 +20,8 @@ internal class ActionHandlerEnvironment {
 
     val context = DivActionHandlingContext(
         cardId = "test",
-        expressionResolver = expressionResolver
+        expressionResolver = expressionResolver,
+        stateStorage = stateStorage
     )
 
     private lateinit var actionHandler: DivActionHandler
@@ -28,7 +31,8 @@ internal class ActionHandlerEnvironment {
         arrayActionsHandler: ArrayActionsHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
         setVariableActionHandler: SetVariableActionHandler = mock(),
-        updateStructureActionHandler: UpdateStructureActionHandler = mock()
+        updateStructureActionHandler: UpdateStructureActionHandler = mock(),
+        setStateActionHandler: SetStateActionHandler = mock()
     ) {
         actionHandler = DivActionHandler(
             externalActionHandler = externalActionHandler,
@@ -36,7 +40,8 @@ internal class ActionHandlerEnvironment {
             arrayActionsHandler = arrayActionsHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,
             setVariableActionHandler = setVariableActionHandler,
-            updateStructureActionHandler = updateStructureActionHandler
+            updateStructureActionHandler = updateStructureActionHandler,
+            setStateActionHandler = setStateActionHandler
         )
     }
 

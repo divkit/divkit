@@ -17,7 +17,6 @@ import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
-import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionShowTooltip
 import com.yandex.div2.DivActionSubmit
@@ -35,6 +34,7 @@ internal class DivActionHandler @Inject constructor(
     private val reporter: DivReporter,
     private val arrayActionsHandler: ArrayActionsHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
+    private val setStateActionHandler: SetStateActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
     private val updateStructureActionHandler: UpdateStructureActionHandler
 ) {
@@ -146,7 +146,7 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ScrollBy -> notSupported(DivActionScrollBy.TYPE)
             is DivActionTyped.ScrollTo -> notSupported(DivActionScrollTo.TYPE)
             is DivActionTyped.SetCursorPosition -> notSupported(DivActionSetCursorPosition.TYPE)
-            is DivActionTyped.SetState -> notSupported(DivActionSetState.TYPE)
+            is DivActionTyped.SetState -> setStateActionHandler.handle(context, action.value)
             is DivActionTyped.SetStoredValue -> notSupported(DivActionSetStoredValue.TYPE)
             is DivActionTyped.SetVariable ->
                 setVariableActionHandler.handle(context, action.value)
@@ -167,7 +167,7 @@ internal class DivActionHandler @Inject constructor(
     ) {
         when (action) {
             is DivUntypedAction.HideTooltip -> notSupported("hide_tooltip")
-            is DivUntypedAction.SetState -> notSupported("set_state")
+            is DivUntypedAction.SetState -> setStateActionHandler.handle(context, action)
             is DivUntypedAction.SetStoredValue -> notSupported("set_stored_value")
             is DivUntypedAction.SetVariable ->
                 setVariableActionHandler.handle(context, action)

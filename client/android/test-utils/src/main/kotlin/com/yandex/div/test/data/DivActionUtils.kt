@@ -1,12 +1,14 @@
 package com.yandex.div.test.data
 
 import androidx.core.net.toUri
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
+import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
@@ -98,6 +100,21 @@ fun updateStructureAction(
         )
     )
 }
+
+fun setStateAction(
+    stateId: Expression<String>,
+    temporary: Boolean = true,
+): DivActionTyped {
+    return DivActionTyped.SetState(
+        DivActionSetState(
+            stateId = stateId,
+            temporary = constant(temporary),
+        )
+    )
+}
+
+fun setStateAction(stateId: String, temporary: Boolean = true): DivActionTyped =
+    setStateAction(stateId = constant(stateId), temporary = temporary)
 
 fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
     return DivActionTyped.SetVariable(
