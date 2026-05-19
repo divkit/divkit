@@ -3,10 +3,12 @@ package com.yandex.div.compose
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
+import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -23,6 +25,14 @@ internal fun createExpressionResolver(
         reporter = reporter,
         variableController = variableController
     )
+}
+
+internal fun mockViewContext(
+    stateStorage: DivStateStorage = DivStateStorage(),
+): DivViewContext {
+    return mock<DivViewContext> {
+        on { this.stateStorage } doReturn stateStorage
+    }
 }
 
 internal fun mockLocalComponent(
