@@ -139,6 +139,11 @@
     {
       "title": "Simple tap",
       "case_id": 15,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "DivAction"
       ],
@@ -202,6 +207,11 @@
     {
       "title": "Tab swipe",
       "case_id": 16,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -245,6 +255,11 @@
     {
       "title": "Tab swipe restricted",
       "case_id": 17,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -265,6 +280,11 @@
     {
       "title": "Gallery scroll",
       "case_id": 18,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -285,6 +305,11 @@
     {
       "title": "Incompletely filled gallery throws taps",
       "case_id": 19,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -299,6 +324,11 @@
     {
       "title": "Paged gallery scroll",
       "case_id": 20,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -319,6 +349,11 @@
     {
       "title": "Gallery item actions",
       "case_id": 21,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -360,6 +395,11 @@
     {
       "title": "Gallery default item states",
       "case_id": 22,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -378,6 +418,11 @@
     {
       "title": "Gallery paging default item states",
       "case_id": 23,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -398,8 +443,15 @@
     {
       "title": "Zoomable gallery",
       "case_id": 24,
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
+      ],
+      "steps": [
+        "Pinch-to-zoom on the image"
       ],
       "expected_results": [
         "Image in gallery can be zoomed"
@@ -428,6 +480,22 @@
       "tags": [
         "DivGallery"
       ],
+      "steps": [
+        "1. Swipe the gallery left and right",
+        "2. Check the text displayed below the gallery",
+        "3. Tap \"Expand\" at the end of the text",
+        "4. Swipe the gallery left and right",
+        "5. Tap the expanded text to collapse it",
+        "6. Swipe the gallery left and right"
+      ],
+      "expected_results": [
+        "1. The gallery scrolls smoothly and has a finite number of slides. The indicator updates correctly when switching between gallery pages",
+        "2. The text below the gallery changes according to the selected slide. Each slide has its own text",
+        "3. The full text is expanded",
+        "4. The text remains expanded for each slide when swiping through the gallery",
+        "5. The text is collapsed, and the \"Expand\" option is displayed at the end of the text",
+        "6. The text is shown in collapsed form for each slide when swiping through the galler"
+      ],
       "file": "gallery/gallery-bottom-multiline-selected-action.json"
     },
     {
@@ -440,19 +508,52 @@
       "tags": [
         "DivGallery"
       ],
+      "steps": [
+        "Check the gallery scroll"
+      ],
+      "expected_results": [
+        "The gallery scrolls smoothly",
+        "The indicator changes when switching gallery pages"
+      ],
       "file": "gallery/gallery-bottom-singleline.json"
     },
     {
       "title": "Gallery top multiline",
       "case_id": 28,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "DivGallery"
+      ],
+      "steps": [
+        "1. Swipe the gallery left and right",
+        "2. Check the text displayed above the gallery",
+        "3. Tap \"Expand\" at the end of the text",
+        "4. Swipe the gallery left and right",
+        "5. Tap the expanded text to collapse it",
+        "6. Swipe the gallery left and right."
+      ],
+      "expected_results": [
+        "1. The gallery scrolls smoothly and has a finite number of slides. The indicator updates correctly when switching between gallery pages",
+        "2. The text above the gallery changes according to the selected slide. Each slide has its own text",
+        "3. The full text is expanded",
+        "4. The text remains expanded for each slide when swiping through the gallery",
+        "5. The text is collapsed, and the \"Expand\" option is displayed at the end of the text",
+        "6. The text is shown in collapsed form for each slide when swiping through the gallery"
       ],
       "file": "gallery/gallery-top-multiline.json"
     },
     {
       "title": "Pager scroll",
       "case_id": 29,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -473,17 +574,45 @@
     {
       "title": "Pager item actions",
       "case_id": 30,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
       "tags": [
         "DivPager"
       ],
+      "steps": [
+        "1. Check the functionality of the buttons in the first row",
+        "2. Check the functionality of the buttons in the second row",
+        "3. Switch the pager pages left and right using both the buttons and swiping, and check that the \"Last logged item\" value updates according to the selected page"
+      ],
+      "expected_results": [
+        "1. The \"<\" and \">\" buttons switch between pager pages. The \"<<\" and \">>\" buttons navigate the pager to the first and last pages respectively",
+        "2. 2. The \"<\" and \">\" buttons switch the pager by skipping one page at a time. The \"<<\" and \">>\" buttons navigate the pager to the first and last pages respectively",
+        "3. The \"Last logged item\" value updates according to the currently selected pager page"
+      ],
       "file": "pager/pager-item-actions.json"
     },
     {
       "title": "Pager selected actions",
       "case_id": 31,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "The value in the Selected position corresponds to the page number"
+      ],
       "tags": [
         "DivPager"
       ],
@@ -492,11 +621,28 @@
     {
       "title": "Pager default item states",
       "case_id": 32,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
       "tags": [
         "DivPager"
+      ],
+      "steps": [
+        "1. Tap the \"EXPAND\" button",
+        "2. Tap the \"COLLAPSE\" button",
+        "3. Expand the text on any slide and swipe the gallery left and right",
+        "4. Expand the text on all slides and swipe the gallery left and right"
+      ],
+      "expected_results": [
+        "1. The full text is displayed, and the \"EXPAND\" button changes to \"COLLAPSE\"",
+        "2. The text is collapsed, and the \"COLLAPSE\" button changes to \"EXPAND\"",
+        "3. The expanded text is displayed only on the selected slide",
+        "4. The gallery scrolls correctly, and the text remains expanded on all slides"
       ],
       "file": "pager/pager_default_item_states.json"
     },
@@ -511,6 +657,14 @@
       "tags": [
         "DivPager",
         "DivIndicator"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "The pages and the pager indicator are switched correctly when swiping horizontally",
+        "Infinite scrolling works correctly: when moving from page 3 to page 1, both the pages and the pager indicator are displayed correctly. When looping, the indicator jumps from the last page to the first"
       ],
       "file": "pager/pager_infinite_scroll.json"
     },
@@ -545,11 +699,32 @@
         "DivPager",
         "DivIndicator"
       ],
+      "steps": [
+        "1. Swipe the gallery left and right",
+        "2. Tap the \"EXPAND\" button",
+        "3. Tap the \"COLLAPSE\" button",
+        "4. Expand the text on any slide, then swipe the gallery left and right",
+        "5. Expand the text on all slides, then swipe the gallery left and right",
+        "6. Check the \"Selected\" switch, then swipe the gallery left and right"
+      ],
+      "expected_results": [
+        "1. Scrolling is smooth and infinite. The slider switches correctly",
+        "2. The full text is displayed, and the \"EXPAND\" button changes to \"COLLAPSE\"",
+        "3. The text is collapsed, and the \"COLLAPSE\" button changes to \"EXPAND\"",
+        "4. The expanded text is displayed only on the slide where it was expanded",
+        "5. The gallery scrolls correctly, and the text remains expanded on all slides",
+        "6. The \"Selected\" value changes according to the currently displayed slide"
+      ],
       "file": "pager/pager_infinite_scroll_with_start_paddings.json"
     },
     {
       "title": "Action animations",
       "case_id": 33,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "DivAnimation"
       ],
@@ -565,6 +740,11 @@
     {
       "title": "Recommendation slider",
       "case_id": 1,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "Slider"
       ],
@@ -583,6 +763,11 @@
     {
       "title": "Slider with two pointers",
       "case_id": 12,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "Slider"
       ],
@@ -601,14 +786,33 @@
     {
       "title": "Slider preferences",
       "case_id": 34,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "Slider"
       ],
       "steps": [
-        "Interact with slider"
+        "1. Drag the thumb to the left and right on the slider with one thumb",
+        "2. Drag the thumb to the left and right on the slider with ticks, with a scale from 0 to 10",
+        "3. Drag the thumb to the left and right on the slider with ticks, with a scale from 0 to 3",
+        "4. Drag the thumbs to the left and right on the sliders with two thumbs",
+        "5. Drag the thumb to the left and right in the Custom preferences section",
+        "6. Turn on the \"Secondary thumb\" toggle, then drag the second thumb to the left and right in the Custom preferences section",
+        "7. Turn on the \"Ticks\" toggle, then drag the thumbs to the left and right in the Custom preferences section",
+        "8. In the Custom preferences section, set the number of points to 5 instead of the default value of 10, then drag the thumbs to the left and right"
       ],
       "expected_results": [
-        "Slider pointer change it's position"
+        "1. When the thumb is moved, the slider color changes from gray to yellow",
+        "2. When the thumb is moved, the slider color changes from gray to yellow. The slider displays 10 tick marks",
+        "3. When the thumb is moved, the slider color changes from gray to yellow. The slider displays 3 tick marks",
+        "4. When the thumbs are moved, the slider color changes from gray to yellow. The slider with ticks displays tick marks. The second thumb can be moved independently, allowing a selected range to be set",
+        "5. When the thumb is moved, the slider color changes from gray to yellow",
+        "6. The \"Secondary thumb\" toggle is enabled. A second thumb appears on the slider. Both thumbs can be moved left and right independently, allowing a range to be selected",
+        "7. The \"Ticks\" toggle is enabled. Tick marks appear on the slider. When the thumbs are moved, the slider color changes from gray to yellow",
+        "8. By default, the number of points is set to 10. After changing the value to 5, the slider displays 5 tick marks instead of 10. When the thumbs are moved, the slider color changes from gray to yellow"
       ],
       "file": "slider_presets.json"
     },
@@ -659,6 +863,11 @@
     {
       "title": "Root state switching",
       "case_id": 35,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -713,6 +922,11 @@
     {
       "title": "Accessibility descriptions",
       "case_id": 196,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "Accessibility"
       ],
@@ -782,6 +996,11 @@
     {
       "title": "Accessibility auto types",
       "case_id": 198,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "Accessibility"
       ],
@@ -926,6 +1145,11 @@
     {
       "title": "Actions on tap",
       "case_id": 36,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -1091,7 +1315,7 @@
         "Animations"
       ],
       "steps": [
-        "Press button with text 'SHOW'",
+        "Press button with text 'Show'",
         "After image appears press 'Hide'"
       ],
       "expected_results": [
@@ -1175,6 +1399,11 @@
     {
       "title": "Synchronizing multiple change bounds animations. Article",
       "case_id": 38,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
@@ -1221,63 +1450,142 @@
         "Click on 'BLINK'"
       ],
       "expected_results": [
-        "Red circle should appear and disappear"
+        "The circle animation is playing"
       ],
       "file": "animations/blink.json"
     },
     {
       "title": "Change bounds transitions ignore start_delay",
       "case_id": 41,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
       "steps": [
-        "Click on tooltip"
+        "Wait 3 seconds",
+        "Wait 3 seconds",
+        "Wait 3 seconds"
       ],
       "expected_results": [
-        "A few seconds after the card is shown, a tooltip should appear",
-        "The text should disappear first, and the background after a short delay"
+        "The tooltip appears",
+        "The tooltip disappears",
+        "The tooltip does not appear again"
       ],
       "file": "animations/mute_notification.json"
     },
     {
       "title": "Div with corner radius and shadow set is clipped during transition animation",
       "case_id": 184,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
       "steps": [
-        "Click on yellow rectangle",
-        "Repeat if necessary"
+        "Tap on the yellow rectangle",
+        "Tap on the blue circle"
       ],
       "expected_results": [
-        "Blue circle still a circle while transition is in progress"
+        "The blue circle appears with an animation, sliding in from the left edge",
+        "The circle slides out to the right with an animation, remaining unchanged in shape and without visual artifacts"
       ],
       "file": "animations/transient_div_with_clip_and_shadow.json"
     },
     {
       "title": "State transition any change",
       "case_id": 42,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap the star icon",
+        "Tap the star icon again"
+      ],
+      "expected_results": [
+        "The star icon changes to the selected state",
+        "The star icon returns to the unselected state"
+      ],
       "file": "animations/transition/state_transition_any_change.json"
     },
     {
       "title": "State transition data change",
       "case_id": 44,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap the star icon",
+        "Tap the star icon again"
+      ],
+      "expected_results": [
+        "The star icon changes to the selected state",
+        "The star icon returns to the unselected state"
+      ],
       "file": "animations/transition/state_transition_data_change.json"
     },
     {
       "title": "State transition state change",
       "case_id": 45,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap the star icon",
+        "Tap the star icon again"
+      ],
+      "expected_results": [
+        "The star icon changes to the selected state",
+        "The star icon returns to the unselected state"
+      ],
       "file": "animations/transition/state_transition_state_change.json"
     },
     {
       "title": "Inner state transition any change",
       "case_id": 46,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap the star icon",
+        "Tap the star icon again"
+      ],
+      "expected_results": [
+        "The star icon changes to the selected state",
+        "The star icon returns to the unselected state"
+      ],
       "file": "animations/transition/inner_state_transition_any_change.json"
     },
     {
       "title": "Inner state transition data change",
-      "case_id": 46,
+      "case_id": 47,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap the star icon",
+        "Tap the star icon again"
+      ],
+      "expected_results": [
+        "The star icon changes to the selected state",
+        "The star icon returns to the unselected state"
+      ],
       "file": "animations/transition/inner_state_transition_data_change.json"
     },
     {
@@ -1316,6 +1624,10 @@
       "tags": [
         "Animations",
         "lottie"
+      ],
+      "steps": [
+        "Check that the animation plays in one direction"
+
       ],
       "expected_results": [
         "Spinner animation will continue 5 times and then stop"
@@ -1386,6 +1698,14 @@
       ],
       "tags": [
         "Animations"
+      ],
+      "steps": [
+        "Check the button animations.",
+        "Check the log in the demo app."
+      ],
+      "expected_results": [
+        "Each button shows its corresponding animation when tapped, except for the \"No animation\" and \"No action\" buttons.",
+        "Tapping the buttons is logged in the demo app, except for the \"No action\" button."
       ],
       "file": "action_animation/button_press_action_animations.json"
     },
@@ -1536,6 +1856,11 @@
     {
       "title": "Visibility actions in gallery",
       "case_id": 52,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -1580,6 +1905,11 @@
     {
       "title": "Visibility actions in pager",
       "case_id": 55,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "web"
       ],
@@ -1600,6 +1930,11 @@
     {
       "title": "Visibility actions performed and logged in pager",
       "case_id": 56,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "web"
       ],
@@ -1620,6 +1955,11 @@
     {
       "title": "Visibility action for child of item in gallery",
       "case_id": 57,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "android"
       ],
@@ -1639,6 +1979,11 @@
     {
       "title": "Visibility actions is_enabled",
       "case_id": 58,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "android",
         "web"
@@ -1662,6 +2007,11 @@
     {
       "title": "Actions is_enabled",
       "case_id": 59,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "android",
         "web"
@@ -1709,6 +2059,11 @@
     {
       "title": "Visibility actions for default_item",
       "case_id": 60,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "web"
       ],
@@ -1727,6 +2082,11 @@
     {
       "title": "Nested visibility actions",
       "case_id": 61,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "automated": [
         "web"
       ],
@@ -1791,6 +2151,11 @@
     {
       "title": "Variables in gallery",
       "case_id": 64,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -1826,6 +2191,11 @@
     {
       "title": "Variables in pager",
       "case_id": 65,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "tags": [
         "DivPager"
       ],
@@ -1855,6 +2225,11 @@
     {
       "title": "Variables in tabs",
       "case_id": 66,
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
       "tags": [
         "DivTabs"
       ],
@@ -3321,6 +3696,11 @@
     {
       "title": "Patch gallery internal items",
       "case_id": 121,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "patch"
       ],
@@ -3356,6 +3736,10 @@
     {
       "title": "Patch grid internal items",
       "case_id": 123,
+      "platforms": [
+        "ios",
+        "web"
+      ],
       "automated": [
         "android"
       ],
@@ -3394,6 +3778,11 @@
     {
       "title": "Patch pager internal items",
       "case_id": 125,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "patch"
       ],
@@ -3476,6 +3865,11 @@
     {
       "title": "Patch tabs partial",
       "case_id": 129,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "patch"
       ],
@@ -3491,6 +3885,11 @@
     {
       "title": "Patch tabs transactional broken",
       "case_id": 130,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "patch"
       ],
@@ -3506,6 +3905,11 @@
     {
       "title": "Patch tabs transactional success",
       "case_id": 132,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "tags": [
         "patch"
       ],
@@ -3542,11 +3946,16 @@
     {
       "title": "Patch root div",
       "case_id": 176,
+      "platforms": [
+        "web",
+        "android",
+        "ios"
+      ],
       "tags": [
         "patch"
       ],
       "steps": [
-        "Wait 10 seconds",
+        "Wait a few seconds",
         "Check items"
       ],
       "expected_results": [
@@ -3618,6 +4027,11 @@
     {
       "title": "Multiple state switching with different root state",
       "case_id": 175,
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
       "tags": [
         "DivState"
       ],
@@ -3633,6 +4047,11 @@
     {
       "title": "Input inside pager",
       "case_id": 134,
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
       "tags": [
         "DivPager",
         "DivInput"
@@ -3656,14 +4075,39 @@
       "tags": [
         "DivInput"
       ],
+      "steps": [
+        "1. Set the following parameters: Keyboard type: \"single_line_text\"; Autocapitalization type: \"auto\". Tap the input field",
+        "2. Set the following parameters: Keyboard type: \"phone\"; Autocapitalization type: \"auto\". Tap the input field",
+        "3. Set the following parameters: Keyboard type: \"number\"; Autocapitalization type: \"auto\". Tap the input field",
+        "4. Set the following parameters: Keyboard type: \"email\"; Autocapitalization type: \"auto\". Tap the input field",
+        "5. Set the following parameters: Keyboard type: \"uri\"; Autocapitalization type: \"auto\". Tap the input field",
+        "6. Set the following parameters: Keyboard type: \"password\"; Autocapitalization type: \"auto\". Tap the input field",
+        "7. Set the following parameters: Keyboard type: \"single_line_text\"; Autocapitalization type: \"none\". Tap the input field",
+        "8. Set the following parameters: Keyboard type: \"single_line_text\"; Autocapitalization type: \"words\". Tap the input field",
+        "9. Set the following parameters: Keyboard type: \"single_line_text\"; Autocapitalization type: \"sentences\". Tap the input field",
+        "10. Set the following parameters: Keyboard type: \"single_line_text\"; Autocapitalization type: \"all_characters\". Tap the input field"
+      ],
       "expected_results": [
-        "The keyboard type when clicking on an input field should differ depending on the select"
+        "1. A standard text keyboard is displayed",
+        "2. A phone keyboard is displayed, including the \"+\", \"*\", and \"#\" symbols",
+        "3. A numeric keyboard is displayed",
+        "4. An email keyboard is displayed, including the \"@\" symbol",
+        "5. A URI keyboard is displayed. On iOS, the space bar may be replaced with \".com\" or another URL-related shortcut",
+        "6. A password keyboard is displayed. Entered characters are masked",
+        "7. All entered letters remain lowercase",
+        "8. The first letter of each word is automatically capitalized",
+        "9. The first letter of each sentence is automatically capitalized",
+        "10. All entered letters are automatically capitalized"
       ],
       "file": "input/input_keyboard_types.json"
     },
     {
       "title": "Slider vertical scroll interruption",
       "case_id": 135,
+      "platforms": [
+        "ios",
+        "web"
+      ],
       "automated": [
         "android"
       ],
@@ -3681,6 +4125,10 @@
     {
       "title": "Slider horizontal scroll interruption",
       "case_id": 136,
+      "platforms": [
+        "ios",
+        "web"
+      ],
       "automated": [
         "android"
       ],
@@ -3875,7 +4323,10 @@
         "DivContainer"
       ],
       "steps": [
-        "Tap on button. Second input should be focused"
+        "Tap the \"Focus 2\" button"
+      ],
+      "expected_results": [
+        "The field is highlighted in orange. The second input field receives focus, and the keyboard is displayed"
       ],
       "file": "container/Item_builder_with_id_override.json"
     },
@@ -3986,6 +4437,11 @@
     {
       "title": "Pager accessibility scroll",
       "case_id": 195,
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "DivPager",
         "Accessibility"
