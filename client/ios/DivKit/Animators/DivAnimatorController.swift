@@ -3,12 +3,17 @@ import LayoutKit
 import VGSL
 
 final class DivAnimatorController {
-  private var animators = [UIElementPath: Animator]()
+  private struct Entry {
+    var animator: Animator
+    var definition: DivAnimator
+  }
+
+  private var entries = [UIElementPath: Entry]()
   private let lock = AllocatedUnfairLock()
 
   deinit {
     lock.withLock {
-      animators.values.forEach { $0.stop() }
+      entries.values.forEach { $0.animator.stop() }
     }
   }
 
@@ -24,7 +29,7 @@ final class DivAnimatorController {
     repeatCount: RepeatCount?
   ) {
     lock.withLock {
-      animators[path + id]?.start(
+      entries[path + id]?.animator.start(
         startValue: startValue,
         endValue: endValue,
         duration: duration,
@@ -38,30 +43,46 @@ final class DivAnimatorController {
 
   func stopAnimator(path: UIElementPath, id: String) {
     lock.withLock {
-      animators[path + id]?.stop()
+      entries[path + id]?.animator.stop()
     }
   }
 
-  func initializeIfNeeded(path: UIElementPath, id: String, animator: Variable<Animator?>) {
+  func definition(path: UIElementPath, id: String) -> DivAnimator? {
+    lock.withLock { entries[path + id]?.definition }
+  }
+
+  func initializeIfNeeded(
+    path: UIElementPath,
+    id: String,
+    definition: DivAnimator,
+    animator: Variable<Animator?>
+  ) {
     lock.withLock {
-      if animators[path + id]?.isRunning != true {
-        animator.value.map { animators[path + id] = $0 }
+      let key = path + id
+      if let existing = entries[key], existing.animator.isRunning {
+        // Keep the running animator instance, but refresh the definition so
+        // that the next start() picks up the latest resolved values.
+        entries[key] = Entry(animator: existing.animator, definition: definition)
+      } else {
+        animator.value.map {
+          entries[key] = Entry(animator: $0, definition: definition)
+        }
       }
     }
   }
 
   func reset() {
     lock.withLock {
-      animators.values.forEach { $0.stop() }
-      animators.removeAll()
+      entries.values.forEach { $0.animator.stop() }
+      entries.removeAll()
     }
   }
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      animators = animators.filter {
+      entries = entries.filter {
         if $0.key.cardId == cardId {
-          $0.value.stop()
+          $0.value.animator.stop()
         }
         return $0.key.cardId != cardId
       }

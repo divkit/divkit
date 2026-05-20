@@ -172,6 +172,7 @@ extension DivBase {
       context.animatorController?.initializeIfNeeded(
         path: path,
         id: animator.id,
+        definition: animator,
         animator: Variable { animator.resolve(context) }
       )
     }

@@ -4729,6 +4729,26 @@
       "case_id": 485
     },
     {
+      "title": "Restart color animator with changed end_value",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Tap the \"GREEN\" button",
+        "Before the animation finishes (within ~1.5 seconds), tap the \"RED\" button"
+      ],
+      "expected_results": [
+        "The square starts animating from gray toward green",
+        "After tapping RED the square animates to red, not green; once the animation finishes the square is fully red"
+      ],
+      "file": "animations/animators/restart_color_animator_with_changed_end_value.json"
+    },
+    {
       "title": "Gif animations",
       "platforms": [
         "android",

@@ -1,0 +1,172 @@
+{
+  "card": {
+    "log_id": "restart_color_animator_with_changed_end_value",
+    "variables": [
+      {
+        "type": "color",
+        "name": "gradient_color",
+        "value": "#aaaaaa"
+      },
+      {
+        "type": "color",
+        "name": "target_gradient_color",
+        "value": "#aaaaaa"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "container",
+              "id": "color_box",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 200
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "@{gradient_color}"
+                }
+              ],
+              "animators": [
+                {
+                  "type": "color_animator",
+                  "id": "gradient_color_animator",
+                  "variable_name": "gradient_color",
+                  "start_value": "@{gradient_color}",
+                  "end_value": "@{target_gradient_color}",
+                  "duration": 1500,
+                  "interpolator": "ease_in_out"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "margins": {
+                "top": 40
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "GREEN",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "text_color": "#FFF",
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "width": {
+                    "type": "fixed",
+                    "value": 120
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "border": {
+                    "corner_radius": 12
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1aa260"
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "log_id": "set_target_green",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "target_gradient_color",
+                        "value": {
+                          "type": "color",
+                          "value": "#1aa260"
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "start_animator_green",
+                      "scope_id": "color_box",
+                      "typed": {
+                        "type": "animator_start",
+                        "animator_id": "gradient_color_animator"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "RED",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "text_color": "#FFF",
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "margins": {
+                    "left": 16
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 120
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "border": {
+                    "corner_radius": 12
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#d93025"
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "log_id": "set_target_red",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "target_gradient_color",
+                        "value": {
+                          "type": "color",
+                          "value": "#d93025"
+                        }
+                      }
+                    },
+                    {
+                      "log_id": "start_animator_red",
+                      "scope_id": "color_box",
+                      "typed": {
+                        "type": "animator_start",
+                        "animator_id": "gradient_color_animator"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

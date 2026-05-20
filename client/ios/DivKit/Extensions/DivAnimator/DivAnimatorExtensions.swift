@@ -1,3 +1,4 @@
+import LayoutKit
 import VGSL
 
 extension DivAnimator {
@@ -144,6 +145,33 @@ extension DivAnimator {
       colorAnimator
     case let .divNumberAnimator(numberAnimator):
       numberAnimator
+    }
+  }
+
+  func resolveStartValue(
+    resolver: ExpressionResolver,
+    variablesStorage: DivVariablesStorage,
+    path: UIElementPath
+  ) -> DivVariableValue? {
+    let name = DivVariableName(rawValue: base.variableName)
+    switch self {
+    case let .divColorAnimator(colorAnimator):
+      let value: Color? = colorAnimator.resolveStartValue(resolver)
+        ?? variablesStorage.getVariableValue(path: path, name: name)
+      return value.map { .color($0) }
+    case let .divNumberAnimator(numberAnimator):
+      let value: Double? = numberAnimator.resolveStartValue(resolver)
+        ?? variablesStorage.getVariableValue(path: path, name: name)
+      return value.map { .number($0) }
+    }
+  }
+
+  func resolveEndValue(_ resolver: ExpressionResolver) -> DivVariableValue? {
+    switch self {
+    case let .divColorAnimator(colorAnimator):
+      colorAnimator.resolveEndValue(resolver).map { .color($0) }
+    case let .divNumberAnimator(numberAnimator):
+      numberAnimator.resolveEndValue(resolver).map { .number($0) }
     }
   }
 }
