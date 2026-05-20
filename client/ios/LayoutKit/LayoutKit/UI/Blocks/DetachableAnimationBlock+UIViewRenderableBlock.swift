@@ -170,7 +170,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     childView.frame = convertFrame(to: container)
     self.childView = nil
     container.addSubview(childView)
-    childView.layer.shouldRasterize = true
     childView.setInitialParamsAndAnimate(
       animations: animationOut?.map { animation in
         if animation.kind == .fade {
@@ -179,7 +178,6 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         return animation
       },
       completion: {
-        childView.layer.shouldRasterize = false
         childView.removeFromSuperview()
       }
     )
@@ -196,11 +194,9 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     let item = DispatchWorkItem { [weak self] in
       childView.isHidden = false
-      childView.layer.shouldRasterize = true
       childView.setInitialParamsAndAnimate(
         animations: animationIn.withDelay(-minDelay),
         completion: { [weak self] in
-          childView.layer.shouldRasterize = false
           self?.queuedAnimation = nil
           self?.animationIn = nil
         }
