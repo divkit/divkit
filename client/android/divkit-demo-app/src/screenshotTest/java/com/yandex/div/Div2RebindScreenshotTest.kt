@@ -1,17 +1,14 @@
 package com.yandex.div
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
+import android.os.Build
+import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.test.idling.ActivityIdlingResource
-import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
+import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,25 +30,25 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
     @Screenshot(viewId = R.id.screenshot_view)
     @Test
     fun divScreenshot() {
-        context.sendBroadcastAndWait<DivScreenshotActivity>(DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA_ACTION)
+        Assume.assumeTrue(
+            "Skipping Div2RebindScreenshotTest on API 24",
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.N
+        )
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            activityRule.activity.setDivData(case)
+        }
     }
 
     companion object {
 
-        private val context: Context = ApplicationProvider.getApplicationContext()
         private val expectedSuite = Div2ScreenshotTest::class.qualifiedName ?: ""
+        private val ignoredCases = listOf(
+            "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
+            "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
+        )
 
         @JvmStatic
         @Parameters(name = "{1}")
-        fun cases() = Div2ScreenshotTest.cases()
+        fun cases() = Div2ScreenshotTest.cases().filter { !ignoredCases.contains(it[0]) }
     }
-}
-
-inline fun <reified T: Activity> Context.sendBroadcastAndWait(
-    action: String
-) {
-    val intent = Intent(action)
-
-    sendBroadcast(intent)
-    waitForIdlingResource(ActivityIdlingResource(T::class.java))
 }

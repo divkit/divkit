@@ -1,9 +1,5 @@
 package com.yandex.divkit.demo.screenshot
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +9,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
@@ -38,18 +33,6 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     private val imageLoaderName: String?
         get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
-
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                REBIND_DIV_WITH_SAME_DATA_ACTION -> rebindDivWithSameData()
-            }
-        }
-    }
-
-    private val receiverIntentFilter = IntentFilter().apply {
-        addAction(REBIND_DIV_WITH_SAME_DATA_ACTION)
-    }
 
     lateinit var divView: Div2View
         private set
@@ -76,21 +59,6 @@ class DivScreenshotActivity : AppCompatActivity() {
         val templatesJson = divJson.optJSONObject("templates")
         val cardJson = divJson.getJSONObject("card")
         Div2ViewFactory(divContext, templatesJson).bindViewByConfig(divView, cardJson) { it.onBound() }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        ContextCompat.registerReceiver(
-            this,
-            broadcastReceiver,
-            receiverIntentFilter,
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(broadcastReceiver)
     }
 
     override fun onDestroy() {
@@ -148,14 +116,6 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
     }
 
-    private fun rebindDivWithSameData() {
-        when (val view = findViewById<View>(R.id.screenshot_view)) {
-            is Div2View -> {
-                view.setData(view.divData, view.dataTag)
-            }
-        }
-    }
-
     fun stopAnimations() = divView.stopAnimations()
 
     private fun ViewGroup.stopAnimations() {
@@ -168,8 +128,6 @@ class DivScreenshotActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val REBIND_DIV_WITH_SAME_DATA_ACTION =
-            "DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA"
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
 
