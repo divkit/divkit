@@ -116,6 +116,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
             include: ['tests/**/*.test.ts'],
             reporters: process.env.CI ? ['html', 'default'] : ['default'],
             outputFile: 'ci/vitest-report/index.html',
+            passWithNoTests: true,
         }
     };
 });
