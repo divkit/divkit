@@ -156,7 +156,7 @@ object StartEnumValue : EnumValue("start"),
     ActionVideo.Action,
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
-    Gallery.CrossContentAlignment,
+    Gallery.ContentAlignment,
     Pager.ItemAlignment,
     Text.Truncate
 
@@ -194,7 +194,7 @@ object CenterEnumValue : EnumValue("center"),
     AlignmentVertical,
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
-    Gallery.CrossContentAlignment,
+    Gallery.ContentAlignment,
     Pager.ItemAlignment,
     TextAlignmentVertical,
     Tooltip.Position
@@ -210,7 +210,7 @@ object RightEnumValue : EnumValue("right"),
 object EndEnumValue : EnumValue("end"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
-    Gallery.CrossContentAlignment,
+    Gallery.ContentAlignment,
     Pager.ItemAlignment,
     Text.Truncate
 

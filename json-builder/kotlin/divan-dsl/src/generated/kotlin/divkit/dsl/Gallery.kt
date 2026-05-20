@@ -65,6 +65,7 @@ data class Gallery internal constructor(
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
+            scrollContentAlignment = additive.scrollContentAlignment ?: properties.scrollContentAlignment,
             scrollMode = additive.scrollMode ?: properties.scrollMode,
             scrollbar = additive.scrollbar ?: properties.scrollbar,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -127,7 +128,7 @@ data class Gallery internal constructor(
          * Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
          * Default value: `start`.
          */
-        val crossContentAlignment: Property<CrossContentAlignment>?,
+        val crossContentAlignment: Property<ContentAlignment>?,
         /**
          * Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
          */
@@ -205,6 +206,10 @@ data class Gallery internal constructor(
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
+        /**
+         * Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
+         */
+        val scrollContentAlignment: Property<ContentAlignment>?,
         /**
          * Scroll type: `default` — continuous, `paging` — page-by-page.
          * Default value: `default`.
@@ -305,6 +310,7 @@ data class Gallery internal constructor(
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
+            result.tryPutProperty("scroll_content_alignment", scrollContentAlignment)
             result.tryPutProperty("scroll_mode", scrollMode)
             result.tryPutProperty("scrollbar", scrollbar)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -326,16 +332,14 @@ data class Gallery internal constructor(
     }
 
     /**
-     * Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
-     *
      * Possible values: [start], [center], [end].
      */
     @Generated
-    sealed interface CrossContentAlignment
+    sealed interface ContentAlignment
 
     /**
      * Gallery orientation.
-     *
+     * 
      * Possible values: [horizontal], [vertical].
      */
     @Generated
@@ -343,7 +347,7 @@ data class Gallery internal constructor(
 
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
-     *
+     * 
      * Possible values: [paging], [default].
      */
     @Generated
@@ -351,7 +355,7 @@ data class Gallery internal constructor(
 
     /**
      * Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
-     *
+     * 
      * Possible values: [none], [auto].
      */
     @Generated
@@ -387,6 +391,7 @@ data class Gallery internal constructor(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -416,7 +421,7 @@ fun DivScope.gallery(
     border: Border? = null,
     columnCount: Int? = null,
     columnSpan: Int? = null,
-    crossContentAlignment: Gallery.CrossContentAlignment? = null,
+    crossContentAlignment: Gallery.ContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -435,6 +440,7 @@ fun DivScope.gallery(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollContentAlignment: Gallery.ContentAlignment? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
@@ -481,6 +487,7 @@ fun DivScope.gallery(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
+        scrollContentAlignment = valueOrNull(scrollContentAlignment),
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
@@ -529,6 +536,7 @@ fun DivScope.gallery(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -558,7 +566,7 @@ fun DivScope.galleryProps(
     border: Border? = null,
     columnCount: Int? = null,
     columnSpan: Int? = null,
-    crossContentAlignment: Gallery.CrossContentAlignment? = null,
+    crossContentAlignment: Gallery.ContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -577,6 +585,7 @@ fun DivScope.galleryProps(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollContentAlignment: Gallery.ContentAlignment? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
@@ -622,6 +631,7 @@ fun DivScope.galleryProps(
     restrictParentScroll = valueOrNull(restrictParentScroll),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
+    scrollContentAlignment = valueOrNull(scrollContentAlignment),
     scrollMode = valueOrNull(scrollMode),
     scrollbar = valueOrNull(scrollbar),
     selectedActions = valueOrNull(selectedActions),
@@ -669,6 +679,7 @@ fun DivScope.galleryProps(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -698,7 +709,7 @@ fun TemplateScope.galleryRefs(
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -717,6 +728,7 @@ fun TemplateScope.galleryRefs(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -762,6 +774,7 @@ fun TemplateScope.galleryRefs(
     restrictParentScroll = restrictParentScroll,
     reuseId = reuseId,
     rowSpan = rowSpan,
+    scrollContentAlignment = scrollContentAlignment,
     scrollMode = scrollMode,
     scrollbar = scrollbar,
     selectedActions = selectedActions,
@@ -809,6 +822,7 @@ fun TemplateScope.galleryRefs(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -838,7 +852,7 @@ fun Gallery.override(
     border: Border? = null,
     columnCount: Int? = null,
     columnSpan: Int? = null,
-    crossContentAlignment: Gallery.CrossContentAlignment? = null,
+    crossContentAlignment: Gallery.ContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -857,6 +871,7 @@ fun Gallery.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollContentAlignment: Gallery.ContentAlignment? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
@@ -903,6 +918,7 @@ fun Gallery.override(
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
+        scrollContentAlignment = valueOrNull(scrollContentAlignment) ?: properties.scrollContentAlignment,
         scrollMode = valueOrNull(scrollMode) ?: properties.scrollMode,
         scrollbar = valueOrNull(scrollbar) ?: properties.scrollbar,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -951,6 +967,7 @@ fun Gallery.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -980,7 +997,7 @@ fun Gallery.defer(
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -999,6 +1016,7 @@ fun Gallery.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1045,6 +1063,7 @@ fun Gallery.defer(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scrollContentAlignment = scrollContentAlignment ?: properties.scrollContentAlignment,
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1093,6 +1112,7 @@ fun Gallery.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1122,7 +1142,7 @@ fun Gallery.modify(
     border: Property<Border>? = null,
     columnCount: Property<Int>? = null,
     columnSpan: Property<Int>? = null,
-    crossContentAlignment: Property<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: Property<Gallery.ContentAlignment>? = null,
     crossSpacing: Property<Int>? = null,
     defaultItem: Property<Int>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
@@ -1141,6 +1161,7 @@ fun Gallery.modify(
     restrictParentScroll: Property<Boolean>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
+    scrollContentAlignment: Property<Gallery.ContentAlignment>? = null,
     scrollMode: Property<Gallery.ScrollMode>? = null,
     scrollbar: Property<Gallery.Scrollbar>? = null,
     selectedActions: Property<List<Action>>? = null,
@@ -1187,6 +1208,7 @@ fun Gallery.modify(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scrollContentAlignment = scrollContentAlignment ?: properties.scrollContentAlignment,
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1220,6 +1242,7 @@ fun Gallery.modify(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param visibility Element visibility.
@@ -1232,7 +1255,7 @@ fun Gallery.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    crossContentAlignment: ExpressionProperty<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
@@ -1240,6 +1263,7 @@ fun Gallery.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
     scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1273,6 +1297,7 @@ fun Gallery.evaluate(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scrollContentAlignment = scrollContentAlignment ?: properties.scrollContentAlignment,
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = properties.selectedActions,
@@ -1321,6 +1346,7 @@ fun Gallery.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1350,7 +1376,7 @@ fun Component<Gallery>.override(
     border: Border? = null,
     columnCount: Int? = null,
     columnSpan: Int? = null,
-    crossContentAlignment: Gallery.CrossContentAlignment? = null,
+    crossContentAlignment: Gallery.ContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -1369,6 +1395,7 @@ fun Component<Gallery>.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollContentAlignment: Gallery.ContentAlignment? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
@@ -1416,6 +1443,7 @@ fun Component<Gallery>.override(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
+        scrollContentAlignment = valueOrNull(scrollContentAlignment),
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
@@ -1464,6 +1492,7 @@ fun Component<Gallery>.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1493,7 +1522,7 @@ fun Component<Gallery>.defer(
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -1512,6 +1541,7 @@ fun Component<Gallery>.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollContentAlignment: ReferenceProperty<Gallery.ContentAlignment>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1559,6 +1589,7 @@ fun Component<Gallery>.defer(
         restrictParentScroll = restrictParentScroll,
         reuseId = reuseId,
         rowSpan = rowSpan,
+        scrollContentAlignment = scrollContentAlignment,
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = selectedActions,
@@ -1592,6 +1623,7 @@ fun Component<Gallery>.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param visibility Element visibility.
@@ -1604,7 +1636,7 @@ fun Component<Gallery>.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    crossContentAlignment: ExpressionProperty<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
@@ -1612,6 +1644,7 @@ fun Component<Gallery>.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
     scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1646,6 +1679,7 @@ fun Component<Gallery>.evaluate(
         restrictParentScroll = restrictParentScroll,
         reuseId = reuseId,
         rowSpan = rowSpan,
+        scrollContentAlignment = scrollContentAlignment,
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = null,
@@ -1694,6 +1728,7 @@ fun Component<Gallery>.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollContentAlignment Aligning elements along the scroll direction. In galleries without page scrolling, it is used when calling scroll actions. In horizontal galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li> For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding. Default value:<li>`start` — in galleries without paging scroll;</li><li>`center` — in galleries with paging scroll.</li>
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1723,7 +1758,7 @@ fun Component<Gallery>.modify(
     border: Property<Border>? = null,
     columnCount: Property<Int>? = null,
     columnSpan: Property<Int>? = null,
-    crossContentAlignment: Property<Gallery.CrossContentAlignment>? = null,
+    crossContentAlignment: Property<Gallery.ContentAlignment>? = null,
     crossSpacing: Property<Int>? = null,
     defaultItem: Property<Int>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
@@ -1742,6 +1777,7 @@ fun Component<Gallery>.modify(
     restrictParentScroll: Property<Boolean>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
+    scrollContentAlignment: Property<Gallery.ContentAlignment>? = null,
     scrollMode: Property<Gallery.ScrollMode>? = null,
     scrollbar: Property<Gallery.Scrollbar>? = null,
     selectedActions: Property<List<Action>>? = null,
@@ -1789,6 +1825,7 @@ fun Component<Gallery>.modify(
         restrictParentScroll = restrictParentScroll,
         reuseId = reuseId,
         rowSpan = rowSpan,
+        scrollContentAlignment = scrollContentAlignment,
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = selectedActions,
@@ -1818,7 +1855,7 @@ operator fun Component<Gallery>.plus(additive: Gallery.Properties): Component<Ga
 fun Gallery.asList() = listOf(this)
 
 @Generated
-fun Gallery.CrossContentAlignment.asList() = listOf(this)
+fun Gallery.ContentAlignment.asList() = listOf(this)
 
 @Generated
 fun Gallery.Orientation.asList() = listOf(this)
