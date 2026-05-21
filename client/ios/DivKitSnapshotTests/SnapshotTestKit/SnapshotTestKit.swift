@@ -85,6 +85,5 @@ extension UIImage {
 }
 
 private let allowedDevices: Set<String> = [
-  "iPhone12,8",
   "iPhone14,7",
 ]
