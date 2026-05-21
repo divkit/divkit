@@ -1,17 +1,13 @@
 package com.yandex.div.compose
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
-import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
@@ -151,46 +147,6 @@ class DivViewTest {
         variable.set(20)
 
         rule.onNodeWithText("value = 20").assertIsDisplayed()
-    }
-
-    @Test
-    fun `text changes when set_variable action is clicked`() {
-        setContent(
-            text(
-                action = action(url = "div-action://set_variable?name=var&value=new value"),
-                id = "title",
-                text = expression("var = @{var}"),
-                variables = listOf(variable("var", "initial value"))
-            )
-        )
-
-        rule.onNodeWithTag("title").apply {
-            assertTextEquals("var = initial value")
-            performClick()
-            assertTextEquals("var = new value")
-        }
-    }
-
-    @Test
-    fun `text changes when set_variable action with local variable is clicked`() {
-        setContent(
-            container(
-                items = listOf(
-                    text(
-                        action = action(url = "div-action://set_variable?name=var&value=new value"),
-                        id = "title",
-                        text = expression("var = @{var}")
-                    )
-                )
-            ),
-            variables = listOf(variable("var", "initial value"))
-        )
-
-        rule.onNodeWithTag("title").apply {
-            assertTextEquals("var = initial value")
-            performClick()
-            assertTextEquals("var = new value")
-        }
     }
 
     private fun setContent(

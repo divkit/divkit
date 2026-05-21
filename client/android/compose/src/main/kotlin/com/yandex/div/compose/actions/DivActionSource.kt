@@ -8,7 +8,9 @@ import com.yandex.div.core.annotations.ExperimentalApi
 @ExperimentalApi
 enum class DivActionSource {
     DISAPPEAR,
+    DOUBLE_TAP,
     EXTERNAL,
+    LONG_TAP,
     TAP,
     TRIGGER,
     VISIBILITY

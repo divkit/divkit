@@ -5,6 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.internal.NetworkRestorationController
@@ -27,6 +28,7 @@ import com.yandex.yatagan.Component
 )
 internal interface DivLocalComponent {
 
+    val actionHandler: DivActionHandler
     val actionHandlingContext: DivActionHandlingContext
     val expressionResolver: ExpressionResolver
     val functionProvider: FunctionProviderDecorator
