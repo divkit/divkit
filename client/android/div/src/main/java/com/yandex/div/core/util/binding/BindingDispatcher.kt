@@ -6,6 +6,8 @@ import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import javax.inject.Inject
 
+private typealias Action = () -> Unit
+
 @DivViewScope
 internal class BindingDispatcher @Inject constructor(
     private val divView: Div2View,
@@ -18,6 +20,9 @@ internal class BindingDispatcher @Inject constructor(
             val bindingThread = executor.bindingThread ?: return false
             return criticalSection.isHeldBy(bindingThread) || criticalSection.isReservedFor(bindingThread)
         }
+
+    private var deferMainThreadAction = false
+    private val mainThreadActions = mutableListOf<Action>()
 
     /**
      * Use to schedule new task for background binding.
@@ -37,20 +42,76 @@ internal class BindingDispatcher @Inject constructor(
         executor.execute {
             val handle = criticalSection.enter()
             try {
-                val result = block()
-                if (onComplete != null) {
+                val (result, deferredActions) = collectMainThreadAction {
+                    block()
+                }
+                if (deferredActions.isEmpty() && onComplete == null) {
+                    criticalSection.exit(handle)
+                } else {
                     UiThreadHandler.postOnMainThread {
+                        criticalSection.transferToCurrentThread()
                         try {
-                            onComplete(result)
+                            deferredActions.forEach { action ->
+                                action.invoke()
+                            }
+                            onComplete?.invoke(result)
                         } finally {
                             criticalSection.exit(handle)
                         }
                     }
                 }
-            } finally {
-                if (onComplete == null) {
+            } catch (e: Throwable) {
+                criticalSection.exit(handle)
+                throw e
+            }
+        }
+    }
+
+    private inline fun <T> collectMainThreadAction(block: () -> T): Pair<T, List<Action>> {
+        try {
+            deferMainThreadAction = true
+            val result = block()
+            val snapshot = mainThreadActions.toList()
+            mainThreadActions.clear()
+            return result to snapshot
+        } finally {
+            deferMainThreadAction = false
+        }
+    }
+
+    inline fun runMainThreadAction(crossinline action: Action) {
+        if (UiThreadHandler.get().isMainThread()) {
+            action()
+        } else {
+            postMainThreadAction { action() }
+        }
+    }
+
+    fun postMainThreadAction(action: Action) {
+        if (deferMainThreadAction) {
+            mainThreadActions.add(action)
+        } else {
+            postToMainThread(action)
+        }
+    }
+
+    private fun postToMainThread(action: Action) {
+        val handle = criticalSection.enter()
+        var posted = false
+
+        try {
+            UiThreadHandler.postOnMainThread {
+                criticalSection.transferToCurrentThread()
+                try {
+                    action()
+                } finally {
                     criticalSection.exit(handle)
                 }
+            }
+            posted = true
+        } finally {
+            if (!posted) {
+                criticalSection.exit(handle)
             }
         }
     }
@@ -104,8 +165,6 @@ internal class BindingDispatcher @Inject constructor(
     }
 
     private companion object {
-        const val TAG = "BindingDispatcher"
-
         const val MESSAGE_LOCK_FAIL = "Trying to run UI thread binding operation while background one in progress. " +
             "Such actions may cause deadlocks, so your call is terminated. Fix this call ASAP."
         const val MESSAGE_LOCK_FAIL_WITH_ASSERTS_OFF = "Looks like asserts are turned off, so your call received default return value."

@@ -7,7 +7,7 @@ import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
@@ -153,7 +153,7 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         attachedViews.forEach { divView ->
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 tryTriggerActions(divView)
             }
         }

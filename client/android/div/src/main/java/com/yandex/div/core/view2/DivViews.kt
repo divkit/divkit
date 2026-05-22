@@ -3,7 +3,6 @@ package com.yandex.div.core.view2
 import android.graphics.Outline
 import android.view.ViewGroup
 import androidx.core.view.allViews
-import com.yandex.div.core.util.binding.postBindingAction
 import com.yandex.div.internal.util.UiThreadHandler
 
 /**
@@ -29,15 +28,15 @@ public inline fun <T> ViewGroup.withDivViewCanvasClipping(block: () -> T): T {
     }
 }
 
-internal inline fun Div2View.runBindingAction(crossinline action: () -> Unit) {
+internal inline fun Div2View.runMainThreadAction(crossinline action: () -> Unit) {
+    // Keep it as is for simplicity of testing
     if (UiThreadHandler.get().isMainThread()) {
         action()
     } else {
-        postBindingAction(action)
+        postMainThreadAction { action() }
     }
 }
 
-private inline fun Div2View.postBindingAction(crossinline action: () -> Unit) {
-    val criticalSection = viewComponent.bindingCriticalSection
-    criticalSection.postBindingAction(action)
+internal inline fun Div2View.postMainThreadAction(crossinline action: () -> Unit) {
+    viewComponent.bindingDispatcher.runMainThreadAction(action)
 }

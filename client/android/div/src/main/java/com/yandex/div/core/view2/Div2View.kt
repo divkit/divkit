@@ -519,7 +519,7 @@ class Div2View private constructor(
             return true
         }
 
-        runBindingAction {
+        runMainThreadAction {
             div2Component.actionPerformer
                 .performActions(this@Div2View, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
         }
@@ -940,7 +940,7 @@ class Div2View private constructor(
         val allowsTransition = oldData?.allowsTransitionsOnDataChange(oldExpressionResolver) == true ||
             newData.allowsTransitionsOnDataChange(expressionResolver)
 
-        runBindingAction {
+        runMainThreadAction {
             addNewStateViewWithTransition(oldData, newData, oldState?.div, newState,
                 newStateView, allowsTransition, bindBeforeViewAdded = false)
         }
@@ -1319,7 +1319,7 @@ class Div2View private constructor(
                 return
             }
 
-            runBindingAction {
+            runMainThreadAction {
                 histogramReporter.onRebindingStarted()
                 viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
                 _divData = newData

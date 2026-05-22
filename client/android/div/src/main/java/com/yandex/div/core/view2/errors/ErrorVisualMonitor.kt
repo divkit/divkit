@@ -11,7 +11,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.core.view2.debugview.DebugView
 import com.yandex.div.core.view2.debugview.DebugViewModelProvider
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 import javax.inject.Inject
 
 @DivViewScope
@@ -45,7 +45,7 @@ internal class ErrorVisualMonitor @Inject constructor(
     }
 
     private fun connectOrDisconnect() {
-        divView.runBindingAction {
+        divView.runMainThreadAction {
             if (canShowDebugView()) {
                 bindingProvider.observeAndGet { debugViewModelProvider.bind(it) }
                 lastConnectionView?.let {
@@ -75,10 +75,10 @@ internal class ErrorVisualMonitor @Inject constructor(
     }
 
     fun connect(root: ViewGroup) {
-        divView.runBindingAction {
+        divView.runMainThreadAction {
             lastConnectionView = root
             if (!canShowDebugView()) {
-                return@runBindingAction
+                return@runMainThreadAction
             }
             debugView?.close()
             debugView = DebugView(root, divView, debugViewModelProvider, typefaceProvider)

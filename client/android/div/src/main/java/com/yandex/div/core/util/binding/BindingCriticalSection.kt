@@ -3,7 +3,6 @@ package com.yandex.div.core.util.binding
 import androidx.annotation.AnyThread
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.internal.util.UiThreadHandler
 import java.util.concurrent.locks.LockSupport
 import javax.inject.Inject
 
@@ -247,31 +246,3 @@ internal class BindingCriticalSection @Inject constructor() {
     }
 }
 
-internal inline fun BindingCriticalSection.runBindingAction(crossinline action: () -> Unit) {
-    if (UiThreadHandler.get().isMainThread()) {
-        action()
-    } else {
-        postBindingAction(action)
-    }
-}
-
-internal inline fun BindingCriticalSection.postBindingAction(crossinline action: () -> Unit) {
-    val handle = enter()
-    var posted = false
-
-    try {
-        UiThreadHandler.postOnMainThread {
-            transferToCurrentThread()
-            try {
-                action()
-            } finally {
-                exit(handle)
-            }
-        }
-        posted = true
-    } finally {
-        if (!posted) {
-            exit(handle)
-        }
-    }
-}
