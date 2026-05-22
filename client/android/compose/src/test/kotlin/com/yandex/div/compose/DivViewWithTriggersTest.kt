@@ -4,7 +4,7 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -22,11 +22,11 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
-import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithTriggersTest {
@@ -41,7 +41,7 @@ class DivViewWithTriggersTest {
 
     private lateinit var divContext: DivContext
 
-    @Before
+    @BeforeTest
     fun setUp() {
         divContext = DivContext(
             baseContext = activity,

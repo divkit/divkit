@@ -1,7 +1,7 @@
 package com.yandex.div.compose
 
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -15,8 +15,8 @@ import com.yandex.div2.DivFunction
 import com.yandex.div2.DivFunctionArgument
 import com.yandex.div2.DivVariable
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithFunctionsTest {

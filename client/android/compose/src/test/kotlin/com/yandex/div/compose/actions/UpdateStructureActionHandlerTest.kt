@@ -10,10 +10,10 @@ import com.yandex.div.test.data.updateStructureAction
 import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class UpdateStructureActionHandlerTest {
@@ -25,7 +25,7 @@ class UpdateStructureActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    @Before
+    @BeforeTest
     fun setUp() {
         actionHandlerEnvironment.init(
             updateStructureActionHandler = UpdateStructureActionHandler(

@@ -8,18 +8,18 @@ import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.visibilityAction
 import com.yandex.div2.DivAction
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
     private val actionHandlerEnvironment = ActionHandlerEnvironment()
     private val externalActionHandler = TestExternalActionHandler()
 
-    @Before
+    @BeforeTest
     fun setUp() {
         actionHandlerEnvironment.init(
             externalActionHandler = externalActionHandler

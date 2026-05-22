@@ -24,8 +24,8 @@ import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivVariable
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)

@@ -10,11 +10,11 @@ import com.yandex.div.test.data.action
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.setStateAction
 import com.yandex.div2.DivAction
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class SetStateActionHandlerTest {
@@ -31,7 +31,7 @@ class SetStateActionHandlerTest {
 
     private val rootPath = DivStatePath.fromState(0L)
 
-    @Before
+    @BeforeTest
     fun setUp() {
         actionHandlerEnvironment.init(
             setStateActionHandler = SetStateActionHandler(

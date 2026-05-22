@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.dagger.LocalComponent
@@ -18,10 +18,10 @@ import com.yandex.div.test.data.expression
 import com.yandex.div2.DivInputFilter
 import com.yandex.div2.DivInputFilterExpression
 import com.yandex.div2.DivInputFilterRegex
-import org.junit.Assert.assertEquals
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)

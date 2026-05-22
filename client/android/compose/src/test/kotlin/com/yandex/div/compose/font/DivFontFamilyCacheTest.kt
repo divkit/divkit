@@ -1,33 +1,23 @@
 package com.yandex.div.compose.font
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.graphics.Typeface
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivReporter
-import java.util.Collections
-import java.util.IdentityHashMap
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotSame
-import org.junit.Assert.assertSame
-import org.junit.Test
+import com.yandex.div.compose.TestReporter
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotSame
+import kotlin.test.assertSame
 
-@OptIn(ExperimentalTextApi::class)
 @RunWith(AndroidJUnit4::class)
 class DivFontFamilyCacheTest {
 
-    private val assets: AssetManager =
-        ApplicationProvider.getApplicationContext<Context>().assets
-    private val reporter: DivReporter = mock()
+    private val assets = ApplicationProvider.getApplicationContext<Context>().assets
+    private val reporter = TestReporter()
     private val source = DivFontSource.Typeface(Typeface.DEFAULT)
     private val cache = DivFontFamilyCache(assets, reporter)
 
@@ -91,34 +81,13 @@ class DivFontFamilyCacheTest {
     }
 
     @Test
-    fun `cached path deduplicates repeated calls into a single FontFamily instance`() {
-        val sampleSize = 100
-
-        val withCache = identitySet<FontFamily>().apply {
-            repeat(sampleSize) {
-                add(cache.getOrCreate(source, FontWeight.Normal, null))
-            }
-        }
-
-        assertEquals(
-            "Repeated calls with the same key should collapse to a single shared FontFamily",
-            1,
-            withCache.size,
-        )
-    }
-
-    @Test
     fun `each DivFontFamilyCache instance has its own storage`() {
-        val other = DivFontFamilyCache(assets, reporter)
+        val otherCache = DivFontFamilyCache(assets, reporter)
 
         val fromCache = cache.getOrCreate(source, FontWeight.Normal, null)
-        val fromOther = other.getOrCreate(source, FontWeight.Normal, null)
+        val fromOtherCache = otherCache.getOrCreate(source, FontWeight.Normal, null)
 
-        assertNotSame(
-            "Each DivFontFamilyCache instance is scoped independently",
-            fromCache,
-            fromOther,
-        )
+        assertNotSame(fromCache, fromOtherCache)
     }
 
     @Test
@@ -129,9 +98,9 @@ class DivFontFamilyCacheTest {
             FontVariation.Settings(FontVariation.weight(500)),
         )
 
-        verify(reporter).reportWarning(any())
+        assertEquals(
+            "font_variation_settings cannot be applied to a Typeface. Use DivFontSource.Resource or DivFontSource.Asset for variable fonts.",
+            reporter.lastWarning
+        )
     }
-
-    private fun <T> identitySet(): MutableSet<T> =
-        Collections.newSetFromMap(IdentityHashMap())
 }

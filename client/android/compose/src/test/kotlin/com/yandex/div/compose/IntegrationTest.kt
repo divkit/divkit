@@ -2,7 +2,7 @@ package com.yandex.div.compose
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.test.crossplatform.IntegrationTestCase
@@ -11,9 +11,9 @@ import com.yandex.div.test.crossplatform.IntegrationTestLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import kotlin.test.Test
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>) {

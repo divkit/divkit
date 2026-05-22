@@ -1,5 +1,6 @@
 package com.yandex.div.compose.triggers
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
@@ -9,16 +10,15 @@ import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.trigger
 import com.yandex.div2.DivTrigger.Mode
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivTriggerStorageTest {
 
     private val actionHandler = mock<DivActionHandler>()

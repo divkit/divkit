@@ -1,6 +1,6 @@
 package com.yandex.div.compose
 
-import org.junit.Assert.fail
+import kotlin.test.fail
 
 class TestReporter : DivReporter() {
     private val _errors = mutableListOf<String>()

@@ -8,7 +8,7 @@ import androidx.compose.ui.test.SemanticsMatcher.Companion.keyIsDefined
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -22,8 +22,8 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility.Mode
 import com.yandex.div2.DivAccessibility.Type
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
 class DivViewAccessibilityTest {

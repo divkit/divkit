@@ -5,7 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -22,10 +22,10 @@ import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.state
 import com.yandex.div2.DivState
-import org.junit.Assert.assertEquals
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)

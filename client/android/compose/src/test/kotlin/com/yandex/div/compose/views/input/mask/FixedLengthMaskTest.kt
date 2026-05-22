@@ -19,10 +19,10 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
-import org.junit.Assert.assertEquals
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -33,6 +33,7 @@ class FixedLengthMaskTest {
 
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
+
     private val localComponent = mockLocalComponent(
         reporter = reporter,
         variableController = variableController,
@@ -42,8 +43,7 @@ class FixedLengthMaskTest {
     private val displayVar = Variable.StringVariable(DISPLAY_VAR, "")
 
     init {
-        variableController.declare(rawVar)
-        variableController.declare(displayVar)
+        variableController.declare(rawVar, displayVar)
     }
 
     @Test
@@ -213,9 +213,7 @@ class FixedLengthMaskTest {
             }
         }
     }
-
-    companion object {
-        private const val RAW_VAR = "fixed_raw"
-        private const val DISPLAY_VAR = "fixed_display"
-    }
 }
+
+private const val RAW_VAR = "fixed_raw"
+private const val DISPLAY_VAR = "fixed_display"

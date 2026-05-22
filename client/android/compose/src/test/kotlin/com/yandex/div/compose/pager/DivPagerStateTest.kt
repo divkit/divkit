@@ -4,11 +4,11 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DivPagerStateTest {
 
@@ -86,8 +86,8 @@ class DivPagerStateTest {
 
         assertEquals(2, state.currentPage)
         assertTrue(
-            "expected positive fraction, was ${state.currentPageOffsetFraction}",
             state.currentPageOffsetFraction > 0f,
+            "Expected positive fraction, was ${state.currentPageOffsetFraction}"
         )
         assertEquals(0.4f, state.currentPageOffsetFraction, EPSILON)
     }

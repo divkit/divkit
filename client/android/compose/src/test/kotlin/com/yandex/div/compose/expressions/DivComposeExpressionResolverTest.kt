@@ -5,9 +5,9 @@ import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.expression
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DivComposeExpressionResolverTest {

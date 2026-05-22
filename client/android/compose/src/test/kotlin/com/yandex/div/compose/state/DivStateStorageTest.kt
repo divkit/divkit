@@ -2,10 +2,10 @@ package com.yandex.div.compose.state
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.state.DivStatePath
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class DivStateStorageTest {

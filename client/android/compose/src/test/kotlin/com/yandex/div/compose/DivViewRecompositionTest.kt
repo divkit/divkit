@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -20,10 +20,10 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
 import com.yandex.div2.DivData
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
 class DivViewRecompositionTest {
@@ -38,7 +38,7 @@ class DivViewRecompositionTest {
 
     private lateinit var divContext: DivContext
 
-    @Before
+    @BeforeTest
     fun setUp() {
         divContext = DivContext(
             baseContext = activity,

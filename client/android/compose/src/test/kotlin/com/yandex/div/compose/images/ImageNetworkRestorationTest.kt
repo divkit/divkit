@@ -7,7 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
@@ -23,15 +23,15 @@ import coil3.request.SuccessResult
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.mockLocalComponent
-import junit.framework.TestCase.assertEquals
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowConnectivityManager
 import org.robolectric.shadows.ShadowNetwork
 import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class ImageNetworkRestorationTest {
@@ -40,6 +40,7 @@ class ImageNetworkRestorationTest {
     val composeRule = createComposeRule()
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+
     private val shadowConnectivityManager: ShadowConnectivityManager = Shadows.shadowOf(
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     )

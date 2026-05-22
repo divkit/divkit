@@ -6,7 +6,7 @@ import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivVisibility
-import org.junit.Assert.fail
+import kotlin.test.fail
 
 fun <T : Any> constant(value: T) = Expression.ConstantExpression(value)
 

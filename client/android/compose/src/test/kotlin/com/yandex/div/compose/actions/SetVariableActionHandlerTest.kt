@@ -11,10 +11,10 @@ import com.yandex.div.test.data.typedColorValue
 import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivAction
 import org.json.JSONArray
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class SetVariableActionHandlerTest {
@@ -26,7 +26,7 @@ class SetVariableActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    @Before
+    @BeforeTest
     fun setUp() {
         actionHandlerEnvironment.init(
             setVariableActionHandler = SetVariableActionHandler(

@@ -11,9 +11,9 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class IntegrationTestCase(
     private val name: String,
@@ -42,8 +42,8 @@ class IntegrationTestCase(
         class Error(private val message: String) : ExpectedResult {
             fun check(errors: List<String>) {
                 assertTrue(
-                    "Expected: <$message> but was: <${errors.toSet().joinToString(", ")}>",
-                    errors.contains(message)
+                    errors.contains(message),
+                    "Expected: <$message> but was: <${errors.toSet().joinToString(", ")}>"
                 )
             }
         }

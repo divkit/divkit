@@ -2,9 +2,9 @@ package com.yandex.div.compose.pager
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListState
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class DivPagerStateStorageTest {
 

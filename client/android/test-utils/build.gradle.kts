@@ -14,5 +14,5 @@ dependencies {
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.coreKtx)
-    implementation(libs.junit)
+    implementation(libs.kotlin.test)
 }
