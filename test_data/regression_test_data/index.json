@@ -4615,6 +4615,7 @@
       "title": "Input with set_cursor_position actions",
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "tags": [

@@ -68,6 +68,8 @@ extension DivInput: DivBlockModeling {
       blockStateStorage.map { !$0.isInputFocused } ?? true
     }
 
+    let viewState: TextInputViewState? = blockStateStorage.takePendingState(context.path) as? TextInputViewState
+
     return TextInputBlock(
       widthTrait: resolveWidthTrait(context),
       heightTrait: resolveHeightTrait(context),
@@ -99,7 +101,8 @@ extension DivInput: DivBlockModeling {
       maxLength: resolveMaxLength(expressionResolver),
       shouldClearFocus: shouldClearFocus,
       autocorrection: keyboardType.autocorrection,
-      isSecure: keyboardType.isSecure
+      isSecure: keyboardType.isSecure,
+      viewState: viewState
     )
   }
 

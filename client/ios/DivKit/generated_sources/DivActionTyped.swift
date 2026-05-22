@@ -28,6 +28,7 @@ public enum DivActionTyped: Sendable {
   case divActionUpdateStructure(DivActionUpdateStructure)
   case divActionVideo(DivActionVideo)
   case divActionCustom(DivActionCustom)
+  case divActionSetCursorPosition(DivActionSetCursorPosition)
 
   public var value: Serializable {
     switch self {
@@ -74,6 +75,8 @@ public enum DivActionTyped: Sendable {
     case let .divActionVideo(value):
       return value
     case let .divActionCustom(value):
+      return value
+    case let .divActionSetCursorPosition(value):
       return value
     }
   }
@@ -128,6 +131,8 @@ extension DivActionTyped {
       self = .divActionVideo(try DivActionVideo(dictionary: dictionary, context: context))
     case DivActionCustom.type:
       self = .divActionCustom(try DivActionCustom(dictionary: dictionary, context: context))
+    case DivActionSetCursorPosition.type:
+      self = .divActionSetCursorPosition(try DivActionSetCursorPosition(dictionary: dictionary, context: context))
     default:
       throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
@@ -181,6 +186,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionVideo(l), .divActionVideo(r)):
       return l == r
     case let (.divActionCustom(l), .divActionCustom(r)):
+      return l == r
+    case let (.divActionSetCursorPosition(l), .divActionSetCursorPosition(r)):
       return l == r
     default:
       return false

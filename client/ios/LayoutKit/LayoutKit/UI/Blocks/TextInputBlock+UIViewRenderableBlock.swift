@@ -48,6 +48,7 @@ extension TextInputBlock {
     inputView.setIsEnabled(isEnabled)
     inputView.setMaxLength(maxLength)
     inputView.paddings = paddings ?? .zero
+    inputView.applySelectionIfNeeded(viewState?.pendingSelection)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -368,6 +369,33 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setMaxLength(_ value: Int?) {
     maxLength = value
+  }
+
+  func applySelectionIfNeeded(_ selection: TextInputViewState.Selection?) {
+    guard let selection else { return }
+
+    let length = currentText.utf16.count
+
+    func clamp(_ index: Int) -> Int {
+      index == -1 ? length : max(0, min(index, length))
+    }
+
+    let start = clamp(selection.start)
+    let end = max(start, clamp(selection.end))
+
+    if !isInputFocused {
+      focusTextInput()
+    }
+
+    if !singleLineInput.isHidden {
+      if let from = singleLineInput.position(from: singleLineInput.beginningOfDocument, offset: start),
+         let to = singleLineInput.position(from: singleLineInput.beginningOfDocument, offset: end) {
+        singleLineInput.selectedTextRange = singleLineInput.textRange(from: from, to: to)
+      }
+    } else {
+      multiLineInput.selectedRange = NSRange(location: start, length: end - start)
+    }
+
   }
 
   private func focusTextInput() {

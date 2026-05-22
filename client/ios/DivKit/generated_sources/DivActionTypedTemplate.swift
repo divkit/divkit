@@ -28,6 +28,7 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
   case divActionUpdateStructureTemplate(DivActionUpdateStructureTemplate)
   case divActionVideoTemplate(DivActionVideoTemplate)
   case divActionCustomTemplate(DivActionCustomTemplate)
+  case divActionSetCursorPositionTemplate(DivActionSetCursorPositionTemplate)
 
   public var value: Any {
     switch self {
@@ -74,6 +75,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
     case let .divActionVideoTemplate(value):
       return value
     case let .divActionCustomTemplate(value):
+      return value
+    case let .divActionSetCursorPositionTemplate(value):
       return value
     }
   }
@@ -124,6 +127,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       return .divActionVideoTemplate(try value.resolveParent(templates: templates))
     case let .divActionCustomTemplate(value):
       return .divActionCustomTemplate(try value.resolveParent(templates: templates))
+    case let .divActionSetCursorPositionTemplate(value):
+      return .divActionSetCursorPositionTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -380,6 +385,17 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
           }
         } else { return nil }
       }()
+      result = result ?? {
+        if case let .divActionSetCursorPositionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionSetCursorPosition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetCursorPosition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
       return result
     }()
   }
@@ -589,6 +605,15 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivActionSetCursorPosition.type {
+      let result = { DivActionSetCursorPositionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divActionSetCursorPosition(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetCursorPosition(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }()
   }
@@ -643,6 +668,8 @@ extension DivActionTypedTemplate {
       self = .divActionVideoTemplate(try DivActionVideoTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionCustomTemplate.type:
       self = .divActionCustomTemplate(try DivActionCustomTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionSetCursorPositionTemplate.type:
+      self = .divActionSetCursorPositionTemplate(try DivActionSetCursorPositionTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.requiredFieldIsMissing(field: "type")
     }

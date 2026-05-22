@@ -93,6 +93,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let isSecure: Bool
   public let enablesReturnKeyAutomatically: Bool
   public let spellChecking: Bool?
+  public let viewState: TextInputViewState?
 
   let shouldClearFocus: Variable<Bool>
 
@@ -155,7 +156,8 @@ public final class TextInputBlock: BlockWithTraits {
     autocorrection: Bool = false,
     isSecure: Bool = false,
     enablesReturnKeyAutomatically: Bool = false,
-    spellChecking: Bool? = nil
+    spellChecking: Bool? = nil,
+    viewState: TextInputViewState? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -191,6 +193,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.isSecure = isSecure
     self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
     self.spellChecking = spellChecking
+    self.viewState = viewState
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
@@ -250,6 +253,7 @@ extension TextInputBlock {
       && lhs.isSecure == rhs.isSecure
       && lhs.enablesReturnKeyAutomatically == rhs.enablesReturnKeyAutomatically
       && lhs.spellChecking == rhs.spellChecking
+      && lhs.viewState == rhs.viewState
   }
 }
 
@@ -295,7 +299,8 @@ extension TextInputBlock: ElementFocusUpdating {
       autocorrection: autocorrection,
       isSecure: isSecure,
       enablesReturnKeyAutomatically: enablesReturnKeyAutomatically,
-      spellChecking: spellChecking
+      spellChecking: spellChecking,
+      viewState: viewState
     )
   }
 }
@@ -335,7 +340,8 @@ extension TextInputBlock {
     autocorrection: Bool? = nil,
     isSecure: Bool? = nil,
     enablesReturnKeyAutomatically: Bool? = nil,
-    spellChecking: Bool? = nil
+    spellChecking: Bool? = nil,
+    viewState: TextInputViewState? = nil
   ) -> TextInputBlock {
     TextInputBlock(
       widthTrait: widthTrait ?? self.widthTrait,
@@ -372,7 +378,8 @@ extension TextInputBlock {
       isSecure: isSecure ?? self.isSecure,
       enablesReturnKeyAutomatically: enablesReturnKeyAutomatically ?? self
         .enablesReturnKeyAutomatically,
-      spellChecking: spellChecking ?? self.spellChecking
+      spellChecking: spellChecking ?? self.spellChecking,
+      viewState: viewState ?? self.viewState
     )
   }
 }

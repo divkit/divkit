@@ -36,6 +36,7 @@ public final class DivActionHandler {
   private let downloadActionHandler: DownloadActionHandler
   private let focusElementActionHandler = FocusElementActionHandler()
   private let scrollActionHandler: ScrollActionHandler
+  private let setCursorPositionActionHandler = SetCursorPositionActionHandler()
   private let setStateActionHandler: SetStateActionHandler
   private let setStoredValueActionHandler: SetStoredValueActionHandler
   private let setVariableActionHandler = SetVariableActionHandler()
@@ -251,6 +252,8 @@ public final class DivActionHandler {
       submitActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
       timerActionHandler.handle(action, context: context)
+    case let .divActionSetCursorPosition(action):
+      setCursorPositionActionHandler.handle(action, context: context)
     case let .divActionUpdateStructure(action):
       updateStructureActionHandler.handle(action, context: context)
     case let .divActionVideo(action):

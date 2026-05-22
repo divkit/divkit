@@ -229,6 +229,7 @@
 		8CF329702875D64B003F799A /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF3296F2875D64B003F799A /* LayoutKit */; };
 		8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */; };
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
+		8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */; };
 		983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */; };
 		98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
@@ -552,6 +553,7 @@
 		8CF329242875D534003F799A /* LayoutKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoutKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
 		8CFD4C9D2B2C5B780092814C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCursorPositionActionHandlerTests.swift; sourceTree = "<group>"; };
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
@@ -974,6 +976,7 @@
 				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
 				8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */,
 				8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */,
+				8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */,
 				8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */,
 			);
 			path = Actions;
@@ -1814,6 +1817,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */,
 				8C23F42229DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift in Sources */,
 				8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */,
 				8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */,
