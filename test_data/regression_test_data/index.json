@@ -4636,6 +4636,29 @@
       "case_id": 502
     },
     {
+      "title": "Masked input with set_cursor_position actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput",
+        "DivAction"
+      ],
+      "steps": [
+        "Tap on all buttons one by one"
+      ],
+      "expected_results": [
+        "Input is focused",
+        "When pressing the 'to start' button, the cursor was moved to the beginning of the input",
+        "When pressing the 'to end' button, the cursor was moved to the end of the input",
+        "When pressing the 'to 4' button, the cursor was moved after the 4th character of the input.",
+        "When pressing the 'to 4-7' the selection range with the area code is entered (if the text has not been changed)"
+      ],
+      "file": "input/masked_input_set_cursor_position.json"
+    },
+    {
       "title": "Submit action test",
       "case_id": 221,
       "platforms": [

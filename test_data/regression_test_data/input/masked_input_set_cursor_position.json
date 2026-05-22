@@ -1,0 +1,273 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 14,
+      "line_height": 18,
+      "type": "text",
+      "text_color": "#777777",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 4
+      }
+    },
+    "input_field": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "paddings": {
+        "left": 16,
+        "top": 12,
+        "right": 16,
+        "bottom": 12
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "highlight_color": "#b3d9ff",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#ccd0d5",
+          "width": 1
+        }
+      },
+      "focus": {
+        "border": {
+          "corner_radius": 10,
+          "stroke": {
+            "color": "#007aff",
+            "width": 2
+          }
+        }
+      }
+    },
+    "action_button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_color": "#007aff",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f0f7ff"
+        }
+      ],
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#007aff",
+          "width": 1
+        }
+      },
+      "capture_focus_on_action": false
+    },
+    "section_divider": {
+      "type": "separator",
+      "delimiter_style": {
+        "color": "#e0e0e0"
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "masked_input_set_cursor_position",
+    "variables": [
+      {
+        "name": "phone",
+        "type": "string",
+        "value": "9001234567"
+      },
+      {
+        "name": "phone_raw",
+        "type": "string",
+        "value": "9001234567"
+      },
+      {
+        "name": "mask",
+        "type": "string",
+        "value": "+7 (###) ###-##-##"
+      },
+      {
+        "name": "key",
+        "type": "string",
+        "value": "#"
+      },
+      {
+        "name": "filter",
+        "type": "string",
+        "value": "\\\\d"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "value": "_"
+      },
+      {
+        "name": "always_visible",
+        "type": "boolean",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "set_cursor_position"
+            },
+            {
+              "type": "subtitle",
+              "text": "Masked input (phone) — cursor moves in formatted text"
+            },
+            {
+              "type": "input_field",
+              "id": "phone_input",
+              "text_variable": "phone",
+              "keyboard_type": "phone",
+              "mask": {
+                "type": "fixed_length",
+                "pattern": "@{mask}",
+                "raw_text_variable": "phone_raw",
+                "pattern_elements": [
+                  {
+                    "key": "@{key}",
+                    "regex": "@{filter}",
+                    "placeholder": "@{placeholder}"
+                  }
+                ],
+                "always_visible": "@{always_visible}"
+              }
+            },
+            {
+              "type": "action_button",
+              "text": "Cursor → start (0)",
+              "actions": [
+                {
+                  "log_id": "phone_cursor_start",
+                  "typed": {
+                    "type": "set_cursor_position",
+                    "id": "phone_input",
+                    "position": {
+                      "type": "absolute",
+                      "start": 0
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "action_button",
+              "text": "Cursor → end (-1)",
+              "actions": [
+                {
+                  "log_id": "phone_cursor_end",
+                  "typed": {
+                    "type": "set_cursor_position",
+                    "id": "phone_input",
+                    "position": {
+                      "type": "absolute",
+                      "start": -1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "action_button",
+              "text": "Cursor → position 4",
+              "actions": [
+                {
+                  "log_id": "phone_cursor_4",
+                  "typed": {
+                    "type": "set_cursor_position",
+                    "id": "phone_input",
+                    "position": {
+                      "type": "absolute",
+                      "start": 4
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "action_button",
+              "text": "Select area code (4–7)",
+              "actions": [
+                {
+                  "log_id": "phone_select_area",
+                  "typed": {
+                    "type": "set_cursor_position",
+                    "id": "phone_input",
+                    "position": {
+                      "type": "absolute",
+                      "start": 4,
+                      "end": 7
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
