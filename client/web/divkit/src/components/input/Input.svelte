@@ -671,6 +671,9 @@
                     }
                 },
                 setCursorPosition(start, end) {
+                    if (document.activeElement !== input) {
+                        input.focus();
+                    }
                     setCursorPosition(start === -1 ? value.length : start, end === -1 ? value.length : end);
                 },
             });
