@@ -28,7 +28,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.errors.VariableMonitor
 import com.yandex.div.core.view2.errors.VariableMonitorView
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 
 internal class DebugView(
     private val root: ViewGroup,
@@ -43,7 +43,7 @@ internal class DebugView(
     private var viewModel: DebugViewModel = DebugViewModel.Hidden
         set(value) {
             field = value
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 updateView(value)
             }
         }

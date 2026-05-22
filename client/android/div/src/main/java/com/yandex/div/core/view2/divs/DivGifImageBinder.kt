@@ -23,7 +23,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
@@ -319,33 +319,33 @@ internal class DivGifImageBinder @Inject constructor(
         const val GIF_SUFFIX = ".gif"
 
         private fun DivGifImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 setPlaceholder(drawable)
             }
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, drawable: Drawable?) {
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 setPreview(drawable)
             }
             previewLoaded()
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, bitmap: Bitmap?) {
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 setPreview(bitmap)
             }
             previewLoaded()
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, bitmap: Bitmap?) {
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 setImage(bitmap)
             }
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, drawable: Drawable?) {
-            divView.runBindingAction {
+            divView.runMainThreadAction {
                 setImage(drawable)
             }
         }
