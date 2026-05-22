@@ -86,12 +86,6 @@
 		8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378728B5143200A047C8 /* DivViewProvider.swift */; };
 		8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */; };
 		8C1A383228B61A2B00A047C8 /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A383128B61A2B00A047C8 /* AppComponents.swift */; };
-		AB0000010000000000000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
-		AB0000040000000000000001 /* AppLogger.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* AppLogger.swift */; };
-		AB0000040000000000000002 /* RegressionFile.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
-		AB0000040000000000000003 /* RegressionTestModel.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
-		AB0000040000000000000004 /* AppRouter.swift in Sources (Tests) */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
-		AB0000040000000000000006 /* AppRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000040000000000000005 /* AppRouterTests.swift */; };
 		8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */; };
 		8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */; };
 		8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */; };
@@ -246,6 +240,12 @@
 		9FE7D30F2CF752F000BAF071 /* libDivKitTestsSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */; };
 		9FE7D3122CF752FD00BAF071 /* libDivKitTestsSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */; };
 		9FE7D3322CF7647000BAF071 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9FE7D3312CF7647000BAF071 /* DivKit */; };
+		AB0000010000000000000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
+		AB0000040000000000000001 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* AppLogger.swift */; };
+		AB0000040000000000000002 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
+		AB0000040000000000000003 /* RegressionTestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
+		AB0000040000000000000004 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
+		AB0000040000000000000006 /* AppRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000040000000000000005 /* AppRouterTests.swift */; };
 		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
 		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
 		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
@@ -398,8 +398,6 @@
 		8C1A378728B5143200A047C8 /* DivViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewProvider.swift; sourceTree = "<group>"; };
 		8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundView.swift; sourceTree = "<group>"; };
 		8C1A383128B61A2B00A047C8 /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
-		AB0000010000000000000002 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
-		AB0000040000000000000005 /* AppRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterTests.swift; sourceTree = "<group>"; };
 		8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivStateManagementTests.swift; sourceTree = "<group>"; };
 		8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumWithDefaultTypeTemplate.swift; sourceTree = "<group>"; };
 		8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithJsonPropertyTemplate.swift; sourceTree = "<group>"; };
@@ -568,6 +566,8 @@
 		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
 		9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
 		9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDivKitTestsSupport.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB0000010000000000000002 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		AB0000040000000000000005 /* AppRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterTests.swift; sourceTree = "<group>"; };
 		E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerControllerTests.swift; sourceTree = "<group>"; };
 		E945FC45293E1CA80066C3EA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
@@ -635,6 +635,7 @@
 				UI/Base/ScrollableContentPagerTests.swift,
 				"UI/Blocks/Array+UIViewRenderableTests.swift",
 				"UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
+				UI/Views/GradientStopsPremultipliedTests.swift,
 				UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift,
 				UI/Views/TabbedPages/TabTitleDelimiterImageLoaderTests.swift,
 				UI/Views/TextSelectionTests.swift,
@@ -1948,10 +1949,10 @@
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
 				8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */,
-				AB0000040000000000000001 /* AppLogger.swift in Sources (Tests) */,
-				AB0000040000000000000002 /* RegressionFile.swift in Sources (Tests) */,
-				AB0000040000000000000003 /* RegressionTestModel.swift in Sources (Tests) */,
-				AB0000040000000000000004 /* AppRouter.swift in Sources (Tests) */,
+				AB0000040000000000000001 /* AppLogger.swift in Sources */,
+				AB0000040000000000000002 /* RegressionFile.swift in Sources */,
+				AB0000040000000000000003 /* RegressionTestModel.swift in Sources */,
+				AB0000040000000000000004 /* AppRouter.swift in Sources */,
 				AB0000040000000000000006 /* AppRouterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

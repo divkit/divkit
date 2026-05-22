@@ -1,11 +1,14 @@
 import CoreGraphics
 import Foundation
+import LayoutKit
 import VGSL
 
 extension Gradient.Linear {
   init?(points: [Gradient.Point], angle: Int) {
     guard points.count >= 2 else { return nil }
-    let sortedPoints = points.stableSort(isLessOrEqual: { $0.location <= $1.location })
+    let sortedPoints = points
+      .stableSort(isLessOrEqual: { $0.location <= $1.location })
+      .premultipliedSubdivided()
 
     guard let start = sortedPoints.first, let end = sortedPoints.last
     else { return nil }
@@ -22,15 +25,11 @@ extension Gradient.Linear {
     guard colors.count >= 2 else {
       return nil
     }
-    var intermediateColors = colors
-    let start = intermediateColors.removeFirst()
-    let end = intermediateColors.removeLast()
-    self.init(
-      startColor: start,
-      intermediateColors: intermediateColors,
-      endColor: end,
-      direction: .angle(Double(angle))
-    )
+    let step = 1 / CGFloat(colors.count - 1)
+    let points = colors.enumerated().map {
+      (color: $0.element, location: CGFloat($0.offset) * step)
+    }
+    self.init(points: points, angle: angle)
   }
 }
 
@@ -42,7 +41,9 @@ extension Gradient.Radial {
     centerY: Gradient.Radial.CenterPoint
   ) {
     guard points.count >= 2 else { return nil }
-    let sortedPoints = points.stableSort(isLessOrEqual: { $0.location <= $1.location })
+    let sortedPoints = points
+      .stableSort(isLessOrEqual: { $0.location <= $1.location })
+      .premultipliedSubdivided()
 
     guard let first = sortedPoints.first, let last = sortedPoints.last
     else { return nil }
@@ -66,21 +67,11 @@ extension Gradient.Radial {
     guard colors.count >= 2 else {
       return nil
     }
-    var intermediateColors = colors
-    let centerColor = intermediateColors.removeFirst()
-    let outerColor = intermediateColors.removeLast()
-    let step = 1 / CGFloat(intermediateColors.count + 1)
-    let points = intermediateColors.enumerated().map {
-      (color: $0.element, location: CGFloat($0.offset + 1) * step)
+    let step = 1 / CGFloat(colors.count - 1)
+    let points = colors.enumerated().map {
+      (color: $0.element, location: CGFloat($0.offset) * step)
     }
-    self.init(
-      centerX: centerX,
-      centerY: centerY,
-      end: end,
-      centerColor: centerColor,
-      intermediatePoints: points,
-      outerColor: outerColor
-    )
+    self.init(points: points, end: end, centerX: centerX, centerY: centerY)
   }
 }
 
