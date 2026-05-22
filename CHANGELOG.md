@@ -1,3 +1,10 @@
+## 32.50.1
+
+# Android Client:
+* Fixed crash at `DivPagerView` constructor called on background thread.
+* Fixed execution order at `Div2View.setDataAsync()`.
+
+
 ## 32.50.0
 
 # Android Client:
