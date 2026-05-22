@@ -3,6 +3,8 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -81,7 +83,8 @@ internal class DivPagerView @JvmOverloads constructor(
 
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
-    private val parentClickGestureDetector = GestureDetector(context,
+    private val parentClickGestureDetector = GestureDetector(
+        context,
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent): Boolean = true
 
@@ -98,7 +101,8 @@ internal class DivPagerView @JvmOverloads constructor(
                     performLongClickOnAncestors()
                 }
             }
-        }
+        },
+        Handler(Looper.getMainLooper())
     )
 
     internal var currentItem: Int
