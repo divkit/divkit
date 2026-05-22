@@ -4,6 +4,7 @@
 * Added `alphaBlend` function for blending two colors.
 * Added `scroll_content_alignment` support in `gallery`.
 * Fixed crash at `DivPagerView` constructor called on background thread.
+* Fixed execution order at `Div2View.setDataAsync()`.
 
 # iOS Client:
 * Added `alphaBlend` function for blending two colors.
