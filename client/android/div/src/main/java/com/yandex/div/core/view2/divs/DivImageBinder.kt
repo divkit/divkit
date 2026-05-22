@@ -25,7 +25,7 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.internal.widget.AspectImageView
@@ -504,19 +504,19 @@ internal class DivImageBinder @Inject constructor(
     ) = view.applyImage(bindingContext, div, errorCollector)
 
     private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
-        divView.runBindingAction {
+        divView.runMainThreadAction {
             setImageDrawable(drawable)
         }
     }
 
     private fun DivImageView.setImageBitmap(divView: Div2View, bitmap: Bitmap?) {
-        divView.runBindingAction {
+        divView.runMainThreadAction {
             setImageBitmap(bitmap)
         }
     }
 
     private fun DivImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
-        divView.runBindingAction {
+        divView.runMainThreadAction {
             setPlaceholder(drawable)
         }
     }

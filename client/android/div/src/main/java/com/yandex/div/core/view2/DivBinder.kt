@@ -119,7 +119,7 @@ internal class DivBinder @Inject constructor(
         }
     }
 
-    internal fun attachIndicators(divView: Div2View) = divView.runBindingAction {
+    internal fun attachIndicators(divView: Div2View) = divView.runMainThreadAction {
         pagerIndicatorConnector.attach()
     }
 

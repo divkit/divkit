@@ -197,7 +197,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div,
         appearActions: List<DivVisibilityAction>,
         disappearActions: List<DivDisappearAction>
-    ) = scope.runBindingAction {
+    ) = scope.runMainThreadAction {
         val visibilityPercentage = view.let {
             val result = viewVisibilityCalculator.calculateVisibilityPercentage(view)
             updateVisibility(view, div, result)

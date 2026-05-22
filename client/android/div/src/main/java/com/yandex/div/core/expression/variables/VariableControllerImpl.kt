@@ -5,7 +5,7 @@ import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.runBindingAction
+import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.util.UiThreadHandler
@@ -150,7 +150,7 @@ internal class VariableControllerImpl(
         if (divView == null) {
             UiThreadHandler.executeOnMainThread(block)
         } else {
-            divView.runBindingAction(block)
+            divView.runMainThreadAction(block)
         }
     }
 

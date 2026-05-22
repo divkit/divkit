@@ -2,7 +2,6 @@ package com.yandex.div.core.dagger
 
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.tooltip.DivTooltipController
-import com.yandex.div.core.util.binding.BindingCriticalSection
 import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.view2.BulkActionHandler
 import com.yandex.div.core.view2.Div2View
@@ -52,7 +51,6 @@ internal interface Div2ViewComponent {
     val drawingPassOverrideStrategy: DrawingPassOverrideStrategy
     val layoutProviderBinder: DivLayoutProviderBinder
     val bindingDispatcher: BindingDispatcher
-    val bindingCriticalSection: BindingCriticalSection
     val bulkActionHandler: BulkActionHandler
 
     @Component.Builder

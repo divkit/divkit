@@ -65,7 +65,7 @@ internal class ReleaseManager @Inject constructor(
 
     private fun addLifecycleListener(lifecycleOwner: LifecycleOwner, divView: Div2View) = synchronized(monitor) {
         val views = divToRelease.getOrPut(lifecycleOwner) {
-            divView.runBindingAction { lifecycleOwner.lifecycle.addObserver(observer) }
+            divView.runMainThreadAction { lifecycleOwner.lifecycle.addObserver(observer) }
             WeakHashMap<Div2View, Any>()
         }
         views[divView] = Any()
