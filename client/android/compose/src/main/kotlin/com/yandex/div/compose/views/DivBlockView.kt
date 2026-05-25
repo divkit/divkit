@@ -69,6 +69,7 @@ private fun BaseViewWithExtensions(
 
     extensionHandler.Content(
         environment = DivExtensionEnvironment(
+            data = data,
             extension = extension,
             expressionResolver = expressionResolver,
             modifier = modifier,

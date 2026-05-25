@@ -17,7 +17,7 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.images.observeNetworkRestoration
-import com.yandex.div.compose.images.toContentScale
+import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div2.DivImageBackground
 import kotlin.math.roundToInt
@@ -28,8 +28,7 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
     val density = LocalDensity.current.density
 
     val imageAlpha = data.alpha.observedFloatValue()
-    val scale = data.scale.observedValue()
-    val contentScale = scale.toContentScale(density)
+    val contentScale = data.scale.observedContentScale()
 
     val alignment = toAlignment(
         data.contentAlignmentHorizontal.observedValue(),

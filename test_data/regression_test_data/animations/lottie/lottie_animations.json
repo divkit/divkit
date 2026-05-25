@@ -10,14 +10,6 @@
       },
       "column_count": 2
     },
-    "lottie_image": {
-      "type": "image",
-      "aspect": {
-        "ratio": 0.8
-      },
-      "content_alignment_horizontal": "center",
-      "content_alignment_vertical": "center"
-    },
     "lottie_gif": {
       "type": "gif",
       "aspect": {
@@ -68,10 +60,7 @@
           "color": "#0e000000"
         }
       ],
-      "orientation": "vertical"
-    },
-    "lottie_gif_card": {
-      "type": "lottie_card",
+      "orientation": "vertical",
       "items": [
         {
           "type": "card_title",
@@ -102,7 +91,7 @@
           "type": "lottie_grid",
           "items": [
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 1",
               "lottie_image_text": "DivGif 1",
               "lottie_params": {
@@ -112,7 +101,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 2",
               "lottie_image_text": "DivGif 2",
               "lottie_params": {
@@ -122,7 +111,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 3",
               "lottie_image_text": "DivGif 3",
               "lottie_params": {
@@ -132,7 +121,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 4",
               "lottie_image_text": "DivGif 4",
               "lottie_params": {
@@ -142,7 +131,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 5",
               "lottie_image_text": "DivGif 5",
               "lottie_params": {
@@ -152,7 +141,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 6",
               "lottie_image_text": "DivGif 6",
               "lottie_params": {
@@ -160,7 +149,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 7",
               "lottie_image_text": "DivGif 7",
               "lottie_params": {
@@ -170,7 +159,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 8",
               "lottie_image_text": "DivGif 8",
               "lottie_params": {
@@ -180,7 +169,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 9",
               "lottie_image_text": "DivGif 9",
               "lottie_params": {
@@ -190,7 +179,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 10",
               "lottie_image_text": "DivGif 10",
               "lottie_params": {
@@ -200,7 +189,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 11",
               "lottie_image_text": "DivGif 11",
               "lottie_params": {
@@ -210,7 +199,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 12",
               "lottie_image_text": "DivGif 12",
               "lottie_params": {
@@ -220,7 +209,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 13",
               "lottie_image_text": "DivGif 13",
               "lottie_params": {
@@ -230,7 +219,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 14",
               "lottie_image_text": "DivGif 14",
               "lottie_params": {
@@ -240,7 +229,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 15",
               "lottie_image_text": "DivGif 15",
               "lottie_params": {
@@ -250,7 +239,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 16",
               "lottie_image_text": "DivGif 16",
               "lottie_params": {
@@ -260,7 +249,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 17",
               "lottie_image_text": "DivGif 17",
               "lottie_params": {
@@ -268,7 +257,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 18",
               "lottie_image_text": "DivGif 18",
               "lottie_params": {
@@ -278,7 +267,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 19",
               "lottie_image_text": "DivGif 19",
               "lottie_params": {
@@ -288,7 +277,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 20",
               "lottie_image_text": "DivGif 20",
               "lottie_params": {
@@ -298,7 +287,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 21",
               "lottie_image_text": "DivGif 21",
               "lottie_params": {
@@ -308,7 +297,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 22",
               "lottie_image_text": "DivGif 22",
               "lottie_params": {
@@ -318,7 +307,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 23",
               "lottie_image_text": "DivGif 23",
               "lottie_params": {
@@ -328,7 +317,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 24",
               "lottie_image_text": "DivGif 24",
               "lottie_params": {
@@ -338,7 +327,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 25",
               "lottie_image_text": "DivGif 25",
               "lottie_params": {
@@ -348,7 +337,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 26",
               "lottie_image_text": "DivGif 26",
               "lottie_params": {
@@ -358,7 +347,7 @@
               }
             },
             {
-              "type": "lottie_gif_card",
+              "type": "lottie_card",
               "image_id": "DivGif 27",
               "lottie_image_text": "DivGif 27",
               "lottie_params": {

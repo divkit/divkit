@@ -20,8 +20,8 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.decodePreview
 import com.yandex.div.compose.images.observeNetworkRestoration
+import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.images.rememberImageRequest
-import com.yandex.div.compose.images.toContentScale
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
@@ -35,8 +35,7 @@ internal fun DivImageView(
     val context = divContext
     val density = LocalDensity.current.density
 
-    val scale = data.scale.observedValue()
-    val contentScale = scale.toContentScale(density)
+    val contentScale = data.scale.observedContentScale()
     val alignment = toAlignment(
         data.contentAlignmentHorizontal.observedValue(),
         data.contentAlignmentVertical.observedValue()

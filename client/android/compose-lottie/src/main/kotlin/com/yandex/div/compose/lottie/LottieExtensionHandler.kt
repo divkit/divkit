@@ -12,6 +12,7 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.images.asImageBase
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.lottie.LottieData
 import com.yandex.div.internal.lottie.LottieExtensionParams
@@ -41,12 +42,20 @@ class LottieExtensionHandler(
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
+        val image = environment.data.asImageBase()
+        if (image == null) {
+            environment.reportError("Lottie extension must be applied to image or gif element")
+            return
+        }
+
         val paramsJson = environment.extension.params
         val params = remember(paramsJson) { parseParams(paramsJson, environment) } ?: return
         val composition by rememberLottieComposition(params.data.toCompositionSpec())
         LottieAnimation(
             modifier = environment.modifier,
+            alignment = image.observedAlignment(),
             composition = composition,
+            contentScale = image.observedContentScale(),
             isPlaying = params.isPlaying.observedValue(true),
             iterations = params.iterations,
             restartOnPlay = false,
