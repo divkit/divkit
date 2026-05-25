@@ -1627,7 +1627,6 @@
       ],
       "steps": [
         "Check that the animation plays in one direction"
-
       ],
       "expected_results": [
         "Spinner animation will continue 5 times and then stop"
@@ -4656,7 +4655,8 @@
         "When pressing the 'to 4' button, the cursor was moved after the 4th character of the input.",
         "When pressing the 'to 4-7' the selection range with the area code is entered (if the text has not been changed)"
       ],
-      "file": "input/masked_input_set_cursor_position.json"
+      "file": "input/masked_input_set_cursor_position.json",
+      "case_id": 510
     },
     {
       "title": "Submit action test",
@@ -4770,7 +4770,8 @@
         "The square starts animating from gray toward green",
         "After tapping RED the square animates to red, not green; once the animation finishes the square is fully red"
       ],
-      "file": "animations/animators/restart_color_animator_with_changed_end_value.json"
+      "file": "animations/animators/restart_color_animator_with_changed_end_value.json",
+      "case_id": 511
     },
     {
       "title": "Gif animations",
