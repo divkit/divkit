@@ -12,6 +12,7 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.images.ImageRequestListener
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
+import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
@@ -35,6 +36,7 @@ internal interface DivContextComponent {
     val fontFamilyCache: DivFontFamilyCache
     val imageLoader: ImageLoader
     val imageRequestListener: ImageRequestListener
+    val playerFactory: DivVideoPlayerFactory
     val viewContextStorage: DivViewContextStorage
 
     @get:Named(Names.HOST_VARIABLES)

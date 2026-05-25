@@ -89,6 +89,7 @@ dependencies {
     implementation project(path: ':coil')
     implementation project(path: ':compose')
     implementation project(path: ':compose-lottie')
+    implementation project(path: ':compose-video-view-based')
     implementation project(path: ':div')
     implementation project(path: ':div-gesture')
     implementation project(path: ':div-lottie')

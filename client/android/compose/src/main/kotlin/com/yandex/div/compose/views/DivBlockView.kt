@@ -8,17 +8,18 @@ import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.grid.DivGridView
 import com.yandex.div.compose.views.image.DivImageView
-import com.yandex.div.compose.views.input.DivInputView
+import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
-import com.yandex.div.compose.views.pager.DivPagerView
+import com.yandex.div.compose.utils.reportError
+import com.yandex.div.compose.views.input.DivInputView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.text.DivTextView
+import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
@@ -101,11 +102,11 @@ private fun BaseView(
         is Div.State -> DivStateView(modifier, data.value)
         is Div.Switch -> DivSwitchView(modifier.applyPaddings(data), data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
+        is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
         is Div.GifImage -> NotSupported("gif")
         is Div.Indicator -> NotSupported("indicator")
         is Div.Slider -> NotSupported("slider")
         is Div.Tabs -> NotSupported("tabs")
-        is Div.Video -> NotSupported("video")
     }
 }
 

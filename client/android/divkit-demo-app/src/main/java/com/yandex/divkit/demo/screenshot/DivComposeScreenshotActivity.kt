@@ -11,7 +11,10 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.ImageLoaderProvider
+import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivAction
@@ -25,7 +28,7 @@ import org.json.JSONObject
 adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity \
 -e DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME snapshot_test_data/div-text/all_attributes.json
  */
-@OptIn(InternalApi::class)
+@OptIn(InternalApi::class, ExperimentalApi::class)
 class DivComposeScreenshotActivity : ComponentActivity() {
 
     private lateinit var divContext: DivContext
@@ -46,7 +49,8 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         divContext = DivContext(
             baseContext = this,
             configuration = DivComposeConfiguration(
-                fontSourceProvider = ComposeFontSourceProvider()
+                fontSourceProvider = ComposeFontSourceProvider(),
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this))
             ),
             debugConfiguration = DivDebugConfiguration(
                 imageLoaderProvider = imageLoaderProvider

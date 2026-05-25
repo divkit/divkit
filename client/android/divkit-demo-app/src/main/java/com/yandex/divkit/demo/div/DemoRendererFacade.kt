@@ -8,10 +8,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import com.yandex.div.DivDataTag
 import com.yandex.div.compose.DivComposeConfiguration
-import com.yandex.div.compose.DivView as ComposeDivView
-import com.yandex.div.compose.DivContext as ComposeDivContext
+import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
@@ -23,6 +23,8 @@ import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.divkit.demo.utils.applyPatchByConfig
 import org.json.JSONException
 import org.json.JSONObject
+import com.yandex.div.compose.DivContext as ComposeDivContext
+import com.yandex.div.compose.DivView as ComposeDivView
 
 interface DemoRendererFacade {
     val view: View
@@ -107,6 +109,7 @@ class ComposeRendererFacade(
         baseContext = context,
         configuration = DivComposeConfiguration(
             fontSourceProvider = ComposeFontSourceProvider(),
+            playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context)),
             variableController = divVariableController,
         )
     )

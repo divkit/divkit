@@ -9,6 +9,9 @@ import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.lottie.LottieExtensionHandler
+import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
+import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
@@ -17,6 +20,7 @@ import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.div.compose.DivView as ComposeDivView
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 
+@OptIn(ExperimentalApi::class)
 class RegressionComposeViewCreator(context: Context) {
     private val assetReader = DivAssetReader(context)
 
@@ -47,6 +51,7 @@ class RegressionComposeViewCreator(context: Context) {
                     )
                 ),
                 fontSourceProvider = ComposeFontSourceProvider(),
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity)),
                 reporter = reporter
             )
         )

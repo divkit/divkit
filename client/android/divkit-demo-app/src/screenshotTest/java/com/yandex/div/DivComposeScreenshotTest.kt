@@ -271,6 +271,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 // div-grid
                 "snapshot_test_data/div-grid",
                 "snapshot_test_data/div-grid/examples",
+                // div-video
+                "snapshot_test_data/div-video",
             ).expandDirectories().withEscapedParameter()
         }
 
