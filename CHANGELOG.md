@@ -3,8 +3,6 @@
 # Android Client:
 * Added `alphaBlend` function for blending two colors.
 * Added `scroll_content_alignment` support in `gallery`.
-* Fixed crash at `DivPagerView` constructor called on background thread.
-* Fixed execution order at `Div2View.setDataAsync()`.
 
 # iOS Client:
 * Added `alphaBlend` function for blending two colors.
@@ -12,6 +10,13 @@
 * Added static images prefetch API for DivData.
 * Added support for the `scroll_content_alignment` parameter in gallery to control the position of the item selected via `default_item` or `scroll_to`; the default value is `start` for `scroll_mode="default"` and `center` for `scroll_mode="paging"`, and alignment affects scrolling only in paging mode.
 * Fixed an issue where a running animator could use a stale `end_value` when restarted, causing animations to target outdated values after quick consecutive updates.
+
+
+## 32.50.1
+
+# Android Client:
+* Fixed crash at `DivPagerView` constructor called on background thread.
+* Fixed execution order at `Div2View.setDataAsync()`.
 
 
 ## 32.50.0
