@@ -76,6 +76,44 @@ function argb(
     };
 }
 
+function compositeAlpha(alpha0: number, alpha1: number): number {
+    // mimic android & ios int calculation
+    return 0xff - ((((0xff - alpha0) * (0xff - alpha1)) / 0xff) | 0);
+}
+
+function compositeComponent(
+    bgColor: number,
+    bgAlpha: number,
+    fgColor: number,
+    fgAlpha: number,
+    alpha: number
+): number {
+    if (alpha === 0) {
+        return 0;
+    }
+
+    return (
+        (((0xFF * fgColor * fgAlpha) + (bgColor * bgAlpha * (0xFF - fgAlpha))) | 0) / (alpha * 0xFF)
+    ) | 0;
+}
+
+function alphaBlend(_ctx: EvalContext, color0: ColorValue, color1: ColorValue): EvalValue {
+    const parsed0 = safeConvertColor(color0.value);
+    const parsed1 = safeConvertColor(color1.value);
+
+    const totalAlpha = compositeAlpha(parsed0.a, parsed1.a);
+
+    return {
+        type: COLOR,
+        value: stringifyColor({
+            a: totalAlpha,
+            r: compositeComponent(parsed0.r, parsed0.a, parsed1.r, parsed1.a, totalAlpha),
+            g: compositeComponent(parsed0.g, parsed0.a, parsed1.g, parsed1.a, totalAlpha),
+            b: compositeComponent(parsed0.b, parsed0.a, parsed1.b, parsed1.a, totalAlpha),
+        })
+    };
+}
+
 export function registerColors(): void {
     registerFunc('getColorAlpha', [STRING], getColorAlpha);
     registerFunc('getColorAlpha', [COLOR], getColorAlpha);
@@ -97,4 +135,6 @@ export function registerColors(): void {
 
     registerFunc('rgb', [NUMBER, NUMBER, NUMBER], rgb);
     registerFunc('argb', [NUMBER, NUMBER, NUMBER, NUMBER], argb);
+
+    registerFunc('alphaBlend', [COLOR, COLOR], alphaBlend);
 }
