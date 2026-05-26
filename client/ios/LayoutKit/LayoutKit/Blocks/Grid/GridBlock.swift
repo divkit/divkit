@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {
@@ -140,6 +141,10 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
   public func getImageHolders() -> [ImageHolder] {
     items.flatMap { $0.contents.getImageHolders() }
+  }
+
+  public func getRemoteURLs() -> [URL] {
+    items.flatMap { $0.contents.getRemoteURLs() }
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {

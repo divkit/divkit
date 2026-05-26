@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
@@ -100,6 +101,12 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
 extension LayeredBlock: ImageContaining {
   public func getImageHolders() -> [ImageHolder] {
     children.flatMap { $0.content.getImageHolders() }
+  }
+}
+
+extension LayeredBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    children.flatMap { $0.content.getRemoteURLs() }
   }
 }
 

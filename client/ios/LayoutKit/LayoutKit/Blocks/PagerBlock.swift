@@ -106,6 +106,12 @@ extension PagerBlock: ImageContaining {
   }
 }
 
+extension PagerBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    gallery.items.flatMap { $0.content.getRemoteURLs() }
+  }
+}
+
 extension PagerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> PagerBlock {
     let newBlocks = try gallery.items.map { try $0.content.updated(withStates: states) }

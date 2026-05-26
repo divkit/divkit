@@ -53,6 +53,10 @@ public final class VideoBlockLegacy: BlockWithTraits {
     preview.asArray()
   }
 
+  public func getRemoteURLs() -> [URL] {
+    [videoAssetHolder.url]
+  }
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? VideoBlockLegacy else {
       return false

@@ -1,3 +1,4 @@
+import Foundation
 import VGSL
 
 public class TabPageViewModel {
@@ -46,6 +47,12 @@ public func !==(lhs: [TabPageViewModel], rhs: [TabPageViewModel]) -> Bool {
 extension TabPageViewModel: ImageContaining {
   public func getImageHolders() -> [ImageHolder] {
     block.getImageHolders()
+  }
+}
+
+extension TabPageViewModel: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    block.getRemoteURLs()
   }
 }
 

@@ -58,6 +58,10 @@ public final class RiveAnimationBlock: BlockWithTraits {
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }
+
+  public func getRemoteURLs() -> [URL] {
+    (animationHolder as? RemoteAnimationHolder).map { [$0.url] } ?? []
+  }
 }
 
 extension RiveAnimationBlock: LayoutCachingDefaultImpl {}

@@ -48,6 +48,10 @@ public final class VideoBlock: BlockWithTraits {
 
   public func getImageHolders() -> [ImageHolder] { [] }
 
+  public func getRemoteURLs() -> [URL] {
+    model.videoData.videos.map(\.url)
+  }
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? VideoBlock else {
       return false

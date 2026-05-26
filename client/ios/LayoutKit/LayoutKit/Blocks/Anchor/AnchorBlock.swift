@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
@@ -150,6 +151,10 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
 
   public func getImageHolders() -> [ImageHolder] {
     contents.flatMap { $0.getImageHolders() }
+  }
+
+  public func getRemoteURLs() -> [URL] {
+    contents.flatMap { $0.getRemoteURLs() }
   }
 
   public func updated(withStates states: BlocksState) throws -> Self {

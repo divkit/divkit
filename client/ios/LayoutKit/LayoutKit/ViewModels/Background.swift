@@ -1,3 +1,4 @@
+import Foundation
 import VGSL
 
 public enum Background: Equatable {
@@ -117,6 +118,26 @@ extension Background: ImageContaining {
       block.getImageHolders()
     case .solidColor,
          .tiledImage,
+         .gradient,
+         .transparentAction:
+      []
+    }
+  }
+}
+
+extension Background: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    switch self {
+    case let .composite(first, second, _):
+      first.getRemoteURLs() + second.getRemoteURLs()
+    case let .withInsets(background, _):
+      background.getRemoteURLs()
+    case let .block(block):
+      block.getRemoteURLs()
+    case .solidColor,
+         .tiledImage,
+         .image,
+         .ninePatchImage,
          .gradient,
          .transparentAction:
       []

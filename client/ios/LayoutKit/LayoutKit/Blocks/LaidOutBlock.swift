@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 final class LaidOutBlock<T: BlockWithLayout>: Block {
@@ -62,6 +63,12 @@ final class LaidOutBlock<T: BlockWithLayout>: Block {
 extension LaidOutBlock: ImageContaining {
   func getImageHolders() -> [ImageHolder] {
     block.getImageHolders()
+  }
+}
+
+extension LaidOutBlock: RemoteURLContaining {
+  func getRemoteURLs() -> [URL] {
+    block.getRemoteURLs()
   }
 }
 

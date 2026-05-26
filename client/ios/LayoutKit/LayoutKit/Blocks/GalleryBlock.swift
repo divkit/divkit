@@ -155,6 +155,12 @@ extension GalleryBlock: ImageContaining {
   }
 }
 
+extension GalleryBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    model.items.flatMap { $0.content.getRemoteURLs() }
+  }
+}
+
 extension GalleryBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> GalleryBlock {
     let newBlocks = try model.items.map { try $0.content.updated(withStates: states) }

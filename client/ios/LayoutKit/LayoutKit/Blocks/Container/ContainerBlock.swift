@@ -545,6 +545,12 @@ extension ContainerBlock: ImageContaining {
   }
 }
 
+extension ContainerBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    children.flatMap { $0.content.getRemoteURLs() }
+  }
+}
+
 extension ContainerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> ContainerBlock {
     let newChildren = try children.map {

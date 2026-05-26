@@ -104,6 +104,12 @@ extension TabsBlock: ImageContaining {
   }
 }
 
+extension TabsBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    model.contentsModel.pages.flatMap { $0.block.getRemoteURLs() }
+  }
+}
+
 extension TabsBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> TabsBlock {
     let newPages = try model.contentsModel.pages

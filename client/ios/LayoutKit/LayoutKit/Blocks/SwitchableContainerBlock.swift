@@ -214,6 +214,12 @@ extension SwitchableContainerBlock: ImageContaining {
   }
 }
 
+extension SwitchableContainerBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    items.0.content.getRemoteURLs() + items.1.content.getRemoteURLs()
+  }
+}
+
 extension SwitchableContainerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> SwitchableContainerBlock {
     let newItems = try map(items) {

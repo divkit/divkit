@@ -377,18 +377,21 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
     let oldModel = self.model
 
-    if self.model?.tooltips.isEmpty ?? true, !model.tooltips.isEmpty {
-      renderingDelegate?.tooltipAnchorViewAdded(anchorView: self)
-    } else if self.model?.tooltips.isEmpty == false, model.tooltips.isEmpty {
-      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
-    }
-
     let shouldUpdateChildView = model.child !== self.model?.child
       || self.observer !== observer
       || self.renderingDelegate !== renderingDelegate
+
+    if oldModel?.tooltips.isEmpty == false, model.tooltips.isEmpty {
+      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
+    }
+
     self.model = model
     self.observer = observer
     self.renderingDelegate = renderingDelegate
+
+    if oldModel?.tooltips.isEmpty ?? true, !model.tooltips.isEmpty {
+      renderingDelegate?.tooltipAnchorViewAdded(anchorView: self)
+    }
 
     if oldModel?.blurEffect != model.blurEffect {
       blurView = model.blurEffect.map { UIVisualEffectView(effect: UIBlurEffect(style: $0.cast())) }

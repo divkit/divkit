@@ -56,6 +56,10 @@ extension BackgroundBlock {
   public func getImageHolders() -> [ImageHolder] {
     child.getImageHolders() + background.getImageHolders()
   }
+
+  public func getRemoteURLs() -> [URL] {
+    child.getRemoteURLs() + background.getRemoteURLs()
+  }
 }
 
 extension Block {

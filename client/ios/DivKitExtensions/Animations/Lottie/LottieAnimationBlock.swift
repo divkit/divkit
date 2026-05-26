@@ -31,6 +31,10 @@ final class LottieAnimationBlock: SizeForwardingBlock {
 
   func getImageHolders() -> [ImageHolder] { [] }
 
+  func getRemoteURLs() -> [URL] {
+    (animationHolder as? RemoteAnimationHolder).map { [$0.url] } ?? []
+  }
+
   func equals(_ other: Block) -> Bool {
     guard let other = other as? LottieAnimationBlock else {
       return false

@@ -48,6 +48,12 @@ extension MaskedBlock: ImageContaining {
   }
 }
 
+extension MaskedBlock: RemoteURLContaining {
+  public func getRemoteURLs() -> [URL] {
+    maskBlock.getRemoteURLs() + maskedBlock.getRemoteURLs()
+  }
+}
+
 extension MaskedBlock: ElementFocusUpdating {
   public func updated(path: UIElementPath, isFocused: Bool) throws -> MaskedBlock {
     let newMaskBlock = try maskBlock.updated(path: path, isFocused: isFocused)

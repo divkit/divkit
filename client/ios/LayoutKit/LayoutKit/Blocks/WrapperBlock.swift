@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public protocol WrapperBlock: SizeForwardingBlock {
@@ -21,6 +22,10 @@ extension WrapperBlock {
 
   public func getImageHolders() -> [ImageHolder] {
     child.getImageHolders()
+  }
+
+  public func getRemoteURLs() -> [URL] {
+    child.getRemoteURLs()
   }
 
   public func updated(withStates states: BlocksState) throws -> Self {
