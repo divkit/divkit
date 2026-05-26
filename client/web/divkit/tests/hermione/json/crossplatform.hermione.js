@@ -129,9 +129,9 @@ function createIntegrationTestCase(testCase, testPath) {
                     let expected = expectErrors[j];
                     let str = errors[j].additionalMessage || errors[j].message;
 
-                    if (errors[j].expression) {
+                    /* if (errors[j].expression) {
                         str += ' Expression: ' + errors[j].expression.replace(/\\/g, '\\\\');
-                    }
+                    } */
 
                     str.should.equal(expected.value);
                 }

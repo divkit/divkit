@@ -136,7 +136,26 @@
         }
       ],
       "platforms": [
-        "ios",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Outdated error format"
+      }
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check wrong type",
+          "url": "div-action://set_variable?name=step&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected."
+        }
+      ],
+      "platforms": [
         "web"
       ]
     }

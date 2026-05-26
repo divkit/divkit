@@ -51,7 +51,24 @@
       ],
       "platforms": [
         "android",
-        "ios",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Outdated error format"
+      }
+    },
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'title' is missing."
+        },
+        {
+          "type": "error",
+          "value": "Variable 'title' is missing."
+        }
+      ],
+      "platforms": [
         "web"
       ]
     }

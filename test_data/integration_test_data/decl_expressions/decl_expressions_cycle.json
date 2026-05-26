@@ -39,7 +39,24 @@
         }
       ],
       "platforms": [
-        "ios",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Outdated error format"
+      }
+    },
+    {
+      "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'val2' is missing."
+        },
+        {
+          "type": "error",
+          "value": "Variable 'val' is missing."
+        }
+      ],
+      "platforms": [
         "web"
       ]
     }

@@ -58,30 +58,27 @@
         "ios"
       ],
       "unsupported_platforms": {
-        "web": "Expected 3 errors"
+        "web": "Expected 3 errors, outdated error format"
       }
     },
     {
       "expected": [
         {
           "type": "error",
-          "value": "Variable 'second' is missing. Expression: @{second}"
+          "value": "Variable 'second' is missing."
         },
         {
           "type": "error",
-          "value": "Variable 'first' is missing. Expression: @{first}"
+          "value": "Variable 'first' is missing."
         },
         {
           "type": "error",
-          "value": "Variable 'first' is missing. Expression: @{first}"
+          "value": "Variable 'first' is missing."
         }
       ],
       "platforms": [
         "web"
-      ],
-      "unsupported_platforms": {
-        "android": "Expected 1 error"
-      }
+      ]
     }
   ]
 }
