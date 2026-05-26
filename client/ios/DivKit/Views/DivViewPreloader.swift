@@ -133,8 +133,12 @@ public final class DivViewPreloader {
     }
   }
 
-  func reset(cardId: DivCardID) {
+  public func reset(cardId: DivCardID) {
     blockProviders.removeValue(forKey: cardId)
+  }
+
+  public func resetAll() {
+    blockProviders.removeAll()
   }
 }
 #endif

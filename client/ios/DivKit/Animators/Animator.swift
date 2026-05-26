@@ -143,6 +143,10 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     isRunning = true
   }
 
+  deinit {
+      if isRunning { stop() }
+  }
+
   func stop() {
     item?.cancel()
     item = nil

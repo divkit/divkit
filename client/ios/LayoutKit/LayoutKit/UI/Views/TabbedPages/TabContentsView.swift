@@ -7,7 +7,7 @@ final class TabContentsView: BlockView {
     static let animationDuration: TimeInterval = 0.2
   }
 
-  var delegate: TabContentsViewDelegate?
+  weak var delegate: TabContentsViewDelegate?
   weak var updatesDelegate: TabbedPagesViewModelDelegate?
   private(set) var selectedPageIndex: CGFloat = 0
   private(set) var model: TabContentsViewModel!
