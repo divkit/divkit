@@ -2,6 +2,8 @@ package com.yandex.div.compose.internal
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlinx.coroutines.CoroutineScope
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimeSource
 
 /**
  * Provides debug configuration for [com.yandex.div.compose.DivContext].
@@ -12,7 +14,18 @@ import kotlinx.coroutines.CoroutineScope
  * @see com.yandex.div.compose.DivContext
  */
 @InternalApi
+@OptIn(ExperimentalTime::class)
 class DivDebugConfiguration(
     val coroutineScope: CoroutineScope? = null,
-    val imageLoaderProvider: ImageLoaderProvider? = null
-)
+    val imageLoaderProvider: ImageLoaderProvider? = null,
+    val timeSource: TimeSource?
+) {
+    constructor(
+        coroutineScope: CoroutineScope? = null,
+        imageLoaderProvider: ImageLoaderProvider? = null,
+    ): this(
+        coroutineScope = coroutineScope,
+        imageLoaderProvider = imageLoaderProvider,
+        timeSource = null
+    )
+}

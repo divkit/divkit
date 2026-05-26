@@ -1,9 +1,11 @@
 package com.yandex.div.compose.dagger
 
+import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.state.DivStateStorage
+import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
@@ -13,9 +15,11 @@ import javax.inject.Named
 @Component(isRoot = false)
 internal interface DivViewComponent {
 
+    val actionHandler: DivActionHandler
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
     val stateStorage: DivStateStorage
+    val timerStorage: TimerStorage
     val visibilityActionTracker: VisibilityActionTracker
 
     @get:Named(Names.HOST_VARIABLES)

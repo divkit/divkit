@@ -3,7 +3,6 @@ package com.yandex.div.compose.dagger
 import android.content.Context
 import coil3.ImageLoader
 import com.yandex.div.compose.DivComposeConfiguration
-import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionHandler
@@ -27,7 +26,6 @@ import javax.inject.Named
 )
 internal interface DivContextComponent {
 
-    val actionHandler: DivActionHandler
     val baseContext: Context
     val customViewFactories: Map<String, DivCustomViewFactory>
     val debugFeatures: DivDebugFeatures

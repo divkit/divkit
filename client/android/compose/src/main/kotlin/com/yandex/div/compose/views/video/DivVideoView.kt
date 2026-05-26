@@ -32,7 +32,7 @@ import com.yandex.div2.DivVideoSource as Div2VideoSource
 
 @Composable
 internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
-    val context = divContext
+    val component = divContext.component
     val config = data.observedConfig()
 
     if (config.sources.isEmpty() && data.playerSettingsPayload == null) {
@@ -41,7 +41,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
         )
     }
 
-    val player = remember { context.component.playerFactory.makePlayer() }
+    val player = remember { component.playerFactory.makePlayer() }
 
     DisposableEffect(player) {
         onDispose { player.release() }
@@ -50,7 +50,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
     ObserveVideoActions(
         player = player,
         data = data,
-        actionHandler = context.component.actionHandler,
+        actionHandler = LocalComponent.current.actionHandler,
         actionHandlingContext = LocalComponent.current.actionHandlingContext,
     )
 
@@ -64,7 +64,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
         if (!player.isReady.collectAsState().value) {
             data.preview?.let {
                 VideoPreviewImage(
-                    imageLoader = divContext.component.imageLoader,
+                    imageLoader = component.imageLoader,
                     scale = config.scale,
                     preview = it.observedValue(transform = ::decodePreview)
                 )

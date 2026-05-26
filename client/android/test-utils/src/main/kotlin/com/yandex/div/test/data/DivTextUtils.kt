@@ -17,6 +17,7 @@ import com.yandex.div2.DivVisibilityAction
 
 fun text(
     accessibility: DivAccessibility? = null,
+    action: DivAction? = null,
     disappearActions: List<DivDisappearAction>? = null,
     id: String? = null,
     text: String,
@@ -27,6 +28,7 @@ fun text(
 ): Div {
     return text(
         accessibility = accessibility,
+        action = action,
         disappearActions = disappearActions,
         id = id,
         text = constant(text),

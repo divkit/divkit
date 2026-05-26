@@ -10,6 +10,7 @@ import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetVariable
+import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
 import com.yandex.div2.DivTypedValue
@@ -87,20 +88,6 @@ fun dictSetValueAction(
     )
 }
 
-fun updateStructureAction(
-    name: String,
-    path: String,
-    value: DivTypedValue
-): DivActionTyped {
-    return DivActionTyped.UpdateStructure(
-        DivActionUpdateStructure(
-            path = constant(path),
-            value = value,
-            variableName = constant(name)
-        )
-    )
-}
-
 fun setStateAction(
     stateId: Expression<String>,
     temporary: Boolean = true,
@@ -119,5 +106,28 @@ fun setStateAction(stateId: String, temporary: Boolean = true): DivActionTyped =
 fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
     return DivActionTyped.SetVariable(
         DivActionSetVariable(value = value, variableName = constant(name))
+    )
+}
+
+fun timerAction(id: String, action: DivActionTimer.Action): DivActionTyped {
+    return DivActionTyped.Timer(
+        DivActionTimer(
+            id = constant(id),
+            action = constant(action)
+        )
+    )
+}
+
+fun updateStructureAction(
+    name: String,
+    path: String,
+    value: DivTypedValue
+): DivActionTyped {
+    return DivActionTyped.UpdateStructure(
+        DivActionUpdateStructure(
+            path = constant(path),
+            value = value,
+            variableName = constant(name)
+        )
     )
 }

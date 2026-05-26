@@ -33,7 +33,6 @@ internal class DivComposeExpressionResolver @Inject constructor(
 
     private val evaluator: Evaluator
 
-    private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
 
@@ -95,7 +94,6 @@ internal class DivComposeExpressionResolver @Inject constructor(
 
     private fun onVariableChanged(variable: Variable) {
         varToExpressions[variable.name]?.forEach { expression ->
-            evaluationsCache.remove(expression)
             expressionObservers[expression]?.forEach { observer ->
                 observer()
             }
@@ -136,18 +134,12 @@ internal class DivComposeExpressionResolver @Inject constructor(
         rawExpression: String,
         evaluable: Evaluable
     ): R {
-        val cachedValue = evaluationsCache[rawExpression]
-        if (cachedValue != null) {
-            return cachedValue as R
-        }
-
         val value = evaluator.eval<R>(evaluable)
         if (evaluable.checkIsCacheable()) {
             evaluable.variables.forEach {
                 val expressions = varToExpressions.getOrPut(it) { mutableSetOf() }
                 expressions.add(rawExpression)
             }
-            evaluationsCache[rawExpression] = value
         }
         return value
     }

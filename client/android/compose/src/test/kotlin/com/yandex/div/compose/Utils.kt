@@ -1,8 +1,10 @@
 package com.yandex.div.compose
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
@@ -40,16 +42,38 @@ internal fun mockLocalComponent(
     variableController: DivVariableController = DivVariableController(),
     networkRestorationController: NetworkRestorationController? = null,
 ): DivLocalComponent {
-    val resolver = createExpressionResolver(
+    val expressionResolver = createExpressionResolver(
         reporter = reporter,
         variableController = variableController
     )
+    val actionHandlingContext = DivActionHandlingContext(
+        cardId = "test",
+        expressionResolver = expressionResolver
+    )
     return mock<DivLocalComponent> {
-        on { expressionResolver } doReturn resolver
+        on { this.actionHandlingContext } doReturn actionHandlingContext
+        on { this.expressionResolver } doReturn expressionResolver
         on { this.reporter } doReturn reporter
         on { this.variableController } doReturn variableController
         networkRestorationController?.let {
             on { this.networkRestorationController } doReturn it
+        }
+    }
+}
+
+fun ComposeContentTestRule.setContentWithDivContext(
+    configuration: DivComposeConfiguration,
+    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
+    content: @Composable () -> Unit
+) {
+    setContent {
+        val divContext = DivContext(
+            baseContext = LocalContext.current,
+            configuration = configuration,
+            debugConfiguration = debugConfiguration
+        )
+        CompositionLocalProvider(LocalContext provides divContext) {
+            content()
         }
     }
 }
@@ -59,14 +83,10 @@ fun ComposeContentTestRule.setContent(
     debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
     data: DivData
 ) {
-    setContent {
-        val divContext = DivContext(
-            baseContext = LocalContext.current,
-            configuration = configuration,
-            debugConfiguration = debugConfiguration
-        )
-        CompositionLocalProvider(LocalContext provides divContext) {
-            DivView(data = data)
-        }
+    setContentWithDivContext(
+        configuration = configuration,
+        debugConfiguration = debugConfiguration
+    ) {
+        DivView(data = data)
     }
 }

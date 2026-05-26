@@ -16,6 +16,5 @@ import javax.inject.Named
 @ExperimentalApi
 class DivActionHandlingContext @Inject internal constructor(
     @param:Named(Names.CARD_ID) val cardId: String,
-    val expressionResolver: ExpressionResolver,
-    internal val stateStorage: DivStateStorage
+    val expressionResolver: ExpressionResolver
 )

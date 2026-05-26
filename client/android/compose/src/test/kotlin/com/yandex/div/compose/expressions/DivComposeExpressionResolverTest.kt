@@ -58,6 +58,18 @@ class DivComposeExpressionResolverTest {
     }
 
     @Test
+    fun `evaluate() returns new value when variable changes`() {
+        val value = Variable.StringVariable("value", "initial value")
+        variableController.declare(value)
+
+        assertEquals("initial value", evaluate("@{value}"))
+
+        value.set("new value")
+
+        assertEquals("new value", evaluate("@{value}"))
+    }
+
+    @Test
     fun `observed value changes when variable changes`() {
         val variable = Variable.IntegerVariable("value", 10)
         variableController.declare(variable)

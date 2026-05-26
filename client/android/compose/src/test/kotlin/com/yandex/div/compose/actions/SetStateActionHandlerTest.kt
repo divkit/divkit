@@ -19,6 +19,7 @@ import kotlin.test.assertNull
 @RunWith(AndroidJUnit4::class)
 class SetStateActionHandlerTest {
     private val actionHandlerEnvironment = ActionHandlerEnvironment()
+    private val stateStorage = DivStateStorage()
 
     private val reporter: TestReporter
         get() = actionHandlerEnvironment.reporter
@@ -26,16 +27,14 @@ class SetStateActionHandlerTest {
     private val variableController: DivVariableController
         get() = actionHandlerEnvironment.variableController
 
-    private val stateStorage: DivStateStorage
-        get() = actionHandlerEnvironment.stateStorage
-
     private val rootPath = DivStatePath.fromState(0L)
 
     @BeforeTest
     fun setUp() {
         actionHandlerEnvironment.init(
             setStateActionHandler = SetStateActionHandler(
-                reporter = reporter
+                reporter = reporter,
+                stateStorage = stateStorage
             )
         )
     }

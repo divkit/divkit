@@ -16,6 +16,8 @@ import com.yandex.yatagan.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimeSource
 
 @Module
 internal object DivContextModule {
@@ -55,6 +57,15 @@ internal object DivContextModule {
         return ImageLoader.Builder(context = context)
             .allowHardware(false)
             .build()
+    }
+
+    @DivContextScope
+    @OptIn(ExperimentalTime::class)
+    @Provides
+    fun provideTimeSource(
+        debugConfiguration: DivDebugConfiguration
+    ): TimeSource {
+        return debugConfiguration.timeSource ?: TimeSource.Monotonic
     }
 }
 

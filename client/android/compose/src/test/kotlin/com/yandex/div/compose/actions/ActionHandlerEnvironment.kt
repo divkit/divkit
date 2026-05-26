@@ -2,7 +2,6 @@ package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivSightAction
@@ -11,7 +10,6 @@ import org.mockito.kotlin.mock
 internal class ActionHandlerEnvironment {
     val reporter = TestReporter()
     val variableController = DivVariableController()
-    val stateStorage = DivStateStorage()
 
     val expressionResolver = createExpressionResolver(
         reporter = reporter,
@@ -20,28 +18,29 @@ internal class ActionHandlerEnvironment {
 
     val context = DivActionHandlingContext(
         cardId = "test",
-        expressionResolver = expressionResolver,
-        stateStorage = stateStorage
+        expressionResolver = expressionResolver
     )
 
-    private lateinit var actionHandler: DivActionHandler
+    lateinit var actionHandler: DivActionHandler
 
     fun init(
         externalActionHandler: DivExternalActionHandler = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
+        setStateActionHandler: SetStateActionHandler = mock(),
         setVariableActionHandler: SetVariableActionHandler = mock(),
-        updateStructureActionHandler: UpdateStructureActionHandler = mock(),
-        setStateActionHandler: SetStateActionHandler = mock()
+        timerActionHandler: TimerActionHandler = mock(),
+        updateStructureActionHandler: UpdateStructureActionHandler = mock()
     ) {
         actionHandler = DivActionHandler(
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,
+            setStateActionHandler = setStateActionHandler,
             setVariableActionHandler = setVariableActionHandler,
-            updateStructureActionHandler = updateStructureActionHandler,
-            setStateActionHandler = setStateActionHandler
+            timerActionHandler = timerActionHandler,
+            updateStructureActionHandler = updateStructureActionHandler
         )
     }
 

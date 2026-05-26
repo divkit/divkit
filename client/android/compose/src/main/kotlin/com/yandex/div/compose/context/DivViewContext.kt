@@ -7,6 +7,7 @@ import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.state.DivStateStorage
+import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -18,9 +19,8 @@ import com.yandex.div2.DivVariable
 
 internal class DivViewContext(
     data: DivData,
-    private val component: DivViewComponent
+    internal val component: DivViewComponent
 ) {
-
     val rootLocalComponent: DivLocalComponent
 
     val pagerStateStorage: DivPagerStateStorage
@@ -28,6 +28,9 @@ internal class DivViewContext(
 
     val stateStorage: DivStateStorage
         get() = component.stateStorage
+
+    val timerStorage: TimerStorage
+        get() = component.timerStorage
 
     val visibilityActionTracker: VisibilityActionTracker
         get() = component.visibilityActionTracker
@@ -40,6 +43,11 @@ internal class DivViewContext(
             functionProvider = baseFunctionProvider + functions,
             triggers = data.variableTriggers.orEmpty(),
             variables = data.variables.orEmpty()
+        )
+
+        timerStorage.init(
+            timers = data.timers.orEmpty(),
+            localComponent = rootLocalComponent
         )
     }
 

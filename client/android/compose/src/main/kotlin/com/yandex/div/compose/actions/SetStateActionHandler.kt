@@ -1,6 +1,7 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PathFormatException
 import com.yandex.div.internal.actions.DivUntypedAction
@@ -8,18 +9,19 @@ import com.yandex.div2.DivActionSetState
 import javax.inject.Inject
 
 internal class SetStateActionHandler @Inject constructor(
-    private val reporter: DivReporter
+    private val reporter: DivReporter,
+    private val stateStorage: DivStateStorage
 ) {
 
     fun handle(context: DivActionHandlingContext, action: DivActionSetState) {
-        handleByPath(context = context, path = action.stateId.evaluate(context.expressionResolver))
+        setState(path = action.stateId.evaluate(context.expressionResolver))
     }
 
-    fun handle(context: DivActionHandlingContext, action: DivUntypedAction.SetState) {
-        handleByPath(context = context, path = action.id)
+    fun handle(action: DivUntypedAction.SetState) {
+        setState(path = action.id)
     }
 
-    private fun handleByPath(context: DivActionHandlingContext, path: String) {
+    private fun setState(path: String) {
         val statePath = try {
             DivStatePath.parse(path)
         } catch (_: PathFormatException) {
@@ -34,6 +36,6 @@ internal class SetStateActionHandler @Inject constructor(
             reporter.reportError("Empty state id in set_state path: $path")
             return
         }
-        context.stateStorage.setActiveState(statePath)
+        stateStorage.setActiveState(statePath)
     }
 }
