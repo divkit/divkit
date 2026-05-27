@@ -1,3 +1,9 @@
+## 32.52.0 (June 1, 2026)
+
+* Added support for the `alphaBlend` function.
+* Fixed `set_cursor_position` with multiple types of `input`.
+
+
 ## 32.50.0 (May 18, 2026)
 
 * Added support for the `playback_speed` parameter in the `video` component.
