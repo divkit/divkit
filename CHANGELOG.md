@@ -1,3 +1,16 @@
+## 32.52.0
+
+# iOS Client:
+* Fixed Retain Cycle in `FunctionsProvider` that caused `DivKitComponents` memory leak.
+* Fixed linear and radial gradient rendering when adjacent stops differ in alpha — transparent → opaque transitions (e.g. `#0000` → `#FFFFFFFF`) no longer pass through mid-grey, matching Android's behavior.
+* Fixed potential memory leaks in `ValueAnimator`, `DivViewPreloader`, and `TabContentsView`.
+* Supported `set-cursor-position` action.
+
+# Web Client:
+* Added support for the `alphaBlend` function.
+* Fixed `set_cursor_position` with multiple types of `input`.
+
+
 ## 32.51.0
 
 # Android Client:
