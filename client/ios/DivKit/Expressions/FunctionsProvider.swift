@@ -15,7 +15,8 @@ final class FunctionsProvider {
     lock.withLock { [weak self] in
       guard let self else { return [:] }
       var functions = staticFunctions
-      functions.addGetStoredValueFunctions({ name, scope in
+      functions.addGetStoredValueFunctions({ [weak self] name, scope in
+        guard let self else { return nil }
         let storageCardId: DivCardID? = (scope == .global) ? nil : self.cardId
         return self.persistentValuesStorage.get(name: name, cardId: storageCardId)
       })
