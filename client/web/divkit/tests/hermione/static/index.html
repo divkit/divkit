@@ -211,9 +211,6 @@
                     globalVariablesController.setVariable(window.result);
                 }
 
-                const externalVariable = Ya.DivKit.createVariable('external_variable', 'string', 'initial');
-                globalVariablesController.setVariable(externalVariable);
-
                 window.divkitRoot = Ya.DivKit.render({
                     id: 'test',
                     target: root,
@@ -251,9 +248,9 @@
                             details.node.setAttribute('data-test-id', details.json.id);
                         }
                     },
-                    onCustomAction(action) {
-                        if (action.payload && action.payload.value) {
-                            externalVariable.setValue(action.payload.value);
+                    onCustomAction(action, context) {
+                        if (action.payload && action.payload.type === 'change_color') {
+                            context.variables.get('color').set(context.processExpressions(action.payload.color))
                         }
                     }
                 });

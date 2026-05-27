@@ -450,12 +450,12 @@ export type StatCallback = (details: {
 /**
  * @deprecated Use CustomActionCallbackWithTyped
  */
-export type CustomActionCallback = (action: Action & { url: string }) => void;
+export type CustomActionCallback = (action: Action & { url: string }, context: DivExtensionContext) => void;
 /**
  * A callback for a custom action, such as 'custom://' or any other non-standard scheme, or
  * actions with typed: {type: "custom"})
  */
-export type CustomActionCallbackWithTyped = (action: Action) => void;
+export type CustomActionCallbackWithTyped = (action: Action, context: DivExtensionContext) => void;
 
 export type ComponentCallback = (details: {
     type: 'mount' | 'update' | 'destroy';

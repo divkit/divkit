@@ -38,7 +38,6 @@ export interface RootCtxValue {
     hasTemplate(templateName: string): boolean;
     genId(key: string): string;
     genClass(key: string): string;
-    execCustomAction(action: (Action | VisibilityAction | DisappearAction) & { url: string }): void;
     processVariableTriggers(
         componentContext: ComponentContext | undefined,
         variableTriggers: MaybeMissing<VariableTrigger>[] | undefined

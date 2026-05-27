@@ -1,7 +1,8 @@
 {
   "description": "Typed custom actions",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "card": {

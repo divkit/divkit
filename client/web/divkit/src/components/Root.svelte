@@ -1483,7 +1483,7 @@
                         ...origAction,
                         // todo remove in major release
                         url: ''
-                    } as (Action | VisibilityAction) & { url: string });
+                    } as (Action | VisibilityAction) & { url: string }, componentContext);
                     break;
                 }
                 case 'set_cursor_position': {
@@ -1670,7 +1670,7 @@
                         await execActionInternal(action, actions[i], opts.componentContext);
                         await tick();
                     } else if (action.log_id) {
-                        execCustomAction(action as Action & { url: string });
+                        execCustomAction(action as Action & { url: string }, opts.componentContext);
                         await tick();
                     }
                 }
@@ -1689,8 +1689,11 @@
         });
     }
 
-    function execCustomAction(action: (Action | VisibilityAction) & { url: string }): void {
-        onCustomAction?.(action);
+    function execCustomAction(
+        action: (Action | VisibilityAction) & { url: string },
+        componentContext: ComponentContext | undefined
+    ): void {
+        onCustomAction?.(action, getExtensionContext(componentContext));
     }
 
     function processVariableTriggers(
@@ -1942,19 +1945,41 @@
         }
     }
 
-    function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
+    function getExtensionContext(componentContext?: ComponentContext): DivExtensionContext {
         return {
-            variables: mergeMaps(variables, componentContext.variables),
+            variables: componentContext ? mergeMaps(variables, componentContext.variables) : variables,
             derviedExpression: function<T>(t: T) {
-                return componentContext.getDerivedFromVars(t) as DerivedExpression<T>;
+                return (componentContext ?
+                    componentContext.getDerivedFromVars(t) :
+                    getDerivedFromVars(logError, t)
+                ) as DerivedExpression<T>;
             },
             processExpressions: function<T>(t: T) {
-                return componentContext.getJsonWithVars<T>(t) as T;
+                return (componentContext ?
+                    componentContext.getJsonWithVars<T>(t) :
+                    getJsonWithVars(logError, t)
+                ) as T;
             },
-            execAction,
-            logError,
+            execAction(action) {
+                if (componentContext) {
+                    componentContext.execAnyActions([action]);
+                } else {
+                    execAnyActions([action]);
+                }
+            },
+            logError(error) {
+                if (componentContext) {
+                    componentContext.logError(error);
+                } else {
+                    logError(error);
+                }
+            },
             getComponentProperty: function<T>(property: string): T {
-                return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
+                if (componentContext) {
+                    return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
+                }
+                // todo remove at major release
+                return undefined as T;
             },
             direction
         };
@@ -2311,7 +2336,6 @@
         hasTemplate,
         genId,
         genClass,
-        execCustomAction,
         processVariableTriggers,
         isRunning,
         setRunning,
