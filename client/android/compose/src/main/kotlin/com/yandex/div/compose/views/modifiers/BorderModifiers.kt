@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observeRoundedCornerShape
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder
@@ -40,18 +40,11 @@ internal fun Modifier.borderStroke(data: DivBorder): Modifier {
 
 @Composable
 private fun DivBorder.toShape(): Shape {
-    val cornersRadius = cornersRadius
-    val singleRadius = cornerRadius?.observedValue()
-    return when {
-        cornersRadius != null -> RoundedCornerShape(
-            topStart = (cornersRadius.topLeft?.observedValue() ?: singleRadius ?: 0L).toDp(),
-            topEnd = (cornersRadius.topRight?.observedValue() ?: singleRadius ?: 0L).toDp(),
-            bottomStart = (cornersRadius.bottomLeft?.observedValue() ?: singleRadius ?: 0L).toDp(),
-            bottomEnd = (cornersRadius.bottomRight?.observedValue() ?: singleRadius ?: 0L).toDp(),
-        )
-        singleRadius != null -> RoundedCornerShape(singleRadius.toDp())
-        else -> RectangleShape
-    }
+    return observeRoundedCornerShape(
+        cornerRadius = cornerRadius,
+        cornersRadius = cornersRadius,
+        defaultShape = RectangleShape,
+    )
 }
 
 @Composable
