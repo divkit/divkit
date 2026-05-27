@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
@@ -25,12 +26,14 @@ internal fun Modifier.visibilityActions(data: DivBase): Modifier {
 private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modifier {
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
+    val divViewHost = LocalDivViewHost.current
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
-                minFractionVisible = action.visibilityPercentage.observedValue() / 100f
+                minFractionVisible = action.visibilityPercentage.observedValue() / 100f,
+                divViewHost = divViewHost,
             ) {
                 visibilityActionTracker.onVisibilityChanged(
                     context = actionHandlingContext,
@@ -46,12 +49,14 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
 private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifier {
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
+    val divViewHost = LocalDivViewHost.current
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f,
+                divViewHost = divViewHost,
             ) {
                 visibilityActionTracker.onVisibilityChanged(
                     context = actionHandlingContext,
