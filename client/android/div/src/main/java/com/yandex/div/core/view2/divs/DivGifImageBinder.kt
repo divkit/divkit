@@ -346,7 +346,9 @@ internal class DivGifImageBinder @Inject constructor(
 
         private fun DivGifImageView.setImage(divView: Div2View, drawable: Drawable?) {
             divView.runMainThreadAction {
-                setImage(drawable)
+                if (!isImageLoaded && !isImagePreview) {
+                    setImage(drawable)
+                }
             }
         }
     }
