@@ -487,6 +487,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     }
     tapRecognizer?.cancelsTouchesInView = false
+    tapRecognizer?.delegate = self
 
     if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
       let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -680,6 +681,17 @@ extension DecoratingView {
 
 extension DecoratingView: TooltipAnchorView {
   var tooltips: [BlockTooltip] { model.tooltips }
+}
+
+extension DecoratingView: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+  ) -> Bool {
+    gestureRecognizer === tapRecognizer &&
+      otherGestureRecognizer is UIPanGestureRecognizer &&
+      otherGestureRecognizer.view is UIScrollView
+  }
 }
 
 extension DecoratingView.HighlightState {
