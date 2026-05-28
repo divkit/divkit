@@ -13,8 +13,6 @@ struct InfiniteScroll {
   let alignment: Alignment
   let insetMode: InsetMode
 
-  var isPerformed = false
-
   init(
     origins: [CGFloat],
     bufferSize: Int,

@@ -44,6 +44,11 @@ final class ScrollHandler {
       return true
     }
 
+    var isIdle: Bool {
+      guard case .idle = self else { return false }
+      return true
+    }
+
     var isUserInitiatedScroll: Bool {
       switch self {
       case .idle, .settling(trigger: .programmatic):
@@ -65,13 +70,15 @@ final class ScrollHandler {
 
   var layout: GalleryViewLayouting
 
+  var infiniteScrollLoopPerformed = false
+
   private var infiniteScroll: InfiniteScroll?
   private var contentPager: ScrollableContentPager?
 
   private var state: ScrollState = .idle {
     didSet {
-      if state.isSettling, oldValue.isDragging {
-        infiniteScroll?.isPerformed = false
+      if state.isIdle || (state.isSettling && oldValue.isDragging) {
+        infiniteScrollLoopPerformed = false
       }
     }
   }
@@ -306,7 +313,7 @@ extension ScrollHandler: ScrollDelegate {
     proposedOffset: CGFloat
   ) {
     guard let infiniteScroll,
-          !infiniteScroll.isPerformed,
+          !infiniteScrollLoopPerformed,
           let newPosition = infiniteScroll.getNewPosition(currentOffset: offset) else { return }
 
     let diff = offset - newPosition.offset
@@ -315,7 +322,7 @@ extension ScrollHandler: ScrollDelegate {
 
     delegate?.updateOffsetDetached(newOffset)
 
-    self.infiniteScroll?.isPerformed = true
+    infiniteScrollLoopPerformed = true
     state = .settling(trigger: .user(
       startOffset: newDraggingStartOffset,
       targetOffset: proposedOffset

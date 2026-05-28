@@ -396,6 +396,79 @@ struct ScrollHandlerTests {
     #expect(delegate.updateOffsetDetachedCalls.isEmpty)
   }
 
+  @Test
+  func infiniteScrollLoopPerformed_preservedByConfigurationCalls() {
+    let handler = makeArmedHandler()
+
+    handler.configurePager(pageOrigins: [0, 100, 200], isHorizontal: true)
+    handler.clearPager()
+    handler.configureInfiniteScroll(
+      enabled: true,
+      bufferSize: 1,
+      boundsSize: 0,
+      alignment: .leading,
+      insetMode: .fixed(values: .zero)
+    )
+
+    #expect(handler.infiniteScrollLoopPerformed)
+  }
+
+  @Test
+  func infiniteScrollLoopPerformed_preservedByProgrammaticPositionChange() {
+    let handler = makeArmedHandler()
+
+    handler.handlePositionChange(
+      oldPosition: .paging(index: 0),
+      newPosition: .paging(index: 1),
+      newLayout: false,
+      animated: false
+    )
+
+    #expect(handler.infiniteScrollLoopPerformed)
+  }
+
+  @Test
+  func infiniteScrollLoopPerformed_preservedByDragSettleEntry() {
+    let handler = makeArmedHandler()
+    let scrollView = UIScrollView()
+
+    handler.onWillBeginDragging(scrollView)
+    #expect(handler.infiniteScrollLoopPerformed)
+  }
+
+  @Test
+  func infiniteScrollLoopPerformed_resetByFinishDragging() {
+    let handler = makeArmedHandler()
+    let scrollView = UIScrollView()
+
+    var target = CGPoint.zero
+    handler.onWillBeginDragging(scrollView)
+    handler.onWillEndDragging(
+      scrollView,
+      withVelocity: .zero,
+      targetContentOffset: &target
+    )
+    #expect(!handler.infiniteScrollLoopPerformed)
+  }
+
+  @Test
+  func infiniteScrollLoopPerformed_resetByFinishScrolling() {
+    let scrollView = UIScrollView()
+
+    let endedWithoutDeceleration = makeArmedHandler()
+    endedWithoutDeceleration.onWillBeginDragging(scrollView)
+    endedWithoutDeceleration.onDidEndDragging(scrollView, willDecelerate: false)
+    #expect(!endedWithoutDeceleration.infiniteScrollLoopPerformed)
+
+    let endedDecelerating = makeArmedHandler()
+    endedDecelerating.onDidEndDecelerating(scrollView)
+    #expect(!endedDecelerating.infiniteScrollLoopPerformed)
+
+    let endedAnimation = makeArmedHandler()
+    endedAnimation.onDidEndScrollingAnimation(scrollView)
+    #expect(!endedAnimation.infiniteScrollLoopPerformed)
+  }
+
   // MARK: - finishScrolling passes startOffset
 
   @Test
@@ -492,6 +565,12 @@ struct ScrollHandlerTests {
     handler.delegate = delegate
     handler.direction = direction
     handler.mode = mode
+    return handler
+  }
+
+  private func makeArmedHandler() -> ScrollHandler {
+    let handler = makeHandler()
+    handler.infiniteScrollLoopPerformed = true
     return handler
   }
 }
