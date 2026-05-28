@@ -142,11 +142,26 @@ internal class BindingDispatcher @Inject constructor(
     /**
      * Use from methods which could be externally called from main thread while background binding is in progress.
      * In such case, rejects the execution returning [fallback].
+     *
+     * Acquisition is done with [BindingCriticalSection.tryEnter] on the main thread —
+     * a single atomic operation inside the section's lock. The previous implementation
+     * read [isBackgroundBindingInProgress] and then called the blocking
+     * [BindingCriticalSection.enter]; between those two steps the binding thread could
+     * call [BindingCriticalSection.reserveFor], leaving the main thread parked indefinitely.
+     * `tryEnter` collapses check and acquire into one synchronized block, so no such
+     * window can open.
+     *
+     * Off the main thread we still use the blocking [withLockInternal] path, because
+     * background binding tasks are expected to serialize against each other.
      */
     inline fun <T> withLock(fallback: T, block: () -> T): T {
-        if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
-            reportLockFail()
-            return fallback
+        if (UiThreadHandler.get().isMainThread()) {
+            val handle = criticalSection.tryEnter()
+            if (handle == null) {
+                reportLockFail()
+                return fallback
+            }
+            return handle.use { block() }
         }
 
         return withLockInternal(block)
