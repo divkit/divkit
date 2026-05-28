@@ -222,4 +222,73 @@ final class InfiniteScrollTests: XCTestCase {
       nil
     )
   }
+
+  func test_getNewPositionForState_lastToFirst_teleportsToBufferedCopyOfLast() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 6),
+      newPosition: .paging(index: 2),
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertEqual(teleportedTo, 1)
+    XCTAssertEqual(result, .paging(index: 2))
+  }
+
+  func test_getNewPositionForState_firstToLast_teleportsToBufferedCopyOfFirst() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 2),
+      newPosition: .paging(index: 6),
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertEqual(teleportedTo, 7)
+    XCTAssertEqual(result, .paging(index: 6))
+  }
+
+  func test_getNewPositionForState_intermediateTransition_returnsNewPositionUnchanged() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 4),
+      newPosition: .paging(index: 2),
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertEqual(result, .paging(index: 2))
+  }
+
+  func test_getNewPositionForState_nilOldPosition_returnsNil() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: nil,
+      newPosition: .paging(index: 2),
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertNil(result)
+  }
+
+  // MARK: - getNewPositionForState
+
+  // 5 real items + bufferSize 2 → origins indices:
+  //   0,1  = bufferedCopiesOfLast (Items 3,4 duplicates)
+  //   2..6 = real Items 0..4    (first=2, last=6)
+  //   7,8  = bufferedCopiesOfFirst (Items 0,1 duplicates)
+  private func makePagerScroll() -> InfiniteScroll {
+    InfiniteScroll(
+      origins: [0, 20, 40, 60, 80, 100, 120, 140, 160],
+      bufferSize: 2
+    )
+  }
 }

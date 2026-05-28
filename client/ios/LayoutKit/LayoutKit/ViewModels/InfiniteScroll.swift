@@ -68,12 +68,12 @@ struct InfiniteScroll {
     let bufferedCopyOfLastRealPageIndex = firstRealPageIndex - 1
 
     switch (oldStatePageIndex.rounded(), newStatePageIndex.rounded()) {
-    case (lastRealPageIndex, bufferedCopyOfFirstRealPageIndex):
+    case (lastRealPageIndex, firstRealPageIndex):
       updateToPosition(bufferedCopyOfLastRealPageIndex)
-      return .paging(index: firstRealPageIndex)
-    case (firstRealPageIndex, bufferedCopyOfLastRealPageIndex):
+      return newPosition
+    case (firstRealPageIndex, lastRealPageIndex):
       updateToPosition(bufferedCopyOfFirstRealPageIndex)
-      return .paging(index: lastRealPageIndex)
+      return newPosition
     default:
       return newPosition
     }
