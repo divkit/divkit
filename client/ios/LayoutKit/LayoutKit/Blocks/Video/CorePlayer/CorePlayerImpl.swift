@@ -3,6 +3,97 @@ import Foundation
 import VGSL
 
 final class CorePlayerImpl: CorePlayer {
+  private final class PlaybackRateManager {
+    private enum State {
+      case readyToSet
+      case pending(Float)
+    }
+
+    private let player: AVPlayer
+
+    private var state: State = .readyToSet
+
+    private var pendingApply: Cancellable?
+
+    private let stopRate: Float = 0
+
+    private var defaultRate: Float {
+      if #available(iOS 16.0, *) {
+        player.defaultRate
+      } else {
+        1
+      }
+    }
+
+    init(player: AVPlayer) {
+      self.player = player
+    }
+
+    func cancelPendingApply() {
+      pendingApply?.cancel()
+      pendingApply = nil
+    }
+
+    func setRate(_ rate: Float) {
+      guard rate != defaultRate,
+            rate != stopRate else {
+        cancelPendingApply()
+        player.rate = rate
+        state = .readyToSet
+        return
+      }
+
+      switch state {
+      case .readyToSet:
+        cancelPendingApply()
+        state = .pending(rate)
+        pendingApply = after(0.05, onQueue: .main) { [weak self] in
+          self?.flushPendingApply()
+        }
+      case let .pending(value):
+        if handlePlayerRateChange(to: value) {
+          setRate(rate)
+          return
+        }
+        state = .pending(rate)
+      }
+    }
+
+    @discardableResult
+    func handlePlayerRateChange(to observedRate: Float) -> Bool {
+      guard player.rate == observedRate else { return false }
+
+      let deferredRate: Float? = if case let .pending(pendingRate) = state,
+                                    pendingRate != observedRate {
+        pendingRate
+      } else {
+        nil
+      }
+
+      cancelPendingApply()
+      state = .readyToSet
+
+      if let deferredRate {
+        setRate(deferredRate)
+      }
+
+      return true
+    }
+
+    private func flushPendingApply() {
+      guard case let .pending(rate) = state else { return }
+      updateRate(rate)
+    }
+
+    private func updateRate(_ rate: Float) {
+      pendingApply = nil
+      player.rate = rate
+      if #available(iOS 16.0, *) {
+        player.defaultRate = rate
+      }
+    }
+  }
+
   private let player: AVPlayer
   private let itemsProvider: PlayerItemsProvider
 
@@ -14,6 +105,7 @@ final class CorePlayerImpl: CorePlayer {
   private let playbackStatusPipe = SignalPipe<PlaybackStatus>()
   private let playerErrorPipe = SignalPipe<PlayerError>()
   private let playbackFinishPipe = SignalPipe<Void>()
+  private let playbackRateManager: PlaybackRateManager
 
   private var currentTimePipes = [TimeInterval: SignalPipe<TimeInterval>]()
 
@@ -42,8 +134,11 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   init(itemsProvider: PlayerItemsProvider) {
-    self.player = AVPlayer()
+    let player = AVPlayer()
+    self.player = player
     self.itemsProvider = itemsProvider
+    self.playbackRateManager = PlaybackRateManager(player: player)
+
     setup(player)
   }
 
@@ -67,6 +162,7 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   func pause() {
+    playbackRateManager.cancelPendingApply()
     guard player.timeControlStatus != .paused else {
       return
     }
@@ -86,6 +182,10 @@ final class CorePlayerImpl: CorePlayer {
 
   func set(isMuted: Bool) {
     player.isMuted = isMuted
+  }
+
+  func set(playbackSpeed: Double) {
+    playbackRateManager.setRate(Float(playbackSpeed))
   }
 
   func periodicCurrentTimeSignal(interval: TimeInterval) -> Signal<TimeInterval> {
@@ -127,6 +227,10 @@ final class CorePlayerImpl: CorePlayer {
 
     observe(player, path: \.timeControlStatus) { _, timeControlStatus in
       weakSelf?.playbackStatusDidChange(timeControlStatus.playbackStatus)
+    }.dispose(in: playerObservers)
+
+    observe(player, path: \.rate) { _, rate in
+      weakSelf?.playbackSpeedDidChange(rate)
     }.dispose(in: playerObservers)
 
     observe(player, path: \.status) { player, _ in
@@ -172,6 +276,10 @@ final class CorePlayerImpl: CorePlayer {
 
   private func playbackStatusDidChange(_ status: PlaybackStatus) {
     playbackStatusPipe.send(status)
+  }
+
+  private func playbackSpeedDidChange(_ rate: Float) {
+    playbackRateManager.handlePlayerRateChange(to: rate)
   }
 
   private func playerStatusDidChange(_ status: PlayerStatus) {

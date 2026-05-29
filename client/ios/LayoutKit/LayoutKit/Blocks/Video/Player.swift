@@ -8,8 +8,22 @@ public protocol Player {
   func set(data: VideoData, config: PlaybackConfig)
   func play()
   func pause()
+
+  /// Deprecated. Use ``configure(_:)`` instead.
   func set(isMuted: Bool)
+  func configure(_ settings: PlaybackConfig.VideoPlaybackSettings)
   func seek(to position: CMTime)
+}
+
+extension Player {
+  /// Default no-op implementation provided for source compatibility.
+  /// Override to apply ``PlaybackConfig/VideoPlaybackSettings`` to your player engine
+  /// (mute, speed, loop, autoplay, custom payload) without recreating the player.
+  /// If not overridden, live updates to these settings when the video source has not changed
+  /// (e.g. mute or speed changes) will have no effect.
+  public func configure(_ settings: PlaybackConfig.VideoPlaybackSettings) {
+    set(isMuted: settings.isMuted)
+  }
 }
 
 public enum PlayerEvent {

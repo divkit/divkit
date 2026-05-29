@@ -13,7 +13,7 @@ public final class DefaultPlayerFactory: PlayerFactory {
 
   public func makePlayer(data: VideoData?, config: PlaybackConfig?) -> Player {
     let player = DefaultPlayer(itemsProvider: itemsProvider)
-    guard let config, let data else { return player }
+    guard let data, let config else { return player }
     player.set(data: data, config: config)
     return player
   }

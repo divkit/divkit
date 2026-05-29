@@ -112,6 +112,7 @@
           "description": "translations.json#/div_video_playback_speed",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         }

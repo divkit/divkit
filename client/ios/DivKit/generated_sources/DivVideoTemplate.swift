@@ -32,6 +32,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
   public let muted: Field<Expression<Bool>>? // default value: false
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pauseActions: Field<[DivActionTemplate]>?
+  public let playbackSpeed: Field<Expression<Double>>? // constraint: number > 0; default value: 1.0
   public let playerSettingsPayload: Field<Expression<[String: Any]>>?
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
   public let preview: Field<Expression<String>>?
@@ -84,6 +85,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: dictionary.getOptionalExpressionField("muted"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       pauseActions: dictionary.getOptionalArray("pause_actions", templateToType: templateToType),
+      playbackSpeed: dictionary.getOptionalExpressionField("playback_speed"),
       playerSettingsPayload: dictionary.getOptionalExpressionField("player_settings_payload"),
       preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
       preview: dictionary.getOptionalExpressionField("preview"),
@@ -137,6 +139,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     muted: Field<Expression<Bool>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pauseActions: Field<[DivActionTemplate]>? = nil,
+    playbackSpeed: Field<Expression<Double>>? = nil,
     playerSettingsPayload: Field<Expression<[String: Any]>>? = nil,
     preloadRequired: Field<Expression<Bool>>? = nil,
     preview: Field<Expression<String>>? = nil,
@@ -187,6 +190,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     self.muted = muted
     self.paddings = paddings
     self.pauseActions = pauseActions
+    self.playbackSpeed = playbackSpeed
     self.playerSettingsPayload = playerSettingsPayload
     self.preloadRequired = preloadRequired
     self.preview = preview
@@ -238,6 +242,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     let mutedValue = { parent?.muted?.resolveOptionalValue(context: context) ?? .noValue }()
     let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let pauseActionsValue = { parent?.pauseActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let playbackSpeedValue = { parent?.playbackSpeed?.resolveOptionalValue(context: context, validator: ResolvedValue.playbackSpeedValidator) ?? .noValue }()
     let playerSettingsPayloadValue = { parent?.playerSettingsPayload?.resolveOptionalValue(context: context) ?? .noValue }()
     let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
     let previewValue = { parent?.preview?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -287,6 +292,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pauseActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pause_actions", error: $0) },
+      playbackSpeedValue.errorsOrWarnings?.map { .nestedObjectError(field: "playback_speed", error: $0) },
       playerSettingsPayloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "player_settings_payload", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
@@ -337,6 +343,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: { mutedValue.value }(),
       paddings: { paddingsValue.value }(),
       pauseActions: { pauseActionsValue.value }(),
+      playbackSpeed: { playbackSpeedValue.value }(),
       playerSettingsPayload: { playerSettingsPayloadValue.value }(),
       preloadRequired: { preloadRequiredValue.value }(),
       preview: { previewValue.value }(),
@@ -393,6 +400,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     var mutedValue: DeserializationResult<Expression<Bool>> = { parent?.muted?.value() ?? .noValue }()
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pauseActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var playbackSpeedValue: DeserializationResult<Expression<Double>> = { parent?.playbackSpeed?.value() ?? .noValue }()
     var playerSettingsPayloadValue: DeserializationResult<Expression<[String: Any]>> = { parent?.playerSettingsPayload?.value() ?? .noValue }()
     var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
     var previewValue: DeserializationResult<Expression<String>> = { parent?.preview?.value() ?? .noValue }()
@@ -544,6 +552,11 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "pause_actions" {
            pauseActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pauseActionsValue)
+          }
+        }()
+        _ = {
+          if key == "playback_speed" {
+           playbackSpeedValue = deserialize(__dictValue, validator: ResolvedValue.playbackSpeedValidator).merged(with: playbackSpeedValue)
           }
         }()
         _ = {
@@ -787,6 +800,11 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
+         if key == parent?.playbackSpeed?.link {
+           playbackSpeedValue = playbackSpeedValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.playbackSpeedValidator) })
+          }
+        }()
+        _ = {
          if key == parent?.playerSettingsPayload?.link {
            playerSettingsPayloadValue = playerSettingsPayloadValue.merged(with: { deserialize(__dictValue) })
           }
@@ -962,6 +980,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pauseActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pause_actions", error: $0) },
+      playbackSpeedValue.errorsOrWarnings?.map { .nestedObjectError(field: "playback_speed", error: $0) },
       playerSettingsPayloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "player_settings_payload", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
@@ -1012,6 +1031,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: { mutedValue.value }(),
       paddings: { paddingsValue.value }(),
       pauseActions: { pauseActionsValue.value }(),
+      playbackSpeed: { playbackSpeedValue.value }(),
       playerSettingsPayload: { playerSettingsPayloadValue.value }(),
       preloadRequired: { preloadRequiredValue.value }(),
       preview: { previewValue.value }(),
@@ -1073,6 +1093,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: muted ?? mergedParent.muted,
       paddings: paddings ?? mergedParent.paddings,
       pauseActions: pauseActions ?? mergedParent.pauseActions,
+      playbackSpeed: playbackSpeed ?? mergedParent.playbackSpeed,
       playerSettingsPayload: playerSettingsPayload ?? mergedParent.playerSettingsPayload,
       preloadRequired: preloadRequired ?? mergedParent.preloadRequired,
       preview: preview ?? mergedParent.preview,
@@ -1129,6 +1150,7 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       muted: merged.muted,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       pauseActions: merged.pauseActions?.tryResolveParent(templates: templates),
+      playbackSpeed: merged.playbackSpeed,
       playerSettingsPayload: merged.playerSettingsPayload,
       preloadRequired: merged.preloadRequired,
       preview: merged.preview,

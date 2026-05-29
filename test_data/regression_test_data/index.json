@@ -3201,6 +3201,7 @@
       ],
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "steps": [

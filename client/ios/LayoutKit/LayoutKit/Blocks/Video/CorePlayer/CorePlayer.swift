@@ -18,7 +18,7 @@ protocol CorePlayer: VideoEngineProvider {
   func play()
   func pause()
   func seek(to position: CMTime, completion: @escaping Action)
-
+  func set(playbackSpeed: Double)
   func set(isMuted: Bool)
 }
 

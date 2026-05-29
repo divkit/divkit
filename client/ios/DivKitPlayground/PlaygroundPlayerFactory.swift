@@ -12,15 +12,19 @@ final class PlaygroundPlayerFactory: PlayerFactory {
     self.itemsProvider = itemsProvider
   }
 
-  func makePlayer(data: VideoData?, config: PlaybackConfig?) -> Player {
+  func makePlayer(
+    data: VideoData?,
+    config: PlaybackConfig?
+  ) -> Player {
     let player = PlaygroundPlayer(
       defaultPlayer: DefaultPlayerFactory(itemsProvider: itemsProvider).makePlayer(
         data: nil,
-        config: nil
+        config: config
       )
     )
-    guard let config, let data else { return player }
+    guard let data, let config else { return player }
     player.set(data: data, config: config)
+
     return player
   }
 
@@ -83,7 +87,8 @@ final class PlaygroundPlayer: Player {
 
   func set(data: VideoData, config: PlaybackConfig) {
     let resolvedData: VideoData = if data.videos.isEmpty,
-                                     let urlString = config.settingsPayload["url"] as? String,
+                                     let urlString = config.settings
+                                     .settingsPayload["url"] as? String,
                                      let url = URL(string: urlString) {
       VideoData(videos: [Video(url: url, mimeType: "video/mp4")])
     } else {
@@ -100,12 +105,16 @@ final class PlaygroundPlayer: Player {
     defaultPlayer.pause()
   }
 
-  func set(isMuted: Bool) {
-    defaultPlayer.set(isMuted: isMuted)
+  func configure(_ settings: PlaybackConfig.VideoPlaybackSettings) {
+    defaultPlayer.configure(settings)
   }
 
   func seek(to position: CMTime) {
     defaultPlayer.seek(to: position)
+  }
+
+  func set(isMuted: Bool) {
+    defaultPlayer.set(isMuted: isMuted)
   }
 }
 #endif

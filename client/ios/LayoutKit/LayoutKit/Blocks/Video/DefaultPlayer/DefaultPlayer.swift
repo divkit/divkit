@@ -9,7 +9,7 @@ final class DefaultPlayer: Player {
   private var context: SourceContext?
 
   private let playerObservers = AutodisposePool()
-  private let playbackConfigObservers = AutodisposePool()
+  private let playbackSettingsObservers = AutodisposePool()
 
   var signal: Signal<PlayerEvent> {
     eventPipe.signal
@@ -20,8 +20,18 @@ final class DefaultPlayer: Player {
     configureObservers(for: self.player)
   }
 
-  func set(data: VideoData, config: PlaybackConfig) {
-    context = SourceContext(videoData: data, playbackConfig: config)
+  func set(
+    data: VideoData,
+    config: PlaybackConfig
+  ) {
+    let settings = config.settings
+    let timeline = config.timeline
+
+    context = SourceContext(
+      videoData: data,
+      settings: settings,
+      timeline: timeline
+    )
     guard let source = data.getSupportedVideo(player.staticScope.isMIMETypeSupported) else {
       eventPipe.send(
         .fatal(
@@ -32,10 +42,24 @@ final class DefaultPlayer: Player {
     }
 
     player.set(source: source)
-    handle(config: config)
+    configure(settings)
+
+    if settings.autoPlay {
+      player.play()
+    } else {
+      player.pause()
+    }
+
+    if timeline.startPosition != .zero {
+      player.seek(to: timeline.startPosition) { [weak self] in
+        guard let self, settings.autoPlay else { return }
+        self.player.set(playbackSpeed: settings.speed)
+      }
+    }
   }
 
   func play() {
+    context.map { player.set(playbackSpeed: $0.settings.speed) }
     player.play()
   }
 
@@ -43,35 +67,36 @@ final class DefaultPlayer: Player {
     player.pause()
   }
 
+  /// Deprecated. Use ``configure(_:)`` instead.
   func set(isMuted: Bool) {
     player.set(isMuted: isMuted)
   }
 
-  func seek(to position: CMTime) {
-    player.seek(to: position)
-  }
+  func configure(_ settings: PlaybackConfig.VideoPlaybackSettings) {
+    playbackSettingsObservers.drain()
 
-  private func handle(config: PlaybackConfig) {
-    playbackConfigObservers.drain()
+    if context?.settings != settings {
+      context?.settings = settings
+    }
 
-    if config.repeatable {
+    if settings.repeatable {
       player
         .playbackDidFinish
         .addObserver { [weak self] _ in
-          self?.player.seek(
-            to: .zero,
-            completion: { self?.player.play() }
-          )
+          guard let self else { return }
+          self.player.seek(to: .zero) {
+            self.player.play()
+          }
         }
-        .dispose(in: playbackConfigObservers)
+        .dispose(in: playbackSettingsObservers)
     }
 
-    player.set(isMuted: config.isMuted)
-    config.autoPlay ? player.play() : player.pause()
+    player.set(isMuted: settings.isMuted)
+    player.set(playbackSpeed: settings.speed)
+  }
 
-    if config.startPosition != .zero {
-      player.seek(to: config.startPosition)
-    }
+  func seek(to position: CMTime) {
+    player.seek(to: position)
   }
 
   private func configureObservers(for player: CorePlayer) {
@@ -127,7 +152,8 @@ extension DefaultPlayer: VideoEngineProvider {
 extension DefaultPlayer {
   fileprivate struct SourceContext {
     var videoData: VideoData
-    var playbackConfig: PlaybackConfig
+    var settings: PlaybackConfig.VideoPlaybackSettings
+    var timeline: PlaybackConfig.VideoPlaybackTimeline
   }
 }
 

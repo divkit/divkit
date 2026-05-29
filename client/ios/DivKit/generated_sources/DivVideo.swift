@@ -31,6 +31,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   public let muted: Expression<Bool> // default value: false
   public let paddings: DivEdgeInsets?
   public let pauseActions: [DivAction]?
+  public let playbackSpeed: Expression<Double> // constraint: number > 0; default value: 1.0
   public let playerSettingsPayload: Expression<[String: Any]>?
   public let preloadRequired: Expression<Bool> // default value: false
   public let preview: Expression<String>?
@@ -79,6 +80,10 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     resolver.resolveNumeric(muted) ?? false
   }
 
+  public func resolvePlaybackSpeed(_ resolver: ExpressionResolver) -> Double {
+    resolver.resolveNumeric(playbackSpeed) ?? 1.0
+  }
+
   public func resolvePlayerSettingsPayload(_ resolver: ExpressionResolver) -> [String: Any]? {
     resolver.resolveDict(playerSettingsPayload)
   }
@@ -117,6 +122,9 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let playbackSpeedValidator: AnyValueValidator<Double> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -150,6 +158,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
       muted: try dictionary.getOptionalExpressionField("muted", context: context),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       pauseActions: try dictionary.getOptionalArray("pause_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      playbackSpeed: try dictionary.getOptionalExpressionField("playback_speed", validator: Self.playbackSpeedValidator, context: context),
       playerSettingsPayload: try dictionary.getOptionalExpressionField("player_settings_payload", context: context),
       preloadRequired: try dictionary.getOptionalExpressionField("preload_required", context: context),
       preview: try dictionary.getOptionalExpressionField("preview", context: context),
@@ -202,6 +211,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     muted: Expression<Bool>? = nil,
     paddings: DivEdgeInsets? = nil,
     pauseActions: [DivAction]? = nil,
+    playbackSpeed: Expression<Double>? = nil,
     playerSettingsPayload: Expression<[String: Any]>? = nil,
     preloadRequired: Expression<Bool>? = nil,
     preview: Expression<String>? = nil,
@@ -251,6 +261,7 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     self.muted = muted ?? .value(false)
     self.paddings = paddings
     self.pauseActions = pauseActions
+    self.playbackSpeed = playbackSpeed ?? .value(1.0)
     self.playerSettingsPayload = playerSettingsPayload
     self.preloadRequired = preloadRequired ?? .value(false)
     self.preview = preview
@@ -339,54 +350,55 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.pauseActions == rhs.pauseActions,
-      lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview
+      lhs.playbackSpeed == rhs.playbackSpeed,
+      lhs.preloadRequired == rhs.preloadRequired
     else {
       return false
     }
     guard
+      lhs.preview == rhs.preview,
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions,
-      lhs.reuseId == rhs.reuseId
+      lhs.resumeActions == rhs.resumeActions
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.videoSources == rhs.videoSources,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -427,6 +439,7 @@ extension DivVideo: Serializable {
     result["muted"] = muted.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["pause_actions"] = pauseActions?.map { $0.toDictionary() }
+    result["playback_speed"] = playbackSpeed.toValidSerializationValue()
     result["player_settings_payload"] = playerSettingsPayload?.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["preview"] = preview?.toValidSerializationValue()

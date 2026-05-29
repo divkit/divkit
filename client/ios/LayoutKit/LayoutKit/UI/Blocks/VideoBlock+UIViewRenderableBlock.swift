@@ -163,11 +163,12 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     }
 
     if !model.hasEqualVideoData(to: oldValue) {
-      player?.set(data: model.videoData, config: model.playbackConfig)
-    }
-
-    if model.playbackConfig.isMuted != oldValue.playbackConfig.isMuted {
-      player?.set(isMuted: model.playbackConfig.isMuted)
+      player?.set(
+        data: model.videoData,
+        config: model.playbackConfig
+      )
+    } else if model.playbackConfig.settings != oldValue.playbackConfig.settings {
+      player?.configure(model.playbackConfig.settings)
     }
 
     if let preview = model.preview {
@@ -233,8 +234,9 @@ extension VideoBlockViewModel {
   )
 
   fileprivate func hasEqualVideoData(to other: Self) -> Bool {
-    videoData == other.videoData
-      && playbackConfig.settingsPayload.isEqual(to: other.playbackConfig.settingsPayload)
+    videoData == other.videoData &&
+      playbackConfig.settings.settingsPayload
+      .isEqual(to: other.playbackConfig.settings.settingsPayload)
   }
 }
 
