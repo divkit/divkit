@@ -8,7 +8,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
@@ -27,15 +26,8 @@ import org.json.JSONObject
 @ExperimentalApi
 class LottieExtensionHandler(
     private val assetMapper: (String) -> String? = { null },
-    private val rawResMapper: (String) -> Int? = { null },
-    private val reporter: DivReporter
+    private val rawResMapper: (String) -> Int? = { null }
 ) : DivExtensionHandler {
-
-    private val parser = LottieExtensionParamsParser(
-        assetMapper = assetMapper,
-        rawResMapper = rawResMapper,
-        reportError = { reporter.reportError(it) }
-    )
 
     @Composable
     override fun Content(
@@ -67,11 +59,17 @@ class LottieExtensionHandler(
         params: JSONObject?,
         environment: DivExtensionEnvironment
     ): LottieExtensionParams? {
+        val reporter = environment.reporter
         if (params == null) {
-            environment.reporter.reportError("Params required for Lottie extension handler")
+            reporter.reportError("Params required for Lottie extension handler")
             return null
         }
 
+        val parser = LottieExtensionParamsParser(
+            assetMapper = assetMapper,
+            rawResMapper = rawResMapper,
+            reportError = { reporter.reportError(it) }
+        )
         return parser.parse(params, environment.expressionResolver)
     }
 }

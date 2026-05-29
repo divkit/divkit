@@ -31,7 +31,6 @@ class RegressionComposeViewCreator(context: Context) {
     ) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
-        val reporter = DivReporter()
         val divContext = DivContext(
             baseContext = activity,
             configuration = DivComposeConfiguration(
@@ -46,13 +45,10 @@ class RegressionComposeViewCreator(context: Context) {
                     "nested_scroll_view" to NestedScrollViewFactory()
                 ),
                 extensionHandlers = mapOf(
-                    "lottie" to LottieExtensionHandler(
-                        reporter = reporter
-                    )
+                    "lottie" to LottieExtensionHandler()
                 ),
                 fontSourceProvider = ComposeFontSourceProvider(),
-                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity)),
-                reporter = reporter
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
             )
         )
         val view = ComposeView(divContext).apply {
