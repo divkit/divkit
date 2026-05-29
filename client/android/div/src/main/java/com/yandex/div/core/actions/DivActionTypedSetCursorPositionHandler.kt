@@ -2,7 +2,6 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.ViewLocator
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionSetCursorPosition
@@ -21,7 +20,7 @@ internal class DivActionTypedSetCursorPositionHandler @Inject constructor() : Di
     ): Boolean {
         return when (action) {
             is DivActionTyped.SetCursorPosition -> {
-                handleSetCursorPosition(action.value, view, resolver)
+                handleSetCursorPosition(action.value, scopeId, view, resolver)
                 true
             }
             else -> false
@@ -30,18 +29,12 @@ internal class DivActionTypedSetCursorPositionHandler @Inject constructor() : Di
 
     private fun handleSetCursorPosition(
         action: DivActionSetCursorPosition,
+        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val id = action.id.evaluate(resolver)
-        val targets = ViewLocator.findViewsWithTag(view, id)
-            .filterIsInstance<DivInputView>()
-
-        val target = when {
-            targets.isEmpty() -> return view.logError("No input view with id '$id'")
-            targets.size > 1 -> return view.logError("Found multiple input views with id '$id'")
-            else -> targets.first()
-        }
+        val target = view.findTargetView<DivInputView>(id, DivActionSetCursorPosition.TYPE, scopeId) ?: return
 
         val textLength = target.length()
         val start = action.position.start.evaluate(resolver).let {

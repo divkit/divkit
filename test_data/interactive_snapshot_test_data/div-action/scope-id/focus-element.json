@@ -1,0 +1,195 @@
+{
+  "description": "Focus_element with scope_id",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "test_input": {
+        "type": "input",
+        "paddings": {
+          "left": 16,
+          "top": 8,
+          "right": 16,
+          "bottom": 8
+        },
+        "margins": {
+          "left": 16,
+          "top": 4,
+          "right": 16,
+          "bottom": 4
+        },
+        "border": {
+          "corner_radius": 8,
+          "stroke": {
+            "color": "#0000FF"
+          }
+        },
+        "focus": {
+          "border": {
+            "corner_radius": 8,
+            "stroke": {
+              "color": "#FF5500"
+            }
+          }
+        }
+      },
+      "scope_label": {
+        "type": "text",
+        "font_size": 12,
+        "text_color": "#586E75",
+        "margins": {
+          "left": 16,
+          "top": 12,
+          "right": 16,
+          "bottom": 0
+        }
+      }
+    },
+    "card": {
+      "log_id": "focus_element_scope_id_test",
+      "variables": [
+        {
+          "name": "outside_value",
+          "type": "string",
+          "value": "Root input (same id, outside scopes)"
+        },
+        {
+          "name": "outside_other_value",
+          "type": "string",
+          "value": "Root input with another id"
+        },
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "Sample input text (shared in all scopes)"
+        },
+        {
+          "name": "last_action",
+          "type": "string",
+          "value": "No action called yet"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "font_size": 14,
+                "font_weight": "medium",
+                "text_color": "#2C3E50",
+                "margins": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 12
+                },
+                "text": "Last action: @{last_action}"
+              },
+              {
+                "type": "test_input",
+                "id": "target_input",
+                "text_variable": "outside_value",
+                "hint_text": "No scope"
+              },
+              {
+                "type": "test_input",
+                "id": "outside_input",
+                "text_variable": "outside_other_value",
+                "hint_text": "No scope, another id"
+              },
+              {
+                "type": "container",
+                "item_builder": {
+                  "data": [
+                    {
+                      "scope_id": "scope_1"
+                    },
+                    {
+                      "scope_id": "scope_2"
+                    },
+                    {
+                      "scope_id": "scope_3"
+                    }
+                  ],
+                  "prototypes": [
+                    {
+                      "id": "@{getStringFromDict(it, 'scope_id')}",
+                      "div": {
+                        "type": "container",
+                        "orientation": "vertical",
+                        "items": [
+                          {
+                            "type": "scope_label",
+                            "text": "@{getStringFromDict(it, 'scope_id')}"
+                          },
+                          {
+                            "type": "test_input",
+                            "id": "target_input",
+                            "text_variable": "input_value",
+                            "hint_text": "target_input inside scope"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "div_actions": [
+        {
+          "log_id": "set_step_title_scope_2",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "last_action",
+            "value": {
+              "type": "string",
+              "value": "focus_element for target_input in scope_2"
+            }
+          }
+        },
+        {
+          "log_id": "focus_scope_2",
+          "scope_id": "scope_2",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "target_input"
+          }
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_step_title_outside_input",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "last_action",
+            "value": {
+              "type": "string",
+              "value": "focus_element for outside_input with wrong scope_id"
+            }
+          }
+        },
+        {
+          "log_id": "focus_outside_input",
+          "scope_id": "scope",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "outside_input"
+          }
+        }
+      ]
+    }
+  ]
+}

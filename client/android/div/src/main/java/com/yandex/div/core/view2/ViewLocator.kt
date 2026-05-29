@@ -2,44 +2,64 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
+import com.yandex.div.core.actions.logWarning
+import com.yandex.div.internal.Assert
 
 internal object ViewLocator {
 
     @JvmStatic
-    fun findSingleViewWithTag(divView: Div2View, tag: String): View? {
-        val foundViews = findViewsWithTag(divView, tag)
-        if (foundViews.isEmpty()) {
-            return null
-        }
-        if (foundViews.size > 1) {
-            divView.logError(RuntimeException("Ambiguous scope id. There are ${foundViews.size} divs with id '$tag'"))
-            return null
-        }
-        return foundViews.first()
-    }
+    fun findSingleViewWithTag(view: Div2View, tag: String): View? = view.findSingleViewWithTag<View>(tag).getOrNull()
 
-    @JvmStatic
-    fun findViewsWithTag(divView: Div2View, tag: String): List<View> {
-        return divView.view.findViewsWithTag(tag)
-    }
+    inline fun <reified T> findSingleViewWithTag(view: Div2View, tag: String, scopeId: String?): Result<T> {
+        scopeId ?: return view.findSingleViewWithTag<T>(tag)
 
-    private fun View.findViewsWithTag(tag: Any?): List<View> {
-        if (tag == null) return emptyList()
-        val result = mutableListOf<View>()
-        findViewsWithTagTraversal(this, tag, result)
-        return result
-    }
+        val scopeError = view.findSingleViewWithTag<View>(scopeId, isScope = true)
+            .onSuccess { return it.findSingleViewWithTag<T>(tag) }
+            .exceptionOrNull()
 
-    private fun findViewsWithTagTraversal(view: View, tag: Any, views: MutableList<View>): List<View> {
-        if (tag == view.tag) {
-            views += view
-        }
-
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                findViewsWithTagTraversal(view.getChildAt(i), tag, views)
+        if (scopeError !is MissingTarget) {
+            val error = scopeError ?: run {
+                Assert.fail("ScopeError is null")
+                DuplicateTarget(scopeId, isScope = true)
             }
+            return Result.failure(error)
         }
-        return views
+
+        return view.findSingleViewWithTag<T>(tag)
+            .onSuccess { view.logWarning(scopeError) }
+            .onFailure { if (it is DuplicateTarget) return Result.failure(scopeError) }
     }
+
+    private inline fun <reified T> View.findSingleViewWithTag(tag: String, isScope: Boolean = false): Result<T> {
+        val foundViews = findViewsWithTag<T>(tag)
+        return when {
+            foundViews.isEmpty() -> Result.failure(MissingTarget(tag, isScope))
+            foundViews.size > 1 -> Result.failure(DuplicateTarget(tag, isScope))
+            else -> Result.success(foundViews.first())
+        }
+    }
+
+    private inline fun <reified T> View.findViewsWithTag(tag: String): List<T> {
+        val result = mutableListOf<View>()
+        result.fillWithViewsWithTagTraversal(this, tag)
+        return result.filterIsInstance<T>()
+    }
+
+    private fun MutableList<View>.fillWithViewsWithTagTraversal(view: View, tag: Any) {
+        if (tag == view.tag) {
+            add(view)
+        }
+
+        if (view !is ViewGroup) return
+
+        view.children.forEach {
+            fillWithViewsWithTagTraversal(it, tag)
+        }
+    }
+
+    class MissingTarget(tag: String, isScope: Boolean) : Exception("${isScope.toMessage} with id '$tag' is missing")
+    class DuplicateTarget(tag: String, isScope: Boolean) : Exception("${isScope.toMessage} with id '$tag' is ambiguous")
+
+    private val Boolean.toMessage get() = if (this) "Scope" else "Element"
 }

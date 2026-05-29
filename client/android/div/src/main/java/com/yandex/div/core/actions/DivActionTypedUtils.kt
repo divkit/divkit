@@ -4,6 +4,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.ViewLocator
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorObserver
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -53,4 +54,17 @@ internal fun DivInputView.openKeyboard() {
 internal fun View.closeKeyboard() {
     val imm = ContextCompat.getSystemService(context, InputMethodManager::class.java)
     imm?.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+}
+
+internal fun Div2View.logActionError(actionType: String, error: Throwable) =
+    logError(RuntimeException("Failed to handle action $actionType", error))
+
+internal inline fun <reified T> Div2View.findTargetView(
+    tag: String,
+    actionType: String,
+    scopeId: String? = null,
+): T? {
+    return ViewLocator.findSingleViewWithTag<T>(this, tag, scopeId)
+        .onFailure { logActionError(actionType, it) }
+        .getOrNull()
 }
