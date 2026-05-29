@@ -132,6 +132,7 @@ public final class GalleryView: BlockView {
     var shouldResync = false
     if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
       updateLayout(to: model)
+      configureScrollBehavior(for: model)
       updateInfiniteScrollIfNeeded()
       setState(stateWithScrollRange, notifyingObservers: true)
       shouldResync = true
@@ -171,9 +172,25 @@ public final class GalleryView: BlockView {
     let oldState = self.state
 
     self.model = model
-
-    setState(state.resetToModelIfInconsistent(model), notifyingObservers: false)
     updateLayout(to: model)
+
+    let maxValidScrollRange: CGFloat? = if bounds.isEmpty {
+      nil
+    } else if model.direction.isHorizontal {
+      layout.contentSize.width - bounds.width
+    } else {
+      layout.contentSize.height - bounds.height
+    }
+
+    setState(
+      state.resetToModelIfInconsistent(
+        model,
+        maxValidScrollRange: maxValidScrollRange
+      ),
+      notifyingObservers: false
+    )
+
+    configureScrollBehavior(for: model)
 
     if oldModel != model {
       configureByNewModel(
@@ -283,7 +300,9 @@ public final class GalleryView: BlockView {
     let layout = layoutFactory(model, bounds.size)
     collectionViewLayout.apply(layout)
     self.layout = layout
+  }
 
+  private func configureScrollBehavior(for model: GalleryViewModel) {
     switch model.scrollMode {
     case .default:
       scrollHandler.clearPager()

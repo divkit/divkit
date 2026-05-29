@@ -8,6 +8,9 @@ public struct GalleryViewState: ElementState, Equatable {
     case offset(_ value: CGFloat, firstVisibleItemIndex: Int = 0)
     case paging(index: CGFloat)
 
+    static let zeroOffset: Self = .offset(0, firstVisibleItemIndex: 0)
+    static let zeroPaging: Self = .paging(index: 0)
+
     public var offset: CGFloat? {
       switch self {
       case let .offset(value, _):
@@ -32,6 +35,13 @@ public struct GalleryViewState: ElementState, Equatable {
         true
       case .offset:
         false
+      }
+    }
+
+    var zero: Self {
+      switch self {
+      case .offset: .zeroOffset
+      case .paging: .zeroPaging
       }
     }
 
@@ -115,29 +125,54 @@ public struct GalleryViewState: ElementState, Equatable {
 }
 
 extension GalleryViewState {
-  public func resetToModelIfInconsistent(_ model: GalleryViewModel) -> GalleryViewState {
-    let newContentPosition: Position
+  public func resetToModelIfInconsistent(
+    _ model: GalleryViewModel,
+    maxValidScrollRange: CGFloat? = nil
+  ) -> GalleryViewState {
+    let accuracy = CGFloat(1e-4)
     let itemsCount = model.items.count
+    let newScrollRange = maxValidScrollRange ?? scrollRange
+
+    guard itemsCount > 0 else {
+      return GalleryViewState(
+        contentPosition: contentPosition.zero,
+        itemsCount: 0,
+        isScrolling: isScrolling,
+        scrollRange: newScrollRange,
+        animated: false
+      )
+    }
+
+    var animated = animated
+    var contentPosition = contentPosition
+
     switch contentPosition {
     case let .paging(index: index):
       if index < 0 || index >= CGFloat(itemsCount) {
-        newContentPosition = .paging(index: 0)
-      } else {
-        newContentPosition = .paging(index: index)
+        contentPosition = contentPosition.zero
+        animated = false
       }
-    case .offset:
+    case let .offset(value, firstVisibleItemIndex):
       switch model.scrollMode {
       case .autoPaging, .fixedPaging:
-        newContentPosition = .paging(index: 0)
+        contentPosition = .zeroPaging
+        animated = false
       case .default:
-        newContentPosition = contentPosition
+        let isIndexInvalid = firstVisibleItemIndex < 0 || firstVisibleItemIndex >= itemsCount
+        let isOffsetBeyondRange = maxValidScrollRange
+          .map { value.isApproximatelyGreaterThan(max(0, $0), withAccuracy: accuracy) } ?? false
+        if isIndexInvalid || isOffsetBeyondRange {
+          contentPosition = contentPosition.zero
+          animated = false
+        }
       }
     }
+
     return GalleryViewState(
-      contentPosition: newContentPosition,
+      contentPosition: contentPosition,
       itemsCount: itemsCount,
       isScrolling: isScrolling,
-      scrollRange: scrollRange,
+      scrollRange: newScrollRange,
       animated: animated
     )
   }

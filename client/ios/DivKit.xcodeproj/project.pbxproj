@@ -646,6 +646,7 @@
 				ViewModels/GalleryViewLayoutTests.swift,
 				ViewModels/GalleryViewMetricsTests.swift,
 				ViewModels/GalleryViewModelTests.swift,
+				ViewModels/GalleryViewStateTests.swift,
 				ViewModels/InfiniteScrollTests.swift,
 				ViewModels/MaskValidatorTests.swift,
 				ViewModels/PageIndicatorStateTests.swift,
