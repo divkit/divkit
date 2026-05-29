@@ -517,7 +517,9 @@ internal class DivImageBinder @Inject constructor(
 
     private fun DivImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
         divView.runMainThreadAction {
-            setPlaceholder(drawable)
+            if (!isImageLoaded && !isImagePreview) {
+                setPlaceholder(drawable)
+            }
         }
     }
 }
