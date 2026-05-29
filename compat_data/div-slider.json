@@ -46,6 +46,18 @@
       }
     },
     {
+      "id": "slider_press_actions",
+      "name": "Slider <code>press_start_actions</code> and <code>press_end_actions</code> properties",
+      "compat": {
+        "ios": {
+          "version_added": "32.50.0"
+        },
+        "android": {
+          "version_added": "32.50.0"
+        }
+      }
+    },
+    {
       "id": "slider_font_variation_settings",
       "name": "Slider <code>font_variation_settings</code> property in <code>thumb_text_style</code> and <code>thumb_secondary_text_style</code>",
       "compat": {

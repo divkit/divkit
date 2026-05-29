@@ -150,6 +150,12 @@
       "compat": {
         "android": {
           "version_added": "32.48.0"
+        },
+        "web": {
+          "version_added": "32.49.0"
+        },
+        "ios": {
+          "version_added": "32.49.0"
         }
       }
     },

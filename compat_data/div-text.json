@@ -92,8 +92,8 @@
       }
     },
     {
-      "id": "text_items_alignment_vertical",
-      "name": "<code>alignment_vertical</code> property for images and ranges inside text",
+      "id": "text_ranges_alignment_vertical",
+      "name": "<code>alignment_vertical</code> property for ranges inside text",
       "compat": {
         "android": {
           "version_added": "30.17.0"
@@ -103,6 +103,21 @@
         },
         "ios": {
           "version_added": "32.11.0"
+        }
+      }
+    },
+    {
+      "id": "text_images_alignment_vertical",
+      "name": "<code>alignment_vertical</code> property for images inside text",
+      "compat": {
+        "android": {
+          "version_added": "30.17.0"
+        },
+        "web": {
+          "version_added": "30.22.0"
+        },
+        "ios": {
+          "version_added": "32.50.0"
         }
       }
     },

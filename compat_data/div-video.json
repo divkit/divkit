@@ -16,6 +16,18 @@
       }
     },
     {
+      "id": "video_playback_speed",
+      "name": "Video property <code>playback_speed</code>",
+      "compat": {
+        "web": {
+          "version_added": "32.50.0"
+        },
+        "android": {
+          "version_added": "32.50.0"
+        }
+      }
+    },
+    {
       "id": "video_custom_player",
       "name": "Custom video player provider",
       "compat": {
