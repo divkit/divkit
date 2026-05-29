@@ -2,11 +2,7 @@
   "templates": {
     "field": {
       "type": "container",
-      "orientation": "horizontal",
       "width": {
-        "type": "wrap_content"
-      },
-      "height": {
         "type": "wrap_content"
       },
       "paddings": {
@@ -22,9 +18,6 @@
           "type": "text",
           "$text": "title",
           "width": {
-            "type": "wrap_content"
-          },
-          "height": {
             "type": "wrap_content"
           },
           "text_alignment_vertical": "center",
@@ -45,9 +38,6 @@
       "width": {
         "type": "fixed",
         "value": 150
-      },
-      "height": {
-        "type": "wrap_content"
       },
       "paddings": {
         "left": 16,
@@ -81,19 +71,15 @@
     "controller_button": {
       "type": "text",
       "width": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 38
       },
       "height": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 38
       },
       "border": {
         "corner_radius": 8
-      },
-      "paddings": {
-        "left": 8,
-        "top": 8,
-        "right": 8,
-        "bottom": 8
       },
       "margins": {
         "left": 4,
@@ -188,7 +174,7 @@
     }
   },
   "card": {
-    "log_id": "div2_sample_card",
+    "log_id": "sample_card",
     "variables": [
       {
         "name": "timer_value",
@@ -276,11 +262,11 @@
                   "text": "Start",
                   "actions": [
                     {
-                      "log_id": "Start timer",
+                      "log_id": "start",
                       "url": "div-action://timer?id=ticker&action=start"
                     },
                     {
-                      "log_id": "tick",
+                      "log_id": "reset_counter",
                       "url": "div-action://set_variable?name=tick_count_value&value=0"
                     }
                   ]
@@ -290,7 +276,7 @@
                   "text": "Pause",
                   "actions": [
                     {
-                      "log_id": "Pause timer",
+                      "log_id": "pause",
                       "url": "div-action://timer?id=ticker&action=pause"
                     }
                   ]
@@ -300,7 +286,7 @@
                   "text": "Resume",
                   "actions": [
                     {
-                      "log_id": "Resume timer",
+                      "log_id": "resume",
                       "url": "div-action://timer?id=ticker&action=resume"
                     }
                   ]
@@ -310,7 +296,7 @@
                   "text": "Stop",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "stop",
                       "url": "div-action://timer?id=ticker&action=stop"
                     }
                   ]
@@ -320,7 +306,7 @@
                   "text": "Cancel",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "cancel",
                       "url": "div-action://timer?id=ticker&action=cancel"
                     }
                   ]
@@ -330,8 +316,12 @@
                   "text": "Reset",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "reset",
                       "url": "div-action://timer?id=ticker&action=reset"
+                    },
+                    {
+                      "log_id": "reset_counter",
+                      "url": "div-action://set_variable?name=tick_count_value&value=0"
                     }
                   ]
                 }

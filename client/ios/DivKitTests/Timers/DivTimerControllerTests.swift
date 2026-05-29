@@ -1,381 +1,455 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 import Foundation
-import XCTest
+import Testing
 
-final class DivTimerControllerTests: XCTestCase {
-  private let tickActions = [divAction(logId: "Tick action")]
-  private let endActions = [divAction(logId: "End action")]
-  private var tickActionsCount = 0
-  private var endActionsCount = 0
+@Suite
+struct DivTimerControllerTests {
+  private class State {
+    var tickCount = 0
+    var endCount = 0
+  }
 
+  private let state = State()
   private let timerScheduler = TestTimerScheduler()
   private let timeMeasuring = TestTimeMeasuring()
-
-  private var timer: DivTimerController!
-  private var timerDuration: Int = 0
-  private var timerTickInterval: Int = 0
-
   private let variablesStorage = DivVariablesStorage()
 
-  private let functionsStorage = DivFunctionsStorage()
-
   private var variableValue: Int? {
-    variablesStorage.getVariableValue(cardId: "test_card", name: "test_variable_name")
+    variablesStorage.getVariableValue(cardId: cardId, name: "elapsed_time")
   }
 
-  override func setUp() {
-    super.setUp()
-
+  init() {
     variablesStorage.set(
-      cardId: "test_card",
-      variables: ["test_variable_name": .integer(-1)]
+      cardId: cardId,
+      variables: ["elapsed_time": .integer(-1)]
     )
-
-    timer = makeTimer()
   }
 
-  func test_WhenTimerStart_StateIsStarted() throws {
-    timer.start()
-    XCTAssertEqual(timer.state, .started)
+  @Test
+  func initialStateIsStopped() {
+    let timer = makeTimer()
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStart_VariableSetToZero() throws {
+  @Test
+  func start_SetsStartedState() {
+    let timer = makeTimer()
     timer.start()
-    XCTAssertEqual(variableValue, 0)
+
+    #expect(timer.state == .started)
   }
 
-  func test_timerStartOnlyOnce() throws {
+  @Test
+  func start_SetsVariableToZero() {
+    let timer = makeTimer()
     timer.start()
-    timer.start()
-    XCTAssertEqual(timeMeasuring.started, 1)
+
+    #expect(variableValue == 0)
   }
 
-  func test_WhenTimerPaused_TimerNotStart() throws {
+  @Test
+  func start_DoesNotAffectStartedTimer() {
+    let timer = makeTimer()
     timer.start()
-    timer.pause()
     timer.start()
-    XCTAssertEqual(timeMeasuring.started, 1)
+
+    #expect(timeMeasuring.started == 1)
   }
 
-  func test_WhenTimerInited_StateIsStopped() throws {
-    XCTAssertEqual(timer.state, .stopped)
-  }
-
-  func test_WhenTimerStarted_StateIsStoppedOnStop() throws {
-    timer.start()
-    timer.stop()
-    XCTAssertEqual(timer.state, .stopped)
-  }
-
-  func test_WhenTimerStarted_VariableEqualPassedIntervalOnStop() throws {
-    timer.start()
-    makeTick()
-    timer.stop()
-    XCTAssertEqual(variableValue, tickInterval)
-  }
-
-  func test_WhenTimerStarted_runEndActionsOnStop() throws {
-    timer.start()
-    timer.stop()
-    XCTAssertEqual(endActionsCount, 1)
-  }
-
-  func test_WhenTimerPaused_runEndActionsOnStop() throws {
+  @Test
+  func start_DoesNotAffectPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
-    timer.stop()
-    XCTAssertEqual(endActionsCount, 1)
+    timer.start()
+
+    #expect(timeMeasuring.started == 1)
   }
 
-  func test_WhenTimerPaused_stateIsStopOnStop() throws {
+  @Test
+  func stop_SetsStoppedState_ForStartedTimer() {
+    let timer = makeTimer()
+    timer.start()
+    timer.stop()
+
+    #expect(timer.state == .stopped)
+  }
+
+  @Test
+  func stop_SetsStoppedState_ForPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
     timer.stop()
-    XCTAssertEqual(timer.state, .stopped)
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStopped_StateNotChangedOnPaused() throws {
-    timer.pause()
-    XCTAssertEqual(timer.state, .stopped)
+  @Test
+  func stop_TriggersEndActions_ForStartedTimer() {
+    let timer = makeTimer()
+    timer.start()
+    timer.stop()
+
+    #expect(state.endCount == 1)
   }
 
-  func test_WhenTimerStarted_StateIsPausedOnPaused() throws {
+  @Test
+  func stop_TriggersEndActions_ForPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
-    XCTAssertEqual(timer.state, .paused)
+    timer.stop()
+
+    #expect(state.endCount == 1)
   }
 
-  func test_WhenTimerStarted_VariableEqualPassedIntervalOnPause() throws {
+  @Test
+  func pause_DoesNotAffectStoppedTimer() {
+    let timer = makeTimer()
+    timer.pause()
+
+    #expect(timer.state == .stopped)
+  }
+
+  @Test
+  func pause_SetsPausedState() {
+    let timer = makeTimer()
     timer.start()
-    makeTick()
     timer.pause()
-    XCTAssertEqual(variableValue, tickInterval)
+
+    #expect(timer.state == .paused)
   }
 
-  func test_timerPausedOnlyOnce() throws {
+  @Test
+  func pause_UpdatesVariable() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
+    timer.start()
+    tick(1000)
+    tick(500)
+
+    #expect(variableValue == 1000)
+
+    timer.pause()
+
+    #expect(variableValue == 1500)
+  }
+
+  @Test
+  func pause_DoesNotAffectPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
     timer.pause()
-    XCTAssertEqual(timeMeasuring.paused, 1)
+
+    #expect(timeMeasuring.paused == 1)
   }
 
-  func test_WhenTimerStopped_StateNotChangedOnResume() throws {
+  @Test
+  func resume_DoesNotAffectStoppedTimer() {
+    let timer = makeTimer()
     timer.resume()
-    XCTAssertEqual(timer.state, .stopped)
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStarted_StateNotChangedOnResume() throws {
+  @Test
+  func resume_DoesNotAffectStartedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.resume()
-    XCTAssertEqual(timer.state, .started)
+
+    #expect(timer.state == .started)
   }
 
-  func test_WhenTimerPaused_StateIsStartedOnResume() throws {
+  @Test
+  func resume_SetsStartedState_ForPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
     timer.resume()
-    XCTAssertEqual(timer.state, .started)
+
+    #expect(timer.state == .started)
   }
 
-  func test_WhenTimerStopped_StateNotChangedOnCancel() throws {
+  @Test
+  func resume_DoesNotTriggerTickActions() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
+    timer.start()
+    tick(500)
+    timer.pause()
+
+    #expect(state.tickCount == 0)
+
+    timer.resume()
+
+    #expect(state.tickCount == 0)
+  }
+
+  @Test
+  func cancel_DoesNotAffectStoppedTimer() {
+    let timer = makeTimer()
     timer.cancel()
-    XCTAssertEqual(timer.state, .stopped)
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStarted_StateIsStoppedOnCancel() throws {
+  @Test
+  func cancel_SetsStateToStopped_ForStartedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.cancel()
-    XCTAssertEqual(timer.state, .stopped)
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStarted_VariableEqualPassedIntervalOnCancel() throws {
-    timer.start()
-    makeTick()
-    timer.cancel()
-    XCTAssertEqual(variableValue, tickInterval)
-  }
-
-  func test_WhenTimerPaused_StateIsStoppedOnCancel() throws {
+  @Test
+  func cancel_SetsStateToStopped_ForPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
     timer.cancel()
-    XCTAssertEqual(timer.state, .stopped)
+
+    #expect(timer.state == .stopped)
   }
 
-  func test_WhenTimerStopped_StateIsStartedOnReset() throws {
+  @Test
+  func cancel_DoesNotUpdateVariable() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
+    timer.start()
+    tick(1000)
+
+    #expect(variableValue == 1000)
+
+    tick(500)
+    timer.cancel()
+
+    #expect(variableValue == 1000)
+  }
+
+  @Test
+  func reset_SetsStartedState_ForStoppedTimer() {
+    let timer = makeTimer()
     timer.reset()
-    XCTAssertEqual(timer.state, .started)
+
+    #expect(timer.state == .started)
   }
 
-  func test_WhenTimerStopped_VariableSetToZeroOnReset() throws {
+  @Test
+  func reset_SetsVariableToZero_ForStoppedTimer() {
+    let timer = makeTimer()
     timer.reset()
-    XCTAssertEqual(variableValue, 0)
+
+    #expect(variableValue == 0)
   }
 
-  func test_WhenTimerStarted_StateIsStartedOnReset() throws {
+  @Test
+  func reset_SetsStartedState_ForStartedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.reset()
-    XCTAssertEqual(timer.state, .started)
+
+    #expect(timer.state == .started)
   }
 
-  func test_WhenTimerStarted_VariableSetToZeroOnReset() throws {
-    timer.start()
-    makeTick()
-    timer.reset()
-    XCTAssertEqual(variableValue, 0)
-  }
-
-  func test_WhenTimerPaused_StateIsStartedOnReset() throws {
+  @Test
+  func reset_SetsStartedState_ForPausedTimer() {
+    let timer = makeTimer()
     timer.start()
     timer.pause()
     timer.reset()
-    XCTAssertEqual(timer.state, .started)
+
+    #expect(timer.state == .started)
   }
 
-  func test_WhenTimerTick_runTickActions() throws {
+  @Test
+  func reset_SetsVariableToZero_ForStartedTimer() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    makeTick()
-    XCTAssertEqual(tickActionsCount, 1)
+    tick(1000)
+
+    #expect(variableValue == 1000)
+
+    timer.reset()
+
+    #expect(variableValue == 0)
   }
 
-  func test_WhenTimerTick_VariableEqualTickInterval() throws {
+  @Test
+  func tick_TriggersTickActions() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    makeTick()
-    XCTAssertEqual(variableValue, tickInterval)
+    tick(1000)
+
+    #expect(state.tickCount == 1)
+
+    tick(1000)
+
+    #expect(state.tickCount == 2)
   }
 
-  func test_WhenTimerEnded_runEndActions() throws {
+  @Test
+  func tick_UpdatesVariable() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    endTimer()
-    XCTAssertEqual(endActionsCount, 1)
+    tick(1000)
+
+    #expect(variableValue == 1000)
   }
 
-  func test_WhenTimerEnded_VariableEqualDuration() throws {
+  @Test
+  func endActionsAreTriggered_WhenTimerEnded() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    endTimer()
-    XCTAssertEqual(variableValue, duration)
+    tick(3000)
+
+    #expect(state.endCount == 1)
   }
 
-  func test_WhenTimerEnded_stateStopped() throws {
+  @Test
+  func variableIsUpdated_WhenTimerEnded() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    endTimer()
-    XCTAssertEqual(timer.state, .stopped)
+    tick(3000)
+
+    #expect(variableValue == 3000)
   }
 
-  func test_WhenTimerResumed_callTickActions() throws {
+  @Test
+  func stateIsStopped_WhenTimerEnded() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    makeHalfTick()
+    tick(3000)
+
+    #expect(timer.state == .stopped)
+  }
+
+  @Test
+  func variableIsUpdatedOnNextTickAfterResume() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
+    timer.start()
+    tick(500)
+    timer.pause()
+
+    #expect(variableValue == 500)
+
+    timer.resume()
+    tick(500)
+
+    #expect(variableValue == 1000)
+
+    tick(1000)
+
+    #expect(variableValue == 2000)
+  }
+
+  @Test
+  func tickActionsAreTriggeredOnNextTickAfterResume() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
+    timer.start()
+    tick(500)
     timer.pause()
     timer.resume()
-    XCTAssertEqual(tickActionsCount, 1)
+    tick(500)
+
+    #expect(state.tickCount == 1)
+
+    tick(1000)
+
+    #expect(state.tickCount == 2)
   }
 
-  func test_WhenTimerResumed_checkVariableOnNextTick() throws {
+  @Test
+  func tickActionsAreTriggered_WhenTimerEnded() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    makeHalfTick()
-    timer.pause()
-    timer.resume()
-    makeHalfTick()
-    XCTAssertEqual(variableValue, tickInterval)
+    tick(1000)
+    tick(1000)
+
+    #expect(state.tickCount == 2)
+
+    tick(3000)
+
+    #expect(state.tickCount == 3)
   }
 
-  func test_WhenTimerResumed_checkTickActionsCountOnNextTick() throws {
+  @Test
+  func updatedTickIntervalIsAppliedAfterReset() {
+    let timer = makeTimer(duration: 3000, tickInterval: 1000)
     timer.start()
-    makeHalfTick()
-    timer.pause()
-    timer.resume()
-    makeHalfTick()
-    XCTAssertEqual(tickActionsCount, 2)
+    tick(1000)
+
+    #expect(state.tickCount == 1)
+
+    variablesStorage.update(cardId: cardId, name: "tick_interval", value: "500")
+
+    tick(500)
+
+    #expect(state.tickCount == 1)
+
+    timer.reset()
+
+    tick(500)
+
+    #expect(state.tickCount == 2)
+
+    tick(500)
+
+    #expect(state.tickCount == 3)
   }
 
-  func test_WhenTimerResumed_checkTickActionsCountOnSecondTick() throws {
-    timer.start()
-    makeHalfTick()
-    timer.pause()
-    timer.resume()
-    makeHalfTick()
-    makeTick()
-    XCTAssertEqual(tickActionsCount, 3)
-  }
-
-  func test_WhenTimerResumed_checkVariableOnSecondTick() throws {
-    timer.start()
-    makeHalfTick()
-    timer.pause()
-    timer.resume()
-    makeHalfTick()
-    makeTick()
-    XCTAssertEqual(variableValue, tickInterval * 2)
-  }
-
-  func test_WhenTimerResumed_VariableChanged() throws {
-    timer.start()
-    makeHalfTick()
-    timer.pause()
-    timer.resume()
-    XCTAssertEqual(variableValue, tickInterval / 2)
-  }
-
-  func test_WhenTimerEnded_runTickActionWhenNeeded() throws {
-    timer.start()
-    makeTick()
-    makeTick()
-    endTimer()
-    XCTAssertEqual(tickActionsCount, tickCount)
-  }
-
-  func test_WhenTimerEnded_doNotRunTickActionWhenCountEnough() throws {
-    timer.start()
-    makeTick()
-    makeTick()
-    makeTick()
-    endTimer()
-    XCTAssertEqual(tickActionsCount, tickCount)
-  }
-
-  func test_WhenTimerEnded_doNotRunTickAction() throws {
-    timer = makeTimer(duration: 3000, tickInterval: 2000)
-    timer.start()
-    endTimer()
-    XCTAssertEqual(tickActionsCount, 0)
-  }
-
-  func test_timerWithSmallValues() throws {
-    timer = makeTimer(duration: 1, tickInterval: 1)
-    timer.start()
-    endTimer()
-    XCTAssertEqual(tickActionsCount, 1)
-    XCTAssertEqual(endActionsCount, 1)
-  }
-
-  private func makeHalfTick() {
-    let halfTick = timerTickInterval.toTimeInterval / 2
-    timeMeasuring.passedTime = timeMeasuring.passedTime + halfTick
-    fireTimer(with: halfTick)
-  }
-
-  private func makeTick() {
-    let interval = timerTickInterval.toTimeInterval
-    timeMeasuring.passedTime = timeMeasuring.passedTime + interval
-    fireTimer(with: interval)
-  }
-
-  private func endTimer() {
-    let interval = timerDuration.toTimeInterval
-    timeMeasuring.passedTime = interval
-    fireTimer(with: interval)
-  }
-
-  private func fireTimer(with interval: TimeInterval) {
+  private func tick(_ interval: Int) {
+    timeMeasuring.passedTime += interval.toTimeInterval
     for timer in timerScheduler.timers {
-      if timer.isValid, timer.timeInterval == interval {
+      if timer.isValid, timer.timeInterval == interval.toTimeInterval {
         timer.fire()
       }
     }
   }
 
   private func makeTimer(
-    duration: Int = duration,
-    tickInterval: Int = tickInterval
+    duration: Int = 3000,
+    tickInterval: Int = 1000
   ) -> DivTimerController {
+    variablesStorage.append(
+      variables: [
+        "duration": .integer(duration),
+        "tick_interval": .integer(tickInterval),
+      ],
+      for: cardId
+    )
     let divTimer = DivTimer(
-      duration: .value(duration),
+      duration: expression("@{duration}"),
       endActions: endActions,
       id: "test_timer",
       tickActions: tickActions,
-      tickInterval: .value(tickInterval),
-      valueVariable: "test_variable_name"
+      tickInterval: expression("@{tick_interval}"),
+      valueVariable: "elapsed_time"
     )
-    timerDuration = duration
-    timerTickInterval = tickInterval
     return DivTimerController(
-      cardId: "test_card",
+      cardId: cardId,
       divTimer: divTimer,
       timerScheduler: timerScheduler,
       timeMeasuring: timeMeasuring,
-      runActions: { [unowned self] actions in
+      runActions: { actions in
         if actions == tickActions {
-          tickActionsCount += 1
+          state.tickCount += 1
         } else if actions == endActions {
-          endActionsCount += 1
+          state.endCount += 1
         }
       },
       updateCard: {},
       variablesStorage: variablesStorage,
-      functionsStorage: functionsStorage,
+      functionsStorage: DivFunctionsStorage(),
       persistentValuesStorage: DivPersistentValuesStorage(),
       reporter: DefaultDivReporter()
     )
   }
 }
 
-extension Int {
-  fileprivate var timeInterval: TimeInterval {
-    TimeInterval(self / 1000)
-  }
-}
+private let cardId: DivCardID = "test_card"
 
-private let tickCount = 3
-private let tickInterval = 1000
-private let duration = tickInterval * tickCount
+private let tickActions = [divAction(logId: "tick")]
+private let endActions = [divAction(logId: "end")]

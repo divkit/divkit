@@ -395,7 +395,7 @@ class TimerStorageTest {
     }
 
     @Test
-    fun `restart() restarts timer`() {
+    fun `reset() restarts timer`() {
         val actions = listOf(action(url = "action://end"))
         init(
             timer(
@@ -581,7 +581,7 @@ class TimerStorageTest {
     }
 
     @Test
-    fun `updated duration is applied after restart`() {
+    fun `updated duration is applied after reset`() {
         val duration = Variable.IntegerVariable("duration", 5000)
         variableController.putOrUpdate(duration)
 
@@ -606,7 +606,7 @@ class TimerStorageTest {
     }
 
     @Test
-    fun `updated tickInterval is applied after restart`() {
+    fun `updated tickInterval is applied after reset`() {
         val tickInterval = Variable.IntegerVariable("tick_interval", 1000)
         variableController.putOrUpdate(tickInterval)
 

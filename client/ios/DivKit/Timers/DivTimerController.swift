@@ -114,6 +114,7 @@ final class DivTimerController {
     }
     state = .paused
     timeMeasuring.pause()
+    setVariable(timeMeasuring.passedInterval())
     invalidateTimers()
   }
 
@@ -123,7 +124,6 @@ final class DivTimerController {
       return
     }
     state = .started
-    onTick()
     makeRemainderTickTimer()
     makeEndTimer()
     timeMeasuring.resume()

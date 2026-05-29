@@ -261,7 +261,7 @@
                   "text": "Start",
                   "actions": [
                     {
-                      "log_id": "Start timer",
+                      "log_id": "start",
                       "url": "div-action://timer?id=ticker&action=start"
                     }
                   ]
@@ -271,7 +271,7 @@
                   "text": "Pause",
                   "actions": [
                     {
-                      "log_id": "Pause timer",
+                      "log_id": "pause",
                       "url": "div-action://timer?id=ticker&action=pause"
                     }
                   ]
@@ -281,7 +281,7 @@
                   "text": "Resume",
                   "actions": [
                     {
-                      "log_id": "Resume timer",
+                      "log_id": "resume",
                       "url": "div-action://timer?id=ticker&action=resume"
                     }
                   ]
@@ -291,7 +291,7 @@
                   "text": "Stop",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "stop",
                       "url": "div-action://timer?id=ticker&action=stop"
                     }
                   ]
@@ -301,7 +301,7 @@
                   "text": "Cancel",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "cancel",
                       "url": "div-action://timer?id=ticker&action=cancel"
                     }
                   ]
@@ -311,7 +311,7 @@
                   "text": "Reset",
                   "actions": [
                     {
-                      "log_id": "Stop timer",
+                      "log_id": "reset",
                       "url": "div-action://timer?id=ticker&action=reset"
                     }
                   ]

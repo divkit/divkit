@@ -34,18 +34,16 @@ class TickerTest {
         val firstTimer = getTicker(
             firstTimerDuration,
             firstTimerInterval,
-            "first"
-        ) { time, _, _ ->
-            actualTimerValues += time
-        }
+            "first",
+            onTick = { time, _, _ -> actualTimerValues += time }
+        )
 
         val secondTimer = getTicker(
             secondTimerDuration,
             secondTimerInterval,
-            "second"
-        ) { time, _, _ ->
-            actualTimerValues += time
-        }
+            "second",
+            onTick = { time, _, _ -> actualTimerValues += time }
+        )
 
         firstTimer.start()
         secondTimer.start()
@@ -170,6 +168,37 @@ class TickerTest {
         ticker.startAndAdvance()
 
         Assert.assertTrue(wasCalled)
+    }
+
+    @Test
+    fun `start() calls onStart()`() {
+        var isStarted = false
+
+        val ticker = createTicker(
+            onStart = { _, _, _ ->
+                isStarted = true
+            }
+        )
+
+        ticker.start()
+
+        Assert.assertTrue(isStarted)
+    }
+
+    @Test
+    fun `pause() calls onPause()`() {
+        var isPaused = false
+
+        val ticker = createTicker(
+            onPause = { _, _, _ ->
+                isPaused = true
+            }
+        )
+
+        ticker.start()
+        ticker.pause()
+
+        Assert.assertTrue(isPaused)
     }
 
     @Test
@@ -431,18 +460,20 @@ class TickerTest {
         interval: Long? = defaultInterval,
         name: String = defaultTimerName,
         onStart: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onInterrupt: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onPause: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onStop: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onTick: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
         onEnd: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onTick: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> }
     ): Ticker {
         var ticker: Ticker? = null
 
         ticker = Ticker(
             name = name,
             onStart = { time -> ticker?.onStart(time, duration, interval) },
-            onInterrupt = { time -> ticker?.onInterrupt(time, duration, interval) },
-            onEnd = { time -> ticker?.onEnd(time, duration, interval) },
+            onPause = { time -> ticker?.onPause(time, duration, interval) },
+            onStop = { time -> ticker?.onStop(time, duration, interval) },
             onTick = { time -> ticker?.onTick(time, duration, interval) },
+            onEnd = { time -> ticker?.onEnd(time, duration, interval) },
             errorCollector = null,
         )
 
@@ -457,17 +488,19 @@ class TickerTest {
         name: String = defaultTimerName,
         onStart: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
         onPause: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onStop: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onTick: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
         onEnd: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onTick: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> }
     ): Ticker {
         var ticker: Ticker? = null
 
         ticker = Ticker(
             name = name,
             onStart = { time -> ticker?.onStart(time, duration, interval) },
-            onInterrupt = { time -> ticker?.onPause(time, duration, interval) },
-            onEnd = { time -> ticker?.onEnd(time, duration, interval) },
+            onPause = { time -> ticker?.onPause(time, duration, interval) },
+            onStop = { time -> ticker?.onStop(time, duration, interval) },
             onTick = { time -> ticker?.onTick(time, duration, interval) },
+            onEnd = { time -> ticker?.onEnd(time, duration, interval) },
             errorCollector = null
         )
 

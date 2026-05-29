@@ -26,10 +26,11 @@ internal class TimerController(
 
     private val ticker = Ticker(
         name = id,
-        onInterrupt = ::updateTimerVariable,
         onStart = ::updateTimerVariable,
-        onEnd = ::onEnd,
+        onPause = ::updateTimerVariable,
+        onStop = ::onStop,
         onTick = ::onTick,
+        onEnd = ::onEnd,
         errorCollector = errorCollector
     )
 
@@ -85,6 +86,10 @@ internal class TimerController(
         }
     }
 
+    private fun onStop(time: Long) {
+        performEndActions()
+    }
+
     private fun onTick(time: Long) {
         updateTimerVariable(time)
 
@@ -95,7 +100,10 @@ internal class TimerController(
 
     private fun onEnd(time: Long) {
         updateTimerVariable(time)
+        performEndActions()
+    }
 
+    private fun performEndActions() {
         div2View?.let {
             actionPerformer.performActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
         }

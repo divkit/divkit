@@ -5,10 +5,11 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 
 internal class Ticker(
     private val name: String,
-    private val onInterrupt: (Long) -> Unit,
     private val onStart: (Long) -> Unit,
-    private val onEnd: (Long) -> Unit,
+    private val onPause: (Long) -> Unit,
+    private val onStop: (Long) -> Unit,
     private val onTick: (Long) -> Unit,
+    private val onEnd: (Long) -> Unit,
     private val errorCollector: ErrorCollector?
 ) {
     private var duration: Long? = null
@@ -215,10 +216,9 @@ internal class Ticker(
             State.WORKING, State.PAUSED -> {
                 state = State.STOPPED
 
-                onEnd(totalWorkTime)
+                onStop(totalWorkTime)
 
                 cleanTicker()
-
                 resetTickerState()
             }
         }
@@ -230,7 +230,7 @@ internal class Ticker(
             State.WORKING -> {
                 state = State.PAUSED
 
-                onInterrupt(totalWorkTime)
+                onPause(totalWorkTime)
 
                 saveState()
 
@@ -259,9 +259,6 @@ internal class Ticker(
                 state = State.STOPPED
 
                 cleanTicker()
-
-                onInterrupt(totalWorkTime)
-
                 resetTickerState()
             }
         }
