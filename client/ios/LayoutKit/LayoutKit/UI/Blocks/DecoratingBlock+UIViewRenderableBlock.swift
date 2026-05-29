@@ -110,30 +110,165 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   struct Model: ReferenceEquatable {
-    let child: UIViewRenderable & AnyObject
-    let backgroundColor: Color
-    let highlightedBackgroundColor: Color?
-    let actions: NonEmptyArray<UserInterfaceAction>?
-    let actionAnimation: ActionAnimation?
-    let doubleTapActions: NonEmptyArray<UserInterfaceAction>?
-    let longTapActions: LongTapActions?
-    let pressStartActions: NonEmptyArray<UserInterfaceAction>?
-    let pressEndActions: NonEmptyArray<UserInterfaceAction>?
-    let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
-    let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
-    let boundary: BoundaryTrait
-    let border: BlockBorder?
-    let childAlpha: CGFloat
-    let blurEffect: BlurEffect?
-    let paddings: EdgeInsets
-    let source: Variable<AnyObject?>
-    let visibilityParams: VisibilityParams?
-    let tooltips: [BlockTooltip]
-    let accessibility: AccessibilityElement?
-    let reuseId: String?
-    let path: UIElementPath?
-    let isFocused: Bool?
-    let captureFocusOnAction: Bool
+    private final class Box {
+      let child: UIViewRenderable & AnyObject
+      let backgroundColor: Color
+      let highlightedBackgroundColor: Color?
+      let actions: NonEmptyArray<UserInterfaceAction>?
+      let actionAnimation: ActionAnimation?
+      let doubleTapActions: NonEmptyArray<UserInterfaceAction>?
+      let longTapActions: LongTapActions?
+      let pressStartActions: NonEmptyArray<UserInterfaceAction>?
+      let pressEndActions: NonEmptyArray<UserInterfaceAction>?
+      let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
+      let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
+      let boundary: BoundaryTrait
+      let border: BlockBorder?
+      let childAlpha: CGFloat
+      let blurEffect: BlurEffect?
+      let paddings: EdgeInsets
+      let source: Variable<AnyObject?>
+      let visibilityParams: VisibilityParams?
+      let tooltips: [BlockTooltip]
+      let accessibility: AccessibilityElement?
+      let reuseId: String?
+      let path: UIElementPath?
+      let isFocused: Bool?
+      let captureFocusOnAction: Bool
+
+      init(
+        child: UIViewRenderable & AnyObject,
+        backgroundColor: Color,
+        highlightedBackgroundColor: Color?,
+        actions: NonEmptyArray<UserInterfaceAction>?,
+        actionAnimation: ActionAnimation?,
+        doubleTapActions: NonEmptyArray<UserInterfaceAction>?,
+        longTapActions: LongTapActions?,
+        pressStartActions: NonEmptyArray<UserInterfaceAction>?,
+        pressEndActions: NonEmptyArray<UserInterfaceAction>?,
+        hoverStartActions: NonEmptyArray<UserInterfaceAction>?,
+        hoverEndActions: NonEmptyArray<UserInterfaceAction>?,
+        boundary: BoundaryTrait,
+        border: BlockBorder?,
+        childAlpha: CGFloat,
+        blurEffect: BlurEffect?,
+        paddings: EdgeInsets,
+        source: Variable<AnyObject?>,
+        visibilityParams: VisibilityParams?,
+        tooltips: [BlockTooltip],
+        accessibility: AccessibilityElement?,
+        reuseId: String?,
+        path: UIElementPath?,
+        isFocused: Bool?,
+        captureFocusOnAction: Bool
+      ) {
+        self.child = child
+        self.backgroundColor = backgroundColor
+        self.highlightedBackgroundColor = highlightedBackgroundColor
+        self.actions = actions
+        self.actionAnimation = actionAnimation
+        self.doubleTapActions = doubleTapActions
+        self.longTapActions = longTapActions
+        self.pressStartActions = pressStartActions
+        self.pressEndActions = pressEndActions
+        self.hoverStartActions = hoverStartActions
+        self.hoverEndActions = hoverEndActions
+        self.boundary = boundary
+        self.border = border
+        self.childAlpha = childAlpha
+        self.blurEffect = blurEffect
+        self.paddings = paddings
+        self.source = source
+        self.visibilityParams = visibilityParams
+        self.tooltips = tooltips
+        self.accessibility = accessibility
+        self.reuseId = reuseId
+        self.path = path
+        self.isFocused = isFocused
+        self.captureFocusOnAction = captureFocusOnAction
+      }
+    }
+
+    private let box: Box
+
+    init(
+      child: UIViewRenderable & AnyObject,
+      backgroundColor: Color,
+      highlightedBackgroundColor: Color?,
+      actions: NonEmptyArray<UserInterfaceAction>?,
+      actionAnimation: ActionAnimation?,
+      doubleTapActions: NonEmptyArray<UserInterfaceAction>?,
+      longTapActions: LongTapActions?,
+      pressStartActions: NonEmptyArray<UserInterfaceAction>?,
+      pressEndActions: NonEmptyArray<UserInterfaceAction>?,
+      hoverStartActions: NonEmptyArray<UserInterfaceAction>?,
+      hoverEndActions: NonEmptyArray<UserInterfaceAction>?,
+      boundary: BoundaryTrait,
+      border: BlockBorder?,
+      childAlpha: CGFloat,
+      blurEffect: BlurEffect?,
+      paddings: EdgeInsets,
+      source: Variable<AnyObject?>,
+      visibilityParams: VisibilityParams?,
+      tooltips: [BlockTooltip],
+      accessibility: AccessibilityElement?,
+      reuseId: String?,
+      path: UIElementPath?,
+      isFocused: Bool?,
+      captureFocusOnAction: Bool
+    ) {
+      self.box = Box(
+        child: child,
+        backgroundColor: backgroundColor,
+        highlightedBackgroundColor: highlightedBackgroundColor,
+        actions: actions,
+        actionAnimation: actionAnimation,
+        doubleTapActions: doubleTapActions,
+        longTapActions: longTapActions,
+        pressStartActions: pressStartActions,
+        pressEndActions: pressEndActions,
+        hoverStartActions: hoverStartActions,
+        hoverEndActions: hoverEndActions,
+        boundary: boundary,
+        border: border,
+        childAlpha: childAlpha,
+        blurEffect: blurEffect,
+        paddings: paddings,
+        source: source,
+        visibilityParams: visibilityParams,
+        tooltips: tooltips,
+        accessibility: accessibility,
+        reuseId: reuseId,
+        path: path,
+        isFocused: isFocused,
+        captureFocusOnAction: captureFocusOnAction
+      )
+    }
+
+    var child: UIViewRenderable & AnyObject { box.child }
+    var backgroundColor: Color { box.backgroundColor }
+    var highlightedBackgroundColor: Color? { box.highlightedBackgroundColor }
+    var actions: NonEmptyArray<UserInterfaceAction>? { box.actions }
+    var actionAnimation: ActionAnimation? { box.actionAnimation }
+    var doubleTapActions: NonEmptyArray<UserInterfaceAction>? { box.doubleTapActions }
+    var longTapActions: LongTapActions? { box.longTapActions }
+    var pressStartActions: NonEmptyArray<UserInterfaceAction>? { box.pressStartActions }
+    var pressEndActions: NonEmptyArray<UserInterfaceAction>? { box.pressEndActions }
+    var hoverStartActions: NonEmptyArray<UserInterfaceAction>? { box.hoverStartActions }
+    var hoverEndActions: NonEmptyArray<UserInterfaceAction>? { box.hoverEndActions }
+    var boundary: BoundaryTrait { box.boundary }
+    var border: BlockBorder? { box.border }
+    var childAlpha: CGFloat { box.childAlpha }
+    var blurEffect: BlurEffect? { box.blurEffect }
+    var paddings: EdgeInsets { box.paddings }
+    var source: Variable<AnyObject?> { box.source }
+    var visibilityParams: VisibilityParams? { box.visibilityParams }
+    var tooltips: [BlockTooltip] { box.tooltips }
+    var accessibility: AccessibilityElement? { box.accessibility }
+    var reuseId: String? { box.reuseId }
+    var path: UIElementPath? { box.path }
+    var isFocused: Bool? { box.isFocused }
+    var captureFocusOnAction: Bool { box.captureFocusOnAction }
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
