@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.items
 
 import android.content.res.Resources
-import android.widget.FrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
@@ -53,6 +52,6 @@ class DivViewWithItemsTest {
 
     @Test
     fun `cannot create`() {
-        assertNull(DivViewWithItems.create(mock<FrameLayout>()) { Direction.NEXT })
+        assertNull(DivViewWithItems.create(mock<DivScrollActionHolder>()) { Direction.NEXT })
     }
 }

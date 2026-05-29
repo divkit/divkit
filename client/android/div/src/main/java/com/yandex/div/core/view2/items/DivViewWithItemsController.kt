@@ -1,10 +1,15 @@
 package com.yandex.div.core.view2.items
 
-import android.view.View
+import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.actions.findTargetView
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivSizeUnit
 
-internal class DivViewWithItemsController private constructor(private val view: DivViewWithItems) {
+internal class DivViewWithItemsController @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) constructor(
+    private val view: DivViewWithItems
+) {
+
     fun setCurrentItem(index: Int, animated: Boolean = true) {
         if (animated) {
             view.currentItem = index
@@ -70,14 +75,15 @@ internal class DivViewWithItemsController private constructor(private val view: 
 
         fun create(
             id: String,
+            scopeId: String?,
             view: DivViewFacade,
-            direction: Direction = Direction.NEXT
+            actionType: String,
+            direction: Direction = Direction.NEXT,
         ): DivViewWithItemsController? {
-            val targetView = view.view.findViewWithTag<View>(id) ?: return null
+            val divView = view as? Div2View ?: return null
+            val targetView = divView.findTargetView<DivScrollActionHolder>(id, actionType, scopeId) ?: return null
             val viewWithItems = DivViewWithItems.create(targetView) { direction } ?: return null
             return DivViewWithItemsController(viewWithItems)
         }
-
-        const val TAG = "DivViewWithItems"
     }
 }

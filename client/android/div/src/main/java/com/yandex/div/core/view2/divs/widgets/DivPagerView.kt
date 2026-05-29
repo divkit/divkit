@@ -21,6 +21,7 @@ import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.performClickOnAncestors
 import com.yandex.div.core.view2.divs.performLongClickOnAncestors
+import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
@@ -34,7 +35,8 @@ internal class DivPagerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr),
     DivHolderView<Div.Pager> by DivHolderViewMixin(),
-    OnInterceptTouchEventListenerHost {
+    OnInterceptTouchEventListenerHost,
+    DivScrollActionHolder {
 
     internal var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
         set(value) {

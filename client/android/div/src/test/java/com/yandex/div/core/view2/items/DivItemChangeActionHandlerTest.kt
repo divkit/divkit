@@ -1,49 +1,36 @@
 package com.yandex.div.core.view2.items
 
 import android.net.Uri
-import android.view.View
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.json.expressions.ExpressionResolver
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.Implementation
+import org.robolectric.annotation.Implements
 
 private typealias DivKitAssert = com.yandex.div.internal.Assert
 
 @RunWith(RobolectricTestRunner::class)
+@Config(shadows = [DivItemChangeActionHandlerTest.ShadowDivViewWithItemsControllerCompanion::class])
 class DivItemChangeActionHandlerTest {
 
-    private val targetView = mock<View> {
-        on { findViewWithTag<View>(ID) } doReturn mock
-    }
-    val resolver = mock<ExpressionResolver>()
-    private val view = mock<DivViewFacade> {
-        on { view } doReturn targetView
-        on { expressionResolver } doReturn mock()
-    }
-    private val divItemsView = mock<DivViewWithItems> {
-        on { currentItem } doReturn CURRENT_ITEM
-        on { itemCount } doReturn ITEM_COUNT
-        on { metrics } doReturn mock()
-    }
+    private val view = mock<DivViewFacade>()
 
     @Before
     fun `setup mock`() {
         DivKitAssert.isEnabled = false
-        DivViewWithItems.viewForTests = divItemsView
+        controller = mock<DivViewWithItemsController>()
     }
 
     @After
     fun `cleanup mock`() {
-        DivViewWithItems.viewForTests = null
         DivKitAssert.isEnabled = true
     }
 
@@ -63,51 +50,43 @@ class DivItemChangeActionHandlerTest {
     fun `handle set current item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=3"),
+            SCOPE_ID,
             view,
         )
 
         assertTrue(result)
-        verify(divItemsView).currentItem = 3
+        verify(controller)?.setCurrentItem(3)
     }
 
     @Test
     fun `handle set next item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
+            SCOPE_ID,
             view,
         )
 
         assertTrue(result)
-        verify(divItemsView).currentItem = CURRENT_ITEM + 1
+        verify(controller)?.changeCurrentItemByStep(null, 1)
     }
 
     @Test
     fun `handle set previous item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID"),
+            SCOPE_ID,
             view,
         )
 
         assertTrue(result)
-        verify(divItemsView).currentItem = CURRENT_ITEM - 1
+        verify(controller)?.changeCurrentItemByStep(null, -1)
     }
 
     @Test
     fun `not handled when id param missing`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item"),
-            view,
-        )
-
-        assertFalse(result)
-    }
-
-    @Test
-    fun `not handled when view with id not found`() {
-        whenever(targetView.findViewWithTag<View>(ID)).thenReturn(null)
-
-        val result = DivItemChangeActionHandler.handleAction(
-            Uri.parse("div-action://set_next_item?id=$ID"),
+            SCOPE_ID,
             view,
         )
 
@@ -116,10 +95,10 @@ class DivItemChangeActionHandlerTest {
 
     @Test
     fun `not handled when div items view not created`() {
-        DivViewWithItems.viewForTests = null
-
+        controller = null
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
+            SCOPE_ID,
             view,
         )
 
@@ -130,6 +109,7 @@ class DivItemChangeActionHandlerTest {
     fun `not handled when item param missing`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID"),
+            SCOPE_ID,
             view,
         )
 
@@ -140,6 +120,7 @@ class DivItemChangeActionHandlerTest {
     fun `not handled when item param not a number`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=bar"),
+            SCOPE_ID,
             view,
         )
 
@@ -148,33 +129,46 @@ class DivItemChangeActionHandlerTest {
 
     @Test
     fun `handle set next item with overflow ring`() {
-        whenever(divItemsView.itemCount).thenReturn(CURRENT_ITEM + 1)
-
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"),
+            SCOPE_ID,
             view,
         )
 
         assertTrue(result)
-        verify(divItemsView).currentItem = 0
+        verify(controller)?.changeCurrentItemByStep("ring", 1)
     }
 
     @Test
     fun `handle set previous item with overflow ring`() {
-        whenever(divItemsView.currentItem).thenReturn(0)
-
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID&overflow=ring"),
+            SCOPE_ID,
             view,
         )
 
         assertTrue(result)
-        verify(divItemsView).currentItem = ITEM_COUNT - 1
+        verify(controller)?.changeCurrentItemByStep("ring", -1)
+    }
+
+    @Implements(DivViewWithItemsController.Companion::class)
+    internal class ShadowDivViewWithItemsControllerCompanion {
+
+        @Implementation
+        @Suppress("unused")
+        fun create(
+            id: String,
+            scopeId: String?,
+            view: DivViewFacade,
+            actionType: String,
+            direction: Direction = Direction.NEXT,
+        ): DivViewWithItemsController? = controller
     }
 
     private companion object {
-        private const val ID = "foo"
-        private const val CURRENT_ITEM = 2
-        private const val ITEM_COUNT = 4
+        const val ID = "foo"
+        const val SCOPE_ID = "scope"
+
+        var controller: DivViewWithItemsController? = null
     }
 }

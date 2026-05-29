@@ -20,6 +20,7 @@ import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGallerySnapHelper
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
+import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
@@ -41,7 +42,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : BackHandlingRecyclerView(ContextThemeWrapper(context, R.style.Div_Gallery), attrs, defStyleAttr),
     DivHolderView<Div.Gallery> by DivHolderViewMixin(),
-    OnInterceptTouchEventListenerHost {
+    OnInterceptTouchEventListenerHost,
+    DivScrollActionHolder {
 
     private var scrollPointerId = -1
     private var pointTouchX = 0

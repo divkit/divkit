@@ -1,8 +1,6 @@
 package com.yandex.div.core.view2.items
 
 import android.util.DisplayMetrics
-import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.divs.availableHeight
@@ -171,11 +169,8 @@ internal sealed class DivViewWithItems {
     }
 
     companion object {
-        @set:VisibleForTesting(otherwise = VisibleForTesting.NONE)
-        internal var viewForTests: DivViewWithItems? = null
-
-        internal inline fun create(view: View, direction: () -> Direction): DivViewWithItems? {
-            return viewForTests ?: when (view) {
+        internal inline fun create(view: DivScrollActionHolder, direction: () -> Direction): DivViewWithItems? {
+            return when (view) {
                 is DivRecyclerView -> Gallery(view, direction())
                 is DivPagerView -> Pager(view)
                 is DivTabsLayout -> Tabs(view)

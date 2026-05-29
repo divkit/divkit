@@ -20,11 +20,11 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
         resolver: ExpressionResolver
     ): Boolean = when(action) {
         is DivActionTyped.ScrollBy -> {
-            handleAction(action.value, view, resolver)
+            handleAction(action.value, scopeId, view, resolver)
             true
         }
         is DivActionTyped.ScrollTo -> {
-            handleAction(action.value, view, resolver)
+            handleAction(action.value, scopeId, view, resolver)
             true
         }
         else -> false
@@ -32,6 +32,7 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
 
     private fun handleAction(
         action: DivActionScrollBy,
+        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
@@ -41,19 +42,20 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
         val overflow = DivActionScrollBy.Overflow.toString(action.overflow.evaluate(resolver))
         val animated = action.animated.evaluate(resolver)
 
-        val viewController = DivViewWithItemsController.create(id, view) ?: return
+        val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollBy.TYPE) ?: return
         viewController.changeCurrentItemByStep(overflow, step, animated)
         viewController.scrollByOffset(overflow, offset, animated)
     }
 
     private fun handleAction(
         action: DivActionScrollTo,
+        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val id = action.id.evaluate(resolver)
         val animated = action.animated.evaluate(resolver)
-        val viewController = DivViewWithItemsController.create(id, view) ?: return
+        val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollTo.TYPE) ?: return
 
         when(val destination = action.destination) {
             is DivActionScrollDestination.Offset -> {

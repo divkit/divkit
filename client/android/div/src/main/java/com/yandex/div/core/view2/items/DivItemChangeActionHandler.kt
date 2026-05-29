@@ -45,14 +45,15 @@ internal object DivItemChangeActionHandler {
     }
 
     @JvmStatic
-    fun handleAction(uri: Uri, view: DivViewFacade): Boolean {
+    fun handleAction(uri: Uri, scopeId: String?, view: DivViewFacade): Boolean {
         val id = uri.getQueryParameter(PARAM_ID)
         if (id == null) {
             KAssert.fail { "$PARAM_ID param is required to set item" }
             return false
         }
-        val authority = uri.authority
-        val viewController = DivViewWithItemsController.create(id, view, direction(authority)) ?: return false
+        val authority = uri.authority ?: return false
+        val viewController = DivViewWithItemsController.create(id, scopeId, view, authority, direction(authority))
+            ?: return false
         val animated = uri.getQueryParameter(PARAM_ANIMATED)?.toBoolean() ?: true
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM -> handleSetCurrentItem(uri, animated, viewController)
