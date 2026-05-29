@@ -2,6 +2,9 @@
 
 # iOS Client:
 * Fixed Retain Cycle in `FunctionsProvider` that caused `DivKitComponents` memory leak.
+* Fixed `scroll_to` and `set_next_item` actions on an infinite `div-pager`: navigating from the last item to the first (or vice versa) now plays a single-item animation across the buffered edge instead of scrolling linearly through every intermediate page.
+* Fixed an issue where tapping a gallery, pager or tabs item during an in-flight scroll animation was ignored.
+* Fixed double infinite-scroll jump in a pager when deceleration crossed the buffer boundary more than once during a single settling.
 * Fixed linear and radial gradient rendering when adjacent stops differ in alpha — transparent → opaque transitions (e.g. `#0000` → `#FFFFFFFF`) no longer pass through mid-grey, matching Android's behavior.
 * Fixed potential memory leaks in `ValueAnimator`, `DivViewPreloader`, and `TabContentsView`.
 * Supported `set-cursor-position` action.
