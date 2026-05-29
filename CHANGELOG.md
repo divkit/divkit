@@ -11,6 +11,12 @@
 * Fixed `set_cursor_position` with multiple types of `input`.
 
 
+## 32.51.1
+
+# Android Client:
+* Fixed an issue where `div-image` continued to show a placeholder after the image had loaded when using asynchronous binding.
+
+
 ## 32.51.0
 
 # Android Client:
