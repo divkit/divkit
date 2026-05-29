@@ -2,7 +2,8 @@
   "description": "1st gallery yellow item 0 on start, 2nd gallery yellow item 8 on center, 3rd gallery yellow item 14 on end, 4th gallery yellow item 0 on start, 5th gallery yellow item 8 on start on small screens (portrait), undefined but 14th item on end in landscape or tablet, 6th gallery yellow item 14 on end",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "cube": {

@@ -6,6 +6,8 @@ import type { CollectionItemBuilder } from './itemBuilder';
 
 export type GalleryCrossAlignment = 'start' | 'center' | 'end';
 
+export type GalleryScrollAlignment = 'start' | 'center' | 'end';
+
 export type GalleryScrollMode = 'default' | 'paging';
 
 export type GalleryShowScrollbar = 'none' | 'auto';
@@ -23,4 +25,5 @@ export interface DivGalleryData extends DivBaseData, DivActionableData {
     default_item?: number;
     scrollbar?: GalleryShowScrollbar;
     item_builder?: CollectionItemBuilder;
+    scroll_content_alignment?: GalleryScrollAlignment;
 }

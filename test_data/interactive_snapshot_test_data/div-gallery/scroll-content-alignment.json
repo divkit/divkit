@@ -2,7 +2,8 @@
   "description": "Gallery scroll_content_alignment: start, center, end with default and paging scroll modes",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

@@ -135,7 +135,8 @@
           "$ref": "#/definitions/content_alignment",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         }
       }

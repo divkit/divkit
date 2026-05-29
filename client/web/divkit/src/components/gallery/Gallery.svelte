@@ -68,12 +68,17 @@
     let prevId: string | undefined;
     let columns = 1;
     let orientation: Orientation = 'horizontal';
-    let align: Align = 'start';
+    let align: Align | undefined = 'start';
+    let scrollAlign: Align | undefined;
     let gridGap: string | undefined;
     let itemSpacing = 8;
     let crossGridGap: string | undefined;
     let crossSpacing;
     let padding = '';
+    let paddingSizes = {
+        first: 0,
+        last: 0
+    };
     let lastPaddingSize: {
         width: string;
         height: string;
@@ -93,6 +98,7 @@
         columns = 1;
         orientation = 'horizontal';
         align = 'start';
+        scrollAlign = undefined;
         itemSpacing = 8;
         padding = '';
     }
@@ -110,6 +116,7 @@
     $: jsonColumnCount = componentContext.getDerivedFromVars(componentContext.json.column_count);
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
     $: jsonCrossContentAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_content_alignment);
+    $: jsonScrollContentAlignment = componentContext.getDerivedFromVars(componentContext.json.scroll_content_alignment);
     $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
     $: jsonCrossSpacing = componentContext.getDerivedFromVars(componentContext.json.cross_spacing);
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
@@ -264,6 +271,19 @@
     }
 
     $: {
+        scrollAlign = correctAlignment($jsonScrollContentAlignment, scrollAlign);
+    }
+    $: totalScrollAlign = (() => {
+        if (scrollAlign) {
+            return scrollAlign;
+        }
+        if ($jsonScrollMode === 'paging') {
+            return 'center';
+        }
+        return 'start';
+    })();
+
+    $: {
         itemSpacing = correctNonNegativeNumber($jsonItemSpacing, itemSpacing);
         gridGap = pxToEm(itemSpacing);
     }
@@ -275,16 +295,23 @@
 
     $: {
         padding = correctEdgeInserts($jsonPaddings, $direction, padding);
-        const size = orientation === 'horizontal' ?
+        const firstSize = orientation === 'horizontal' ?
+            ($jsonPaddings?.start ?? $jsonPaddings?.[($direction === 'ltr' ? 'left' : 'right')] ?? 0) :
+            ($jsonPaddings?.top ?? 0);
+        const lastSize = orientation === 'horizontal' ?
             ($jsonPaddings?.end ?? $jsonPaddings?.[($direction === 'ltr' ? 'right' : 'left')] ?? 0) :
             ($jsonPaddings?.bottom ?? 0);
-        const calcedSize = pxToEm(size);
+        const calcedLastSize = pxToEm(lastSize);
+        paddingSizes = {
+            first: firstSize,
+            last: lastSize,
+        };
         lastPaddingSize = {
-            width: orientation === 'horizontal' ? calcedSize : '1px',
-            height: orientation === 'horizontal' ? '1px' : calcedSize,
-            'margin-right': orientation === 'horizontal' && $direction === 'ltr' ? '-' + calcedSize : undefined,
-            'margin-left': orientation === 'horizontal' && $direction === 'rtl' ? '-' + calcedSize : undefined,
-            'margin-bottom': orientation === 'vertical' ? '-' + calcedSize : undefined,
+            width: orientation === 'horizontal' ? calcedLastSize : '1px',
+            height: orientation === 'horizontal' ? '1px' : calcedLastSize,
+            'margin-right': orientation === 'horizontal' && $direction === 'ltr' ? '-' + calcedLastSize : undefined,
+            'margin-left': orientation === 'horizontal' && $direction === 'rtl' ? '-' + calcedLastSize : undefined,
+            'margin-bottom': orientation === 'vertical' ? '-' + calcedLastSize : undefined,
         };
     }
 
@@ -320,9 +347,20 @@
 
         if ($jsonScrollMode === 'paging') {
             scrollSnap = true;
-            newChildLayoutParams.scrollSnap = 'start';
-            const scrollPadding = orientation === 'horizontal' ? 'scroll-padding-left' : 'scroll-padding-top';
-            newScrollerStyle[scrollPadding] = pxToEm(itemSpacing / 2);
+            newChildLayoutParams.scrollSnap = totalScrollAlign;
+            if (totalScrollAlign === 'start') {
+                // eslint-disable-next-line no-nested-ternary
+                const scrollPadding = orientation === 'horizontal' ?
+                    ($direction === 'ltr' ? 'scroll-padding-left' : 'scroll-padding-right') :
+                    'scroll-padding-top';
+                newScrollerStyle[scrollPadding] = pxToEm(paddingSizes.first);
+            } else if (totalScrollAlign === 'end') {
+                // eslint-disable-next-line no-nested-ternary
+                const scrollPadding = orientation === 'horizontal' ?
+                    ($direction === 'ltr' ? 'scroll-padding-right' : 'scroll-padding-left') :
+                    'scroll-padding-bottom';
+                newScrollerStyle[scrollPadding] = pxToEm(paddingSizes.last);
+            }
         }
 
         scrollerStyle = assignIfDifferent(newScrollerStyle, scrollerStyle);
@@ -415,6 +453,7 @@
     } = {}): void {
         const isHorizontal = orientation === 'horizontal';
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
+        const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
 
         // 0.01 forces Chromium to use scroll-snap (exact correct scroll position will not trigger it)
         // Chromium will save scroll-snapped value and will not save exact one
@@ -427,14 +466,27 @@
         }
 
         const elem = galleryElements[index];
+        const scrollWrapperSize = scroller.offsetWidth;
 
         if (elem) {
             let offset;
             if ($direction === 'ltr' || !isHorizontal) {
-                offset = elem[elementOffset] + .01 - itemSpacing / 2;
+                if (totalScrollAlign === 'start') {
+                    offset = elem[elementOffset] - paddingSizes.first + .01;
+                } else if (totalScrollAlign === 'center') {
+                    offset = elem[elementOffset] + elem[elementSize] / 2 - scrollWrapperSize / 2 + .01;
+                } else {
+                    offset = elem[elementOffset] + elem[elementSize] + paddingSizes.last - scrollWrapperSize + .01;
+                }
             } else {
-                const scrollWrapperSize = scroller.offsetWidth;
-                offset = (elem[elementOffset] + elem.offsetWidth + .01 - itemSpacing / 2) - scrollWrapperSize;
+                // eslint-disable-next-line no-lonely-if
+                if (totalScrollAlign === 'start') {
+                    offset = elem[elementOffset] + elem[elementSize] + paddingSizes.first + .01 - scrollWrapperSize;
+                } else if (totalScrollAlign === 'center') {
+                    offset = elem[elementOffset] + elem[elementSize] / 2 - scrollWrapperSize / 2 + .01;
+                } else {
+                    offset = elem[elementOffset] - paddingSizes.last + .01;
+                }
             }
 
             if (extraOffset) {
