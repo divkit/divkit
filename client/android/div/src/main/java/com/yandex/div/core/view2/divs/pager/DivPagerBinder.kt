@@ -328,7 +328,7 @@ internal class DivPagerBinder @Inject constructor(
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
                 adapter.setItems(builder.build(context.expressionResolver))
                 pagerOnItemsCountChange?.onItemsUpdated()
-                getRecyclerView()?.scrollToPosition(adapter.realItemPosition(currentItem))
+                getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(currentItem))
                 viewPager.doOnNextLayout { viewPager.requestTransform() }
             }
         }

@@ -37,8 +37,12 @@ internal class DivPagerAdapter(
     private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
 
     fun realItemPosition(position: Int): Int {
+        return normalizeItemPosition(getRealPosition(position))
+    }
+
+    fun normalizeItemPosition(position: Int): Int {
         val size = visibleItems.size.takeIf { it > 0 } ?: return 0
-        return (getRealPosition(position) + size) % size
+        return (position + size) % size
     }
 
     var orientation = ViewPager2.ORIENTATION_HORIZONTAL
