@@ -104,15 +104,25 @@ extension DivContainer: DivBlockModeling {
     case .wrap:
       ContainerBlock.CrossAlignment.leading
     }
+    let crossSizeIsWrapContent: Bool = switch layoutDirection {
+    case .horizontal:
+      getTransformedHeight(context).isIntrinsic && aspect == nil
+    case .vertical:
+      getTransformedWidth(context).isIntrinsic
+    }
     let children: [ContainerBlock.Child] = makeChildren(
       context: context,
       mappedBy: { div, block, context in
-        ContainerBlock.Child(
+        let childMatchesParentOnCrossAxis = layoutDirection == .horizontal
+          ? div.isVerticallyMatchParent
+          : div.isHorizontallyMatchParent
+        return ContainerBlock.Child(
           content: block,
           crossAlignment: div.value.crossAlignment(
             for: layoutDirection,
             context: context
-          ) ?? defaultCrossAlignment
+          ) ?? defaultCrossAlignment,
+          fillsCrossAxis: crossSizeIsWrapContent && childMatchesParentOnCrossAxis
         )
       }
     )

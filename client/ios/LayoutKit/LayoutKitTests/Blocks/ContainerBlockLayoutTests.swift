@@ -1138,6 +1138,86 @@ final class ContainerBlockLayoutTests: XCTestCase {
     )
     XCTAssertEqual(layout.blockFrames[0].height / layout.blockFrames[1].height, 0.5, accuracy: 1e-5)
   }
+
+  func test_HorizontalContainer_FillingChildren_AreStretchedToContainerHeight() {
+    let layout = ContainerBlockLayout(
+      children: [
+        .init(
+          content: TextBlock(widthTrait: .intrinsic, heightTrait: .fixed(100), text: text),
+          fillsCrossAxis: true
+        ),
+        .init(
+          content: TextBlock(widthTrait: .intrinsic, heightTrait: .fixed(30), text: text),
+          fillsCrossAxis: true
+        ),
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 200, height: 100)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.height), [100, 100])
+  }
+
+  func test_HorizontalContainer_NonFillingChildren_KeepTheirOwnHeight() {
+    let layout = ContainerBlockLayout(
+      children: [
+        .init(content: TextBlock(widthTrait: .intrinsic, heightTrait: .fixed(100), text: text)),
+        .init(content: TextBlock(widthTrait: .intrinsic, heightTrait: .fixed(30), text: text)),
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 200, height: 100)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.height), [100, 30])
+  }
+
+  func test_VerticalContainer_FillingChildren_AreStretchedToContainerWidth() {
+    let layout = ContainerBlockLayout(
+      children: [
+        .init(
+          content: TextBlock(widthTrait: .fixed(100), heightTrait: .fixed(40), text: text),
+          fillsCrossAxis: true
+        ),
+        .init(
+          content: TextBlock(widthTrait: .fixed(30), heightTrait: .fixed(40), text: text),
+          fillsCrossAxis: true
+        ),
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 100, height: 200)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.width), [100, 100])
+  }
+
+  func test_VerticalContainer_NonFillingChildren_KeepTheirOwnWidth() {
+    let layout = ContainerBlockLayout(
+      children: [
+        .init(content: TextBlock(widthTrait: .fixed(100), heightTrait: .fixed(40), text: text)),
+        .init(content: TextBlock(widthTrait: .fixed(30), heightTrait: .fixed(40), text: text)),
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 100, height: 200)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.width), [100, 30])
+  }
 }
 
 private let containerBlock = try! ContainerBlock(

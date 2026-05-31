@@ -301,12 +301,16 @@ struct ContainerBlockLayout {
       let widthIfConstrained = block
         .isHorizontallyConstrained ? (constrainedBlockSizesIterator.next() ?? 0) : 0
 
-      let blockSize = block.sizeFor(
+      var blockSize = block.sizeFor(
         widthOfHorizontallyResizableBlock: widthIfResizable,
         heightOfVerticallyResizableBlock: size.height,
         constrainedWidth: widthIfConstrained,
         constrainedHeight: needCompressConstrainedBlocks ? size.height : .infinity
       )
+
+      if child.fillsCrossAxis {
+        blockSize.height = max(blockSize.height, size.height)
+      }
 
       containerAscent = getMaxAscent(
         current: containerAscent, child: child, childSize: blockSize
@@ -343,12 +347,16 @@ struct ContainerBlockLayout {
 
     for (child, gapAfterBlock) in zip(children, gaps.dropFirst()) {
       let block = child.content
-      let width: CGFloat
+      var width: CGFloat
       if block.isHorizontallyResizable {
         width = size.width
       } else {
         let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
         width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
+      }
+
+      if child.fillsCrossAxis {
+        width = max(width, size.width)
       }
 
       let height: CGFloat = if block.isVerticallyResizable {

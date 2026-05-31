@@ -1,0 +1,101 @@
+{
+  "description": "Horizontal wrap_content-height container with two match_parent-height text items of different content. The shorter item is stretched to the tallest item's height (matching Android, web and Flutter).",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "item_spacing": 8,
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F5F3F1"
+            }
+          ],
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 12,
+            "bottom": 12
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Long text that wraps onto several lines to make this item the tallest one",
+              "text_color": "#191817",
+              "font_size": 13,
+              "line_height": 15,
+              "text_alignment_vertical": "top",
+              "width": {
+                "type": "match_parent",
+                "weight": 1.0
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "border": {
+                "corner_radius": 16
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8,
+                "top": 8,
+                "bottom": 8
+              }
+            },
+            {
+              "type": "text",
+              "text": "Short text",
+              "text_color": "#191817",
+              "font_size": 13,
+              "line_height": 15,
+              "text_alignment_vertical": "top",
+              "width": {
+                "type": "match_parent",
+                "weight": 1.0
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "border": {
+                "corner_radius": 16
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8,
+                "top": 8,
+                "bottom": 8
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

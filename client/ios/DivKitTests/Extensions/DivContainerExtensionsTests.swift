@@ -464,20 +464,23 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           widthTrait: .intrinsic,
           children: [
-            DecoratingBlock(
-              child: textBlock(
-                widthTrait: .intrinsic(
-                  constrained: true,
-                  minSize: 0,
-                  maxSize: .infinity
+            ContainerBlock.Child(
+              content: DecoratingBlock(
+                child: textBlock(
+                  widthTrait: .intrinsic(
+                    constrained: true,
+                    minSize: 0,
+                    maxSize: .infinity
+                  ),
+                  text: "Hello!",
+                  path: defaultContainerPath + 0 + "text"
                 ),
-                text: "Hello!",
-                path: defaultContainerPath + 0 + "text"
+                accessibilityElement: accessibility(
+                  traits: .staticText,
+                  label: "Hello!"
+                )
               ),
-              accessibilityElement: accessibility(
-                traits: .staticText,
-                label: "Hello!"
-              )
+              fillsCrossAxis: true
             ),
           ],
           path: defaultContainerPath
@@ -624,12 +627,14 @@ final class DivContainerExtensionsTests: XCTestCase {
     }
   }
 
-  func test_HorizontalContainer_WithIntrinsicWidth_AndHasSingleHorizontallyResizableItem_FallbackWidth(
+  func test_Container_WithIntrinsicWidth_OnlyMatchParentSingleItemFillsCrossAxis(
   ) throws {
-    try assertBlocksAreEqual(
-      in: "wrap_content_width_match_parent_items",
-      "wrap_content_width_wrap_content_constrained_items"
+    let matchParent = try containerBlock(fromFile: "wrap_content_width_match_parent_items")
+    let constrained = try containerBlock(
+      fromFile: "wrap_content_width_wrap_content_constrained_items"
     )
+    XCTAssertTrue(matchParent.children.allSatisfy(\.fillsCrossAxis))
+    XCTAssertTrue(constrained.children.allSatisfy { !$0.fillsCrossAxis })
   }
 
   func test_HorizontalContainer_WithIntrinsicWidth_AndHasHorizontallyResizableItem_FallbackWidth(
@@ -640,20 +645,25 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
   }
 
-  func test_HorizontalContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_FallbackHeight(
+  func test_HorizontalContainer_WithIntrinsicHeight_OnlyMatchParentItemsFillCrossAxis(
   ) throws {
-    try assertBlocksAreEqual(
-      in: "horizontal_wrap_content_height_match_parent_items",
-      "horizontal_wrap_content_height_wrap_content_constrained_items"
+    let matchParent =
+      try containerBlock(fromFile: "horizontal_wrap_content_height_match_parent_items")
+    let constrained = try containerBlock(
+      fromFile: "horizontal_wrap_content_height_wrap_content_constrained_items"
     )
+    XCTAssertTrue(matchParent.children.allSatisfy(\.fillsCrossAxis))
+    XCTAssertTrue(constrained.children.allSatisfy { !$0.fillsCrossAxis })
   }
 
-  func test_VerticalContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_FallbackWidth(
+  func test_VerticalContainer_WithIntrinsicWidth_OnlyMatchParentItemsFillCrossAxis(
   ) throws {
-    try assertBlocksAreEqual(
-      in: "vertical_wrap_content_width_match_parent_items",
-      "vertical_wrap_content_width_wrap_content_constrained_items"
+    let matchParent = try containerBlock(fromFile: "vertical_wrap_content_width_match_parent_items")
+    let constrained = try containerBlock(
+      fromFile: "vertical_wrap_content_width_wrap_content_constrained_items"
     )
+    XCTAssertTrue(matchParent.children.allSatisfy(\.fillsCrossAxis))
+    XCTAssertTrue(constrained.children.allSatisfy { !$0.fillsCrossAxis })
   }
 
   func test_VerticalContainer_WithIntrinsicHeight_AndHasVerticallyResizableItem_FallbackHeight(
@@ -699,6 +709,11 @@ final class DivContainerExtensionsTests: XCTestCase {
     for file in files.dropFirst() {
       XCTAssertTrue(try first == makeBlock(fromFile: file))
     }
+  }
+
+  private func containerBlock(fromFile filename: String) throws -> ContainerBlock {
+    let block = try makeBlock(fromFile: filename) as! WrapperBlock
+    return block.child as! ContainerBlock
   }
 }
 

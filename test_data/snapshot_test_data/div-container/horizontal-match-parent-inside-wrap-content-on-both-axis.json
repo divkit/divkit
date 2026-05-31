@@ -2,6 +2,7 @@
   "description": "match_parent inside wrap_content in horizontal container without known size should transform into the wrap_content with constrained",
   "platforms": [
     "android",
+    "ios",
     "web",
     "flutter"
   ],

@@ -34,10 +34,16 @@ public final class ContainerBlock: BlockWithLayout {
     public var content: Block
     /// Alignment for dimension crossing container direction
     public let crossAlignment: CrossAlignment
+    public let fillsCrossAxis: Bool
 
-    public init(content: Block, crossAlignment: CrossAlignment = .leading) {
+    public init(
+      content: Block,
+      crossAlignment: CrossAlignment = .leading,
+      fillsCrossAxis: Bool = false
+    ) {
       self.content = content
       self.crossAlignment = crossAlignment
+      self.fillsCrossAxis = fillsCrossAxis
     }
   }
 
@@ -581,7 +587,9 @@ extension ContainerBlock: ElementFocusUpdating {
 
 extension ContainerBlock.Child {
   public static func ==(_ lhs: ContainerBlock.Child, _ rhs: ContainerBlock.Child) -> Bool {
-    lhs.content == rhs.content && lhs.crossAlignment == rhs.crossAlignment
+    lhs.content == rhs.content
+      && lhs.crossAlignment == rhs.crossAlignment
+      && lhs.fillsCrossAxis == rhs.fillsCrossAxis
   }
 }
 
