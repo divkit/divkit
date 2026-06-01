@@ -8,16 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.pager.DivPagerState
+import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
@@ -43,6 +42,7 @@ internal fun PagerContent(
     defaultItem: Int,
     viewportSize: Dp,
     crossAxisBounded: Boolean,
+    stateStorage: DivPagerStateStorage
 ) {
     val density = LocalDensity.current
     val snapPosition = scrollAxisAlignment.toSnapPosition()
@@ -52,7 +52,13 @@ internal fun PagerContent(
     val pageSize = layoutMode.observePageSize(scrollAxisAlignment, viewportSize, itemSpacing, startPadding, endPadding)
     val listState = rememberListState(defaultItem, snapPosition, pageSize, itemSpacing, startPadding, endPadding, viewportSize, items.size)
 
-    StorePagerState(id = id, pageCount = items.size, listState = listState, snapPosition = snapPosition)
+    stateStorage.rememberAndStoreState(
+        id = id,
+        pageCount = items.size,
+        listState = listState,
+        snapPosition = snapPosition,
+        initialPage = defaultItem,
+    )
 
     if (pageSize == null && snapPosition != SnapPosition.Start) {
         AdjustScrollToItem(listState, defaultItem, snapPosition, endPadding)
@@ -170,20 +176,4 @@ private class SinglePageSnapLayoutInfoProvider(
 ) : SnapLayoutInfoProvider {
     override fun calculateSnapOffset(velocity: Float) = delegate.calculateSnapOffset(velocity)
     override fun calculateApproachOffset(velocity: Float, decayOffset: Float) = 0f
-}
-
-@Composable
-private fun StorePagerState(
-    id: String?,
-    pageCount: Int,
-    listState: LazyListState,
-    snapPosition: SnapPosition,
-) {
-    if (id != null) {
-        val storage = LocalDivViewContext.current.pagerStateStorage
-        LaunchedEffect(pageCount, listState, snapPosition) {
-            val state = DivPagerState(pageCount, listState, snapPosition)
-            storage.put(id, state)
-        }
-    }
 }

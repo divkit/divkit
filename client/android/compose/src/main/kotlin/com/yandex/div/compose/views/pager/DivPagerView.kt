@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.pager
 
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -10,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.Div
@@ -48,6 +51,16 @@ private fun PagerView(
     val crossAxisBounded = remember { mutableStateOf(true) }
 
     val isHorizontal = data.orientation.observedValue() == DivPager.Orientation.HORIZONTAL
+    val defaultItem = data.defaultItem.observedValue().toInt().coerceIn(0, items.size - 1)
+    val stateStorage = LocalDivViewContext.current.pagerStateStorage
+
+    stateStorage.rememberAndStoreState(
+        id = data.id,
+        pageCount = items.size,
+        listState = null,
+        snapPosition = SnapPosition.Start,
+        initialPage = defaultItem,
+    )
 
     Box(modifier.captureConstraints(isHorizontal, viewportSizePx, crossAxisBounded)) {
         if (viewportSizePx.intValue <= 0) return@Box
@@ -65,9 +78,10 @@ private fun PagerView(
             scrollAxisAlignment = data.scrollAxisAlignment.observedValue(),
             crossAxisAlignment = data.crossAxisAlignment.observedValue(),
             layoutDirection = LocalLayoutDirection.current,
-            defaultItem = data.defaultItem.observedValue().toInt().coerceIn(0, items.size - 1),
+            defaultItem = defaultItem,
             viewportSize = viewportSize,
             crossAxisBounded = crossAxisBounded.value,
+            stateStorage = stateStorage
         )
     }
 }

@@ -7,17 +7,18 @@ import kotlin.math.abs
 
 internal class DivPagerState(
     val pageCount: Int,
-    private val listState: LazyListState,
+    private val listState: LazyListState?,
     private val snapPosition: SnapPosition,
+    private val initialPage: Int = 0,
 ) {
 
     val currentPage: Int
-        get() = pageAndOffset().first
+        get() = listState?.let { pageAndOffset(it).first } ?: initialPage
 
     val currentPageOffsetFraction: Float
-        get() = pageAndOffset().second
+        get() = listState?.let { pageAndOffset(it).second } ?: 0f
 
-    private fun pageAndOffset(): Pair<Int, Float> {
+    private fun pageAndOffset(listState: LazyListState): Pair<Int, Float> {
         val info = listState.layoutInfo
         return pageAndOffset(
             viewportStart = info.viewportStartOffset,
