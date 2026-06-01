@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewLocator
 import com.yandex.div.core.view2.divs.widgets.DivInputView
-import com.yandex.div.core.view2.errors.ErrorObserver
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTypedValue
 
@@ -15,13 +14,6 @@ internal fun Div2View.logWarning(throwable: Throwable) {
         .errorCollectors
         .getOrCreate(dataTag, divData)
         .logWarning(throwable)
-}
-
-internal fun Div2View.observeErrors(observer: ErrorObserver) {
-    viewComponent
-        .errorCollectors
-        .getOrCreate(dataTag, divData)
-        .observeAndGet(observer)
 }
 
 internal fun DivTypedValue.longValue(expressionResolver: ExpressionResolver): Long? {

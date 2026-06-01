@@ -4,14 +4,16 @@ import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
-import com.yandex.div.core.actions.observeErrors
+import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.test.crossplatform.IntegrationTestCase
 import com.yandex.div.test.crossplatform.IntegrationTestCaseParser
+import com.yandex.div.test.crossplatform.IntegrationTestLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import com.yandex.div2.DivData
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -28,7 +30,10 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
     fun run() {
         val divData = testCase.parseDivData() ?: return
 
-        val context = Div2Context(activity, DivConfiguration.Builder(IMAGE_LOADER_STUB).build())
+        val config = DivConfiguration.Builder(IMAGE_LOADER_STUB)
+            .divErrorsReporter(ErrorReporter(testCase.logger))
+            .build()
+        val context = Div2Context(activity, config)
 
         testCase.declareResultVariables(
             variables = divData.variables ?: emptyList(),
@@ -37,11 +42,6 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
 
         val divView = Div2View(context)
         divView.setData(divData, DivDataTag(UUID.randomUUID().toString()))
-        divView.observeErrors { errors, _ ->
-            errors.forEach { error ->
-                testCase.logger.logErrorDirectly(error)
-            }
-        }
 
         testCase.parseActions().forEach {
             divView.handleAction(it)
@@ -50,6 +50,15 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
         testCase.checkResult(
             expressionResolver = divView.expressionResolver
         )
+    }
+
+    private class ErrorReporter(private val logger: IntegrationTestLogger) : DivErrorsReporter {
+
+        override fun onRuntimeError(divData: DivData?, divDataTag: DivDataTag, error: Throwable) =
+            logger.logErrorDirectly(error)
+
+        override fun onWarning(divData: DivData?, divDataTag: DivDataTag, warning: Throwable) =
+            logger.logErrorDirectly(warning)
     }
 
     companion object {

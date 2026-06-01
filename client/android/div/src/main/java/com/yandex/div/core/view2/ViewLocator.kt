@@ -15,13 +15,13 @@ internal object ViewLocator {
         scopeId ?: return view.findSingleViewWithTag<T>(tag)
 
         val scopeError = view.findSingleViewWithTag<View>(scopeId, isScope = true)
-            .onSuccess { return it.findSingleViewWithTag<T>(tag) }
+            .onSuccess { return it.findSingleViewWithTag<T>(tag, inScope = true) }
             .exceptionOrNull()
 
         if (scopeError !is MissingTarget) {
             val error = scopeError ?: run {
                 Assert.fail("ScopeError is null")
-                DuplicateTarget(scopeId, isScope = true)
+                DuplicateTarget(scopeId, isScope = true, inScope = false)
             }
             return Result.failure(error)
         }
@@ -31,11 +31,15 @@ internal object ViewLocator {
             .onFailure { if (it is DuplicateTarget) return Result.failure(scopeError) }
     }
 
-    private inline fun <reified T> View.findSingleViewWithTag(tag: String, isScope: Boolean = false): Result<T> {
+    private inline fun <reified T> View.findSingleViewWithTag(
+        tag: String,
+        isScope: Boolean = false,
+        inScope: Boolean = false,
+    ): Result<T> {
         val foundViews = findViewsWithTag<T>(tag)
         return when {
-            foundViews.isEmpty() -> Result.failure(MissingTarget(tag, isScope))
-            foundViews.size > 1 -> Result.failure(DuplicateTarget(tag, isScope))
+            foundViews.isEmpty() -> Result.failure(MissingTarget(tag, isScope, inScope))
+            foundViews.size > 1 -> Result.failure(DuplicateTarget(tag, isScope, inScope))
             else -> Result.success(foundViews.first())
         }
     }
@@ -58,8 +62,11 @@ internal object ViewLocator {
         }
     }
 
-    class MissingTarget(tag: String, isScope: Boolean) : Exception("${isScope.toMessage} with id '$tag' is missing")
-    class DuplicateTarget(tag: String, isScope: Boolean) : Exception("${isScope.toMessage} with id '$tag' is ambiguous")
+    class MissingTarget(tag: String, isScope: Boolean, inScope: Boolean)
+        : Exception(buildMessage(tag, isScope, "not found", inScope))
+    class DuplicateTarget(tag: String, isScope: Boolean, inScope: Boolean)
+        : Exception(buildMessage(tag, isScope, "is ambiguous", inScope))
 
-    private val Boolean.toMessage get() = if (this) "Scope" else "Element"
+    private fun buildMessage(tag: String, isScope: Boolean, error: String, inScope: Boolean) =
+        (if (isScope) "Scope" else "Element") + " with id '$tag' $error" + (if (inScope) " in scope" else "")
 }
