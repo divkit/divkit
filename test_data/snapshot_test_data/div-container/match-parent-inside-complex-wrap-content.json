@@ -1,0 +1,141 @@
+{
+  "platforms": [
+    "android",
+    "web",
+    "ios"
+  ],
+  "description": "match_parent on the cross-axis of the container should be calculated as max size",
+  "card": {
+    "log_id": "mock-editable-preview-logId",
+    "states": [
+      {
+        "div": {
+          "background": [
+            {
+              "color": "#000",
+              "type": "solid"
+            }
+          ],
+          "items": [
+            {
+              "background": [
+                {
+                  "color": "#FFFFFF",
+                  "type": "solid"
+                }
+              ],
+              "paddings": {
+                "left": 10,
+                "right": 10
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text": "long text many lines long text many lines",
+                  "text_color": "#191817",
+                  "type": "small-text",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1.0
+                  }
+                }
+              ],
+              "type": "container"
+            },
+            {
+              "background": [
+                {
+                  "color": "#FFFFFF",
+                  "type": "solid"
+                }
+              ],
+              "paddings": {
+                "left": 10,
+                "right": 10
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text": "small text ",
+                  "text_color": "#191817",
+                  "type": "small-text",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1.0
+                  }
+                }
+              ],
+              "type": "container"
+            },
+            {
+              "background": [
+                {
+                  "color": "#FFFFFF",
+                  "type": "solid"
+                }
+              ],
+              "paddings": {
+                "left": 10,
+                "right": 10
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text": "small text ",
+                  "text_color": "#191817",
+                  "type": "small-text",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1.0
+                  }
+                }
+              ],
+              "type": "container"
+            }
+          ],
+          "orientation": "horizontal",
+          "paddings": {
+            "bottom": 12,
+            "left": 16,
+            "right": 16
+          },
+          "type": "container"
+        },
+        "state_id": 0
+      }
+    ],
+    "variables": []
+  },
+  "templates": {
+    "small-text": {
+      "font_feature_settings": "'lnum' on, 'pnum' on",
+      "font_size": 13,
+      "line_height": 15,
+      "type": "text"
+    }
+  }
+}

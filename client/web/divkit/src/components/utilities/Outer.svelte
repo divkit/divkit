@@ -1012,7 +1012,15 @@
     // eslint-disable-next-line no-nested-ternary
     $: flexBasis = (widthFill || heightFill) ?
         '100%' :
-        ((widthFlexGrow || heightFlexGrow) ? 0 : undefined);
+        (
+            (
+                (widthFlexGrow || heightFlexGrow) &&
+                !(layoutParams?.parentContainerOrientation === 'horizontal' && layoutParams?.insideParentWithContentWidth) &&
+                !(layoutParams?.parentContainerOrientation === 'vertical' && layoutParams?.insideParentWithContentHeight)
+            ) ?
+                0 :
+                undefined
+        );
 
     $: stl = {
         ...style,

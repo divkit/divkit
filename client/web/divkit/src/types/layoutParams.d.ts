@@ -13,6 +13,8 @@ export interface LayoutParams {
     parentContainerWrap?: boolean;
     parentHorizontalWrapContent?: boolean;
     parentVerticalWrapContent?: boolean;
+    insideParentWithContentWidth?: boolean;
+    insideParentWithContentHeight?: boolean;
     stretchWidth?: boolean;
     stretchHeight?: boolean;
     treatMatchParentAs100?: boolean;

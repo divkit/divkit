@@ -349,6 +349,18 @@
         if (!aspect && !supportHeightWrapContent && isHeightWrapContent) {
             newChildLayoutParams.parentVerticalWrapContent = true;
         }
+        if (
+            supportWidthWrapContent && isWidthWrapContent ||
+            layoutParams?.insideParentWithContentWidth && !isWidthWrapContent && $jsonWidth?.type !== 'fixed'
+        ) {
+            newChildLayoutParams.insideParentWithContentWidth = true;
+        }
+        if (
+            supportHeightWrapContent && isHeightWrapContent ||
+            layoutParams?.insideParentWithContentHeight && !isHeightWrapContent && $jsonHeight?.type !== 'fixed'
+        ) {
+            newChildLayoutParams.insideParentWithContentHeight = true;
+        }
         if (!isWidthWrapContent) {
             newChildLayoutParams.parentContainerKnownWidth = true;
         }
