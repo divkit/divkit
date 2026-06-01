@@ -537,6 +537,255 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     }
   }
 
+  public final class RangeBuilderTemplate: TemplateValue, @unchecked Sendable {
+    public final class PrototypeTemplate: TemplateValue, Sendable {
+      public let range: Field<RangeTemplate>?
+      public let selector: Field<Expression<Bool>>? // default value: true
+
+      public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+        self.init(
+          range: dictionary.getOptionalField("range", templateToType: templateToType),
+          selector: dictionary.getOptionalExpressionField("selector")
+        )
+      }
+
+      init(
+        range: Field<RangeTemplate>? = nil,
+        selector: Field<Expression<Bool>>? = nil
+      ) {
+        self.range = range
+        self.selector = selector
+      }
+
+      private static func resolveOnlyLinks(context: TemplatesContext, parent: PrototypeTemplate?) -> DeserializationResult<DivText.RangeBuilder.Prototype> {
+        let rangeValue = { parent?.range?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+        let selectorValue = { parent?.selector?.resolveOptionalValue(context: context) ?? .noValue }()
+        var errors = mergeErrors(
+          rangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "range", error: $0) },
+          selectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "selector", error: $0) }
+        )
+        if case .noValue = rangeValue {
+          errors.append(.requiredFieldIsMissing(field: "range"))
+        }
+        guard
+          let rangeNonNil = rangeValue.value
+        else {
+          return .failure(NonEmptyArray(errors)!)
+        }
+        let result = DivText.RangeBuilder.Prototype(
+          range: { rangeNonNil }(),
+          selector: { selectorValue.value }()
+        )
+        return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      }
+
+      public static func resolveValue(context: TemplatesContext, parent: PrototypeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.RangeBuilder.Prototype> {
+        if useOnlyLinks {
+          return resolveOnlyLinks(context: context, parent: parent)
+        }
+        var rangeValue: DeserializationResult<DivText.Range> = .noValue
+        var selectorValue: DeserializationResult<Expression<Bool>> = { parent?.selector?.value() ?? .noValue }()
+        _ = {
+          // Each field is parsed in its own lambda to keep the stack size managable
+          // Otherwise the compiler will allocate stack for each intermediate variable
+          // upfront even when we don't actually visit a relevant branch
+          for (key, __dictValue) in context.templateData {
+            _ = {
+              if key == "range" {
+               rangeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self).merged(with: rangeValue)
+              }
+            }()
+            _ = {
+              if key == "selector" {
+               selectorValue = deserialize(__dictValue).merged(with: selectorValue)
+              }
+            }()
+            _ = {
+             if key == parent?.range?.link {
+               rangeValue = rangeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self) })
+              }
+            }()
+            _ = {
+             if key == parent?.selector?.link {
+               selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
+              }
+            }()
+          }
+        }()
+        if let parent = parent {
+          _ = { rangeValue = rangeValue.merged(with: { parent.range?.resolveValue(context: context, useOnlyLinks: true) }) }()
+        }
+        var errors = mergeErrors(
+          rangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "range", error: $0) },
+          selectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "selector", error: $0) }
+        )
+        if case .noValue = rangeValue {
+          errors.append(.requiredFieldIsMissing(field: "range"))
+        }
+        guard
+          let rangeNonNil = rangeValue.value
+        else {
+          return .failure(NonEmptyArray(errors)!)
+        }
+        let result = DivText.RangeBuilder.Prototype(
+          range: { rangeNonNil }(),
+          selector: { selectorValue.value }()
+        )
+        return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      }
+
+      private func mergedWithParent(templates: [TemplateName: Any]) throws -> PrototypeTemplate {
+        return self
+      }
+
+      public func resolveParent(templates: [TemplateName: Any]) throws -> PrototypeTemplate {
+        let merged = try mergedWithParent(templates: templates)
+
+        return PrototypeTemplate(
+          range: try merged.range?.resolveParent(templates: templates),
+          selector: merged.selector
+        )
+      }
+    }
+
+    public let data: Field<Expression<[Any]>>?
+    public let dataElementName: Field<String>? // default value: it
+    public let prototypes: Field<[PrototypeTemplate]>? // at least 1 elements
+
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+      self.init(
+        data: dictionary.getOptionalExpressionField("data"),
+        dataElementName: dictionary.getOptionalField("data_element_name"),
+        prototypes: dictionary.getOptionalArray("prototypes", templateToType: templateToType)
+      )
+    }
+
+    init(
+      data: Field<Expression<[Any]>>? = nil,
+      dataElementName: Field<String>? = nil,
+      prototypes: Field<[PrototypeTemplate]>? = nil
+    ) {
+      self.data = data
+      self.dataElementName = dataElementName
+      self.prototypes = prototypes
+    }
+
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: RangeBuilderTemplate?) -> DeserializationResult<DivText.RangeBuilder> {
+      let dataValue = { parent?.data?.resolveValue(context: context) ?? .noValue }()
+      let dataElementNameValue = { parent?.dataElementName?.resolveOptionalValue(context: context) ?? .noValue }()
+      let prototypesValue = { parent?.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) ?? .noValue }()
+      var errors = mergeErrors(
+        dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
+        dataElementNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_name", error: $0) },
+        prototypesValue.errorsOrWarnings?.map { .nestedObjectError(field: "prototypes", error: $0) }
+      )
+      if case .noValue = dataValue {
+        errors.append(.requiredFieldIsMissing(field: "data"))
+      }
+      if case .noValue = prototypesValue {
+        errors.append(.requiredFieldIsMissing(field: "prototypes"))
+      }
+      guard
+        let dataNonNil = dataValue.value,
+        let prototypesNonNil = prototypesValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivText.RangeBuilder(
+        data: { dataNonNil }(),
+        dataElementName: { dataElementNameValue.value }(),
+        prototypes: { prototypesNonNil }()
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    public static func resolveValue(context: TemplatesContext, parent: RangeBuilderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.RangeBuilder> {
+      if useOnlyLinks {
+        return resolveOnlyLinks(context: context, parent: parent)
+      }
+      var dataValue: DeserializationResult<Expression<[Any]>> = { parent?.data?.value() ?? .noValue }()
+      var dataElementNameValue: DeserializationResult<String> = { parent?.dataElementName?.value() ?? .noValue }()
+      var prototypesValue: DeserializationResult<[DivText.RangeBuilder.Prototype]> = .noValue
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "data" {
+             dataValue = deserialize(__dictValue).merged(with: dataValue)
+            }
+          }()
+          _ = {
+            if key == "data_element_name" {
+             dataElementNameValue = deserialize(__dictValue).merged(with: dataElementNameValue)
+            }
+          }()
+          _ = {
+            if key == "prototypes" {
+             prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivTextTemplate.RangeBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
+            }
+          }()
+          _ = {
+           if key == parent?.data?.link {
+             dataValue = dataValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.dataElementName?.link {
+             dataElementNameValue = dataElementNameValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.prototypes?.link {
+             prototypesValue = prototypesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivTextTemplate.RangeBuilderTemplate.PrototypeTemplate.self) })
+            }
+          }()
+        }
+      }()
+      if let parent = parent {
+        _ = { prototypesValue = prototypesValue.merged(with: { parent.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) }) }()
+      }
+      var errors = mergeErrors(
+        dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
+        dataElementNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_name", error: $0) },
+        prototypesValue.errorsOrWarnings?.map { .nestedObjectError(field: "prototypes", error: $0) }
+      )
+      if case .noValue = dataValue {
+        errors.append(.requiredFieldIsMissing(field: "data"))
+      }
+      if case .noValue = prototypesValue {
+        errors.append(.requiredFieldIsMissing(field: "prototypes"))
+      }
+      guard
+        let dataNonNil = dataValue.value,
+        let prototypesNonNil = prototypesValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivText.RangeBuilder(
+        data: { dataNonNil }(),
+        dataElementName: { dataElementNameValue.value }(),
+        prototypes: { prototypesNonNil }()
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> RangeBuilderTemplate {
+      return self
+    }
+
+    public func resolveParent(templates: [TemplateName: Any]) throws -> RangeBuilderTemplate {
+      let merged = try mergedWithParent(templates: templates)
+
+      return RangeBuilderTemplate(
+        data: merged.data,
+        dataElementName: merged.dataElementName,
+        prototypes: try merged.prototypes?.resolveParent(templates: templates)
+      )
+    }
+  }
+
   public final class RangeTemplate: TemplateValue, @unchecked Sendable {
     public let actions: Field<[DivActionTemplate]>?
     public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>?
@@ -1101,6 +1350,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pressEndActions: Field<[DivActionTemplate]>?
   public let pressStartActions: Field<[DivActionTemplate]>?
+  public let rangeBuilder: Field<RangeBuilderTemplate>?
   public let ranges: Field<[RangeTemplate]>?
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -1175,6 +1425,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       pressEndActions: dictionary.getOptionalArray("press_end_actions", templateToType: templateToType),
       pressStartActions: dictionary.getOptionalArray("press_start_actions", templateToType: templateToType),
+      rangeBuilder: dictionary.getOptionalField("range_builder", templateToType: templateToType),
       ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
@@ -1250,6 +1501,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pressEndActions: Field<[DivActionTemplate]>? = nil,
     pressStartActions: Field<[DivActionTemplate]>? = nil,
+    rangeBuilder: Field<RangeBuilderTemplate>? = nil,
     ranges: Field<[RangeTemplate]>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
@@ -1322,6 +1574,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     self.paddings = paddings
     self.pressEndActions = pressEndActions
     self.pressStartActions = pressStartActions
+    self.rangeBuilder = rangeBuilder
     self.ranges = ranges
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -1395,6 +1648,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let pressEndActionsValue = { parent?.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let pressStartActionsValue = { parent?.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let rangeBuilderValue = { parent?.rangeBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let rangesValue = { parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
@@ -1466,6 +1720,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
       pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
+      rangeBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "range_builder", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -1546,6 +1801,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddings: { paddingsValue.value }(),
       pressEndActions: { pressEndActionsValue.value }(),
       pressStartActions: { pressStartActionsValue.value }(),
+      rangeBuilder: { rangeBuilderValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -1624,6 +1880,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pressEndActionsValue: DeserializationResult<[DivAction]> = .noValue
     var pressStartActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var rangeBuilderValue: DeserializationResult<DivText.RangeBuilder> = .noValue
     var rangesValue: DeserializationResult<[DivText.Range]> = .noValue
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
@@ -1865,6 +2122,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "press_start_actions" {
            pressStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressStartActionsValue)
+          }
+        }()
+        _ = {
+          if key == "range_builder" {
+           rangeBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeBuilderTemplate.self).merged(with: rangeBuilderValue)
           }
         }()
         _ = {
@@ -2218,6 +2480,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
+         if key == parent?.rangeBuilder?.link {
+           rangeBuilderValue = rangeBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeBuilderTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.ranges?.link {
            rangesValue = rangesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self) })
           }
@@ -2383,6 +2650,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { pressEndActionsValue = pressEndActionsValue.merged(with: { parent.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { pressStartActionsValue = pressStartActionsValue.merged(with: { parent.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { rangeBuilderValue = rangeBuilderValue.merged(with: { parent.rangeBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { rangesValue = rangesValue.merged(with: { parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { textGradientValue = textGradientValue.merged(with: { parent.textGradient?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -2442,6 +2710,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
       pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
+      rangeBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "range_builder", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -2522,6 +2791,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddings: { paddingsValue.value }(),
       pressEndActions: { pressEndActionsValue.value }(),
       pressStartActions: { pressStartActionsValue.value }(),
+      rangeBuilder: { rangeBuilderValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -2605,6 +2875,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddings: paddings ?? mergedParent.paddings,
       pressEndActions: pressEndActions ?? mergedParent.pressEndActions,
       pressStartActions: pressStartActions ?? mergedParent.pressStartActions,
+      rangeBuilder: rangeBuilder ?? mergedParent.rangeBuilder,
       ranges: ranges ?? mergedParent.ranges,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
@@ -2683,6 +2954,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       pressEndActions: merged.pressEndActions?.tryResolveParent(templates: templates),
       pressStartActions: merged.pressStartActions?.tryResolveParent(templates: templates),
+      rangeBuilder: merged.rangeBuilder?.tryResolveParent(templates: templates),
       ranges: merged.ranges?.tryResolveParent(templates: templates),
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,

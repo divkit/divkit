@@ -1,0 +1,98 @@
+{
+  "description": "Text ranges generated dynamically via range_builder.",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content",
+            "constrained": true
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "variables": [
+                {
+                  "name": "source",
+                  "type": "array",
+                  "value": [
+                    { "start": 0, "end": 3, "color": "#FF0000" },
+                    { "start": 4, "end": 9, "color": "#00AA00" },
+                    { "start": 10, "end": 14, "color": "#0000FF" }
+                  ]
+                }
+              ],
+              "description": "range_builder generates a styled range per data element",
+              "type": "text",
+              "font_size": 18,
+              "text": "Red Green Blue",
+              "range_builder": {
+                "data": "@{source}",
+                "prototypes": [
+                  {
+                    "range": {
+                      "start": "@{getIntegerFromDict(it, 'start')}",
+                      "end": "@{getIntegerFromDict(it, 'end')}",
+                      "font_weight": "bold",
+                      "text_color": "@{getStringFromDict(it, 'color')}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "variables": [
+                {
+                  "name": "source",
+                  "type": "array",
+                  "value": [
+                    { "start": 0, "end": 2, "kind": "ok" },
+                    { "start": 3, "end": 7, "kind": "warn" },
+                    { "start": 8, "end": 10, "kind": "ok" },
+                    { "start": 11, "end": 15, "kind": "warn" }
+                  ]
+                }
+              ],
+              "description": "selector chooses a prototype per data element",
+              "type": "text",
+              "font_size": 18,
+              "text": "ok warn ok warn",
+              "range_builder": {
+                "data": "@{source}",
+                "prototypes": [
+                  {
+                    "selector": "@{getStringFromDict(it, 'kind') == 'warn'}",
+                    "range": {
+                      "start": "@{getIntegerFromDict(it, 'start')}",
+                      "end": "@{getIntegerFromDict(it, 'end')}",
+                      "font_weight": "bold",
+                      "text_color": "#D00000"
+                    }
+                  },
+                  {
+                    "range": {
+                      "start": "@{getIntegerFromDict(it, 'start')}",
+                      "end": "@{getIntegerFromDict(it, 'end')}",
+                      "text_color": "#888888"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

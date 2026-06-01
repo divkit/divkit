@@ -353,6 +353,61 @@ public final class DivText: DivBase, @unchecked Sendable {
     }
   }
 
+  public final class RangeBuilder: @unchecked Sendable {
+    public final class Prototype: Sendable {
+      public let range: Range
+      public let selector: Expression<Bool> // default value: true
+
+      public func resolveSelector(_ resolver: ExpressionResolver) -> Bool {
+        resolver.resolveNumeric(selector) ?? true
+      }
+
+      public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+        self.init(
+          range: try dictionary.getField("range", transform: { (dict: [String: Any]) in try DivText.Range(dictionary: dict, context: context) }, context: context),
+          selector: try dictionary.getOptionalExpressionField("selector", context: context)
+        )
+      }
+
+      init(
+        range: Range,
+        selector: Expression<Bool>? = nil
+      ) {
+        self.range = range
+        self.selector = selector ?? .value(true)
+      }
+    }
+
+    public let data: Expression<[Any]>
+    public let dataElementName: String // default value: it
+    public let prototypes: [Prototype] // at least 1 elements
+
+    public func resolveData(_ resolver: ExpressionResolver) -> [Any]? {
+      resolver.resolveArray(data)
+    }
+
+    static let prototypesValidator: AnyArrayValueValidator<DivText.RangeBuilder.Prototype> =
+      makeArrayValidator(minItems: 1)
+
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        data: try dictionary.getExpressionField("data", context: context),
+        dataElementName: try dictionary.getOptionalField("data_element_name", context: context),
+        prototypes: try dictionary.getArray("prototypes", transform: { (dict: [String: Any]) in try? DivText.RangeBuilder.Prototype(dictionary: dict, context: context) }, validator: Self.prototypesValidator, context: context)
+      )
+    }
+
+    init(
+      data: Expression<[Any]>,
+      dataElementName: String? = nil,
+      prototypes: [Prototype]
+    ) {
+      self.data = data
+      self.dataElementName = dataElementName ?? "it"
+      self.prototypes = prototypes
+    }
+  }
+
   public static let type: String = "text"
   public let accessibility: DivAccessibility?
   public let action: DivAction?
@@ -396,6 +451,7 @@ public final class DivText: DivBase, @unchecked Sendable {
   public let paddings: DivEdgeInsets?
   public let pressEndActions: [DivAction]?
   public let pressStartActions: [DivAction]?
+  public let rangeBuilder: RangeBuilder?
   public let ranges: [Range]?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -616,6 +672,7 @@ public final class DivText: DivBase, @unchecked Sendable {
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       pressEndActions: try dictionary.getOptionalArray("press_end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       pressStartActions: try dictionary.getOptionalArray("press_start_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+      rangeBuilder: try dictionary.getOptionalField("range_builder", transform: { (dict: [String: Any]) in try DivText.RangeBuilder(dictionary: dict, context: context) }),
       ranges: try dictionary.getOptionalArray("ranges", transform: { (dict: [String: Any]) in try? DivText.Range(dictionary: dict, context: context) }),
       reuseId: try dictionary.getOptionalExpressionField("reuse_id", context: context),
       rowSpan: try dictionary.getOptionalExpressionField("row_span", validator: Self.rowSpanValidator, context: context),
@@ -690,6 +747,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     paddings: DivEdgeInsets? = nil,
     pressEndActions: [DivAction]? = nil,
     pressStartActions: [DivAction]? = nil,
+    rangeBuilder: RangeBuilder? = nil,
     ranges: [Range]? = nil,
     reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
@@ -761,6 +819,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     self.paddings = paddings
     self.pressEndActions = pressEndActions
     self.pressStartActions = pressStartActions
+    self.rangeBuilder = rangeBuilder
     self.ranges = ranges
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -890,69 +949,74 @@ extension DivText: Equatable {
     guard
       lhs.pressEndActions == rhs.pressEndActions,
       lhs.pressStartActions == rhs.pressStartActions,
-      lhs.ranges == rhs.ranges
+      lhs.rangeBuilder == rhs.rangeBuilder
     else {
       return false
     }
     guard
+      lhs.ranges == rhs.ranges,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectable == rhs.selectable
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectable == rhs.selectable,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike,
-      lhs.text == rhs.text
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
+      lhs.text == rhs.text,
       lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textGradient == rhs.textGradient,
-      lhs.textShadow == rhs.textShadow,
-      lhs.tightenWidth == rhs.tightenWidth
+      lhs.textShadow == rhs.textShadow
     else {
       return false
     }
     guard
+      lhs.tightenWidth == rhs.tightenWidth,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.truncate == rhs.truncate,
-      lhs.underline == rhs.underline
+      lhs.truncate == rhs.truncate
     else {
       return false
     }
     guard
+      lhs.underline == rhs.underline,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -1009,6 +1073,7 @@ extension DivText: Serializable {
     result["paddings"] = paddings?.toDictionary()
     result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
     result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
+    result["range_builder"] = rangeBuilder?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
@@ -1100,6 +1165,21 @@ extension DivText.Range: Equatable {
 #endif
 
 #if DEBUG
+// WARNING: this == is incomplete because of [String: Any] in class fields
+extension DivText.RangeBuilder: Equatable {
+  public static func ==(lhs: DivText.RangeBuilder, rhs: DivText.RangeBuilder) -> Bool {
+    guard
+      lhs.dataElementName == rhs.dataElementName,
+      lhs.prototypes == rhs.prototypes
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
 extension DivText.Ellipsis: Equatable {
   public static func ==(lhs: DivText.Ellipsis, rhs: DivText.Ellipsis) -> Bool {
     guard
@@ -1159,6 +1239,20 @@ extension DivText.Image: Equatable {
     }
     guard
       lhs.width == rhs.width
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
+extension DivText.RangeBuilder.Prototype: Equatable {
+  public static func ==(lhs: DivText.RangeBuilder.Prototype, rhs: DivText.RangeBuilder.Prototype) -> Bool {
+    guard
+      lhs.range == rhs.range,
+      lhs.selector == rhs.selector
     else {
       return false
     }
@@ -1233,6 +1327,27 @@ extension DivText.Range: Serializable {
     result["text_shadow"] = textShadow?.toDictionary()
     result["top_offset"] = topOffset?.toValidSerializationValue()
     result["underline"] = underline?.toValidSerializationValue()
+    return result
+  }
+}
+
+extension DivText.RangeBuilder.Prototype: Serializable {
+  @_optimize(size)
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["range"] = range.toDictionary()
+    result["selector"] = selector.toValidSerializationValue()
+    return result
+  }
+}
+
+extension DivText.RangeBuilder: Serializable {
+  @_optimize(size)
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["data"] = data.toValidSerializationValue()
+    result["data_element_name"] = dataElementName
+    result["prototypes"] = prototypes.map { $0.toDictionary() }
     return result
   }
 }

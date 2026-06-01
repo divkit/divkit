@@ -2527,6 +2527,30 @@
     "en": "Additional parameters of the character range.",
     "ru": "Дополнительные параметры диапазона символов."
   },
+  "div_text_range_builder": {
+    "en": "Sets character ranges dynamically using `data` and `prototypes`.",
+    "ru": "Задает диапазоны символов динамически при помощи `data` и `prototypes`."
+  },
+  "div_text_range_builder_data": {
+    "en": "Data that will be used to create character ranges.",
+    "ru": "Данные, которые будут использоваться для создания диапазонов символов."
+  },
+  "div_text_range_builder_data_element_name": {
+    "en": "Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.",
+    "ru": "Имя для обращения к очередному элементу `data` в прототипе. Работа с этим элементом ведется так же, как со словарями."
+  },
+  "div_text_range_builder_prototypes": {
+    "en": "Array of `range` elements from which the character ranges will be created.",
+    "ru": "Массив `range`, из которых будут созданы диапазоны символов."
+  },
+  "div_text_range_builder_prototype_range": {
+    "en": "`range` from which the character range will be created. In `range`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same name as in `data_element_name`.",
+    "ru": "`range`, из которого будет создан диапазон символов. В `range` можно использовать выражения с использованием данных из `data`. Для обращения к очередному элементу `data` нужно использовать такое же имя, как и в `data_element_name`."
+  },
+  "div_text_range_builder_prototype_selector": {
+    "en": "A condition that is used to select the prototype for the next character range. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
+    "ru": "Условие, которое используется для выбора прототипа для очередного диапазона символов. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."
+  },
   "div_text_range_actions": {
     "en": "Action when clicking on text.",
     "ru": "Действие при нажатии на текст."
