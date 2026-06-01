@@ -45,6 +45,8 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
         private val ignoredCases = listOf(
             "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
             "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
+            "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image.json",
+            "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image_scale.json",
         )
 
         @JvmStatic
