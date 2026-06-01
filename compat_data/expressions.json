@@ -365,6 +365,21 @@
           "version_added": "32.41.0"
         }
       }
+    },
+    {
+      "id": "fn_color_alpha_blend",
+      "name": "<code>alphaBlend</code> function for colors",
+      "compat": {
+        "ios": {
+          "version_added": "32.51.0"
+        },
+        "android": {
+          "version_added": "32.51.0"
+        },
+        "web": {
+          "version_added": "32.52.0"
+        }
+      }
     }
   ]
 }

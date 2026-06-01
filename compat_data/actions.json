@@ -246,6 +246,9 @@
         },
         "android": {
           "version_added": "32.48.0"
+        },
+        "ios": {
+          "version_added": "32.52.0"
         }
       }
     },
