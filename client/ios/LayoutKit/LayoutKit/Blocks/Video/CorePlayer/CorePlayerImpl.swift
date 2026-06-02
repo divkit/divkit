@@ -18,7 +18,7 @@ final class CorePlayerImpl: CorePlayer {
     private let stopRate: Float = 0
 
     private var defaultRate: Float {
-      if #available(iOS 16.0, *) {
+      if #available(iOS 16.0, macOS 13.0, *) {
         player.defaultRate
       } else {
         1
@@ -88,7 +88,7 @@ final class CorePlayerImpl: CorePlayer {
     private func updateRate(_ rate: Float) {
       pendingApply = nil
       player.rate = rate
-      if #available(iOS 16.0, *) {
+      if #available(iOS 16.0, macOS 13.0, *) {
         player.defaultRate = rate
       }
     }
