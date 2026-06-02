@@ -146,9 +146,8 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
         val viewRenderer = Div2RendererFacade(binding.singleContainer, divContext, actionHandler)
         val composeRenderer = ComposeRendererFacade(
-            binding.composeContainer,
-            divContext.divVariableController,
-            this
+            container = binding.composeContainer,
+            variableController = divContext.divVariableController
         )
 
         with(binding.div2Recycler) {

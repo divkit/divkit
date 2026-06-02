@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
-import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.lottie.LottieExtensionHandler
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.annotations.ExperimentalApi
@@ -16,6 +16,7 @@ import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
 import com.yandex.divkit.demo.div.NestedScrollViewFactory
+import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.div.compose.DivView as ComposeDivView
 import com.yandex.divkit.demo.screenshot.DivAssetReader
@@ -48,6 +49,7 @@ class RegressionComposeViewCreator(context: Context) {
                     "lottie" to LottieExtensionHandler()
                 ),
                 fontSourceProvider = ComposeFontSourceProvider(),
+                histogramConfiguration = DemoHistogramConfiguration,
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
             )
         )
@@ -58,4 +60,10 @@ class RegressionComposeViewCreator(context: Context) {
         }
         onBound(view)
     }
+}
+
+private object DemoHistogramConfiguration : DivHistogramConfiguration {
+    override val isEnabled = true
+    override val componentName = ""
+    override val histogramBridge = LoggingHistogramBridge()
 }

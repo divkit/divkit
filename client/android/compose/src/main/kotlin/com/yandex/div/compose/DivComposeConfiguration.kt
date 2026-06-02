@@ -10,6 +10,8 @@ import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.font.DivFontSource
 import com.yandex.div.compose.font.DivFontSourceProvider
+import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
+import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoPlayerFactory
@@ -48,6 +50,9 @@ class DivComposeConfiguration(
 
     @get:Provides
     val fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider,
+
+    @get:Provides
+    val histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration,
 
     @get:Provides
     val playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory,

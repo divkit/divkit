@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":div-core"))
     implementation(project(":div-data"))
     implementation(project(":div-evaluable"))
+    implementation(project(":div-histogram"))
     implementation(project(":logging"))
 
     implementation(platform(libs.androidx.compose.bom))

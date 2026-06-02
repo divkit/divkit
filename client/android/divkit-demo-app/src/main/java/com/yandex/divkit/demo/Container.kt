@@ -141,10 +141,6 @@ internal object Container {
         DivKit.getInstance(context).parsingHistogramReporter
     }
 
-    val histogramReporterDelegate by lazy {
-        DivKit.getInstance(context).histogramReporterDelegate
-    }
-
     fun initialize(context: Context) {
         this.context = context
     }

@@ -37,31 +37,32 @@ fun DivView(
     modifier: Modifier = Modifier
 ) {
     val viewContext = divContext.getViewContext(data)
-    viewContext.timerStorage.observe()
+    viewContext.component.histogramReporter.measure {
+        val localComponent = viewContext.rootLocalComponent
+        viewContext.timerStorage.observe()
+        localComponent.triggerStorage.observe()
 
-    val localComponent = viewContext.rootLocalComponent
-    localComponent.triggerStorage.observe()
+        CompositionLocalProvider(
+            LocalDivViewContext provides viewContext,
+            LocalComponent provides localComponent
+        ) {
+            val states = data.states
+            if (states.size > 1) {
+                reportError("Multiple root states not supported")
+            }
 
-    CompositionLocalProvider(
-        LocalDivViewContext provides viewContext,
-        LocalComponent provides localComponent
-    ) {
-        val states = data.states
-        if (states.size > 1) {
-            reportError("Multiple root states not supported")
-        }
+            val rootState = states.firstOrNull()
+            if (rootState == null) {
+                reportError("Empty data")
+                return@CompositionLocalProvider
+            }
 
-        val rootState = states.firstOrNull()
-        if (rootState == null) {
-            reportError("Empty data")
-            return@CompositionLocalProvider
-        }
-
-        WithRootStatePath(rootState.stateId) {
-            DivBlockView(
-                data = rootState.div,
-                modifier = modifier
-            )
+            WithRootStatePath(rootState.stateId) {
+                DivBlockView(
+                    data = rootState.div,
+                    modifier = modifier
+                )
+            }
         }
     }
 }
