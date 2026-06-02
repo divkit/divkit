@@ -1298,9 +1298,10 @@ class Div2View private constructor(
     fun applyVideoCommand(
         divId: String,
         command: String,
-        expressionResolver: ExpressionResolver = getExpressionResolver()
+        expressionResolver: ExpressionResolver = getExpressionResolver(),
+        scopeId: String? = null,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return divVideoActionHandler.handleAction(this, divId, command, expressionResolver)
+        return divVideoActionHandler.handleAction(this, divId, scopeId, command)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = synchronized(viewToDivBindings) {

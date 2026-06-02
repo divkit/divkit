@@ -506,7 +506,7 @@ public class DivActionHandler {
                 return false;
             }
 
-            return div2View.applyVideoCommand(id, command, resolver);
+            return div2View.applyVideoCommand(id, command, resolver, scopeId);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, scopeId, view);
         } else if (StoredValuesActionHandler.canHandle(action)) {

@@ -1,36 +1,23 @@
 package com.yandex.div.core.player
 
+import com.yandex.div.core.actions.findTargetView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.internal.KAssert
-import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivBase
-import com.yandex.div2.DivContainer
-import com.yandex.div2.DivCustom
-import com.yandex.div2.DivData
-import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGrid
-import com.yandex.div2.DivPager
-import com.yandex.div2.DivState
-import com.yandex.div2.DivTabs
-import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
 @DivScope
-internal class DivVideoActionHandler @Inject constructor(
-    private val videoViewMapper: DivVideoViewMapper
-) {
+internal class DivVideoActionHandler @Inject constructor() {
+
     fun handleAction(
         div2View: Div2View,
         divId: String,
+        scopeId: String?,
         action: String,
-        expressionResolver: ExpressionResolver
     ): Boolean {
-        val divData = div2View.divData ?: return false
-        val video = searchDivDataForVideo(divData, divId, expressionResolver) ?: return false
-        val player = videoViewMapper.getPlayer(video) ?: return false
+        val videoView = div2View.findTargetView<DivVideoView>(divId, "video", scopeId) ?: return false
+        val player = videoView.getPlayerView()?.getAttachedPlayer() ?: return false
 
         when (action) {
             START_COMMAND -> player.play()
@@ -41,80 +28,6 @@ internal class DivVideoActionHandler @Inject constructor(
             }
         }
         return true
-    }
-
-    private fun searchDivDataForVideo(divData: DivData, id: String, resolver: ExpressionResolver): DivVideo? {
-        divData.states.forEach { state ->
-            findDivVideoWithId(state.div.value(), id, resolver)?.let {
-                return it
-            }
-        }
-        return null
-    }
-
-    private fun findDivVideoWithId(div: DivBase, id: String, resolver: ExpressionResolver): DivVideo? {
-        when (div) {
-            is DivVideo -> return if (div.id == id) div else null
-            is DivGallery -> {
-                div.buildItems(resolver).forEach { (item, newResolver) ->
-                    findDivVideoWithId(item.value(), id, newResolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivContainer -> {
-                div.buildItems(resolver).forEach { (item, newResolver) ->
-                    findDivVideoWithId(item.value(), id, newResolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivGrid -> {
-                div.nonNullItems.forEach { item ->
-                    findDivVideoWithId(item.value(), id, resolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivPager -> {
-                div.buildItems(resolver).forEach { (item, newResolver) ->
-                    findDivVideoWithId(item.value(), id, newResolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivTabs -> {
-                div.items.forEach { item ->
-                    findDivVideoWithId(item.div.value(), id, resolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivCustom -> {
-                div.items?.forEach { item ->
-                    findDivVideoWithId(item.value(), id, resolver)?.let {
-                        return it
-                    }
-                }
-                return null
-            }
-            is DivState -> {
-                div.states.forEach { state ->
-                    state.div?.value()?.let {  div ->
-                        findDivVideoWithId(div, id, resolver)?.let {
-                            return it
-                        }
-                    }
-                }
-                return null
-            }
-            else -> return null
-        }
     }
 
     companion object {

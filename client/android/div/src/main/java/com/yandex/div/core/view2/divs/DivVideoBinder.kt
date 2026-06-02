@@ -24,7 +24,6 @@ import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
-import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
@@ -45,7 +44,6 @@ internal class DivVideoBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val actionPerformer: DivActionPerformer,
-    private val videoViewMapper: DivVideoViewMapper,
     private val executorService: ExecutorService,
     private val playerFactory: DivPlayerFactory,
 ) : DivViewBinder<Div.Video, DivVideo, DivVideoView>(baseBinder) {
@@ -129,8 +127,6 @@ internal class DivVideoBinder @Inject constructor(
             addView(playerView)
             addView(previewImageView)
         }
-
-        videoViewMapper.addView(this, div)
     }
 
     private fun createObserver(

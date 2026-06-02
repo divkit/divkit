@@ -29,7 +29,6 @@ import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.player.DivVideoActionHandler;
-import com.yandex.div.core.player.DivVideoViewMapper;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.state.DivStateManager;
 import com.yandex.div.core.state.TabsStateCache;
@@ -129,9 +128,6 @@ public interface Div2Component {
 
     @NonNull
     DivVideoActionHandler getDivVideoActionHandler();
-
-    @NonNull
-    DivVideoViewMapper getDivVideoViewMapper();
 
     @NonNull
     DivStateManager getStateManager();
