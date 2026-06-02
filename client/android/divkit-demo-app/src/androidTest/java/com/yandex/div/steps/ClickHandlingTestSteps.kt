@@ -1,13 +1,11 @@
 package com.yandex.div.steps
 
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.doubleClick
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
@@ -35,11 +33,6 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
     fun click(text: String): Unit =
         step("Click on view with text='$text'") {
             findView(text).perform(click())
-        }
-
-    fun clickOnImage(): Unit =
-        step("Click on image") {
-            onView(isAssignableFrom(AppCompatImageView::class.java)).perform(click())
         }
 
     fun doubleClick(text: String): Unit =

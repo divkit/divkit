@@ -6,7 +6,7 @@ import com.yandex.div.steps.testClicks
 import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.divkit.demo.div.DemoDiv2Logger
-import org.junit.Ignore
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -15,6 +15,11 @@ class DivTouchInteractivityTest {
 
     @get:Rule
     val rule = uiTestRule { activityTestRule }
+
+    @Before
+    fun setUp() {
+        DemoDiv2Logger.clearLogActions()
+    }
 
     @Test
     fun singleTapScenarioSingleTapIsHandled() {
@@ -29,38 +34,13 @@ class DivTouchInteractivityTest {
     }
 
     @Test
-    fun longTapScenarioLongTapIsHandled() {
-        testClicks {
-            testAsset = "regression_test_data/long_tap.json"
-            activityTestRule.buildContainer()
-            longClick("Long tap menu")
-            assert {
-                checkShown("Show")
-            }
-        }
-    }
-
-    @Test
-    @Ignore("DIVKIT-3241")
     fun singleTapIsHandled() {
         testClicks {
             activityTestRule.buildContainer()
-            click("With double and long taps")
+            click("Button 1 (tap)")
 
             assert {
-                checkShown("Single tap")
-            }
-        }
-    }
-
-    @Test
-    fun doubleTapIsHandled() {
-        testClicks {
-            activityTestRule.buildContainer()
-            doubleClick("With double and long taps")
-
-            assert {
-                checkShown("Double tap")
+                checkShown("Button 1 tapped")
             }
         }
     }
@@ -69,23 +49,58 @@ class DivTouchInteractivityTest {
     fun longTapIsHandled() {
         testClicks {
             activityTestRule.buildContainer()
-            longClick("With double and long taps")
+            longClick("Button 2 (long tap)")
 
             assert {
-                checkShown("Long tap")
+                checkShown("Button 2 long tapped")
             }
         }
     }
 
     @Test
-    @Ignore("DIVKIT-3241")
-    fun singleTapIsHandledWhenDoubleTapActionIsNotSet() {
+    fun singleTapIsHandledOnElementWithTapAndLongTapActions() {
         testClicks {
             activityTestRule.buildContainer()
-            doubleClick("Without double tap")
+            click("Button 5 (tap + long tap)")
 
             assert {
-                checkShown("Single tap")
+                checkShown("Button 5 tapped")
+            }
+        }
+    }
+
+    @Test
+    fun longTapIsHandledOnElementWithTapAndLongTapActions() {
+        testClicks {
+            activityTestRule.buildContainer()
+            longClick("Button 5 (tap + long tap)")
+
+            assert {
+                checkShown("Button 5 long tapped")
+            }
+        }
+    }
+
+    @Test
+    fun singleTapIsHandledOnElementWithTapAndDoubleTapActions() {
+        testClicks {
+            activityTestRule.buildContainer()
+            click("Button 6 (tap + double tap)")
+
+            assert {
+                checkShown("Button 6 tapped")
+            }
+        }
+    }
+
+    @Test
+    fun doubleTapIsHandledOnElementWithTapAndDoubleTapActions() {
+        testClicks {
+            activityTestRule.buildContainer()
+            doubleClick("Button 6 (tap + double tap)")
+
+            assert {
+                checkShown("Button 6 double tapped")
             }
         }
     }
@@ -94,44 +109,41 @@ class DivTouchInteractivityTest {
     fun clickOnChildIsNotPassedToParentWithAction() {
         testClicks {
             activityTestRule.buildContainer()
-            clickOnImage()
+            click("Button 7")
+
             assert {
-                checkShown("Single tap on child")
+                checkShown("Button 7 inner part tapped")
             }
         }
     }
 
     @Test
-    fun longClickIsLogged() {
-        DemoDiv2Logger.clearLogActions()
+    fun singleClickIsLogged() {
         testClicks {
             activityTestRule.buildContainer()
-            longClick("With double and long taps")
+            click("Button 1 (tap)")
 
-            assert { checkLongClickLogged("action_button", "longtap_actions") }
+            assert { checkClickLogged("test_card", "button1_tap") }
         }
     }
 
     @Test
-    @Ignore("DIVKIT-3241")
-    fun singleClickIsLogged() {
-        DemoDiv2Logger.clearLogActions()
+    fun longClickIsLogged() {
         testClicks {
             activityTestRule.buildContainer()
-            click("With double and long taps")
+            longClick("Button 2 (long tap)")
 
-            assert { checkClickLogged("action_button", "single_tap") }
+            assert { checkLongClickLogged("test_card", "button2_longtap") }
         }
     }
 
     @Test
     fun doubleClickLogged() {
-        DemoDiv2Logger.clearLogActions()
         testClicks {
             activityTestRule.buildContainer()
-            doubleClick("With double and long taps")
+            doubleClick("Button 6 (tap + double tap)")
 
-            assert { checkDoubleClickLogged("action_button", "doubletap_actions") }
+            assert { checkDoubleClickLogged("test_card", "button6_doubletap") }
         }
     }
 

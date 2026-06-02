@@ -35,7 +35,6 @@ internal fun Modifier.apply(
     modifier = modifier
         .width(data.width, data.alignmentHorizontal?.observedValue())
         .height(data.height, data.alignmentVertical?.observedValue())
-        .actions(div)
         .visibilityActions(data)
 
     val alphaValue = if (data.visibility.observedValue() == DivVisibility.VISIBLE) {
@@ -54,6 +53,12 @@ internal fun Modifier.apply(
     data.border?.let {
         modifier = modifier.borderClip(it)
     }
+
+    // The actions must be applied AFTER the transformations and the border clipping in order
+    // to have correct touch and animation area.
+    // The actions must be applied BEFORE the background so that the action animation is applied
+    // to the background.
+    modifier = modifier.actions(div)
 
     data.background?.let {
         modifier = modifier.backgrounds(it)
