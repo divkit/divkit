@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.modifiers
 
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
@@ -10,10 +11,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div2.Div
+import com.yandex.div2.DivAspect
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivVisibility
 
@@ -32,9 +36,16 @@ internal fun Modifier.apply(
         }
     }
 
+    val aspect = div.aspectRatioOrNull()
+
     modifier = modifier
         .width(data.width, data.alignmentHorizontal?.observedValue())
-        .height(data.height, data.alignmentVertical?.observedValue())
+        .applyIfNotNull(aspect) { ratio ->
+            aspectRatio(ratio)
+        }
+        .applyIf(aspect == null) {
+            height(data.height, data.alignmentVertical?.observedValue())
+        }
         .visibilityActions(data)
 
     val alphaValue = if (data.visibility.observedValue() == DivVisibility.VISIBLE) {
@@ -107,4 +118,18 @@ internal fun Modifier.horizontalPaddings(value: DivEdgeInsets): Modifier {
         start = start,
         end = end,
     )
+}
+
+@Composable
+private fun Div.aspectRatioOrNull(): Float? {
+    val ratio = aspectOrNull()?.ratio?.observedFloatValue() ?: return null
+    return if (ratio > 0f) ratio else null
+}
+
+private fun Div.aspectOrNull(): DivAspect? = when (this) {
+    is Div.Container -> value.aspect
+    is Div.Image -> value.aspect
+    is Div.GifImage -> value.aspect
+    is Div.Video -> value.aspect
+    else -> null
 }
