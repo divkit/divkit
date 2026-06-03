@@ -118,7 +118,7 @@ class DivTooltipControllerTest {
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
 
     private val tooltipRestrictor = mock<DivTooltipRestrictor> {
-        on { canShowTooltip(any(), any(), any(), any()) } doReturn true
+        on { canShowTooltip(any(), any(), any(), any(), anyOrNull()) } doReturn true
         on { tooltipShownCallback } doReturn tooltipShownCallback
     }
     private val visibilityActionTracker = mock<DivVisibilityActionTracker>()
@@ -207,7 +207,7 @@ class DivTooltipControllerTest {
         underTest.showTooltip("tooltip_id", bindingContext)
         verify(tooltipShownCallback, never()).onDivTooltipDismissed(div2View, anchor, tooltips[0])
 
-        underTest.hideTooltip("tooltip_id", div2View)
+        underTest.hideTooltip("tooltip_id")
 
         verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
     }
@@ -218,7 +218,7 @@ class DivTooltipControllerTest {
         underTest.showTooltip("tooltip_id", bindingContext)
         reset(visibilityActionTracker)
 
-        underTest.hideTooltip("tooltip_id", div2View)
+        underTest.hideTooltip("tooltip_id")
 
         verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, expressionResolver, null, div)
     }
@@ -260,7 +260,7 @@ class DivTooltipControllerTest {
 
     @Test
     fun `tooltip not present at shown tooltips before restriction-check`() {
-        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any())).doAnswer {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull())).doAnswer {
             return@doAnswer underTest.captureCurrentTooltips().isEmpty()
         }
         prepareDiv()
@@ -273,7 +273,7 @@ class DivTooltipControllerTest {
 
     @Test
     fun `tooltip show restriction works`() {
-        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any())).doReturn(false)
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull())).doReturn(false)
         prepareDiv()
 
         underTest.showTooltip("tooltip_id", bindingContext)

@@ -40,7 +40,7 @@ internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActi
             .onFailure {
                 if (it is ViewLocator.DuplicateTarget) return view.logActionError(DivActionFocusElement.TYPE, it)
             }.getOrNull()
-            ?: view.viewComponent.divTooltipController.findViewWithTag(elementId)
+            ?: view.viewComponent.divTooltipController.findViewWithTag(elementId, scopeId)
             ?: return
 
         requestedView.requestFocus()

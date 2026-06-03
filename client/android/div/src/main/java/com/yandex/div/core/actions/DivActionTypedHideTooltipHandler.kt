@@ -18,7 +18,7 @@ internal class DivActionTypedHideTooltipHandler @Inject constructor()
         resolver: ExpressionResolver
     ): Boolean = when(action) {
         is DivActionTyped.HideTooltip -> {
-            handleHideTooltip(action.value, view, resolver)
+            handleHideTooltip(action.value, scopeId, view, resolver)
             true
         }
         else -> false
@@ -26,10 +26,11 @@ internal class DivActionTypedHideTooltipHandler @Inject constructor()
 
     private fun handleHideTooltip(
         action: DivActionHideTooltip,
+        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val tooltipId = action.id.evaluate(resolver)
-        view.hideTooltip(tooltipId)
+        view.hideTooltip(tooltipId, scopeId)
     }
 }

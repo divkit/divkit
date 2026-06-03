@@ -17,8 +17,25 @@ public interface DivTooltipRestrictor {
 
     /**
      * Called when handling div-action://show_tooltip
+     *
+     * @deprecated Use {@link DivTooltipRestrictor#canShowTooltip(Div2View, View, DivTooltip, boolean, String)}
      */
+    @Deprecated
     boolean canShowTooltip(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip, boolean multiple);
+
+    /**
+     * Called when handling div-action://show_tooltip
+     */
+    default boolean canShowTooltip(
+            @NonNull Div2View div2View,
+            @NonNull View anchor,
+            @NonNull DivTooltip tooltip,
+            boolean multiple,
+            @Nullable String scopeId
+    ) {
+        //noinspection deprecation
+        return canShowTooltip(div2View, anchor, tooltip, multiple);
+    }
 
     @Nullable
     default DivTooltipShownCallback getTooltipShownCallback() {

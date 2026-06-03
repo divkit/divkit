@@ -18,7 +18,7 @@ internal class DivActionTypedShowTooltipHandler @Inject constructor()
         resolver: ExpressionResolver
     ): Boolean = when(action) {
         is DivActionTyped.ShowTooltip -> {
-            handleShowTooltip(action.value, view, resolver)
+            handleShowTooltip(action.value, scopeId, view, resolver)
             true
         }
         else -> false
@@ -26,15 +26,12 @@ internal class DivActionTypedShowTooltipHandler @Inject constructor()
 
     private fun handleShowTooltip(
         action: DivActionShowTooltip,
+        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val tooltipId = action.id.evaluate(resolver)
-        val multiple = action.multiple?.evaluate(resolver)
-        if (multiple != null) {
-            view.showTooltip(tooltipId, multiple)
-        } else {
-            view.showTooltip(tooltipId)
-        }
+        val multiple = action.multiple?.evaluate(resolver) ?: false
+        view.showTooltip(tooltipId, multiple, scopeId)
     }
 }

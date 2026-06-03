@@ -137,16 +137,30 @@ public interface DivViewFacade {
         return ExpressionResolver.EMPTY;
     }
 
+    @Deprecated
     default void showTooltip(@NonNull String tooltipId) {
         //do nothing by default
     }
 
+    @Deprecated
     default void showTooltip(@NonNull String tooltipId, boolean multiple) {
+        //noinspection deprecation
         showTooltip(tooltipId);
     }
 
+    default void showTooltip(@NonNull String tooltipId, boolean multiple, @Nullable String scopeId) {
+        //noinspection deprecation
+        showTooltip(tooltipId, multiple);
+    }
+
+    @Deprecated
     default void hideTooltip(@NonNull String tooltipId) {
         //do nothing by default
+    }
+
+    default void hideTooltip(@NonNull String tooltipId, @Nullable String scopeId) {
+        //noinspection deprecation
+        hideTooltip(tooltipId);
     }
 
     default void cancelTooltips() {

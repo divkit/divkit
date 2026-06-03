@@ -1227,19 +1227,28 @@ class Div2View private constructor(
     private val RuntimeStore?.resolver get() =
         (this as? RuntimeStoreImpl)?.rootRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
-    override fun showTooltip(tooltipId: String): Unit = bindingDispatcher.withLock {
-        tooltipController.showTooltip(tooltipId, bindingContext)
-    }
+    @Deprecated("Use showTooltip(tooltipId, multiple, scopeId")
+    override fun showTooltip(tooltipId: String): Unit = showTooltip(tooltipId, false, null)
 
+    @Deprecated("Use showTooltip(tooltipId, multiple, scopeId")
     override fun showTooltip(
         tooltipId: String,
         multiple: Boolean
-    ): Unit = bindingDispatcher.withLock {
-        tooltipController.showTooltip(tooltipId, bindingContext, multiple)
+    ): Unit = showTooltip(tooltipId, multiple, null)
+
+    override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
+        bindingDispatcher.withLock {
+            tooltipController.showTooltip(tooltipId, bindingContext, multiple, scopeId)
+        }
     }
 
-    override fun hideTooltip(tooltipId: String): Unit = bindingDispatcher.withLock {
-        tooltipController.hideTooltip(tooltipId, this)
+    @Deprecated("Use hideTooltip(tooltipId, scopeId)")
+    override fun hideTooltip(tooltipId: String): Unit = hideTooltip(tooltipId, null)
+
+    override fun hideTooltip(tooltipId: String, scopeId: String?) {
+        bindingDispatcher.withLock {
+            tooltipController.hideTooltip(tooltipId, scopeId)
+        }
     }
 
     override fun cancelTooltips(): Unit = bindingDispatcher.withLock {

@@ -428,7 +428,7 @@ public class DivActionHandler {
                 return false;
             }
             boolean multiple = uri.getBooleanQueryParameter(PARAM_MULTIPLE, false);
-            view.showTooltip(tooltipId, multiple);
+            view.showTooltip(tooltipId, multiple, scopeId);
             return true;
         } else if (AUTHORITY_HIDE_TOOLTIP.equals(action)) {
             String tooltipId = uri.getQueryParameter(PARAM_ID);
@@ -436,7 +436,7 @@ public class DivActionHandler {
                 Assert.fail(PARAM_ID + " param is required");
                 return false;
             }
-            view.hideTooltip(tooltipId);
+            view.hideTooltip(tooltipId, scopeId);
             return true;
         } else if (AUTHORITY_SET_VARIABLE.equals(action)) {
             String name = uri.getQueryParameter(PARAM_VARIABLE_NAME);

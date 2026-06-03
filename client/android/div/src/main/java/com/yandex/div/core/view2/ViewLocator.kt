@@ -31,7 +31,7 @@ internal object ViewLocator {
             .onFailure { if (it is DuplicateTarget) return Result.failure(scopeError) }
     }
 
-    private inline fun <reified T> View.findSingleViewWithTag(
+    inline fun <reified T> View.findSingleViewWithTag(
         tag: String,
         isScope: Boolean = false,
         inScope: Boolean = false,
