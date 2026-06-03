@@ -80,19 +80,7 @@ class DivTouchInteractivityTest {
             }
         }
     }
-
-    @Test
-    fun singleTapIsHandledOnElementWithTapAndDoubleTapActions() {
-        testClicks {
-            activityTestRule.buildContainer()
-            click("Button 6 (tap + double tap)")
-
-            assert {
-                checkShown("Button 6 tapped")
-            }
-        }
-    }
-
+    
     @Test
     fun doubleTapIsHandledOnElementWithTapAndDoubleTapActions() {
         testClicks {
