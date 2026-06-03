@@ -7,14 +7,18 @@ import VGSL
 public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
   public final class EllipsisTemplate: TemplateValue, Sendable {
     public let actions: Field<[DivActionTemplate]>?
+    public let imageBuilder: Field<ImageBuilderTemplate>?
     public let images: Field<[ImageTemplate]>?
+    public let rangeBuilder: Field<RangeBuilderTemplate>?
     public let ranges: Field<[RangeTemplate]>?
     public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         actions: dictionary.getOptionalArray("actions", templateToType: templateToType),
+        imageBuilder: dictionary.getOptionalField("image_builder", templateToType: templateToType),
         images: dictionary.getOptionalArray("images", templateToType: templateToType),
+        rangeBuilder: dictionary.getOptionalField("range_builder", templateToType: templateToType),
         ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
         text: dictionary.getOptionalExpressionField("text")
       )
@@ -22,24 +26,32 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
 
     init(
       actions: Field<[DivActionTemplate]>? = nil,
+      imageBuilder: Field<ImageBuilderTemplate>? = nil,
       images: Field<[ImageTemplate]>? = nil,
+      rangeBuilder: Field<RangeBuilderTemplate>? = nil,
       ranges: Field<[RangeTemplate]>? = nil,
       text: Field<Expression<String>>? = nil
     ) {
       self.actions = actions
+      self.imageBuilder = imageBuilder
       self.images = images
+      self.rangeBuilder = rangeBuilder
       self.ranges = ranges
       self.text = text
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: EllipsisTemplate?) -> DeserializationResult<DivText.Ellipsis> {
       let actionsValue = { parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let imageBuilderValue = { parent?.imageBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let imagesValue = { parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let rangeBuilderValue = { parent?.rangeBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let rangesValue = { parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let textValue = { parent?.text?.resolveValue(context: context) ?? .noValue }()
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        imageBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_builder", error: $0) },
         imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+        rangeBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "range_builder", error: $0) },
         rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
         textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) }
       )
@@ -53,7 +65,9 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       }
       let result = DivText.Ellipsis(
         actions: { actionsValue.value }(),
+        imageBuilder: { imageBuilderValue.value }(),
         images: { imagesValue.value }(),
+        rangeBuilder: { rangeBuilderValue.value }(),
         ranges: { rangesValue.value }(),
         text: { textNonNil }()
       )
@@ -65,7 +79,9 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var actionsValue: DeserializationResult<[DivAction]> = .noValue
+      var imageBuilderValue: DeserializationResult<DivText.ImageBuilder> = .noValue
       var imagesValue: DeserializationResult<[DivText.Image]> = .noValue
+      var rangeBuilderValue: DeserializationResult<DivText.RangeBuilder> = .noValue
       var rangesValue: DeserializationResult<[DivText.Range]> = .noValue
       var textValue: DeserializationResult<Expression<String>> = { parent?.text?.value() ?? .noValue }()
       _ = {
@@ -79,8 +95,18 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
             }
           }()
           _ = {
+            if key == "image_builder" {
+             imageBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageBuilderTemplate.self).merged(with: imageBuilderValue)
+            }
+          }()
+          _ = {
             if key == "images" {
              imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
+            }
+          }()
+          _ = {
+            if key == "range_builder" {
+             rangeBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeBuilderTemplate.self).merged(with: rangeBuilderValue)
             }
           }()
           _ = {
@@ -99,8 +125,18 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
             }
           }()
           _ = {
+           if key == parent?.imageBuilder?.link {
+             imageBuilderValue = imageBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageBuilderTemplate.self) })
+            }
+          }()
+          _ = {
            if key == parent?.images?.link {
              imagesValue = imagesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self) })
+            }
+          }()
+          _ = {
+           if key == parent?.rangeBuilder?.link {
+             rangeBuilderValue = rangeBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeBuilderTemplate.self) })
             }
           }()
           _ = {
@@ -117,12 +153,16 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       }()
       if let parent = parent {
         _ = { actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+        _ = { imageBuilderValue = imageBuilderValue.merged(with: { parent.imageBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
         _ = { imagesValue = imagesValue.merged(with: { parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+        _ = { rangeBuilderValue = rangeBuilderValue.merged(with: { parent.rangeBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
         _ = { rangesValue = rangesValue.merged(with: { parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       }
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        imageBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_builder", error: $0) },
         imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+        rangeBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "range_builder", error: $0) },
         rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
         textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) }
       )
@@ -136,7 +176,9 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       }
       let result = DivText.Ellipsis(
         actions: { actionsValue.value }(),
+        imageBuilder: { imageBuilderValue.value }(),
         images: { imagesValue.value }(),
+        rangeBuilder: { rangeBuilderValue.value }(),
         ranges: { rangesValue.value }(),
         text: { textNonNil }()
       )
@@ -152,7 +194,9 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
 
       return EllipsisTemplate(
         actions: merged.actions?.tryResolveParent(templates: templates),
+        imageBuilder: merged.imageBuilder?.tryResolveParent(templates: templates),
         images: merged.images?.tryResolveParent(templates: templates),
+        rangeBuilder: merged.rangeBuilder?.tryResolveParent(templates: templates),
         ranges: merged.ranges?.tryResolveParent(templates: templates),
         text: merged.text
       )

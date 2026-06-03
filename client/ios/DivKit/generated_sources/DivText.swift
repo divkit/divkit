@@ -15,7 +15,9 @@ public final class DivText: DivBase, @unchecked Sendable {
 
   public final class Ellipsis: Sendable {
     public let actions: [DivAction]?
+    public let imageBuilder: ImageBuilder?
     public let images: [Image]?
+    public let rangeBuilder: RangeBuilder?
     public let ranges: [Range]?
     public let text: Expression<String>
 
@@ -26,7 +28,9 @@ public final class DivText: DivBase, @unchecked Sendable {
     public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
       self.init(
         actions: try dictionary.getOptionalArray("actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
+        imageBuilder: try dictionary.getOptionalField("image_builder", transform: { (dict: [String: Any]) in try DivText.ImageBuilder(dictionary: dict, context: context) }),
         images: try dictionary.getOptionalArray("images", transform: { (dict: [String: Any]) in try? DivText.Image(dictionary: dict, context: context) }),
+        rangeBuilder: try dictionary.getOptionalField("range_builder", transform: { (dict: [String: Any]) in try DivText.RangeBuilder(dictionary: dict, context: context) }),
         ranges: try dictionary.getOptionalArray("ranges", transform: { (dict: [String: Any]) in try? DivText.Range(dictionary: dict, context: context) }),
         text: try dictionary.getExpressionField("text", context: context)
       )
@@ -34,12 +38,16 @@ public final class DivText: DivBase, @unchecked Sendable {
 
     init(
       actions: [DivAction]? = nil,
+      imageBuilder: ImageBuilder? = nil,
       images: [Image]? = nil,
+      rangeBuilder: RangeBuilder? = nil,
       ranges: [Range]? = nil,
       text: Expression<String>
     ) {
       self.actions = actions
+      self.imageBuilder = imageBuilder
       self.images = images
+      self.rangeBuilder = rangeBuilder
       self.ranges = ranges
       self.text = text
     }
@@ -1260,12 +1268,14 @@ extension DivText.Ellipsis: Equatable {
   public static func ==(lhs: DivText.Ellipsis, rhs: DivText.Ellipsis) -> Bool {
     guard
       lhs.actions == rhs.actions,
-      lhs.images == rhs.images,
-      lhs.ranges == rhs.ranges
+      lhs.imageBuilder == rhs.imageBuilder,
+      lhs.images == rhs.images
     else {
       return false
     }
     guard
+      lhs.rangeBuilder == rhs.rangeBuilder,
+      lhs.ranges == rhs.ranges,
       lhs.text == rhs.text
     else {
       return false
@@ -1356,7 +1366,9 @@ extension DivText.Ellipsis: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions?.map { $0.toDictionary() }
+    result["image_builder"] = imageBuilder?.toDictionary()
     result["images"] = images?.map { $0.toDictionary() }
+    result["range_builder"] = rangeBuilder?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
     result["text"] = text.toValidSerializationValue()
     return result

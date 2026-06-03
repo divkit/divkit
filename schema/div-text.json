@@ -363,12 +363,24 @@
           },
           "$description": "translations.json#/div_text_ellipsis_ranges"
         },
+        "range_builder": {
+          "$ref": "#/definitions/range_builder",
+          "platforms": [
+            "ios"
+          ]
+        },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
           "$description": "translations.json#/div_text_ellipsis_images"
+        },
+        "image_builder": {
+          "$ref": "#/definitions/image_builder",
+          "platforms": [
+            "ios"
+          ]
         }
       },
       "required": [

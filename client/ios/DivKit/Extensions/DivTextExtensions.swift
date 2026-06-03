@@ -117,13 +117,13 @@ extension DivText: DivBlockModeling {
       makeAttributedString(
         text: ($0.resolveText(expressionResolver) ?? "") as CFString,
         typo: typo,
-        ranges: makeRanges($0.ranges, rangeBuilder: nil, context: context),
+        ranges: makeRanges($0.ranges, rangeBuilder: $0.rangeBuilder, context: context),
         actions: $0.actions?.uiActions(context: context),
         fontParams: fontParams
       )
     }
     let truncationImages = makeInlineImages(
-      images: makeImages(ellipsis?.images, imageBuilder: nil, context: context),
+      images: makeImages(ellipsis?.images, imageBuilder: ellipsis?.imageBuilder, context: context),
       text: truncationToken
     )
 
