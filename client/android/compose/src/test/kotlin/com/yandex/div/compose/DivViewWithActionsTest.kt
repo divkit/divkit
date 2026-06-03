@@ -8,12 +8,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.actions.DivActionData
-import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -244,25 +240,5 @@ class DivViewWithActionsTest {
             configuration = configuration,
             data = data(content, variables = variables)
         )
-    }
-}
-
-private fun actionData(
-    source: DivActionSource = DivActionSource.TAP,
-    url: String
-): DivActionData {
-    return DivActionData(
-        id = "test",
-        payload = null,
-        source = source,
-        url = url.toUri()
-    )
-}
-
-private class TestExternalActionHandler : DivExternalActionHandler {
-    val handledActions = mutableListOf<DivActionData>()
-
-    override fun handle(context: DivActionHandlingContext, action: DivActionData) {
-        handledActions.add(action)
     }
 }

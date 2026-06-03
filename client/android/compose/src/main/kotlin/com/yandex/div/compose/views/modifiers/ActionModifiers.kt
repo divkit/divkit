@@ -13,46 +13,44 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 
 @Composable
-internal fun Modifier.actions(data: Div): Modifier {
-    val actionParams = data.observedActionParams() ?: return this
-
-    if (actionParams.tapActions.isEmpty()
-        && actionParams.doubleTapActions.isEmpty()
-        && actionParams.longTapActions.isEmpty()
+internal fun Modifier.actions(actions: DivActions): Modifier {
+    if (actions.tapActions.isEmpty()
+        && actions.doubleTapActions.isEmpty()
+        && actions.longTapActions.isEmpty()
     ) {
         return this
     }
 
-    return when (val name = actionParams.animation.name.observedValue()) {
+    return when (val name = actions.animation.name.observedValue()) {
         DivAnimation.Name.FADE ->
-            clickableWithFade(actionParams)
+            clickableWithFade(actions)
 
         DivAnimation.Name.NATIVE ->
             clickable(
-                actionParams = actionParams,
+                actions = actions,
                 indication = ripple(),
                 interactionSource = remember { MutableInteractionSource() }
             )
 
         DivAnimation.Name.NO_ANIMATION ->
-            clickable(actionParams)
+            clickable(actions)
 
         DivAnimation.Name.SCALE,
         DivAnimation.Name.SET,
         DivAnimation.Name.TRANSLATE -> {
             reportError("Animation not supported: $name")
-            clickable(actionParams)
+            clickable(actions)
         }
     }
 }
@@ -69,7 +67,7 @@ private fun DivLocalComponent.createHandler(
 
 @Composable
 private fun Modifier.clickable(
-    actionParams: ActionParams,
+    actions: DivActions,
     indication: Indication? = null,
     interactionSource: MutableInteractionSource? = null
 ): Modifier {
@@ -78,25 +76,25 @@ private fun Modifier.clickable(
         indication = indication,
         interactionSource = interactionSource,
         onClick = localComponent.createHandler(
-            actions = actionParams.tapActions,
+            actions = actions.tapActions,
             source = DivActionSource.TAP
         ) ?: {},
         onDoubleClick = localComponent.createHandler(
-            actions = actionParams.doubleTapActions,
+            actions = actions.doubleTapActions,
             source = DivActionSource.DOUBLE_TAP
         ),
         onLongClick = localComponent.createHandler(
-            actions = actionParams.longTapActions,
+            actions = actions.longTapActions,
             source = DivActionSource.LONG_TAP
         )
     )
 }
 
 @Composable
-private fun Modifier.clickableWithFade(actionParams: ActionParams): Modifier {
+private fun Modifier.clickableWithFade(actions: DivActions): Modifier {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val animation = actionParams.animation
+    val animation = actions.animation
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isPressed) animation.endValue.observedFloatValue(1f) else 1f,
         animationSpec = tween(durationMillis = animation.duration.observedIntValue()),
@@ -105,111 +103,6 @@ private fun Modifier.clickableWithFade(actionParams: ActionParams): Modifier {
     return graphicsLayer(alpha = animatedAlpha)
         .clickable(
             interactionSource = interactionSource,
-            actionParams = actionParams
+            actions = actions
         )
-}
-
-private class ActionParams(
-    val tapActions: List<DivAction>,
-    val doubleTapActions: List<DivAction>,
-    val longTapActions: List<DivAction>,
-    val animation: DivAnimation
-)
-
-@Composable
-private fun getParams(
-    actions: List<DivAction>?,
-    action: DivAction?,
-    animation: DivAnimation,
-    doubleTapActions: List<DivAction>?,
-    longTapActions: List<DivAction>?
-) = ActionParams(
-    tapActions = (actions ?: action?.let { listOf(it) }).observedEnabledActions(),
-    doubleTapActions = doubleTapActions.observedEnabledActions(),
-    longTapActions = longTapActions.observedEnabledActions(),
-    animation = animation
-)
-
-@Composable
-private fun List<DivAction>?.observedEnabledActions(): List<DivAction> {
-    return this?.filter { it.isEnabled.observedValue() } ?: emptyList()
-}
-
-@Composable
-private fun Div.observedActionParams(): ActionParams? {
-    return when (this) {
-        is Div.Container ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.Image ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.GifImage ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.Grid ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.Separator ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.State ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.Text ->
-            getParams(
-                actions = value.actions,
-                action = value.action,
-                animation = value.actionAnimation,
-                doubleTapActions = value.doubletapActions,
-                longTapActions = value.longtapActions
-            )
-
-        is Div.Custom,
-        is Div.Gallery,
-        is Div.Indicator,
-        is Div.Input,
-        is Div.Pager,
-        is Div.Select,
-        is Div.Slider,
-        is Div.Switch,
-        is Div.Tabs,
-        is Div.Video -> null
-    }
 }

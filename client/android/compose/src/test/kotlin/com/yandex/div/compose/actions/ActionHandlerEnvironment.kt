@@ -33,6 +33,7 @@ internal class ActionHandlerEnvironment {
         updateStructureActionHandler: UpdateStructureActionHandler = mock()
     ) {
         actionHandler = DivActionHandler(
+            actionMenuHolder = mock(),
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,

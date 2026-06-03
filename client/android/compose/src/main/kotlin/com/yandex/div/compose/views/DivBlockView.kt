@@ -2,22 +2,23 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.grid.DivGridView
 import com.yandex.div.compose.views.image.DivImageView
-import com.yandex.div.compose.views.pager.DivPagerView
-import com.yandex.div.compose.views.modifiers.apply
-import com.yandex.div.compose.views.modifiers.applyPaddings
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.indicator.DivIndicatorView
 import com.yandex.div.compose.views.input.DivInputView
+import com.yandex.div.compose.views.modifiers.apply
+import com.yandex.div.compose.views.modifiers.applyPaddings
+import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.slider.DivSliderView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.tabs.DivTabsView
@@ -38,11 +39,18 @@ internal fun DivBlockView(
         if (divBase.visibility.observedValue() == DivVisibility.GONE) {
             return@WithLocalComponent
         }
-        BaseViewWithExtensions(
-            data = data,
-            extensions = divBase.extensions.orEmpty(),
-            modifier = modifier.apply(data, applyMargins = applyMargins)
-        )
+        val actions = data.observedActions()
+        WithActionMenu(actions) {
+            BaseViewWithExtensions(
+                data = data,
+                extensions = divBase.extensions.orEmpty(),
+                modifier = modifier.apply(
+                    data,
+                    actions = actions,
+                    applyMargins = applyMargins
+                )
+            )
+        }
     }
 }
 

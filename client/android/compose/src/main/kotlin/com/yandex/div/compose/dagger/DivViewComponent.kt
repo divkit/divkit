@@ -1,5 +1,6 @@
 package com.yandex.div.compose.dagger
 
+import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivLocalComponentStorage
@@ -17,6 +18,7 @@ import javax.inject.Named
 internal interface DivViewComponent {
 
     val actionHandler: DivActionHandler
+    val actionMenuHolder: ActionMenuHolder
     val histogramReporter: DivViewHistogramReporter
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage

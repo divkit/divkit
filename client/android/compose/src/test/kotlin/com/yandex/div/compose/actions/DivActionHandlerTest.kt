@@ -1,7 +1,8 @@
 package com.yandex.div.compose.actions
 
-import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.TestExternalActionHandler
+import com.yandex.div.compose.actionData
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.customAction
 import com.yandex.div.test.data.disappearAction
@@ -12,7 +13,6 @@ import org.junit.runner.RunWith
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class DivActionHandlerTest {
@@ -35,7 +35,7 @@ class DivActionHandlerTest {
             )
         )
 
-        assertNull(externalActionHandler.lastAction)
+        assertEquals(emptyList(), externalActionHandler.handledActions)
     }
 
     @Test
@@ -46,13 +46,11 @@ class DivActionHandlerTest {
         )
 
         assertEquals(
-            DivActionData(
+            actionData(
                 id = "test",
-                payload = null,
-                source = DivActionSource.TAP,
-                url = null
+                source = DivActionSource.TAP
             ),
-            externalActionHandler.lastAction
+            externalActionHandler.handledAction
         )
     }
 
@@ -70,13 +68,13 @@ class DivActionHandlerTest {
         )
 
         assertEquals(
-            DivActionData(
+            actionData(
                 id = "test",
                 payload = payload,
                 source = DivActionSource.TAP,
-                url = "custom://url".toUri()
+                url = "custom://url"
             ),
-            externalActionHandler.lastAction
+            externalActionHandler.handledAction
         )
     }
 
@@ -99,7 +97,7 @@ class DivActionHandlerTest {
                 payload = payload,
                 source = DivActionSource.TRIGGER
             ),
-            externalActionHandler.lastCustomAction
+            externalActionHandler.handledCustomAction
         )
     }
 
@@ -113,13 +111,12 @@ class DivActionHandlerTest {
         )
 
         assertEquals(
-            DivActionData(
+            actionData(
                 id = "test",
-                payload = null,
                 source = DivActionSource.VISIBILITY,
-                url = "custom://url".toUri()
+                url = "custom://url"
             ),
-            externalActionHandler.lastAction
+            externalActionHandler.handledAction
         )
     }
 
@@ -133,36 +130,16 @@ class DivActionHandlerTest {
         )
 
         assertEquals(
-            DivActionData(
+            actionData(
                 id = "test",
-                payload = null,
                 source = DivActionSource.DISAPPEAR,
-                url = "custom://url".toUri()
+                url = "custom://url"
             ),
-            externalActionHandler.lastAction
+            externalActionHandler.handledAction
         )
     }
 
     private fun handle(action: DivAction, source: DivActionSource = DivActionSource.EXTERNAL) {
         actionHandlerEnvironment.handle(action, source)
-    }
-}
-
-private class TestExternalActionHandler : DivExternalActionHandler {
-    var lastAction: DivActionData? = null
-        private set
-
-    var lastCustomAction: DivCustomActionData? = null
-        private set
-
-    override fun handle(context: DivActionHandlingContext, action: DivActionData) {
-        lastAction = action
-    }
-
-    override fun handleCustomAction(
-        context: DivActionHandlingContext,
-        action: DivCustomActionData
-    ) {
-        lastCustomAction = action
     }
 }

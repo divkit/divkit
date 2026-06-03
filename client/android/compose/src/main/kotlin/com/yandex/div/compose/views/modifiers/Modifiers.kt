@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
+import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -24,7 +25,8 @@ import com.yandex.div2.DivVisibility
 @Composable
 internal fun Modifier.apply(
     div: Div,
-    applyMargins: Boolean = true
+    actions: DivActions?,
+    applyMargins: Boolean
 ): Modifier {
     val data = div.value()
 
@@ -69,7 +71,9 @@ internal fun Modifier.apply(
     // to have correct touch and animation area.
     // The actions must be applied BEFORE the background so that the action animation is applied
     // to the background.
-    modifier = modifier.actions(div)
+    actions?.let {
+        modifier = modifier.actions(it)
+    }
 
     data.background?.let {
         modifier = modifier.backgrounds(it)

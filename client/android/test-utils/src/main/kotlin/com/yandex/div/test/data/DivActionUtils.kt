@@ -19,6 +19,7 @@ import org.json.JSONObject
 fun action(
     id: String = "test",
     isEnabled: Boolean = true,
+    menuItems: List<DivAction.MenuItem>? = null,
     payload: JSONObject? = null,
     typed: DivActionTyped? = null,
     url: String? = null,
@@ -26,6 +27,7 @@ fun action(
     return DivAction(
         isEnabled = constant(isEnabled),
         logId = constant(id),
+        menuItems = menuItems,
         payload = payload,
         typed = typed,
         url = url?.let { constant(it.toUri()) }
@@ -129,5 +131,15 @@ fun updateStructureAction(
             value = value,
             variableName = constant(name)
         )
+    )
+}
+
+fun menuItem(
+    action: DivAction,
+    text: String
+): DivAction.MenuItem {
+    return DivAction.MenuItem(
+        action = action,
+        text = constant(text)
     )
 }

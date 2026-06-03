@@ -1147,19 +1147,38 @@
         "Long tap on container (between buttons)"
       ],
       "expected_results": [
-        "Message appears without delay: Button 1 tap",
-        "Message appears: Button 2 long tap",
-        "Message appears: Button 3 double tap",
-        "Message appears with delay: Button 4 tap",
-        "Message appears: Button 4 long tap",
-        "Message appears: Button 4 double tap",
-        "Message appears without delay: Button 5 tap",
-        "Message appears: Button 5 long tap",
-        "Message appears with delay: Button 6 tap",
-        "Message appears: Button 5 double tap",
-        "Message appears: Container long tap"
+        "Message appears without delay: Button 1 tapped",
+        "Message appears: Button 2 long tapped",
+        "Message appears: Button 3 double tapped",
+        "Message appears with delay: Button 4 tapped",
+        "Message appears: Button 4 long tapped",
+        "Message appears: Button 4 double tapped",
+        "Message appears without delay: Button 5 tapped",
+        "Message appears: Button 5 long tapped",
+        "Message appears with delay: Button 6 tapped",
+        "Message appears: Button 5 double tapped",
+        "Message appears: Container long tapped"
       ],
       "file": "button_actions.json"
+    },
+    {
+      "title": "Actions with menu",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap button 1",
+        "Tap Menu Item 1",
+        "Long tap button 3"
+      ],
+      "expected_results": [
+        "Menu with 2 items appears, disabled menu item is not visible.",
+        "Message appears: Menu Item 1 selected",
+        "Menu with 2 items appears."
+      ],
+      "file": "actions/menu.json"
     },
     {
       "title": "Div errors visualization",

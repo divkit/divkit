@@ -1,0 +1,152 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "paddings": {
+        "left": 10,
+        "right": 10
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "action_animation": {
+        "name": "native"
+      }
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "variables": [
+      {
+        "name": "last_action",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 20,
+            "right": 20,
+            "top": 20,
+            "bottom": 20
+          },
+          "items": [
+            {
+              "type": "button",
+              "text": "Menu with disabled item",
+              "actions": [
+                {
+                  "log_id": "button1",
+                  "menu_items": [
+                    {
+                      "text": "Menu Item 1",
+                      "action": {
+                        "log_id": "menu_item_1",
+                        "url": "div-action://set_variable?name=last_action&value=Menu Item 1 selected"
+                      }
+                    },
+                    {
+                      "text": "Menu Item 2",
+                      "action": {
+                        "log_id": "menu_item_2",
+                        "url": "div-action://set_variable?name=last_action&value=Menu Item 2 selected"
+                      }
+                    },
+                    {
+                      "log_id": "disabled_menu_item",
+                      "text": "Disabled Menu Item",
+                      "action": {
+                        "log_id": "disabled_menu_item_2",
+                        "is_enabled": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Button with action and menu",
+              "actions": [
+                {
+                  "log_id": "button2",
+                  "menu_items": [
+                    {
+                      "text": "Menu Item 3",
+                      "action": {
+                        "log_id": "menu_item_3",
+                        "url": "div-action://set_variable?name=last_action&value=Menu Item 3 selected"
+                      }
+                    },
+                    {
+                      "text": "Menu Item 4",
+                      "action": {
+                        "log_id": "menu_item_2",
+                        "url": "div-action://set_variable?name=last_action&value=Menu Item 4 selected"
+                      }
+                    }
+                  ],
+                  "url": "div-action://set_variable?name=last_action&value=Button tapped"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Button with long tap action",
+              "longtap_actions": [
+                {
+                  "log_id": "button3",
+                  "menu_items": [
+                    {
+                      "text": "Long Tap Menu Item 1",
+                      "action": {
+                        "log_id": "longtap_menu_item_1",
+                        "url": "div-action://set_variable?name=last_action&value=Long Tap Menu Item 1 selected"
+                      }
+                    },
+                    {
+                      "text": "Long Tap Menu Item 2",
+                      "action": {
+                        "log_id": "longtap_menu_item_2",
+                        "url": "div-action://set_variable?name=last_action&value=Long Tap Menu Item 2 selected"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "@{last_action}",
+              "font_size": 18
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

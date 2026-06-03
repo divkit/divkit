@@ -29,6 +29,7 @@ import javax.inject.Inject
 
 @DivViewScope
 internal class DivActionHandler @Inject constructor(
+    private val actionMenuHolder: ActionMenuHolder,
     private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
     private val arrayActionsHandler: ArrayActionsHandler,
@@ -48,6 +49,7 @@ internal class DivActionHandler @Inject constructor(
     }
 
     fun handle(context: DivActionHandlingContext, action: DivAction, source: DivActionSource) {
+        actionMenuHolder.showIfNeeded(action, expressionResolver = context.expressionResolver)
         handle(
             context = context,
             action = DivActionBase(
