@@ -42,7 +42,6 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
-import com.yandex.div.internal.core.getChildContext
 import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -227,4 +226,9 @@ internal class DivBinder @Inject constructor(
     private fun setGridData(context: BindingContext, view: View, data: Div.Grid) {
         gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
     }
+}
+
+private fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
+    val runtime = divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, expressionResolver)
+    return getFor(runtime.expressionResolver)
 }

@@ -7,16 +7,10 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.DivImagePriority
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.internal.core.DivVisitor
-import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
 import javax.inject.Inject
-
-private val NO_CALLBACK = DivImagePreloader.Callback {
-    //not interested
-}
 
 @Mockable
 @DivScope
@@ -29,16 +23,22 @@ class DivImagePreloader @Inject constructor(
         resolver: ExpressionResolver,
         preloadFilter: DivPreloader.PreloadFilter = DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
         callback: DivPreloader.DownloadCallback,
-    ): List<LoadReference> {
-        return PreloadVisitor(callback, resolver, preloadFilter, visitContainers = false).preload(div)
-    }
+    ): List<LoadReference> = PreloadVisitor(callback, resolver, preloadFilter).preload(div)
 
-    private fun preloadImage(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
+    private fun preloadImage(
+        url: String,
+        callback: DivPreloader.DownloadCallback,
+        references: ArrayList<LoadReference>
+    ) {
         callback.onSingleLoadingStarted()
         references.add(imageLoader.loadImage(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
     }
 
-    private fun preloadImageBytes(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
+    private fun preloadImageBytes(
+        url: String,
+        callback: DivPreloader.DownloadCallback,
+        references: ArrayList<LoadReference>
+    ) {
         callback.onSingleLoadingStarted()
         references.add(imageLoader.loadImageBytes(url, callback, DivImagePriority.IMAGES_PRIORITY_PRELOAD))
     }
@@ -47,7 +47,6 @@ class DivImagePreloader @Inject constructor(
         private val callback: DivPreloader.DownloadCallback,
         private val resolver: ExpressionResolver,
         private val preloadFilter: DivPreloader.PreloadFilter,
-        private val visitContainers: Boolean = true,
     ) : DivVisitor<Unit>() {
         private val references = ArrayList<LoadReference>()
 
@@ -81,48 +80,6 @@ class DivImagePreloader @Inject constructor(
             }
         }
 
-        override fun visit(data: Div.Container, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-            }
-        }
-
-        override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.nonNullItems.forEach { visit(it, resolver) }
-            }
-        }
-
-        override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-            }
-        }
-
-        override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-            }
-        }
-
-        override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.items.forEach { visit(it.div, resolver) }
-            }
-        }
-
-        override fun visit(data: Div.State, resolver: ExpressionResolver) {
-            defaultVisit(data, resolver)
-            if (visitContainers) {
-                data.value.states.forEach { state -> state.div?.let { div -> visit(div, resolver) } }
-            }
-        }
-
         private fun visitBackground(data: Div, resolver: ExpressionResolver) {
             data.value().background?.forEach { background ->
                 if (background is DivBackground.Image && preloadFilter.shouldPreloadBackground(background, resolver)) {
@@ -132,33 +89,17 @@ class DivImagePreloader @Inject constructor(
         }
     }
 
+    @Deprecated("Not used in DivKit")
     interface Ticket {
         fun cancel()
     }
 
-    private class TicketImpl : Ticket {
-        val refs = mutableListOf<LoadReference>()
-        fun addReference(reference: LoadReference) {
-            refs.add(reference)
-        }
-
-        override fun cancel() {
-            refs.forEach {
-                it.cancel()
-            }
-        }
-    }
-
-    internal fun List<LoadReference>.asTicket(): Ticket {
-        return TicketImpl().apply {
-            forEach { addReference(it) }
-        }
-    }
-
+    @Deprecated("Not used in DivKit")
     fun interface Callback {
         fun finish(hasErrors: Boolean)
     }
 
+    @Deprecated("Not used in DivKit")
     fun Callback.toPreloadCallback(): DivPreloader.Callback {
         return DivPreloader.Callback { hasErrors -> this@toPreloadCallback.finish(hasErrors) }
     }

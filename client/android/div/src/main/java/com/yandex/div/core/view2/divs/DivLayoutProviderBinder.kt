@@ -67,7 +67,7 @@ internal class DivLayoutProviderBinder @Inject constructor(
             .add(layoutProvider)
 
         val variableHolder = variableHolders.getOrPut(data) { DivLayoutProviderVariableHolder() }
-        variableHolder.observeDivDataIfNeeded(data, divView.bindingContext)
+        variableHolder.observeDivDataIfNeeded(data, divView.expressionResolver)
 
         val listener =
             View.OnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->

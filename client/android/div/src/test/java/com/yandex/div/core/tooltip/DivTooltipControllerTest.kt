@@ -130,7 +130,7 @@ class DivTooltipControllerTest {
     private val accessibilityStateProvider = AccessibilityStateProvider(false)
 
     private val divPreloader = mock<DivPreloader> {
-        on { preload(any(), any(), any()) } doAnswer {
+        on { preload(any<Div>(), any(), any()) } doAnswer {
             (it.arguments[2] as DivPreloader.Callback).finish(false)
             object: DivPreloader.Ticket {
                 override fun cancel() {}
@@ -287,7 +287,7 @@ class DivTooltipControllerTest {
     fun `when preload completes with failures tooltip can be shown again`() {
         val preloadCallback = argumentCaptor<DivPreloader.Callback>()
         val preloadTicket = mock<DivPreloader.Ticket>()
-        whenever(divPreloader.preload(any(), any(), preloadCallback.capture()))
+        whenever(divPreloader.preload(any<Div>(), any(), preloadCallback.capture()))
             .doReturn(preloadTicket)
         prepareDiv()
         underTest.showTooltip("tooltip_id", bindingContext)

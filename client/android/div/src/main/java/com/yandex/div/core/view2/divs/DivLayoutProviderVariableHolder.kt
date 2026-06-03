@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
@@ -23,13 +22,13 @@ internal class DivLayoutProviderVariableHolder : DivTreeVisitor<Unit>(), Express
 
     fun clear() = changedVariables.clear()
 
-    fun observeDivDataIfNeeded(data: DivData, context: BindingContext) {
+    fun observeDivDataIfNeeded(data: DivData, resolver: ExpressionResolver) {
         if (subscriptions.isNotEmpty()) return
-        visit(data, context)
+        visit(data, resolver)
     }
 
-    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) =
-        data.value().observeSize(context.expressionResolver)
+    override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) =
+        data.value().observeSize(resolver)
 
     private fun DivBase.observeSize(resolver: ExpressionResolver) {
         width.observe(resolver)

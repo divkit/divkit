@@ -60,7 +60,7 @@ class DivLayoutProviderBinderTest {
         on { viewTreeObserver } doReturn viewTreeObserver
         on { divData } doReturn divData
         on { dataTag } doReturn mock()
-        on { bindingContext } doReturn mock()
+        on { expressionResolver } doReturn mock()
     }
     private val underTest = DivLayoutProviderBinder(errorCollectors, divView)
     private val layoutProvider = DivLayoutProvider(HEIGHT_VARIABLE_NAME, WIDTH_VARIABLE_NAME)

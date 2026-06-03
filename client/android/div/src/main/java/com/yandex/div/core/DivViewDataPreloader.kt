@@ -8,9 +8,9 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.CompositeResult
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivTreeVisitor
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 
@@ -25,11 +25,11 @@ internal class DivViewDataPreloader internal constructor(
 
     fun preload(
         data: DivData,
-        context: BindingContext,
+        resolver: ExpressionResolver,
         callback: Callback = NO_CALLBACK
     ): DivPreloader.Ticket {
         val downloadCallback = DivPreloader.DownloadCallback(callback)
-        val ticket = PreloadVisitor(downloadCallback, callback, preloadFilter).preload(data, context)
+        val ticket = PreloadVisitor(downloadCallback, callback, preloadFilter).preload(data, resolver)
         downloadCallback.onFullPreloadStarted()
         return ticket
     }
@@ -41,28 +41,28 @@ internal class DivViewDataPreloader internal constructor(
     ) : DivTreeVisitor<Unit>() {
         private val ticket = DivPreloader.TicketImpl()
 
-        fun preload(data: DivData, context: BindingContext): DivPreloader.Ticket {
-            visit(data, context)
+        fun preload(data: DivData, resolver: ExpressionResolver): DivPreloader.Ticket {
+            visit(data, resolver)
             return ticket
         }
 
-        override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
-            imagePreloader?.preloadImage(data, context.expressionResolver, preloadFilter, downloadCallback)
+        override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) {
+            imagePreloader?.preloadImage(data, resolver, preloadFilter, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data.value(), context.expressionResolver, downloadCallback)
+            extensionController.preprocessExtensions(data.value(), resolver, downloadCallback)
         }
 
-        override fun visit(data: Div.Custom, context: BindingContext, path: DivStatePath) {
-            super.visit(data, context, path)
+        override fun visit(data: Div.Custom, resolver: ExpressionResolver, path: DivStatePath) {
+            super.visit(data, resolver, path)
             customContainerViewAdapter.preload(data.value, callback).also { ticket.addReference(it) }
         }
 
-        override fun visit(data: Div.Video, context: BindingContext, path: DivStatePath) {
-            defaultVisit(data, context, path)
-            if (preloadFilter.shouldPreloadContent(data, context.expressionResolver)) {
+        override fun visit(data: Div.Video, resolver: ExpressionResolver, path: DivStatePath) {
+            defaultVisit(data, resolver, path)
+            if (preloadFilter.shouldPreloadContent(data, resolver)) {
                 val sources = mutableListOf<Uri>()
                 data.value.videoSources?.forEach {
-                    sources.add(it.url.evaluate(context.expressionResolver))
+                    sources.add(it.url.evaluate(resolver))
                 }
                 val preloading = downloadCallback.registerPreloading("video")
                 videoPreloader.preloadVideo(sources, callback = { results ->

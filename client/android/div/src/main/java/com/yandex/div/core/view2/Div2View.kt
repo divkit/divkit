@@ -212,7 +212,7 @@ class Div2View private constructor(
             oldRuntimeStore?.clearBindings(this)
         }
         bindingContext = BindingContext(this, expressionResolver)
-        div2Component.stateManager.collectStateVariables(tag, data, bindingContext)
+        div2Component.stateManager.collectStateVariables(tag, data, expressionResolver)
     }
 
     private fun tryAttachVariableTriggers(data: DivData?) {
@@ -366,7 +366,7 @@ class Div2View private constructor(
         layoutProviderBinder.release(oldData)
         dataTag = tag
 
-        div2Component.divViewDataPreloader.preload(data, bindingContext)
+        div2Component.divViewDataPreloader.preload(data, expressionResolver)
 
         val isDataReplaceable = DivComparator.isDivDataReplaceable(
             oldData,
@@ -451,7 +451,7 @@ class Div2View private constructor(
         )
         dataTag = tag
 
-        div2Component.divViewDataPreloader.preload(data, bindingContext)
+        div2Component.divViewDataPreloader.preload(data, expressionResolver)
         paths.forEach { path ->
             div2Component.stateManager.updateStates(divTag.id, path, temporary)
         }

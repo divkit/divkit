@@ -5,7 +5,6 @@ import androidx.collection.ArrayMap
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivPathUtils.statePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.Assert
@@ -34,9 +33,9 @@ internal class DivStateManager @Inject constructor(
     private val states = ArrayMap<DivDataTag, DivViewState>()
     private val variables = mutableMapOf<String, CardVariables>()
 
-    fun collectStateVariables(tag: DivDataTag, data: DivData, context: BindingContext) {
+    fun collectStateVariables(tag: DivDataTag, data: DivData, resolver: ExpressionResolver) {
         val cardVariables = variables.getOrPut(tag.id) { mutableMapOf() }
-        StateVariableCollector(cardVariables).collectStateVariables(data, context)
+        StateVariableCollector(cardVariables).collectStateVariables(data, resolver)
     }
 
     fun getState(tag: DivDataTag): DivViewState? = synchronized(states) {
@@ -124,14 +123,14 @@ private class StateVariableCollector(
     private val variables: CardVariables
 ) : DivTreeVisitor<Unit>() {
 
-    fun collectStateVariables(data: DivData, context: BindingContext) = visit(data, context)
+    fun collectStateVariables(data: DivData, resolver: ExpressionResolver) = visit(data, resolver)
 
-    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) = Unit
+    override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) = Unit
 
-    override fun visit(data: Div.State, context: BindingContext, path: DivStatePath) {
+    override fun visit(data: Div.State, resolver: ExpressionResolver, path: DivStatePath) {
         val variableName = data.value.stateIdVariable ?: return
-        val variable = context.expressionResolver.getVariable(variableName) ?: return
+        val variable = resolver.getVariable(variableName) ?: return
         variables.getOrPut(path.statePath) { StateVariableHolder(variable) }
-        super.visit(data, context, path)
+        super.visit(data, resolver, path)
     }
 }

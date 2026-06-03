@@ -1,158 +1,158 @@
 package com.yandex.div.internal.core
 
+import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivData
 
 internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> Boolean)? = null) {
 
-    protected fun visit(data: DivData, context: BindingContext) {
+    protected fun visit(data: DivData, resolver: ExpressionResolver) {
         data.states.forEach { state ->
-            visit(state.div, context, DivStatePath.fromState(state))
+            val path = DivStatePath.fromState(state)
+            val stateResolver = resolver.asImpl?.runtimeStore
+                ?.getOrCreateRuntime(path.fullPath, state.div, resolver)?.expressionResolver
+                ?: resolver
+            visit(state.div, stateResolver, path)
         }
     }
 
-    private fun visit(div: Div, parentContext: BindingContext, path: DivStatePath): T {
-        val context = parentContext.getChildContext(div, path)
+    fun visit(div: Div, resolver: ExpressionResolver, path: DivStatePath): T {
         return when (div) {
-            is Div.Text -> visit(div, context, path)
-            is Div.Image -> visit(div, context, path)
-            is Div.GifImage -> visit(div, context, path)
-            is Div.Separator -> visit(div, context, path)
-            is Div.Container -> visit(div, context, path)
-            is Div.Grid -> visit(div, context, path)
-            is Div.Gallery -> visit(div, context, path)
-            is Div.Pager -> visit(div, context, path)
-            is Div.Tabs -> visit(div, context, path)
-            is Div.State -> visit(div, context, path)
-            is Div.Custom -> visit(div, context, path)
-            is Div.Indicator -> visit(div, context, path)
-            is Div.Slider -> visit(div, context, path)
-            is Div.Input -> visit(div, context, path)
-            is Div.Select -> visit(div, context, path)
-            is Div.Video -> visit(div, context, path)
-            is Div.Switch -> visit(div, context, path)
+            is Div.Text -> visit(div, resolver, path)
+            is Div.Image -> visit(div, resolver, path)
+            is Div.GifImage -> visit(div, resolver, path)
+            is Div.Separator -> visit(div, resolver, path)
+            is Div.Container -> visit(div, resolver, path)
+            is Div.Grid -> visit(div, resolver, path)
+            is Div.Gallery -> visit(div, resolver, path)
+            is Div.Pager -> visit(div, resolver, path)
+            is Div.Tabs -> visit(div, resolver, path)
+            is Div.State -> visit(div, resolver, path)
+            is Div.Custom -> visit(div, resolver, path)
+            is Div.Indicator -> visit(div, resolver, path)
+            is Div.Slider -> visit(div, resolver, path)
+            is Div.Input -> visit(div, resolver, path)
+            is Div.Select -> visit(div, resolver, path)
+            is Div.Video -> visit(div, resolver, path)
+            is Div.Switch -> visit(div, resolver, path)
         }
     }
 
-    protected abstract fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath): T
+    protected abstract fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath): T
 
     protected open fun defaultVisitCollection(
         data: Div,
-        context: BindingContext,
+        resolver: ExpressionResolver,
         path: DivStatePath,
         items: List<Div>?,
         itemBuilder: DivCollectionItemBuilder? = null,
         pathOverride: List<DivStatePath>? = null
     ): T {
-        val result = defaultVisit(data, context, path)
+        val result = defaultVisit(data, resolver, path)
         if (returnCondition?.invoke(result) == true) return result
 
         itemBuilder?.let {
-            return it.visit(context, path, result)
+            val resolverImpl = resolver.asImpl ?: return result
+            return it.visit(resolverImpl, path, result)
         }
 
         val ids = items?.getIds() ?: return result
         items.forEachIndexed { index, div ->
             val childPath = pathOverride?.get(index) ?: path.appendDiv(ids[index])
-            val child = visitCollectionChild(div, context, childPath, result)
+            val child = visitCollectionChild(div, resolver, childPath, result)
             if (returnCondition?.invoke(child) == true) return child
         }
         return result
     }
 
     private fun DivCollectionItemBuilder.visit(
-        context: BindingContext,
+        resolver: ExpressionResolverImpl,
         path: DivStatePath,
         parent: T,
     ): T {
-        val builtItems = build(context.expressionResolver)
+        val builtItems = build(resolver)
         val ids = builtItems.getItemIds()
         builtItems.forEachIndexed { index, item ->
             val childPath = path.appendDiv(ids[index])
-            val resolver = context.divView.runtimeStore.resolveRuntimeWith(
+            val childResolver = resolver.runtimeStore.resolveRuntimeWith(
                 childPath,
                 item.div,
                 item.expressionResolver,
-                context.expressionResolver
+                resolver
             )?.expressionResolver ?: item.expressionResolver
-            val childContext = BindingContext(context.divView, resolver)
 
-            val result = visitCollectionChild(item.div, childContext, childPath, parent)
+            val result = visitCollectionChild(item.div, childResolver, childPath, parent)
             if (returnCondition?.invoke(result) == true) return result
         }
         return parent
     }
 
-    protected open fun visitCollectionChild(div: Div, context: BindingContext, path: DivStatePath, parent: T) =
-        visit(div, context, path)
+    protected open fun visitCollectionChild(div: Div, resolver: ExpressionResolver, path: DivStatePath, parent: T) =
+        visit(div, resolver, path)
 
-    protected open fun visit(data: Div.Container, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
+    protected open fun visit(data: Div.Container, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items, data.value.itemBuilder)
 
-    protected open fun visit(data: Div.Grid, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items)
+    protected open fun visit(data: Div.Grid, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items)
 
-    protected open fun visit(data: Div.Gallery, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
+    protected open fun visit(data: Div.Gallery, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items, data.value.itemBuilder)
 
-    protected open fun visit(data: Div.Pager, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items, data.value.itemBuilder)
+    protected open fun visit(data: Div.Pager, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items, data.value.itemBuilder)
 
-    protected open fun visit(data: Div.Tabs, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items.map { it.div })
+    protected open fun visit(data: Div.Tabs, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items.map { it.div })
 
-    protected open fun visit(data: Div.State, context: BindingContext, path: DivStatePath): T {
+    protected open fun visit(data: Div.State, resolver: ExpressionResolver, path: DivStatePath): T {
         val id = data.value.getId()
         val paths = data.value.states.mapNotNull {
             it.div ?: return@mapNotNull null
             path.append(id, it, it.stateId)
         }
-        return defaultVisitCollection(data, context, path, data.value.states.mapNotNull { it.div }, null, paths)
+        return defaultVisitCollection(data, resolver, path, data.value.states.mapNotNull { it.div }, null, paths)
     }
 
-    protected open fun visit(data: Div.Custom, context: BindingContext, path: DivStatePath) =
-        defaultVisitCollection(data, context, path, data.value.items)
+    protected open fun visit(data: Div.Custom, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisitCollection(data, resolver, path, data.value.items)
 
-    protected open fun visit(data: Div.Text, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Text, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Image, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Image, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.GifImage, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.GifImage, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Separator, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Separator, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Indicator, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Indicator, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Slider, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Slider, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Input, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Input, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Select, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Select, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Video, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
+    protected open fun visit(data: Div.Video, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 
-    protected open fun visit(data: Div.Switch, context: BindingContext, path: DivStatePath) =
-        defaultVisit(data, context, path)
-}
-
-internal fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    val runtime = divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, expressionResolver)
-    return getFor(runtime.expressionResolver)
+    protected open fun visit(data: Div.Switch, resolver: ExpressionResolver, path: DivStatePath) =
+        defaultVisit(data, resolver, path)
 }
