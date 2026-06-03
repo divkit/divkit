@@ -2551,6 +2551,30 @@
     "en": "A condition that is used to select the prototype for the next character range. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
     "ru": "Условие, которое используется для выбора прототипа для очередного диапазона символов. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."
   },
+  "div_text_image_builder": {
+    "en": "Sets inline images dynamically using `data` and `prototypes`.",
+    "ru": "Задает встроенные изображения динамически при помощи `data` и `prototypes`."
+  },
+  "div_text_image_builder_data": {
+    "en": "Data that will be used to create inline images.",
+    "ru": "Данные, которые будут использоваться для создания встроенных изображений."
+  },
+  "div_text_image_builder_data_element_name": {
+    "en": "Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.",
+    "ru": "Имя для обращения к очередному элементу `data` в прототипе. Работа с этим элементом ведется так же, как со словарями."
+  },
+  "div_text_image_builder_prototypes": {
+    "en": "Array of `image` elements from which the inline images will be created.",
+    "ru": "Массив `image`, из которых будут созданы встроенные изображения."
+  },
+  "div_text_image_builder_prototype_image": {
+    "en": "`image` from which the inline image will be created. In `image`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same name as in `data_element_name`.",
+    "ru": "`image`, из которого будет создано встроенное изображение. В `image` можно использовать выражения с использованием данных из `data`. Для обращения к очередному элементу `data` нужно использовать такое же имя, как и в `data_element_name`."
+  },
+  "div_text_image_builder_prototype_selector": {
+    "en": "A condition that is used to select the prototype for the next inline image. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
+    "ru": "Условие, которое используется для выбора прототипа для очередного встроенного изображения. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."
+  },
   "div_text_range_actions": {
     "en": "Action when clicking on text.",
     "ru": "Действие при нажатии на текст."

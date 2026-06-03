@@ -1,0 +1,70 @@
+{
+  "description": "Text with image_builder: inline images generated from a data array, with selector-based prototype choice.",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "items": [
+            {
+              "variables": [
+                {
+                  "name": "source",
+                  "type": "array",
+                  "value": [
+                    { "pos": 2, "kind": "chess" },
+                    { "pos": 5, "kind": "star" },
+                    { "pos": 8, "kind": "chess" }
+                  ]
+                }
+              ],
+              "type": "text",
+              "text": "0123456789",
+              "font_size": 20,
+              "width": {
+                "type": "wrap_content"
+              },
+              "image_builder": {
+                "data": "@{source}",
+                "data_element_name": "it",
+                "prototypes": [
+                  {
+                    "selector": "@{getStringFromDict(it, 'kind') == 'star'}",
+                    "image": {
+                      "start": "@{getIntegerFromDict(it, 'pos')}",
+                      "url": "https://yastatic.net/s3/home/divkit/star.png",
+                      "width": { "type": "fixed", "value": 24 },
+                      "height": { "type": "fixed", "value": 24 }
+                    }
+                  },
+                  {
+                    "image": {
+                      "start": "@{getIntegerFromDict(it, 'pos')}",
+                      "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                      "width": { "type": "fixed", "value": 24 },
+                      "height": { "type": "fixed", "value": 18 }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

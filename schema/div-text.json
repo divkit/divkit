@@ -190,6 +190,48 @@
       ],
       "$description": "translations.json#/div_text_range_builder"
     },
+    "image_builder": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "$description": "translations.json#/div_text_image_builder_data"
+        },
+        "data_element_name": {
+          "type": "string",
+          "default_value": "it",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_text_image_builder_data_element_name"
+        },
+        "prototypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "selector": {
+                "$ref": "common.json#/boolean_int",
+                "default_value": "true",
+                "$description": "translations.json#/div_text_image_builder_prototype_selector"
+              },
+              "image": {
+                "$ref": "#/definitions/image",
+                "$description": "translations.json#/div_text_image_builder_prototype_image"
+              }
+            },
+            "required": [
+              "image"
+            ]
+          },
+          "$description": "translations.json#/div_text_image_builder_prototypes"
+        }
+      },
+      "required": [
+        "data",
+        "prototypes"
+      ],
+      "$description": "translations.json#/div_text_image_builder"
+    },
     "image": {
       "type": "object",
       "platforms": [
@@ -468,6 +510,12 @@
             "android",
             "ios",
             "web"
+          ]
+        },
+        "image_builder": {
+          "$ref": "#/definitions/image_builder",
+          "platforms": [
+            "ios"
           ]
         },
         "ellipsis": {

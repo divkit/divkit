@@ -109,8 +109,7 @@ extension DivText: DivBlockModeling {
     }
 
     let images = makeInlineImages(
-      context: context,
-      images: self.images,
+      images: makeImages(self.images, imageBuilder: imageBuilder, context: context),
       text: attributedString
     )
 
@@ -124,8 +123,7 @@ extension DivText: DivBlockModeling {
       )
     }
     let truncationImages = makeInlineImages(
-      context: context,
-      images: ellipsis?.images,
+      images: makeImages(ellipsis?.images, imageBuilder: nil, context: context),
       text: truncationToken
     )
 
@@ -183,17 +181,17 @@ extension DivText: DivBlockModeling {
   }
 
   private func makeInlineImages(
-    context: DivBlockModelingContext,
-    images: [Image]?,
+    images: [(Image, DivBlockModelingContext)],
     text: NSAttributedString?
   ) -> [TextBlock.InlineImage] {
     guard let text else {
       return []
     }
-    return (images ?? []).compactMap {
-      $0.makeImage(
-        context: context,
-        textLength: CFAttributedStringGetLength(text)
+    let textLength = CFAttributedStringGetLength(text)
+    return images.compactMap { image, imageContext in
+      image.makeImage(
+        context: imageContext,
+        textLength: textLength
       )
     }
   }

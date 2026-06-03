@@ -167,6 +167,61 @@ public final class DivText: DivBase, @unchecked Sendable {
     }
   }
 
+  public final class ImageBuilder: @unchecked Sendable {
+    public final class Prototype: Sendable {
+      public let image: Image
+      public let selector: Expression<Bool> // default value: true
+
+      public func resolveSelector(_ resolver: ExpressionResolver) -> Bool {
+        resolver.resolveNumeric(selector) ?? true
+      }
+
+      public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+        self.init(
+          image: try dictionary.getField("image", transform: { (dict: [String: Any]) in try DivText.Image(dictionary: dict, context: context) }, context: context),
+          selector: try dictionary.getOptionalExpressionField("selector", context: context)
+        )
+      }
+
+      init(
+        image: Image,
+        selector: Expression<Bool>? = nil
+      ) {
+        self.image = image
+        self.selector = selector ?? .value(true)
+      }
+    }
+
+    public let data: Expression<[Any]>
+    public let dataElementName: String // default value: it
+    public let prototypes: [Prototype] // at least 1 elements
+
+    public func resolveData(_ resolver: ExpressionResolver) -> [Any]? {
+      resolver.resolveArray(data)
+    }
+
+    static let prototypesValidator: AnyArrayValueValidator<DivText.ImageBuilder.Prototype> =
+      makeArrayValidator(minItems: 1)
+
+    public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
+      self.init(
+        data: try dictionary.getExpressionField("data", context: context),
+        dataElementName: try dictionary.getOptionalField("data_element_name", context: context),
+        prototypes: try dictionary.getArray("prototypes", transform: { (dict: [String: Any]) in try? DivText.ImageBuilder.Prototype(dictionary: dict, context: context) }, validator: Self.prototypesValidator, context: context)
+      )
+    }
+
+    init(
+      data: Expression<[Any]>,
+      dataElementName: String? = nil,
+      prototypes: [Prototype]
+    ) {
+      self.data = data
+      self.dataElementName = dataElementName ?? "it"
+      self.prototypes = prototypes
+    }
+  }
+
   public final class Range: @unchecked Sendable {
     public let actions: [DivAction]?
     public let alignmentVertical: Expression<DivTextAlignmentVertical>?
@@ -440,6 +495,7 @@ public final class DivText: DivBase, @unchecked Sendable {
   public let hoverEndActions: [DivAction]?
   public let hoverStartActions: [DivAction]?
   public let id: String?
+  public let imageBuilder: ImageBuilder?
   public let images: [Image]?
   public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
@@ -661,6 +717,7 @@ public final class DivText: DivBase, @unchecked Sendable {
       hoverEndActions: try dictionary.getOptionalArray("hover_end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       hoverStartActions: try dictionary.getOptionalArray("hover_start_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       id: try dictionary.getOptionalField("id", context: context),
+      imageBuilder: try dictionary.getOptionalField("image_builder", transform: { (dict: [String: Any]) in try DivText.ImageBuilder(dictionary: dict, context: context) }),
       images: try dictionary.getOptionalArray("images", transform: { (dict: [String: Any]) in try? DivText.Image(dictionary: dict, context: context) }),
       layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
       letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing", context: context),
@@ -736,6 +793,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     hoverEndActions: [DivAction]? = nil,
     hoverStartActions: [DivAction]? = nil,
     id: String? = nil,
+    imageBuilder: ImageBuilder? = nil,
     images: [Image]? = nil,
     layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
@@ -808,6 +866,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     self.hoverEndActions = hoverEndActions
     self.hoverStartActions = hoverStartActions
     self.id = id
+    self.imageBuilder = imageBuilder
     self.images = images
     self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
@@ -926,97 +985,98 @@ extension DivText: Equatable {
       return false
     }
     guard
+      lhs.imageBuilder == rhs.imageBuilder,
       lhs.images == rhs.images,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.maxLines == rhs.maxLines,
-      lhs.minHiddenLines == rhs.minHiddenLines,
-      lhs.paddings == rhs.paddings
+      lhs.minHiddenLines == rhs.minHiddenLines
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pressEndActions == rhs.pressEndActions,
-      lhs.pressStartActions == rhs.pressStartActions,
-      lhs.rangeBuilder == rhs.rangeBuilder
+      lhs.pressStartActions == rhs.pressStartActions
     else {
       return false
     }
     guard
+      lhs.rangeBuilder == rhs.rangeBuilder,
       lhs.ranges == rhs.ranges,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectable == rhs.selectable,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.strike == rhs.strike,
       lhs.text == rhs.text,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textGradient == rhs.textGradient,
-      lhs.textShadow == rhs.textShadow
+      lhs.textGradient == rhs.textGradient
     else {
       return false
     }
     guard
+      lhs.textShadow == rhs.textShadow,
       lhs.tightenWidth == rhs.tightenWidth,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.truncate == rhs.truncate
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.truncate == rhs.truncate,
       lhs.underline == rhs.underline,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -1062,6 +1122,7 @@ extension DivText: Serializable {
     result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
     result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
+    result["image_builder"] = imageBuilder?.toDictionary()
     result["images"] = images?.map { $0.toDictionary() }
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
@@ -1105,6 +1166,21 @@ extension DivText: Serializable {
     return result
   }
 }
+
+#if DEBUG
+// WARNING: this == is incomplete because of [String: Any] in class fields
+extension DivText.ImageBuilder: Equatable {
+  public static func ==(lhs: DivText.ImageBuilder, rhs: DivText.ImageBuilder) -> Bool {
+    guard
+      lhs.dataElementName == rhs.dataElementName,
+      lhs.prototypes == rhs.prototypes
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
 
 #if DEBUG
 // WARNING: this == is incomplete because of [String: Any] in class fields
@@ -1248,6 +1324,20 @@ extension DivText.Image: Equatable {
 #endif
 
 #if DEBUG
+extension DivText.ImageBuilder.Prototype: Equatable {
+  public static func ==(lhs: DivText.ImageBuilder.Prototype, rhs: DivText.ImageBuilder.Prototype) -> Bool {
+    guard
+      lhs.image == rhs.image,
+      lhs.selector == rhs.selector
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
 extension DivText.RangeBuilder.Prototype: Equatable {
   public static func ==(lhs: DivText.RangeBuilder.Prototype, rhs: DivText.RangeBuilder.Prototype) -> Bool {
     guard
@@ -1297,6 +1387,27 @@ extension DivText.Image: Serializable {
     result["tint_mode"] = tintMode.toValidSerializationValue()
     result["url"] = url.toValidSerializationValue()
     result["width"] = width.toDictionary()
+    return result
+  }
+}
+
+extension DivText.ImageBuilder.Prototype: Serializable {
+  @_optimize(size)
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["image"] = image.toDictionary()
+    result["selector"] = selector.toValidSerializationValue()
+    return result
+  }
+}
+
+extension DivText.ImageBuilder: Serializable {
+  @_optimize(size)
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["data"] = data.toValidSerializationValue()
+    result["data_element_name"] = dataElementName
+    result["prototypes"] = prototypes.map { $0.toDictionary() }
     return result
   }
 }
