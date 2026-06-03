@@ -107,7 +107,34 @@ class DivViewWithActionsTest {
     }
 
     @Test
-    fun `doubleTapActions are handled`() {
+    fun `tap on element with actions does not trigger container actions`() {
+        setContent(
+            container(
+                action = action(url = "test://container_tap"),
+                items = listOf(
+                    text(
+                        action = action(url = "test://tap"),
+                        text = constant("button")
+                    )
+                )
+            )
+        )
+
+        rule.onNodeWithText("button").performClick()
+
+        assertEquals(
+            listOf(
+                actionData(
+                    source = DivActionSource.TAP,
+                    url = "test://tap"
+                )
+            ),
+            actionHandler.handledActions
+        )
+    }
+
+    @Test
+    fun `double tap triggers doubleTapActions`() {
         setContent(
             text(
                 doubleTapActions = listOf(action(url = "test://double_tap")),
@@ -133,10 +160,10 @@ class DivViewWithActionsTest {
     }
 
     @Test
-    fun `double click does not inflict click actions`() {
+    fun `double tap does not trigger tap actions`() {
         setContent(
             text(
-                action = action(url = "custom-action://tap"),
+                action = action(url = "test://tap"),
                 doubleTapActions = listOf(action(url = "test://double_tap")),
                 text = constant("button")
             )
@@ -156,7 +183,35 @@ class DivViewWithActionsTest {
     }
 
     @Test
-    fun `longTapActions are handled`() {
+    fun `tap triggers tap actions on element with actions and doubleTapActions`() {
+        setContent(
+            text(
+                action = action(url = "test://tap"),
+                doubleTapActions = listOf(action(url = "test://double_tap")),
+                text = constant("button")
+            )
+        )
+
+        rule.onNodeWithText("button").performClick()
+
+        // action is triggered with a delay necessary to distinguish a single tap from a double tap
+        rule.waitUntil {
+            actionHandler.handledActions.isNotEmpty()
+        }
+
+        assertEquals(
+            listOf(
+                actionData(
+                    source = DivActionSource.TAP,
+                    url = "test://tap"
+                )
+            ),
+            actionHandler.handledActions
+        )
+    }
+
+    @Test
+    fun `long tap triggers longTapActions`() {
         setContent(
             text(
                 longTapActions = listOf(action(url = "test://long_tap")),
