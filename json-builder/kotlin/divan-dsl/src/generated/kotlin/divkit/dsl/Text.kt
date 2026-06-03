@@ -69,6 +69,7 @@ data class Text internal constructor(
             hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
             hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
+            imageBuilder = additive.imageBuilder ?: properties.imageBuilder,
             images = additive.images ?: properties.images,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
@@ -80,6 +81,7 @@ data class Text internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
             pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
+            rangeBuilder = additive.rangeBuilder ?: properties.rangeBuilder,
             ranges = additive.ranges ?: properties.ranges,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -246,6 +248,7 @@ data class Text internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        val imageBuilder: Property<ImageBuilder>?,
         /**
          * Images embedded in text.
          */
@@ -291,6 +294,7 @@ data class Text internal constructor(
          * Actions performed at the start of a click/tap on an element.
          */
         val pressStartActions: Property<List<Action>>?,
+        val rangeBuilder: Property<RangeBuilder>?,
         /**
          * A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
          */
@@ -445,6 +449,7 @@ data class Text internal constructor(
             result.tryPutProperty("hover_end_actions", hoverEndActions)
             result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("image_builder", imageBuilder)
             result.tryPutProperty("images", images)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
@@ -456,6 +461,7 @@ data class Text internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("press_end_actions", pressEndActions)
             result.tryPutProperty("press_start_actions", pressStartActions)
+            result.tryPutProperty("range_builder", rangeBuilder)
             result.tryPutProperty("ranges", ranges)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -514,7 +520,9 @@ data class Text internal constructor(
         operator fun plus(additive: Properties): Ellipsis = Ellipsis(
             Properties(
                 actions = additive.actions ?: properties.actions,
+                imageBuilder = additive.imageBuilder ?: properties.imageBuilder,
                 images = additive.images ?: properties.images,
+                rangeBuilder = additive.rangeBuilder ?: properties.rangeBuilder,
                 ranges = additive.ranges ?: properties.ranges,
                 text = additive.text ?: properties.text,
             )
@@ -526,10 +534,12 @@ data class Text internal constructor(
              * Actions when clicking on a crop marker.
              */
             val actions: Property<List<Action>>?,
+            val imageBuilder: Property<ImageBuilder>?,
             /**
              * Images embedded in a crop marker.
              */
             val images: Property<List<Image>>?,
+            val rangeBuilder: Property<RangeBuilder>?,
             /**
              * Character ranges inside a crop marker with different text styles.
              */
@@ -543,7 +553,9 @@ data class Text internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("actions", actions)
+                result.tryPutProperty("image_builder", imageBuilder)
                 result.tryPutProperty("images", images)
+                result.tryPutProperty("range_builder", rangeBuilder)
                 result.tryPutProperty("ranges", ranges)
                 result.tryPutProperty("text", text)
                 return result
@@ -705,6 +717,102 @@ data class Text internal constructor(
              */
             @Generated
             sealed interface Type
+        }
+
+    }
+
+
+    /**
+     * Sets inline images dynamically using `data` and `prototypes`.
+     * 
+     * Can be created using the method [textImageBuilder].
+     * 
+     * Required parameters: `prototypes, data`.
+     */
+    @Generated
+    @ExposedCopyVisibility
+    data class ImageBuilder internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): ImageBuilder = ImageBuilder(
+            Properties(
+                data = additive.data ?: properties.data,
+                dataElementName = additive.dataElementName ?: properties.dataElementName,
+                prototypes = additive.prototypes ?: properties.prototypes,
+            )
+        )
+
+        @ExposedCopyVisibility
+        data class Properties internal constructor(
+            /**
+             * Data that will be used to create inline images.
+             */
+            val data: Property<List<Any>>?,
+            /**
+             * Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+             * Default value: `it`.
+             */
+            val dataElementName: Property<String>?,
+            /**
+             * Array of `image` elements from which the inline images will be created.
+             */
+            val prototypes: Property<List<Prototype>>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("data", data)
+                result.tryPutProperty("data_element_name", dataElementName)
+                result.tryPutProperty("prototypes", prototypes)
+                return result
+            }
+        }
+
+        /**
+         * Can be created using the method [textImageBuilderPrototype].
+         * 
+         * Required parameters: `image`.
+         */
+        @Generated
+        @ExposedCopyVisibility
+        data class Prototype internal constructor(
+            @JsonIgnore
+            val properties: Properties,
+        ) {
+            @JsonAnyGetter
+            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+            operator fun plus(additive: Properties): Prototype = Prototype(
+                Properties(
+                    image = additive.image ?: properties.image,
+                    selector = additive.selector ?: properties.selector,
+                )
+            )
+
+            @ExposedCopyVisibility
+            data class Properties internal constructor(
+                /**
+                 * `image` from which the inline image will be created. In `image`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same name as in `data_element_name`.
+                 */
+                val image: Property<Image>?,
+                /**
+                 * A condition that is used to select the prototype for the next inline image. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
+                 * Default value: `true`.
+                 */
+                val selector: Property<Boolean>?,
+            ) {
+                internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                    val result = mutableMapOf<String, Any>()
+                    result.putAll(properties)
+                    result.tryPutProperty("image", image)
+                    result.tryPutProperty("selector", selector)
+                    return result
+                }
+            }
         }
 
     }
@@ -875,6 +983,102 @@ data class Text internal constructor(
         }
     }
 
+
+    /**
+     * Sets character ranges dynamically using `data` and `prototypes`.
+     * 
+     * Can be created using the method [textRangeBuilder].
+     * 
+     * Required parameters: `prototypes, data`.
+     */
+    @Generated
+    @ExposedCopyVisibility
+    data class RangeBuilder internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): RangeBuilder = RangeBuilder(
+            Properties(
+                data = additive.data ?: properties.data,
+                dataElementName = additive.dataElementName ?: properties.dataElementName,
+                prototypes = additive.prototypes ?: properties.prototypes,
+            )
+        )
+
+        @ExposedCopyVisibility
+        data class Properties internal constructor(
+            /**
+             * Data that will be used to create character ranges.
+             */
+            val data: Property<List<Any>>?,
+            /**
+             * Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+             * Default value: `it`.
+             */
+            val dataElementName: Property<String>?,
+            /**
+             * Array of `range` elements from which the character ranges will be created.
+             */
+            val prototypes: Property<List<Prototype>>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("data", data)
+                result.tryPutProperty("data_element_name", dataElementName)
+                result.tryPutProperty("prototypes", prototypes)
+                return result
+            }
+        }
+
+        /**
+         * Can be created using the method [textRangeBuilderPrototype].
+         * 
+         * Required parameters: `range`.
+         */
+        @Generated
+        @ExposedCopyVisibility
+        data class Prototype internal constructor(
+            @JsonIgnore
+            val properties: Properties,
+        ) {
+            @JsonAnyGetter
+            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+            operator fun plus(additive: Properties): Prototype = Prototype(
+                Properties(
+                    range = additive.range ?: properties.range,
+                    selector = additive.selector ?: properties.selector,
+                )
+            )
+
+            @ExposedCopyVisibility
+            data class Properties internal constructor(
+                /**
+                 * `range` from which the character range will be created. In `range`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same name as in `data_element_name`.
+                 */
+                val range: Property<Range>?,
+                /**
+                 * A condition that is used to select the prototype for the next character range. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
+                 * Default value: `true`.
+                 */
+                val selector: Property<Boolean>?,
+            ) {
+                internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                    val result = mutableMapOf<String, Any>()
+                    result.putAll(properties)
+                    result.tryPutProperty("range", range)
+                    result.tryPutProperty("selector", selector)
+                    return result
+                }
+            }
+        }
+
+    }
+
 }
 
 /**
@@ -984,6 +1188,7 @@ fun DivScope.text(
     hoverEndActions: List<Action>? = null,
     hoverStartActions: List<Action>? = null,
     id: String? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
@@ -995,6 +1200,7 @@ fun DivScope.text(
     paddings: EdgeInsets? = null,
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1056,6 +1262,7 @@ fun DivScope.text(
         hoverEndActions = valueOrNull(hoverEndActions),
         hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
+        imageBuilder = valueOrNull(imageBuilder),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
@@ -1067,6 +1274,7 @@ fun DivScope.text(
         paddings = valueOrNull(paddings),
         pressEndActions = valueOrNull(pressEndActions),
         pressStartActions = valueOrNull(pressStartActions),
+        rangeBuilder = valueOrNull(rangeBuilder),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1204,6 +1412,7 @@ fun DivScope.textProps(
     hoverEndActions: List<Action>? = null,
     hoverStartActions: List<Action>? = null,
     id: String? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
@@ -1215,6 +1424,7 @@ fun DivScope.textProps(
     paddings: EdgeInsets? = null,
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1275,6 +1485,7 @@ fun DivScope.textProps(
     hoverEndActions = valueOrNull(hoverEndActions),
     hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
+    imageBuilder = valueOrNull(imageBuilder),
     images = valueOrNull(images),
     layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
@@ -1286,6 +1497,7 @@ fun DivScope.textProps(
     paddings = valueOrNull(paddings),
     pressEndActions = valueOrNull(pressEndActions),
     pressStartActions = valueOrNull(pressStartActions),
+    rangeBuilder = valueOrNull(rangeBuilder),
     ranges = valueOrNull(ranges),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -1422,6 +1634,7 @@ fun TemplateScope.textRefs(
     hoverEndActions: ReferenceProperty<List<Action>>? = null,
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
+    imageBuilder: ReferenceProperty<Text.ImageBuilder>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
@@ -1433,6 +1646,7 @@ fun TemplateScope.textRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
+    rangeBuilder: ReferenceProperty<Text.RangeBuilder>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1493,6 +1707,7 @@ fun TemplateScope.textRefs(
     hoverEndActions = hoverEndActions,
     hoverStartActions = hoverStartActions,
     id = id,
+    imageBuilder = imageBuilder,
     images = images,
     layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
@@ -1504,6 +1719,7 @@ fun TemplateScope.textRefs(
     paddings = paddings,
     pressEndActions = pressEndActions,
     pressStartActions = pressStartActions,
+    rangeBuilder = rangeBuilder,
     ranges = ranges,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -1640,6 +1856,7 @@ fun Text.override(
     hoverEndActions: List<Action>? = null,
     hoverStartActions: List<Action>? = null,
     id: String? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
@@ -1651,6 +1868,7 @@ fun Text.override(
     paddings: EdgeInsets? = null,
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1712,6 +1930,7 @@ fun Text.override(
         hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
         hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
+        imageBuilder = valueOrNull(imageBuilder) ?: properties.imageBuilder,
         images = valueOrNull(images) ?: properties.images,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
@@ -1723,6 +1942,7 @@ fun Text.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
         pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
+        rangeBuilder = valueOrNull(rangeBuilder) ?: properties.rangeBuilder,
         ranges = valueOrNull(ranges) ?: properties.ranges,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -1860,6 +2080,7 @@ fun Text.defer(
     hoverEndActions: ReferenceProperty<List<Action>>? = null,
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
+    imageBuilder: ReferenceProperty<Text.ImageBuilder>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
@@ -1871,6 +2092,7 @@ fun Text.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
+    rangeBuilder: ReferenceProperty<Text.RangeBuilder>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1932,6 +2154,7 @@ fun Text.defer(
         hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
         hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
+        imageBuilder = imageBuilder ?: properties.imageBuilder,
         images = images ?: properties.images,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
@@ -1943,6 +2166,7 @@ fun Text.defer(
         paddings = paddings ?: properties.paddings,
         pressEndActions = pressEndActions ?: properties.pressEndActions,
         pressStartActions = pressStartActions ?: properties.pressStartActions,
+        rangeBuilder = rangeBuilder ?: properties.rangeBuilder,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -2080,6 +2304,7 @@ fun Text.modify(
     hoverEndActions: Property<List<Action>>? = null,
     hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
+    imageBuilder: Property<Text.ImageBuilder>? = null,
     images: Property<List<Text.Image>>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     letterSpacing: Property<Double>? = null,
@@ -2091,6 +2316,7 @@ fun Text.modify(
     paddings: Property<EdgeInsets>? = null,
     pressEndActions: Property<List<Action>>? = null,
     pressStartActions: Property<List<Action>>? = null,
+    rangeBuilder: Property<Text.RangeBuilder>? = null,
     ranges: Property<List<Text.Range>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
@@ -2152,6 +2378,7 @@ fun Text.modify(
         hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
         hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
+        imageBuilder = imageBuilder ?: properties.imageBuilder,
         images = images ?: properties.images,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
@@ -2163,6 +2390,7 @@ fun Text.modify(
         paddings = paddings ?: properties.paddings,
         pressEndActions = pressEndActions ?: properties.pressEndActions,
         pressStartActions = pressStartActions ?: properties.pressStartActions,
+        rangeBuilder = rangeBuilder ?: properties.rangeBuilder,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -2292,6 +2520,7 @@ fun Text.evaluate(
         hoverEndActions = properties.hoverEndActions,
         hoverStartActions = properties.hoverStartActions,
         id = properties.id,
+        imageBuilder = properties.imageBuilder,
         images = properties.images,
         layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
@@ -2303,6 +2532,7 @@ fun Text.evaluate(
         paddings = properties.paddings,
         pressEndActions = properties.pressEndActions,
         pressStartActions = properties.pressStartActions,
+        rangeBuilder = properties.rangeBuilder,
         ranges = properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -2440,6 +2670,7 @@ fun Component<Text>.override(
     hoverEndActions: List<Action>? = null,
     hoverStartActions: List<Action>? = null,
     id: String? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
@@ -2451,6 +2682,7 @@ fun Component<Text>.override(
     paddings: EdgeInsets? = null,
     pressEndActions: List<Action>? = null,
     pressStartActions: List<Action>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -2513,6 +2745,7 @@ fun Component<Text>.override(
         hoverEndActions = valueOrNull(hoverEndActions),
         hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
+        imageBuilder = valueOrNull(imageBuilder),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
@@ -2524,6 +2757,7 @@ fun Component<Text>.override(
         paddings = valueOrNull(paddings),
         pressEndActions = valueOrNull(pressEndActions),
         pressStartActions = valueOrNull(pressStartActions),
+        rangeBuilder = valueOrNull(rangeBuilder),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -2661,6 +2895,7 @@ fun Component<Text>.defer(
     hoverEndActions: ReferenceProperty<List<Action>>? = null,
     hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
+    imageBuilder: ReferenceProperty<Text.ImageBuilder>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
@@ -2672,6 +2907,7 @@ fun Component<Text>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pressEndActions: ReferenceProperty<List<Action>>? = null,
     pressStartActions: ReferenceProperty<List<Action>>? = null,
+    rangeBuilder: ReferenceProperty<Text.RangeBuilder>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -2734,6 +2970,7 @@ fun Component<Text>.defer(
         hoverEndActions = hoverEndActions,
         hoverStartActions = hoverStartActions,
         id = id,
+        imageBuilder = imageBuilder,
         images = images,
         layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
@@ -2745,6 +2982,7 @@ fun Component<Text>.defer(
         paddings = paddings,
         pressEndActions = pressEndActions,
         pressStartActions = pressStartActions,
+        rangeBuilder = rangeBuilder,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -2875,6 +3113,7 @@ fun Component<Text>.evaluate(
         hoverEndActions = null,
         hoverStartActions = null,
         id = null,
+        imageBuilder = null,
         images = null,
         layoutProvider = null,
         letterSpacing = letterSpacing,
@@ -2886,6 +3125,7 @@ fun Component<Text>.evaluate(
         paddings = null,
         pressEndActions = null,
         pressStartActions = null,
+        rangeBuilder = null,
         ranges = null,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -3023,6 +3263,7 @@ fun Component<Text>.modify(
     hoverEndActions: Property<List<Action>>? = null,
     hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
+    imageBuilder: Property<Text.ImageBuilder>? = null,
     images: Property<List<Text.Image>>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     letterSpacing: Property<Double>? = null,
@@ -3034,6 +3275,7 @@ fun Component<Text>.modify(
     paddings: Property<EdgeInsets>? = null,
     pressEndActions: Property<List<Action>>? = null,
     pressStartActions: Property<List<Action>>? = null,
+    rangeBuilder: Property<Text.RangeBuilder>? = null,
     ranges: Property<List<Text.Range>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
@@ -3096,6 +3338,7 @@ fun Component<Text>.modify(
         hoverEndActions = hoverEndActions,
         hoverStartActions = hoverStartActions,
         id = id,
+        imageBuilder = imageBuilder,
         images = images,
         layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
@@ -3107,6 +3350,7 @@ fun Component<Text>.modify(
         paddings = paddings,
         pressEndActions = pressEndActions,
         pressStartActions = pressStartActions,
+        rangeBuilder = rangeBuilder,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -3156,13 +3400,17 @@ fun Text.asList() = listOf(this)
 fun DivScope.textEllipsis(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     text: String? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = valueOrNull(actions),
+        imageBuilder = valueOrNull(imageBuilder),
         images = valueOrNull(images),
+        rangeBuilder = valueOrNull(rangeBuilder),
         ranges = valueOrNull(ranges),
         text = valueOrNull(text),
     )
@@ -3178,12 +3426,16 @@ fun DivScope.textEllipsis(
 fun DivScope.textEllipsisProps(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     text: String? = null,
 ) = Text.Ellipsis.Properties(
     actions = valueOrNull(actions),
+    imageBuilder = valueOrNull(imageBuilder),
     images = valueOrNull(images),
+    rangeBuilder = valueOrNull(rangeBuilder),
     ranges = valueOrNull(ranges),
     text = valueOrNull(text),
 )
@@ -3198,12 +3450,16 @@ fun DivScope.textEllipsisProps(
 fun TemplateScope.textEllipsisRefs(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    imageBuilder: ReferenceProperty<Text.ImageBuilder>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    rangeBuilder: ReferenceProperty<Text.RangeBuilder>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     text: ReferenceProperty<String>? = null,
 ) = Text.Ellipsis.Properties(
     actions = actions,
+    imageBuilder = imageBuilder,
     images = images,
+    rangeBuilder = rangeBuilder,
     ranges = ranges,
     text = text,
 )
@@ -3218,13 +3474,17 @@ fun TemplateScope.textEllipsisRefs(
 fun Text.Ellipsis.override(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    imageBuilder: Text.ImageBuilder? = null,
     images: List<Text.Image>? = null,
+    rangeBuilder: Text.RangeBuilder? = null,
     ranges: List<Text.Range>? = null,
     text: String? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = valueOrNull(actions) ?: properties.actions,
+        imageBuilder = valueOrNull(imageBuilder) ?: properties.imageBuilder,
         images = valueOrNull(images) ?: properties.images,
+        rangeBuilder = valueOrNull(rangeBuilder) ?: properties.rangeBuilder,
         ranges = valueOrNull(ranges) ?: properties.ranges,
         text = valueOrNull(text) ?: properties.text,
     )
@@ -3240,13 +3500,17 @@ fun Text.Ellipsis.override(
 fun Text.Ellipsis.defer(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    imageBuilder: ReferenceProperty<Text.ImageBuilder>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    rangeBuilder: ReferenceProperty<Text.RangeBuilder>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     text: ReferenceProperty<String>? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = actions ?: properties.actions,
+        imageBuilder = imageBuilder ?: properties.imageBuilder,
         images = images ?: properties.images,
+        rangeBuilder = rangeBuilder ?: properties.rangeBuilder,
         ranges = ranges ?: properties.ranges,
         text = text ?: properties.text,
     )
@@ -3262,13 +3526,17 @@ fun Text.Ellipsis.defer(
 fun Text.Ellipsis.modify(
     `use named arguments`: Guard = Guard.instance,
     actions: Property<List<Action>>? = null,
+    imageBuilder: Property<Text.ImageBuilder>? = null,
     images: Property<List<Text.Image>>? = null,
+    rangeBuilder: Property<Text.RangeBuilder>? = null,
     ranges: Property<List<Text.Range>>? = null,
     text: Property<String>? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = actions ?: properties.actions,
+        imageBuilder = imageBuilder ?: properties.imageBuilder,
         images = images ?: properties.images,
+        rangeBuilder = rangeBuilder ?: properties.rangeBuilder,
         ranges = ranges ?: properties.ranges,
         text = text ?: properties.text,
     )
@@ -3284,7 +3552,9 @@ fun Text.Ellipsis.evaluate(
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = properties.actions,
+        imageBuilder = properties.imageBuilder,
         images = properties.images,
+        rangeBuilder = properties.rangeBuilder,
         ranges = properties.ranges,
         text = text ?: properties.text,
     )
@@ -3573,6 +3843,134 @@ fun Text.Image.evaluate(
 
 @Generated
 fun Text.Image.asList() = listOf(this)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun DivScope.textImageBuilder(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.ImageBuilder.Prototype>? = null,
+): Text.ImageBuilder = Text.ImageBuilder(
+    Text.ImageBuilder.Properties(
+        data = valueOrNull(data),
+        dataElementName = valueOrNull(dataElementName),
+        prototypes = valueOrNull(prototypes),
+    )
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun DivScope.textImageBuilderProps(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.ImageBuilder.Prototype>? = null,
+) = Text.ImageBuilder.Properties(
+    data = valueOrNull(data),
+    dataElementName = valueOrNull(dataElementName),
+    prototypes = valueOrNull(prototypes),
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun TemplateScope.textImageBuilderRefs(
+    `use named arguments`: Guard = Guard.instance,
+    data: ReferenceProperty<List<Any>>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
+    prototypes: ReferenceProperty<List<Text.ImageBuilder.Prototype>>? = null,
+) = Text.ImageBuilder.Properties(
+    data = data,
+    dataElementName = dataElementName,
+    prototypes = prototypes,
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun Text.ImageBuilder.override(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.ImageBuilder.Prototype>? = null,
+): Text.ImageBuilder = Text.ImageBuilder(
+    Text.ImageBuilder.Properties(
+        data = valueOrNull(data) ?: properties.data,
+        dataElementName = valueOrNull(dataElementName) ?: properties.dataElementName,
+        prototypes = valueOrNull(prototypes) ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun Text.ImageBuilder.defer(
+    `use named arguments`: Guard = Guard.instance,
+    data: ReferenceProperty<List<Any>>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
+    prototypes: ReferenceProperty<List<Text.ImageBuilder.Prototype>>? = null,
+): Text.ImageBuilder = Text.ImageBuilder(
+    Text.ImageBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = dataElementName ?: properties.dataElementName,
+        prototypes = prototypes ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `image` elements from which the inline images will be created.
+ */
+@Generated
+fun Text.ImageBuilder.modify(
+    `use named arguments`: Guard = Guard.instance,
+    data: Property<List<Any>>? = null,
+    dataElementName: Property<String>? = null,
+    prototypes: Property<List<Text.ImageBuilder.Prototype>>? = null,
+): Text.ImageBuilder = Text.ImageBuilder(
+    Text.ImageBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = dataElementName ?: properties.dataElementName,
+        prototypes = prototypes ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create inline images.
+ */
+@Generated
+fun Text.ImageBuilder.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    data: ExpressionProperty<List<Any>>? = null,
+): Text.ImageBuilder = Text.ImageBuilder(
+    Text.ImageBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = properties.dataElementName,
+        prototypes = properties.prototypes,
+    )
+)
+
+@Generated
+fun Text.ImageBuilder.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
@@ -4094,6 +4492,134 @@ fun Text.Range.evaluate(
 
 @Generated
 fun Text.Range.asList() = listOf(this)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun DivScope.textRangeBuilder(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.RangeBuilder.Prototype>? = null,
+): Text.RangeBuilder = Text.RangeBuilder(
+    Text.RangeBuilder.Properties(
+        data = valueOrNull(data),
+        dataElementName = valueOrNull(dataElementName),
+        prototypes = valueOrNull(prototypes),
+    )
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun DivScope.textRangeBuilderProps(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.RangeBuilder.Prototype>? = null,
+) = Text.RangeBuilder.Properties(
+    data = valueOrNull(data),
+    dataElementName = valueOrNull(dataElementName),
+    prototypes = valueOrNull(prototypes),
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun TemplateScope.textRangeBuilderRefs(
+    `use named arguments`: Guard = Guard.instance,
+    data: ReferenceProperty<List<Any>>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
+    prototypes: ReferenceProperty<List<Text.RangeBuilder.Prototype>>? = null,
+) = Text.RangeBuilder.Properties(
+    data = data,
+    dataElementName = dataElementName,
+    prototypes = prototypes,
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun Text.RangeBuilder.override(
+    `use named arguments`: Guard = Guard.instance,
+    data: List<Any>? = null,
+    dataElementName: String? = null,
+    prototypes: List<Text.RangeBuilder.Prototype>? = null,
+): Text.RangeBuilder = Text.RangeBuilder(
+    Text.RangeBuilder.Properties(
+        data = valueOrNull(data) ?: properties.data,
+        dataElementName = valueOrNull(dataElementName) ?: properties.dataElementName,
+        prototypes = valueOrNull(prototypes) ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun Text.RangeBuilder.defer(
+    `use named arguments`: Guard = Guard.instance,
+    data: ReferenceProperty<List<Any>>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
+    prototypes: ReferenceProperty<List<Text.RangeBuilder.Prototype>>? = null,
+): Text.RangeBuilder = Text.RangeBuilder(
+    Text.RangeBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = dataElementName ?: properties.dataElementName,
+        prototypes = prototypes ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `range` elements from which the character ranges will be created.
+ */
+@Generated
+fun Text.RangeBuilder.modify(
+    `use named arguments`: Guard = Guard.instance,
+    data: Property<List<Any>>? = null,
+    dataElementName: Property<String>? = null,
+    prototypes: Property<List<Text.RangeBuilder.Prototype>>? = null,
+): Text.RangeBuilder = Text.RangeBuilder(
+    Text.RangeBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = dataElementName ?: properties.dataElementName,
+        prototypes = prototypes ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create character ranges.
+ */
+@Generated
+fun Text.RangeBuilder.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    data: ExpressionProperty<List<Any>>? = null,
+): Text.RangeBuilder = Text.RangeBuilder(
+    Text.RangeBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = properties.dataElementName,
+        prototypes = properties.prototypes,
+    )
+)
+
+@Generated
+fun Text.RangeBuilder.asList() = listOf(this)
 
 @Generated
 fun Text.Truncate.asList() = listOf(this)
