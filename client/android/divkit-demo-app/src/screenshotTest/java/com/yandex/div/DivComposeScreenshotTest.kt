@@ -290,6 +290,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-tabs",
                 // div-indicator
                 "snapshot_test_data/div-indicator",
+                // div-slider
+                "snapshot_test_data/div-slider",
             ).expandDirectories().withEscapedParameter()
         }
 

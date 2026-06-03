@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,7 +23,7 @@ internal fun mutableStateFromVariable(variableName: String, defaultValue: Boolea
 
 @Composable
 internal fun mutableStateFromVariable(variableName: String, defaultValue: Long): MutableState<Long> {
-    return mutableStateFromIntegerVariable(variableName) ?: remember { mutableStateOf(defaultValue) }
+    return mutableStateFromIntegerVariable(variableName) ?: remember { mutableLongStateOf(defaultValue) }
 }
 
 @Composable

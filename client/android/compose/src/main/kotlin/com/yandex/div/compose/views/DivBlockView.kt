@@ -18,6 +18,7 @@ import com.yandex.div.compose.views.modifiers.applyPaddings
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.indicator.DivIndicatorView
 import com.yandex.div.compose.views.input.DivInputView
+import com.yandex.div.compose.views.slider.DivSliderView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.tabs.DivTabsView
 import com.yandex.div.compose.views.text.DivTextView
@@ -103,13 +104,13 @@ private fun BaseView(
         is Div.Pager -> DivPagerView(modifier, data.value)
         is Div.Select -> DivSelectView(modifier.applyPaddings(data), data.value)
         is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
+        is Div.Slider -> DivSliderView(modifier.applyPaddings(data), data.value)
         is Div.State -> DivStateView(modifier, data.value)
         is Div.Switch -> DivSwitchView(modifier.applyPaddings(data), data.value)
         is Div.Tabs -> DivTabsView(modifier, data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
         is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
         is Div.GifImage -> NotSupported("gif")
-        is Div.Slider -> NotSupported("slider")
     }
 }
 
