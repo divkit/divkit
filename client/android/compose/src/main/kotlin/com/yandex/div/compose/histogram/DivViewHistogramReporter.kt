@@ -94,7 +94,7 @@ internal class DivViewHistogramReporter @Inject constructor(
         }
 
         val componentName = configuration.componentName
-        val name = if (componentName.isEmpty()) name else "${componentName}.name"
+        val name = if (componentName.isEmpty()) name else "$componentName.$name"
         configuration.histogramBridge.recordTimeHistogram(
             "$name.$state",
             duration.inWholeMicroseconds,
