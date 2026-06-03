@@ -44,7 +44,9 @@ internal class DecodeBase64ImageTask(
         val options = BitmapFactory.Options()
         options.inPreferredConfig = Bitmap.Config.ARGB_8888
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-        return bitmap
+        return bitmap ?: throw IllegalArgumentException(
+            "Failed to decode bitmap from ${bytes.size} bytes"
+        )
     }
 
     private fun extractFromDataUrl(base64string: String): String {
