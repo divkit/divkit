@@ -27,6 +27,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       defaultCrossAlignment: resolveCrossContentAlignment(expressionResolver).blockAlignment,
       scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
       columnCount: resolveColumnCount(expressionResolver),
+      allowTapWhileScroll: resolveAllowTapWhileScroll(expressionResolver),
       scrollbar: resolveScrollbar(expressionResolver).blockScrollbar,
       scrollAlignment: resolveScrollContentAlignment(expressionResolver).map(\.blockAlignment)
     )

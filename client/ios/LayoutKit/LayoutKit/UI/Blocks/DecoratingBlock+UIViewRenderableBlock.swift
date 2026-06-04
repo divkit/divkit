@@ -191,60 +191,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     private let box: Box
 
-    init(
-      child: UIViewRenderable & AnyObject,
-      backgroundColor: Color,
-      highlightedBackgroundColor: Color?,
-      actions: NonEmptyArray<UserInterfaceAction>?,
-      actionAnimation: ActionAnimation?,
-      doubleTapActions: NonEmptyArray<UserInterfaceAction>?,
-      longTapActions: LongTapActions?,
-      pressStartActions: NonEmptyArray<UserInterfaceAction>?,
-      pressEndActions: NonEmptyArray<UserInterfaceAction>?,
-      hoverStartActions: NonEmptyArray<UserInterfaceAction>?,
-      hoverEndActions: NonEmptyArray<UserInterfaceAction>?,
-      boundary: BoundaryTrait,
-      border: BlockBorder?,
-      childAlpha: CGFloat,
-      blurEffect: BlurEffect?,
-      paddings: EdgeInsets,
-      source: Variable<AnyObject?>,
-      visibilityParams: VisibilityParams?,
-      tooltips: [BlockTooltip],
-      accessibility: AccessibilityElement?,
-      reuseId: String?,
-      path: UIElementPath?,
-      isFocused: Bool?,
-      captureFocusOnAction: Bool
-    ) {
-      self.box = Box(
-        child: child,
-        backgroundColor: backgroundColor,
-        highlightedBackgroundColor: highlightedBackgroundColor,
-        actions: actions,
-        actionAnimation: actionAnimation,
-        doubleTapActions: doubleTapActions,
-        longTapActions: longTapActions,
-        pressStartActions: pressStartActions,
-        pressEndActions: pressEndActions,
-        hoverStartActions: hoverStartActions,
-        hoverEndActions: hoverEndActions,
-        boundary: boundary,
-        border: border,
-        childAlpha: childAlpha,
-        blurEffect: blurEffect,
-        paddings: paddings,
-        source: source,
-        visibilityParams: visibilityParams,
-        tooltips: tooltips,
-        accessibility: accessibility,
-        reuseId: reuseId,
-        path: path,
-        isFocused: isFocused,
-        captureFocusOnAction: captureFocusOnAction
-      )
-    }
-
     var child: UIViewRenderable & AnyObject { box.child }
     var backgroundColor: Color { box.backgroundColor }
     var highlightedBackgroundColor: Color? { box.highlightedBackgroundColor }
@@ -300,6 +246,60 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         shouldHandleDoubleTap ||
         shouldHandlePress ||
         shouldHandleHover
+    }
+
+    init(
+      child: UIViewRenderable & AnyObject,
+      backgroundColor: Color,
+      highlightedBackgroundColor: Color?,
+      actions: NonEmptyArray<UserInterfaceAction>?,
+      actionAnimation: ActionAnimation?,
+      doubleTapActions: NonEmptyArray<UserInterfaceAction>?,
+      longTapActions: LongTapActions?,
+      pressStartActions: NonEmptyArray<UserInterfaceAction>?,
+      pressEndActions: NonEmptyArray<UserInterfaceAction>?,
+      hoverStartActions: NonEmptyArray<UserInterfaceAction>?,
+      hoverEndActions: NonEmptyArray<UserInterfaceAction>?,
+      boundary: BoundaryTrait,
+      border: BlockBorder?,
+      childAlpha: CGFloat,
+      blurEffect: BlurEffect?,
+      paddings: EdgeInsets,
+      source: Variable<AnyObject?>,
+      visibilityParams: VisibilityParams?,
+      tooltips: [BlockTooltip],
+      accessibility: AccessibilityElement?,
+      reuseId: String?,
+      path: UIElementPath?,
+      isFocused: Bool?,
+      captureFocusOnAction: Bool
+    ) {
+      self.box = Box(
+        child: child,
+        backgroundColor: backgroundColor,
+        highlightedBackgroundColor: highlightedBackgroundColor,
+        actions: actions,
+        actionAnimation: actionAnimation,
+        doubleTapActions: doubleTapActions,
+        longTapActions: longTapActions,
+        pressStartActions: pressStartActions,
+        pressEndActions: pressEndActions,
+        hoverStartActions: hoverStartActions,
+        hoverEndActions: hoverEndActions,
+        boundary: boundary,
+        border: border,
+        childAlpha: childAlpha,
+        blurEffect: blurEffect,
+        paddings: paddings,
+        source: source,
+        visibilityParams: visibilityParams,
+        tooltips: tooltips,
+        accessibility: accessibility,
+        reuseId: reuseId,
+        path: path,
+        isFocused: isFocused,
+        captureFocusOnAction: captureFocusOnAction
+      )
     }
   }
 
@@ -825,7 +825,7 @@ extension DecoratingView: UIGestureRecognizerDelegate {
   ) -> Bool {
     gestureRecognizer === tapRecognizer &&
       otherGestureRecognizer is UIPanGestureRecognizer &&
-      otherGestureRecognizer.view is UIScrollView
+      (otherGestureRecognizer.view as? TapControlScrollView)?.allowTapWhileScroll == true
   }
 }
 

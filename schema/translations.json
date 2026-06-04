@@ -1139,6 +1139,10 @@
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",
     "ru": "Галерея. Содержит горизонтальный или вертикальный набор карточек, которые можно скроллить."
   },
+  "div_gallery_allow_tap_while_scroll": {
+    "en": "Allows handling taps on gallery items while the gallery is scrolling or decelerating.",
+    "ru": "Разрешает обработку нажатий по элементам галереи во время скролла или инерционного движения."
+  },
   "div_gallery_column_count": {
     "en": "Number of columns for block layout.",
     "ru": "Количество колонок для плиточной верстки."
