@@ -8,8 +8,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoSource
+import com.yandex.div.compose.views.modifiers.onDivVisibilityChanged
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerFactory
+import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoResolution as PlayerDivVideoResolution
 import com.yandex.div.core.player.DivVideoSource as PlayerDivVideoSource
@@ -52,6 +54,9 @@ internal class ViewBasedDivVideoPlayer(
     override val currentTimeMs: StateFlow<Long> = _currentTimeMs
 
     private var delegate: DivPlayer? = null
+
+    private var playerView: DivPlayerView? = null
+    private var visibleOnScreen = false
 
     private val stateObserver = object : DivPlayer.Observer {
         override fun onReady() {
@@ -98,6 +103,11 @@ internal class ViewBasedDivVideoPlayer(
         delegate?.seek(timeMs)
     }
 
+    private fun setVisibleOnScreen(visible: Boolean) {
+        visibleOnScreen = visible
+        playerView?.setVisibleOnScreen(visible)
+    }
+
     override fun release() {
         delegate?.let {
             it.removeObserver(stateObserver)
@@ -124,22 +134,36 @@ internal class ViewBasedDivVideoPlayer(
         LaunchedEffect(config.muted) { player.setMuted(config.muted) }
         LaunchedEffect(config.playbackSpeed) { player.setPlaybackSpeed(config.playbackSpeed) }
 
+        val onVisibilityChanged = remember {
+            { visible: Boolean -> setVisibleOnScreen(visible) }
+        }
+
         AndroidView(
-            modifier = modifier,
+            modifier = modifier.onDivVisibilityChanged(
+                minFractionVisible = 0.01f,
+                onVisibilityChanged = onVisibilityChanged,
+            ),
             factory = { ctx ->
                 delegateFactory.makePlayerView(ctx).apply {
                     attach(player)
                     setScale(config.scale)
+                    setVisibleOnScreen(visibleOnScreen)
+                    playerView = this
                 }
             },
             update = { view ->
+                playerView = view
                 view.setScale(config.scale)
+                view.setVisibleOnScreen(visibleOnScreen)
                 if (view.getAttachedPlayer() !== player) {
                     view.detach()
                     view.attach(player)
                 }
             },
-            onRelease = { view -> view.detach() },
+            onRelease = { view ->
+                view.detach()
+                if (playerView === view) playerView = null
+            }
         )
     }
 }

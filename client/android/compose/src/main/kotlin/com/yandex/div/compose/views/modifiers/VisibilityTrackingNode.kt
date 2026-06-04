@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.modifiers
 
 import android.view.View
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -11,10 +12,14 @@ import androidx.compose.ui.node.UnplacedAwareModifierNode
 import androidx.compose.ui.platform.InspectorInfo
 import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.DivViewHost
+import com.yandex.div.compose.host.LocalDivViewHost
+import com.yandex.div.core.annotations.InternalApi
 
-internal fun Modifier.onDivVisibilityChanged(
+@Composable
+@InternalApi
+fun Modifier.onDivVisibilityChanged(
     minFractionVisible: Float = 1f,
-    divViewHost: DivViewHost?,
+    divViewHost: DivViewHost? = LocalDivViewHost.current,
     onVisibilityChanged: (Boolean) -> Unit,
 ): Modifier = this then VisibilityTrackingElement(
     minFractionVisible = minFractionVisible,

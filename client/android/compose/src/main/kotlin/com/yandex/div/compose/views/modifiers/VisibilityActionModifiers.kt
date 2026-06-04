@@ -26,14 +26,12 @@ internal fun Modifier.visibilityActions(data: DivBase): Modifier {
 private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modifier {
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
-    val divViewHost = LocalDivViewHost.current
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
-                minFractionVisible = action.visibilityPercentage.observedValue() / 100f,
-                divViewHost = divViewHost,
+                minFractionVisible = action.visibilityPercentage.observedValue() / 100f
             ) {
                 visibilityActionTracker.onVisibilityChanged(
                     context = actionHandlingContext,
@@ -49,14 +47,12 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
 private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifier {
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
-    val divViewHost = LocalDivViewHost.current
     var modifier = this
     actions
         .filter { shouldRegisterVisibilityCallback(it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
-                minFractionVisible = action.visibilityPercentage.observedValue() / 100f,
-                divViewHost = divViewHost,
+                minFractionVisible = action.visibilityPercentage.observedValue() / 100f
             ) {
                 visibilityActionTracker.onVisibilityChanged(
                     context = actionHandlingContext,
