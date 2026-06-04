@@ -404,7 +404,11 @@ extension GalleryView: ScrollHandlerDelegate {
       scrollRange: state.scrollRange,
       animated: true
     )
-    setState(newState, notifyingObservers: true)
+    
+    // In default scroll mode, we skip notifying global observers on every frame 
+    // to prevent heavy layout recalculations, as the state is only needed for restoration.
+    // Pager modes still notify, but PagerView filters them.
+    setState(newState, notifyingObservers: !model.scrollMode.isDefault)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
     visibilityDelegate?.onGalleryVisibilityChanged()
   }
