@@ -1,6 +1,7 @@
 {
   "description": "Text ranges generated dynamically via range_builder.",
   "platforms": [
+    "android",
     "ios"
   ],
   "card": {

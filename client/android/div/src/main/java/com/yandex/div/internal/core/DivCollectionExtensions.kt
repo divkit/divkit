@@ -17,7 +17,7 @@ import com.yandex.div2.DivPager
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 
-private const val INDEX_VARIABLE_NAME = "index"
+internal const val INDEX_VARIABLE_NAME = "index"
 
 @InternalApi
 fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
@@ -65,10 +65,18 @@ private fun DivCollectionItemBuilder.getItemResolver(
     dataElement: Any,
     index: Int,
     resolver: ExpressionResolver,
+) = getItemBuilderResolver(dataElementName, dataElement, index, resolver, "")
+
+internal fun getItemBuilderResolver(
+    dataElementName: String,
+    dataElement: Any,
+    index: Int,
+    resolver: ExpressionResolver,
+    pathPrefix: String,
 ): ExpressionResolver? {
     val resolverImpl = resolver.asImpl ?: return resolver
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
-    val pathSegment = "$dataElement:$index"
+    val pathSegment = "$pathPrefix$dataElement:$index"
     return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(resolverImpl.childPath(pathSegment)) {
         val localDataProvider = ConstantsProvider(mapOf(
             dataElementName to validElement,
