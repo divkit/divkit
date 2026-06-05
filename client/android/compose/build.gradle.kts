@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.coreKtx)
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
     implementation(libs.coil.network)
     implementation(libs.yatagan.api.compiled)
 
