@@ -1,3 +1,12 @@
+## 32.53.0 (June 8, 2026)
+
+* Added a `context` API in the `onCustomAction` handler.
+* Added support for the `scroll_content_alignment` property in the `gallery`.
+* Changed scroll alignment in the `gallery` to better match Android behaviour.
+* Fixed a bug with the layout of the `match_parent` elements inside the `wrap_content`.
+* The `execAction` and `logError` APIs have been changed, now they will be executed in the context of the component (if possible, previously they were executed in the global context).
+
+
 ## 32.52.0 (June 1, 2026)
 
 * Added support for the `alphaBlend` function.
