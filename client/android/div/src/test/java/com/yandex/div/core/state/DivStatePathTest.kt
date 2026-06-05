@@ -77,4 +77,47 @@ class DivStatePathTest {
 
         Assert.assertEquals(tested, rootPath)
     }
+
+    @Test
+    fun `lowestCommonAncestor with root divId prefix`() {
+        // Simulates paths created by fromRootDiv when root div is DivState with divId.
+        // path[0] has format "stateId:divId" but states store bare "divId".
+        val path1 = DivStatePath(
+            0,
+            listOf("rootId" to "disabled", "stateA" to "false", "switchA" to "on"),
+            listOf("0:rootId", "disabled", "child#0", "stateA", "false", "child#1", "switchA", "on")
+        )
+        val path2 = DivStatePath(
+            0,
+            listOf("rootId" to "disabled", "stateB" to "false", "switchB" to "on"),
+            listOf("0:rootId", "disabled", "child#0", "stateB", "false", "child#1", "switchB", "on")
+        )
+
+        val result = DivStatePath.lowestCommonAncestor(path1, path2)
+
+        Assert.assertNotNull(result)
+        Assert.assertEquals(listOf("rootId" to "disabled"), result!!.getStates())
+        // extractStates finds "rootId" at index 0 (via "0:rootId"), stateId "disabled" at index 1,
+        // returns index 1, addChild increments to 2, so subList(0, 2) = ["0:rootId", "disabled"]
+        Assert.assertEquals("0:rootId/disabled", result.fullPath)
+    }
+
+    @Test
+    fun `lowestCommonAncestor with root divId prefix and no shared nested states`() {
+        val path1 = DivStatePath(
+            0,
+            listOf("rootId" to "active", "stateA" to "on"),
+            listOf("0:rootId", "active", "child#0", "stateA", "on")
+        )
+        val path2 = DivStatePath(
+            0,
+            listOf("rootId" to "active", "stateB" to "on"),
+            listOf("0:rootId", "active", "child#1", "stateB", "on")
+        )
+
+        val result = DivStatePath.lowestCommonAncestor(path1, path2)
+
+        Assert.assertNotNull(result)
+        Assert.assertEquals(listOf("rootId" to "active"), result!!.getStates())
+    }
 }

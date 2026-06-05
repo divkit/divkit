@@ -214,8 +214,18 @@ public data class DivStatePath @VisibleForTesting @InternalApi constructor(
         }
 
         private fun List<String>.findState(state: Pair<String, String>, start: Int): Int {
+            if (start == 0) {
+                val topLevelDivId = firstOrNull()?.substringAfter(':')
+                if (topLevelDivId == state.divId && getOrNull(1) == state.stateId) {
+                    return 1
+                }
+            }
+
             for (i in start until size - 1) {
-                if (get(i) == state.divId && get(i + 1) == state.stateId) return i + 1
+                val element = get(i)
+                val matchesDivId = element == state.divId
+                    || element.substringBeforeLast('#') == state.divId
+                if (matchesDivId && get(i + 1) == state.stateId) return i + 1
             }
             return size
         }
