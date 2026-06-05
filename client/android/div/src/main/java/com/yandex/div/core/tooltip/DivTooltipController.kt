@@ -21,6 +21,7 @@ import com.yandex.div.R
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
+import com.yandex.div.core.actions.logActionError
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -31,16 +32,17 @@ import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.ViewLocator
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivActionShowTooltip
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
 import javax.inject.Inject
-
 
 internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int) -> SafePopupWindow
 
@@ -78,11 +80,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
     fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false, scopeId: String? = null) {
-        findChildWithTooltip(tooltipId, context.divView)?.let { (divTooltip, anchor) ->
+        ViewLocator.findSingleViewWithTag(context.divView, tooltipId, scopeId) { tooltipId, _ ->
+            findChildWithTooltip(tooltipId)?.let { Result.success(it) }
+                ?: Result.failure(IllegalStateException("Unable to find view for tooltip '$tooltipId'"))
+        }.onSuccess { (divTooltip, anchor) ->
             showTooltip(context, divTooltip, anchor, multiple, scopeId)
-        } ?: run {
-            context.divView.logError(IllegalStateException(
-                "Unable to find view for tooltip '$tooltipId'"))
+        }.onFailure {
+            context.divView.logActionError(DivActionShowTooltip.TYPE, it)
         }
     }
 
@@ -458,21 +462,17 @@ private class PopupWindowTouchListener(
     }
 }
 
-private fun findChildWithTooltip(tooltipId: String, view: View): Pair<DivTooltip, View>? {
+private fun View.findChildWithTooltip(tooltipId: String): Pair<DivTooltip, View>? {
     @Suppress("UNCHECKED_CAST")
-    (view.getTag(R.id.div_tooltips_tag) as? List<DivTooltip>)?.let { tooltips ->
-        tooltips.forEach {
-            if (it.id == tooltipId) {
-                return it to view
-            }
-        }
+    val tooltips = getTag(R.id.div_tooltips_tag) as? List<DivTooltip>
+    tooltips?.forEach {
+        if (it.id == tooltipId) return it to this
     }
-    if (view is ViewGroup) {
-        view.children.forEach { child ->
-            findChildWithTooltip(tooltipId, child)?.let {
-                return it
-            }
-        }
+
+    if (this !is ViewGroup) return null
+
+    children.forEach { child ->
+        child.findChildWithTooltip(tooltipId)?.let { return it }
     }
     return null
 }
