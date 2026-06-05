@@ -5,7 +5,8 @@
 * Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 * Added support of scoped search for elements with given `id` in `scroll_to` actions.
 * Added support of scoped search for elements with given `id` in `video` actions.
-* Fixed current page preservation for infinite scroll in `DivPager` after item builder array variable updates.
+* Fixed `IndexOutOfBoundsException` in `DivStatePath.findState` when root div is a `state` with `div_id`. The method now correctly matches `divId` in path elements with "stateId:divId" and "divId#N" formats, consistent with `parentState()` behavior.
+* Fixed current page preservation for infinite scroll in `pager` after item builder array variable updates.
 * Fixed timer variable update behavior.
 
 # iOS Client:
@@ -17,8 +18,8 @@
 * Added the `allow_tap_while_scroll` property to `gallery` (iOS only) that controls whether taps on gallery items are handled while the gallery is scrolling or decelerating. Defaults to `false`.
 * Fixed `match_parent` size on the cross-axis of a `wrap_content` container. Items are now stretched to the container's resolved cross size.
 * Fixed an issue with `gallery` where continuous layout invalidations occurred during scrolling, causing performance degradation and high CPU usage.
+* Fixed configured playback speed restoration after each loop when the default player repeats a video.
 * Fixed horizontal and vertical galleries when the item list or layout updates and the saved scroll position is no longer valid: state is normalized and the correction is applied without animation.
-* Fixed the configured playback speed restoration after each loop when the default player repeats a video.
 * Fixed timer variable update behavior.
 * Optimized `DecoratingView.Model` with Heap Boxing pattern to avoid expensive copying.
 
