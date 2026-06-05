@@ -573,7 +573,8 @@ internal class DivTextBinder @Inject constructor(
         newDiv: DivText,
         oldDiv: DivText?,
     ) {
-        if (newDiv.ranges == null && newDiv.rangeBuilder == null && newDiv.images == null) {
+        if (newDiv.ranges == null && newDiv.rangeBuilder == null
+            && newDiv.images == null && newDiv.imageBuilder == null) {
             bindPlainText(bindingContext, newDiv, oldDiv)
         } else {
             bindRichText(bindingContext, newDiv)
@@ -603,24 +604,55 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(newDiv.lineHeight?.observe(resolver, callback))
 
         newDiv.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
+        bindRangeBuilder(newDiv.rangeBuilder, resolver, callback)
 
-        newDiv.rangeBuilder?.let { builder ->
-            addSubscription(builder.data.observe(resolver, callback))
-            val itemResolver = builder.getItemResolver(resolver)
-            builder.prototypes.forEach { prototype ->
-                addSubscription(prototype.selector.observe(itemResolver, callback))
-                subscribeToRange(prototype.range, itemResolver, callback)
-            }
+        newDiv.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
+        bindImageBuilder(newDiv.imageBuilder, resolver, callback)
+    }
+
+    private fun ExpressionSubscriber.bindRangeBuilder(
+        rangeBuilder: DivText.RangeBuilder?,
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit,
+    ) {
+        rangeBuilder ?: return
+        addSubscription(rangeBuilder.data.observe(resolver, callback))
+        val itemResolver = rangeBuilder.getItemResolver(resolver)
+        rangeBuilder.prototypes.forEach { prototype ->
+            addSubscription(prototype.selector.observe(itemResolver, callback))
+            subscribeToRange(prototype.range, itemResolver, callback)
         }
-        newDiv.images?.forEach { image ->
-            addSubscription(image.start.observe(resolver, callback))
-            addSubscription(image.indexingDirection.observe(resolver, callback))
-            addSubscription(image.url.observe(resolver, callback))
-            addSubscription(image.alignmentVertical.observe(resolver, callback))
-            addSubscription(image.tintColor?.observe(resolver, callback))
-            addSubscription(image.width.value.observe(resolver, callback))
-            addSubscription(image.width.unit.observe(resolver, callback))
+    }
+
+    private fun ExpressionSubscriber.bindImageBuilder(
+        imageBuilder: DivText.ImageBuilder?,
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit,
+    ) {
+        imageBuilder ?: return
+        addSubscription(imageBuilder.data.observe(resolver, callback))
+        val itemResolver = imageBuilder.getItemResolver(resolver)
+        imageBuilder.prototypes.forEach { prototype ->
+            addSubscription(prototype.selector.observe(itemResolver, callback))
+            subscribeToImage(prototype.image, itemResolver, callback)
         }
+    }
+
+    private fun ExpressionSubscriber.subscribeToImage(
+        image: DivText.Image,
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit,
+    ) {
+        addSubscription(image.start.observe(resolver, callback))
+        addSubscription(image.indexingDirection.observe(resolver, callback))
+        addSubscription(image.url.observe(resolver, callback))
+        addSubscription(image.alignmentVertical.observe(resolver, callback))
+        addSubscription(image.tintColor?.observe(resolver, callback))
+        addSubscription(image.tintMode.observe(resolver, callback))
+        addSubscription(image.width.value.observe(resolver, callback))
+        addSubscription(image.width.unit.observe(resolver, callback))
+        addSubscription(image.height.value.observe(resolver, callback))
+        addSubscription(image.height.unit.observe(resolver, callback))
     }
 
     private fun TextView.applyRichText(
@@ -750,7 +782,9 @@ internal class DivTextBinder @Inject constructor(
         oldDiv: DivText?,
     ) {
         val ellipsis = newDiv.ellipsis
-        if (ellipsis?.ranges == null && ellipsis?.images == null && ellipsis?.actions == null) {
+        if (ellipsis?.ranges == null && ellipsis?.rangeBuilder == null
+            && ellipsis?.images == null && ellipsis?.imageBuilder == null
+            && ellipsis?.actions == null) {
             bindPlainEllipsis(newDiv.ellipsis, oldDiv?.ellipsis, bindingContext.expressionResolver)
         } else {
             bindRichEllipsis(bindingContext, newDiv)
@@ -792,14 +826,12 @@ internal class DivTextBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val callback = { _: Any -> applyRichEllipsis(bindingContext, newDiv) }
         addSubscription(ellipsis.text.observe(resolver, callback))
+
         ellipsis.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
-        ellipsis.images?.forEach { image ->
-            addSubscription(image.start.observe(resolver, callback))
-            addSubscription(image.url.observe(resolver, callback))
-            addSubscription(image.tintColor?.observe(resolver, callback))
-            addSubscription(image.width.value.observe(resolver, callback))
-            addSubscription(image.width.unit.observe(resolver, callback))
-        }
+        bindRangeBuilder(ellipsis.rangeBuilder, resolver, callback)
+
+        ellipsis.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
+        bindImageBuilder(ellipsis.imageBuilder, resolver, callback)
     }
 
     private fun EllipsizedTextView.applyRichEllipsis(
