@@ -1,3 +1,10 @@
+## 32.50.2
+
+# Android Client:
+* Fixed IndexOutOfBoundsException in DivStatePath.findState when root div is a div-state with div_id. The method now correctly matches divId in path elements with "stateId:divId" and "divId#N" formats, consistent with parentState() behavior.
+* Fixed NPE in DecodeBase64ImageTask when BitmapFactory.decodeByteArray returns null for invalid or empty preview data.
+
+
 ## 32.50.1
 
 # Android Client:
