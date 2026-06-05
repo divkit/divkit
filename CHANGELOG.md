@@ -11,13 +11,14 @@
 # iOS Client:
 * Added `Player.configure(_:)` to `LayoutKit` to apply playback settings (mute, speed, loop, autoplay) to a running player without reloading the video source; a no-op default implementation is provided for source compatibility with existing custom `Player` types.
 * Added `image_builder` property on `text` that generates inline images dynamically from a `data` array using `prototypes` and `selector`, the same way as `range_builder`. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `images` list.
-* Added `range_builder` property on `text` that generates character ranges dynamically from a `data` array using `prototypes` and `selector`, mirroring `item_builder` for collections. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `ranges` list.
 * Added `playback_speed` property on `video` so layouts can set how fast the default player plays the clip (must be greater than 0; default is 1.0).
+* Added `range_builder` property on `text` that generates character ranges dynamically from a `data` array using `prototypes` and `selector`, mirroring `item_builder` for collections. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `ranges` list.
 * Added support of `range_builder` and `image_builder` inside the text `ellipsis`, so the custom ellipsis token can build its ranges and inline images dynamically from `data` the same way as the top-level `text`.
 * Fixed `match_parent` size on the cross-axis of a `wrap_content` container. Items are now stretched to the container's resolved cross size.
+* Fixed an issue with `gallery` where continuous layout invalidations occurred during scrolling, causing performance degradation and high CPU usage.
 * Fixed horizontal and vertical galleries when the item list or layout updates and the saved scroll position is no longer valid: state is normalized and the correction is applied without animation.
-* Fixed timer variable update behavior.
 * Fixed the configured playback speed restoration after each loop when the default player repeats a video.
+* Fixed timer variable update behavior.
 * Optimized `DecoratingView.Model` with Heap Boxing pattern to avoid expensive copying.
 
 # Web Client:
