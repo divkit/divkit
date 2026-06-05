@@ -33,11 +33,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: String = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
     }
@@ -49,11 +51,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: Long = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -70,11 +74,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: Boolean = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -91,11 +97,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: Double = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -112,11 +120,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: Color = Color(defaultValue)
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -134,11 +144,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: Uri = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -155,11 +167,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: JSONObject = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -176,11 +190,13 @@ sealed class Variable {
 
         @field:Volatile
         internal var value: JSONArray = defaultValue
-            set(value) = synchronized(this) {
-                if (field == value) {
-                    return
+            set(value) {
+                synchronized(this) {
+                    if (field == value) {
+                        return
+                    }
+                    field = value
                 }
-                field = value
                 notifyVariableChanged(this)
             }
 
@@ -199,11 +215,13 @@ sealed class Variable {
         @InternalApi
         @field:Volatile
         var delegate: PropertyDelegate = delegate
-            set(value) = synchronized(this) {
-                field.release()
-                field = value
-                if (!observers.isEmpty) {
-                    field.observe { notifyVariableChanged(this) }
+            set(value) {
+                synchronized(this) {
+                    field.release()
+                    field = value
+                    if (!observers.isEmpty) {
+                        field.observe { notifyVariableChanged(this) }
+                    }
                 }
             }
 
@@ -272,6 +290,9 @@ sealed class Variable {
     }
 
     protected fun notifyVariableChanged(v: Variable) {
+        val observers = synchronized(this) {
+            observers.toList()
+        }
         observers.forEach { it.invoke(v) }
     }
 
