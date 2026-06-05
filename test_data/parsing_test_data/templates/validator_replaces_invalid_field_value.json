@@ -4,6 +4,9 @@
     "android",
     "ios"
   ],
+  "unsupported_platforms": {
+    "web": "This behavior cannot be tested in parsing_test_data."
+  },
   "card": {
     "log_id": "test",
     "states": [

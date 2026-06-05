@@ -1,0 +1,42 @@
+{
+  "description": "Reference should work when renamed.",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "page": {
+      "type": "text",
+      "$text": "page_title"
+    },
+    "inline_page": {
+      "type": "page",
+      "$page_title": "title"
+    }
+  },
+  "card": {
+    "log_id": "a",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "inline_page",
+          "title": "Card text"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Card text"
+          }
+        }
+      ]
+    }
+  }
+}

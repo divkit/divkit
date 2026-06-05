@@ -1,0 +1,40 @@
+{
+  "description": "The template definition declares both a literal value and a reference definition for the same field. Checks that the literal in use has a higher priority than the template field.",
+  "platforms": [
+    "web"
+  ],
+  "templates": {
+    "conflicted": {
+      "type": "text",
+      "text": "LITERAL",
+      "$text": "content"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "conflicted",
+          "content": "from link",
+          "text": "overridden text"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "overridden text"
+          }
+        }
+      ]
+    }
+  }
+}
