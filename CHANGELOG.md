@@ -5,6 +5,7 @@
 * Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 * Added support of scoped search for elements with given `id` in `scroll_to` actions.
 * Added support of scoped search for elements with given `id` in `video` actions.
+* Fixed NPE in `DecodeBase64ImageTask` when `BitmapFactory.decodeByteArray` returns null for invalid or empty preview data.
 * Fixed `IndexOutOfBoundsException` in `DivStatePath.findState` when root div is a `state` with `div_id`. The method now correctly matches `divId` in path elements with "stateId:divId" and "divId#N" formats, consistent with `parentState()` behavior.
 * Fixed current page preservation for infinite scroll in `pager` after item builder array variable updates.
 * Fixed timer variable update behavior.
