@@ -47,6 +47,17 @@ class IntegrationTestCase(
                 )
             }
         }
+
+        class View(
+            val id: String,
+            val isShown: Boolean,
+            val text: String?,
+            val scopeId: String?,
+        ): ExpectedResult {
+            fun check(outerCheck: (View) -> Unit) {
+                outerCheck(this)
+            }
+        }
     }
 
     val logger = IntegrationTestLogger()
@@ -100,14 +111,17 @@ class IntegrationTestCase(
             }
     }
 
-    fun checkResult(expressionResolver: ExpressionResolver) {
+    fun checkResult(expressionResolver: ExpressionResolver, checkView: (ExpectedResult.View) -> Unit) {
         expectedResults.forEach {
             when (it) {
                 is ExpectedResult.Error ->
                     it.check(logger.messages)
 
                 is ExpectedResult.Variable ->
-                    it.check(expressionResolver = expressionResolver)
+                    it.check(expressionResolver)
+
+                is ExpectedResult.View ->
+                    it.check(checkView)
             }
         }
     }

@@ -1,10 +1,12 @@
 {
   "description": "div-action://set_state switches one state to another and back",
   "platforms": [
-    "android",
     "ios",
     "web"
   ],
+  "unsupported_platforms": {
+    "android": "Supported as integration test"
+  },
   "div_data": {
     "card": {
       "log_id": "sample_card",

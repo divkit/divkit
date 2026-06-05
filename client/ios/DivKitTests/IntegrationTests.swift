@@ -28,7 +28,6 @@ private func makeTestCases() -> [(String, IntegrationTestData)] {
 
     return test.cases
       .enumerated()
-      .filter { $1.platforms.contains(.ios) }
       .map { index, testCase in
         (
           "\(fileName): test case index - [\(index)]",
@@ -145,11 +144,19 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
 
   init(_ data: Data) throws {
     let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
-    let casesJson = json["cases"]!
+    self.description = json["description"] as! String
+
+    let casesJson = (json["cases"] as! [[String: Any]]).filter(isCaseForIOS)
+    if casesJson.isEmpty {
+      self.divData = nil
+      self.deserializationErrorMessages = []
+      self.cases = []
+      return
+    }
+
     let divDataJson = json["div_data"] as! [String: Any]
     let card = divDataJson["card"] as! [String: Any]
     let templates = divDataJson["templates"] as? [String: Any] ?? [:]
-    self.description = json["description"] as! String
 
     let typedResult = DivData.resolve(
       card: card,
@@ -175,6 +182,11 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
       from: try JSONSerialization.data(withJSONObject: casesJson)
     )
   }
+}
+
+private func isCaseForIOS(_ caseJson: [String: Any]) -> Bool {
+  guard let platforms = caseJson["platforms"] as? [String] else { return true }
+  return platforms.contains(Platform.ios.rawValue)
 }
 
 private struct IntegrationTestCase: Decodable {

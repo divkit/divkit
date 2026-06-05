@@ -136,6 +136,7 @@ dependencies {
 
     androidTestUtil libs.androidx.test.services
     androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation project(":test-utils")
     androidTestImplementation libs.androidx.compose.ui.test.junit4
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2

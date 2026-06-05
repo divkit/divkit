@@ -2,6 +2,11 @@ package com.yandex.div.compose
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -52,9 +57,26 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         }
 
         testCase.checkResult(
-            expressionResolver = divContext.debugFeatures.getExpressionResolver(divData)!!
+            expressionResolver = divContext.debugFeatures.getExpressionResolver(divData)!!,
+            checkView = ::checkView
         )
     }
+
+    private fun checkView(view: IntegrationTestCase.ExpectedResult.View) {
+        val idMatcher = hasTestTag(view.id)
+        val scopeMatcher = view.scopeId?.let { hasAnyAncestor(hasTestTag(it)) }
+        val textMatcher = view.text?.let { hasTextExactly(it) }
+        val element = when {
+            scopeMatcher != null && textMatcher != null -> idMatcher and textMatcher and scopeMatcher
+            scopeMatcher != null -> idMatcher and scopeMatcher
+            textMatcher != null -> idMatcher and textMatcher
+            else -> idMatcher
+        }
+        rule.onNode(element).checkVisibility(view.isShown)
+    }
+
+    private fun SemanticsNodeInteraction.checkVisibility(isShown: Boolean) =
+        if (isShown) assertIsDisplayed() else assertDoesNotExist()
 
     companion object {
         // Store parsed test cases to prevent multiple parsing by

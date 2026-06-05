@@ -64,8 +64,16 @@ private fun JSONObject.parseExpectedResult(): IntegrationTestCase.ExpectedResult
                 value = value.getVariableValue()
             )
         }
-
         "error" -> IntegrationTestCase.ExpectedResult.Error(getString("value"))
+
+        "view" -> {
+            IntegrationTestCase.ExpectedResult.View(
+                id = getString("id"),
+                isShown = optBoolean("shown", true),
+                text = if (has("text")) getString("text") else null,
+                scopeId = if (has("scope_id")) getString("scope_id") else null,
+            )
+        }
         else -> throw JSONException("Unknown expected result type: $type")
     }
 }
