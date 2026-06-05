@@ -14,6 +14,7 @@
 * Added `playback_speed` property on `video` so layouts can set how fast the default player plays the clip (must be greater than 0; default is 1.0).
 * Added `range_builder` property on `text` that generates character ranges dynamically from a `data` array using `prototypes` and `selector`, mirroring `item_builder` for collections. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `ranges` list.
 * Added support of `range_builder` and `image_builder` inside the text `ellipsis`, so the custom ellipsis token can build its ranges and inline images dynamically from `data` the same way as the top-level `text`.
+* Added the `allow_tap_while_scroll` property to `gallery` (iOS only) that controls whether taps on gallery items are handled while the gallery is scrolling or decelerating. Defaults to `false`.
 * Fixed `match_parent` size on the cross-axis of a `wrap_content` container. Items are now stretched to the container's resolved cross size.
 * Fixed an issue with `gallery` where continuous layout invalidations occurred during scrolling, causing performance degradation and high CPU usage.
 * Fixed horizontal and vertical galleries when the item list or layout updates and the saved scroll position is no longer valid: state is normalized and the correction is applied without animation.
