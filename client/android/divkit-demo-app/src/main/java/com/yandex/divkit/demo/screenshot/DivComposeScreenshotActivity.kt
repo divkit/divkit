@@ -9,6 +9,7 @@ import coil3.request.allowHardware
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
@@ -42,6 +43,9 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         val imageLoaderProvider = ImageLoaderProvider {
             ImageLoader.Builder(context = this)
                 .allowHardware(false)
+                .components {
+                    add(gifDecoderFactory())
+                }
                 .eventListener(imageLoadingTracker)
                 .build()
         }

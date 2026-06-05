@@ -13,6 +13,7 @@ import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.grid.DivGridView
+import com.yandex.div.compose.views.image.DivGifImageView
 import com.yandex.div.compose.views.image.DivImageView
 import com.yandex.div.compose.views.indicator.DivIndicatorView
 import com.yandex.div.compose.views.input.DivInputView
@@ -105,6 +106,7 @@ private fun BaseView(
         is Div.Container -> DivContainerView(modifier, data.value)
         is Div.Custom -> DivCustomView(modifier.applyPaddings(data), data.value)
         is Div.Gallery -> DivGalleryView(modifier, data.value)
+        is Div.GifImage -> DivGifImageView(modifier.applyPaddings(data), data.value)
         is Div.Grid -> DivGridView(modifier.applyPaddings(data), data.value)
         is Div.Image -> DivImageView(modifier.applyPaddings(data), data.value)
         is Div.Indicator -> DivIndicatorView(modifier.applyPaddings(data), data.value)
@@ -118,11 +120,5 @@ private fun BaseView(
         is Div.Tabs -> DivTabsView(modifier, data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
         is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
-        is Div.GifImage -> NotSupported("gif")
     }
-}
-
-@Composable
-private fun NotSupported(name: String) {
-    reportError("Element not supported: $name")
 }

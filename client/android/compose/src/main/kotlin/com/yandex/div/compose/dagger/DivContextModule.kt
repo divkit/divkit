@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
 import coil3.request.allowHardware
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.json.ParsingErrorLogger
@@ -56,6 +57,9 @@ internal object DivContextModule {
         }
         return ImageLoader.Builder(context = context)
             .allowHardware(false)
+            .components {
+                add(gifDecoderFactory())
+            }
             .build()
     }
 

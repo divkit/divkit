@@ -1,27 +1,15 @@
 package com.yandex.div.compose.views.image
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
-import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.decodePreview
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.observedContentScale
-import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
@@ -35,81 +23,24 @@ internal fun DivImageView(
     val context = divContext
     val density = LocalDensity.current.density
 
-    val contentScale = data.scale.observedContentScale()
-    val alignment = toAlignment(
-        data.contentAlignmentHorizontal.observedValue(),
-        data.contentAlignmentVertical.observedValue()
-    )
     val colorFilter = data.tintColor?.observedValue()?.let {
         toColorFilter(it, data.tintMode.observedValue())
     }
     val transformations = data.filters.resolveTransformations(context, density)
 
-    val imageRequestParams = ImageRequestParams(
-        data = data.imageUrl.observedValue(),
-        transformations = transformations
+    DivImageContent(
+        modifier = modifier,
+        model = data.imageUrl.observedValue(),
+        contentScale = data.scale.observedContentScale(),
+        alignment = toAlignment(
+            data.contentAlignmentHorizontal.observedValue(),
+            data.contentAlignmentVertical.observedValue()
+        ),
+        placeholderColor = data.placeholderColor.observedColorValue(),
+        transformations = transformations,
+        colorFilter = colorFilter,
+        preview = { data.preview?.observedValue(transform = ::decodePreview) }
     )
-    val imageRequest = rememberImageRequest(imageRequestParams)
-
-    var isImageLoaded by remember(imageRequestParams) { mutableStateOf(false) }
-
-    val preview = if (isImageLoaded) {
-        null
-    } else {
-        data.preview?.observedValue(transform = ::decodePreview)
-    }
-    val previewRequest = if (preview == null) {
-        null
-    } else {
-        rememberImageRequest(
-            ImageRequestParams(
-                data = preview,
-                transformations = transformations
-            )
-        )
-    }
-
-    val backgroundModifier = if (!isImageLoaded && previewRequest == null) {
-        modifier.background(data.placeholderColor.observedColorValue())
-    } else {
-        modifier
-    }
-
-    val imageLoader = context.component.imageLoader
-
-    Box(modifier = backgroundModifier) {
-        if (!isImageLoaded && previewRequest != null) {
-            val previewPainter = rememberAsyncImagePainter(
-                model = previewRequest,
-                imageLoader = imageLoader,
-            )
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = previewPainter,
-                contentDescription = null,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter
-            )
-        }
-
-        val imagePainter = rememberAsyncImagePainter(
-            model = imageRequest,
-            imageLoader = imageLoader,
-            onSuccess = {
-                isImageLoaded = true
-            }
-        )
-        imagePainter.observeNetworkRestoration()
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = imagePainter,
-            contentDescription = null,
-            contentScale = contentScale,
-            alignment = alignment,
-            colorFilter = colorFilter
-        )
-    }
 }
 
 private fun toColorFilter(tintColor: Int, tintMode: DivBlendMode): ColorFilter {
