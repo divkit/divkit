@@ -4,7 +4,6 @@ import androidx.annotation.AnyThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivErrorsReporter
-import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
@@ -21,7 +20,7 @@ internal class ErrorCollector(
 
     private val mutex = Any()
 
-    private val observers = ObserverList<ErrorObserver>()
+    private val observers = mutableSetOf<ErrorObserver>()
     private val runtimeErrors = mutableListOf<Throwable>()
     private var parsingErrors = emptyList<Throwable>()
     private var warnings = mutableListOf<Throwable>()
@@ -29,35 +28,70 @@ internal class ErrorCollector(
     private var errors = mutableListOf<Throwable>()
     private var errorsAreValid = true
 
-    fun logError(e: Throwable): Unit = synchronized(mutex) {
-        runtimeErrors.add(e)
-        divErrorsReporter.onRuntimeError(divData, divDataTag, e)
-        notifyObservers()
+    fun logError(e: Throwable) {
+        val snapshot = takeSnapshot {
+            runtimeErrors.add(e)
+            divErrorsReporter.onRuntimeError(divData, divDataTag, e)
+        }
+        snapshot.notifyObservers()
     }
 
     override fun logError(e: Exception) = logError(e as Throwable)
 
-    fun logWarning(warning: Throwable): Unit = synchronized(mutex) {
-        warnings.add(warning)
-        divErrorsReporter.onWarning(divData, divDataTag, warning)
-        notifyObservers()
+    fun logWarning(warning: Throwable) {
+        val snapshot = takeSnapshot {
+            warnings.add(warning)
+            divErrorsReporter.onWarning(divData, divDataTag, warning)
+        }
+        snapshot.notifyObservers()
     }
 
     fun getWarnings(): Iterable<Throwable> = synchronized(mutex) { warnings.toList() }
 
-    fun cleanRuntimeWarningsAndErrors(): Unit = synchronized(mutex) {
-        warnings.clear()
-        runtimeErrors.clear()
-        notifyObservers()
+    fun cleanRuntimeWarningsAndErrors() {
+        val snapshot = takeSnapshot {
+            warnings.clear()
+            runtimeErrors.clear()
+        }
+        snapshot.notifyObservers()
     }
 
-    private fun notifyObservers(): Unit = synchronized(mutex) {
-        errorsAreValid = false
-        if (observers.isEmpty) return
-        rebuildErrors()
-        observers.forEach { observer ->
-            observer.invoke(errors, warnings)
+    fun observeAndGet(observer: ErrorObserver): Disposable {
+        synchronized(mutex)  {
+            observers.add(observer)
+            rebuildErrors()
         }
+
+        observer.invoke(errors, warnings)
+        return Disposable {
+            synchronized(mutex) {
+                observers.remove(observer)
+            }
+        }
+    }
+
+    fun attachParsingErrors() {
+        val snapshot = takeSnapshot {
+            parsingErrors = divData?.parsingErrors ?: emptyList()
+        }
+        snapshot.notifyObservers()
+    }
+
+    private inline fun takeSnapshot(block: () -> Unit): StateSnapshot = synchronized(mutex) {
+        block()
+
+        errorsAreValid = false
+
+        if (observers.isEmpty()) {
+            return StateSnapshot.EMPTY
+        }
+        rebuildErrors()
+
+        return StateSnapshot(
+            errors = errors.toList(),
+            warnings = warnings.toList(),
+            observers = observers.toList()
+        )
     }
 
     private fun rebuildErrors() {
@@ -68,19 +102,21 @@ internal class ErrorCollector(
         errorsAreValid = true
     }
 
-    fun observeAndGet(observer: ErrorObserver): Disposable = synchronized(mutex)  {
-        observers.addObserver(observer)
-        rebuildErrors()
-        observer(errors, warnings)
-        return Disposable {
-            synchronized(mutex) {
-                observers.removeObserver(observer)
+    private class StateSnapshot(
+        private val errors: List<Throwable>,
+        private val warnings: List<Throwable>,
+        private val observers: List<ErrorObserver>,
+    ) {
+
+        fun notifyObservers() {
+            observers.forEach { observer ->
+                observer.invoke(errors, warnings)
             }
         }
-    }
 
-    fun attachParsingErrors(): Unit = synchronized(mutex)  {
-        parsingErrors = divData?.parsingErrors ?: emptyList()
-        notifyObservers()
+        companion object {
+            @JvmField
+            val EMPTY = StateSnapshot(emptyList(), emptyList(), emptyList())
+        }
     }
 }
