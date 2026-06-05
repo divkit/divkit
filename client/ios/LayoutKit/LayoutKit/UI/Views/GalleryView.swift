@@ -234,6 +234,7 @@ public final class GalleryView: BlockView {
         .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
     }
     collectionView.decelerationRate = model.scrollMode.decelerationRate
+    collectionView.allowTapWhileScroll = model.allowTapWhileScroll
     collectionView.alwaysBounceVertical = model.alwaysBounceVertical
     collectionView.bounces = model.bounces
     collectionView.showsHorizontalScrollIndicator = model.scrollbar.show

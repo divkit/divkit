@@ -277,6 +277,7 @@ public func divGallery(
     accessibility: nil,
     alignmentHorizontal: nil,
     alignmentVertical: nil,
+    allowTapWhileScroll: nil,
     alpha: nil,
     animators: nil,
     background: nil,

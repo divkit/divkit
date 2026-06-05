@@ -215,6 +215,7 @@ extension DivGallery {
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
+      allowTapWhileScroll: allowTapWhileScroll,
       alpha: alpha,
       animators: animators,
       background: background,

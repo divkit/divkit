@@ -18,6 +18,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
   public let accessibility: Field<DivAccessibilityTemplate>?
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
+  public let allowTapWhileScroll: Field<Expression<Bool>>? // default value: false
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
@@ -67,6 +68,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+      allowTapWhileScroll: dictionary.getOptionalExpressionField("allow_tap_while_scroll"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
@@ -117,6 +119,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     accessibility: Field<DivAccessibilityTemplate>? = nil,
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
+    allowTapWhileScroll: Field<Expression<Bool>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
@@ -164,6 +167,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
+    self.allowTapWhileScroll = allowTapWhileScroll
     self.alpha = alpha
     self.animators = animators
     self.background = background
@@ -212,6 +216,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     let accessibilityValue = { parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let alignmentHorizontalValue = { parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
     let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+    let allowTapWhileScrollValue = { parent?.allowTapWhileScroll?.resolveOptionalValue(context: context) ?? .noValue }()
     let alphaValue = { parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue }()
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -258,6 +263,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      allowTapWhileScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_tap_while_scroll", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -305,6 +311,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibility: { accessibilityValue.value }(),
       alignmentHorizontal: { alignmentHorizontalValue.value }(),
       alignmentVertical: { alignmentVerticalValue.value }(),
+      allowTapWhileScroll: { allowTapWhileScrollValue.value }(),
       alpha: { alphaValue.value }(),
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
@@ -358,6 +365,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     var accessibilityValue: DeserializationResult<DivAccessibility> = .noValue
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.alignmentHorizontal?.value() ?? .noValue }()
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
+    var allowTapWhileScrollValue: DeserializationResult<Expression<Bool>> = { parent?.allowTapWhileScroll?.value() ?? .noValue }()
     var alphaValue: DeserializationResult<Expression<Double>> = { parent?.alpha?.value() ?? .noValue }()
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
@@ -418,6 +426,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
           if key == "alignment_vertical" {
            alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
+          }
+        }()
+        _ = {
+          if key == "allow_tap_while_scroll" {
+           allowTapWhileScrollValue = deserialize(__dictValue).merged(with: allowTapWhileScrollValue)
           }
         }()
         _ = {
@@ -643,6 +656,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.alignmentVertical?.link {
            alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.allowTapWhileScroll?.link {
+           allowTapWhileScrollValue = allowTapWhileScrollValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -889,6 +907,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      allowTapWhileScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_tap_while_scroll", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -936,6 +955,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibility: { accessibilityValue.value }(),
       alignmentHorizontal: { alignmentHorizontalValue.value }(),
       alignmentVertical: { alignmentVerticalValue.value }(),
+      allowTapWhileScroll: { allowTapWhileScrollValue.value }(),
       alpha: { alphaValue.value }(),
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
@@ -994,6 +1014,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibility: accessibility ?? mergedParent.accessibility,
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
+      allowTapWhileScroll: allowTapWhileScroll ?? mergedParent.allowTapWhileScroll,
       alpha: alpha ?? mergedParent.alpha,
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
@@ -1047,6 +1068,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       accessibility: merged.accessibility?.tryResolveParent(templates: templates),
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
+      allowTapWhileScroll: merged.allowTapWhileScroll,
       alpha: merged.alpha,
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),

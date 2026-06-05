@@ -3,7 +3,7 @@ import UIKit
 import VGSL
 
 public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysCollectionView,
-  VisibleBoundsTrackingContainer {
+  VisibleBoundsTrackingContainer, TapControlScrollView {
   public override var bounds: CGRect {
     didSet {
       if bounds.size == oldValue.size {
@@ -17,6 +17,8 @@ public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysColl
       previousVisibleBounds = currentVisibleBounds
     }
   }
+
+  var allowTapWhileScroll = false
 
   private var previousVisibleBounds = CGRect.zero
   private var currentVisibleBounds = CGRect.zero

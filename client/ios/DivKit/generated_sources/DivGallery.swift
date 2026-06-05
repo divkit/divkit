@@ -34,6 +34,7 @@ public final class DivGallery: DivBase, Sendable {
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
+  public let allowTapWhileScroll: Expression<Bool> // default value: false
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
@@ -83,6 +84,10 @@ public final class DivGallery: DivBase, Sendable {
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
     resolver.resolveEnum(alignmentVertical)
+  }
+
+  public func resolveAllowTapWhileScroll(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(allowTapWhileScroll) ?? false
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -174,6 +179,7 @@ public final class DivGallery: DivBase, Sendable {
       accessibility: try dictionary.getOptionalField("accessibility", transform: { (dict: [String: Any]) in try DivAccessibility(dictionary: dict, context: context) }),
       alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal", context: context),
       alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical", context: context),
+      allowTapWhileScroll: try dictionary.getOptionalExpressionField("allow_tap_while_scroll", context: context),
       alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
       animators: try dictionary.getOptionalArray("animators", transform: { (dict: [String: Any]) in try? DivAnimator(dictionary: dict, context: context) }),
       background: try dictionary.getOptionalArray("background", transform: { (dict: [String: Any]) in try? DivBackground(dictionary: dict, context: context) }),
@@ -223,6 +229,7 @@ public final class DivGallery: DivBase, Sendable {
     accessibility: DivAccessibility?,
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
+    allowTapWhileScroll: Expression<Bool>?,
     alpha: Expression<Double>?,
     animators: [DivAnimator]?,
     background: [DivBackground]?,
@@ -269,6 +276,7 @@ public final class DivGallery: DivBase, Sendable {
     self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
+    self.allowTapWhileScroll = allowTapWhileScroll ?? .value(false)
     self.alpha = alpha ?? .value(1.0)
     self.animators = animators
     self.background = background
@@ -325,99 +333,104 @@ extension DivGallery: Equatable {
       return false
     }
     guard
+      lhs.allowTapWhileScroll == rhs.allowTapWhileScroll,
       lhs.alpha == rhs.alpha,
-      lhs.animators == rhs.animators,
-      lhs.background == rhs.background
+      lhs.animators == rhs.animators
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.columnCount == rhs.columnCount,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.columnCount == rhs.columnCount
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.crossContentAlignment == rhs.crossContentAlignment,
-      lhs.crossSpacing == rhs.crossSpacing,
-      lhs.defaultItem == rhs.defaultItem
+      lhs.crossSpacing == rhs.crossSpacing
     else {
       return false
     }
     guard
+      lhs.defaultItem == rhs.defaultItem,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.functions == rhs.functions,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.itemSpacing == rhs.itemSpacing,
-      lhs.items == rhs.items
+      lhs.itemSpacing == rhs.itemSpacing
     else {
       return false
     }
     guard
+      lhs.items == rhs.items,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.reuseId == rhs.reuseId
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollContentAlignment == rhs.scrollContentAlignment,
-      lhs.scrollMode == rhs.scrollMode
+      lhs.scrollContentAlignment == rhs.scrollContentAlignment
     else {
       return false
     }
     guard
+      lhs.scrollMode == rhs.scrollMode,
       lhs.scrollbar == rhs.scrollbar,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transformations == rhs.transformations
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -435,6 +448,7 @@ extension DivGallery: Serializable {
     result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
+    result["allow_tap_while_scroll"] = allowTapWhileScroll.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }

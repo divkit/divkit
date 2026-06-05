@@ -138,6 +138,18 @@
             "ios",
             "web"
           ]
+        },
+        "allow_tap_while_scroll": {
+          "type": "boolean",
+          "default_value": "false",
+          "$description": "translations.json#/div_gallery_allow_tap_while_scroll",
+          "platforms": [
+            "ios"
+          ],
+          "unsupported_platforms": {
+            "web": "Not relevant.",
+            "android": "Not relevant."
+          }
         }
       }
     }

@@ -68,6 +68,7 @@ public struct GalleryViewModel: Equatable {
   public let areEmptySpaceTouchesEnabled: Bool
   public let alwaysBounceVertical: Bool
   public let bounces: Bool
+  public let allowTapWhileScroll: Bool
   public let infiniteScroll: Bool
   public let scrollbar: Scrollbar
   public let transformation: ElementsTransformation?
@@ -97,6 +98,7 @@ public struct GalleryViewModel: Equatable {
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
     bounces: Bool = true,
+    allowTapWhileScroll: Bool = false,
     infiniteScroll: Bool = false,
     scrollbar: Scrollbar = .none,
     transformation: ElementsTransformation? = nil,
@@ -115,6 +117,7 @@ public struct GalleryViewModel: Equatable {
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled,
       alwaysBounceVertical: alwaysBounceVertical,
       bounces: bounces,
+      allowTapWhileScroll: allowTapWhileScroll,
       infiniteScroll: infiniteScroll,
       scrollbar: scrollbar,
       transformation: transformation,
@@ -135,6 +138,7 @@ public struct GalleryViewModel: Equatable {
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
     bounces: Bool = true,
+    allowTapWhileScroll: Bool = false,
     infiniteScroll: Bool = false,
     scrollbar: Scrollbar = .none,
     transformation: ElementsTransformation? = nil,
@@ -166,6 +170,7 @@ public struct GalleryViewModel: Equatable {
     self.areEmptySpaceTouchesEnabled = areEmptySpaceTouchesEnabled
     self.alwaysBounceVertical = alwaysBounceVertical
     self.bounces = bounces
+    self.allowTapWhileScroll = allowTapWhileScroll
     self.infiniteScroll = infiniteScroll
     self.scrollbar = scrollbar
     self.transformation = transformation
@@ -187,7 +192,8 @@ public struct GalleryViewModel: Equatable {
     path: UIElementPath? = nil,
     bufferSize: Int? = nil,
     direction: ScrollDirection? = nil,
-    areEmptySpaceTouchesEnabled: Bool? = nil
+    areEmptySpaceTouchesEnabled: Bool? = nil,
+    allowTapWhileScroll: Bool? = nil
   ) -> GalleryViewModel {
     GalleryViewModel(
       items: items ?? self.items,
@@ -196,7 +202,8 @@ public struct GalleryViewModel: Equatable {
       path: path ?? self.path,
       direction: direction ?? self.direction,
       bufferSize: bufferSize ?? self.bufferSize,
-      areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled ?? self.areEmptySpaceTouchesEnabled
+      areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled ?? self.areEmptySpaceTouchesEnabled,
+      allowTapWhileScroll: allowTapWhileScroll ?? self.allowTapWhileScroll
     )
   }
 }
