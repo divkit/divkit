@@ -11,11 +11,19 @@ internal object ViewLocator {
     @JvmStatic
     fun findSingleViewWithTag(view: Div2View, tag: String): View? = view.findSingleViewWithTag<View>(tag).getOrNull()
 
-    inline fun <reified T> findSingleViewWithTag(view: Div2View, tag: String, scopeId: String?): Result<T> {
-        scopeId ?: return view.findSingleViewWithTag<T>(tag)
+    inline fun <reified T> findSingleViewWithTag(view: Div2View, tag: String, scopeId: String?): Result<T> =
+        findSingleViewWithTag(view, tag, scopeId) { id, inScope -> findSingleViewWithTag(id, inScope = inScope) }
+
+    inline fun <reified T> findSingleViewWithTag(
+        view: Div2View,
+        tag: String,
+        scopeId: String?,
+        findTargetView: View.(id: String, inScope: Boolean) -> Result<T>,
+    ): Result<T> {
+        scopeId ?: return view.findTargetView(tag, false)
 
         val scopeError = view.findSingleViewWithTag<View>(scopeId, isScope = true)
-            .onSuccess { return it.findSingleViewWithTag<T>(tag, inScope = true) }
+            .onSuccess { return it.findTargetView(tag, true) }
             .exceptionOrNull()
 
         if (scopeError !is MissingTarget) {
@@ -26,7 +34,7 @@ internal object ViewLocator {
             return Result.failure(error)
         }
 
-        return view.findSingleViewWithTag<T>(tag)
+        return view.findTargetView(tag, false)
             .onSuccess { view.logWarning(scopeError) }
             .onFailure { if (it is DuplicateTarget) return Result.failure(scopeError) }
     }
