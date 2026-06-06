@@ -8,6 +8,7 @@
 * Fixed NPE in `DecodeBase64ImageTask` when `BitmapFactory.decodeByteArray` returns null for invalid or empty preview data.
 * Fixed `IndexOutOfBoundsException` in `DivStatePath.findState` when root div is a `state` with `div_id`. The method now correctly matches `divId` in path elements with "stateId:divId" and "divId#N" formats, consistent with `parentState()` behavior.
 * Fixed current page preservation for infinite scroll in `pager` after item builder array variable updates.
+* Fixed possible ANR at variable change during async binding.
 * Fixed timer variable update behavior.
 
 # iOS Client:
