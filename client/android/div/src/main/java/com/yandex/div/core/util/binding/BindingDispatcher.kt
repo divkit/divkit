@@ -29,6 +29,7 @@ internal class BindingDispatcher @Inject constructor(
      */
     inline fun <T> runOnBindingThread(
         noinline onComplete: ((T) -> Unit)? = null,
+        noinline onError: ((Throwable) -> Unit)? = null,
         crossinline block: () -> T
     ) {
         val bindingThread = try {
@@ -55,6 +56,9 @@ internal class BindingDispatcher @Inject constructor(
                                 action.invoke()
                             }
                             onComplete?.invoke(result)
+                        } catch (e: Throwable) {
+                            divView.logError(e)
+                            onError?.invoke(e)
                         } finally {
                             criticalSection.exit(handle)
                         }
@@ -62,7 +66,10 @@ internal class BindingDispatcher @Inject constructor(
                 }
             } catch (e: Throwable) {
                 criticalSection.exit(handle)
-                throw e
+                UiThreadHandler.postOnMainThread {
+                    divView.logError(e)
+                    onError?.invoke(e)
+                }
             }
         }
     }
@@ -125,7 +132,7 @@ internal class BindingDispatcher @Inject constructor(
         crossinline block: () -> T
     ) {
         if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
-            runOnBindingThread(null, block)
+            runOnBindingThread(null, null, block)
         } else {
             block()
         }
