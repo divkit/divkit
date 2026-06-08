@@ -245,4 +245,3 @@ internal class BindingCriticalSection @Inject constructor() {
         }
     }
 }
-

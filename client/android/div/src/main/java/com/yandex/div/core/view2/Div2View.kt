@@ -305,7 +305,8 @@ class Div2View private constructor(
             return
         }
 
-        bindingDispatcher.runOnBindingThread(onComplete) {
+        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
+        bindingDispatcher.runOnBindingThread(onComplete, onError) {
             setDataInternal(data, divData, tag)
         }
     }
@@ -323,7 +324,8 @@ class Div2View private constructor(
             return
         }
 
-        bindingDispatcher.runOnBindingThread(onComplete) {
+        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
+        bindingDispatcher.runOnBindingThread(onComplete, onError) {
             setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
         }
     }
@@ -405,8 +407,11 @@ class Div2View private constructor(
         paths: List<DivStatePath>,
         temporary: Boolean,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        setDataWithStatesInternal(data, tag, paths, temporary)
+    ) {
+        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
+        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+            setDataWithStatesInternal(data, tag, paths, temporary)
+        }
     }
 
     fun setDataWithStates(
@@ -491,8 +496,11 @@ class Div2View private constructor(
     fun applyPatchAsync(
         patch: DivPatch,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        applyPatchInternal(patch)
+    ) {
+        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
+        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+            applyPatchInternal(patch)
+        }
     }
 
     fun applyPatch(patch: DivPatch): Boolean = applyPatchInternal(patch)
