@@ -366,6 +366,7 @@
         "range_builder": {
           "$ref": "#/definitions/range_builder",
           "platforms": [
+            "android",
             "ios"
           ]
         },
@@ -379,6 +380,7 @@
         "image_builder": {
           "$ref": "#/definitions/image_builder",
           "platforms": [
+            "android",
             "ios"
           ]
         }
@@ -509,6 +511,7 @@
         "range_builder": {
           "$ref": "#/definitions/range_builder",
           "platforms": [
+            "android",
             "ios"
           ]
         },
@@ -527,6 +530,7 @@
         "image_builder": {
           "$ref": "#/definitions/image_builder",
           "platforms": [
+            "android",
             "ios"
           ]
         },

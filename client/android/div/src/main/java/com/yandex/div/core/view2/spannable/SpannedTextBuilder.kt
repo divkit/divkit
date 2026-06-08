@@ -40,7 +40,9 @@ import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
 import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.core.view2.getTypefaceValue
 import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
+import com.yandex.div.internal.core.DivTextImageResult
 import com.yandex.div.internal.core.DivTextRangeResult
+import com.yandex.div.internal.core.buildImages
 import com.yandex.div.internal.core.buildRanges
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
@@ -97,7 +99,7 @@ internal class SpannedTextBuilder @Inject constructor(
             divText,
             divText.text.evaluate(bindingContext.expressionResolver),
             divText.buildRanges(bindingContext.expressionResolver),
-            divText.images,
+            divText.buildImages(bindingContext.expressionResolver),
             null,
             textConsumer
         )
@@ -114,8 +116,8 @@ internal class SpannedTextBuilder @Inject constructor(
             textView,
             divText,
             ellipsis.text.evaluate(bindingContext.expressionResolver),
-            ellipsis.ranges?.map { DivTextRangeResult(it, bindingContext.expressionResolver) },
-            ellipsis.images,
+            ellipsis.buildRanges(bindingContext.expressionResolver),
+            ellipsis.buildImages(bindingContext.expressionResolver),
             ellipsis.actions,
             textConsumer,
             inEllipsis = true
@@ -128,21 +130,20 @@ internal class SpannedTextBuilder @Inject constructor(
         divText: DivText,
         text: String,
         ranges: List<DivTextRangeResult>?,
-        images: List<DivText.Image>?,
+        images: List<DivTextImageResult>?,
         actions: List<DivAction>?,
         textConsumer: TextConsumer? = null,
         inEllipsis: Boolean = false,
     ): Spanned {
         val context = textView.context
         val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
 
         // We use zero-width space for empty text to make sure line height span will be applied properly.
         val spannedText = SpannableStringBuilder(text.ifEmpty { ZWSP })
         val textData = createTextData(context, bindingContext, divText, text)
         val textLength = textData.textLength
         val spans = preprocessSpans(context, textData, ranges)
-        val sortedImages = preprocessImages(textData, images, resolver)
+        val sortedImages = preprocessImages(textData, images)
 
         if (debugFontMetrics) {
             spannedText.setSpan(LineMetricsSpan(), 0, spannedText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -191,15 +192,17 @@ internal class SpannedTextBuilder @Inject constructor(
         )
 
         for (index in sortedImages.indices.reversed()) {
-            val image = sortedImages[index]
-            val position = imagePosition(textData.textLength, image, resolver)
+            val (image, imageResolver) = sortedImages[index]
+            val imageContext = bindingContext.getFor(imageResolver)
+            val position = imagePosition(textData.textLength, image, imageResolver)
             val prevImagePosition = if (index > 0) {
-                imagePosition(textData.textLength, sortedImages[index - 1], resolver)
+                val (prevImage, prevResolver) = sortedImages[index - 1]
+                imagePosition(textData.textLength, prevImage, prevResolver)
             } else {
                 Int.MIN_VALUE
             }
             spannedText.insert(position, IMAGE_PLACEHOLDER)
-            val imageSpan = addImageSpan(bindingContext, textView, spannedText, textData, image)
+            val imageSpan = addImageSpan(imageContext, textView, spannedText, textData, image)
 
             val nextAfterImage = prevImagePosition + 1 == position
             val nextAfterWord = position > 0 && !spannedText[position - 1].isWhitespace()
@@ -208,8 +211,8 @@ internal class SpannedTextBuilder @Inject constructor(
             }
 
             val reference = imageLoader.loadImage(
-                image.url.evaluate(resolver).toString(),
-                ImageDownloadCallbackImpl(bindingContext, image, imageSpan, spannedText, textConsumer)
+                image.url.evaluate(imageResolver).toString(),
+                ImageDownloadCallbackImpl(imageContext, image, imageSpan, spannedText, textConsumer)
             )
             divView.addLoadReference(reference, textView)
         }
@@ -287,11 +290,10 @@ internal class SpannedTextBuilder @Inject constructor(
 
     private fun preprocessImages(
         textData: TextData,
-        images: List<DivText.Image>?,
-        resolver: ExpressionResolver
-    ): List<DivText.Image> {
-        return images?.filter { it.start.evaluate(resolver) <= textData.textLength }
-            ?.sortedBy { imagePosition(textData.textLength, it, resolver) } ?: emptyList()
+        images: List<DivTextImageResult>?,
+    ): List<DivTextImageResult> {
+        return images?.filter { it.image.start.evaluate(it.resolver) <= textData.textLength }
+            ?.sortedBy { imagePosition(textData.textLength, it.image, it.resolver) } ?: emptyList()
     }
 
     private fun imagePosition(textLength: Int, image: DivText.Image, resolver: ExpressionResolver): Int {

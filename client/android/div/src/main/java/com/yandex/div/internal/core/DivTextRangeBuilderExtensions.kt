@@ -15,6 +15,11 @@ internal fun DivText.buildRanges(resolver: ExpressionResolver): List<DivTextRang
     return ranges?.map { DivTextRangeResult(it, resolver) }
 }
 
+internal fun DivText.Ellipsis.buildRanges(resolver: ExpressionResolver): List<DivTextRangeResult>? {
+    rangeBuilder?.let { return it.build(resolver) }
+    return ranges?.map { DivTextRangeResult(it, resolver) }
+}
+
 internal fun DivText.RangeBuilder.build(resolver: ExpressionResolver): List<DivTextRangeResult> =
     data.evaluate(resolver).mapIndexedNotNull { index, element -> buildItem(element, index, resolver) }
 

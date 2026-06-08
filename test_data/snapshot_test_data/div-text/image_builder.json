@@ -1,6 +1,7 @@
 {
   "description": "Text with image_builder: inline images generated from a data array, with selector-based prototype choice.",
   "platforms": [
+    "android",
     "ios"
   ],
   "card": {

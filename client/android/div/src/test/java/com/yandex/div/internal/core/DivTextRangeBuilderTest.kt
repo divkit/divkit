@@ -110,6 +110,38 @@ class DivTextRangeBuilderTest {
         assertNull(ranges)
     }
 
+    @Test
+    fun `ellipsis builder produces a range per data element`() {
+        val ellipsis = DivText.Ellipsis(
+            text = Expression.constant("..."),
+            rangeBuilder = builder(
+                data = jsonArray(JSONObject(), JSONObject()),
+                prototypes = listOf(prototype(range()))
+            )
+        )
+
+        val ranges = ellipsis.buildRanges(resolver)
+
+        assertEquals(2, ranges?.size)
+    }
+
+    @Test
+    fun `ellipsis builder takes priority over static ranges`() {
+        val ellipsis = DivText.Ellipsis(
+            text = Expression.constant("..."),
+            ranges = listOf(range(start = 1L)),
+            rangeBuilder = builder(
+                data = jsonArray(JSONObject()),
+                prototypes = listOf(prototype(range(start = 7L)))
+            )
+        )
+
+        val ranges = ellipsis.buildRanges(resolver)
+
+        assertEquals(1, ranges?.size)
+        assertEquals(7L, ranges?.first()?.range?.start?.evaluate(resolver))
+    }
+
     private fun createText(
         ranges: List<DivText.Range>? = null,
         rangeBuilder: DivText.RangeBuilder? = null,
