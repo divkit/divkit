@@ -149,6 +149,42 @@ internal class BindingCriticalSection @Inject constructor() {
     }
 
     /**
+     * Tries to enter the critical section without blocking.
+     *
+     * Returns immediately with a [Disposable] handle if the section is free (or already
+     * held by the current thread), or `null` if it is held by — or reserved for —
+     * a different thread.
+     *
+     * Intended for the main thread to avoid an indefinite [LockSupport.park] when a
+     * background binding is in progress (see [BindingDispatcher.withLock]).
+     *
+     * @return A [Disposable] handle on success, or `null` if the section cannot be
+     *         acquired immediately by the current thread.
+     */
+    @AnyThread
+    @Throws(InterruptedException::class)
+    fun tryEnter(): Disposable? {
+        synchronized(lock) {
+            val thread = reserver ?: Thread.currentThread()
+            when (holder) {
+                null -> {
+                    holder = thread
+                    reserver = null
+                    entranceCounter = 1
+                    return EntranceHandle(this)
+                }
+
+                thread -> {
+                    entranceCounter++
+                    return EntranceHandle(this)
+                }
+
+                else -> return null
+            }
+        }
+    }
+
+    /**
      * Enters the critical section.
      *
      * If the section is not held, the current thread becomes the holder.

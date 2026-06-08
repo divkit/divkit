@@ -151,16 +151,14 @@ internal class BindingDispatcher @Inject constructor(
      * In such case, rejects the execution returning [fallback].
      */
     inline fun <T> withLock(fallback: T, block: () -> T): T {
-        if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
-            reportLockFail()
-            return fallback
+        val handle = if (UiThreadHandler.get().isMainThread()) {
+            criticalSection.tryEnter() ?: return fallback.also {
+                reportLockFail()
+            }
+        } else {
+            criticalSection.enter()
         }
 
-        return withLockInternal(block)
-    }
-
-    private inline fun <T> withLockInternal(block: () -> T): T {
-        val handle = criticalSection.enter()
         handle.use {
             return block()
         }
