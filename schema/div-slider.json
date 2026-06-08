@@ -148,7 +148,8 @@
           "$description": "translations.json#/div_actionable_press_start_actions",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "press_end_actions": {
@@ -159,7 +160,8 @@
           "$description": "translations.json#/div_actionable_press_end_actions",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         }
       }

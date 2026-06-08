@@ -246,7 +246,7 @@
         cls={genClassName('select', css, mods)}
         style={stl}
         customDescription={true}
-        customActions={'select'}
+        customActions="select"
         customPaddings={true}
         hasInnerFocusable={true}
         {componentContext}

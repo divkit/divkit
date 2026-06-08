@@ -710,7 +710,7 @@
         cls={genClassName('input', css, mods)}
         style={stl}
         customDescription={true}
-        customActions={'input'}
+        customActions="input"
         customPaddings={true}
         hasInnerFocusable={true}
         {componentContext}

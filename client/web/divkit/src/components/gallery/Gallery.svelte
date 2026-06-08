@@ -720,7 +720,7 @@
     {componentContext}
     {layoutParams}
     customPaddings={true}
-    customActions={'gallery'}
+    customActions="gallery"
     parentOf={items}
     {replaceItems}
 >

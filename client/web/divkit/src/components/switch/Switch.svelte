@@ -146,7 +146,7 @@
         cls={genClassName('switch', css, mods)}
         style={stl}
         customDescription={true}
-        customActions={'switch'}
+        customActions="switch"
         hasInnerFocusable={true}
         {componentContext}
         {layoutParams}

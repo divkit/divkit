@@ -820,7 +820,6 @@
       "title": "Slider callbacks",
       "platforms": [
         "android",
-        "ios",
         "web"
       ],
       "tags": [
@@ -830,12 +829,14 @@
       "steps": [
         "Press and hold the slider thumb",
         "Release the slider thumb",
-        "Drag the slider to another tick and repeat press and release"
+        "Drag the slider to another tick and repeat press and release",
+        "Try dragging the slider over the colored area"
       ],
       "expected_results": [
         "While the thumb is pressed, the cirlce fill animates to red",
         "On release, the cirlce fill animates back to yellow",
-        "Slider value changes as usual when dragging"
+        "Slider value changes as usual when dragging",
+        "The slider does move, the circle does change color"
       ],
       "file": "slider_callbacks.json",
       "case_id": 508

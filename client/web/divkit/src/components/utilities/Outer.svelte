@@ -779,19 +779,18 @@
             newActions.length ||
             newDoubleTapActions.length ||
             newLongTapActions.length ||
-            pressStartActions.length ||
-            pressEndActions.length ||
-            hoverStartActions.length ||
-            hoverEndActions.length
+            newPressStartActions.length ||
+            newPressEndActions.length ||
+            newHoverStartActions.length ||
+            newHoverEndActions.length
         ) && customActions) {
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
-            pressStartActions = [];
-            pressEndActions = [];
-            hoverStartActions = [];
-            hoverEndActions = [];
-            componentContext.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
+            newPressStartActions = [];
+            newPressEndActions = [];
+            newHoverStartActions = [];
+            newHoverEndActions = [];
         }
 
         // todo check parent actions with customActions

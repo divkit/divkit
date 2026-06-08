@@ -832,7 +832,7 @@
         cls={genClassName('tabs', css, mods)}
         {componentContext}
         {layoutParams}
-        customActions={'tabs'}
+        customActions="tabs"
         parentOf={parentOfItems}
         parentOfSimpleMode={true}
         {replaceItems}

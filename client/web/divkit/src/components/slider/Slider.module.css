@@ -11,9 +11,11 @@
     display: block;
     width: calc(100% + var(--divkit-slider-thumb-width));
     height: var(--divkit-slider-max-thumb-height);
-    margin: 0;
-    margin-right: calc(var(--divkit-slider-thumb-width) / -2);
-    margin-left: calc(var(--divkit-slider-thumb-width) / -2);
+    padding: var(--divkit-slider-padding-top) var(--divkit-slider-padding-right) var(--divkit-slider-padding-bottom) var(--divkit-slider-padding-left);
+    margin-top: calc(-1 * var(--divkit-slider-padding-top));
+    margin-right: calc(var(--divkit-slider-thumb-width) / -2 - var(--divkit-slider-padding-right));
+    margin-bottom: calc(-1 * var(--divkit-slider-padding-bottom));
+    margin-left: calc(var(--divkit-slider-thumb-width) / -2 - var(--divkit-slider-padding-left));
     font: inherit;
     background: none;
     border: none;
@@ -23,13 +25,13 @@
 }
 
 .slider__input + .slider__input {
-    margin-top: calc(0px - var(--divkit-slider-max-thumb-height));
+    margin-top: calc(0px - var(--divkit-slider-max-thumb-height) - var(--divkit-slider-padding-top));
 }
 
 .slider__input_secondary {
     width: calc(100% + var(--divkit-slider-thumb-secondary-width));
-    margin-right: calc(var(--divkit-slider-thumb-secondary-width) / -2);
-    margin-left: calc(var(--divkit-slider-thumb-secondary-width) / -2);
+    margin-right: calc(var(--divkit-slider-thumb-secondary-width) / -2 - var(--divkit-slider-padding-right));
+    margin-left: calc(var(--divkit-slider-thumb-secondary-width) / -2 - var(--divkit-slider-padding-left));
 }
 
 .slider__thumb {
@@ -73,6 +75,9 @@
 
 .slider__tracks-inner {
     position: relative;
+    /* force margin trim */
+    display: flex;
+    flex-direction: column;
 }
 
 .slider__tracks-ranges {

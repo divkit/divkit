@@ -43,6 +43,8 @@
     import { fillTicks } from '../../utils/slider';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
+  import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+  import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
 
     export let componentContext: ComponentContext<DivSliderData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -70,6 +72,7 @@
     let textSecondaryStyle: TransformedSliderTextStyle | undefined = textStyle;
     let description = '';
     let secondaryDescription = '';
+    let selfPadding: EdgeInsets | null = null;
     let isEnabled = true;
     let hasError = false;
     let renderRanges: {
@@ -80,6 +83,7 @@
         background: string;
         boxShadow: string;
     }[] = [];
+    let cleanupPress: (() => void) | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -95,6 +99,7 @@
         description = '';
         isEnabled = true;
         secondaryDescription = '';
+        selfPadding = null;
     }
 
     $: if (origJson) {
@@ -133,6 +138,7 @@
     );
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
     $: jsonRanges = componentContext.getDerivedFromVars(componentContext.json.ranges);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
 
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
@@ -229,6 +235,16 @@
             level: 'warn'
         }));
     }
+
+    $: {
+        selfPadding = correctEdgeInsertsObject($jsonPaddings, selfPadding);
+    }
+
+    $: padding = edgeInsertsToCss(selfPadding || {}, $direction);
+    $: paddingTop = pxToEmWithUnits(selfPadding?.top || 0);
+    $: paddingRight = pxToEmWithUnits(($direction === 'rtl' ? selfPadding?.start : selfPadding?.end) || selfPadding?.right || 0);
+    $: paddingBottom = pxToEmWithUnits(selfPadding?.bottom || 0);
+    $: paddingLeft = pxToEmWithUnits(($direction === 'ltr' ? selfPadding?.start : selfPadding?.end) || selfPadding?.left || 0);
 
     $: {
         let newHasError = false;
@@ -391,6 +407,11 @@
     });
 
     $: stl = {
+        '--divkit-slider-padding-top': paddingTop,
+        '--divkit-slider-padding-right': paddingRight,
+        '--divkit-slider-padding-bottom': paddingBottom,
+        '--divkit-slider-padding-left': paddingLeft,
+
         '--divkit-slider-thumb-width': pxToEm(thumbStyle.width),
         '--divkit-slider-thumb-height': pxToEm(thumbStyle.height),
 
@@ -461,6 +482,34 @@
         }
     }
 
+    function onPointerDown(): void {
+        const json = componentContext.json;
+        if (!json.press_start_actions && !json.press_end_actions || actionCtx.hasAction()) {
+            return;
+        }
+
+        if (Array.isArray(json.press_start_actions)) {
+            componentContext.execAnyActions(json.press_start_actions, {
+                node: input
+            });
+        }
+
+        cleanupPress?.();
+        cleanupPress = () => {
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        };
+        const onPointerUp = () => {
+            if (Array.isArray(json.press_end_actions)) {
+                componentContext.execAnyActions(json.press_end_actions, {
+                    node: input
+                });
+            }
+        };
+        window.addEventListener('pointerup', onPointerUp, { passive: true });
+        window.addEventListener('pointercancel', onPointerUp, { passive: true });
+    }
+
     $: if (componentContext.json && input) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
@@ -480,6 +529,8 @@
     }
 
     onDestroy(() => {
+        cleanupPress?.();
+        cleanupPress = undefined;
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
@@ -493,9 +544,9 @@
         let:blurHandler
         cls={genClassName('slider', css, mods)}
         style={stl}
-        customDescription={true}
+        customDescription
         customActions="slider"
-        hasInnerFocusable={true}
+        hasInnerFocusable
         {componentContext}
         {layoutParams}
     >
@@ -576,6 +627,7 @@
                     on:input={event => onInputChange(event, 'first')}
                     on:focus={focusHandler}
                     on:blur={blurHandler}
+                    on:pointerdown={onPointerDown}
                     bind:this={input}
                 >
                 {#if secondVariable}
@@ -593,6 +645,7 @@
                         on:touchstart={secondVariable ? onSecondMousedown : null}
                         on:focus={focusHandler}
                         on:blur={blurHandler}
+                        on:pointerdown={onPointerDown}
                     >
                 {/if}
             </div>

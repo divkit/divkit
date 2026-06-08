@@ -48,4 +48,6 @@ export interface DivSliderData extends DivBaseData, DivActionableData {
     ranges?: SliderRange[];
     secondary_value_accessibility?: Accessibility;
     is_enabled?: BooleanInt;
+    press_start_actions?: Action[];
+    press_end_actions?: Action[];
 }
