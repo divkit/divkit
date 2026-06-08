@@ -29,9 +29,10 @@ import kotlin.math.tan
  * @param animationStartTime can be used to synchronize it with other animations.
  * It should be set to [SystemClock.uptimeMillis] of the start of the first animation.
  */
-class ShimmerDrawable(
+class ShimmerDrawable @JvmOverloads constructor(
         initialConfig: Config,
-        private val animationStartTime: Long
+        private val animationStartTime: Long,
+        private val animationsEnabled: () -> Boolean = { true },
 ) : Drawable(), Animatable {
     var config: Config = initialConfig
         set(value) {
@@ -126,7 +127,7 @@ class ShimmerDrawable(
         shaderMatrix.setRotate(rotate.toFloat(), drawRect.width() / 2f, drawRect.height() / 2f)
         shaderMatrix.preTranslate(dx, dy)
         shimmerShader.setLocalMatrix(shaderMatrix)
-        if (!isStopped) {
+        if (!isStopped && animationsEnabled()) {
             start()
         }
 
