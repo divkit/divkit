@@ -2,6 +2,9 @@
 
 # Android Client:
 * Added `scope_id` support for anchor search for `show_tooltip` and `hide_tooltip` actions.
+* Added extended error handling at async binding.
+* Added support for `image_builder` in `text` that generates inline images dynamically from a `data` array using `prototypes` and `selector`. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `images` list.
+* Added support for `range_builder` and `image_builder` inside `text.ellipsis`, generating the custom ellipsis ranges and images dynamically the same way as for the main text.
 * Added support for `range_builder` in `text` that generates character ranges dynamically from a `data` array using `prototypes` and `selector`. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `ranges` list.
 * Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 * Added support of scoped search for elements with given `id` in `scroll_to` actions.
