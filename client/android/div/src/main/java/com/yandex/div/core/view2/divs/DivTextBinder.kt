@@ -30,6 +30,8 @@ import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.graphics.Colormap
@@ -571,7 +573,7 @@ internal class DivTextBinder @Inject constructor(
         newDiv: DivText,
         oldDiv: DivText?,
     ) {
-        if (newDiv.ranges == null && newDiv.images == null) {
+        if (newDiv.ranges == null && newDiv.rangeBuilder == null && newDiv.images == null) {
             bindPlainText(bindingContext, newDiv, oldDiv)
         } else {
             bindRichText(bindingContext, newDiv)
@@ -600,44 +602,14 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(newDiv.fontFamily?.observe(resolver, callback))
         addSubscription(newDiv.lineHeight?.observe(resolver, callback))
 
-        newDiv.ranges?.forEach { range ->
-            addSubscription(range.start.observe(resolver, callback))
-            addSubscription(range.end?.observe(resolver, callback))
-            addSubscription(range.alignmentVertical?.observe(resolver, callback))
-            addSubscription(range.baselineOffset.observe(resolver, callback))
-            addSubscription(range.fontSize?.observe(resolver, callback))
-            addSubscription(range.fontSizeUnit.observe(resolver, callback))
-            addSubscription(range.fontFamily?.observe(resolver, callback))
-            addSubscription(range.fontWeight?.observe(resolver, callback))
-            addSubscription(range.fontWeightValue?.observe(resolver, callback))
-            addSubscription(range.fontFeatureSettings?.observe(resolver, callback))
-            addSubscription(range.letterSpacing?.observe(resolver, callback))
-            addSubscription(range.lineHeight?.observe(resolver, callback))
-            addSubscription(range.strike?.observe(resolver, callback))
-            addSubscription(range.textColor?.observe(resolver, callback))
-            addSubscription(range.topOffset?.observe(resolver, callback))
-            addSubscription(range.underline?.observe(resolver, callback))
-            when (val background = range.background?.value()) {
-                is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
-            }
-            when (val mask = range.mask?.value()) {
-                is DivTextRangeMaskSolid -> {
-                    addSubscription(mask.isEnabled.observe(resolver, callback))
-                    addSubscription(mask.color.observe(resolver, callback))
-                }
-                is DivTextRangeMaskParticles -> {
-                    addSubscription(mask.isEnabled.observe(resolver, callback))
-                    addSubscription(mask.color.observe(resolver, callback))
-                    addSubscription(mask.density.observe(resolver, callback))
-                    addSubscription(mask.isAnimated.observe(resolver, callback))
-                    addSubscription(mask.particleSize.value.observe(resolver, callback))
-                    addSubscription(mask.particleSize.unit.observe(resolver, callback))
-                }
-            }
-            addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
-            addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
-            if (supportFontVariations) {
-                addSubscription(range.fontVariationSettings?.observe(resolver, callback))
+        newDiv.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
+
+        newDiv.rangeBuilder?.let { builder ->
+            addSubscription(builder.data.observe(resolver, callback))
+            val itemResolver = builder.getItemResolver(resolver)
+            builder.prototypes.forEach { prototype ->
+                addSubscription(prototype.selector.observe(itemResolver, callback))
+                subscribeToRange(prototype.range, itemResolver, callback)
             }
         }
         newDiv.images?.forEach { image ->
@@ -657,6 +629,51 @@ internal class DivTextBinder @Inject constructor(
     ) {
         spannedTextBuilder.buildText(bindingContext, this, div) { spannedText ->
             setText(spannedText, TextView.BufferType.NORMAL)
+        }
+    }
+
+    private fun ExpressionSubscriber.subscribeToRange(
+        range: DivText.Range,
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit,
+    ) {
+        addSubscription(range.start.observe(resolver, callback))
+        addSubscription(range.end?.observe(resolver, callback))
+        addSubscription(range.alignmentVertical?.observe(resolver, callback))
+        addSubscription(range.baselineOffset.observe(resolver, callback))
+        addSubscription(range.fontSize?.observe(resolver, callback))
+        addSubscription(range.fontSizeUnit.observe(resolver, callback))
+        addSubscription(range.fontFamily?.observe(resolver, callback))
+        addSubscription(range.fontWeight?.observe(resolver, callback))
+        addSubscription(range.fontWeightValue?.observe(resolver, callback))
+        addSubscription(range.fontFeatureSettings?.observe(resolver, callback))
+        addSubscription(range.letterSpacing?.observe(resolver, callback))
+        addSubscription(range.lineHeight?.observe(resolver, callback))
+        addSubscription(range.strike?.observe(resolver, callback))
+        addSubscription(range.textColor?.observe(resolver, callback))
+        addSubscription(range.topOffset?.observe(resolver, callback))
+        addSubscription(range.underline?.observe(resolver, callback))
+        when (val background = range.background?.value()) {
+            is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
+        }
+        when (val mask = range.mask?.value()) {
+            is DivTextRangeMaskSolid -> {
+                addSubscription(mask.isEnabled.observe(resolver, callback))
+                addSubscription(mask.color.observe(resolver, callback))
+            }
+            is DivTextRangeMaskParticles -> {
+                addSubscription(mask.isEnabled.observe(resolver, callback))
+                addSubscription(mask.color.observe(resolver, callback))
+                addSubscription(mask.density.observe(resolver, callback))
+                addSubscription(mask.isAnimated.observe(resolver, callback))
+                addSubscription(mask.particleSize.value.observe(resolver, callback))
+                addSubscription(mask.particleSize.unit.observe(resolver, callback))
+            }
+        }
+        addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
+        addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
+        if (supportFontVariations) {
+            addSubscription(range.fontVariationSettings?.observe(resolver, callback))
         }
     }
 
@@ -775,46 +792,7 @@ internal class DivTextBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val callback = { _: Any -> applyRichEllipsis(bindingContext, newDiv) }
         addSubscription(ellipsis.text.observe(resolver, callback))
-        ellipsis.ranges?.forEach { range ->
-            addSubscription(range.start.observe(resolver, callback))
-            addSubscription(range.end?.observe(resolver, callback))
-            addSubscription(range.alignmentVertical?.observe(resolver, callback))
-            addSubscription(range.baselineOffset.observe(resolver, callback))
-            addSubscription(range.fontSize?.observe(resolver, callback))
-            addSubscription(range.fontSizeUnit.observe(resolver, callback))
-            addSubscription(range.fontFamily?.observe(resolver, callback))
-            addSubscription(range.fontWeight?.observe(resolver, callback))
-            addSubscription(range.fontWeightValue?.observe(resolver, callback))
-            addSubscription(range.fontFeatureSettings?.observe(resolver, callback))
-            addSubscription(range.letterSpacing?.observe(resolver, callback))
-            addSubscription(range.lineHeight?.observe(resolver, callback))
-            addSubscription(range.strike?.observe(resolver, callback))
-            addSubscription(range.textColor?.observe(resolver, callback))
-            addSubscription(range.topOffset?.observe(resolver, callback))
-            addSubscription(range.underline?.observe(resolver, callback))
-            when (val background = range.background?.value()) {
-                is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
-            }
-            when (val mask = range.mask?.value()) {
-                is DivTextRangeMaskSolid -> {
-                    addSubscription(mask.isEnabled.observe(resolver, callback))
-                    addSubscription(mask.color.observe(resolver, callback))
-                }
-                is DivTextRangeMaskParticles -> {
-                    addSubscription(mask.isEnabled.observe(resolver, callback))
-                    addSubscription(mask.color.observe(resolver, callback))
-                    addSubscription(mask.density.observe(resolver, callback))
-                    addSubscription(mask.isAnimated.observe(resolver, callback))
-                    addSubscription(mask.particleSize.value.observe(resolver, callback))
-                    addSubscription(mask.particleSize.unit.observe(resolver, callback))
-                }
-            }
-            addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
-            addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
-            if (supportFontVariations) {
-                addSubscription(range.fontVariationSettings?.observe(resolver, callback))
-            }
-        }
+        ellipsis.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
         ellipsis.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
             addSubscription(image.url.observe(resolver, callback))

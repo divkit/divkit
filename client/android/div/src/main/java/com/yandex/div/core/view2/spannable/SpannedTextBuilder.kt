@@ -40,6 +40,8 @@ import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
 import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.core.view2.getTypefaceValue
 import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
+import com.yandex.div.internal.core.DivTextRangeResult
+import com.yandex.div.internal.core.buildRanges
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
@@ -94,7 +96,7 @@ internal class SpannedTextBuilder @Inject constructor(
             textView,
             divText,
             divText.text.evaluate(bindingContext.expressionResolver),
-            divText.ranges,
+            divText.buildRanges(bindingContext.expressionResolver),
             divText.images,
             null,
             textConsumer
@@ -112,7 +114,7 @@ internal class SpannedTextBuilder @Inject constructor(
             textView,
             divText,
             ellipsis.text.evaluate(bindingContext.expressionResolver),
-            ellipsis.ranges,
+            ellipsis.ranges?.map { DivTextRangeResult(it, bindingContext.expressionResolver) },
             ellipsis.images,
             ellipsis.actions,
             textConsumer,
@@ -125,7 +127,7 @@ internal class SpannedTextBuilder @Inject constructor(
         textView: TextView,
         divText: DivText,
         text: String,
-        ranges: List<DivText.Range>?,
+        ranges: List<DivTextRangeResult>?,
         images: List<DivText.Image>?,
         actions: List<DivAction>?,
         textConsumer: TextConsumer? = null,
@@ -139,7 +141,7 @@ internal class SpannedTextBuilder @Inject constructor(
         val spannedText = SpannableStringBuilder(text.ifEmpty { ZWSP })
         val textData = createTextData(context, bindingContext, divText, text)
         val textLength = textData.textLength
-        val spans = preprocessSpans(context, bindingContext, textData, ranges)
+        val spans = preprocessSpans(context, textData, ranges)
         val sortedImages = preprocessImages(textData, images, resolver)
 
         if (debugFontMetrics) {
@@ -155,19 +157,19 @@ internal class SpannedTextBuilder @Inject constructor(
             addSpan(textView, spannedText, textData, span)
         }
 
-        val hasAdditionalRanges = ranges?.any { range ->
+        val hasAdditionalRanges = ranges?.any { (range, _) ->
             range.actions != null
                 || range.background != null
                 || range.border != null
         } ?: false
 
         if (hasAdditionalRanges) {
-            ranges?.forEach { range ->
-                val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
-                val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
-                addActionSpan(bindingContext, textView, spannedText, start, end, range.actions)
+            ranges?.forEach { (range, rangeResolver) ->
+                val start = range.start.evaluate(rangeResolver).toIntSafely().coerceAtMost(textLength)
+                val end = range.end?.evaluate(rangeResolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
+                addActionSpan(bindingContext.getFor(rangeResolver), textView, spannedText, start, end, range.actions)
                 addDecorationSpan(
-                    bindingContext,
+                    rangeResolver,
                     textView,
                     spannedText,
                     start,
@@ -218,24 +220,22 @@ internal class SpannedTextBuilder @Inject constructor(
 
     private fun preprocessSpans(
         context: Context,
-        bindingContext: BindingContext,
         textData: TextData,
-        ranges: List<DivText.Range>?,
+        ranges: List<DivTextRangeResult>?,
     ): List<SpanData> {
         if (textData.lineHeight == null && ranges.isNullOrEmpty()) return emptyList()
 
-        val resolver = bindingContext.expressionResolver
         val textLength = textData.textLength
 
         val rangeCount = ranges?.size ?: 0
         val boundSet = sortedSetOf<Int>()
         val overlappingSpans = ArrayList<SpanData>(rangeCount + 1)
 
-        ranges?.forEach { range ->
-            val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
-            val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
+        ranges?.forEach { (range, rangeResolver) ->
+            val start = range.start.evaluate(rangeResolver).toIntSafely().coerceAtMost(textLength)
+            val end = range.end?.evaluate(rangeResolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
             if (start < end) {
-                val span = createSpanData(context, bindingContext, textData, range, start, end)
+                val span = createSpanData(context, rangeResolver, textData, range, start, end)
                 if (!span.isEmpty()) {
                     boundSet += start
                     boundSet += end
@@ -476,7 +476,7 @@ internal class SpannedTextBuilder @Inject constructor(
     }
 
     private fun addDecorationSpan(
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
         textView: TextView,
         spannedText: Spannable,
         start: Int,
@@ -490,7 +490,6 @@ internal class SpannedTextBuilder @Inject constructor(
         if (border == null && background == null) return
 
         val displayMetrics = textView.context.resources.displayMetrics
-        val resolver = bindingContext.expressionResolver
 
         val fontSizeValue = range.fontSize?.evaluate(resolver)?.toIntSafely()
         val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
@@ -618,14 +617,13 @@ internal class SpannedTextBuilder @Inject constructor(
 
     private fun createSpanData(
         context: Context,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
         textData: TextData,
         range: DivText.Range,
         start: Int,
         end: Int
     ) : SpanData {
         val displayMetrics = context.resources.displayMetrics
-        val resolver = bindingContext.expressionResolver
         val textFontSizeValue = textData.fontSizeValue
         val fontSizeValue = range.fontSize?.evaluate(resolver)?.toIntSafely()
         val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
@@ -643,10 +641,10 @@ internal class SpannedTextBuilder @Inject constructor(
             fontVariationSettings = range.fontVariationSettings?.evaluate(resolver),
             letterSpacing = range.letterSpacing?.evaluate(resolver)?.div(fontSizeValue ?: textFontSizeValue),
             lineHeight = range.lineHeight?.evaluate(resolver)?.unitToPx(displayMetrics, fontSizeUnit),
-            mask = createMaskData(context, bindingContext, range.mask),
+            mask = createMaskData(context, resolver, range.mask),
             strike = range.strike?.evaluate(resolver),
             textColor = range.textColor?.evaluate(resolver),
-            textShadow = createShadowData(context, bindingContext, range.textShadow, textData.textColor),
+            textShadow = createShadowData(context, resolver, range.textShadow, textData.textColor),
             topOffset = range.topOffset?.evaluate(resolver)?.toIntSafely()?.unitToPx(displayMetrics, fontSizeUnit),
             topOffsetStart = if (range.topOffset != null) start else null,
             topOffsetEnd = if (range.topOffset != null) end else null,
@@ -656,14 +654,13 @@ internal class SpannedTextBuilder @Inject constructor(
 
     private fun createShadowData(
         context: Context,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
         shadow: DivShadow?,
         @ColorInt textColor: Int
     ): ShadowData? {
         if (shadow == null) return null
 
         val displayMetrics = context.resources.displayMetrics
-        val resolver = bindingContext.expressionResolver
         val textAlpha = textColor ushr 24
 
         val radius = shadow.blur.evaluate(resolver).dpToPxF(displayMetrics)
@@ -679,12 +676,11 @@ internal class SpannedTextBuilder @Inject constructor(
 
     private fun createMaskData(
         context: Context,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
         mask: DivTextRangeMask?
     ): MaskData? {
         if (mask == null) return null
 
-        val resolver = bindingContext.expressionResolver
         val displayMetrics = context.resources.displayMetrics
         return when (mask) {
             is DivTextRangeMask.Particles -> {
