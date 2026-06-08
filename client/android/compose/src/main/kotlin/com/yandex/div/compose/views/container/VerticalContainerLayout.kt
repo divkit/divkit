@@ -105,9 +105,9 @@ private fun ColumnScope.makeVerticalChildModifier(
     hasWeightedChildren: Boolean,
     weightedChildrenMargins: Dp,
 ): Modifier = when {
-    childSize is DivSize.MatchParent && containerSize.isWrapContent ->
+    childSize.isMatchParent && containerSize.isWrapContent ->
         // TODO: Needs warning match_parent child and wrap_content container.
-        Modifier.height(IntrinsicSize.Max)
+        Modifier
     childSize is DivSize.MatchParent ->
         Modifier.weight(childSize.value.weight?.observedFloatValue() ?: 1f)
     childSize is DivSize.WrapContent && childSize.value.constrained?.observedValue() == true -> when {

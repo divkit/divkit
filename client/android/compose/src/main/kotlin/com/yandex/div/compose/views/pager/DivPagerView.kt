@@ -3,17 +3,17 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
+import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
+import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.Div
@@ -62,7 +62,14 @@ private fun PagerView(
         initialPage = defaultItem,
     )
 
-    Box(modifier.captureConstraints(isHorizontal, viewportSizePx, crossAxisBounded)) {
+    Box(
+        modifier = modifier
+            .constrainUnboundedMax(isWidth = isHorizontal)
+            .onMeasureConstraints { constraints ->
+                viewportSizePx.intValue = if (isHorizontal) constraints.maxWidth else constraints.maxHeight
+                crossAxisBounded.value = if (isHorizontal) constraints.hasBoundedHeight else constraints.hasBoundedWidth
+            }
+    ) {
         if (viewportSizePx.intValue <= 0) return@Box
 
         val density = LocalDensity.current
@@ -84,15 +91,4 @@ private fun PagerView(
             stateStorage = stateStorage
         )
     }
-}
-
-private fun Modifier.captureConstraints(
-    isHorizontal: Boolean,
-    onViewportSize: MutableState<Int>,
-    crossAxisBounded: MutableState<Boolean>,
-) = layout { measurable, constraints ->
-    onViewportSize.value = if (isHorizontal) constraints.maxWidth else constraints.maxHeight
-    crossAxisBounded.value = if (isHorizontal) constraints.hasBoundedHeight else constraints.hasBoundedWidth
-    val placeable = measurable.measure(constraints)
-    layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
 }

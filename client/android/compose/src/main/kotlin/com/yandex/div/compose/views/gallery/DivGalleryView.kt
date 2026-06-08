@@ -2,8 +2,6 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
@@ -30,7 +28,7 @@ internal fun DivGalleryView(
 
     if (columnCount > 1) {
         GalleryGridView(
-            modifier = modifier.constrainGridAxes(),
+            modifier = modifier,
             items = items,
             orientation = orientation,
             columnCount = columnCount,
@@ -45,7 +43,7 @@ internal fun DivGalleryView(
         val isScrollable = data.isScrollable(orientation)
 
         GalleryListView(
-            modifier = if (isScrollable) modifier.constrainScrollAxis(isHorizontal) else modifier,
+            modifier = modifier,
             items = items,
             orientation = orientation,
             itemSpacing = itemSpacing,
@@ -70,38 +68,5 @@ private fun DivGallery.isScrollable(orientation: DivGallery.Orientation): Boolea
         DivGallery.Orientation.VERTICAL -> {
             height.observeIsConstrained()
         }
-    }
-}
-
-private fun Modifier.constrainScrollAxis(isHorizontal: Boolean): Modifier = layout { measurable, constraints ->
-    val adjusted = if (isHorizontal && constraints.maxWidth == Constraints.Infinity) {
-        constraints.copy(maxWidth = constraints.minWidth.coerceAtLeast(0))
-    } else if (!isHorizontal && constraints.maxHeight == Constraints.Infinity) {
-        constraints.copy(maxHeight = constraints.minHeight.coerceAtLeast(0))
-    } else {
-        constraints
-    }
-    val placeable = measurable.measure(adjusted)
-    layout(placeable.width, placeable.height) {
-        placeable.placeRelative(0, 0)
-    }
-}
-
-private fun Modifier.constrainGridAxes(): Modifier = layout { measurable, constraints ->
-    val adjusted = constraints.copy(
-        maxWidth = if (constraints.maxWidth == Constraints.Infinity) {
-            constraints.minWidth.coerceAtLeast(0)
-        } else {
-            constraints.maxWidth
-        },
-        maxHeight = if (constraints.maxHeight == Constraints.Infinity) {
-            constraints.minHeight.coerceAtLeast(0)
-        } else {
-            constraints.maxHeight
-        },
-    )
-    val placeable = measurable.measure(adjusted)
-    layout(placeable.width, placeable.height) {
-        placeable.placeRelative(0, 0)
     }
 }

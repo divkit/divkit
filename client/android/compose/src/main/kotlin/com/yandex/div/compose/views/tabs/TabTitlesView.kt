@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -35,6 +36,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivTabs
 import kotlinx.coroutines.flow.first
 import kotlin.collections.first
@@ -50,12 +52,14 @@ internal fun TabTitlesView(
     onTabSelected: (Int) -> Unit,
 ) {
     val itemSpacing = style.itemSpacing.observedIntValue().dp
+    val rowHeight = style.observeRowHeight()
+    val intrinsicWidth = observeIntrinsicWidth(items, style, titleDelimiter, itemSpacing)
 
     val modifier = Modifier
         .padding(titlePaddings)
-        .requiredHeight(style.observeRowHeight())
+        .requiredHeight(rowHeight)
 
-    BoxWithConstraints {
+    BoxWithConstraints(modifier = Modifier.fixedIntrinsics(width = intrinsicWidth, height = rowHeight).then(modifier)) {
         if (constraints.hasBoundedWidth) {
             ScrollableTitleRow(
                 items = items,
@@ -63,7 +67,7 @@ internal fun TabTitlesView(
                 style = style,
                 titleDelimiter = titleDelimiter,
                 itemSpacing = itemSpacing,
-                modifier = modifier,
+                modifier = Modifier,
                 onTabSelected = onTabSelected,
             )
         } else {
@@ -73,11 +77,39 @@ internal fun TabTitlesView(
                 style = style,
                 titleDelimiter = titleDelimiter,
                 itemSpacing = itemSpacing,
-                modifier = modifier,
+                modifier = Modifier,
                 onTabSelected = onTabSelected,
             )
         }
     }
+}
+
+@Composable
+private fun observeIntrinsicWidth(
+    items: List<DivTabs.Item>,
+    style: DivTabs.TabTitleStyle,
+    titleDelimiter: DivTabs.TabTitleDelimiter?,
+    itemSpacing: Dp,
+): Dp {
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val textStyle = style.observeTextStyle(isSelected = false)
+    val horizontalTabPaddings = (style.paddings.left.observedIntValue() + style.paddings.right.observedIntValue()).dp
+    val delimiterWidth = titleDelimiter?.let {
+        it.width.value.observedValue().toDp(it.width.unit.observedValue())
+    } ?: 0.dp
+
+    val textWidthPx = items.sumOf { item ->
+        textMeasurer.measure(
+            text = item.title.observedValue(),
+            style = textStyle,
+        ).size.width
+    }
+    val extraWidth = horizontalTabPaddings * items.size +
+        itemSpacing * (items.size - 1).coerceAtLeast(0) +
+        (delimiterWidth + itemSpacing) * (items.size - 1).coerceAtLeast(0)
+
+    return with(density) { textWidthPx.toDp() + extraWidth }
 }
 
 @Composable

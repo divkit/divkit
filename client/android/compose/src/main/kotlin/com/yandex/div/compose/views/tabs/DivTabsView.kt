@@ -25,8 +25,10 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.compose.views.modifiers.padding
+import com.yandex.div.compose.views.modifiers.fixedIntrinsics
+import com.yandex.div2.DivSize
 import com.yandex.div2.DivTabs
 import kotlinx.coroutines.launch
 
@@ -58,14 +60,28 @@ internal fun DivTabsView(
 
     val scope = rememberCoroutineScope()
     val style = data.tabTitleStyle ?: DEFAULT_TAB_TITLE_STYLE
+    val fixedWidth = (data.width as? DivSize.Fixed)?.value?.observedValue()
+    val fixedHeight = (data.height as? DivSize.Fixed)?.value?.observedValue()
+    val titlePaddings = data.titlePaddings.observeInsets()
+    val contentPaddings = data.paddings.observeInsets()
+    val minIntrinsicHeight = style.observeRowHeight() +
+        titlePaddings.calculateTopPadding() +
+        titlePaddings.calculateBottomPadding() +
+        contentPaddings.calculateTopPadding() +
+        contentPaddings.calculateBottomPadding()
 
-    Column(modifier = modifier.padding(data.paddings)) {
+    Column(
+        modifier = Modifier
+            .fixedIntrinsics(width = fixedWidth, height = fixedHeight ?: minIntrinsicHeight)
+            .then(modifier)
+            .padding(contentPaddings)
+    ) {
         TabTitlesView(
             items = items,
             pagerState = state.pagerState,
             style = style,
             titleDelimiter = data.tabTitleDelimiter,
-            titlePaddings = data.titlePaddings.observeInsets(),
+            titlePaddings = titlePaddings,
             onTabSelected = { index -> scope.launch { state.selectTab(index) } },
         )
 
