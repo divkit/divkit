@@ -15,7 +15,7 @@
     }
   },
   "definitions": {
-    "div_state": {
+    "state": {
       "type": "object",
       "typescript_templatable": false,
       "codegen": {
@@ -53,7 +53,7 @@
     "states": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/div_state"
+        "$ref": "#/definitions/state"
       },
       "minItems": 1,
       "$description": "translations.json#/div_data_states"

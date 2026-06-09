@@ -557,7 +557,7 @@
       "entity_with_optional_string_enum_property.json": {
         "type": "object",
         "definitions": {
-          "string_enum_property": {
+          "property": {
             "type": "string",
             "enum": [
               "first",
@@ -574,14 +574,14 @@
           },
           "property": {
             "$resolved_refs": [
-              "#/definitions/string_enum_property"
+              "#/definitions/property"
             ],
             "type": "string",
             "enum": [
               "first",
               "second"
             ],
-            "$typename": "string_enum_property"
+            "$typename": "property"
           }
         },
         "required": [
@@ -918,7 +918,7 @@
       "entity_with_string_enum_property.json": {
         "type": "object",
         "definitions": {
-          "string_enum_property": {
+          "property": {
             "type": "string",
             "enum": [
               "first",
@@ -935,14 +935,14 @@
           },
           "property": {
             "$resolved_refs": [
-              "#/definitions/string_enum_property"
+              "#/definitions/property"
             ],
             "type": "string",
             "enum": [
               "first",
               "second"
             ],
-            "$typename": "string_enum_property"
+            "$typename": "property"
           }
         },
         "required": [

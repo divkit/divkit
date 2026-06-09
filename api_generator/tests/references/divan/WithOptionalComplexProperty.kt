@@ -45,7 +45,7 @@ data class WithOptionalComplexProperty internal constructor(
 
     @ExposedCopyVisibility
     data class Properties internal constructor(
-        val property: Property<Property>?,
+        val property: Property<ComplexProperty>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -56,20 +56,20 @@ data class WithOptionalComplexProperty internal constructor(
     }
 
     /**
-     * Can be created using the method [withOptionalComplexPropertyProperty].
+     * Can be created using the method [withOptionalComplexPropertyComplexProperty].
      * 
      * Required parameters: `value`.
      */
     @Generated
     @ExposedCopyVisibility
-    data class Property internal constructor(
+    data class ComplexProperty internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
         @JsonAnyGetter
         internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-        operator fun plus(additive: Properties): Property = Property(
+        operator fun plus(additive: Properties): ComplexProperty = ComplexProperty(
             Properties(
                 value = additive.value ?: properties.value,
             )
@@ -93,7 +93,7 @@ data class WithOptionalComplexProperty internal constructor(
 @Generated
 fun DivScope.withOptionalComplexProperty(
     `use named arguments`: Guard = Guard.instance,
-    property: WithOptionalComplexProperty.Property? = null,
+    property: WithOptionalComplexProperty.ComplexProperty? = null,
 ): WithOptionalComplexProperty = WithOptionalComplexProperty(
     WithOptionalComplexProperty.Properties(
         property = valueOrNull(property),
@@ -103,7 +103,7 @@ fun DivScope.withOptionalComplexProperty(
 @Generated
 fun DivScope.withOptionalComplexPropertyProps(
     `use named arguments`: Guard = Guard.instance,
-    property: WithOptionalComplexProperty.Property? = null,
+    property: WithOptionalComplexProperty.ComplexProperty? = null,
 ) = WithOptionalComplexProperty.Properties(
     property = valueOrNull(property),
 )
@@ -111,7 +111,7 @@ fun DivScope.withOptionalComplexPropertyProps(
 @Generated
 fun TemplateScope.withOptionalComplexPropertyRefs(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithOptionalComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithOptionalComplexProperty.ComplexProperty>? = null,
 ) = WithOptionalComplexProperty.Properties(
     property = property,
 )
@@ -119,7 +119,7 @@ fun TemplateScope.withOptionalComplexPropertyRefs(
 @Generated
 fun WithOptionalComplexProperty.override(
     `use named arguments`: Guard = Guard.instance,
-    property: WithOptionalComplexProperty.Property? = null,
+    property: WithOptionalComplexProperty.ComplexProperty? = null,
 ): WithOptionalComplexProperty = WithOptionalComplexProperty(
     WithOptionalComplexProperty.Properties(
         property = valueOrNull(property) ?: properties.property,
@@ -129,7 +129,7 @@ fun WithOptionalComplexProperty.override(
 @Generated
 fun WithOptionalComplexProperty.defer(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithOptionalComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithOptionalComplexProperty.ComplexProperty>? = null,
 ): WithOptionalComplexProperty = WithOptionalComplexProperty(
     WithOptionalComplexProperty.Properties(
         property = property ?: properties.property,
@@ -139,7 +139,7 @@ fun WithOptionalComplexProperty.defer(
 @Generated
 fun WithOptionalComplexProperty.modify(
     `use named arguments`: Guard = Guard.instance,
-    property: Property<WithOptionalComplexProperty.Property>? = null,
+    property: Property<WithOptionalComplexProperty.ComplexProperty>? = null,
 ): WithOptionalComplexProperty = WithOptionalComplexProperty(
     WithOptionalComplexProperty.Properties(
         property = property ?: properties.property,
@@ -149,7 +149,7 @@ fun WithOptionalComplexProperty.modify(
 @Generated
 fun Component<WithOptionalComplexProperty>.override(
     `use named arguments`: Guard = Guard.instance,
-    property: WithOptionalComplexProperty.Property? = null,
+    property: WithOptionalComplexProperty.ComplexProperty? = null,
 ): Component<WithOptionalComplexProperty> = Component(
     template = template,
     properties = WithOptionalComplexProperty.Properties(
@@ -160,7 +160,7 @@ fun Component<WithOptionalComplexProperty>.override(
 @Generated
 fun Component<WithOptionalComplexProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithOptionalComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithOptionalComplexProperty.ComplexProperty>? = null,
 ): Component<WithOptionalComplexProperty> = Component(
     template = template,
     properties = WithOptionalComplexProperty.Properties(
@@ -171,7 +171,7 @@ fun Component<WithOptionalComplexProperty>.defer(
 @Generated
 fun Component<WithOptionalComplexProperty>.modify(
     `use named arguments`: Guard = Guard.instance,
-    property: Property<WithOptionalComplexProperty.Property>? = null,
+    property: Property<WithOptionalComplexProperty.ComplexProperty>? = null,
 ): Component<WithOptionalComplexProperty> = Component(
     template = template,
     properties = WithOptionalComplexProperty.Properties(
@@ -189,70 +189,70 @@ operator fun Component<WithOptionalComplexProperty>.plus(additive: WithOptionalC
 fun WithOptionalComplexProperty.asList() = listOf(this)
 
 @Generated
-fun DivScope.withOptionalComplexPropertyProperty(
+fun DivScope.withOptionalComplexPropertyComplexProperty(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
-    WithOptionalComplexProperty.Property.Properties(
+): WithOptionalComplexProperty.ComplexProperty = WithOptionalComplexProperty.ComplexProperty(
+    WithOptionalComplexProperty.ComplexProperty.Properties(
         value = valueOrNull(value),
     )
 )
 
 @Generated
-fun DivScope.withOptionalComplexPropertyPropertyProps(
+fun DivScope.withOptionalComplexPropertyComplexPropertyProps(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-) = WithOptionalComplexProperty.Property.Properties(
+) = WithOptionalComplexProperty.ComplexProperty.Properties(
     value = valueOrNull(value),
 )
 
 @Generated
-fun TemplateScope.withOptionalComplexPropertyPropertyRefs(
+fun TemplateScope.withOptionalComplexPropertyComplexPropertyRefs(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
-) = WithOptionalComplexProperty.Property.Properties(
+) = WithOptionalComplexProperty.ComplexProperty.Properties(
     value = value,
 )
 
 @Generated
-fun WithOptionalComplexProperty.Property.override(
+fun WithOptionalComplexProperty.ComplexProperty.override(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
-    WithOptionalComplexProperty.Property.Properties(
+): WithOptionalComplexProperty.ComplexProperty = WithOptionalComplexProperty.ComplexProperty(
+    WithOptionalComplexProperty.ComplexProperty.Properties(
         value = valueOrNull(value) ?: properties.value,
     )
 )
 
 @Generated
-fun WithOptionalComplexProperty.Property.defer(
+fun WithOptionalComplexProperty.ComplexProperty.defer(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
-): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
-    WithOptionalComplexProperty.Property.Properties(
+): WithOptionalComplexProperty.ComplexProperty = WithOptionalComplexProperty.ComplexProperty(
+    WithOptionalComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithOptionalComplexProperty.Property.modify(
+fun WithOptionalComplexProperty.ComplexProperty.modify(
     `use named arguments`: Guard = Guard.instance,
     value: Property<Url>? = null,
-): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
-    WithOptionalComplexProperty.Property.Properties(
+): WithOptionalComplexProperty.ComplexProperty = WithOptionalComplexProperty.ComplexProperty(
+    WithOptionalComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithOptionalComplexProperty.Property.evaluate(
+fun WithOptionalComplexProperty.ComplexProperty.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Url>? = null,
-): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
-    WithOptionalComplexProperty.Property.Properties(
+): WithOptionalComplexProperty.ComplexProperty = WithOptionalComplexProperty.ComplexProperty(
+    WithOptionalComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithOptionalComplexProperty.Property.asList() = listOf(this)
+fun WithOptionalComplexProperty.ComplexProperty.asList() = listOf(this)

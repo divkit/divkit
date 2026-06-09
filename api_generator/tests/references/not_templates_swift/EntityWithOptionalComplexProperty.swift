@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 public final class EntityWithOptionalComplexProperty: Sendable {
-  public final class Property: Sendable {
+  public final class ComplexProperty: Sendable {
     public let value: Expression<URL>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
@@ -26,16 +26,16 @@ public final class EntityWithOptionalComplexProperty: Sendable {
   }
 
   public static let type: String = "entity_with_optional_complex_property"
-  public let property: Property?
+  public let property: ComplexProperty?
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithOptionalComplexProperty.Property(dictionary: dict, context: context) })
+      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithOptionalComplexProperty.ComplexProperty(dictionary: dict, context: context) })
     )
   }
 
   init(
-    property: Property? = nil
+    property: ComplexProperty? = nil
   ) {
     self.property = property
   }
@@ -65,8 +65,8 @@ extension EntityWithOptionalComplexProperty: Serializable {
 }
 
 #if DEBUG
-extension EntityWithOptionalComplexProperty.Property: Equatable {
-  public static func ==(lhs: EntityWithOptionalComplexProperty.Property, rhs: EntityWithOptionalComplexProperty.Property) -> Bool {
+extension EntityWithOptionalComplexProperty.ComplexProperty: Equatable {
+  public static func ==(lhs: EntityWithOptionalComplexProperty.ComplexProperty, rhs: EntityWithOptionalComplexProperty.ComplexProperty) -> Bool {
     guard
       lhs.value == rhs.value
     else {
@@ -77,7 +77,7 @@ extension EntityWithOptionalComplexProperty.Property: Equatable {
 }
 #endif
 
-extension EntityWithOptionalComplexProperty.Property: Serializable {
+extension EntityWithOptionalComplexProperty.ComplexProperty: Serializable {
   @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]

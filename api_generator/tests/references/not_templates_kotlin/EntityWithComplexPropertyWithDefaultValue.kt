@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexPropertyWithDefaultValue(
-    @JvmField val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: ComplexProperty = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.ComplexProperty(value = Expression.constant("Default text"))
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -36,7 +36,7 @@ class EntityWithComplexPropertyWithDefaultValue(
     }
 
     fun copy(
-        property: Property = this.property,
+        property: ComplexProperty = this.property,
     ) = EntityWithComplexPropertyWithDefaultValue(
         property = property,
     )
@@ -51,21 +51,21 @@ class EntityWithComplexPropertyWithDefaultValue(
     companion object {
         const val TYPE = "entity_with_complex_property_with_default_value"
 
-        private val PROPERTY_DEFAULT_VALUE = EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+        private val PROPERTY_DEFAULT_VALUE = EntityWithComplexPropertyWithDefaultValue.ComplexProperty(value = Expression.constant("Default text"))
 
         @JvmStatic
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithComplexPropertyWithDefaultValue {
             val logger = env.logger
             return EntityWithComplexPropertyWithDefaultValue(
-                property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env) ?: PROPERTY_DEFAULT_VALUE
+                property = JsonParser.readOptional(json, "property", ComplexProperty.CREATOR, logger, env) ?: PROPERTY_DEFAULT_VALUE
             )
         }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValue(env, json = it) }
     }
 
-    class Property(
+    class ComplexProperty(
         @JvmField val value: Expression<String>,
     ) : JSONSerializable, Hashable {
 
@@ -82,14 +82,14 @@ class EntityWithComplexPropertyWithDefaultValue(
             return hash
         }
 
-        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        fun equals(other: ComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(
             value: Expression<String> = this.value,
-        ) = Property(
+        ) = ComplexProperty(
             value = value,
         )
 
@@ -102,14 +102,14 @@ class EntityWithComplexPropertyWithDefaultValue(
         companion object {
             @JvmStatic
             @JvmName("fromJson")
-            operator fun invoke(env: ParsingEnvironment, json: JSONObject): Property {
+            operator fun invoke(env: ParsingEnvironment, json: JSONObject): ComplexProperty {
                 val logger = env.logger
-                return Property(
+                return ComplexProperty(
                     value = JsonParser.readExpression(json, "value", logger, env, TYPE_HELPER_STRING)
                 )
             }
 
-            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Property(env, json = it) }
+            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> ComplexProperty(env, json = it) }
         }
     }
 }

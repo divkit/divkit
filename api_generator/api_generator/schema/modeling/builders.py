@@ -224,7 +224,7 @@ def type_property_build(dictionary: Dict[str, any],
                         location: ElementLocation,
                         mode: GenerationMode,
                         config: Config.GenerationConfig) -> Tuple[PropertyType, List[Declarable]]:
-    name: str = alias(config.lang, dictionary) or outer_name
+    name: str = alias(config.lang, dictionary) or dictionary.get('$typename') or outer_name
 
     if is_boolean_int_property(dictionary):
         return BoolInt(), []

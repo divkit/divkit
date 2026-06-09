@@ -45,7 +45,7 @@ data class WithComplexProperty internal constructor(
 
     @ExposedCopyVisibility
     data class Properties internal constructor(
-        val property: Property<Property>?,
+        val property: Property<ComplexProperty>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -56,20 +56,20 @@ data class WithComplexProperty internal constructor(
     }
 
     /**
-     * Can be created using the method [withComplexPropertyProperty].
+     * Can be created using the method [withComplexPropertyComplexProperty].
      * 
      * Required parameters: `value`.
      */
     @Generated
     @ExposedCopyVisibility
-    data class Property internal constructor(
+    data class ComplexProperty internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
         @JsonAnyGetter
         internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-        operator fun plus(additive: Properties): Property = Property(
+        operator fun plus(additive: Properties): ComplexProperty = ComplexProperty(
             Properties(
                 value = additive.value ?: properties.value,
             )
@@ -93,7 +93,7 @@ data class WithComplexProperty internal constructor(
 @Generated
 fun DivScope.withComplexProperty(
     `use named arguments`: Guard = Guard.instance,
-    property: WithComplexProperty.Property? = null,
+    property: WithComplexProperty.ComplexProperty? = null,
 ): WithComplexProperty = WithComplexProperty(
     WithComplexProperty.Properties(
         property = valueOrNull(property),
@@ -103,7 +103,7 @@ fun DivScope.withComplexProperty(
 @Generated
 fun DivScope.withComplexPropertyProps(
     `use named arguments`: Guard = Guard.instance,
-    property: WithComplexProperty.Property? = null,
+    property: WithComplexProperty.ComplexProperty? = null,
 ) = WithComplexProperty.Properties(
     property = valueOrNull(property),
 )
@@ -111,7 +111,7 @@ fun DivScope.withComplexPropertyProps(
 @Generated
 fun TemplateScope.withComplexPropertyRefs(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithComplexProperty.ComplexProperty>? = null,
 ) = WithComplexProperty.Properties(
     property = property,
 )
@@ -119,7 +119,7 @@ fun TemplateScope.withComplexPropertyRefs(
 @Generated
 fun WithComplexProperty.override(
     `use named arguments`: Guard = Guard.instance,
-    property: WithComplexProperty.Property? = null,
+    property: WithComplexProperty.ComplexProperty? = null,
 ): WithComplexProperty = WithComplexProperty(
     WithComplexProperty.Properties(
         property = valueOrNull(property) ?: properties.property,
@@ -129,7 +129,7 @@ fun WithComplexProperty.override(
 @Generated
 fun WithComplexProperty.defer(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithComplexProperty.ComplexProperty>? = null,
 ): WithComplexProperty = WithComplexProperty(
     WithComplexProperty.Properties(
         property = property ?: properties.property,
@@ -139,7 +139,7 @@ fun WithComplexProperty.defer(
 @Generated
 fun WithComplexProperty.modify(
     `use named arguments`: Guard = Guard.instance,
-    property: Property<WithComplexProperty.Property>? = null,
+    property: Property<WithComplexProperty.ComplexProperty>? = null,
 ): WithComplexProperty = WithComplexProperty(
     WithComplexProperty.Properties(
         property = property ?: properties.property,
@@ -149,7 +149,7 @@ fun WithComplexProperty.modify(
 @Generated
 fun Component<WithComplexProperty>.override(
     `use named arguments`: Guard = Guard.instance,
-    property: WithComplexProperty.Property? = null,
+    property: WithComplexProperty.ComplexProperty? = null,
 ): Component<WithComplexProperty> = Component(
     template = template,
     properties = WithComplexProperty.Properties(
@@ -160,7 +160,7 @@ fun Component<WithComplexProperty>.override(
 @Generated
 fun Component<WithComplexProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
-    property: ReferenceProperty<WithComplexProperty.Property>? = null,
+    property: ReferenceProperty<WithComplexProperty.ComplexProperty>? = null,
 ): Component<WithComplexProperty> = Component(
     template = template,
     properties = WithComplexProperty.Properties(
@@ -171,7 +171,7 @@ fun Component<WithComplexProperty>.defer(
 @Generated
 fun Component<WithComplexProperty>.modify(
     `use named arguments`: Guard = Guard.instance,
-    property: Property<WithComplexProperty.Property>? = null,
+    property: Property<WithComplexProperty.ComplexProperty>? = null,
 ): Component<WithComplexProperty> = Component(
     template = template,
     properties = WithComplexProperty.Properties(
@@ -189,70 +189,70 @@ operator fun Component<WithComplexProperty>.plus(additive: WithComplexProperty.P
 fun WithComplexProperty.asList() = listOf(this)
 
 @Generated
-fun DivScope.withComplexPropertyProperty(
+fun DivScope.withComplexPropertyComplexProperty(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-): WithComplexProperty.Property = WithComplexProperty.Property(
-    WithComplexProperty.Property.Properties(
+): WithComplexProperty.ComplexProperty = WithComplexProperty.ComplexProperty(
+    WithComplexProperty.ComplexProperty.Properties(
         value = valueOrNull(value),
     )
 )
 
 @Generated
-fun DivScope.withComplexPropertyPropertyProps(
+fun DivScope.withComplexPropertyComplexPropertyProps(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-) = WithComplexProperty.Property.Properties(
+) = WithComplexProperty.ComplexProperty.Properties(
     value = valueOrNull(value),
 )
 
 @Generated
-fun TemplateScope.withComplexPropertyPropertyRefs(
+fun TemplateScope.withComplexPropertyComplexPropertyRefs(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
-) = WithComplexProperty.Property.Properties(
+) = WithComplexProperty.ComplexProperty.Properties(
     value = value,
 )
 
 @Generated
-fun WithComplexProperty.Property.override(
+fun WithComplexProperty.ComplexProperty.override(
     `use named arguments`: Guard = Guard.instance,
     value: Url? = null,
-): WithComplexProperty.Property = WithComplexProperty.Property(
-    WithComplexProperty.Property.Properties(
+): WithComplexProperty.ComplexProperty = WithComplexProperty.ComplexProperty(
+    WithComplexProperty.ComplexProperty.Properties(
         value = valueOrNull(value) ?: properties.value,
     )
 )
 
 @Generated
-fun WithComplexProperty.Property.defer(
+fun WithComplexProperty.ComplexProperty.defer(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
-): WithComplexProperty.Property = WithComplexProperty.Property(
-    WithComplexProperty.Property.Properties(
+): WithComplexProperty.ComplexProperty = WithComplexProperty.ComplexProperty(
+    WithComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithComplexProperty.Property.modify(
+fun WithComplexProperty.ComplexProperty.modify(
     `use named arguments`: Guard = Guard.instance,
     value: Property<Url>? = null,
-): WithComplexProperty.Property = WithComplexProperty.Property(
-    WithComplexProperty.Property.Properties(
+): WithComplexProperty.ComplexProperty = WithComplexProperty.ComplexProperty(
+    WithComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithComplexProperty.Property.evaluate(
+fun WithComplexProperty.ComplexProperty.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Url>? = null,
-): WithComplexProperty.Property = WithComplexProperty.Property(
-    WithComplexProperty.Property.Properties(
+): WithComplexProperty.ComplexProperty = WithComplexProperty.ComplexProperty(
+    WithComplexProperty.ComplexProperty.Properties(
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun WithComplexProperty.Property.asList() = listOf(this)
+fun WithComplexProperty.ComplexProperty.asList() = listOf(this)

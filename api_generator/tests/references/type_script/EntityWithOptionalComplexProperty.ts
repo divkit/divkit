@@ -8,7 +8,7 @@ export class EntityWithOptionalComplexProperty<T extends EntityWithOptionalCompl
     readonly _props?: Exact<EntityWithOptionalComplexPropertyProps, T>;
 
     readonly type = 'entity_with_optional_complex_property';
-    property?: Type<IEntityWithOptionalComplexPropertyProperty>;
+    property?: Type<IEntityWithOptionalComplexPropertyComplexProperty>;
 
     constructor(props?: Exact<EntityWithOptionalComplexPropertyProps, T>) {
         this.property = props?.property;
@@ -16,9 +16,9 @@ export class EntityWithOptionalComplexProperty<T extends EntityWithOptionalCompl
 }
 
 export interface EntityWithOptionalComplexPropertyProps {
-    property?: Type<IEntityWithOptionalComplexPropertyProperty>;
+    property?: Type<IEntityWithOptionalComplexPropertyComplexProperty>;
 }
 
-export interface IEntityWithOptionalComplexPropertyProperty {
+export interface IEntityWithOptionalComplexPropertyComplexProperty {
     value: Type<string | DivExpression>;
 }

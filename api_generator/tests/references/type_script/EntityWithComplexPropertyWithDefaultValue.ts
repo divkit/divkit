@@ -8,7 +8,7 @@ export class EntityWithComplexPropertyWithDefaultValue<T extends EntityWithCompl
     readonly _props?: Exact<EntityWithComplexPropertyWithDefaultValueProps, T>;
 
     readonly type = 'entity_with_complex_property_with_default_value';
-    property?: Type<IEntityWithComplexPropertyWithDefaultValueProperty>;
+    property?: Type<IEntityWithComplexPropertyWithDefaultValueComplexProperty>;
 
     constructor(props?: Exact<EntityWithComplexPropertyWithDefaultValueProps, T>) {
         this.property = props?.property;
@@ -16,9 +16,9 @@ export class EntityWithComplexPropertyWithDefaultValue<T extends EntityWithCompl
 }
 
 export interface EntityWithComplexPropertyWithDefaultValueProps {
-    property?: Type<IEntityWithComplexPropertyWithDefaultValueProperty>;
+    property?: Type<IEntityWithComplexPropertyWithDefaultValueComplexProperty>;
 }
 
-export interface IEntityWithComplexPropertyWithDefaultValueProperty {
+export interface IEntityWithComplexPropertyWithDefaultValueComplexProperty {
     value: Type<string | DivExpression>;
 }

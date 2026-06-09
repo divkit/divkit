@@ -8,7 +8,7 @@ export class EntityWithComplexProperty<T extends EntityWithComplexPropertyProps 
     readonly _props?: Exact<EntityWithComplexPropertyProps, T>;
 
     readonly type = 'entity_with_complex_property';
-    property: Type<IEntityWithComplexPropertyProperty>;
+    property: Type<IEntityWithComplexPropertyComplexProperty>;
 
     constructor(props: Exact<EntityWithComplexPropertyProps, T>) {
         this.property = props.property;
@@ -16,9 +16,9 @@ export class EntityWithComplexProperty<T extends EntityWithComplexPropertyProps 
 }
 
 export interface EntityWithComplexPropertyProps {
-    property: Type<IEntityWithComplexPropertyProperty>;
+    property: Type<IEntityWithComplexPropertyComplexProperty>;
 }
 
-export interface IEntityWithComplexPropertyProperty {
+export interface IEntityWithComplexPropertyComplexProperty {
     value: Type<string | DivExpression>;
 }

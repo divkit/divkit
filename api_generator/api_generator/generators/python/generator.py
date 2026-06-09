@@ -68,7 +68,7 @@ class PythonGenerator(Generator):
         file_content += f"__all__ = ({', '.join(sorted(repr(imp) for imp in all_imports))})"
 
         with open(f'{self._config.output_path}/__init__.py', 'w') as file:
-            file.write(str(file_content))
+            file.write(str(file_content) + '\n')
             file.close()
 
     def __inner_types_classes(self, entity: PythonEntity) -> List[str]:

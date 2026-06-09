@@ -6,7 +6,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexProperty(
-    @JvmField val property: Property,
+    @JvmField val property: ComplexProperty,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -28,7 +28,7 @@ class EntityWithComplexProperty(
     }
 
     fun copy(
-        property: Property = this.property,
+        property: ComplexProperty = this.property,
     ) = EntityWithComplexProperty(
         property = property,
     )
@@ -37,7 +37,7 @@ class EntityWithComplexProperty(
         const val TYPE = "entity_with_complex_property"
     }
 
-    class Property(
+    class ComplexProperty(
         @JvmField val value: Expression<Uri>,
     ) : Hashable {
 
@@ -54,14 +54,14 @@ class EntityWithComplexProperty(
             return hash
         }
 
-        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        fun equals(other: ComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(
             value: Expression<Uri> = this.value,
-        ) = Property(
+        ) = ComplexProperty(
             value = value,
         )
     }

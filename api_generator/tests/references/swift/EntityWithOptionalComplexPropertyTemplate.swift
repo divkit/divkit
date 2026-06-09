@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sendable {
-  public final class PropertyTemplate: TemplateValue, Sendable {
+  public final class ComplexPropertyTemplate: TemplateValue, Sendable {
     public let value: Field<Expression<URL>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -20,7 +20,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
       self.value = value
     }
 
-    private static func resolveOnlyLinks(context: TemplatesContext, parent: PropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ComplexPropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty.ComplexProperty> {
       let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
       var errors = mergeErrors(
         valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -33,13 +33,13 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
       else {
         return .failure(NonEmptyArray(errors)!)
       }
-      let result = EntityWithOptionalComplexProperty.Property(
+      let result = EntityWithOptionalComplexProperty.ComplexProperty(
         value: { valueNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: TemplatesContext, parent: PropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
+    public static func resolveValue(context: TemplatesContext, parent: ComplexPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalComplexProperty.ComplexProperty> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -72,24 +72,24 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
       else {
         return .failure(NonEmptyArray(errors)!)
       }
-      let result = EntityWithOptionalComplexProperty.Property(
+      let result = EntityWithOptionalComplexProperty.ComplexProperty(
         value: { valueNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: [TemplateName: Any]) throws -> PropertyTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ComplexPropertyTemplate {
       return self
     }
 
-    public func resolveParent(templates: [TemplateName: Any]) throws -> PropertyTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ComplexPropertyTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
 
   public static let type: String = "entity_with_optional_complex_property"
   public let parent: String?
-  public let property: Field<PropertyTemplate>?
+  public let property: Field<ComplexPropertyTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
@@ -100,7 +100,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
 
   init(
     parent: String?,
-    property: Field<PropertyTemplate>? = nil
+    property: Field<ComplexPropertyTemplate>? = nil
   ) {
     self.parent = parent
     self.property = property
@@ -121,7 +121,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var propertyValue: DeserializationResult<EntityWithOptionalComplexProperty.Property> = .noValue
+    var propertyValue: DeserializationResult<EntityWithOptionalComplexProperty.ComplexProperty> = .noValue
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable
@@ -129,12 +129,12 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
       for (key, __dictValue) in context.templateData {
         _ = {
           if key == "property" {
-           propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self).merged(with: propertyValue)
+           propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.ComplexPropertyTemplate.self).merged(with: propertyValue)
           }
         }()
         _ = {
          if key == parent?.property?.link {
-           propertyValue = propertyValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self) })
+           propertyValue = propertyValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.ComplexPropertyTemplate.self) })
           }
         }()
       }

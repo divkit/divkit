@@ -33,7 +33,7 @@
       ],
       "$description": "translations.json#/div_tabs_item"
     },
-    "delimiter_style": {
+    "tab_title_delimiter": {
       "type": "object",
       "properties": {
         "image_url": {
@@ -211,7 +211,7 @@
           "$description": "translations.json#/div_tabs_tab_title_style"
         },
         "tab_title_delimiter": {
-          "$ref": "#/definitions/delimiter_style",
+          "$ref": "#/definitions/tab_title_delimiter",
           "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
           "platforms": [
             "android",

@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 public final class EntityWithComplexPropertyWithDefaultValue: Sendable {
-  public final class Property: Sendable {
+  public final class ComplexProperty: Sendable {
     public let value: Expression<String>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> String? {
@@ -26,16 +26,16 @@ public final class EntityWithComplexPropertyWithDefaultValue: Sendable {
   }
 
   public static let type: String = "entity_with_complex_property_with_default_value"
-  public let property: Property // default value: EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
+  public let property: ComplexProperty // default value: EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithComplexPropertyWithDefaultValue.Property(dictionary: dict, context: context) })
+      property: try dictionary.getOptionalField("property", transform: { (dict: [String: Any]) in try EntityWithComplexPropertyWithDefaultValue.ComplexProperty(dictionary: dict, context: context) })
     )
   }
 
   init(
-    property: Property? = nil
+    property: ComplexProperty? = nil
   ) {
     self.property = property ?? EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
   }
@@ -65,8 +65,8 @@ extension EntityWithComplexPropertyWithDefaultValue: Serializable {
 }
 
 #if DEBUG
-extension EntityWithComplexPropertyWithDefaultValue.Property: Equatable {
-  public static func ==(lhs: EntityWithComplexPropertyWithDefaultValue.Property, rhs: EntityWithComplexPropertyWithDefaultValue.Property) -> Bool {
+extension EntityWithComplexPropertyWithDefaultValue.ComplexProperty: Equatable {
+  public static func ==(lhs: EntityWithComplexPropertyWithDefaultValue.ComplexProperty, rhs: EntityWithComplexPropertyWithDefaultValue.ComplexProperty) -> Bool {
     guard
       lhs.value == rhs.value
     else {
@@ -77,7 +77,7 @@ extension EntityWithComplexPropertyWithDefaultValue.Property: Equatable {
 }
 #endif
 
-extension EntityWithComplexPropertyWithDefaultValue.Property: Serializable {
+extension EntityWithComplexPropertyWithDefaultValue.ComplexProperty: Serializable {
   @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]

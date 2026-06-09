@@ -7,11 +7,11 @@ from .entity_with_array_of_enums import EntityWithArrayOfEnums, EntityWithArrayO
 from .entity_with_array_of_expressions import EntityWithArrayOfExpressions
 from .entity_with_array_of_nested_items import EntityWithArrayOfNestedItems, EntityWithArrayOfNestedItemsItem
 from .entity_with_array_with_transform import EntityWithArrayWithTransform
-from .entity_with_complex_property import EntityWithComplexProperty, EntityWithComplexPropertyProperty
-from .entity_with_complex_property_with_default_value import EntityWithComplexPropertyWithDefaultValue, EntityWithComplexPropertyWithDefaultValueProperty
+from .entity_with_complex_property import EntityWithComplexProperty, EntityWithComplexPropertyComplexProperty
+from .entity_with_complex_property_with_default_value import EntityWithComplexPropertyWithDefaultValue, EntityWithComplexPropertyWithDefaultValueComplexProperty
 from .entity_with_entity_property import EntityWithEntityProperty
 from .entity_with_json_property import EntityWithJsonProperty
-from .entity_with_optional_complex_property import EntityWithOptionalComplexProperty, EntityWithOptionalComplexPropertyProperty
+from .entity_with_optional_complex_property import EntityWithOptionalComplexProperty, EntityWithOptionalComplexPropertyComplexProperty
 from .entity_with_optional_property import EntityWithOptionalProperty
 from .entity_with_optional_string_enum_property import EntityWithOptionalStringEnumProperty, EntityWithOptionalStringEnumPropertyProperty
 from .entity_with_property_with_default_value import EntityWithPropertyWithDefaultValue, EntityWithPropertyWithDefaultValueNested
@@ -33,13 +33,13 @@ EntityWithArrayOfNestedItems.update_forward_refs()
 EntityWithArrayOfNestedItemsItem.update_forward_refs()
 EntityWithArrayWithTransform.update_forward_refs()
 EntityWithComplexProperty.update_forward_refs()
-EntityWithComplexPropertyProperty.update_forward_refs()
+EntityWithComplexPropertyComplexProperty.update_forward_refs()
 EntityWithComplexPropertyWithDefaultValue.update_forward_refs()
-EntityWithComplexPropertyWithDefaultValueProperty.update_forward_refs()
+EntityWithComplexPropertyWithDefaultValueComplexProperty.update_forward_refs()
 EntityWithEntityProperty.update_forward_refs()
 EntityWithJsonProperty.update_forward_refs()
 EntityWithOptionalComplexProperty.update_forward_refs()
-EntityWithOptionalComplexPropertyProperty.update_forward_refs()
+EntityWithOptionalComplexPropertyComplexProperty.update_forward_refs()
 EntityWithOptionalProperty.update_forward_refs()
 EntityWithOptionalStringEnumProperty.update_forward_refs()
 EntityWithPropertyWithDefaultValue.update_forward_refs()
@@ -54,4 +54,4 @@ EntityWithoutProperties.update_forward_refs()
 WithDefault.update_forward_refs()
 WithoutDefault.update_forward_refs()
 
-__all__ = ('Entity', 'EntityWithArray', 'EntityWithArrayOfEnums', 'EntityWithArrayOfEnumsItem', 'EntityWithArrayOfExpressions', 'EntityWithArrayOfNestedItems', 'EntityWithArrayOfNestedItemsItem', 'EntityWithArrayWithTransform', 'EntityWithComplexProperty', 'EntityWithComplexPropertyProperty', 'EntityWithComplexPropertyWithDefaultValue', 'EntityWithComplexPropertyWithDefaultValueProperty', 'EntityWithEntityProperty', 'EntityWithJsonProperty', 'EntityWithOptionalComplexProperty', 'EntityWithOptionalComplexPropertyProperty', 'EntityWithOptionalProperty', 'EntityWithOptionalStringEnumProperty', 'EntityWithOptionalStringEnumPropertyProperty', 'EntityWithPropertyWithDefaultValue', 'EntityWithPropertyWithDefaultValueNested', 'EntityWithRawArray', 'EntityWithRequiredProperty', 'EntityWithSimpleProperties', 'EntityWithStringArrayProperty', 'EntityWithStringEnumProperty', 'EntityWithStringEnumPropertyProperty', 'EntityWithStringEnumPropertyWithDefaultValue', 'EntityWithStringEnumPropertyWithDefaultValueValue', 'EntityWithoutProperties', 'EnumWithDefaultType', 'WithDefault', 'WithoutDefault')
+__all__ = ('Entity', 'EntityWithArray', 'EntityWithArrayOfEnums', 'EntityWithArrayOfEnumsItem', 'EntityWithArrayOfExpressions', 'EntityWithArrayOfNestedItems', 'EntityWithArrayOfNestedItemsItem', 'EntityWithArrayWithTransform', 'EntityWithComplexProperty', 'EntityWithComplexPropertyComplexProperty', 'EntityWithComplexPropertyWithDefaultValue', 'EntityWithComplexPropertyWithDefaultValueComplexProperty', 'EntityWithEntityProperty', 'EntityWithJsonProperty', 'EntityWithOptionalComplexProperty', 'EntityWithOptionalComplexPropertyComplexProperty', 'EntityWithOptionalProperty', 'EntityWithOptionalStringEnumProperty', 'EntityWithOptionalStringEnumPropertyProperty', 'EntityWithPropertyWithDefaultValue', 'EntityWithPropertyWithDefaultValueNested', 'EntityWithRawArray', 'EntityWithRequiredProperty', 'EntityWithSimpleProperties', 'EntityWithStringArrayProperty', 'EntityWithStringEnumProperty', 'EntityWithStringEnumPropertyProperty', 'EntityWithStringEnumPropertyWithDefaultValue', 'EntityWithStringEnumPropertyWithDefaultValueValue', 'EntityWithoutProperties', 'EnumWithDefaultType', 'WithDefault', 'WithoutDefault')

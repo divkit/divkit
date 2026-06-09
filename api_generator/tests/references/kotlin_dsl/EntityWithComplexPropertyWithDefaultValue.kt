@@ -10,7 +10,7 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class EntityWithComplexPropertyWithDefaultValue internal constructor(
-    @JsonIgnore val property: Property<Property>?,
+    @JsonIgnore val property: Property<ComplexProperty>?,
 ) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_complex_property_with_default_value"
@@ -22,7 +22,7 @@ class EntityWithComplexPropertyWithDefaultValue internal constructor(
         )
     }
 
-    class Property internal constructor(
+    class ComplexProperty internal constructor(
         @JsonIgnore val value: Property<String>?,
     ) {
 
@@ -42,7 +42,7 @@ fun <T> TemplateContext<T>.entityWithComplexPropertyWithDefaultValue(): LiteralP
 }
 
 fun <T> TemplateContext<T>.entityWithComplexPropertyWithDefaultValue(
-    property: Property<EntityWithComplexPropertyWithDefaultValue.Property>? = null,
+    property: Property<EntityWithComplexPropertyWithDefaultValue.ComplexProperty>? = null,
 ): LiteralProperty<EntityWithComplexPropertyWithDefaultValue> {
     return value(EntityWithComplexPropertyWithDefaultValue(
         property = property,
@@ -50,31 +50,31 @@ fun <T> TemplateContext<T>.entityWithComplexPropertyWithDefaultValue(
 }
 
 fun <T> TemplateContext<T>.entityWithComplexPropertyWithDefaultValue(
-    property: EntityWithComplexPropertyWithDefaultValue.Property? = null,
+    property: EntityWithComplexPropertyWithDefaultValue.ComplexProperty? = null,
 ): LiteralProperty<EntityWithComplexPropertyWithDefaultValue> {
     return value(EntityWithComplexPropertyWithDefaultValue(
         property = optionalValue(property),
     ))
 }
 
-fun <T> TemplateContext<T>.property(): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.Property> {
-    return value(EntityWithComplexPropertyWithDefaultValue.Property(
+fun <T> TemplateContext<T>.complexProperty(): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.ComplexProperty> {
+    return value(EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
         value = null,
     ))
 }
 
-fun <T> TemplateContext<T>.property(
+fun <T> TemplateContext<T>.complexProperty(
     value: Property<String>? = null,
-): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.Property> {
-    return value(EntityWithComplexPropertyWithDefaultValue.Property(
+): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.ComplexProperty> {
+    return value(EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
         value = value,
     ))
 }
 
-fun <T> TemplateContext<T>.property(
+fun <T> TemplateContext<T>.complexProperty(
     value: String? = null,
-): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.Property> {
-    return value(EntityWithComplexPropertyWithDefaultValue.Property(
+): LiteralProperty<EntityWithComplexPropertyWithDefaultValue.ComplexProperty> {
+    return value(EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
         value = optionalValue(value),
     ))
 }
@@ -86,7 +86,7 @@ fun CardContext.entityWithComplexPropertyWithDefaultValue(): EntityWithComplexPr
 }
 
 fun CardContext.entityWithComplexPropertyWithDefaultValue(
-    property: ValueProperty<EntityWithComplexPropertyWithDefaultValue.Property>? = null,
+    property: ValueProperty<EntityWithComplexPropertyWithDefaultValue.ComplexProperty>? = null,
 ): EntityWithComplexPropertyWithDefaultValue {
     return EntityWithComplexPropertyWithDefaultValue(
         property = property,
@@ -94,25 +94,25 @@ fun CardContext.entityWithComplexPropertyWithDefaultValue(
 }
 
 fun CardContext.entityWithComplexPropertyWithDefaultValue(
-    property: EntityWithComplexPropertyWithDefaultValue.Property? = null,
+    property: EntityWithComplexPropertyWithDefaultValue.ComplexProperty? = null,
 ): EntityWithComplexPropertyWithDefaultValue {
     return EntityWithComplexPropertyWithDefaultValue(
         property = optionalValue(property),
     )
 }
 
-fun CardContext.property(
+fun CardContext.complexProperty(
     value: ValueProperty<String>,
-): EntityWithComplexPropertyWithDefaultValue.Property {
-    return EntityWithComplexPropertyWithDefaultValue.Property(
+): EntityWithComplexPropertyWithDefaultValue.ComplexProperty {
+    return EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
         value = value,
     )
 }
 
-fun CardContext.property(
+fun CardContext.complexProperty(
     value: String,
-): EntityWithComplexPropertyWithDefaultValue.Property {
-    return EntityWithComplexPropertyWithDefaultValue.Property(
+): EntityWithComplexPropertyWithDefaultValue.ComplexProperty {
+    return EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
         value = value(value),
     )
 }

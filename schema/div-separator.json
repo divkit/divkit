@@ -1,7 +1,7 @@
 {
   "$description": "translations.json#/div_separator",
   "definitions": {
-    "style": {
+    "delimiter_style": {
       "type": "object",
       "properties": {
         "color": {
@@ -31,7 +31,7 @@
     {
       "properties": {
         "delimiter_style": {
-          "$ref": "#/definitions/style",
+          "$ref": "#/definitions/delimiter_style",
           "$description": "translations.json#/div_separator_delimiter_style"
         },
         "type": {

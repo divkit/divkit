@@ -11,7 +11,7 @@ class EntityWithOptionalComplexProperty with EquatableMixin  {
   });
 
   static const type = "entity_with_optional_complex_property";
-  final EntityWithOptionalComplexPropertyProperty? property;
+  final EntityWithOptionalComplexPropertyComplexProperty? property;
 
   @override
   List<Object?> get props => [
@@ -19,7 +19,7 @@ class EntityWithOptionalComplexProperty with EquatableMixin  {
       ];
 
   EntityWithOptionalComplexProperty copyWith({
-      EntityWithOptionalComplexPropertyProperty? Function()?  property,
+      EntityWithOptionalComplexPropertyComplexProperty? Function()?  property,
   }) => EntityWithOptionalComplexProperty(
       property: property != null ? property.call() : this.property,
     );
@@ -30,7 +30,7 @@ class EntityWithOptionalComplexProperty with EquatableMixin  {
     }
     try {
       return EntityWithOptionalComplexProperty(
-        property: safeParseObject(json['property'], parse: EntityWithOptionalComplexPropertyProperty.fromJson,),
+        property: safeParseObject(json['property'], parse: EntityWithOptionalComplexPropertyComplexProperty.fromJson,),
       );
     } catch (e, st) {
       logger.warning("Parsing error", error: e, stackTrace: st);
@@ -40,8 +40,8 @@ class EntityWithOptionalComplexProperty with EquatableMixin  {
 }
 
 
-class EntityWithOptionalComplexPropertyProperty with EquatableMixin  {
-  const EntityWithOptionalComplexPropertyProperty({
+class EntityWithOptionalComplexPropertyComplexProperty with EquatableMixin  {
+  const EntityWithOptionalComplexPropertyComplexProperty({
     required this.value,
   });
 
@@ -52,18 +52,18 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin  {
         value,
       ];
 
-  EntityWithOptionalComplexPropertyProperty copyWith({
+  EntityWithOptionalComplexPropertyComplexProperty copyWith({
       Expression<Uri>?  value,
-  }) => EntityWithOptionalComplexPropertyProperty(
+  }) => EntityWithOptionalComplexPropertyComplexProperty(
       value: value ?? this.value,
     );
 
-  static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
+  static EntityWithOptionalComplexPropertyComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
-      return EntityWithOptionalComplexPropertyProperty(
+      return EntityWithOptionalComplexPropertyComplexProperty(
         value: reqVProp<Uri>(safeParseUriExpr(json['value'],), name: 'value',),
       );
     } catch (e, st) {

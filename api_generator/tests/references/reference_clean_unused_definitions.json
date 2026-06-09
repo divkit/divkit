@@ -503,14 +503,14 @@
           },
           "property": {
             "$resolved_refs": [
-              "#/definitions/string_enum_property"
+              "#/definitions/property"
             ],
             "type": "string",
             "enum": [
               "first",
               "second"
             ],
-            "$typename": "string_enum_property"
+            "$typename": "property"
           }
         },
         "required": [
@@ -799,14 +799,14 @@
           },
           "property": {
             "$resolved_refs": [
-              "#/definitions/string_enum_property"
+              "#/definitions/property"
             ],
             "type": "string",
             "enum": [
               "first",
               "second"
             ],
-            "$typename": "string_enum_property"
+            "$typename": "property"
           }
         },
         "required": [

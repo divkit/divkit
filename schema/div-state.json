@@ -6,7 +6,7 @@
     }
   },
   "definitions": {
-    "div_state": {
+    "state": {
       "type": "object",
       "alias_divan": "item",
       "codegen": {
@@ -82,7 +82,7 @@
         "states": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/div_state"
+            "$ref": "#/definitions/state"
           },
           "minItems": 1,
           "$description": "translations.json#/div_state_states"

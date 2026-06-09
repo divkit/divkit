@@ -11,7 +11,7 @@ class EntityWithOptionalComplexProperty(BaseDiv):
     def __init__(
         self, *,
         type: str = 'entity_with_optional_complex_property',
-        property: typing.Optional[EntityWithOptionalComplexPropertyProperty] = None,
+        property: typing.Optional[EntityWithOptionalComplexPropertyComplexProperty] = None,
         **kwargs: typing.Any,
     ):
         super().__init__(
@@ -21,11 +21,11 @@ class EntityWithOptionalComplexProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_optional_complex_property')
-    property: typing.Optional[EntityWithOptionalComplexPropertyProperty] = Field(
+    property: typing.Optional[EntityWithOptionalComplexPropertyComplexProperty] = Field(
     )
 
 
-class EntityWithOptionalComplexPropertyProperty(BaseDiv):
+class EntityWithOptionalComplexPropertyComplexProperty(BaseDiv):
 
     def __init__(
         self, *,
@@ -42,7 +42,7 @@ class EntityWithOptionalComplexPropertyProperty(BaseDiv):
     )
 
 
-EntityWithOptionalComplexPropertyProperty.update_forward_refs()
+EntityWithOptionalComplexPropertyComplexProperty.update_forward_refs()
 
 
 EntityWithOptionalComplexProperty.update_forward_refs()

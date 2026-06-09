@@ -39,11 +39,11 @@ internal val ENTITY_WITH_MISSING_OPTIONAL_PROPERTY = Entity.WithOptionalProperty
 )
 
 internal val ENTITY_WITH_REQUIRED_COMPLEX_PROPERTY = Entity.WithComplexProperty(
-    EntityWithComplexProperty(EntityWithComplexProperty.Property(Expression.constant(Uri.parse("https://ya.ru"))))
+    EntityWithComplexProperty(EntityWithComplexProperty.ComplexProperty(Expression.constant(Uri.parse("https://ya.ru"))))
 )
 
 internal val ENTITY_WITH_OPTIONAL_COMPLEX_PROPERTY = Entity.WithOptionalComplexProperty(
-    EntityWithOptionalComplexProperty(EntityWithOptionalComplexProperty.Property(Expression.constant(Uri.parse("https://ya.ru"))))
+    EntityWithOptionalComplexProperty(EntityWithOptionalComplexProperty.ComplexProperty(Expression.constant(Uri.parse("https://ya.ru"))))
 )
 
 internal val ENTITY_WITH_MISSING_OPTIONAL_COMPLEX_PROPERTY = Entity.WithOptionalComplexProperty(

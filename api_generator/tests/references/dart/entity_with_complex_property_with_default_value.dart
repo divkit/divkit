@@ -7,12 +7,12 @@ import 'package:divkit/src/utils/parsing.dart';
 
 class EntityWithComplexPropertyWithDefaultValue with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValue({
-    this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),
+    this.property = const EntityWithComplexPropertyWithDefaultValueComplexProperty(value: ValueExpression("Default text",),),
   });
 
   static const type = "entity_with_complex_property_with_default_value";
-   // default value: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),)
-  final EntityWithComplexPropertyWithDefaultValueProperty property;
+   // default value: const EntityWithComplexPropertyWithDefaultValueComplexProperty(value: ValueExpression("Default text",),)
+  final EntityWithComplexPropertyWithDefaultValueComplexProperty property;
 
   @override
   List<Object?> get props => [
@@ -20,7 +20,7 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin  {
       ];
 
   EntityWithComplexPropertyWithDefaultValue copyWith({
-      EntityWithComplexPropertyWithDefaultValueProperty?  property,
+      EntityWithComplexPropertyWithDefaultValueComplexProperty?  property,
   }) => EntityWithComplexPropertyWithDefaultValue(
       property: property ?? this.property,
     );
@@ -31,7 +31,7 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin  {
     }
     try {
       return EntityWithComplexPropertyWithDefaultValue(
-        property: reqProp<EntityWithComplexPropertyWithDefaultValueProperty>(safeParseObject(json['property'], parse: EntityWithComplexPropertyWithDefaultValueProperty.fromJson, fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),), name: 'property',),
+        property: reqProp<EntityWithComplexPropertyWithDefaultValueComplexProperty>(safeParseObject(json['property'], parse: EntityWithComplexPropertyWithDefaultValueComplexProperty.fromJson, fallback: const EntityWithComplexPropertyWithDefaultValueComplexProperty(value: ValueExpression("Default text",),),), name: 'property',),
       );
     } catch (e, st) {
       logger.warning("Parsing error", error: e, stackTrace: st);
@@ -41,8 +41,8 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin  {
 }
 
 
-class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin  {
-  const EntityWithComplexPropertyWithDefaultValueProperty({
+class EntityWithComplexPropertyWithDefaultValueComplexProperty with EquatableMixin  {
+  const EntityWithComplexPropertyWithDefaultValueComplexProperty({
     required this.value,
   });
 
@@ -53,18 +53,18 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin  {
         value,
       ];
 
-  EntityWithComplexPropertyWithDefaultValueProperty copyWith({
+  EntityWithComplexPropertyWithDefaultValueComplexProperty copyWith({
       Expression<String>?  value,
-  }) => EntityWithComplexPropertyWithDefaultValueProperty(
+  }) => EntityWithComplexPropertyWithDefaultValueComplexProperty(
       value: value ?? this.value,
     );
 
-  static EntityWithComplexPropertyWithDefaultValueProperty? fromJson(Map<String, dynamic>? json,) {
+  static EntityWithComplexPropertyWithDefaultValueComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
-      return EntityWithComplexPropertyWithDefaultValueProperty(
+      return EntityWithComplexPropertyWithDefaultValueComplexProperty(
         value: reqVProp<String>(safeParseStrExpr(json['value'],), name: 'value',),
       );
     } catch (e, st) {

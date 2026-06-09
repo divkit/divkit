@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexPropertyTemplate(
-    @JvmField val property: Field<PropertyTemplate>,
+    @JvmField val property: Field<ComplexPropertyTemplate>,
 ) : JSONSerializable, JsonTemplate<EntityWithComplexProperty> {
 
     constructor(
@@ -23,7 +23,7 @@ class EntityWithComplexPropertyTemplate(
         topLevel: Boolean = false,
         json: JSONObject
     ) : this(
-        property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, env.logger, env)
+        property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, ComplexPropertyTemplate.CREATOR, env.logger, env)
     )
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty {
@@ -42,27 +42,27 @@ class EntityWithComplexPropertyTemplate(
     companion object {
         const val TYPE = "entity_with_complex_property"
 
-        val PROPERTY_READER: Reader<EntityWithComplexProperty.Property> = { key, json, env -> JsonParser.read(json, key, EntityWithComplexProperty.Property.CREATOR, env.logger, env) }
+        val PROPERTY_READER: Reader<EntityWithComplexProperty.ComplexProperty> = { key, json, env -> JsonParser.read(json, key, EntityWithComplexProperty.ComplexProperty.CREATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyTemplate(env, json = it) }
     }
 
-    class PropertyTemplate(
+    class ComplexPropertyTemplate(
         @JvmField val value: Field<Expression<Uri>>,
-    ) : JSONSerializable, JsonTemplate<EntityWithComplexProperty.Property> {
+    ) : JSONSerializable, JsonTemplate<EntityWithComplexProperty.ComplexProperty> {
 
         constructor(
             env: ParsingEnvironment,
-            parent: PropertyTemplate? = null,
+            parent: ComplexPropertyTemplate? = null,
             topLevel: Boolean = false,
             json: JSONObject
         ) : this(
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI)
         )
 
-        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty.Property {
-            return EntityWithComplexProperty.Property(
+        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty.ComplexProperty {
+            return EntityWithComplexProperty.ComplexProperty(
                 value = this.value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)
             )
         }
@@ -76,7 +76,7 @@ class EntityWithComplexPropertyTemplate(
         companion object {
             val VALUE_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readExpression(json, key, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI) }
 
-            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> PropertyTemplate(env, json = it) }
+            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> ComplexPropertyTemplate(env, json = it) }
         }
     }
 }

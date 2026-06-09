@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithOptionalComplexProperty(
-    @JvmField val property: Property? = null,
+    @JvmField val property: ComplexProperty? = null,
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -36,7 +36,7 @@ class EntityWithOptionalComplexProperty(
     }
 
     fun copy(
-        property: Property? = this.property,
+        property: ComplexProperty? = this.property,
     ) = EntityWithOptionalComplexProperty(
         property = property,
     )
@@ -56,14 +56,14 @@ class EntityWithOptionalComplexProperty(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithOptionalComplexProperty {
             val logger = env.logger
             return EntityWithOptionalComplexProperty(
-                property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env)
+                property = JsonParser.readOptional(json, "property", ComplexProperty.CREATOR, logger, env)
             )
         }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalComplexProperty(env, json = it) }
     }
 
-    class Property(
+    class ComplexProperty(
         @JvmField val value: Expression<Uri>,
     ) : JSONSerializable, Hashable {
 
@@ -80,14 +80,14 @@ class EntityWithOptionalComplexProperty(
             return hash
         }
 
-        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        fun equals(other: ComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(
             value: Expression<Uri> = this.value,
-        ) = Property(
+        ) = ComplexProperty(
             value = value,
         )
 
@@ -100,14 +100,14 @@ class EntityWithOptionalComplexProperty(
         companion object {
             @JvmStatic
             @JvmName("fromJson")
-            operator fun invoke(env: ParsingEnvironment, json: JSONObject): Property {
+            operator fun invoke(env: ParsingEnvironment, json: JSONObject): ComplexProperty {
                 val logger = env.logger
-                return Property(
+                return ComplexProperty(
                     value = JsonParser.readExpression(json, "value", ANY_TO_URI, logger, env, TYPE_HELPER_URI)
                 )
             }
 
-            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Property(env, json = it) }
+            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> ComplexProperty(env, json = it) }
         }
     }
 }

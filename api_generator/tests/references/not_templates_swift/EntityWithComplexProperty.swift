@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 public final class EntityWithComplexProperty: Sendable {
-  public final class Property: Sendable {
+  public final class ComplexProperty: Sendable {
     public let value: Expression<URL>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
@@ -26,16 +26,16 @@ public final class EntityWithComplexProperty: Sendable {
   }
 
   public static let type: String = "entity_with_complex_property"
-  public let property: Property
+  public let property: ComplexProperty
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      property: try dictionary.getField("property", transform: { (dict: [String: Any]) in try EntityWithComplexProperty.Property(dictionary: dict, context: context) }, context: context)
+      property: try dictionary.getField("property", transform: { (dict: [String: Any]) in try EntityWithComplexProperty.ComplexProperty(dictionary: dict, context: context) }, context: context)
     )
   }
 
   init(
-    property: Property
+    property: ComplexProperty
   ) {
     self.property = property
   }
@@ -65,8 +65,8 @@ extension EntityWithComplexProperty: Serializable {
 }
 
 #if DEBUG
-extension EntityWithComplexProperty.Property: Equatable {
-  public static func ==(lhs: EntityWithComplexProperty.Property, rhs: EntityWithComplexProperty.Property) -> Bool {
+extension EntityWithComplexProperty.ComplexProperty: Equatable {
+  public static func ==(lhs: EntityWithComplexProperty.ComplexProperty, rhs: EntityWithComplexProperty.ComplexProperty) -> Bool {
     guard
       lhs.value == rhs.value
     else {
@@ -77,7 +77,7 @@ extension EntityWithComplexProperty.Property: Equatable {
 }
 #endif
 
-extension EntityWithComplexProperty.Property: Serializable {
+extension EntityWithComplexProperty.ComplexProperty: Serializable {
   @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]

@@ -2,7 +2,7 @@
   "type": "object",
   "$description": "translations.json#/div_action_submit",
   "definitions": {
-    "parameter": {
+    "header": {
       "type": "object",
       "properties": {
         "name": {
@@ -28,7 +28,7 @@
           "type": "array",
           "$description": "translations.json#/div_action_submit_request_headers",
           "items": {
-            "$ref": "#/definitions/parameter"
+            "$ref": "#/definitions/header"
           }
         },
         "method": {

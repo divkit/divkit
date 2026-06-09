@@ -11,7 +11,7 @@ class EntityWithComplexProperty with EquatableMixin  {
   });
 
   static const type = "entity_with_complex_property";
-  final EntityWithComplexPropertyProperty property;
+  final EntityWithComplexPropertyComplexProperty property;
 
   @override
   List<Object?> get props => [
@@ -19,7 +19,7 @@ class EntityWithComplexProperty with EquatableMixin  {
       ];
 
   EntityWithComplexProperty copyWith({
-      EntityWithComplexPropertyProperty?  property,
+      EntityWithComplexPropertyComplexProperty?  property,
   }) => EntityWithComplexProperty(
       property: property ?? this.property,
     );
@@ -30,7 +30,7 @@ class EntityWithComplexProperty with EquatableMixin  {
     }
     try {
       return EntityWithComplexProperty(
-        property: reqProp<EntityWithComplexPropertyProperty>(safeParseObject(json['property'], parse: EntityWithComplexPropertyProperty.fromJson,), name: 'property',),
+        property: reqProp<EntityWithComplexPropertyComplexProperty>(safeParseObject(json['property'], parse: EntityWithComplexPropertyComplexProperty.fromJson,), name: 'property',),
       );
     } catch (e, st) {
       logger.warning("Parsing error", error: e, stackTrace: st);
@@ -40,8 +40,8 @@ class EntityWithComplexProperty with EquatableMixin  {
 }
 
 
-class EntityWithComplexPropertyProperty with EquatableMixin  {
-  const EntityWithComplexPropertyProperty({
+class EntityWithComplexPropertyComplexProperty with EquatableMixin  {
+  const EntityWithComplexPropertyComplexProperty({
     required this.value,
   });
 
@@ -52,18 +52,18 @@ class EntityWithComplexPropertyProperty with EquatableMixin  {
         value,
       ];
 
-  EntityWithComplexPropertyProperty copyWith({
+  EntityWithComplexPropertyComplexProperty copyWith({
       Expression<Uri>?  value,
-  }) => EntityWithComplexPropertyProperty(
+  }) => EntityWithComplexPropertyComplexProperty(
       value: value ?? this.value,
     );
 
-  static EntityWithComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
+  static EntityWithComplexPropertyComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
-      return EntityWithComplexPropertyProperty(
+      return EntityWithComplexPropertyComplexProperty(
         value: reqVProp<Uri>(safeParseUriExpr(json['value'],), name: 'value',),
       );
     } catch (e, st) {
