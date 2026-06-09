@@ -40,6 +40,7 @@ data class Gallery internal constructor(
             accessibility = additive.accessibility ?: properties.accessibility,
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
+            allowTapWhileScroll = additive.allowTapWhileScroll ?: properties.allowTapWhileScroll,
             alpha = additive.alpha ?: properties.alpha,
             animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
@@ -99,6 +100,11 @@ data class Gallery internal constructor(
          * Vertical alignment of an element inside the parent element.
          */
         val alignmentVertical: Property<AlignmentVertical>?,
+        /**
+         * Allows handling taps on gallery items while the gallery is scrolling or decelerating.
+         * Default value: `false`.
+         */
+        val allowTapWhileScroll: Property<Boolean>?,
         /**
          * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
@@ -285,6 +291,7 @@ data class Gallery internal constructor(
             result.tryPutProperty("accessibility", accessibility)
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
+            result.tryPutProperty("allow_tap_while_scroll", allowTapWhileScroll)
             result.tryPutProperty("alpha", alpha)
             result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
@@ -366,6 +373,7 @@ data class Gallery internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -415,6 +423,7 @@ fun DivScope.gallery(
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
+    allowTapWhileScroll: Boolean? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
@@ -462,6 +471,7 @@ fun DivScope.gallery(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
+        allowTapWhileScroll = valueOrNull(allowTapWhileScroll),
         alpha = valueOrNull(alpha),
         animators = valueOrNull(animators),
         background = valueOrNull(background),
@@ -511,6 +521,7 @@ fun DivScope.gallery(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -560,6 +571,7 @@ fun DivScope.galleryProps(
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
+    allowTapWhileScroll: Boolean? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
@@ -606,6 +618,7 @@ fun DivScope.galleryProps(
     accessibility = valueOrNull(accessibility),
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
+    allowTapWhileScroll = valueOrNull(allowTapWhileScroll),
     alpha = valueOrNull(alpha),
     animators = valueOrNull(animators),
     background = valueOrNull(background),
@@ -654,6 +667,7 @@ fun DivScope.galleryProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -703,6 +717,7 @@ fun TemplateScope.galleryRefs(
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    allowTapWhileScroll: ReferenceProperty<Boolean>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -749,6 +764,7 @@ fun TemplateScope.galleryRefs(
     accessibility = accessibility,
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
+    allowTapWhileScroll = allowTapWhileScroll,
     alpha = alpha,
     animators = animators,
     background = background,
@@ -797,6 +813,7 @@ fun TemplateScope.galleryRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -846,6 +863,7 @@ fun Gallery.override(
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
+    allowTapWhileScroll: Boolean? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
@@ -893,6 +911,7 @@ fun Gallery.override(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
+        allowTapWhileScroll = valueOrNull(allowTapWhileScroll) ?: properties.allowTapWhileScroll,
         alpha = valueOrNull(alpha) ?: properties.alpha,
         animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
@@ -942,6 +961,7 @@ fun Gallery.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -991,6 +1011,7 @@ fun Gallery.defer(
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    allowTapWhileScroll: ReferenceProperty<Boolean>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1038,6 +1059,7 @@ fun Gallery.defer(
         accessibility = accessibility ?: properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll ?: properties.allowTapWhileScroll,
         alpha = alpha ?: properties.alpha,
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
@@ -1087,6 +1109,7 @@ fun Gallery.defer(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -1136,6 +1159,7 @@ fun Gallery.modify(
     accessibility: Property<Accessibility>? = null,
     alignmentHorizontal: Property<AlignmentHorizontal>? = null,
     alignmentVertical: Property<AlignmentVertical>? = null,
+    allowTapWhileScroll: Property<Boolean>? = null,
     alpha: Property<Double>? = null,
     animators: Property<List<Animator>>? = null,
     background: Property<List<Background>>? = null,
@@ -1183,6 +1207,7 @@ fun Gallery.modify(
         accessibility = accessibility ?: properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll ?: properties.allowTapWhileScroll,
         alpha = alpha ?: properties.alpha,
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
@@ -1231,6 +1256,7 @@ fun Gallery.modify(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1252,6 +1278,7 @@ fun Gallery.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    allowTapWhileScroll: ExpressionProperty<Boolean>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
@@ -1272,6 +1299,7 @@ fun Gallery.evaluate(
         accessibility = properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll ?: properties.allowTapWhileScroll,
         alpha = alpha ?: properties.alpha,
         animators = properties.animators,
         background = properties.background,
@@ -1321,6 +1349,7 @@ fun Gallery.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -1370,6 +1399,7 @@ fun Component<Gallery>.override(
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
+    allowTapWhileScroll: Boolean? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
@@ -1418,6 +1448,7 @@ fun Component<Gallery>.override(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
+        allowTapWhileScroll = valueOrNull(allowTapWhileScroll),
         alpha = valueOrNull(alpha),
         animators = valueOrNull(animators),
         background = valueOrNull(background),
@@ -1467,6 +1498,7 @@ fun Component<Gallery>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -1516,6 +1548,7 @@ fun Component<Gallery>.defer(
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    allowTapWhileScroll: ReferenceProperty<Boolean>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1564,6 +1597,7 @@ fun Component<Gallery>.defer(
         accessibility = accessibility,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll,
         alpha = alpha,
         animators = animators,
         background = background,
@@ -1612,6 +1646,7 @@ fun Component<Gallery>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1633,6 +1668,7 @@ fun Component<Gallery>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    allowTapWhileScroll: ExpressionProperty<Boolean>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
@@ -1654,6 +1690,7 @@ fun Component<Gallery>.evaluate(
         accessibility = null,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll,
         alpha = alpha,
         animators = null,
         background = null,
@@ -1703,6 +1740,7 @@ fun Component<Gallery>.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param allowTapWhileScroll Allows handling taps on gallery items while the gallery is scrolling or decelerating.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
@@ -1752,6 +1790,7 @@ fun Component<Gallery>.modify(
     accessibility: Property<Accessibility>? = null,
     alignmentHorizontal: Property<AlignmentHorizontal>? = null,
     alignmentVertical: Property<AlignmentVertical>? = null,
+    allowTapWhileScroll: Property<Boolean>? = null,
     alpha: Property<Double>? = null,
     animators: Property<List<Animator>>? = null,
     background: Property<List<Background>>? = null,
@@ -1800,6 +1839,7 @@ fun Component<Gallery>.modify(
         accessibility = accessibility,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
+        allowTapWhileScroll = allowTapWhileScroll,
         alpha = alpha,
         animators = animators,
         background = background,
