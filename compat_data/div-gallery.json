@@ -84,6 +84,21 @@
         },
         "ios": {
           "version_added": "32.51.0"
+        },
+        "web": {
+          "version_added": "32.53.0"
+        }
+      }
+    },
+    {
+      "id": "gallery_allow_tap_while_scroll",
+      "name": "Gallery property <code>allow_tap_while_scroll</code>",
+      "status": {
+        "notes": "iOS-only feature"
+      },
+      "compat": {
+        "ios": {
+          "version_added": "32.53.0"
         }
       }
     }

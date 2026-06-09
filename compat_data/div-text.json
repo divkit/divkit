@@ -249,6 +249,54 @@
           "version_added": "27.2.0"
         }
       }
+    },
+    {
+      "id": "text_image_builder",
+      "name": "Text <code>image_builder</code> property",
+      "compat": {
+        "android": {
+          "version_added": "32.53.0"
+        },
+        "ios": {
+          "version_added": "32.53.0"
+        }
+      }
+    },
+    {
+      "id": "text_range_builder",
+      "name": "Text <code>range_builder</code> property",
+      "compat": {
+        "android": {
+          "version_added": "32.53.0"
+        },
+        "ios": {
+          "version_added": "32.53.0"
+        }
+      }
+    },
+    {
+      "id": "text_ellipsis_image_builder",
+      "name": "Text <code>image_builder</code> property for the <code>ellipsis</code> config",
+      "compat": {
+        "android": {
+          "version_added": "32.53.0"
+        },
+        "ios": {
+          "version_added": "32.53.0"
+        }
+      }
+    },
+    {
+      "id": "text_ellipsis_range_builder",
+      "name": "Text <code>range_builder</code> property for the <code>ellipsis</code> config",
+      "compat": {
+        "android": {
+          "version_added": "32.53.0"
+        },
+        "ios": {
+          "version_added": "32.53.0"
+        }
+      }
     }
   ]
 }
