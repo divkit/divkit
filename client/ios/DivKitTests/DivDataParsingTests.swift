@@ -45,14 +45,15 @@ private func makeTestCases() -> [(String, TestData)] {
   try! getFiles(
     "parsing_test_data",
     forBundle: Bundle(for: DivDataParsingTests.self)
-  ).map { url in
+  ).compactMap { url in
+    let data = try Data(contentsOf: url)
+    let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+    guard Platform.isSupported(by: json) else { return nil }
     let testName = url.pathComponents
       .trimmingPrefix { $0 != "parsing_test_data" }
       .dropFirst()
       .joined(separator: "/")
       .dropLast(5) // .json
-    let data = try Data(contentsOf: url)
-    let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
     return ("\(testName)", TestData(json: json))
   }
 }

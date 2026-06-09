@@ -146,7 +146,7 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
     self.description = json["description"] as! String
 
-    let casesJson = (json["cases"] as! [[String: Any]]).filter(isCaseForIOS)
+    let casesJson = (json["cases"] as! [[String: Any]]).filter(Platform.isSupported(by:))
     if casesJson.isEmpty {
       self.divData = nil
       self.deserializationErrorMessages = []
@@ -182,11 +182,6 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
       from: try JSONSerialization.data(withJSONObject: casesJson)
     )
   }
-}
-
-private func isCaseForIOS(_ caseJson: [String: Any]) -> Bool {
-  guard let platforms = caseJson["platforms"] as? [String] else { return true }
-  return platforms.contains(Platform.ios.rawValue)
 }
 
 private struct IntegrationTestCase: Decodable {

@@ -17,7 +17,7 @@ private func makeTestCases() -> [(String, SignatureTestCase)] {
         .decode(TestCases.self, from: Data(contentsOf: url))
         .signatures ?? []
       return testCases
-        .filter { $0.platforms.contains(.ios) }
+        .filter(\.platforms.supported)
         .map { ("\(fileName): \($0.name)", $0) }
     }
 }

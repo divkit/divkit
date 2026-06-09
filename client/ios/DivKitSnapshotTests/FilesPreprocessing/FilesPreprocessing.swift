@@ -24,6 +24,9 @@ private func loadJsonFiles() -> [JsonFile] {
   }.filter { $0.absolutePath.contains(".json") }
 }
 
+// Intentionally mirrors `Platform.isSupported(by:)` from the DivKitTests target.
+// This file is compiled standalone via `swiftc` in a build phase and cannot import that
+// target, so the few lines of filter logic are duplicated here on purpose.
 private func isSupported(file: JsonFile) -> Bool {
   guard let jsonDict = jsonDict(fileName: file.absolutePath) else { return false }
   guard let platforms = jsonDict["platforms"] as? [String] else {

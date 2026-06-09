@@ -18,7 +18,7 @@ private func makeTestCases() -> [(String, ExpressionTestCase)] {
         .decode(TestCases.self, from: Data(contentsOf: url))
         .cases ?? []
       return testCases
-        .filter { $0.platforms.contains(.ios) }
+        .filter(\.platforms.supported)
         .map { ("\(fileName): \($0.description)", $0) }
     }
 }
@@ -120,8 +120,8 @@ private struct ExpressionTestCase: Decodable {
     self.variables = variables.extractDivVariableValues(
       ExpressionResolver(
         functionsProvider: FunctionsProvider(
-            persistentValuesStorage: DivPersistentValuesStorage(),
-            cardId: nil
+          persistentValuesStorage: DivPersistentValuesStorage(),
+          cardId: nil
         ),
         customFunctionsStorageProvider: { _ in nil },
         variableValueProvider: { _ in nil },
