@@ -101,6 +101,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-container/aspect/wrap-layout_mode-horizontal-fixed-height.json",
                 "snapshot_test_data/div-container/aspect/wrap-layout_mode-horizontal-match_parent-height.json",
                 "snapshot_test_data/div-container/constraint-propagation",
+                "snapshot_test_data/div-container/wrap",
                 // div-image
                 "snapshot_test_data/div-image/aspect-fixed.json",
                 "snapshot_test_data/div-image/aspect-match_parent.json",
