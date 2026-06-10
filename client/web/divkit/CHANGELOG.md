@@ -1,3 +1,10 @@
+## 32.54.0 (June 15, 2026)
+
+* Added support for the `press_start_actions` and `press_end_actions` properties in the `slider`.
+* Allowed `integer`s to be in range `[-9007199254740991, 9007199254740991]` instead of range `[-2147483648, 2147483647]` after expression execution.
+* Animators with a limited number of repetitions now respect the system's "prefer reduced motion" setting.
+
+
 ## 32.53.0 (June 8, 2026)
 
 * Added a `context` API in the `onCustomAction` handler.
