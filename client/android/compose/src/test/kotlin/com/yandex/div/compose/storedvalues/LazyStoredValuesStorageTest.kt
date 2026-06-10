@@ -2,6 +2,7 @@ package com.yandex.div.compose.storedvalues
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.data.StoredValue
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import org.junit.runner.RunWith
@@ -13,11 +14,13 @@ import kotlin.test.assertNull
 class LazyStoredValuesStorageTest {
     private val reporter = TestReporter()
     private val repository = TestStoredValuesRepository()
+    private val timeProvider = TestTimeProvider()
 
     private val storage = LazyStoredValuesStorage(
         cardId = "test",
         reporter = reporter,
-        repository = { repository }
+        repository = { repository },
+        timeProvider = timeProvider
     )
 
     @Test
@@ -103,8 +106,61 @@ class LazyStoredValuesStorageTest {
         assertEquals(setOf("card_test_stored_value_value1"), repository.values.keys)
     }
 
+    @Test
+    fun `getValue() returns null when value is expired`() {
+        storage.setValue(
+            value = StoredValue.StringStoredValue(name = "value", value = "stored value"),
+            scope = StoredValueScope.Global,
+            lifetime = ONE_HOUR
+        )
+
+        timeProvider.advanceTime(ONE_HOUR / 2)
+
+        assertEquals("stored value", getValue("value"))
+
+        timeProvider.advanceTime(ONE_HOUR / 2)
+
+        assertNull(getValue("value"))
+    }
+
+    @Test
+    fun `setValue() updates lifetime`() {
+        storage.setValue(
+            value = StoredValue.StringStoredValue(name = "value", value = "stored value"),
+            scope = StoredValueScope.Global,
+            lifetime = ONE_HOUR
+        )
+
+        timeProvider.advanceTime(ONE_HOUR / 2)
+
+        storage.setValue(
+            value = StoredValue.StringStoredValue(name = "value", value = "new value"),
+            scope = StoredValueScope.Global,
+            lifetime = ONE_HOUR
+        )
+
+        timeProvider.advanceTime(ONE_HOUR / 2)
+
+        assertEquals("new value", getValue("value"))
+
+        timeProvider.advanceTime(ONE_HOUR / 2)
+
+        assertNull(getValue("value"))
+    }
+
     private fun getValue(name: String): Any? {
         return storage.getValue(name, StoredValueScope.Global)
+    }
+}
+
+private class TestTimeProvider : TimeProvider {
+    private var _currentTimeMillis = 0L
+
+    override val currentTimeMillis: Long
+        get() = _currentTimeMillis
+
+    fun advanceTime(seconds: Long) {
+        _currentTimeMillis += seconds * 1000L
     }
 }
 

@@ -10,6 +10,8 @@ import coil3.request.allowHardware
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.utils.SystemTimeProvider
+import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
@@ -82,6 +84,12 @@ internal object DivContextModule {
         return StoredValuesRepositoryImpl(
             rawJsonRepository = storageComponent.rawJsonRepository
         )
+    }
+
+    @DivContextScope
+    @Provides
+    fun provideTimeProvider(): TimeProvider {
+        return SystemTimeProvider()
     }
 
     @DivContextScope

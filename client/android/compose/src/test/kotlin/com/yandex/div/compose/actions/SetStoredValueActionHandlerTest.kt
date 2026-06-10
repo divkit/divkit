@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.storedvalues.LazyStoredValuesStorage
 import com.yandex.div.compose.storedvalues.TestStoredValuesRepository
+import com.yandex.div.compose.utils.SystemTimeProvider
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.test.data.action
@@ -24,7 +25,8 @@ class SetStoredValueActionHandlerTest {
     private val storedValuesStorage = LazyStoredValuesStorage(
         cardId = actionHandlerEnvironment.context.cardId,
         reporter = reporter,
-        repository = { TestStoredValuesRepository() }
+        repository = { TestStoredValuesRepository() },
+        timeProvider = SystemTimeProvider()
     )
 
     private val reporter: TestReporter

@@ -18,11 +18,9 @@ import org.json.JSONObject
 
 @InternalApi
 class StoredValuesStorage(
-    private val repository: StoredValuesRepository
+    private val repository: StoredValuesRepository,
+    private val currentTimeMillis: () -> Long = { System.currentTimeMillis() }
 ) {
-    private val currentTime: Long
-        get() = System.currentTimeMillis()
-
     @Throws(StoredValueException::class)
     fun getValue(
         name: String,
@@ -32,7 +30,7 @@ class StoredValuesStorage(
         val id = formatId(name = name, scope = scope, cardId = cardId)
         val jsonValue = repository.get(id) ?: return null
 
-        if (isExpiredV2(jsonValue) || isExpiredV1(jsonValue)) {
+        if (isExpired(jsonValue) || isExpiredLegacy(jsonValue)) {
             repository.remove(id)
             return null
         }
@@ -59,20 +57,20 @@ class StoredValuesStorage(
         )
     }
 
-    private fun isExpiredV1(value: JSONObject): Boolean {
+    private fun isExpiredLegacy(value: JSONObject): Boolean {
         if (value.has(KEY_EXPIRATION_TIME)) {
             val expirationTime = value.getLong(KEY_EXPIRATION_TIME)
-            return currentTime >= expirationTime
+            return currentTimeMillis() >= expirationTime
         }
         return false
     }
 
-    private fun isExpiredV2(value: JSONObject): Boolean {
+    private fun isExpired(value: JSONObject): Boolean {
         if (value.has(KEY_TIMESTAMP) && value.has(KEY_LIFETIME)) {
             val timestamp = value.getLong(KEY_TIMESTAMP)
             val lifetime = value.getLong(KEY_LIFETIME)
-            val currentTimestamp = currentTime / 1000L
-            return currentTimestamp - timestamp >= lifetime
+            val currentTimeSeconds = currentTimeMillis() / 1000L
+            return currentTimeSeconds - timestamp >= lifetime
         }
         return false
     }
@@ -92,7 +90,7 @@ class StoredValuesStorage(
 
         return JSONObject().apply {
             put(KEY_TYPE, Converter.toString(getType()))
-            put(KEY_TIMESTAMP, currentTime / 1000L)
+            put(KEY_TIMESTAMP, currentTimeMillis() / 1000L)
             put(KEY_LIFETIME, lifetime)
             put(KEY_VALUE, value)
         }
@@ -127,7 +125,7 @@ private fun JSONObject.toStoredValue(type: StoredValue.Type, name: String): Stor
     }
 }
 
-private const val CARD_PREFIX =  "card_"
+private const val CARD_PREFIX = "card_"
 
 private fun formatId(
     name: String,

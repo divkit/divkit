@@ -3,6 +3,7 @@ package com.yandex.div.compose.storedvalues
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.data.StoredValue
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.internal.storedvalues.StoredValueException
@@ -17,12 +18,14 @@ import javax.inject.Named
 internal class LazyStoredValuesStorage @Inject constructor(
     @param:Named(Names.CARD_ID) private val cardId: String,
     private val reporter: DivReporter,
-    repository: Lazy<StoredValuesRepository>
+    repository: Lazy<StoredValuesRepository>,
+    timeProvider: TimeProvider
 ) : ScopedStoredValueProvider {
 
     private val storage by lazy {
         StoredValuesStorage(
-            repository = repository.get()
+            repository = repository.get(),
+            currentTimeMillis = timeProvider::currentTimeMillis
         )
     }
 
