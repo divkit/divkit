@@ -9,6 +9,7 @@ import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionSetState
+import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
@@ -104,6 +105,22 @@ fun setStateAction(
 
 fun setStateAction(stateId: String, temporary: Boolean = true): DivActionTyped =
     setStateAction(stateId = constant(stateId), temporary = temporary)
+
+fun setStoredValueAction(
+    lifetime: Long,
+    name: String,
+    scope: DivActionSetStoredValue.Scope? = null,
+    value: DivTypedValue
+): DivActionTyped {
+    return DivActionTyped.SetStoredValue(
+        DivActionSetStoredValue(
+            lifetime = constant(lifetime),
+            name = constant(name),
+            scope = scope?.let { constant(scope) },
+            value = value
+        )
+    )
+}
 
 fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
     return DivActionTyped.SetVariable(

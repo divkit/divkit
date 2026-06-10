@@ -25,7 +25,7 @@
     }
   },
   "card": {
-    "log_id": "tooltip_modes",
+    "log_id": "test_card",
     "states": [
       {
         "state_id": 0,

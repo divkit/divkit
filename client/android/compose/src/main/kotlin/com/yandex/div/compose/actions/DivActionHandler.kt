@@ -17,7 +17,6 @@ import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
-import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionShowTooltip
 import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTyped
@@ -35,6 +34,7 @@ internal class DivActionHandler @Inject constructor(
     private val arrayActionsHandler: ArrayActionsHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
+    private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
     private val timerActionHandler: TimerActionHandler,
     private val updateStructureActionHandler: UpdateStructureActionHandler
@@ -154,7 +154,8 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.SetState ->
                 setStateActionHandler.handle(context, action.value)
 
-            is DivActionTyped.SetStoredValue -> notSupported(DivActionSetStoredValue.TYPE)
+            is DivActionTyped.SetStoredValue ->
+                setStoredValueActionHandler.handle(context, action.value)
 
             is DivActionTyped.SetVariable ->
                 setVariableActionHandler.handle(context, action.value)
@@ -177,13 +178,26 @@ internal class DivActionHandler @Inject constructor(
         action: DivUntypedAction
     ) {
         when (action) {
-            is DivUntypedAction.HideTooltip -> notSupported("hide_tooltip")
-            is DivUntypedAction.SetState -> setStateActionHandler.handle(action)
-            is DivUntypedAction.SetStoredValue -> notSupported("set_stored_value")
-            is DivUntypedAction.SetVariable -> setVariableActionHandler.handle(context, action)
-            is DivUntypedAction.ShowTooltip -> notSupported("show_tooltip")
-            is DivUntypedAction.Timer -> timerActionHandler.handle(action)
-            is DivUntypedAction.Video -> notSupported("video")
+            is DivUntypedAction.HideTooltip ->
+                notSupported("hide_tooltip")
+
+            is DivUntypedAction.SetState ->
+                setStateActionHandler.handle(action)
+
+            is DivUntypedAction.SetStoredValue ->
+                setStoredValueActionHandler.handle(action)
+
+            is DivUntypedAction.SetVariable ->
+                setVariableActionHandler.handle(context, action)
+
+            is DivUntypedAction.ShowTooltip ->
+                notSupported("show_tooltip")
+
+            is DivUntypedAction.Timer ->
+                timerActionHandler.handle(action)
+
+            is DivUntypedAction.Video ->
+                notSupported("video")
         }
     }
 

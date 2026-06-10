@@ -1,14 +1,12 @@
 package com.yandex.div.core.expression.storedvalues
 
-import com.yandex.div.core.expression.storedvalues.StoredValuesController.Companion.isStoredForCard
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.StoredValue
+import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryResult
-import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div2.DivActionSetStoredValue.Scope
-import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor
@@ -38,13 +36,23 @@ class StoredValuesControllerTest {
 
     @Test
     fun `get value without scope prefix when scope is global`() {
-        underTest.getStoredValue(VALUE_NAME, errorCollector, DATA_TAG, Scope.toString(Scope.GLOBAL))
+        underTest.getStoredValue(
+            name = VALUE_NAME,
+            scope = Scope.toString(Scope.GLOBAL),
+            dataTag = DATA_TAG,
+            errorCollector = errorCollector
+        )
         checkValueId(GLOBAL_SCOPE_ID)
     }
 
     @Test
     fun `get value with card id when scope is card`() {
-        underTest.getStoredValue(VALUE_NAME, errorCollector, DATA_TAG, Scope.toString(Scope.CARD))
+        underTest.getStoredValue(
+            name = VALUE_NAME,
+            scope = Scope.toString(Scope.CARD),
+            dataTag = DATA_TAG,
+            errorCollector = errorCollector
+        )
         checkValueId(CARD_SCOPE_ID)
     }
 
@@ -54,39 +62,29 @@ class StoredValuesControllerTest {
 
     @Test
     fun `store value without scope prefix when scope is global`() {
-        underTest.setStoredValue(storedValue, 0L, Scope.GLOBAL, DATA_TAG, errorCollector)
+        underTest.setStoredValue(
+            value = storedValue,
+            scope = StoredValueScope.Global,
+            dataTag = DATA_TAG,
+            lifetime = 0L,
+            errorCollector = errorCollector
+        )
         checkStoredValueId(GLOBAL_SCOPE_ID)
     }
 
     @Test
     fun `store value with card id when scope is card`() {
-        underTest.setStoredValue(storedValue, 0L, Scope.CARD, DATA_TAG, errorCollector)
+        underTest.setStoredValue(
+            value = storedValue,
+            scope = StoredValueScope.Card,
+            dataTag = DATA_TAG,
+            lifetime = 0L,
+            errorCollector = errorCollector
+        )
         checkStoredValueId(CARD_SCOPE_ID)
     }
 
     private fun checkStoredValueId(expected: String) {
         Assert.assertEquals(expected, payload.firstValue.jsons.first().id)
     }
-
-    @Test
-    fun `stored for card returns true when scope equals to card id`() {
-        Assert.assertTrue("card_unique_tag_stored_value_name".toJson().isStoredForCard(DATA_TAG))
-    }
-
-    @Test
-    fun `stored for card returns true when scope is empty and value has no scope`() {
-        Assert.assertTrue("stored_value_name".toJson().isStoredForCard(""))
-    }
-
-    @Test
-    fun `stored for card returns false when scope does not equal to card id`() {
-        Assert.assertFalse("card_new_tag_stored_value_name".toJson().isStoredForCard(DATA_TAG))
-    }
-
-    @Test
-    fun `stored for card returns false when scope is empty and value has scope`() {
-        Assert.assertFalse("card_unique_tag_stored_value_name".toJson().isStoredForCard(""))
-    }
-
-    private fun String.toJson() = RawJson(this, JSONObject())
 }

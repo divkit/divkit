@@ -3,20 +3,21 @@ package com.yandex.div.core
 import android.content.Context
 import androidx.annotation.AnyThread
 import androidx.annotation.IntDef
+import androidx.annotation.VisibleForTesting
 import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
-import com.yandex.div.core.expression.storedvalues.StoredValuesController.Companion.isStoredForCard
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.Log
+import com.yandex.div.internal.storedvalues.isStoredValueForCard
 import com.yandex.div.logging.Severity
 
-class DivKit private constructor(
+class DivKit @VisibleForTesting internal constructor(
     context: Context,
     configuration: DivKitConfiguration
 ) {
@@ -41,7 +42,9 @@ class DivKit private constructor(
                 if (tags.isEmpty()) {
                     remove { true }
                 } else {
-                    remove { json -> tags.any { json.isStoredForCard(it.id) } }
+                    remove { json ->
+                        tags.any { isStoredValueForCard(storedValueId = json.id, cardId = it.id) }
+                    }
                 }
             }
         }
@@ -76,6 +79,7 @@ class DivKit private constructor(
         private val DEFAULT_CONFIGURATION = DivKitConfiguration.Builder().build()
 
         private var configuration: DivKitConfiguration? = null
+
         @Volatile
         private var instance: DivKit? = null
 

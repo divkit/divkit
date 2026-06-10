@@ -2,6 +2,7 @@ package com.yandex.div.internal.actions
 
 import android.net.Uri
 import com.yandex.div.data.StoredValue
+import com.yandex.div.internal.storedvalues.StoredValueScope
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -44,9 +45,38 @@ class DivUntypedActionTest {
                 name = "boolean_value",
                 value = "true",
                 type = StoredValue.Type.BOOLEAN,
+                scope = StoredValueScope.Global,
                 lifetime = 1000L
             ),
             parse("div-action://set_stored_value?name=boolean_value&value=true&type=boolean&lifetime=1000")
+        )
+    }
+
+    @Test
+    fun `set_stored_value action with card scope`() {
+        assertEquals(
+            DivUntypedAction.SetStoredValue(
+                name = "value",
+                value = "stored value",
+                type = StoredValue.Type.STRING,
+                scope = StoredValueScope.Card,
+                lifetime = 1000L
+            ),
+            parse("div-action://set_stored_value?name=value&value=stored value&type=string&scope=card&lifetime=1000")
+        )
+    }
+
+    @Test
+    fun `set_stored_value action with invalid scope fallbacks to global scope`() {
+        assertEquals(
+            DivUntypedAction.SetStoredValue(
+                name = "value",
+                value = "stored value",
+                type = StoredValue.Type.STRING,
+                scope = StoredValueScope.Global,
+                lifetime = 1000L
+            ),
+            parse("div-action://set_stored_value?name=value&value=stored value&type=string&scope=invalid&lifetime=1000")
         )
     }
 

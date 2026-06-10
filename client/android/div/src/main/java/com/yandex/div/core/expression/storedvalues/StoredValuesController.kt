@@ -4,191 +4,67 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.StoredValue
-import com.yandex.div.data.StoredValue.ArrayStoredValue
-import com.yandex.div.data.StoredValue.BooleanStoredValue
-import com.yandex.div.data.StoredValue.ColorStoredValue
-import com.yandex.div.data.StoredValue.DictStoredValue
-import com.yandex.div.data.StoredValue.DoubleStoredValue
-import com.yandex.div.data.StoredValue.IntegerStoredValue
-import com.yandex.div.data.StoredValue.StringStoredValue
-import com.yandex.div.data.StoredValue.Type.Converter
-import com.yandex.div.data.StoredValue.UrlStoredValue
-import com.yandex.div.evaluable.types.Color
-import com.yandex.div.evaluable.types.Url
+import com.yandex.div.internal.storedvalues.StoredValueException
+import com.yandex.div.internal.storedvalues.StoredValueScope
+import com.yandex.div.internal.storedvalues.StoredValuesStorage
+import com.yandex.div.internal.storedvalues.toStoredValueScope
 import com.yandex.div.storage.DivStorageComponent
-import com.yandex.div.storage.RawJsonRepository
-import com.yandex.div.storage.RawJsonRepositoryException
-import com.yandex.div.storage.rawjson.RawJson
+import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.yatagan.Lazy
-import org.json.JSONException
-import org.json.JSONObject
 import javax.inject.Inject
 
 @Mockable
 @DivScope
 internal class StoredValuesController @Inject constructor(
-    divStorageComponentLazy: Lazy<DivStorageComponent>,
+    storageComponent: Lazy<DivStorageComponent>
 ) {
-    private val rawJsonRepository by lazy { divStorageComponentLazy.get().rawJsonRepository }
-
-    private val currentTime: Long
-        get() = System.currentTimeMillis()
+    private val storage by lazy {
+        StoredValuesStorage(
+            repository = StoredValuesRepositoryImpl(
+                rawJsonRepository = storageComponent.get().rawJsonRepository
+            )
+        )
+    }
 
     fun getStoredValue(
         name: String,
-        errorCollector: ErrorCollector,
-        dataTag: String,
         scope: String,
+        dataTag: String,
+        errorCollector: ErrorCollector
     ): StoredValue? {
         val divScope = DivActionSetStoredValue.Scope.fromString(scope) ?: run {
             errorCollector.logError(
-                RuntimeException(
-                    "Failed to get stored value '$name'",
-                    IllegalArgumentException("Unknown scope '$scope'")
-                )
+                RuntimeException("Failed to get stored value: $name. Invalid scope: $scope")
             )
-            return null
-        }
-        val storedValueId = name.toStoredValueId(divScope, dataTag)
-        val repositoryResult = rawJsonRepository.get(listOf(storedValueId))
-
-        errorCollector.logRepositoryErrors(repositoryResult.errors)
-        val jsonStoredValue = repositoryResult.resultData.firstOrNull()?.data ?: return null
-
-        if (isStoredValueExpiredV2(jsonStoredValue) || isStoredValueExpiredV1(jsonStoredValue)) {
-            rawJsonRepository.remove { it.id == storedValueId }
             return null
         }
 
         try {
-            val typeStrValue = jsonStoredValue.getString(KEY_TYPE)
-            val storedValueType = Converter.fromString(typeStrValue)
-            if (storedValueType == null) {
-                errorCollector.logUnknownType(name, typeStrValue)
-                return null
-            }
-            return jsonStoredValue.toStoredValue(storedValueType, name)
-        } catch (e: JSONException) {
-            errorCollector.logDeclarationFailed(name, e)
-            return null
+            return storage.getValue(
+                name = name,
+                scope = divScope.toStoredValueScope(),
+                cardId = dataTag
+            )
+        } catch (e: StoredValueException) {
+            errorCollector.logError(e)
         }
-    }
 
-    private fun isStoredValueExpiredV1(storedValue: JSONObject): Boolean {
-        if (storedValue.has(KEY_EXPIRATION_TIME)) {
-            val expirationTime = storedValue.getLong(KEY_EXPIRATION_TIME)
-            return currentTime >= expirationTime
-        }
-        return false
-    }
-
-    private fun isStoredValueExpiredV2(storedValue: JSONObject): Boolean {
-        if (storedValue.has(KEY_TIMESTAMP) && storedValue.has(KEY_LIFETIME)) {
-            val savedTimestamp = storedValue.getLong(KEY_TIMESTAMP)
-            val lifetime = storedValue.getLong(KEY_LIFETIME)
-            val currentTimestamp = currentTime / 1000L
-            return currentTimestamp - savedTimestamp >= lifetime
-        }
-        return false
+        return null
     }
 
     fun setStoredValue(
-        storedValue: StoredValue,
+        value: StoredValue,
         lifetime: Long,
-        scope: DivActionSetStoredValue.Scope,
+        scope: StoredValueScope,
         dataTag: String,
-        errorCollector: ErrorCollector,
-    ): Boolean {
-        val rawPayload = RawJsonRepository.Payload(
-            jsons = listOf(
-                RawJson(
-                    id = storedValue.name.toStoredValueId(scope, dataTag),
-                    data = storedValue.toJSONObject(lifetime)
-                )
-            )
+        errorCollector: ErrorCollector
+    ) {
+        storage.setValue(
+            value = value,
+            lifetime = lifetime,
+            scope = scope,
+            cardId = dataTag,
         )
-        val repositoryResult = rawJsonRepository.put(rawPayload)
-        errorCollector.logRepositoryErrors(repositoryResult.errors)
-        return repositoryResult.errors.isEmpty()
-    }
-
-    private fun ErrorCollector.logRepositoryErrors(errors: List<RawJsonRepositoryException>) {
-        errors.forEach { error -> logError(error) }
-    }
-
-    private fun ErrorCollector.logUnknownType(name: String, unknownType: String) {
-        val declarationException = StoredValueDeclarationException(
-            message = "Stored value '$name' declaration failed because of unknown type '$unknownType'"
-        )
-        logError(declarationException)
-    }
-
-    private fun ErrorCollector.logDeclarationFailed(name: String, cause: Throwable? = null) {
-        val declarationException = StoredValueDeclarationException(
-            message = "Stored value '$name' declaration failed: ${cause?.message}",
-            cause = cause,
-        )
-        logError(declarationException)
-    }
-
-    @Throws(JSONException::class)
-    private fun JSONObject.toStoredValue(type: StoredValue.Type, name: String): StoredValue =
-        when (type) {
-            StoredValue.Type.STRING -> StringStoredValue(name, getString(KEY_VALUE))
-            StoredValue.Type.INTEGER -> IntegerStoredValue(name, getLong(KEY_VALUE))
-            StoredValue.Type.BOOLEAN -> BooleanStoredValue(name, getBoolean(KEY_VALUE))
-            StoredValue.Type.NUMBER -> DoubleStoredValue(name, getDouble(KEY_VALUE))
-            StoredValue.Type.COLOR -> ColorStoredValue(name, Color.parse(getString(KEY_VALUE)))
-            StoredValue.Type.URL -> UrlStoredValue(name, Url.from(getString(KEY_VALUE)))
-            StoredValue.Type.ARRAY -> ArrayStoredValue(name, getJSONArray(KEY_VALUE))
-            StoredValue.Type.DICT -> DictStoredValue(name, getJSONObject(KEY_VALUE))
-        }
-
-    private fun StoredValue.toJSONObject(lifetime: Long): JSONObject {
-        val value = when (this) {
-            is StringStoredValue,
-            is IntegerStoredValue,
-            is BooleanStoredValue,
-            is ArrayStoredValue,
-            is DictStoredValue,
-            is DoubleStoredValue -> getValue()
-            is UrlStoredValue,
-            is ColorStoredValue -> getValue().toString()
-        }
-        val json = JSONObject().apply {
-            put(KEY_TYPE, Converter.toString(getType()))
-            put(KEY_TIMESTAMP, currentTime / 1000L)
-            put(KEY_LIFETIME, lifetime)
-            put(KEY_VALUE, value)
-        }
-        return json
-    }
-
-    companion object {
-        private const val CARD_PREFIX = "card_"
-        private const val STORED_VALUE_ID_PREFIX = "stored_value_"
-        private const val KEY_EXPIRATION_TIME = "expiration_time"
-        private const val KEY_TIMESTAMP = "timestamp"
-        private const val KEY_LIFETIME = "lifetime"
-        private const val KEY_TYPE = "type"
-        private const val KEY_VALUE = "value"
-
-        fun RawJson.isStoredForCard(dataTag: String): Boolean {
-            return when {
-                dataTag.isEmpty() -> !id.startsWith(CARD_PREFIX)
-                else -> id.startsWith(dataTag.withPrefix)
-            }
-        }
-
-        private val String.withPrefix get() = CARD_PREFIX + this + "_"
-
-        private fun String.toStoredValueId(scope: DivActionSetStoredValue.Scope, dataTag: String): String {
-            val valueId = STORED_VALUE_ID_PREFIX + this
-            return when (scope) {
-                DivActionSetStoredValue.Scope.GLOBAL -> valueId
-                DivActionSetStoredValue.Scope.CARD -> dataTag.withPrefix + valueId
-            }
-        }
     }
 }

@@ -6,6 +6,7 @@ import com.yandex.div2.ColorValue
 import com.yandex.div2.DictValue
 import com.yandex.div2.DivTypedValue
 import com.yandex.div2.IntegerValue
+import com.yandex.div2.NumberValue
 import com.yandex.div2.StrValue
 import org.json.JSONArray
 import org.json.JSONObject
@@ -20,6 +21,10 @@ fun typedValue(value: Long): DivTypedValue {
 
 fun typedValue(value: Expression<Long>): DivTypedValue {
     return DivTypedValue.Integer(IntegerValue(value = value))
+}
+
+fun typedValue(value: Double): DivTypedValue {
+    return DivTypedValue.Number(NumberValue(value = constant(value)))
 }
 
 fun typedValue(value: JSONArray): DivTypedValue {

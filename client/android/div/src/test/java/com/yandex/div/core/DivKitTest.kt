@@ -1,18 +1,15 @@
 package com.yandex.div.core
 
-import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.storage.DivDataRepository
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawDataAndMetadata
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.rawjson.RawJson
 import org.json.JSONObject
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -20,33 +17,35 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
 
 @RunWith(RobolectricTestRunner::class)
-@Config(shadows = [DivKitTest.ShadowStoredValuesController::class])
 class DivKitTest {
-
-    private val appContext = mock<Context>()
-    private val context = mock<Context> {
-        on { applicationContext } doReturn appContext
-    }
     private val tagA = DivDataTag("a")
     private val tagB = DivDataTag("b")
-    private val rawJsonPredicate = argumentCaptor<(RawJson) -> Boolean>()
-    private val divDataPredicate = argumentCaptor<(RawDataAndMetadata) -> Boolean>()
-    private val underTest = DivKit.getInstance(context)
 
-    @Before
-    fun setup() {
-        whenever(rawJsonRepository.remove(rawJsonPredicate.capture())).doReturn(mock())
-        whenever(divDataRepository.remove(divDataPredicate.capture())).doReturn(mock())
+    private val rawJsonPredicate = argumentCaptor<(RawJson) -> Boolean>()
+    private val rawJsonRepository = mock<RawJsonRepository> {
+        on { remove(rawJsonPredicate.capture()) } doReturn mock()
     }
+
+    private val divDataPredicate = argumentCaptor<(RawDataAndMetadata) -> Boolean>()
+    private val divDataRepository = mock<DivDataRepository> {
+        on { remove(divDataPredicate.capture()) } doReturn mock()
+    }
+
+    private val storageComponent = mock<DivStorageComponent> {
+        on { rawJsonRepository } doReturn rawJsonRepository
+        on { repository } doReturn divDataRepository
+    }
+
+    private val underTest = DivKit(
+        context = ApplicationProvider.getApplicationContext(),
+        configuration = DivKitConfiguration.Builder()
+            .divStorageComponent { storageComponent }
+            .build()
+    )
 
     @Test
     fun `reset with no flags does not touch repositories`() {
@@ -107,7 +106,7 @@ class DivKitTest {
     }
 
     @Test
-    fun `reset stored div data does not remove variables`(){
+    fun `reset stored div data does not remove variables`() {
         underTest.reset(DivKit.RESET_STORED_DIV_DATA)
         verify(rawJsonRepository, never()).remove(any())
     }
@@ -155,43 +154,8 @@ class DivKitTest {
         assertTrue(divDataPredicate.firstValue.invoke(tagA.id.toRawData()))
         assertFalse(divDataPredicate.firstValue.invoke(tagB.id.toRawData()))
     }
-
-    @After
-    fun tearDown() {
-        reset(rawJsonRepository, divDataRepository)
-    }
-
-    @Implements(StoredValuesController.Companion::class)
-    class ShadowStoredValuesController {
-
-        @Implementation
-        @Suppress("unused")
-        fun isStoredForCard(receiver: RawJson, dataTag: String) = receiver.id.startsWith("$CARD_LINE_PREFIX$dataTag:")
-    }
-
-    private companion object {
-
-        const val CARD_LINE_PREFIX = "card:"
-
-        val json = JSONObject()
-        val rawJsonRepository = mock<RawJsonRepository>()
-        val divDataRepository = mock<DivDataRepository>()
-        val storageComponent = mock<DivStorageComponent> {
-            on { rawJsonRepository } doReturn rawJsonRepository
-            on { repository } doReturn divDataRepository
-        }
-        val configuration = DivKitConfiguration.Builder()
-            .divStorageComponent { storageComponent }
-            .build()
-
-        init {
-            DivKit.configure(configuration)
-        }
-
-        private fun String.withCard(id: String) = "$CARD_LINE_PREFIX$id:$this"
-
-        private fun String.toRawJson() = RawJson(this, json)
-
-        private fun String.toRawData() = RawDataAndMetadata(this, json)
-    }
 }
+
+private fun String.withCard(id: String) = "card_${id}_$this"
+private fun String.toRawJson() = RawJson(this, JSONObject())
+private fun String.toRawData() = RawDataAndMetadata(this, JSONObject())

@@ -14,7 +14,10 @@ import com.yandex.yatagan.Component
 import javax.inject.Named
 
 @DivViewScope
-@Component(isRoot = false)
+@Component(
+    isRoot = false,
+    modules = [DivViewModule::class]
+)
 internal interface DivViewComponent {
 
     val actionHandler: DivActionHandler

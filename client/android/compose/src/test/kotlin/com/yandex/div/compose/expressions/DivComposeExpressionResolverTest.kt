@@ -4,17 +4,23 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.test.data.expression
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.whenever
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DivComposeExpressionResolverTest {
-
+    private val storedValueProvider = mock<ScopedStoredValueProvider>()
     private val variableController = DivVariableController()
 
     private val expressionResolver = createExpressionResolver(
+        storedValueProvider = storedValueProvider,
         variableController = variableController
     )
 
@@ -54,6 +60,16 @@ class DivComposeExpressionResolverTest {
         assertEquals(
             "value + 10 = 133.45",
             evaluate("value + 10 = @{value + 10}")
+        )
+    }
+
+    @Test
+    fun `expression with getStoredStringValue() function`() {
+        whenever(storedValueProvider.get(name = eq("value"))) doReturn "stored value"
+
+        assertEquals(
+            "value = stored value",
+            evaluate("value = @{getStoredStringValue('value', 'fallback')}")
         )
     }
 

@@ -3525,7 +3525,7 @@
       "case_id": 491
     },
     {
-      "title": "Persistent values storage",
+      "title": "Stored values storage",
       "case_id": 145,
       "platforms": [
         "ios",
@@ -3545,7 +3545,7 @@
       "file": "stored_value.json"
     },
     {
-      "title": "Persistent values lifetime",
+      "title": "Stored values lifetime",
       "platforms": [
         "android",
         "ios",
@@ -3570,7 +3570,7 @@
       "case_id": 483
     },
     {
-      "title": "Persistent values storage with typed actions",
+      "title": "Stored values storage with typed actions",
       "case_id": 206,
       "tags": [
         "TypedActions"

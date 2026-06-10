@@ -510,7 +510,8 @@ public class DivActionHandler {
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, scopeId, view);
         } else if (StoredValuesActionHandler.canHandle(action)) {
-            return StoredValuesActionHandler.handleAction(uri, view);
+            StoredValuesActionHandler.handleAction(uri, view);
+            return true;
         }
 
         return false;

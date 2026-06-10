@@ -11,6 +11,7 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.MissingVariableException
+import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
@@ -28,6 +29,7 @@ import javax.inject.Inject
 internal class DivComposeExpressionResolver @Inject constructor(
     functionProvider: FunctionProviderDecorator,
     private val reporter: DivReporter,
+    storedValueProvider: ScopedStoredValueProvider,
     private val variableController: DivVariableController
 ) : ExpressionResolver {
 
@@ -41,7 +43,7 @@ internal class DivComposeExpressionResolver @Inject constructor(
             variableProvider = { name ->
                 variableController.get(name)?.getValue().variableValueToEvaluableValue()
             },
-            storedValueProvider = { _ -> null },
+            storedValueProvider = storedValueProvider,
             functionProvider = functionProvider,
             warningSender = EvaluatorWarningSender(reporter)
         )

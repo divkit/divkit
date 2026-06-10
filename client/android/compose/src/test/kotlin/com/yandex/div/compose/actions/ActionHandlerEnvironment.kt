@@ -28,6 +28,7 @@ internal class ActionHandlerEnvironment {
         arrayActionsHandler: ArrayActionsHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
         setStateActionHandler: SetStateActionHandler = mock(),
+        setStoredValueActionHandler: SetStoredValueActionHandler = mock(),
         setVariableActionHandler: SetVariableActionHandler = mock(),
         timerActionHandler: TimerActionHandler = mock(),
         updateStructureActionHandler: UpdateStructureActionHandler = mock()
@@ -39,6 +40,7 @@ internal class ActionHandlerEnvironment {
             arrayActionsHandler = arrayActionsHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,
             setStateActionHandler = setStateActionHandler,
+            setStoredValueActionHandler = setStoredValueActionHandler,
             setVariableActionHandler = setVariableActionHandler,
             timerActionHandler = timerActionHandler,
             updateStructureActionHandler = updateStructureActionHandler

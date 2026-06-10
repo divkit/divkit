@@ -3,6 +3,7 @@ package com.yandex.div.internal.actions
 import android.net.Uri
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.StoredValue
+import com.yandex.div.internal.storedvalues.StoredValueScope
 
 @InternalApi
 sealed class DivUntypedAction {
@@ -20,6 +21,7 @@ sealed class DivUntypedAction {
         val name: String,
         val value: String,
         val type: StoredValue.Type,
+        val scope: StoredValueScope,
         val lifetime: Long
     ) : DivUntypedAction()
 
@@ -76,6 +78,7 @@ sealed class DivUntypedAction {
                         name = name,
                         value = value,
                         type = type,
+                        scope = StoredValueScope.fromString(uri.getQueryParameter("scope")),
                         lifetime = lifetime
                     )
                 }

@@ -12,6 +12,7 @@ import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div2.DivData
@@ -20,11 +21,13 @@ import org.mockito.kotlin.mock
 
 internal fun createExpressionResolver(
     reporter: DivReporter = TestReporter(),
+    storedValueProvider: ScopedStoredValueProvider = mock(),
     variableController: DivVariableController
 ): DivComposeExpressionResolver {
     return DivComposeExpressionResolver(
         functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider),
         reporter = reporter,
+        storedValueProvider = storedValueProvider,
         variableController = variableController
     )
 }

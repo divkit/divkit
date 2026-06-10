@@ -100,5 +100,4 @@ sealed class StoredValue {
         is ArrayStoredValue -> Type.ARRAY
         is DictStoredValue -> Type.DICT
     }
-
 }

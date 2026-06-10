@@ -11,7 +11,10 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.storage.DivStorageComponent
+import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -38,12 +41,6 @@ internal object DivContextModule {
             ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     }
 
-    @DivContextScope
-    @Provides
-    fun provideParsingErrorLogger(reporter: DivReporter): ParsingErrorLogger {
-        return ParsingErrorLogger { reporter.reportError(it) }
-    }
-
     @OptIn(InternalApi::class)
     @DivContextScope
     @Provides
@@ -61,6 +58,30 @@ internal object DivContextModule {
                 add(gifDecoderFactory())
             }
             .build()
+    }
+
+    @DivContextScope
+    @Provides
+    fun provideParsingErrorLogger(reporter: DivReporter): ParsingErrorLogger {
+        return ParsingErrorLogger { reporter.reportError(it) }
+    }
+
+    @DivContextScope
+    @Provides
+    fun provideStorageComponent(context: Context): DivStorageComponent {
+        return DivStorageComponent.create(
+            context = context
+        )
+    }
+
+    @DivContextScope
+    @Provides
+    fun provideStoredValuesRepository(
+        storageComponent: DivStorageComponent
+    ): StoredValuesRepository {
+        return StoredValuesRepositoryImpl(
+            rawJsonRepository = storageComponent.rawJsonRepository
+        )
     }
 
     @DivContextScope

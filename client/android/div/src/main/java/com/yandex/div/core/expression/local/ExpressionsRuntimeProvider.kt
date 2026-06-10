@@ -47,8 +47,14 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         variableController.addSource(divVariableController.variableSource)
 
         val storedValueProvider = object : ScopedStoredValueProvider {
-            override fun get(name: String, scope: String) =
-                storedValuesController.getStoredValue(name, errorCollector, dataTag, scope)?.getValue()
+            override fun get(name: String, scope: String): Any? {
+                return storedValuesController.getStoredValue(
+                    name = name,
+                    scope = scope,
+                    dataTag = dataTag,
+                    errorCollector = errorCollector
+                )?.getValue()
+            }
         }
         var functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
         val functions = data.functions
